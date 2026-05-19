@@ -1,0 +1,110 @@
+name: Build & Release
+
+# Builds a release APK + AAB and publishes them to a GitHub Release.
+#
+# Triggers:
+#   • push a tag matching v*       → release tagged with that tag
+#   • manual run (workflow_dispatch) → release tagged build-<run number>
+#
+# The Mapbox token is injected at build time from the MAPBOX_TOKEN
+# repository secret via --dart-define, so it never lives in the repo.
+# (Settings → Secrets and variables → Actions → New repository secret:
+#  name MAPBOX_TOKEN, value = your pk.* token.)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      notes:
+        description: 'Optional release notes'
+        required: false
+        default: 'Manual build'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Android (APK + AAB)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Resolve version
+        id: ver
+        run: |
+          PUBSPEC_VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          else
+            TAG="build-${GITHUB_RUN_NUMBER}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "pubspec=${PUBSPEC_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build release APK
+        run: >
+          flutter build apk --release
+          --dart-define=MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN }}
+
+      - name: Build release AAB
+        run: >
+          flutter build appbundle --release
+          --dart-define=MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN }}
+
+      - name: Rename artifacts
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk \
+            "dist/WAWUBasket-${{ steps.ver.outputs.tag }}.apk"
+          cp build/app/outputs/bundle/release/app-release.aab \
+            "dist/WAWUBasket-${{ steps.ver.outputs.tag }}.aab"
+
+      - name: Upload build artifacts (workflow run)
+        uses: actions/upload-artifact@v4
+        with:
+          name: wawubasket-android-${{ steps.ver.outputs.tag }}
+          path: dist/*
+          retention-days: 14
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: WAWUBasket ${{ steps.ver.outputs.tag }}
+          body: |
+            Automated build of WAWUBasket.
+
+            • Flutter version: pubspec ${{ steps.ver.outputs.pubspec }}
+            • Commit: ${{ github.sha }}
+            ${{ github.event.inputs.notes }}
+
+            Artifacts:
+            • `WAWUBasket-${{ steps.ver.outputs.tag }}.apk` — sideload on Android
+            • `WAWUBasket-${{ steps.ver.outputs.tag }}.aab` — Play Store upload
+
+            Note: builds are debug-signed (no production keystore configured
+            yet) so they install for testing but are not Play-ready until a
+            release keystore is wired into android/app/build.gradle.kts.
+          files: dist/*
+          draft: false
+          prerelease: false

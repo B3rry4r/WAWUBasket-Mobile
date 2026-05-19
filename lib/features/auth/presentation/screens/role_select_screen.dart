@@ -52,7 +52,7 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
   void _commit() {
     if (_selected == AppRole.customer) {
       RoleController.instance.setRole(AppRole.customer);
-      context.go(AppRoutes.home);
+      context.go(AppRoutes.onboarding);
       return;
     }
     final status = RoleController.instance.statusOf(_selected);
@@ -92,7 +92,7 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
                   TextButton(
                     onPressed: () {
                       RoleController.instance.setRole(AppRole.customer);
-                      context.go(AppRoutes.home);
+                      context.go(AppRoutes.onboarding);
                     },
                     child: Text(
                       'Skip',

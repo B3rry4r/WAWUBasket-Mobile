@@ -20,7 +20,9 @@ const String _envToken =
 const String _localFallback = '';
 
 /// The effective public token — env-define wins, local fallback second.
-const String kMapboxPublicToken =
+/// A getter (not `const`) because the env-vs-fallback choice can't be
+/// const-evaluated.
+String get kMapboxPublicToken =>
     _envToken.isNotEmpty ? _envToken : _localFallback;
 
 /// True when a usable token is configured. Screens use this to decide

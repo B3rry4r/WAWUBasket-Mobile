@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
@@ -21,6 +22,7 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   String? _activeSubcategory;
+  bool _premium = false;
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +107,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: WBSpacing.lg)),
+            SliverToBoxAdapter(
+              child: _ContextBand(
+                categoryId: widget.categoryId,
+                premium: _premium,
+                onQualityChanged: (v) => setState(() => _premium = v),
+              ),
+            ),
             if (category.kind == CategoryKind.restaurant)
               _vendorList(context, vendors)
             else
@@ -207,3 +216,291 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 }
+
+/// Category-specific band shown above the product grid. Produce gets a
+/// quality toggle + recipe bundle + farmer spotlight; livestock gets the
+/// live-butchery WhatsApp banner; essentials gets a smart-reorder nudge.
+class _ContextBand extends StatelessWidget {
+  const _ContextBand({
+    required this.categoryId,
+    required this.premium,
+    required this.onQualityChanged,
+  });
+  final String categoryId;
+  final bool premium;
+  final ValueChanged<bool> onQualityChanged;
+
+  bool get _isProduce =>
+      categoryId == 'fresh-market' || categoryId == 'farm-produce';
+  bool get _isLivestock => categoryId == 'livestock';
+  bool get _isEssentials =>
+      categoryId == 'household' || categoryId == 'groceries';
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isProduce) return _produce(context);
+    if (_isLivestock) return _livestock(context);
+    if (_isEssentials) return _essentials(context);
+    return const SizedBox.shrink();
+  }
+
+  Widget _wrap(Widget child) => Padding(
+        padding: const EdgeInsets.fromLTRB(
+          WBSpacing.screenPadding,
+          0,
+          WBSpacing.screenPadding,
+          WBSpacing.lg,
+        ),
+        child: child,
+      );
+
+  Widget _produce(BuildContext context) {
+    return _wrap(Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: WBColors.bgSecondary,
+            borderRadius: BorderRadius.circular(WBRadius.pill),
+          ),
+          child: Row(
+            children: [
+              _QualityTab(
+                label: 'Standard',
+                sub: 'Everyday good',
+                active: !premium,
+                onTap: () => onQualityChanged(false),
+              ),
+              _QualityTab(
+                label: 'Premium',
+                sub: 'Larger, riper',
+                active: premium,
+                onTap: () => onQualityChanged(true),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: WBSpacing.md),
+        Row(
+          children: [
+            Expanded(
+              child: _MiniCard(
+                icon: WBIconName.basket,
+                title: 'Jollof bundle',
+                sub: 'Everything you need · save 15%',
+                onTap: () => wbShowSnack(context, 'Bundle added to basket'),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: _MiniCard(
+                icon: WBIconName.user,
+                title: 'Meet the farmer',
+                sub: 'Behind your tomatoes',
+                onTap: () =>
+                    wbShowSnack(context, 'Farmer spotlight coming soon'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ));
+  }
+
+  Widget _livestock(BuildContext context) {
+    return _wrap(GestureDetector(
+      onTap: () => wbShowSnack(context, 'Connecting you to Butcher John…'),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.all(WBSpacing.md),
+        decoration: BoxDecoration(
+          color: WBColors.surfaceDark,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(
+                WBIconName.phone,
+                size: 18,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Watch your meat being cut',
+                    style: WBTypography.body.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'Butcher John · 4.9★ · 5 min wait · WhatsApp call',
+                    style: WBTypography.caption.copyWith(
+                      color: Colors.white.withValues(alpha: 0.65),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const WBIcon(
+              WBIconName.arrowRight,
+              size: 16,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
+    ));
+  }
+
+  Widget _essentials(BuildContext context) {
+    return _wrap(Container(
+      padding: const EdgeInsets.all(WBSpacing.md),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Row(
+        children: [
+          const WBIcon(WBIconName.clock, size: 18),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'You bought some of these 2 months ago. Need a refill?',
+              style: WBTypography.body.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          WBButton(
+            label: 'Reorder',
+            size: WBButtonSize.sm,
+            onPressed: () => wbShowSnack(context, 'Last basket reordered'),
+          ),
+        ],
+      ),
+    ));
+  }
+}
+
+class _QualityTab extends StatelessWidget {
+  const _QualityTab({
+    required this.label,
+    required this.sub,
+    required this.active,
+    required this.onTap,
+  });
+  final String label;
+  final String sub;
+  final bool active;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: WBMotion.base,
+          curve: WBMotion.easeSoft,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: active ? WBColors.surfaceDark : Colors.transparent,
+            borderRadius: BorderRadius.circular(WBRadius.pill),
+          ),
+          child: Column(
+            children: [
+              Text(
+                label,
+                style: WBTypography.body.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: active ? Colors.white : WBColors.fgHeader,
+                ),
+              ),
+              const SizedBox(height: 1),
+              Text(
+                sub,
+                style: WBTypography.caption.copyWith(
+                  fontSize: 11,
+                  color: active
+                      ? Colors.white.withValues(alpha: 0.6)
+                      : WBColors.fgPlaceholder,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MiniCard extends StatelessWidget {
+  const _MiniCard({
+    required this.icon,
+    required this.title,
+    required this.sub,
+    required this.onTap,
+  });
+  final WBIconName icon;
+  final String title;
+  final String sub;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: WBColors.surfaceCard,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+          boxShadow: WBShadows.card,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            WBIcon(icon, size: 18),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: WBTypography.body.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              sub,
+              style: WBTypography.caption.copyWith(
+                color: WBColors.fgSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

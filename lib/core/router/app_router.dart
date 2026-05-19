@@ -2,6 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/screens/about_screen.dart';
+import '../../features/account/presentation/screens/delete_account_screen.dart';
+import '../../features/account/presentation/screens/dietary_preferences_screen.dart';
+import '../../features/account/presentation/screens/security_screen.dart';
+import '../../features/account/presentation/screens/wawu_plus_screen.dart';
 import '../../features/account/presentation/screens/add_address_screen.dart';
 import '../../features/account/presentation/screens/chat_inbox_screen.dart';
 import '../../features/account/presentation/screens/chat_screen.dart';
@@ -77,6 +81,7 @@ import '../../features/vendor/presentation/screens/vendor_settings_screen.dart';
 import '../../features/vendor/presentation/vendor_shell.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/otp_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/role_select_screen.dart';
@@ -130,6 +135,10 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.roleSelect,
         builder: (_, _) => const RoleSelectScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.onboarding,
+        builder: (_, _) => const OnboardingScreen(),
       ),
 
       // Customer shell — wraps the 4 tabs with the floating bottom nav.
@@ -221,6 +230,22 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.about,
         builder: (_, _) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.wawuPlus,
+        builder: (_, _) => const WawuPlusScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.dietary,
+        builder: (_, _) => const DietaryPreferencesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.security,
+        builder: (_, _) => const SecurityScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.deleteAccount,
+        builder: (_, _) => const DeleteAccountScreen(),
       ),
       GoRoute(
         path: AppRoutes.trade,

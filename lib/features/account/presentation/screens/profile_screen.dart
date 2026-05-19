@@ -21,7 +21,10 @@ class ProfileScreen extends StatelessWidget {
       padding: EdgeInsets.zero,
       children: [
         Container(
-          color: WBColors.surfaceDark,
+          decoration: const BoxDecoration(
+            color: WBColors.bgPrimary,
+            border: Border(bottom: BorderSide(color: WBColors.bgDivider)),
+          ),
           padding: EdgeInsets.fromLTRB(
             WBSpacing.screenPadding,
             16 + MediaQuery.of(context).padding.top,
@@ -44,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.18),
+                              color: WBColors.bgDivider,
                               width: 2.5,
                             ),
                           ),
@@ -58,10 +61,10 @@ class ProfileScreen extends StatelessWidget {
                             width: 22,
                             height: 22,
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: WBColors.surfaceDark,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: WBColors.surfaceDark,
+                                color: WBColors.bgPrimary,
                                 width: 2,
                               ),
                             ),
@@ -69,6 +72,7 @@ class ProfileScreen extends StatelessWidget {
                             child: const WBIcon(
                               WBIconName.plus,
                               size: 11,
+                              color: Colors.white,
                               strokeWidth: 2.5,
                             ),
                           ),
@@ -85,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
                           'Brooks Adesanya',
                           style: WBTypography.cardTitle.copyWith(
                             fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                            color: WBColors.fgHeader,
                             fontSize: 20,
                           ),
                         ),
@@ -93,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
                         Text(
                           'brooks@wawu.africa',
                           style: WBTypography.caption.copyWith(
-                            color: Colors.white.withValues(alpha: 0.55),
+                            color: WBColors.fgSecondary,
                             fontSize: 13,
                           ),
                         ),
@@ -105,15 +109,15 @@ class ProfileScreen extends StatelessWidget {
                     child: Container(
                       width: 36,
                       height: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.12),
+                      decoration: const BoxDecoration(
+                        color: WBColors.bgSoft,
                         shape: BoxShape.circle,
                       ),
                       alignment: Alignment.center,
                       child: const WBIcon(
                         WBIconName.more,
                         size: 16,
-                        color: Colors.white,
+                        color: WBColors.fgHeader,
                       ),
                     ),
                   ),
@@ -122,9 +126,9 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: WBSpacing.lg - 4),
               Container(
                 padding: const EdgeInsets.only(top: 18),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(
-                    top: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
+                    top: BorderSide(color: WBColors.bgDivider),
                   ),
                 ),
                 child: const Row(
@@ -193,6 +197,12 @@ class ProfileScreen extends StatelessWidget {
             sub: 'Escrow-protected purchases from /trade',
             onTap: () => context.push(AppRoutes.escrowOrders),
           ),
+          AccountMenuRow(
+            icon: WBIconName.star,
+            label: 'WAWU+ membership',
+            sub: 'Unlock free delivery and more',
+            onTap: () => context.push(AppRoutes.wawuPlus),
+          ),
         ],
       ),
       AccountMenuSection(
@@ -205,6 +215,12 @@ class ProfileScreen extends StatelessWidget {
             onTap: () => context.push(AppRoutes.language),
           ),
           AccountMenuRow(
+            icon: WBIconName.basket,
+            label: 'Dietary preferences',
+            sub: "Things you'd rather not eat",
+            onTap: () => context.push(AppRoutes.dietary),
+          ),
+          AccountMenuRow(
             icon: WBIconName.star,
             label: 'Rate the app',
             onTap: () => _showRateSheet(context),
@@ -214,6 +230,17 @@ class ProfileScreen extends StatelessWidget {
             label: 'About WAWUBasket',
             sub: 'v2.1.0',
             onTap: () => context.push(AppRoutes.about),
+          ),
+        ],
+      ),
+      AccountMenuSection(
+        title: 'Security',
+        rows: [
+          AccountMenuRow(
+            icon: WBIconName.card,
+            label: 'Password & security',
+            sub: 'Change password, biometric, 2FA',
+            onTap: () => context.push(AppRoutes.security),
           ),
         ],
       ),
@@ -230,6 +257,13 @@ class ProfileScreen extends StatelessWidget {
             icon: WBIconName.phone,
             label: 'Help & support',
             onTap: () => context.push(AppRoutes.support),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.close,
+            label: 'Delete account',
+            sub: "We'll be sad to see you go",
+            danger: true,
+            onTap: () => context.push(AppRoutes.deleteAccount),
           ),
           AccountMenuRow(
             icon: WBIconName.close,
@@ -417,11 +451,9 @@ class _Stat extends StatelessWidget {
       child: Container(
         decoration: last
             ? null
-            : BoxDecoration(
+            : const BoxDecoration(
                 border: Border(
-                  right: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.1),
-                  ),
+                  right: BorderSide(color: WBColors.bgDivider),
                 ),
               ),
         child: Column(
@@ -429,7 +461,7 @@ class _Stat extends StatelessWidget {
             Text(
               value,
               style: WBTypography.body.copyWith(
-                color: Colors.white,
+                color: WBColors.fgHeader,
                 fontWeight: FontWeight.w700,
                 fontSize: 20,
                 letterSpacing: -0.4,
@@ -439,7 +471,7 @@ class _Stat extends StatelessWidget {
             Text(
               label,
               style: WBTypography.caption.copyWith(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: WBColors.fgPlaceholder,
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
               ),

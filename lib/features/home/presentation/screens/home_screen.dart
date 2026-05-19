@@ -125,6 +125,42 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         )),
+        const SizedBox(height: 20),
+        SizedBox(
+          height: 84,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            children: [
+              _QuickAction(
+                icon: WBIconName.basket,
+                label: 'Reorder',
+                onTap: () => context.go(AppRoutes.orders),
+              ),
+              _QuickAction(
+                icon: WBIconName.clock,
+                label: 'Schedule',
+                onTap: () => context.push(AppRoutes.cart),
+              ),
+              _QuickAction(
+                icon: WBIconName.pin,
+                label: 'Track',
+                onTap: () => context.push(AppRoutes.tracking),
+              ),
+              _QuickAction(
+                icon: WBIconName.heart,
+                label: 'Saved',
+                onTap: () => context.go(AppRoutes.favorites),
+              ),
+              _QuickAction(
+                icon: WBIconName.message,
+                label: 'Chat',
+                onTap: () => context.push(AppRoutes.chatInbox),
+                last: true,
+              ),
+            ],
+          ),
+        ),
         const SizedBox(height: 18),
         _padded(GestureDetector(
           onTap: () => context.push(AppRoutes.trade),
@@ -262,6 +298,59 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 22),
         _padded(const _OffersBanner()),
       ],
+    );
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.last = false,
+  });
+  final WBIconName icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool last;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: last ? 0 : 10),
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: SizedBox(
+          width: 68,
+          child: Column(
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: WBColors.surfaceCard,
+                  borderRadius: BorderRadius.circular(WBRadius.card),
+                  boxShadow: WBShadows.card,
+                ),
+                alignment: Alignment.center,
+                child: WBIcon(icon, size: 20),
+              ),
+              const SizedBox(height: 7),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: WBTypography.caption.copyWith(
+                  color: WBColors.fgHeader,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -9,6 +9,7 @@ abstract final class AppRoutes {
   static const forgotPassword = '/forgot-password';
   static const resetPassword = '/reset-password';
   static const roleSelect = '/role';
+  static const onboarding = '/onboarding';
 
   // Shell tabs
   static const home = '/home';
@@ -52,6 +53,10 @@ abstract final class AppRoutes {
   static const addAddress = '/account/addresses/edit';
   static const language = '/account/language';
   static const about = '/account/about';
+  static const wawuPlus = '/account/wawu-plus';
+  static const dietary = '/account/dietary';
+  static const security = '/account/security';
+  static const deleteAccount = '/account/delete';
 
   // Wallet sub-flows
   static const walletTopUp = '/wallet/top-up';

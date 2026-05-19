@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/wb_theme_exports.dart';
 import 'wb_icon.dart';
 
-enum WBButtonVariant { primary, secondary, ghost }
+enum WBButtonVariant { primary, secondary, ghost, danger }
 
 enum WBButtonSize { sm, md, lg }
 
@@ -64,6 +64,8 @@ class _WBButtonState extends State<WBButton> {
         return (bg: WBColors.bgSoft, fg: WBColors.fgHeader);
       case WBButtonVariant.ghost:
         return (bg: Colors.transparent, fg: WBColors.fgHeader);
+      case WBButtonVariant.danger:
+        return (bg: WBColors.statusError, fg: Colors.white);
     }
   }
 
