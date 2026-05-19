@@ -28,8 +28,17 @@ import '../../features/rider/presentation/screens/rider_earnings_screen.dart';
 import '../../features/rider/presentation/screens/rider_home_screen.dart';
 import '../../features/rider/presentation/screens/rider_screens.dart';
 import '../../features/trade/presentation/screens/bulk_lot_detail_screen.dart';
+import '../../features/trade/presentation/screens/export_listing_detail_screen.dart';
 import '../../features/trade/presentation/screens/supplier_detail_screen.dart';
 import '../../features/trade/presentation/screens/trade_screen.dart';
+import '../../features/trader/presentation/screens/trader_home_screen.dart';
+import '../../features/trader/presentation/screens/trader_kyc_screen.dart';
+import '../../features/trader/presentation/screens/trader_listing_edit_screen.dart';
+import '../../features/trader/presentation/screens/trader_listings_screen.dart';
+import '../../features/trader/presentation/screens/trader_login_screen.dart';
+import '../../features/trader/presentation/screens/trader_prices_screen.dart';
+import '../../features/trader/presentation/screens/trader_transport_screen.dart';
+import '../../features/trader/presentation/trader_shell.dart';
 import '../../features/vendor/presentation/screens/vendor_alerts_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_analytics_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_home_screen.dart';
@@ -196,6 +205,12 @@ GoRouter buildRouter() {
         path: '${AppRoutes.tradeLot}/:id',
         builder: (_, state) =>
             BulkLotDetailScreen(lotId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '${AppRoutes.tradeListing}/:id',
+        builder: (_, state) => ExportListingDetailScreen(
+          listingId: state.pathParameters['id']!,
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.categoryDetail}/:id',
@@ -392,6 +407,51 @@ GoRouter buildRouter() {
       GoRoute(
         path: '${AppRoutes.riderDelivery}/complete',
         builder: (_, _) => const RiderDeliveryCompleteScreen(),
+      ),
+
+      // ───────── Trader (RBAC) ─────────
+      GoRoute(
+        path: AppRoutes.traderLogin,
+        builder: (_, _) => const TraderLoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.traderKyc,
+        builder: (_, _) => const TraderKycScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => TraderShell(
+          location: state.uri.toString(),
+          child: child,
+        ),
+        routes: [
+          GoRoute(
+            path: AppRoutes.traderHome,
+            pageBuilder: (_, _) => _tabFade(const TraderHomeScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.traderListings,
+            pageBuilder: (_, _) => _tabFade(const TraderListingsScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.traderPrices,
+            pageBuilder: (_, _) => _tabFade(const TraderPricesScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.traderAccount,
+            pageBuilder: (_, _) =>
+                _tabFade(const OperatorAccountScreen(role: AppRole.trader)),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '${AppRoutes.traderListings}/edit',
+        builder: (_, state) => TraderListingEditScreen(
+          listingId: state.uri.queryParameters['id'],
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.traderTransport,
+        builder: (_, _) => const TraderTransportScreen(),
       ),
     ],
   );

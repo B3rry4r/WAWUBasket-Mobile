@@ -64,13 +64,17 @@ extension AppRoleX on AppRole {
         AppRole.driver => AppRoutes.driverAccount,
       };
 
-  /// Trader and driver shells aren't wired into the router until batches C
-  /// and E. While that's the case, the role-switcher treats those rows as
-  /// "Coming soon" so we don't end up navigating to a missing route.
+  /// The driver shell isn't wired into the router until batch E. While
+  /// that's the case, the role-switcher treats it as "Coming soon" so we
+  /// don't end up navigating to a missing route.
   bool get shellReady => switch (this) {
-        AppRole.customer || AppRole.vendor || AppRole.agent ||
-            AppRole.rider => true,
-        AppRole.trader || AppRole.driver => false,
+        AppRole.customer ||
+        AppRole.vendor ||
+        AppRole.trader ||
+        AppRole.agent ||
+        AppRole.rider =>
+          true,
+        AppRole.driver => false,
       };
 }
 

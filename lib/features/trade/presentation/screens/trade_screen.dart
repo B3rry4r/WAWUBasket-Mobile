@@ -5,9 +5,16 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/application/mock_data.dart';
+import '../../application/trade_controller.dart';
 import '../widgets/bulk_lot_card.dart';
+import '../widgets/corridor_prices_table.dart';
+import '../widgets/export_listing_card.dart';
 import '../widgets/supplier_card.dart';
 
+/// Customer-side bulk-trade browse. Four tabs: Suppliers, Bulk lots,
+/// Export listings, Corridor prices. The tab pills sit in a segmented
+/// control so the active tab feels distinct; the produce filter row
+/// shows only on tabs where it's meaningful.
 class TradeScreen extends StatefulWidget {
   const TradeScreen({super.key});
 
@@ -15,8 +22,10 @@ class TradeScreen extends StatefulWidget {
   State<TradeScreen> createState() => _TradeScreenState();
 }
 
+enum _Tab { suppliers, lots, listings, prices }
+
 class _TradeScreenState extends State<TradeScreen> {
-  String _tab = 'suppliers';
+  _Tab _tab = _Tab.suppliers;
   String _produceFilter = 'all';
 
   static const _produce = [
@@ -26,15 +35,14 @@ class _TradeScreenState extends State<TradeScreen> {
     ('palm-oil', 'Palm oil'),
     ('cocoa', 'Cocoa'),
     ('maize', 'Maize'),
-    ('feed', 'Feed'),
-    ('fertilizer', 'Fertilizer'),
-    ('veg', 'Bulk veg'),
+    ('tomato', 'Tomato'),
+    ('onions', 'Onions'),
   ];
+
+  bool get _showProduceFilter => _tab == _Tab.suppliers || _tab == _Tab.lots;
 
   @override
   Widget build(BuildContext context) {
-    final suppliers = MockData.suppliers;
-    final lots = MockData.bulkLots;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
@@ -71,138 +79,226 @@ class _TradeScreenState extends State<TradeScreen> {
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
-            // Tabs
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: WBSpacing.screenPadding,
               ),
-              child: Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: WBColors.surfaceCard,
-                  borderRadius: BorderRadius.circular(14),
-                  boxShadow: WBShadows.card,
-                ),
-                child: Row(
-                  children: [
-                    _SegmentTab(
-                      label: 'Suppliers',
-                      active: _tab == 'suppliers',
-                      onTap: () => setState(() => _tab = 'suppliers'),
-                    ),
-                    _SegmentTab(
-                      label: 'Bulk lots',
-                      active: _tab == 'lots',
-                      onTap: () => setState(() => _tab = 'lots'),
-                    ),
-                  ],
-                ),
+              child: _TabBar(
+                current: _tab,
+                onChanged: (t) => setState(() => _tab = t),
               ),
             ),
             const SizedBox(height: WBSpacing.md),
-            // Produce filter
-            SizedBox(
-              height: 36,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: WBSpacing.screenPadding,
+            if (_showProduceFilter) ...[
+              SizedBox(
+                height: 36,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: WBSpacing.screenPadding,
+                  ),
+                  itemCount: _produce.length,
+                  separatorBuilder: (_, _) => const SizedBox(width: 8),
+                  itemBuilder: (_, i) {
+                    final p = _produce[i];
+                    return WBTag(
+                      label: p.$2,
+                      active: p.$1 == _produceFilter,
+                      onTap: () => setState(() => _produceFilter = p.$1),
+                    );
+                  },
                 ),
-                itemCount: _produce.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 8),
-                itemBuilder: (_, i) {
-                  final p = _produce[i];
-                  return WBTag(
-                    label: p.$2,
-                    active: p.$1 == _produceFilter,
-                    onTap: () => setState(() => _produceFilter = p.$1),
-                  );
-                },
               ),
-            ),
-            const SizedBox(height: WBSpacing.md),
-            Expanded(
-              child: _tab == 'suppliers'
-                  ? ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(
-                        WBSpacing.screenPadding,
-                        4,
-                        WBSpacing.screenPadding,
-                        40,
-                      ),
-                      itemCount: suppliers.length,
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(height: WBSpacing.md),
-                      itemBuilder: (_, i) => SupplierCard(
-                        supplier: suppliers[i],
-                        onTap: () => context.push(
-                          '${AppRoutes.tradeSupplier}/${suppliers[i].id}',
-                        ),
-                      ),
-                    )
-                  : GridView.builder(
-                      padding: const EdgeInsets.fromLTRB(
-                        WBSpacing.screenPadding,
-                        4,
-                        WBSpacing.screenPadding,
-                        40,
-                      ),
-                      itemCount: lots.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 14,
-                        childAspectRatio: 0.62,
-                      ),
-                      itemBuilder: (_, i) => BulkLotCard(
-                        lot: lots[i],
-                        onTap: () => context.push(
-                          '${AppRoutes.tradeLot}/${lots[i].id}',
-                        ),
-                      ),
-                    ),
-            ),
+              const SizedBox(height: WBSpacing.md),
+            ],
+            Expanded(child: _tabBody()),
           ],
         ),
       ),
     );
   }
+
+  Widget _tabBody() {
+    switch (_tab) {
+      case _Tab.suppliers:
+        final suppliers = MockData.suppliers;
+        return ListView.separated(
+          padding: const EdgeInsets.fromLTRB(
+            WBSpacing.screenPadding,
+            4,
+            WBSpacing.screenPadding,
+            40,
+          ),
+          itemCount: suppliers.length,
+          separatorBuilder: (_, _) => const SizedBox(height: WBSpacing.md),
+          itemBuilder: (_, i) => SupplierCard(
+            supplier: suppliers[i],
+            onTap: () => context.push(
+              '${AppRoutes.tradeSupplier}/${suppliers[i].id}',
+            ),
+          ),
+        );
+      case _Tab.lots:
+        final lots = MockData.bulkLots;
+        return GridView.builder(
+          padding: const EdgeInsets.fromLTRB(
+            WBSpacing.screenPadding,
+            4,
+            WBSpacing.screenPadding,
+            40,
+          ),
+          itemCount: lots.length,
+          gridDelegate:
+              const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 14,
+            childAspectRatio: 0.62,
+          ),
+          itemBuilder: (_, i) => BulkLotCard(
+            lot: lots[i],
+            onTap: () => context.push(
+              '${AppRoutes.tradeLot}/${lots[i].id}',
+            ),
+          ),
+        );
+      case _Tab.listings:
+        return ValueListenableBuilder(
+          valueListenable: TradeController.instance.listings,
+          builder: (_, listings, _) {
+            if (listings.isEmpty) {
+              return _Empty(
+                label:
+                    'No active export listings right now. Check back in a bit.',
+              );
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.fromLTRB(
+                WBSpacing.screenPadding,
+                4,
+                WBSpacing.screenPadding,
+                40,
+              ),
+              itemCount: listings.length,
+              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              itemBuilder: (_, i) => ExportListingCard(
+                listing: listings[i],
+                onTap: () => context.push(
+                  '${AppRoutes.tradeListing}/${listings[i].id}',
+                ),
+              ),
+            );
+          },
+        );
+      case _Tab.prices:
+        return ValueListenableBuilder(
+          valueListenable: TradeController.instance.prices,
+          builder: (_, rows, _) => ListView(
+            padding: const EdgeInsets.fromLTRB(
+              WBSpacing.screenPadding,
+              4,
+              WBSpacing.screenPadding,
+              40,
+            ),
+            children: [
+              CorridorPricesTable(rows: rows),
+              const SizedBox(height: 12),
+              Text(
+                'Prices in ₦ per unit. Updated daily from corridor trades.',
+                style: WBTypography.caption.copyWith(
+                  color: WBColors.fgPlaceholder,
+                  fontSize: 11,
+                ),
+              ),
+            ],
+          ),
+        );
+    }
+  }
 }
 
-class _SegmentTab extends StatelessWidget {
-  const _SegmentTab({
-    required this.label,
-    required this.active,
-    required this.onTap,
-  });
+class _TabBar extends StatelessWidget {
+  const _TabBar({required this.current, required this.onChanged});
+  final _Tab current;
+  final ValueChanged<_Tab> onChanged;
 
-  final String label;
-  final bool active;
-  final VoidCallback onTap;
+  static const _spec = [
+    (_Tab.suppliers, 'Suppliers'),
+    (_Tab.lots, 'Lots'),
+    (_Tab.listings, 'Listings'),
+    (_Tab.prices, 'Prices'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: AnimatedContainer(
-          duration: WBMotion.base,
-          curve: WBMotion.easeSoft,
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: active ? WBColors.surfaceDark : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Text(
-            label,
-            style: WBTypography.body.copyWith(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: active ? Colors.white : WBColors.fgSecondary,
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: WBColors.surfaceCard,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: WBShadows.card,
+      ),
+      child: Row(
+        children: [
+          for (final s in _spec)
+            Expanded(
+              child: GestureDetector(
+                onTap: () => onChanged(s.$1),
+                behavior: HitTestBehavior.opaque,
+                child: AnimatedContainer(
+                  duration: WBMotion.base,
+                  curve: WBMotion.easeSoft,
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: s.$1 == current
+                        ? WBColors.surfaceDark
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    s.$2,
+                    style: WBTypography.body.copyWith(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: s.$1 == current
+                          ? Colors.white
+                          : WBColors.fgSecondary,
+                    ),
+                  ),
+                ),
+              ),
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Empty extends StatelessWidget {
+  const _Empty({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        WBSpacing.screenPadding,
+        4,
+        WBSpacing.screenPadding,
+        40,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: WBColors.bgSoft,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+        ),
+        child: Text(
+          label,
+          style: WBTypography.body.copyWith(
+            color: WBColors.fgSecondary,
+            fontSize: 14,
           ),
         ),
       ),

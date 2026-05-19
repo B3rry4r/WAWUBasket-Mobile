@@ -135,6 +135,8 @@ void _showOperatorSheet(BuildContext context) {
           for (final r in const [
             (WBIconName.home, 'Vendor', 'Sell food, produce or essentials',
                 AppRoutes.vendorLogin),
+            (WBIconName.basket, 'Trader',
+                'List bulk lots & corridor exports', AppRoutes.traderLogin),
             (WBIconName.bike, 'Rider', 'Deliver baskets in the city',
                 AppRoutes.riderLogin),
             (WBIconName.card, 'Trade agent', 'Register traders, log sales',

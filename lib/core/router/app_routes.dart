@@ -29,6 +29,7 @@ abstract final class AppRoutes {
   static const trade = '/trade';
   static const tradeSupplier = '/trade/supplier'; // append `/:id`
   static const tradeLot = '/trade/lot'; // append `/:id`
+  static const tradeListing = '/trade/listing'; // append `/:id`
 
   // Account tools
   static const wallet = '/wallet';

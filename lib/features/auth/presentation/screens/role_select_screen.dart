@@ -23,6 +23,8 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
         'Order food, groceries and household goods.'),
     _Role(AppRole.vendor, WBIconName.home,
         'Sell from your kitchen, store or stall.'),
+    _Role(AppRole.trader, WBIconName.basket,
+        'List bulk lots and reach buyers across corridors.'),
     _Role(AppRole.rider, WBIconName.bike,
         'Deliver baskets across your city.'),
     _Role(AppRole.agent, WBIconName.card,
