@@ -1,0 +1,142 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  body { background: #F7F7F7; }
+  .card { background: #F7F7F7; padding: 24px 24px 32px; }
+
+  /* Vendor card — inset photo, circular ETA medallion, hairline footer */
+  .v {
+    width: 360px;
+    background: #FFFFFF;
+    border-radius: 28px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+    padding: 12px;
+    display: flex; flex-direction: column; gap: 0;
+    position: relative;
+  }
+  /* Inset photo with its own radius */
+  .photo {
+    height: 132px;
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 70% 30%, rgba(255,255,255,0.06), transparent 55%),
+      linear-gradient(135deg, #2a2a2a 0%, #424242 60%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  /* Tiny brand mark on photo */
+  .markdot {
+    position: absolute; top: 14px; left: 14px;
+    height: 28px; padding: 0 10px 0 6px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px;
+    color: #fff; font-size: 11px; font-weight: 500;
+  }
+  .markdot::before {
+    content: ""; width: 18px; height: 18px; border-radius: 999px;
+    background: rgba(255,255,255,0.92);
+  }
+  /* Heart pill top-right */
+  .fav {
+    position: absolute; top: 14px; right: 14px;
+    width: 32px; height: 32px; border-radius: 999px;
+    background: rgba(255,255,255,0.94);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fav svg { width: 16px; height: 16px; stroke: #1A1A1A; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ETA medallion — sits half on the photo, half on the info row */
+  .eta {
+    position: absolute; right: 24px; top: 120px;
+    width: 56px; height: 56px; border-radius: 999px;
+    background: #111111; color: #fff;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18), 0 0 0 4px #FFFFFF;
+    font-feature-settings: 'tnum' 1;
+  }
+  .eta .num { font-size: 17px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+  .eta .unit { font-size: 9px; opacity: 0.7; margin-top: 3px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* Info block */
+  .info { padding: 16px 6px 4px; display: flex; flex-direction: column; gap: 6px; }
+  .name { font-size: 17px; font-weight: 500; color: #1A1A1A; letter-spacing: -0.005em; }
+  .sub  { font-size: 13px; color: #4A4A4A; }
+  .meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 13px; color: #4A4A4A; }
+  .rate { display: inline-flex; align-items: center; gap: 4px; color: #1A1A1A; font-weight: 500; }
+  .rate svg { width: 13px; height: 13px; }
+  .dot  { width: 3px; height: 3px; border-radius: 999px; background: #C7C7C7; }
+
+  /* Pricing */
+  .price-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+  .price-original { font-size: 13px; color: #A0A0A0; text-decoration: line-through; text-decoration-color: #A0A0A0; font-weight: 400; }
+  .price-discounted { font-size: 16px; font-weight: 600; color: #1A1A1A; letter-spacing: -0.01em; }
+  .discount-badge {
+    font-size: 10px; font-weight: 600; color: #FFFFFF;
+    background: #111111; padding: 3px 7px; border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Hairline footer with tiny tags */
+  .footer {
+    margin-top: 14px; padding: 12px 6px 2px;
+    border-top: 1px solid #EFEFEF;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .tags { display: flex; gap: 6px; }
+  .mt { font-size: 11px; font-weight: 500; color: #4A4A4A; padding: 5px 9px; border-radius: 999px; background: #F4F4F4; }
+  .pill-go {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500; color: #1A1A1A;
+  }
+  .pill-go svg { width: 14px; height: 14px; stroke: #1A1A1A; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+</style></head>
+<body>
+<div class="card">
+  <div class="eyebrow">Card · inset photo, ETA medallion, hairline footer</div>
+  <div class="v">
+    <div class="photo">
+      <span class="markdot">Mama Cass</span>
+      <!-- Discount badge top-right of photo, left of fav -->
+      <span style="
+        position:absolute; top:14px; right:54px;
+        background:#FFFFFF; color:#111111;
+        font-size:10px; font-weight:700; letter-spacing:0.04em;
+        padding:5px 9px; border-radius:999px;
+        box-shadow:0 2px 6px rgba(0,0,0,0.14);
+      ">20% OFF</span>
+      <div class="fav"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></div>
+    </div>
+    <div class="eta"><div class="num">28</div><div class="unit">min</div></div>
+    <div class="info">
+      <div class="name">Mama Cass Kitchen</div>
+      <div class="sub">Nigerian · Local · Lagos Island</div>
+      <!-- Pricing row: original (strikethrough) → discounted → badge -->
+      <div class="price-row">
+        <span class="price-original">₦5,500</span>
+        <span class="price-discounted">₦4,400</span>
+        <span class="discount-badge">−20%</span>
+      </div>
+      <div class="meta">
+        <span class="rate">
+          <svg viewBox="0 0 24 24" fill="#1A1A1A"><polygon points="12 3 14.7 9.3 21.5 9.8 16.3 14.2 18 21 12 17.3 6 21 7.7 14.2 2.5 9.8 9.3 9.3"/></svg>
+          4.8
+        </span>
+        <span style="color:#7A7A7A;">(2,481)</span>
+        <span class="dot"></span>
+        <span>₦600 delivery</span>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="tags">
+        <span class="mt">Free delivery</span>
+        <span class="mt">Halal</span>
+      </div>
+      <span class="pill-go">View menu
+        <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+  </div>
+</div>
+</body></html>

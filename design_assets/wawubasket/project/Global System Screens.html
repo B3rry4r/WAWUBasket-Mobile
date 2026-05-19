@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>WAWUBasket — Global System Screens</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="wb/colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ECECEC; }
+  * { box-sizing: border-box; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="wb/components.jsx"></script>
+<script type="text/babel" src="wb/design-canvas.jsx"></script>
+<script type="text/babel" src="wb/global-screens.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+const SCREEN_W = 390;
+const SCREEN_H = 844;
+
+function App() {
+  return (
+    <DesignCanvas
+      title="WAWUBasket — Global System Screens"
+      subtitle="Splash · Welcome · Auth · OTP · Password recovery · Role selection. Every screen shares the same monochrome system."
+    >
+      {/* ── Entry: Splash → Welcome ───────────────────────────── */}
+      <DCSection
+        id="entry"
+        title="Entry"
+        subtitle="The first 5 seconds. Logo lands, then a single, calm welcome."
+        gap={56}
+      >
+        <DCArtboard id="splash" label="01 · Splash"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <SplashScreen />
+        </DCArtboard>
+        <DCArtboard id="welcome" label="02 · Welcome"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <WelcomeScreen />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ── Auth: Sign in + Create account ──────────────────────── */}
+      <DCSection
+        id="auth"
+        title="Authentication"
+        subtitle="Two forms, same shape. Existing users sign in; new users create."
+        gap={56}
+      >
+        <DCArtboard id="login" label="03 · Sign in"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <LoginScreen />
+        </DCArtboard>
+        <DCArtboard id="signup" label="04 · Create account"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <SignupScreen />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ── Verify: OTP ─────────────────────────────────────────── */}
+      <DCSection
+        id="verify"
+        title="Verification"
+        subtitle="6-digit code, sent over SMS or email. No magic links."
+        gap={56}
+      >
+        <DCArtboard id="otp" label="05 · OTP verification"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <OTPScreen />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ── Recovery: Forgot + Reset ────────────────────────────── */}
+      <DCSection
+        id="recovery"
+        title="Password recovery"
+        subtitle="Two screens. Pick channel, set a new one."
+        gap={56}
+      >
+        <DCArtboard id="forgot" label="06 · Forgot password"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <ForgotPasswordScreen />
+        </DCArtboard>
+        <DCArtboard id="reset" label="07 · Reset password"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <ResetPasswordScreen />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ── Role selection ──────────────────────────────────────── */}
+      <DCSection
+        id="role"
+        title="Role selection"
+        subtitle="One question that branches the entire product. Switchable later from profile."
+        gap={56}
+      >
+        <DCArtboard id="role-select" label="08 · Choose role"
+                    width={SCREEN_W} height={SCREEN_H}>
+          <RoleSelectScreen />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

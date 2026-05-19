@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>WAWUBasket — Customer App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="wb/colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ECECEC; }
+  * { box-sizing: border-box; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- Load order: tokens → canvas → home (verified) → primitives → shell → flows -->
+<script type="text/babel" src="wb/components.jsx"></script>
+<script type="text/babel" src="wb/design-canvas.jsx"></script>
+<script type="text/babel" src="wb/home-variants.jsx"></script>
+<script type="text/babel" src="wb/global-screens.jsx"></script>
+<script type="text/babel" src="wb/app-shell.jsx"></script>
+<script type="text/babel" src="wb/customer-shopping.jsx"></script>
+<script type="text/babel" src="wb/customer-account.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+
+// Bare screen wrapper — fixed height fills artboard so position:absolute nav works
+function Wrap({ children, bg = '#FFFFFF', height }) {
+  return (
+    <div style={{
+      width: 390, height, background: bg, overflow: 'hidden',
+      fontFamily: 'Inter, -apple-system, sans-serif',
+      WebkitFontSmoothing: 'antialiased', position: 'relative', color: '#000',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas
+      title="WAWUBasket — Customer App"
+      subtitle="Complete customer experience. App shell (4 persistent tabs) plus all pushed screens, laid out by navigation flow."
+    >
+
+      {/* ═══════════════════════════════════════════════════════════
+          ROW 1 — APP SHELL
+          The four persistent tab destinations. Every screen here
+          shows the same dark pill nav at the bottom, with the active
+          tab in its white capsule state. This row IS the navigation.
+         ═══════════════════════════════════════════════════════════ */}
+      <DCSection
+        id="app-shell"
+        title="App shell — 4 tabs"
+        subtitle="The persistent bottom navigation. Tap any tab from any tab — this row shows each in its active state."
+        gap={48}
+      >
+        <DCArtboard id="tab-home"     label="Home tab"
+                    width={390} height={1100}>
+          <Wrap height={1100} bg="#FFFFFF"><HomeV4 /></Wrap>
+        </DCArtboard>
+        <DCArtboard id="tab-favs"     label="Favorites tab"
+                    width={390} height={1100}>
+          <FavoritesScreen />
+        </DCArtboard>
+        <DCArtboard id="tab-orders"   label="Orders tab"
+                    width={390} height={1000}>
+          <OrderHistoryScreen />
+        </DCArtboard>
+        <DCArtboard id="tab-profile"  label="Profile tab"
+                    width={390} height={1100}>
+          <ProfileScreen />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ═══════════════════════════════════════════════════════════
+          ROW 2 — BUYING FLOW (pushed from Home tab)
+          Left-to-right reads the user journey:
+          Home search bar → Search results → tap dish → tap basket →
+          checkout → see live tracking. None have the bottom nav —
+          they're pushed views, not tabs.
+         ═══════════════════════════════════════════════════════════ */}
+      <DCSection
+        id="buying-flow"
+        title="Buying flow — pushed from Home"
+        subtitle="Search → Product → Cart → Checkout → Track. Each tap pushes a new screen; back chip pops it. No bottom nav on pushed views."
+        gap={48}
+      >
+        <DCArtboard id="push-search"   label="① Search"          width={390} height={1020}>
+          <SearchScreen />
+        </DCArtboard>
+        <DCArtboard id="push-product"  label="② Product details" width={390} height={1060}>
+          <ProductScreen />
+        </DCArtboard>
+        <DCArtboard id="push-cart"     label="③ Cart"            width={390} height={960}>
+          <CartScreen />
+        </DCArtboard>
+        <DCArtboard id="push-checkout" label="④ Checkout"        width={390} height={1160}>
+          <CheckoutScreen />
+        </DCArtboard>
+        <DCArtboard id="push-tracking" label="⑤ Order tracking"  width={390} height={960}>
+          <TrackingScreen />
+        </DCArtboard>
+      </DCSection>
+
+      {/* ═══════════════════════════════════════════════════════════
+          ROW 3 — ACCOUNT TOOLS (pushed from Profile tab)
+          The Profile menu pushes into these. Wallet, Notifications,
+          Help — each its own pushed screen with a back chip.
+         ═══════════════════════════════════════════════════════════ */}
+      <DCSection
+        id="account-tools"
+        title="Account tools — pushed from Profile"
+        subtitle="Wallet, Notifications and Help all live behind the Profile menu. Each is a pushed screen with its own back chip."
+        gap={48}
+      >
+        <DCArtboard id="push-wallet"   label="Wallet"          width={390} height={1040}>
+          <WalletScreen />
+        </DCArtboard>
+        <DCArtboard id="push-notifs"   label="Notifications"   width={390} height={940}>
+          <NotificationsScreen />
+        </DCArtboard>
+        <DCArtboard id="push-support"  label="Help & support"  width={390} height={1080}>
+          <SupportScreen />
+        </DCArtboard>
+      </DCSection>
+
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

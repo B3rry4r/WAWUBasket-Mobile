@@ -1,0 +1,467 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/widgets/wb_widgets.dart';
+import '../../../shopping/application/mock_data.dart';
+
+class MeatCutScreen extends StatefulWidget {
+  const MeatCutScreen({super.key, required this.productId});
+  final String productId;
+
+  @override
+  State<MeatCutScreen> createState() => _MeatCutScreenState();
+}
+
+class _MeatCutScreenState extends State<MeatCutScreen> {
+  String _cut = 'pieces';
+  double _weight = 2.0;
+  bool _fresh = true;
+  bool _removeSkin = false;
+  final _instructions = TextEditingController();
+
+  @override
+  void dispose() {
+    _instructions.dispose();
+    super.dispose();
+  }
+
+  static const _cutsByCat = {
+    'chicken': [
+      ('whole', 'Whole'),
+      ('breast', 'Breast'),
+      ('thighs', 'Thighs'),
+      ('drumsticks', 'Drumsticks'),
+      ('wings', 'Wings'),
+      ('pieces', '8 pieces'),
+    ],
+    'beef': [
+      ('chunks', 'Chunks'),
+      ('strips', 'Strips'),
+      ('cubes', 'Cubes'),
+      ('mince', 'Minced'),
+      ('bone-in', 'Bone-in'),
+    ],
+    'goat': [
+      ('chunks', 'Chunks'),
+      ('soup-cut', 'Pepper-soup cut'),
+      ('bone-in', 'Bone-in'),
+    ],
+    'fish': [
+      ('whole', 'Whole'),
+      ('cleaned', 'Cleaned'),
+      ('steaks', 'Steaks'),
+      ('fillets', 'Fillets'),
+    ],
+    'seafood': [
+      ('whole', 'As-is'),
+      ('peeled', 'Peeled'),
+    ],
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final product = MockData.marketplaceProducts.firstWhere(
+      (p) => p.id == widget.productId,
+      orElse: () => MockData.marketplaceProducts.first,
+    );
+    final cuts =
+        _cutsByCat[product.subcategoryId] ?? _cutsByCat['chicken']!;
+    final total = (product.priceNaira * _weight).round();
+
+    return Scaffold(
+      backgroundColor: WBColors.bgSecondary,
+      body: Stack(
+        children: [
+          ListView(
+            padding: const EdgeInsets.only(bottom: 140),
+            children: [
+              Stack(
+                children: [
+                  AspectRatio(
+                    aspectRatio: 16 / 11,
+                    child: WBNetworkImage(url: product.imageUrl),
+                  ),
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        WBSpacing.screenPadding,
+                        8,
+                        WBSpacing.screenPadding,
+                        0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          WBBackChip(onPressed: () => context.pop()),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: WBColors.surfaceDark,
+                              borderRadius:
+                                  BorderRadius.circular(WBRadius.pill),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const WBIcon(
+                                  WBIconName.check,
+                                  size: 11,
+                                  color: Colors.white,
+                                  strokeWidth: 2.5,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'HALAL',
+                                  style: WBTypography.label.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.66,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  WBSpacing.screenPadding,
+                  WBSpacing.lg,
+                  WBSpacing.screenPadding,
+                  0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.name,
+                      style: WBTypography.hero.copyWith(fontSize: 24),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${product.formattedPrice}${product.unit ?? ''} · '
+                      'Cut to order',
+                      style: WBTypography.body.copyWith(
+                        color: WBColors.fgSecondary,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: WBSpacing.lg),
+                    _LabelText(label: 'Cut'),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: [
+                        for (final c in cuts)
+                          WBTag(
+                            label: c.$2,
+                            active: c.$1 == _cut,
+                            onTap: () => setState(() => _cut = c.$1),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: WBSpacing.lg),
+                    _LabelText(label: 'Weight'),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text(
+                          '${_weight.toStringAsFixed(1)} kg',
+                          style: WBTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          '0.5 – 10 kg',
+                          style: WBTypography.caption.copyWith(
+                            color: WBColors.fgPlaceholder,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: WBColors.surfaceDark,
+                        inactiveTrackColor: WBColors.bgDivider,
+                        thumbColor: WBColors.surfaceDark,
+                        overlayColor: WBColors.surfaceDark.withValues(alpha: 0.1),
+                        trackHeight: 3,
+                      ),
+                      child: Slider(
+                        value: _weight,
+                        min: 0.5,
+                        max: 10,
+                        divisions: 19,
+                        onChanged: (v) => setState(() => _weight = v),
+                      ),
+                    ),
+                    const SizedBox(height: WBSpacing.md),
+                    _LabelText(label: 'Fresh or frozen'),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _FreshTile(
+                            label: 'Fresh',
+                            sub: 'Same day',
+                            active: _fresh,
+                            onTap: () => setState(() => _fresh = true),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _FreshTile(
+                            label: 'Frozen',
+                            sub: 'Vacuum packed',
+                            active: !_fresh,
+                            onTap: () => setState(() => _fresh = false),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: WBSpacing.lg),
+                    _LabelText(label: 'Butchery instructions'),
+                    const SizedBox(height: 8),
+                    GestureDetector(
+                      onTap: () =>
+                          setState(() => _removeSkin = !_removeSkin),
+                      behavior: HitTestBehavior.opaque,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 22,
+                            height: 22,
+                            decoration: BoxDecoration(
+                              color: _removeSkin
+                                  ? WBColors.surfaceDark
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(
+                                color: _removeSkin
+                                    ? WBColors.surfaceDark
+                                    : WBColors.bgDivider,
+                                width: 1.5,
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            child: _removeSkin
+                                ? const WBIcon(
+                                    WBIconName.check,
+                                    size: 13,
+                                    color: Colors.white,
+                                    strokeWidth: 2.5,
+                                  )
+                                : null,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            'Remove skin',
+                            style: WBTypography.body.copyWith(fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: WBColors.bgSoft,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: WBColors.borderFilled),
+                      ),
+                      child: TextField(
+                        controller: _instructions,
+                        maxLines: 2,
+                        style: WBTypography.body.copyWith(fontSize: 14),
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText:
+                              'e.g. Remove feet, cut into 8 pieces, no fat',
+                          hintStyle: WBTypography.body.copyWith(
+                            color: WBColors.fgPlaceholder,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: WBSpacing.lg),
+                    WBCard(
+                      child: Row(
+                        children: [
+                          ClipOval(
+                            child: SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: WBNetworkImage(
+                                url: product.imageUrl,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Butcher John',
+                                  style: WBTypography.body.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '★ 4.9 · 5 min wait',
+                                  style: WBTypography.caption.copyWith(
+                                    color: WBColors.fgSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          WBButton(
+                            label: 'Watch live',
+                            size: WBButtonSize.sm,
+                            variant: WBButtonVariant.secondary,
+                            onPressed: () => wbShowSnack(
+                              context,
+                              'Calling Butcher John on WhatsApp…',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  WBSpacing.screenPadding,
+                  0,
+                  WBSpacing.screenPadding,
+                  20,
+                ),
+                child: WBButton(
+                  label: 'Add to basket — ₦${_n(total)}',
+                  fullWidth: true,
+                  size: WBButtonSize.lg,
+                  onPressed: () {
+                    wbShowSnack(
+                      context,
+                      '${product.name} added to basket',
+                    );
+                    context.push(AppRoutes.cart);
+                  },
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+String _n(int v) {
+  final s = v.toString();
+  final buf = StringBuffer();
+  for (var i = 0; i < s.length; i++) {
+    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
+    buf.write(s[i]);
+  }
+  return buf.toString();
+}
+
+class _LabelText extends StatelessWidget {
+  const _LabelText({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      label.toUpperCase(),
+      style: WBTypography.label.copyWith(
+        color: WBColors.fgPlaceholder,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.66,
+      ),
+    );
+  }
+}
+
+class _FreshTile extends StatelessWidget {
+  const _FreshTile({
+    required this.label,
+    required this.sub,
+    required this.active,
+    required this.onTap,
+  });
+  final String label;
+  final String sub;
+  final bool active;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: WBMotion.base,
+        curve: WBMotion.easeSoft,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: active ? WBColors.surfaceDark : WBColors.bgSoft,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: WBTypography.body.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: active ? Colors.white : WBColors.fgHeader,
+              ),
+            ),
+            const SizedBox(height: 3),
+            Text(
+              sub,
+              style: WBTypography.caption.copyWith(
+                color: active
+                    ? Colors.white.withValues(alpha: 0.65)
+                    : WBColors.fgSecondary,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

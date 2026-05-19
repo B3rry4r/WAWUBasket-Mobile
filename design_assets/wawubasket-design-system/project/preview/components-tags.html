@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; background: #F1F1F1; color: #1A1A1A; }
+  .tag.active { background: #111111; color: #FFFFFF; }
+  .status { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+  .s-success { background: rgba(34,197,94,0.12); color: #15803d; }
+  .s-error   { background: rgba(239,68,68,0.12); color: #b91c1c; }
+  .s-warning { background: rgba(245,158,11,0.14); color: #b45309; }
+  .s-info    { background: rgba(59,130,246,0.12); color: #1d4ed8; }
+  .d { width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
+</style></head>
+<body>
+<div class="card">
+  <div class="eyebrow">Tags & status pills</div>
+  <div class="row">
+    <span class="tag active">All</span>
+    <span class="tag">Rice</span>
+    <span class="tag">Snacks</span>
+    <span class="tag">Drinks</span>
+    <span class="tag">Fast food</span>
+  </div>
+  <div class="row">
+    <span class="status s-success"><span class="d"></span>Delivered</span>
+    <span class="status s-info"><span class="d"></span>On the way</span>
+    <span class="status s-warning"><span class="d"></span>Preparing</span>
+    <span class="status s-error"><span class="d"></span>Cancelled</span>
+  </div>
+</div>
+</body></html>

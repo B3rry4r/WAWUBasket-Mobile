@@ -1,0 +1,43 @@
+name: wawubasket
+description: "WAWUBasket — a calm, minimal, premium marketplace for orders and delivery."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_riverpod: ^2.5.1
+
+  # Routing
+  go_router: ^14.6.2
+
+  # Typography (Inter — design system primary)
+  google_fonts: ^6.2.1
+
+  # Value equality for state objects
+  equatable: ^2.0.5
+  flutter_svg: ^2.3.0
+
+  # Persistence (role status, KYC progress, preferences)
+  shared_preferences: ^2.3.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/logos/
+
+  # Inter is loaded at runtime via google_fonts.

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>WAWUBasket — Customer Home (3 variants)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="wb/colors_and_type.css" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ECECEC; }
+  * { box-sizing: border-box; }
+  /* hide scrollbars inside the scrollable screen areas */
+  ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="wb/components.jsx"></script>
+<script type="text/babel" src="wb/ios-frame.jsx"></script>
+<script type="text/babel" src="wb/design-canvas.jsx"></script>
+<script type="text/babel" src="wb/home-variants.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<script type="text/babel" data-presets="env,react">
+const { DesignCanvas, DCSection, DCArtboard } = window;
+const { useTweaks, TweaksPanel, TweakSection, TweakColor, TweakRadio } = window;
+
+// ── Tweak defaults ──────────────────────────────────────────────────────────
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "#111111",
+  "shape": "pill",
+  "surface": "floating"
+}/*EDITMODE-END*/;
+
+// Snapshot of original W values — read once before any applyTweaks call
+const _W0 = (() => {
+  const W = window.W;
+  return {
+    dark: W.dark,
+    r: { ...W.r },
+    shadow: { ...W.shadow },
+  };
+})();
+
+// applyTweaks — mutates window.W in place before children render.
+// TOK in home-variants.jsx IS window.W (same object reference),
+// so every inline style that reads TOK.dark / TOK.r.card / etc.
+// picks up the updated value on each React render cycle.
+function applyTweaks(t) {
+  const W = window.W;
+
+  // ── Accent: primary action color — nav, buttons, active states
+  W.dark = t.accent;
+
+  // ── Shape: rescale all radii in concert for a coherent personality shift
+  const shapes = {
+    pill:    { btn: 16, input: 16, card: 24, sheet: 32, pill: 999 },
+    rounded: { btn: 10, input: 10, card: 12, sheet: 18, pill: 999 },
+    sharp:   { btn:  4, input:  4, card:  5, sheet:  8, pill: 999 },
+  };
+  Object.assign(W.r, shapes[t.shape] || shapes.pill);
+
+  // ── Surface: change depth language — shadows vs. hairlines vs. none
+  const surfaces = {
+    floating: _W0.shadow,
+    outlined: { card: 'none', float: 'none', nav: 'none' },
+    flat:     { card: 'none', float: 'none', nav: '0 -1px 0 rgba(0,0,0,0.07)' },
+  };
+  Object.assign(W.shadow, surfaces[t.surface] || surfaces.floating);
+}
+
+// ── Screen wrapper ──────────────────────────────────────────────────────────
+function Screen({ children, bg = '#F7F7F7', height = 980 }) {
+  return (
+    <div style={{
+      width: 390, height, background: bg, overflow: 'hidden',
+      fontFamily: 'Inter, -apple-system, sans-serif',
+      WebkitFontSmoothing: 'antialiased',
+      position: 'relative',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+// ── App ─────────────────────────────────────────────────────────────────────
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  // Apply before any child renders — synchronous, so all TOK reads in
+  // home-variants.jsx see the mutated values on this render pass.
+  applyTweaks(t);
+
+  return (
+    <>
+      <DesignCanvas
+        title="WAWUBasket — Customer Home"
+        subtitle="Five layout explorations. No phone chrome — raw design only."
+      >
+        <DCSection
+          id="home"
+          title="Home screen"
+          subtitle="V1 · Hungry? hero  ·  V2 · Popular Near You  ·  V3 · Minimal  ·  V4 · DS cards  ·  V5 · Editorial  ·  V6 · Reimagined header"
+          gap={64}
+        >
+          <DCArtboard id="v1" label="V1 · Hungry? hero"      width={390} height={920}>
+            <Screen bg="#FFFFFF" height={920}><HomeV1 /></Screen>
+          </DCArtboard>
+          <DCArtboard id="v2" label="V2 · Popular Near You"  width={390} height={1060}>
+            <Screen bg="#F7F7F7" height={1060}><HomeV2 /></Screen>
+          </DCArtboard>
+          <DCArtboard id="v3" label="V3 · Minimal hero"      width={390} height={1120}>
+            <Screen bg="#FFFFFF" height={1120}><HomeV3 /></Screen>
+          </DCArtboard>
+          <DCArtboard id="v4" label="V4 · DS Cards + Promo"  width={390} height={1100}>
+            <Screen bg="#FFFFFF" height={1100}><HomeV4 /></Screen>
+          </DCArtboard>
+          <DCArtboard id="v5" label="V5 · Editorial"         width={390} height={1320}>
+            <Screen bg="#F7F7F7" height={1320}><HomeV5 /></Screen>
+          </DCArtboard>
+          <DCArtboard id="v6" label="V6 · Reimagined header" width={390} height={1100}>
+            <Screen bg="#FFFFFF" height={1100}><HomeV6 /></Screen>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      <TweaksPanel>
+        <TweakSection label="Accent">
+          <TweakColor
+            label="Primary color"
+            value={t.accent}
+            options={['#111111', '#C2410C', '#0F766E']}
+            onChange={v => setTweak('accent', v)}
+          />
+        </TweakSection>
+
+        <TweakSection label="Shape">
+          <TweakRadio
+            label="Corner radius"
+            value={t.shape}
+            options={[
+              { label: 'Pill', value: 'pill' },
+              { label: 'Round', value: 'rounded' },
+              { label: 'Sharp', value: 'sharp' },
+            ]}
+            onChange={v => setTweak('shape', v)}
+          />
+        </TweakSection>
+
+        <TweakSection label="Surface">
+          <TweakRadio
+            label="Depth"
+            value={t.surface}
+            options={[
+              { label: 'Float', value: 'floating' },
+              { label: 'Line', value: 'outlined' },
+              { label: 'Flat', value: 'flat' },
+            ]}
+            onChange={v => setTweak('surface', v)}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

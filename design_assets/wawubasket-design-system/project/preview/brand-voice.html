@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="_card.css">
+<style>
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .pair { display: grid; grid-template-columns: 90px 1fr; gap: 16px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E4E4; }
+  .pair:last-child { border-bottom: 0; }
+  .lab { font-size: 11px; font-weight: 500; color: #7A7A7A; letter-spacing: 0.06em; text-transform: uppercase; }
+  .ex { font-size: 16px; color: #1A1A1A; line-height: 1.45; }
+  .bad { color: #A0A0A0; text-decoration: line-through; margin-left: 8px; font-size: 14px; }
+</style></head>
+<body>
+<div class="card">
+  <div class="eyebrow">Voice — calm, direct, no exclaim, no emoji</div>
+  <div class="stack">
+    <div class="pair"><div class="lab">Greeting</div><div class="ex">Good evening, David <span class="bad">Hey there! 👋 Welcome back!!</span></div></div>
+    <div class="pair"><div class="lab">CTA</div><div class="ex">Confirm order <span class="bad">Place my order now! →</span></div></div>
+    <div class="pair"><div class="lab">Empty</div><div class="ex">Your basket is empty. <span class="bad">Oh no, nothing here yet 😢</span></div></div>
+    <div class="pair"><div class="lab">Error</div><div class="ex">Card declined. Try another payment method. <span class="bad">Oops!</span></div></div>
+    <div class="pair"><div class="lab">ETA</div><div class="ex">Arrives in 25–35 min <span class="bad">Super fast delivery 🚀</span></div></div>
+  </div>
+</div>
+</body></html>
