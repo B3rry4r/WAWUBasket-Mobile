@@ -8,7 +8,7 @@ enum WBButtonVariant { primary, secondary, ghost, danger }
 enum WBButtonSize { sm, md, lg }
 
 /// Pill-radius CTA used across the app. Defaults to a full-width primary
-/// button — the most common pattern in the design.
+/// button, the most common pattern in the design.
 class WBButton extends StatefulWidget {
   const WBButton({
     super.key,

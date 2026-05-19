@@ -5,7 +5,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
-/// Trade-agent shell. Four tabs — Home, Record sale, Cash payout, Account.
+/// Trade-agent shell. Four tabs, Home, Record sale, Cash payout, Account.
 /// Register-trader is reached as a pushed route from Home's quick action
 /// row; it's a once-per-trader flow, not a daily tab.
 class AgentShell extends StatelessWidget {

@@ -261,7 +261,7 @@ class _ConflictSheet extends StatelessWidget {
         final c =
             conflicts.where((c) => c.id == conflictId).firstOrNull;
         if (c == null) {
-          // Already resolved — close the sheet.
+          // Already resolved, close the sheet.
           WidgetsBinding.instance
               .addPostFrameCallback((_) => Navigator.of(context).pop());
           return const SizedBox.shrink();

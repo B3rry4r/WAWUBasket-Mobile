@@ -251,7 +251,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          'Tap to add — at least one shot',
+                          'Tap to add, at least one shot',
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,
                           ),
@@ -289,7 +289,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                         onTap: _pickCategory,
                         behavior: HitTestBehavior.opaque,
                         child: AbsorbPointer(
-                          // re-read on every rebuild — `key` forces the
+                          // re-read on every rebuild, `key` forces the
                           // child WBInput to discard its stale text state
                           // when the user picks a new category.
                           child: WBInput(
@@ -381,7 +381,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Sizes, spice levels, add-ons — anything customers should choose.',
+                            'Sizes, spice levels, add-ons, anything customers should choose.',
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),

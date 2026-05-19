@@ -50,7 +50,7 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                         children: [
                           Text('Apply to ride', style: WBTypography.page),
                           Text(
-                            'Quick verification — under 5 minutes.',
+                            'Quick verification, under 5 minutes.',
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),

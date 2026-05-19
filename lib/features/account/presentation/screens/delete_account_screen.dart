@@ -6,7 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 
-/// Empathetic delete-account flow — pre-leave checklist, reason chips,
+/// Empathetic delete-account flow, pre-leave checklist, reason chips,
 /// destructive confirm. UI-only: confirming signs the user out.
 class DeleteAccountScreen extends StatefulWidget {
   const DeleteAccountScreen({super.key});
@@ -19,9 +19,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   String _reason = '';
 
   static const _checklist = [
-    'Use your wallet balance — it will be lost',
+    'Use your wallet balance, it will be lost',
     'Complete any active orders',
-    "Download your receipts — you won't access them after",
+    "Download your receipts, you won't access them after",
   ];
   static const _reasons = [
     'Too expensive',

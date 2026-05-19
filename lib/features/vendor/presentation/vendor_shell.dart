@@ -5,7 +5,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
-/// Vendor's persistent shell. Four tabs — Home, Orders, Menu, Account —
+/// Vendor's persistent shell. Four tabs, Home, Orders, Menu, Account —
 /// match the customer flow's tab count so the navbar stays comfortable.
 /// Earnings, Inventory, Reviews and Settings live as pushed routes reached
 /// from Home's quick actions and the Account tab.
@@ -39,7 +39,7 @@ class VendorShell extends StatelessWidget {
   ];
 
   String get _activeId {
-    // Longest-prefix match — `/vendor` is a prefix of `/vendor/orders` etc.
+    // Longest-prefix match, `/vendor` is a prefix of `/vendor/orders` etc.
     // so we have to pick the longest matching item id, not the first.
     String? best;
     for (final item in _items) {

@@ -367,7 +367,7 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
                   20,
                 ),
                 child: WBButton(
-                  label: 'Add to basket — ₦${_n(total)}',
+                  label: 'Add to basket, ₦${_n(total)}',
                   fullWidth: true,
                   size: WBButtonSize.lg,
                   onPressed: () {

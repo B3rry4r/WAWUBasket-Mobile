@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/wb_theme_exports.dart';
 import 'wb_icon.dart';
 
-/// Pill quantity stepper — soft tray with a white minus and a dark plus.
+/// Pill quantity stepper, soft tray with a white minus and a dark plus.
 class WBQtyStepper extends StatelessWidget {
   const WBQtyStepper({
     super.key,

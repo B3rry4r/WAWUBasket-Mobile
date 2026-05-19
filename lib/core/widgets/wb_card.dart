@@ -42,7 +42,7 @@ class WBCard extends StatelessWidget {
   }
 }
 
-/// Hairline divider (1px @ #E4E4E4) — used inside cards & list rows.
+/// Hairline divider (1px @ #E4E4E4), used inside cards & list rows.
 class WBDivider extends StatelessWidget {
   const WBDivider({super.key, this.indent = 0, this.endIndent = 0});
   final double indent;

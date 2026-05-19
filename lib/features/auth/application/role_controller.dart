@@ -100,7 +100,7 @@ class RoleController {
   final ValueNotifier<AppRole> notifier = ValueNotifier(AppRole.customer);
 
   /// True once [setRole] has been called from any auth/role-select/operator
-  /// login flow. Drives splash routing — a signed-out user lands on
+  /// login flow. Drives splash routing, a signed-out user lands on
   /// `/welcome`, a signed-in user lands on their role's home.
   bool _signedIn = false;
   bool get signedIn => _signedIn;
@@ -126,7 +126,7 @@ class RoleController {
       ];
 
   /// Called when the user finishes a KYC form. We auto-approve in the
-  /// prototype — production would flip this to [pending] until admin
+  /// prototype, production would flip this to [pending] until admin
   /// approves.
   void completeKyc(AppRole r) {
     _status[r] = RoleStatus.approved;
@@ -165,7 +165,7 @@ class RoleController {
       _prefs = await SharedPreferences.getInstance();
     } catch (_) {
       // shared_preferences isn't available in tests / unsupported
-      // platforms — degrade gracefully to in-memory defaults.
+      // platforms, degrade gracefully to in-memory defaults.
       _prefs = null;
       return;
     }

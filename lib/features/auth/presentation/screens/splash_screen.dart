@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
     final canResume = role == AppRole.customer ||
         (role.shellReady && ctrl.statusOf(role) == RoleStatus.approved);
     if (!canResume) {
-      // Saved role lost its approval or its shell isn't built yet — fall
+      // Saved role lost its approval or its shell isn't built yet, fall
       // back to customer so we never strand the user on a dead route.
       ctrl.setRole(AppRole.customer);
       context.go(AppRoutes.home);

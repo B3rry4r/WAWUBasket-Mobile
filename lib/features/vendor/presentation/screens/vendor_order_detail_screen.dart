@@ -10,7 +10,7 @@ import '../../application/vendor_orders_controller.dart';
 import '../widgets/vendor_status_pill.dart';
 
 /// Full detail for one order: items × modifiers, customer info, address,
-/// special instructions, contact rider, print ticket — plus the next-stage
+/// special instructions, contact rider, print ticket, plus the next-stage
 /// action ribbon at the bottom that walks the order through the state
 /// machine in [OrderStage].
 class VendorOrderDetailScreen extends StatefulWidget {
@@ -69,11 +69,45 @@ class _Body extends StatelessWidget {
   const _Body({required this.order});
   final VendorOrder order;
 
-  void _advance(BuildContext context) {
+  Future<void> _advance(BuildContext context) async {
     final next = order.stage.advance;
     if (next == null) return;
+    // Handover (ready → handover) is the moment we request a rider.
+    // Show the picker so the vendor selects the vehicle category that
+    // suits this basket before the dispatcher matches a rider.
+    if (next.next == OrderStage.handover && order.riderType == null) {
+      final picked = await _showRiderTypeSheet(context);
+      if (picked == null) return;
+      order.riderType = picked;
+    }
     VendorOrdersController.instance.advance(order.id);
+    if (!context.mounted) return;
     wbShowSnack(context, '${order.id} · ${next.next.label}');
+  }
+
+  Future<RiderType?> _showRiderTypeSheet(BuildContext context) {
+    final suggestion = _suggestRiderType(order);
+    return showModalBottomSheet<RiderType>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (sheetCtx) => _RiderTypeSheet(
+        order: order,
+        suggestion: suggestion,
+      ),
+    );
+  }
+
+  /// Heuristic: many items or pricey baskets → car; short addresses
+  /// or single-item orders → motorbike; tiny single item → bicycle.
+  RiderType _suggestRiderType(VendorOrder o) {
+    if (o.items.length >= 4 || o.subtotal >= 15000) return RiderType.car;
+    if (o.items.length == 1 && o.subtotal < 3000) return RiderType.bicycle;
+    return RiderType.motorbike;
   }
 
   void _decline(BuildContext context) {
@@ -245,7 +279,7 @@ class _Body extends StatelessWidget {
                 ),
               ),
 
-              // Rider — only once one's been assigned
+              // Rider, only once one's been assigned
               if (order.riderName != null) ...[
                 const SizedBox(height: WBSpacing.lg),
                 _SectionLabel('Rider'),
@@ -526,6 +560,185 @@ class _TotalRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Picks a [RiderType] for an order being handed off. Pre-selects a
+/// sensible default based on the basket size / value.
+class _RiderTypeSheet extends StatefulWidget {
+  const _RiderTypeSheet({required this.order, required this.suggestion});
+  final VendorOrder order;
+  final RiderType suggestion;
+
+  @override
+  State<_RiderTypeSheet> createState() => _RiderTypeSheetState();
+}
+
+class _RiderTypeSheetState extends State<_RiderTypeSheet> {
+  late RiderType _picked = widget.suggestion;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: WBSpacing.screenPadding,
+        right: WBSpacing.screenPadding,
+        top: WBSpacing.lg,
+        bottom: MediaQuery.of(context).padding.bottom + WBSpacing.lg,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+              decoration: BoxDecoration(
+                color: WBColors.bgDivider,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+            ),
+          ),
+          Text(
+            'Pick a rider type',
+            style: WBTypography.cardTitle.copyWith(fontSize: 18),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Based on ${widget.order.items.length} item${widget.order.items.length == 1 ? '' : 's'}, we suggest ${widget.suggestion.label.toLowerCase()}.',
+            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          for (final t in RiderType.values) ...[
+            _RiderTypeRow(
+              type: t,
+              selected: _picked == t,
+              suggested: widget.suggestion == t,
+              onTap: () => setState(() => _picked = t),
+            ),
+            if (t != RiderType.values.last) const SizedBox(height: 8),
+          ],
+          const SizedBox(height: WBSpacing.lg),
+          WBButton(
+            label: 'Request ${_picked.label.toLowerCase()} rider',
+            size: WBButtonSize.lg,
+            fullWidth: true,
+            trailingIcon: WBIconName.arrowRight,
+            onPressed: () => Navigator.of(context).pop(_picked),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _RiderTypeRow extends StatelessWidget {
+  const _RiderTypeRow({
+    required this.type,
+    required this.selected,
+    required this.suggested,
+    required this.onTap,
+  });
+  final RiderType type;
+  final bool selected;
+  final bool suggested;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: WBMotion.base,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: selected ? WBColors.surfaceDark : WBColors.surfaceCard,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+          border: Border.all(
+            color: selected ? WBColors.surfaceDark : WBColors.bgDivider,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: selected
+                    ? Colors.white.withValues(alpha: 0.12)
+                    : WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: WBIcon(
+                WBIconName.bike,
+                size: 18,
+                color: selected ? Colors.white : WBColors.fgHeader,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        type.label,
+                        style: WBTypography.body.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: selected ? Colors.white : WBColors.fgHeader,
+                        ),
+                      ),
+                      if (suggested) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: selected
+                                ? Colors.white.withValues(alpha: 0.18)
+                                : WBColors.bgSoft,
+                            borderRadius:
+                                BorderRadius.circular(WBRadius.pill),
+                          ),
+                          child: Text(
+                            'Suggested',
+                            style: WBTypography.label.copyWith(
+                              color: selected
+                                  ? Colors.white
+                                  : WBColors.fgSecondary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 10,
+                              letterSpacing: 0.4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    type.hint,
+                    style: WBTypography.caption.copyWith(
+                      color: selected
+                          ? Colors.white.withValues(alpha: 0.6)
+                          : WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

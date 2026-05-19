@@ -3,6 +3,25 @@ import 'package:flutter/foundation.dart';
 /// State machine an order moves through from the vendor's perspective.
 /// Mirrors the lifecycle in the build-guide order service (pending →
 /// confirmed → preparing → ready → picked_up → en_route → delivered).
+/// Vehicle category the vendor picks when requesting a delivery rider.
+/// Matched against the rider pool's KYC-declared vehicle so a hot soup
+/// order doesn't end up on a bicycle.
+enum RiderType { bicycle, motorbike, car }
+
+extension RiderTypeX on RiderType {
+  String get label => switch (this) {
+        RiderType.bicycle => 'Bicycle',
+        RiderType.motorbike => 'Motorbike',
+        RiderType.car => 'Car',
+      };
+
+  String get hint => switch (this) {
+        RiderType.bicycle => 'Small parcels, under 2 km',
+        RiderType.motorbike => 'Standard food orders',
+        RiderType.car => 'Bulky items, multi-vendor baskets',
+      };
+}
+
 enum OrderStage {
   pending,
   preparing,
@@ -66,6 +85,7 @@ class VendorOrder {
     required this.stage,
     this.riderName,
     this.riderEta,
+    this.riderType,
     this.specialInstructions = '',
     this.serviceFee = 200,
     this.deliveryFee = 600,
@@ -80,6 +100,10 @@ class VendorOrder {
   OrderStage stage;
   String? riderName;
   String? riderEta;
+
+  /// The vehicle category the vendor requested when handing off. Drives
+  /// which rider pool the dispatch service can match against.
+  RiderType? riderType;
   final String specialInstructions;
   final int serviceFee;
   final int deliveryFee;
@@ -137,7 +161,7 @@ class VendorOrdersController {
           placedMinsAgo: 4,
           stage: OrderStage.pending,
           specialInstructions:
-              'No onions please. Extra suya pepper on the side. Call when you arrive — security needs to escort.',
+              'No onions please. Extra suya pepper on the side. Call when you arrive, security needs to escort.',
           items: const [
             OrderItem(
               name: 'Jollof rice & grilled chicken',

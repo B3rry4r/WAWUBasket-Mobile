@@ -6,7 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../domain/models/vendor.dart';
 
-/// The "DS" vendor card — pixel match for `preview/components-card.html`
+/// The "DS" vendor card, pixel match for `preview/components-card.html`
 /// and the verified Home (HomeV4).
 ///
 /// Anatomy:
@@ -119,7 +119,7 @@ class DSVendorCard extends StatelessWidget {
                   ),
                 ),
               ),
-              // ETA medallion — straddles photo/info seam
+              // ETA medallion, straddles photo/info seam
               Positioned(
                 right: 12,
                 bottom: -28,

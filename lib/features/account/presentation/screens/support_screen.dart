@@ -262,7 +262,7 @@ class SupportScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Missing item — Order #8804',
+                    'Missing item, Order #8804',
                     style: WBTypography.body.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

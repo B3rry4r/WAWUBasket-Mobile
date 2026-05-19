@@ -18,7 +18,7 @@ class WBNavItem {
 
 /// Floating dark-pill bottom navigation. The active tab inflates into a white
 /// capsule with a small inner black icon disc and a label. Active swap is
-/// fully animated — the capsule expands smoothly into place rather than
+/// fully animated, the capsule expands smoothly into place rather than
 /// popping.
 ///
 /// Used by every role's shell (customer, vendor, agent, rider). Each shell

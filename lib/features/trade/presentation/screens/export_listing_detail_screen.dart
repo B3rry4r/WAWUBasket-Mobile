@@ -12,7 +12,7 @@ import '../../domain/models/export_listing.dart';
 
 /// Buyer-facing detail for one export listing. The Enquire CTA records
 /// an enquiry against the listing (which the trader sees on their
-/// dashboard) and shows a snackbar — the actual escrow checkout lands
+/// dashboard) and shows a snackbar, the actual escrow checkout lands
 /// in batch D.
 class ExportListingDetailScreen extends StatelessWidget {
   const ExportListingDetailScreen({super.key, required this.listingId});
@@ -61,7 +61,7 @@ class _Body extends StatelessWidget {
 
   void _enquire(BuildContext context) {
     TradeController.instance.recordEnquiry(listing.id);
-    wbShowSnack(context, "Enquiry sent — the trader will reach out.");
+    wbShowSnack(context, "Enquiry sent, the trader will reach out.");
   }
 
   void _buyNow(BuildContext context) {

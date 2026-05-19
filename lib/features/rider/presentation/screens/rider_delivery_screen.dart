@@ -9,7 +9,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/rider_controller.dart';
 import '../widgets/rider_map_view.dart';
 
-/// Active delivery screen — the rider walks the order through four stages:
+/// Active delivery screen, the rider walks the order through four stages:
 /// Heading to vendor → At vendor → Picked up → En route → Delivered.
 /// Vendor card carries the call action while we're pre-pickup; customer
 /// card carries it once we're en route. A mini map (same widget as home,
@@ -136,7 +136,7 @@ class _Body extends StatelessWidget {
             ),
             const SizedBox(height: WBSpacing.lg),
 
-            // Mini map — same widget, scaled down.
+            // Mini map, same widget, scaled down.
             SizedBox(
               height: 200,
               child: RiderMapView(

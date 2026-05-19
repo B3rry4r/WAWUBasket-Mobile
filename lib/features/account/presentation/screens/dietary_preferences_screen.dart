@@ -5,7 +5,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
-/// Dietary preferences — things the customer would rather not eat. Drives
+/// Dietary preferences, things the customer would rather not eat. Drives
 /// what gets surfaced first across the catalogue (UI-only here).
 class DietaryPreferencesScreen extends StatefulWidget {
   const DietaryPreferencesScreen({super.key});

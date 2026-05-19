@@ -339,8 +339,8 @@ class _SyncBanner extends StatelessWidget {
             Expanded(
               child: Text(
                 dirty
-                    ? '$pending item${pending == 1 ? '' : 's'} waiting to sync — tap to sync now.'
-                    : "You're online — transactions sync as you record them.",
+                    ? '$pending item${pending == 1 ? '' : 's'} waiting to sync, tap to sync now.'
+                    : "You're online, transactions sync as you record them.",
                 style: WBTypography.caption.copyWith(
                   color: WBColors.fgHeader,
                   fontWeight: FontWeight.w500,

@@ -84,7 +84,7 @@ class RiderController {
   }
   static final RiderController instance = RiderController._();
 
-  /// Rider's home coordinate — used to center the map and to give offer
+  /// Rider's home coordinate, used to center the map and to give offer
   /// pins something to be offset from in the stylized fallback.
   static const riderLat = 6.4281; // Victoria Island, Lagos
   static const riderLng = 3.4216;
@@ -96,7 +96,7 @@ class RiderController {
   void toggleOnline() => online.value = !online.value;
 
   /// Promote an offer to the active delivery and pull it out of the
-  /// nearby list. Idempotent — no-op if there's already an active.
+  /// nearby list. Idempotent, no-op if there's already an active.
   void accept(DeliveryOffer offer) {
     if (active.value != null) return;
     active.value = ActiveDelivery(offer: offer, stage: DeliveryStage.accepted);
@@ -135,7 +135,7 @@ class RiderController {
           distanceKm: 4.2,
           etaMin: 22,
           feeNaira: 600,
-          specialInstructions: 'Call when you arrive — security will escort.',
+          specialInstructions: 'Call when you arrive, security will escort.',
         ),
         DeliveryOffer(
           id: 'WAWU-8822',

@@ -161,7 +161,7 @@ class _AgentRegisterTraderScreenState
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          "Offline-capable — we'll sync when you have connection.",
+                          "Offline-capable, we'll sync when you have connection.",
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,
                           ),

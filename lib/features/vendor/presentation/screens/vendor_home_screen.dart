@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
+import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_orders_controller.dart';
 import '../widgets/vendor_status_pill.dart';
@@ -54,6 +55,11 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                 subtitle: 'Vendor dashboard',
               ),
               const SizedBox(height: WBSpacing.lg),
+              const WBRandomTagline(
+                pairs: WBTaglines.vendor,
+                fontSize: 26,
+              ),
+              const SizedBox(height: WBSpacing.lg),
               _Hero(
                 open: _open,
                 onToggle: () => setState(() => _open = !_open),
@@ -95,7 +101,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                         const SizedBox(height: 4),
                         Text(
                           pending.isEmpty
-                              ? 'Nothing pending — enjoy the breather.'
+                              ? 'Nothing pending, enjoy the breather.'
                               : '${pending.length} waiting for your magic.',
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,

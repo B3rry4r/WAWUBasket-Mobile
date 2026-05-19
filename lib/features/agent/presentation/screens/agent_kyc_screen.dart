@@ -103,7 +103,7 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                 const SizedBox(height: 10),
                 const KycUploadTile(
                   label: 'Face capture',
-                  sub: 'Live selfie — anti-fraud',
+                  sub: 'Live selfie, anti-fraud',
                   icon: WBIconName.user,
                 ),
                 const SizedBox(height: WBSpacing.lg),

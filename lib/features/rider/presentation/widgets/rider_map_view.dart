@@ -10,7 +10,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/rider_controller.dart';
 
-/// Centre of the rider's view — either a real Mapbox `MapWidget` when a
+/// Centre of the rider's view, either a real Mapbox `MapWidget` when a
 /// token is configured AND the platform supports it, or a stylized
 /// placeholder built with `CustomPainter` otherwise.
 ///
@@ -29,17 +29,15 @@ class RiderMapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(WBRadius.card),
-      child: SizedBox.expand(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: _useMapbox
-                  ? _MapboxLayer()
-                  : const _StylizedMap(),
-            ),
-            // Offer markers — positioned proportionally on the map.
+    return SizedBox.expand(
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: _useMapbox
+                ? _MapboxLayer()
+                : const _StylizedMap(),
+          ),
+            // Offer markers, positioned proportionally on the map.
             for (var i = 0; i < offers.length; i++)
               _OfferMarker(
                 offer: offers[i],
@@ -47,21 +45,34 @@ class RiderMapView extends StatelessWidget {
                 slotCount: offers.length,
                 onTap: () => onTapOffer(offers[i]),
               ),
-            // Rider's own pin sits at dead-centre.
-            const Center(child: _RiderPin()),
-          ],
-        ),
+          // Rider's own pin sits at dead-centre.
+          const Center(child: _RiderPin()),
+        ],
       ),
     );
   }
 }
 
 class _MapboxLayer extends StatelessWidget {
+  /// Hides the default Mapbox scale-bar + compass + attribution chrome
+  /// so the top-left and top-right corners stay clean. We re-surface
+  /// attribution in the offer drawer footer instead.
+  void _onMapCreated(mb.MapboxMap map) {
+    map.scaleBar.updateSettings(mb.ScaleBarSettings(enabled: false));
+    map.compass.updateSettings(mb.CompassSettings(enabled: false));
+    map.attribution.updateSettings(mb.AttributionSettings(
+      position: mb.OrnamentPosition.BOTTOM_RIGHT,
+    ));
+    map.logo.updateSettings(
+      mb.LogoSettings(position: mb.OrnamentPosition.BOTTOM_LEFT),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return mb.MapWidget(
       // `cameraOptions` is still the public knob in mapbox_maps_flutter
-      // 2.x — the `viewport`/CameraViewportState replacement isn't fully
+      // 2.x. The `viewport`/CameraViewportState replacement isn't fully
       // landed yet, so we keep the working API and silence the warning.
       // ignore: deprecated_member_use
       cameraOptions: mb.CameraOptions(
@@ -74,6 +85,7 @@ class _MapboxLayer extends StatelessWidget {
         zoom: 13.2,
       ),
       styleUri: mb.MapboxStyles.LIGHT,
+      onMapCreated: _onMapCreated,
     );
   }
 }
@@ -117,7 +129,7 @@ class _RoadsPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // Three soft curves — the eye sees city roads.
+    // Three soft curves, the eye sees city roads.
     final p1 = Path()
       ..moveTo(-10, h * 0.78)
       ..cubicTo(w * 0.25, h * 0.62, w * 0.55, h * 0.74, w + 10, h * 0.58);
@@ -179,7 +191,7 @@ class _OfferMarker extends StatelessWidget {
   final int slotCount;
   final VoidCallback onTap;
 
-  /// Deterministic positioning around the centre — close offers nearer
+  /// Deterministic positioning around the centre, close offers nearer
   /// the rider, far ones at the edge. Avoids overlapping the rider pin
   /// and the bottom sheet handle.
   Alignment _slotAlignment() {

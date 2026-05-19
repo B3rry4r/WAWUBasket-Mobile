@@ -10,7 +10,7 @@ import '../../application/rider_controller.dart';
 import '../widgets/accept_offer_sheet.dart';
 import '../widgets/rider_map_view.dart';
 
-/// Rider's home screen — full-bleed Mapbox map (or stylized fallback) with
+/// Rider's home screen, full-bleed Mapbox map (or stylized fallback) with
 /// floating offer pins, a top status banner (online toggle + today's
 /// earnings), and a draggable offer sheet pinned to the bottom.
 ///
@@ -315,7 +315,7 @@ class _OfferDrawer extends StatelessWidget {
                                       BorderRadius.circular(WBRadius.card),
                                 ),
                                 child: Text(
-                                  'No offers right now. Hang tight — they spike at meal times.',
+                                  'No offers right now. Hang tight, they spike at meal times.',
                                   style: WBTypography.body.copyWith(
                                     color: WBColors.fgSecondary,
                                     fontSize: 14,

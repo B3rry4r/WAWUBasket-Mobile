@@ -149,6 +149,35 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
+                  label: 'Cross-border papers',
+                  sub: 'Required if you run loads across ECOWAS borders.',
+                ),
+                const SizedBox(height: 12),
+                const KycUploadTile(
+                  label: 'ECOWAS Trade Liberalisation Scheme certificate',
+                  sub: 'ETLS approval issued by your country trade ministry',
+                  icon: WBIconName.card,
+                ),
+                const SizedBox(height: 10),
+                const KycUploadTile(
+                  label: 'AfCFTA registration',
+                  sub: 'African Continental Free Trade Area papers',
+                  icon: WBIconName.card,
+                ),
+                const SizedBox(height: 10),
+                const KycUploadTile(
+                  label: 'Customs clearance licence',
+                  sub: 'Or partnership with a licensed customs agent',
+                  icon: WBIconName.card,
+                ),
+                const SizedBox(height: 10),
+                const KycUploadTile(
+                  label: 'International passport',
+                  sub: 'Bio data page',
+                  icon: WBIconName.user,
+                ),
+                const SizedBox(height: WBSpacing.lg),
+                const KycSectionLabel(
                   label: 'Payout',
                   sub: 'Where we settle each completed trip.',
                 ),

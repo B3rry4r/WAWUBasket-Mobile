@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/wb_theme_exports.dart';
 import 'wb_icon.dart';
 
-/// Circular 44px back chip with soft card shadow — used in screen headers.
+/// Circular 44px back chip with soft card shadow, used in screen headers.
 class WBBackChip extends StatelessWidget {
   const WBBackChip({super.key, this.onPressed, this.icon = WBIconName.chevronLeft});
 

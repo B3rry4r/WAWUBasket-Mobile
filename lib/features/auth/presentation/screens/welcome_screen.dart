@@ -9,9 +9,9 @@ class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   static const _features = [
-    _Feature(WBIconName.basket, 'Eat now, gather fresh, stock up — one basket.'),
+    _Feature(WBIconName.basket, 'Eat now, gather fresh, stock up, one basket.'),
     _Feature(WBIconName.bike, 'Watch your basket come to life in real time.'),
-    _Feature(WBIconName.card, 'Pay your way — card, transfer, or wallet.'),
+    _Feature(WBIconName.card, 'Pay your way, card, transfer, or wallet.'),
   ];
 
   @override
@@ -44,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 320),
                 child: Text(
                   'Restaurants, fresh produce, livestock and kitchen '
-                  'essentials — all in one basket.',
+                  'essentials, all in one basket.',
                   style: WBTypography.body.copyWith(
                     color: WBColors.fgSecondary,
                     fontSize: 15,

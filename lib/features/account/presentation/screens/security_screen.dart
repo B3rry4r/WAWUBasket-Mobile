@@ -5,7 +5,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
-/// Account security — change password, biometric login, 2FA. UI-only:
+/// Account security, change password, biometric login, 2FA. UI-only:
 /// toggles flip local state and snack; password opens a sheet.
 class SecurityScreen extends StatefulWidget {
   const SecurityScreen({super.key});

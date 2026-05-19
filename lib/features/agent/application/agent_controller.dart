@@ -85,13 +85,13 @@ class AgentPayout {
   final int amountNaira;
   final DateTime recordedAt;
 
-  /// Raw bytes of a serialized signature stroke list. Optional — only
+  /// Raw bytes of a serialized signature stroke list. Optional, only
   /// captured when the agent uses the signature pad.
   final List<List<Offset>>? signatureBytes;
   bool synced;
 }
 
-/// A simulated sync conflict — two versions of the same transaction
+/// A simulated sync conflict, two versions of the same transaction
 /// (offline edit vs server snapshot) that the agent has to pick between
 /// before sync can complete.
 class SyncConflict {
@@ -134,7 +134,7 @@ class AgentController {
   final ValueNotifier<List<AgentPayout>> payouts;
   final ValueNotifier<List<SyncConflict>> conflicts;
 
-  /// Total items waiting on sync — drives the badge on the home hero
+  /// Total items waiting on sync, drives the badge on the home hero
   /// and the sync screen's pending counts.
   int get pendingSyncCount {
     var n = 0;

@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
+import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../escrow/application/escrow_controller.dart';
 import '../../../escrow/domain/models/bulk_order.dart';
@@ -42,6 +43,11 @@ class TraderHomeScreen extends StatelessWidget {
               const WBHomeAppBar(
                 title: 'Hauwa & Sons Bulk Co.',
                 subtitle: 'Trader dashboard',
+              ),
+              const SizedBox(height: WBSpacing.lg),
+              const WBRandomTagline(
+                pairs: WBTaglines.trader,
+                fontSize: 26,
               ),
               const SizedBox(height: WBSpacing.lg),
               _Hero(
@@ -182,7 +188,7 @@ class _LiveEscrowSection extends StatelessWidget {
             if (live.isEmpty)
               _EmptyTile(
                 label:
-                    'Funds sit here when a buyer pays for a listing — release on delivery.',
+                    'Funds sit here when a buyer pays for a listing, release on delivery.',
               )
             else
               for (final o in live)

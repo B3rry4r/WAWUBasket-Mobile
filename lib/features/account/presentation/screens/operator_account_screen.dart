@@ -11,7 +11,7 @@ import '../widgets/account_menu.dart';
 import '../widgets/role_switcher_sheet.dart';
 
 /// One Account tab, shared across every operator shell (vendor, agent,
-/// rider — and later trader, driver). The visual language mirrors the
+/// rider, and later trader, driver). The visual language mirrors the
 /// customer Profile screen: dark hero with avatar + name + 3 stat tiles,
 /// then grouped menu sections (Account, Preferences, Switch role, Sign out).
 ///
@@ -65,7 +65,7 @@ class OperatorAccountScreen extends StatelessWidget {
             settingsSub: null,
             settingsRoute: null,
           ),
-        // Trader & driver are returned here for completeness — their shells
+        // Trader & driver are returned here for completeness, their shells
         // (and therefore this screen as the Account tab body) come online
         // in batches C and E.
         AppRole.trader => const _OperatorProfile(
@@ -158,7 +158,7 @@ class OperatorAccountScreen extends StatelessWidget {
           AccountMenuRow(
             icon: WBIconName.user,
             label: 'Personal information',
-            sub: 'Name, email, phone — verified ✓',
+            sub: 'Name, email, phone, verified ✓',
             onTap: () => context.push(AppRoutes.personalInfo),
           ),
           AccountMenuRow(
@@ -230,7 +230,7 @@ class OperatorAccountScreen extends StatelessWidget {
     ];
   }
 
-  /// e.g. "Approved: Customer · Vendor · Rider" — gives a one-line picture
+  /// e.g. "Approved: Customer · Vendor · Rider", gives a one-line picture
   /// of what shells the user can hop into.
   String _switchSub() {
     final approved = RoleController.instance.switchableRoles
@@ -276,15 +276,17 @@ class _Hero extends StatelessWidget {
                     Container(
                       width: 64,
                       height: 64,
+                      padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: WBColors.bgDivider,
-                          width: 2.5,
+                          width: 1.5,
                         ),
                       ),
-                      clipBehavior: Clip.antiAlias,
-                      child: const WBNetworkImage(url: WBImages.avatar),
+                      child: const ClipOval(
+                        child: WBNetworkImage(url: WBImages.avatar),
+                      ),
                     ),
                     Positioned(
                       right: -2,

@@ -18,7 +18,7 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
   final Set<String> _replied = <String>{};
 
   static const _reviews = [
-    (name: 'Adunni O.', rating: 5, text: 'Best jollof in Lagos — period.', date: 'Today'),
+    (name: 'Adunni O.', rating: 5, text: 'Best jollof in Lagos, period.', date: 'Today'),
     (name: 'Tobi K.', rating: 4, text: 'Great food, suya could be hotter.', date: 'Yesterday'),
     (name: 'Kemi A.', rating: 5, text: 'Fast delivery, food still hot 🔥', date: '2 days ago'),
     (name: 'Daniel U.', rating: 3, text: 'Rice was a bit dry today.', date: '3 days ago'),
@@ -260,7 +260,7 @@ class _ReplySheetState extends State<_ReplySheet> {
           const SizedBox(height: WBSpacing.lg),
           WBInput(
             label: 'Your reply',
-            placeholder: 'Thanks for the feedback — we hear you...',
+            placeholder: 'Thanks for the feedback, we hear you...',
             controller: _ctrl,
             onChanged: (_) => setState(() {}),
           ),

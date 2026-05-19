@@ -4,7 +4,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
-/// Section header used in every KYC screen — UPPERCASE label + spacing.
+/// Section header used in every KYC screen, UPPERCASE label + spacing.
 /// Mirrors the look of the Profile screen menu-section labels so KYC feels
 /// native to the design system.
 class KycSectionLabel extends StatelessWidget {
@@ -40,7 +40,7 @@ class KycSectionLabel extends StatelessWidget {
 }
 
 /// Dashed-border upload tile. Tapping fires [onTap] (which should open the
-/// camera / file picker — here it just snackbars). Once "uploaded" the
+/// camera / file picker, here it just snackbars). Once "uploaded" the
 /// tile shows a filled state.
 class KycUploadTile extends StatefulWidget {
   const KycUploadTile({

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 
 /// Transparent footer slot that hosts the sticky CTA at the bottom of a
-/// screen. Has no background fill — the dark button itself supplies all
+/// screen. Has no background fill, the dark button itself supplies all
 /// the visual presence. Callers must reserve enough bottom padding on
 /// their scroll content so the CTA doesn't overlap the last card.
 ///

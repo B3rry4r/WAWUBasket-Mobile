@@ -73,7 +73,7 @@ class _Body extends StatelessWidget {
     EscrowController.instance.markDeliveredBySeller(order.id);
     wbShowSnack(
       context,
-      'Buyer notified — waiting on their confirmation to release funds.',
+      'Buyer notified, waiting on their confirmation to release funds.',
     );
   }
 
@@ -392,46 +392,61 @@ class _Timeline extends StatelessWidget {
     return WBCard(
       child: Column(
         children: [
-          for (var i = 0; i < steps.length; i++) ...[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _StepDot(
-                  done: steps[i].done,
-                  warning: steps[i].warning,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
-                    child: Text(
-                      steps[i].label,
-                      style: WBTypography.body.copyWith(
-                        fontWeight: steps[i].done || steps[i].warning
-                            ? FontWeight.w600
-                            : FontWeight.w500,
-                        fontSize: 14,
-                        color: steps[i].done || steps[i].warning
-                            ? WBColors.fgHeader
-                            : WBColors.fgPlaceholder,
+          for (var i = 0; i < steps.length; i++)
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Left rail: 20px wide column holding the dot and the
+                  // vertical connector that runs to the next dot. Sharing
+                  // a single column guarantees pixel-perfect alignment
+                  // between the dot's centre and the line.
+                  SizedBox(
+                    width: 20,
+                    child: Column(
+                      children: [
+                        _StepDot(
+                          done: steps[i].done,
+                          warning: steps[i].warning,
+                        ),
+                        if (i != steps.length - 1)
+                          Expanded(
+                            child: Center(
+                              child: Container(
+                                width: 2,
+                                color: steps[i + 1].done
+                                    ? WBColors.surfaceDark
+                                    : WBColors.bgDivider,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 1,
+                        bottom: i == steps.length - 1 ? 0 : 14,
+                      ),
+                      child: Text(
+                        steps[i].label,
+                        style: WBTypography.body.copyWith(
+                          fontWeight: steps[i].done || steps[i].warning
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                          fontSize: 14,
+                          color: steps[i].done || steps[i].warning
+                              ? WBColors.fgHeader
+                              : WBColors.fgPlaceholder,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            if (i != steps.length - 1)
-              Padding(
-                padding: const EdgeInsets.only(left: 9, top: 4, bottom: 4),
-                child: Container(
-                  width: 2,
-                  height: 14,
-                  color: steps[i + 1].done
-                      ? WBColors.surfaceDark
-                      : WBColors.bgDivider,
-                ),
+                ],
               ),
-          ],
+            ),
         ],
       ),
     );

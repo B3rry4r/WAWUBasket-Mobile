@@ -5,7 +5,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
-/// Long-haul driver's shell. Four tabs — Loads · Trip · Earnings · Account.
+/// Long-haul driver's shell. Four tabs, Loads · Trip · Earnings · Account.
 /// Bidding on a single load is a pushed route from the Loads board.
 class DriverShell extends StatelessWidget {
   const DriverShell({super.key, required this.child, required this.location});

@@ -29,7 +29,7 @@ class EscrowController {
     return order.id;
   }
 
-  /// Buyer confirms receipt — releases the held amount to the seller.
+  /// Buyer confirms receipt, releases the held amount to the seller.
   void release(String id) => _setStatus(id, EscrowStatus.released);
 
   /// Admin sided with the buyer (or buyer cancelled before delivery).

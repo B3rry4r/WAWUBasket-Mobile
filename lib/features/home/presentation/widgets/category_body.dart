@@ -328,7 +328,7 @@ class _TradeBody extends StatelessWidget {
           onSeeAll: () => context.push(AppRoutes.trade),
         )),
         const SizedBox(height: 14),
-        // Full-bleed bulk-lot carousel — height reserves vertical room for
+        // Full-bleed bulk-lot carousel, height reserves vertical room for
         // the card content plus its soft shadow bleed so nothing clips.
         SizedBox(
           height: 360,

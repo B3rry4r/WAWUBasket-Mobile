@@ -9,7 +9,7 @@ import '../../domain/models/export_listing.dart';
 /// One trader-posted export listing rendered as a card. Used in the
 /// customer-side `/trade` browse, on the trader dashboard, and inside
 /// supplier-detail listings. `showStatus` toggles the Active / Sold pill
-/// (trader-facing) — buyer-facing surfaces just show the enquiry count.
+/// (trader-facing), buyer-facing surfaces just show the enquiry count.
 class ExportListingCard extends StatelessWidget {
   const ExportListingCard({
     super.key,

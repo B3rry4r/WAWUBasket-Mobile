@@ -9,7 +9,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
 
-/// Active trip screen — vertical checkpoint timeline, GPS-active banner,
+/// Active trip screen, vertical checkpoint timeline, GPS-active banner,
 /// masked-call trader. "Log checkpoint" advances state; the last
 /// checkpoint marks the trip delivered.
 class DriverActiveTripScreen extends StatelessWidget {

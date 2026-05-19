@@ -11,7 +11,7 @@ import '../widgets/sticky_action_bar.dart';
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key, this.productId});
 
-  /// Id of the tapped product. Null only on legacy direct pushes — the
+  /// Id of the tapped product. Null only on legacy direct pushes, the
   /// screen then falls back to the first menu item.
   final String? productId;
 
@@ -152,7 +152,7 @@ class _ProductScreenState extends State<ProductScreen> {
                         borderRadius: BorderRadius.circular(WBRadius.input),
                       ),
                       child: Text(
-                        'Less spicy please — and no onions on the side.',
+                        'Less spicy please, and no onions on the side.',
                         style: WBTypography.body.copyWith(
                           fontSize: 14,
                           color: WBColors.fgPlaceholder,

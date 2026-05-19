@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
+import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
@@ -11,7 +12,7 @@ import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/application/wb_images.dart';
 import '../widgets/category_body.dart';
 
-/// Padding helper — wraps a non-carousel section in the standard 20 px safe
+/// Padding helper, wraps a non-carousel section in the standard 20 px safe
 /// area so carousels can stay full-bleed.
 Widget _padded(Widget child) =>
     Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: child);
@@ -74,28 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )),
         const SizedBox(height: 22),
-        _padded(RichText(
-          text: TextSpan(
-            style: WBTypography.hero.copyWith(
-              fontSize: 32,
-              height: 1.1,
-              letterSpacing: -0.8,
-            ),
-            children: const [
-              TextSpan(
-                text: 'Hungry? ',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-              TextSpan(
-                text: 'Order & Eat',
-                style: TextStyle(
-                  color: WBColors.fgPlaceholder,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ],
-          ),
-        )),
+        _padded(const WBRandomTagline(pairs: WBTaglines.customer)),
         const SizedBox(height: 22),
         // Search bar (filter pill removed)
         _padded(GestureDetector(
@@ -207,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )),
         const SizedBox(height: 22),
-        // Row 1 — category pills (full-bleed)
+        // Row 1, category pills (full-bleed)
         SizedBox(
           height: 44,
           child: ListView.separated(
@@ -256,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        // Row 2 — subcategory chips (animated reveal, full-bleed).
+        // Row 2, subcategory chips (animated reveal, full-bleed).
         AnimatedSize(
           duration: WBMotion.base,
           curve: WBMotion.easeSoft,
@@ -275,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
         ),
         const SizedBox(height: 22),
-        // Category body — picks its own horizontal padding per section.
+        // Category body, picks its own horizontal padding per section.
         CategoryBody(
           kind: kind,
           categoryId: _activeCategoryId,

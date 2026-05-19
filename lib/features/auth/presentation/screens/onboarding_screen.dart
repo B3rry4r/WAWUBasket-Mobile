@@ -212,7 +212,7 @@ class _PermissionCard extends StatelessWidget {
                   size: WBButtonSize.sm,
                   fullWidth: true,
                   onPressed: () =>
-                      wbShowSnack(context, '$primary — thanks!'),
+                      wbShowSnack(context, '$primary, thanks!'),
                 ),
               ),
               const SizedBox(width: 8),

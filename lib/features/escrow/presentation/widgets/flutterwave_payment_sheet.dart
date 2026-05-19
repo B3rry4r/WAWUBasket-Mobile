@@ -10,7 +10,7 @@ import '../../domain/models/bulk_order.dart';
 /// [PaymentMethod]. The caller is responsible for persisting the order
 /// once the future resolves.
 ///
-/// Stays UI-only — no real Flutterwave SDK call. The "Powered by
+/// Stays UI-only, no real Flutterwave SDK call. The "Powered by
 /// Flutterwave" footer makes the simulated brand explicit.
 class FlutterwavePaymentSheet extends StatefulWidget {
   const FlutterwavePaymentSheet({
@@ -320,7 +320,7 @@ class _ProcessingView extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            "Hold tight — we're moving funds into escrow.",
+            "Hold tight, we're moving funds into escrow.",
             textAlign: TextAlign.center,
             style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
           ),

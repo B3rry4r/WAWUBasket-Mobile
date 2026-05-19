@@ -5,7 +5,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
-/// Trader operator shell. Four tabs — Home · Listings · Prices · Account.
+/// Trader operator shell. Four tabs, Home · Listings · Prices · Account.
 /// Transport (post-a-load for drivers) is a pushed route from Home, since
 /// it's an occasional action rather than a daily tab.
 class TraderShell extends StatelessWidget {

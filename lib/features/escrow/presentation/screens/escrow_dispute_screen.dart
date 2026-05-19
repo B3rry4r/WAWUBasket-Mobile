@@ -38,7 +38,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
   void _submit(BulkOrder order) {
     final body = _notes.text.trim().isEmpty
         ? _reason
-        : '$_reason — ${_notes.text.trim()}';
+        : '$_reason, ${_notes.text.trim()}';
     EscrowController.instance.dispute(order.id, body);
     wbShowSnack(
       context,
@@ -126,7 +126,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
                     WBInput(
                       label: 'Notes (optional)',
                       placeholder:
-                          "Tell us specifics — what arrived vs what you expected?",
+                          "Tell us specifics, what arrived vs what you expected?",
                       controller: _notes,
                     ),
                     const SizedBox(height: WBSpacing.lg),

@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
             time: '12:34',
           ),
           const _ChatMessage(
-            'Great — please use the gate on Akin Adesola, thank you!',
+            'Great, please use the gate on Akin Adesola, thank you!',
             fromMe: true,
             time: '12:35',
           ),
@@ -76,7 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
           _ChatMessage(
             widget.kind == ChatContextKind.rider
                 ? 'Got it 👍'
-                : "Thanks — we'll follow up shortly.",
+                : "Thanks, we'll follow up shortly.",
             fromMe: false,
             time: 'Now',
           ),

@@ -9,7 +9,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
 
-/// Driver's home — load board. Shows open loads with route, weight,
+/// Driver's home, load board. Shows open loads with route, weight,
 /// distance, offer; the resume banner appears whenever there's an
 /// active trip so the driver can hop back into it.
 class DriverHomeScreen extends StatelessWidget {

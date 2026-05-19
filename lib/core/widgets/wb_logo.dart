@@ -24,7 +24,7 @@ class WBWMark extends StatelessWidget {
   }
 }
 
-/// Wordmark variant — the full WAWUBasket lock-up. Use when the brand needs
+/// Wordmark variant, the full WAWUBasket lock-up. Use when the brand needs
 /// to read at a glance (welcome screen, marketing surfaces).
 class WBWordmark extends StatelessWidget {
   const WBWordmark({super.key, this.height = 32, this.color = WBColors.fgHeader});

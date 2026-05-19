@@ -1,5 +1,5 @@
 name: wawubasket
-description: "WAWUBasket — a calm, minimal, premium marketplace for orders and delivery."
+description: "WAWUBasket, a calm, minimal, premium marketplace for orders and delivery."
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -37,6 +37,21 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^6.0.0
+
+  # Generates platform launcher icons from a single PNG. Run:
+  #   dart run flutter_launcher_icons
+  flutter_launcher_icons: ^0.14.1
+
+# Launcher-icon configuration. Foreground PNG sits on a white background;
+# Android 8+ adaptive icon picks up the foreground + background colour.
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logos/launcher-icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/logos/launcher-icon-foreground.png"
+  remove_alpha_ios: true
+  min_sdk_android: 21
 
 flutter:
   uses-material-design: true

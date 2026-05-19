@@ -44,15 +44,17 @@ class ProfileScreen extends StatelessWidget {
                         Container(
                           width: 64,
                           height: 64,
+                          padding: const EdgeInsets.all(2),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
                               color: WBColors.bgDivider,
-                              width: 2.5,
+                              width: 1.5,
                             ),
                           ),
-                          clipBehavior: Clip.antiAlias,
-                          child: const WBNetworkImage(url: WBImages.avatar),
+                          child: const ClipOval(
+                            child: WBNetworkImage(url: WBImages.avatar),
+                          ),
                         ),
                         Positioned(
                           right: -2,
@@ -176,7 +178,7 @@ class ProfileScreen extends StatelessWidget {
           AccountMenuRow(
             icon: WBIconName.user,
             label: 'Personal information',
-            sub: 'Name, email, phone — verified ✓',
+            sub: 'Name, email, phone, verified ✓',
             onTap: () => context.push(AppRoutes.personalInfo),
           ),
           AccountMenuRow(
@@ -364,7 +366,7 @@ class _RateSheetState extends State<_RateSheet> {
                 : () {
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Thanks — you rated us $_rating stars')),
+                      SnackBar(content: Text('Thanks, you rated us $_rating stars')),
                     );
                   },
           ),

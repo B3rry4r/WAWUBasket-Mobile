@@ -5,7 +5,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
-/// WAWU+ subscription screen — benefits, monthly/yearly pricing, trial CTA.
+/// WAWU+ subscription screen, benefits, monthly/yearly pricing, trial CTA.
 class WawuPlusScreen extends StatefulWidget {
   const WawuPlusScreen({super.key});
 
@@ -19,7 +19,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
   static const _benefits = [
     'Free delivery on orders over ₦5,000',
     'Member-only deals every week',
-    'Priority support — skip the line',
+    'Priority support, skip the line',
     'Free returns on wrong items',
     'Early access to new features',
   ];
@@ -160,7 +160,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                     20,
                   ),
                   child: WBButton(
-                    label: 'Start free trial — 7 days',
+                    label: 'Start free trial, 7 days',
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,

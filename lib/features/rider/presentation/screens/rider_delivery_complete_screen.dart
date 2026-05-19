@@ -8,7 +8,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/rider_controller.dart';
 
-/// Post-delivery screen — confirms earnings, surfaces the customer rating
+/// Post-delivery screen, confirms earnings, surfaces the customer rating
 /// + optional tip, then clears the active delivery and routes back to
 /// the rider's map.
 class RiderDeliveryCompleteScreen extends StatefulWidget {

@@ -34,7 +34,7 @@ class _OtpScreenState extends State<OtpScreen>
     setState(() {
       for (var i = 0; i < _digits.length; i++) {
         if (_digits[i].isEmpty) {
-          // Mock digits — completes the 6-digit code.
+          // Mock digits, completes the 6-digit code.
           _digits[i] = '${(i * 3) % 10}';
         }
       }

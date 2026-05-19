@@ -7,7 +7,7 @@ import '../../trade/domain/models/supplier.dart';
 import '../domain/models/product.dart';
 import 'wb_images.dart';
 
-/// Central mock content — categories, subcategories, vendors, products,
+/// Central mock content, categories, subcategories, vendors, products,
 /// suppliers, bulk lots. Mirrors the WAWUBasket brand taxonomy.
 abstract final class MockData {
   // ─── 8 brand categories ──────────────────────────────────────
@@ -150,7 +150,7 @@ abstract final class MockData {
     ),
   ];
 
-  // ─── Vendors (restaurants only — for vendor carousel) ────────
+  // ─── Vendors (restaurants only, for vendor carousel) ────────
   static const vendors = [
     Vendor(
       id: 'v1',
@@ -206,7 +206,7 @@ abstract final class MockData {
     ),
   ];
 
-  // ─── Menu — restaurant dishes (used in vendor screen + home) ──
+  // ─── Menu, restaurant dishes (used in vendor screen + home) ──
   static const menu = [
     Product(
       id: 'm1',
@@ -253,7 +253,7 @@ abstract final class MockData {
     ),
     Product(
       id: 'm5',
-      name: 'Shawarma — chicken',
+      name: 'Shawarma, chicken',
       description: 'Grilled chicken, garlic sauce, fresh vegetables, soft wrap.',
       priceNaira: 2800,
       vendorName: 'Chicken Republic',
@@ -311,7 +311,7 @@ abstract final class MockData {
     ),
     Product(
       id: 'gp4',
-      name: 'Groundnut oil — 5 L',
+      name: 'Groundnut oil, 5 L',
       description: 'Pure, locally pressed groundnut oil.',
       priceNaira: 8500,
       vendorName: 'Pantry Plus',
@@ -378,7 +378,7 @@ abstract final class MockData {
     Product(
       id: 'fm4',
       name: 'Puna yam',
-      description: 'Premium puna yam — sweet & firm.',
+      description: 'Premium puna yam, sweet & firm.',
       priceNaira: 2500,
       vendorName: 'Mile 12 Market',
       imageUrl: WBImages.yam,
@@ -400,7 +400,7 @@ abstract final class MockData {
     Product(
       id: 'fm6',
       name: 'Fresh catfish',
-      description: 'Live catfish — cleaned on order.',
+      description: 'Live catfish, cleaned on order.',
       priceNaira: 4000,
       vendorName: 'Mile 12 Market',
       imageUrl: WBImages.freshFish,
@@ -421,7 +421,7 @@ abstract final class MockData {
     ),
     Product(
       id: 'fm8',
-      name: 'Fresh meat — beef',
+      name: 'Fresh meat, beef',
       description: 'Daily-cut beef, bone-in or boneless.',
       priceNaira: 3800,
       vendorName: 'Mile 12 Market',
@@ -566,7 +566,7 @@ abstract final class MockData {
     // Snacks
     Product(
       id: 'sn1',
-      name: 'Birthday cake — half slab',
+      name: 'Birthday cake, half slab',
       description: 'Vanilla butter cake, fresh icing.',
       priceNaira: 12000,
       vendorName: 'Sweet Spot',
@@ -598,7 +598,7 @@ abstract final class MockData {
     // Pharmacy
     Product(
       id: 'ph1',
-      name: 'Paracetamol — 24 tabs',
+      name: 'Paracetamol, 24 tabs',
       description: 'For mild pain & fever.',
       priceNaira: 800,
       vendorName: 'HealthDirect',
@@ -608,7 +608,7 @@ abstract final class MockData {
     ),
     Product(
       id: 'ph2',
-      name: 'Multivitamin — 30 tabs',
+      name: 'Multivitamin, 30 tabs',
       description: 'Daily wellness, A–Z support.',
       priceNaira: 4500,
       vendorName: 'HealthDirect',
@@ -618,7 +618,7 @@ abstract final class MockData {
     ),
   ];
 
-  // ─── Trade — suppliers + bulk lots (farm-produce only) ───────
+  // ─── Trade, suppliers + bulk lots (farm-produce only) ───────
   static const suppliers = [
     Supplier(
       id: 's1',

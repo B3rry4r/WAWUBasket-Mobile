@@ -50,7 +50,7 @@ class SearchField extends StatelessWidget {
   }
 }
 
-/// Section header — title + optional trailing action label.
+/// Section header, title + optional trailing action label.
 class SectionHeader extends StatelessWidget {
   const SectionHeader({super.key, required this.title, this.action});
   final String title;

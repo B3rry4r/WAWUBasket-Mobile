@@ -134,7 +134,7 @@ class WalletScreen extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          '₦3,000 held in escrow — releases in 48 hrs',
+                          '₦3,000 held in escrow, releases in 48 hrs',
                           style: WBTypography.caption.copyWith(
                             color: WBColors.statusWarning,
                             fontWeight: FontWeight.w500,

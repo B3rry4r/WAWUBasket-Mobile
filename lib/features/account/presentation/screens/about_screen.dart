@@ -53,7 +53,7 @@ class AboutScreen extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     'One basket. Everything. Restaurants, fresh produce, '
-                    'livestock and kitchen essentials — delivered fast.',
+                    'livestock and kitchen essentials, delivered fast.',
                     style: WBTypography.body.copyWith(
                       color: Colors.white.withValues(alpha: 0.7),
                       fontSize: 14,

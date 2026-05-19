@@ -6,14 +6,14 @@ import 'wb_network_image.dart';
 
 enum WBProductCardVariant { grid, row, carousel }
 
-/// One product-card widget for every product surface — dishes, marketplace
+/// One product-card widget for every product surface, dishes, marketplace
 /// items, search results, favorites, cart line previews. Bulk / sale / new
 /// statuses surface as **tags** (top-left chip), not as separate widgets.
 ///
 /// Three layout variants:
-/// - [WBProductCardVariant.grid]   — 2-col grid tile (square image, name, vendor, price + add)
-/// - [WBProductCardVariant.carousel] — fixed-width horizontal scroll tile (same anatomy, 220 px wide)
-/// - [WBProductCardVariant.row]    — horizontal list item with the image on the right
+/// - [WBProductCardVariant.grid]  , 2-col grid tile (square image, name, vendor, price + add)
+/// - [WBProductCardVariant.carousel], fixed-width horizontal scroll tile (same anatomy, 220 px wide)
+/// - [WBProductCardVariant.row]   , horizontal list item with the image on the right
 class WBProductCard extends StatelessWidget {
   const WBProductCard({
     super.key,
@@ -38,7 +38,7 @@ class WBProductCard extends StatelessWidget {
   /// Optional top-left chip (e.g. `'BULK'`, `'NEW'`, `'-20%'`).
   final String? tag;
 
-  /// Optional description — only rendered in the [WBProductCardVariant.row]
+  /// Optional description, only rendered in the [WBProductCardVariant.row]
   /// variant where there's room.
   final String? description;
 

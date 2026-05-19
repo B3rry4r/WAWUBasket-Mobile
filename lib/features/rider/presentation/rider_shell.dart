@@ -5,7 +5,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
-/// Food-courier shell. Four tabs — Map, Active, Earnings, Account. Map is
+/// Food-courier shell. Four tabs, Map, Active, Earnings, Account. Map is
 /// the rider's home and surfaces nearby delivery offers (Mapbox wired in
 /// batch B).
 class RiderShell extends StatelessWidget {
