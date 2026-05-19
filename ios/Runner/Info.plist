@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>WAWUBasket uses your location to show restaurants and markets near you and to track deliveries on the map.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Riders and drivers share location while on an active trip so customers and traders can track the basket in real time.</string>
 </dict>
 </plist>

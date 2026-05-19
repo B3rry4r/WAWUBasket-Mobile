@@ -2,6 +2,22 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        // Mapbox SDK is served from a private Maven repo. The password is
+        // a SECRET download token (sk.* with DOWNLOADS:READ scope) — NOT
+        // the public pk.* runtime token. Supply it via the
+        // MAPBOX_DOWNLOADS_TOKEN gradle property
+        // (~/.gradle/gradle.properties locally) or the same-named
+        // environment variable (CI).
+        maven {
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+            authentication { create<BasicAuthentication>("basic") }
+            credentials {
+                username = "mapbox"
+                password = (project.findProperty("MAPBOX_DOWNLOADS_TOKEN")
+                    ?: System.getenv("MAPBOX_DOWNLOADS_TOKEN")
+                    ?: "") as String
+            }
+        }
     }
 }
 

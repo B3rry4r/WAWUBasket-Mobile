@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: 'Hi, Brooks',
           subtitle: 'Delivering to 12 Adeola Odeku St, V/I',
           subtitleIcon: WBIconName.pin,
+          showChat: false,
           trailingExtra: WBHomeAppBarButton(
             icon: WBIconName.basket,
             onTap: () => context.push(AppRoutes.cart),
@@ -135,22 +136,12 @@ class _HomeScreenState extends State<HomeScreen> {
               _QuickAction(
                 icon: WBIconName.basket,
                 label: 'Reorder',
-                onTap: () => context.go(AppRoutes.orders),
-              ),
-              _QuickAction(
-                icon: WBIconName.clock,
-                label: 'Schedule',
-                onTap: () => context.push(AppRoutes.cart),
+                onTap: () => context.push(AppRoutes.ordersHistory),
               ),
               _QuickAction(
                 icon: WBIconName.pin,
                 label: 'Track',
                 onTap: () => context.push(AppRoutes.tracking),
-              ),
-              _QuickAction(
-                icon: WBIconName.heart,
-                label: 'Saved',
-                onTap: () => context.go(AppRoutes.favorites),
               ),
               _QuickAction(
                 icon: WBIconName.message,

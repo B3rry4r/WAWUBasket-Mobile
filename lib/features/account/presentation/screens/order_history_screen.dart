@@ -7,7 +7,12 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
-  const OrderHistoryScreen({super.key});
+  const OrderHistoryScreen({super.key, this.standalone = false});
+
+  /// When reached as a pushed route (e.g. the Home "Reorder" quick
+  /// action) we render a back chip. As a bottom-nav tab it stays
+  /// chrome-free since the nav bar is the way back.
+  final bool standalone;
 
   @override
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
@@ -73,7 +78,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    final body = SafeArea(
       bottom: false,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(
@@ -83,7 +88,18 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           120,
         ),
         children: [
-          Text('Your past baskets', style: WBTypography.page),
+          if (widget.standalone)
+            Row(
+              children: [
+                WBBackChip(onPressed: () => context.pop()),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Text('Your past baskets', style: WBTypography.page),
+                ),
+              ],
+            )
+          else
+            Text('Your past baskets', style: WBTypography.page),
           const SizedBox(height: WBSpacing.lg),
           SizedBox(
             height: 36,
@@ -106,6 +122,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
         ],
       ),
     );
+    if (widget.standalone) {
+      return Scaffold(backgroundColor: WBColors.bgPrimary, body: body);
+    }
+    return body;
   }
 }
 

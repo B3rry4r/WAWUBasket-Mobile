@@ -24,8 +24,14 @@ class WBHomeAppBar extends StatelessWidget {
     this.subtitle,
     this.subtitleIcon,
     this.notificationBadge = true,
+    this.showChat = true,
     this.trailingExtra,
   });
+
+  /// Whether to surface the chat button. The customer home sets this
+  /// false because chat already lives in its quick-actions row; every
+  /// operator home keeps it (their only entry point to chat).
+  final bool showChat;
 
   final String title;
   final String? subtitle;
@@ -97,11 +103,13 @@ class WBHomeAppBar extends StatelessWidget {
         ),
         Row(
           children: [
-            WBHomeAppBarButton(
-              icon: WBIconName.message,
-              onTap: () => context.push(AppRoutes.chatInbox),
-            ),
-            const SizedBox(width: 8),
+            if (showChat) ...[
+              WBHomeAppBarButton(
+                icon: WBIconName.message,
+                onTap: () => context.push(AppRoutes.chatInbox),
+              ),
+              const SizedBox(width: 8),
+            ],
             WBHomeAppBarButton(
               icon: WBIconName.bell,
               badge: notificationBadge,

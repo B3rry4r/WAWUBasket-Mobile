@@ -14,6 +14,7 @@ abstract final class AppRoutes {
   // Shell tabs
   static const home = '/home';
   static const orders = '/orders';
+  static const ordersHistory = '/orders/history'; // pushed (has back)
   static const favorites = '/favorites';
   static const profile = '/profile';
 

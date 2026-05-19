@@ -204,6 +204,10 @@ GoRouter buildRouter() {
         builder: (_, _) => const TrackingScreen(),
       ),
       GoRoute(
+        path: AppRoutes.ordersHistory,
+        builder: (_, _) => const OrderHistoryScreen(standalone: true),
+      ),
+      GoRoute(
         path: AppRoutes.wallet,
         builder: (_, _) => const WalletScreen(),
       ),

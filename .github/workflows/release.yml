@@ -6,10 +6,13 @@ name: Build & Release
 #   • push a tag matching v*       → release tagged with that tag
 #   • manual run (workflow_dispatch) → release tagged build-<run number>
 #
-# The Mapbox token is injected at build time from the MAPBOX_TOKEN
-# repository secret via --dart-define, so it never lives in the repo.
-# (Settings → Secrets and variables → Actions → New repository secret:
-#  name MAPBOX_TOKEN, value = your pk.* token.)
+# Two repository secrets are required
+# (Settings → Secrets and variables → Actions → New repository secret):
+#   • MAPBOX_TOKEN           — public pk.* token, injected at runtime via
+#                              --dart-define (never stored in the repo).
+#   • MAPBOX_DOWNLOADS_TOKEN — SECRET sk.* token with the DOWNLOADS:READ
+#                              scope, needed for Gradle to fetch the
+#                              Mapbox Android SDK from its private Maven.
 
 on:
   push:
@@ -62,11 +65,15 @@ jobs:
         run: flutter pub get
 
       - name: Build release APK
+        env:
+          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
         run: >
           flutter build apk --release
           --dart-define=MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN }}
 
       - name: Build release AAB
+        env:
+          MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
         run: >
           flutter build appbundle --release
           --dart-define=MAPBOX_TOKEN=${{ secrets.MAPBOX_TOKEN }}
