@@ -43,6 +43,13 @@ import '../../features/trader/presentation/screens/trader_login_screen.dart';
 import '../../features/trader/presentation/screens/trader_prices_screen.dart';
 import '../../features/trader/presentation/screens/trader_transport_screen.dart';
 import '../../features/trader/presentation/trader_shell.dart';
+import '../../features/driver/presentation/driver_shell.dart';
+import '../../features/driver/presentation/screens/driver_active_trip_screen.dart';
+import '../../features/driver/presentation/screens/driver_bid_screen.dart';
+import '../../features/driver/presentation/screens/driver_earnings_screen.dart';
+import '../../features/driver/presentation/screens/driver_home_screen.dart';
+import '../../features/driver/presentation/screens/driver_kyc_screen.dart';
+import '../../features/driver/presentation/screens/driver_login_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_alerts_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_analytics_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_home_screen.dart';
@@ -476,6 +483,47 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.traderTransport,
         builder: (_, _) => const TraderTransportScreen(),
+      ),
+
+      // ───────── Driver (RBAC) ─────────
+      GoRoute(
+        path: AppRoutes.driverLogin,
+        builder: (_, _) => const DriverLoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.driverKyc,
+        builder: (_, _) => const DriverKycScreen(),
+      ),
+      ShellRoute(
+        builder: (context, state, child) => DriverShell(
+          location: state.uri.toString(),
+          child: child,
+        ),
+        routes: [
+          GoRoute(
+            path: AppRoutes.driverHome,
+            pageBuilder: (_, _) => _tabFade(const DriverHomeScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.driverActiveTrip,
+            pageBuilder: (_, _) => _tabFade(const DriverActiveTripScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.driverEarnings,
+            pageBuilder: (_, _) => _tabFade(const DriverEarningsScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.driverAccount,
+            pageBuilder: (_, _) =>
+                _tabFade(const OperatorAccountScreen(role: AppRole.driver)),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '${AppRoutes.driverHome}/bid/:loadId',
+        builder: (_, state) => DriverBidScreen(
+          loadId: state.pathParameters['loadId']!,
+        ),
       ),
     ],
   );

@@ -89,14 +89,6 @@ class RoleSwitcherSheet extends StatelessWidget {
       return;
     }
 
-    if (!role.shellReady) {
-      wbShowSnack(
-        context,
-        '${role.title} role is coming soon. Hold tight.',
-      );
-      return;
-    }
-
     if (role == AppRole.customer) {
       ctrl.setRole(AppRole.customer);
       Navigator.of(context).pop();
@@ -143,9 +135,6 @@ class _RoleRow extends StatelessWidget {
       };
 
   ({String label, _PillTone tone}) _pill(AppRole r) {
-    if (!r.shellReady) {
-      return (label: 'Coming soon', tone: _PillTone.muted);
-    }
     if (r == AppRole.customer) {
       return (label: 'Always on', tone: _PillTone.success);
     }

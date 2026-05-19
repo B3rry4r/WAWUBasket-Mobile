@@ -1,0 +1,88 @@
+import '../../../trade/domain/models/corridor.dart';
+
+/// State a transport load moves through. Mirrors build-guide #87–98.
+enum LoadStatus {
+  open, // accepting bids
+  assigned, // driver picked, trip not yet started
+  inTransit, // checkpoints in progress
+  delivered, // last checkpoint logged
+  cancelled,
+}
+
+extension LoadStatusX on LoadStatus {
+  String get label => switch (this) {
+        LoadStatus.open => 'Open',
+        LoadStatus.assigned => 'Assigned',
+        LoadStatus.inTransit => 'In transit',
+        LoadStatus.delivered => 'Delivered',
+        LoadStatus.cancelled => 'Cancelled',
+      };
+}
+
+/// One checkpoint logged on the way from origin to destination.
+class Checkpoint {
+  const Checkpoint({required this.name, required this.reachedAt});
+  final String name;
+  final DateTime reachedAt;
+}
+
+/// One transport load a trader has posted for drivers to bid on.
+class LoadOffer {
+  LoadOffer({
+    required this.id,
+    required this.origin,
+    required this.destination,
+    required this.originLabel,
+    required this.destinationLabel,
+    required this.weightKg,
+    required this.offerNaira,
+    required this.traderName,
+    required this.distanceKm,
+    required this.checkpointNames,
+    required this.postedAt,
+    this.status = LoadStatus.open,
+    this.bids = const [],
+    this.assignedDriver,
+    this.reachedCheckpoints = const [],
+  });
+
+  final String id;
+  final Corridor origin;
+  final Corridor destination;
+
+  /// Friendlier than the raw corridor for the route subtitle (e.g.
+  /// "Kano → Cotonou" instead of "Nigeria → Benin").
+  final String originLabel;
+  final String destinationLabel;
+  final int weightKg;
+  final int offerNaira;
+  final String traderName;
+  final double distanceKm;
+  final List<String> checkpointNames;
+  final DateTime postedAt;
+
+  LoadStatus status;
+  List<LoadBid> bids;
+  String? assignedDriver;
+  List<Checkpoint> reachedCheckpoints;
+
+  String get routeLabel => '$originLabel → $destinationLabel';
+
+  /// True when the current driver has logged the last checkpoint.
+  bool get atFinalCheckpoint =>
+      reachedCheckpoints.length >= checkpointNames.length;
+}
+
+/// One driver's bid on an open load.
+class LoadBid {
+  const LoadBid({
+    required this.driverName,
+    required this.priceNaira,
+    required this.etaHours,
+    this.notes = '',
+  });
+  final String driverName;
+  final int priceNaira;
+  final int etaHours;
+  final String notes;
+}

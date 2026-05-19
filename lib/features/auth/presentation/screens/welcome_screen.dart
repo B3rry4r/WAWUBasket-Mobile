@@ -139,6 +139,8 @@ void _showOperatorSheet(BuildContext context) {
                 'List bulk lots & corridor exports', AppRoutes.traderLogin),
             (WBIconName.bike, 'Rider', 'Deliver baskets in the city',
                 AppRoutes.riderLogin),
+            (WBIconName.bike, 'Driver',
+                'Move long-haul corridor loads', AppRoutes.driverLogin),
             (WBIconName.card, 'Trade agent', 'Register traders, log sales',
                 AppRoutes.agentLogin),
           ])

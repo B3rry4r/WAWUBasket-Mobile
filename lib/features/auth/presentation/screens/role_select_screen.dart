@@ -27,6 +27,8 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
         'List bulk lots and reach buyers across corridors.'),
     _Role(AppRole.rider, WBIconName.bike,
         'Deliver baskets across your city.'),
+    _Role(AppRole.driver, WBIconName.bike,
+        'Move long-haul corridor loads.'),
     _Role(AppRole.agent, WBIconName.card,
         'Register traders. Log sales. Pay them out.'),
   ];
