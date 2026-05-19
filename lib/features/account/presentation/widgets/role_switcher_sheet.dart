@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -93,6 +95,19 @@ class RoleSwitcherSheet extends StatelessWidget {
       ctrl.setRole(AppRole.customer);
       Navigator.of(context).pop();
       context.go(AppRole.customer.homeRoute);
+      return;
+    }
+
+    // Rider and Driver shells need native GPS / push and are mobile-only.
+    // From the Flutter web build we redirect to a "get the app" screen
+    // instead of dropping the user into a broken shell.
+    if (kIsWeb && (role == AppRole.rider || role == AppRole.driver)) {
+      Navigator.of(context).pop();
+      context.push(
+        role == AppRole.rider
+            ? AppRoutes.webUnavailableRider
+            : AppRoutes.webUnavailableDriver,
+      );
       return;
     }
 

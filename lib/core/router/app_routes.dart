@@ -132,4 +132,9 @@ abstract final class AppRoutes {
   static const driverActiveTrip = '/driver/trip';
   static const driverEarnings = '/driver/earnings';
   static const driverAccount = '/driver/account';
+
+  // Web-only blockers shown when the user picks a mobile-only role from
+  // the Flutter web build.
+  static const webUnavailableRider = '/web-unavailable/rider';
+  static const webUnavailableDriver = '/web-unavailable/driver';
 }

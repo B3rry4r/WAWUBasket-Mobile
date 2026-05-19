@@ -85,6 +85,7 @@ import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/otp_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
 import '../../features/auth/presentation/screens/role_select_screen.dart';
+import '../../features/auth/presentation/screens/web_unavailable_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
@@ -139,6 +140,16 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.onboarding,
         builder: (_, _) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.webUnavailableRider,
+        builder: (_, _) =>
+            const WebUnavailableScreen(role: AppRole.rider),
+      ),
+      GoRoute(
+        path: AppRoutes.webUnavailableDriver,
+        builder: (_, _) =>
+            const WebUnavailableScreen(role: AppRole.driver),
       ),
 
       // Customer shell — wraps the 4 tabs with the floating bottom nav.

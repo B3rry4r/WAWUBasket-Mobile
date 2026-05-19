@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -53,6 +54,17 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
     if (_selected == AppRole.customer) {
       RoleController.instance.setRole(AppRole.customer);
       context.go(AppRoutes.onboarding);
+      return;
+    }
+    // Rider and Driver are mobile-only — block them on Flutter web with
+    // a "get the app" gate.
+    if (kIsWeb &&
+        (_selected == AppRole.rider || _selected == AppRole.driver)) {
+      context.push(
+        _selected == AppRole.rider
+            ? AppRoutes.webUnavailableRider
+            : AppRoutes.webUnavailableDriver,
+      );
       return;
     }
     final status = RoleController.instance.statusOf(_selected);
