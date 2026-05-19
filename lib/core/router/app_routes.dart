@@ -31,6 +31,14 @@ abstract final class AppRoutes {
   static const tradeLot = '/trade/lot'; // append `/:id`
   static const tradeListing = '/trade/listing'; // append `/:id`
 
+  // Escrow (cross-border bulk-order checkout). Buyer enters via
+  // `/escrow/checkout/:listingId`; the success / status screen takes the
+  // generated bulk-order id.
+  static const escrowCheckout = '/escrow/checkout'; // append `/:listingId`
+  static const escrowStatus = '/escrow/status'; // append `/:orderId`
+  static const escrowDispute = '/escrow/dispute'; // append `/:orderId`
+  static const escrowOrders = '/escrow/orders'; // buyer-side list
+
   // Account tools
   static const wallet = '/wallet';
   static const notifications = '/notifications';

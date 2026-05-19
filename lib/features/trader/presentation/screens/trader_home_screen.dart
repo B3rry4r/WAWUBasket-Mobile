@@ -5,6 +5,8 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../escrow/application/escrow_controller.dart';
+import '../../../escrow/domain/models/bulk_order.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/presentation/widgets/export_listing_card.dart';
 
@@ -122,9 +124,138 @@ class TraderHomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+              const SizedBox(height: WBSpacing.lg),
+              _LiveEscrowSection(),
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _LiveEscrowSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: EscrowController.instance.orders,
+      builder: (_, orders, _) {
+        final live = orders
+            .where((o) =>
+                o.status == EscrowStatus.held ||
+                o.status == EscrowStatus.disputed)
+            .toList();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Live escrow',
+                        style: WBTypography.cardTitle.copyWith(fontSize: 17),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        live.isEmpty
+                            ? 'No funded orders right now.'
+                            : '${live.length} order${live.length == 1 ? '' : 's'} awaiting fulfilment.',
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (live.isEmpty)
+              _EmptyTile(
+                label:
+                    'Funds sit here when a buyer pays for a listing — release on delivery.',
+              )
+            else
+              for (final o in live)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _EscrowOrderRow(order: o),
+                ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _EscrowOrderRow extends StatelessWidget {
+  const _EscrowOrderRow({required this.order});
+  final BulkOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    final disputed = order.status == EscrowStatus.disputed;
+    return GestureDetector(
+      onTap: () => context.push('${AppRoutes.escrowStatus}/${order.id}'),
+      behavior: HitTestBehavior.opaque,
+      child: WBCard(
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(
+                width: 56,
+                height: 56,
+                child: WBNetworkImage(url: order.imageUrl),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '${order.produce} · ${order.quantityKg} kg',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: WBTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      WBStatusPill(
+                        label: order.status.label,
+                        kind: disputed
+                            ? WBStatusKind.warning
+                            : WBStatusKind.success,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${order.buyerName} · ${wbNaira(order.totalNaira)} held',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            const WBIcon(
+              WBIconName.chevronRight,
+              size: 16,
+              color: WBColors.fgPlaceholder,
+            ),
+          ],
+        ),
       ),
     );
   }

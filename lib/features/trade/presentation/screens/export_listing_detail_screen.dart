@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
@@ -64,12 +65,7 @@ class _Body extends StatelessWidget {
   }
 
   void _buyNow(BuildContext context) {
-    // Escrow checkout lands in Batch D. For now show the future-state
-    // path so the user knows where this goes.
-    wbShowSnack(
-      context,
-      'Bulk-order checkout (escrow) ships in the next batch.',
-    );
+    context.push('${AppRoutes.escrowCheckout}/${listing.id}');
   }
 
   @override

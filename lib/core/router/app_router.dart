@@ -17,6 +17,10 @@ import '../../features/account/presentation/screens/support_screen.dart';
 import '../../features/account/presentation/screens/top_up_screen.dart';
 import '../../features/account/presentation/screens/wallet_screen.dart';
 import '../../features/auth/application/role_controller.dart';
+import '../../features/escrow/presentation/screens/bulk_checkout_screen.dart';
+import '../../features/escrow/presentation/screens/escrow_dispute_screen.dart';
+import '../../features/escrow/presentation/screens/escrow_orders_screen.dart';
+import '../../features/escrow/presentation/screens/escrow_status_screen.dart';
 import '../../features/agent/presentation/agent_shell.dart';
 import '../../features/agent/presentation/screens/agent_screens.dart';
 import '../../features/category/presentation/screens/category_screen.dart';
@@ -211,6 +215,26 @@ GoRouter buildRouter() {
         builder: (_, state) => ExportListingDetailScreen(
           listingId: state.pathParameters['id']!,
         ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.escrowCheckout}/:listingId',
+        builder: (_, state) => BulkCheckoutScreen(
+          listingId: state.pathParameters['listingId']!,
+        ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.escrowStatus}/:id',
+        builder: (_, state) =>
+            EscrowStatusScreen(orderId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '${AppRoutes.escrowDispute}/:id',
+        builder: (_, state) =>
+            EscrowDisputeScreen(orderId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: AppRoutes.escrowOrders,
+        builder: (_, _) => const EscrowOrdersScreen(),
       ),
       GoRoute(
         path: '${AppRoutes.categoryDetail}/:id',

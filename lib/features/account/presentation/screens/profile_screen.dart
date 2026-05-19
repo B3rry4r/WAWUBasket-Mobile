@@ -187,6 +187,12 @@ class ProfileScreen extends StatelessWidget {
             sub: "What we tell you about",
             onTap: () => context.push(AppRoutes.notifications),
           ),
+          AccountMenuRow(
+            icon: WBIconName.basket,
+            label: 'Bulk orders',
+            sub: 'Escrow-protected purchases from /trade',
+            onTap: () => context.push(AppRoutes.escrowOrders),
+          ),
         ],
       ),
       AccountMenuSection(
