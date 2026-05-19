@@ -2,11 +2,13 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart' as mb;
 
 import '../../../../core/config/secrets.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/rider_controller.dart';
 
@@ -29,35 +31,64 @@ class RiderMapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // On Mapbox we use real circle annotations anchored to coordinates,
+    // so markers + the rider's location puck pan/zoom with the map. On
+    // the stylized fallback (web / no-token) we keep the Align overlays
+    // so something is visible.
     return SizedBox.expand(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: _useMapbox
-                ? _MapboxLayer()
-                : const _StylizedMap(),
-          ),
-            // Offer markers, positioned proportionally on the map.
-            for (var i = 0; i < offers.length; i++)
-              _OfferMarker(
-                offer: offers[i],
-                slot: i,
-                slotCount: offers.length,
-                onTap: () => onTapOffer(offers[i]),
-              ),
-          // Rider's own pin sits at dead-centre.
-          const Center(child: _RiderPin()),
-        ],
-      ),
+      child: _useMapbox
+          ? _MapboxLayer(offers: offers, onTapOffer: onTapOffer)
+          : Stack(
+              children: [
+                const Positioned.fill(child: _StylizedMap()),
+                for (var i = 0; i < offers.length; i++)
+                  _OfferMarker(
+                    offer: offers[i],
+                    slot: i,
+                    slotCount: offers.length,
+                    onTap: () => onTapOffer(offers[i]),
+                  ),
+                const Center(child: _RiderPin()),
+              ],
+            ),
     );
   }
 }
 
-class _MapboxLayer extends StatelessWidget {
+class _MapboxLayer extends StatefulWidget {
+  const _MapboxLayer({
+    required this.offers,
+    required this.onTapOffer,
+  });
+  final List<DeliveryOffer> offers;
+  final ValueChanged<DeliveryOffer> onTapOffer;
+
+  @override
+  State<_MapboxLayer> createState() => _MapboxLayerState();
+}
+
+class _MapboxLayerState extends State<_MapboxLayer> {
+  mb.MapboxMap? _map;
+  mb.CircleAnnotationManager? _circleManager;
+  final Map<String, mb.CircleAnnotation> _annotations = {};
+
+  @override
+  void didUpdateWidget(covariant _MapboxLayer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.offers != oldWidget.offers) _syncAnnotations();
+  }
+
+  @override
+  void dispose() {
+    _circleManager?.deleteAll();
+    super.dispose();
+  }
+
   /// Hides the default Mapbox scale-bar + compass + attribution chrome
   /// so the top-left and top-right corners stay clean. We re-surface
   /// attribution in the offer drawer footer instead.
-  void _onMapCreated(mb.MapboxMap map) {
+  Future<void> _onMapCreated(mb.MapboxMap map) async {
+    _map = map;
     map.scaleBar.updateSettings(mb.ScaleBarSettings(enabled: false));
     map.compass.updateSettings(mb.CompassSettings(enabled: false));
     map.attribution.updateSettings(mb.AttributionSettings(
@@ -66,6 +97,74 @@ class _MapboxLayer extends StatelessWidget {
     map.logo.updateSettings(
       mb.LogoSettings(position: mb.OrnamentPosition.BOTTOM_LEFT),
     );
+    // Show the user's location puck if we have permission. Mapbox's own
+    // location component handles the puck rendering + heading rotation.
+    final granted = await WBPermissions.hasLocation();
+    if (granted) {
+      await map.location.updateSettings(
+        mb.LocationComponentSettings(enabled: true, pulsingEnabled: true),
+      );
+      _centerOnCurrent();
+    }
+    _circleManager = await map.annotations.createCircleAnnotationManager();
+    // ignore: deprecated_member_use
+    _circleManager!.addOnCircleAnnotationClickListener(
+      _OfferClickListener((id) {
+        final offer = _annotations.entries
+            .firstWhere((e) => e.value.id == id,
+                orElse: () => MapEntry('', _annotations.values.first))
+            .key;
+        for (final o in widget.offers) {
+          if (o.id == offer) {
+            widget.onTapOffer(o);
+            return;
+          }
+        }
+      }),
+    );
+    _syncAnnotations();
+  }
+
+  /// Read the device's current GPS once and re-centre the camera so the
+  /// rider sees their own location at the centre of the map instead of
+  /// the hard-coded Lagos seed.
+  Future<void> _centerOnCurrent() async {
+    try {
+      final pos = await Geolocator.getCurrentPosition();
+      if (!mounted || _map == null) return;
+      await _map!.setCamera(
+        mb.CameraOptions(
+          center: mb.Point(
+            coordinates: mb.Position(pos.longitude, pos.latitude),
+          ),
+          zoom: 14,
+        ),
+      );
+    } catch (_) {
+      // Service disabled or permission revoked between checks. Keep the
+      // initial camera position.
+    }
+  }
+
+  Future<void> _syncAnnotations() async {
+    final mgr = _circleManager;
+    if (mgr == null) return;
+    await mgr.deleteAll();
+    _annotations.clear();
+    for (final o in widget.offers) {
+      final ann = await mgr.create(
+        mb.CircleAnnotationOptions(
+          geometry: mb.Point(
+            coordinates: mb.Position(o.vendorLng, o.vendorLat),
+          ),
+          circleRadius: 10,
+          circleColor: 0xff111111,
+          circleStrokeColor: 0xffffffff,
+          circleStrokeWidth: 3,
+        ),
+      );
+      _annotations[o.id] = ann;
+    }
   }
 
   @override
@@ -87,6 +186,17 @@ class _MapboxLayer extends StatelessWidget {
       styleUri: mb.MapboxStyles.LIGHT,
       onMapCreated: _onMapCreated,
     );
+  }
+}
+
+// ignore: deprecated_member_use
+class _OfferClickListener extends mb.OnCircleAnnotationClickListener {
+  _OfferClickListener(this._onTap);
+  final void Function(String annotationId) _onTap;
+
+  @override
+  void onCircleAnnotationClick(mb.CircleAnnotation annotation) {
+    _onTap(annotation.id);
   }
 }
 

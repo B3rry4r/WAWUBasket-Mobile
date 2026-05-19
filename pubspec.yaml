@@ -32,6 +32,11 @@ dependencies:
   # lib/core/config/secrets.dart so it never lands in version control.
   mapbox_maps_flutter: ^2.24.1
 
+  # Runtime permission prompts (location, notifications) + a one-shot
+  # current-position read for the rider map.
+  permission_handler: ^11.3.1
+  geolocator: ^13.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

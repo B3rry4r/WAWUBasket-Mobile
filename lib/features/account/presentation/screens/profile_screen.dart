@@ -202,7 +202,7 @@ class ProfileScreen extends StatelessWidget {
           AccountMenuRow(
             icon: WBIconName.star,
             label: 'WAWU+ membership',
-            sub: 'Unlock free delivery and more',
+            sub: 'Discounted delivery and more',
             onTap: () => context.push(AppRoutes.wawuPlus),
           ),
         ],

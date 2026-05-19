@@ -17,7 +17,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
   bool _yearly = true;
 
   static const _benefits = [
-    'Free delivery on orders over ₦5,000',
+    'Up to 50% off delivery on every order',
     'Member-only deals every week',
     'Priority support, skip the line',
     'Free returns on wrong items',
@@ -66,7 +66,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Free delivery. Exclusive treats. Priority support.',
+                        'Discounted delivery. Exclusive treats. Priority support.',
                         style: WBTypography.body.copyWith(
                           color: Colors.white.withValues(alpha: 0.65),
                           fontSize: 14,

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 /// Post-OTP customer onboarding. Three steps in one screen:
@@ -127,6 +128,8 @@ class _PermissionsStep extends StatelessWidget {
           primary: 'While using app',
           secondary: 'Allow once',
           tertiary: 'Not now',
+          onPrimary: WBPermissions.requestLocation,
+          onSecondary: WBPermissions.requestLocation,
         ),
         const SizedBox(height: WBSpacing.md),
         _PermissionCard(
@@ -135,6 +138,7 @@ class _PermissionsStep extends StatelessWidget {
           sub: "We'll tell you when your order is on its way, when your meat is freshly cut, and when there's a surprise waiting.",
           primary: 'Yes, tell me',
           secondary: 'Maybe later',
+          onPrimary: WBPermissions.requestNotifications,
         ),
         const SizedBox(height: WBSpacing.xl),
         WBButton(
@@ -157,6 +161,8 @@ class _PermissionCard extends StatelessWidget {
     required this.primary,
     required this.secondary,
     this.tertiary,
+    this.onPrimary,
+    this.onSecondary,
   });
   final WBIconName icon;
   final String title;
@@ -164,6 +170,11 @@ class _PermissionCard extends StatelessWidget {
   final String primary;
   final String secondary;
   final String? tertiary;
+
+  /// Real permission-handler callbacks. Returning `true` means the OS
+  /// granted the permission. The card surfaces a snackbar either way.
+  final Future<bool> Function()? onPrimary;
+  final Future<bool> Function()? onSecondary;
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +222,16 @@ class _PermissionCard extends StatelessWidget {
                   label: primary,
                   size: WBButtonSize.sm,
                   fullWidth: true,
-                  onPressed: () =>
-                      wbShowSnack(context, '$primary, thanks!'),
+                  onPressed: () async {
+                    final granted = await onPrimary?.call() ?? true;
+                    if (!context.mounted) return;
+                    wbShowSnack(
+                      context,
+                      granted
+                          ? '$primary, thanks!'
+                          : 'Permission denied. You can enable it later in settings.',
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 8),
@@ -222,7 +241,16 @@ class _PermissionCard extends StatelessWidget {
                   size: WBButtonSize.sm,
                   fullWidth: true,
                   variant: WBButtonVariant.secondary,
-                  onPressed: () {},
+                  onPressed: () async {
+                    final granted = await onSecondary?.call() ?? true;
+                    if (!context.mounted || onSecondary == null) return;
+                    wbShowSnack(
+                      context,
+                      granted
+                          ? '$secondary, thanks!'
+                          : 'No problem, ask me later.',
+                    );
+                  },
                 ),
               ),
             ],

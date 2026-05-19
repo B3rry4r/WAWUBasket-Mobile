@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/foundation.dart';
 
 /// Stage the active delivery is in. Mirrors the customer-facing tracking
@@ -67,6 +69,35 @@ class DeliveryOffer {
   final int etaMin;
   final int feeNaira;
   final String specialInstructions;
+
+  /// Haversine distance (km) from an arbitrary point to this offer's
+  /// pickup. Used to recompute the cards once we have the rider's GPS.
+  double distanceKmFrom(double lat, double lng) =>
+      _haversineKm(lat, lng, vendorLat, vendorLng);
+
+  /// Rough ETA in minutes for the full pickup→drop journey from a given
+  /// rider position, assuming a 25 km/h average across city traffic
+  /// (15 minutes per 6 km, plus 5 minutes pickup handling).
+  int etaMinFrom(double lat, double lng) {
+    final pickup = distanceKmFrom(lat, lng);
+    final delivery = _haversineKm(vendorLat, vendorLng, dropLat, dropLng);
+    final hours = (pickup + delivery) / 25.0;
+    return (hours * 60).round() + 5;
+  }
+}
+
+double _haversineKm(double lat1, double lng1, double lat2, double lng2) {
+  const r = 6371.0;
+  double rad(double d) => d * math.pi / 180.0;
+  final dLat = rad(lat2 - lat1);
+  final dLng = rad(lng2 - lng1);
+  final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+      math.cos(rad(lat1)) *
+          math.cos(rad(lat2)) *
+          math.sin(dLng / 2) *
+          math.sin(dLng / 2);
+  final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+  return r * c;
 }
 
 class ActiveDelivery {
@@ -92,6 +123,16 @@ class RiderController {
   final ValueNotifier<bool> online;
   final ValueNotifier<List<DeliveryOffer>> offers;
   final ValueNotifier<ActiveDelivery?> active;
+
+  /// The rider's last known GPS reading. Null until permission is
+  /// granted + a Geolocator one-shot returns. Drives the offer cards'
+  /// distance + ETA labels so they reflect where the rider actually is.
+  final ValueNotifier<({double lat, double lng})?> currentPosition =
+      ValueNotifier(null);
+
+  void updatePosition(double lat, double lng) {
+    currentPosition.value = (lat: lat, lng: lng);
+  }
 
   void toggleOnline() => online.value = !online.value;
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/rider_controller.dart';
 import '../widgets/accept_offer_sheet.dart';
@@ -25,6 +27,27 @@ class RiderHomeScreen extends StatefulWidget {
 }
 
 class _RiderHomeScreenState extends State<RiderHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Ask for location once the first build settles. Granting lets the
+    // map render the user puck + we recompute every offer's distance +
+    // ETA against the rider's real GPS reading.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _ensureLocation());
+  }
+
+  Future<void> _ensureLocation() async {
+    final granted = await WBPermissions.requestLocation();
+    if (!granted || !mounted) return;
+    try {
+      final pos = await Geolocator.getCurrentPosition();
+      RiderController.instance.updatePosition(pos.latitude, pos.longitude);
+    } catch (_) {
+      // Service off or fix unavailable; offer cards fall back to the
+      // hardcoded distances on each offer.
+    }
+  }
+
   Future<void> _open(DeliveryOffer offer) async {
     final accepted = await AcceptOfferSheet.show(context, offer);
     if (!mounted || accepted != true) return;
@@ -357,6 +380,40 @@ class _OfferRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: RiderController.instance.currentPosition,
+      builder: (_, pos, _) {
+        final km = pos == null
+            ? offer.distanceKm
+            : offer.distanceKmFrom(pos.lat, pos.lng);
+        final eta = pos == null
+            ? offer.etaMin
+            : offer.etaMinFrom(pos.lat, pos.lng);
+        return _OfferRowBody(
+          offer: offer,
+          distanceKm: km,
+          etaMin: eta,
+          onTap: onTap,
+        );
+      },
+    );
+  }
+}
+
+class _OfferRowBody extends StatelessWidget {
+  const _OfferRowBody({
+    required this.offer,
+    required this.distanceKm,
+    required this.etaMin,
+    required this.onTap,
+  });
+  final DeliveryOffer offer;
+  final double distanceKm;
+  final int etaMin;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -401,7 +458,7 @@ class _OfferRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${offer.distanceKm.toStringAsFixed(1)} km · ${offer.etaMin} min · ${offer.dropAddress}',
+                    '${distanceKm.toStringAsFixed(1)} km · $etaMin min · ${offer.dropAddress}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: WBTypography.caption.copyWith(
