@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_orders_controller.dart';
 import '../widgets/vendor_status_pill.dart';
@@ -48,6 +49,11 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
               140,
             ),
             children: [
+              const WBHomeAppBar(
+                title: 'Mama Cass Kitchen',
+                subtitle: 'Vendor dashboard',
+              ),
+              const SizedBox(height: WBSpacing.lg),
               _Hero(
                 open: _open,
                 onToggle: () => setState(() => _open = !_open),
@@ -473,55 +479,67 @@ class _InProgressCard extends StatelessWidget {
       onTap: () => context.push('${AppRoutes.vendorOrderDetail}/${order.id}'),
       behavior: HitTestBehavior.opaque,
       child: WBCard(
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              alignment: Alignment.center,
-              child: const WBIcon(WBIconName.basket, size: 16),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: WBColors.bgSoft,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  alignment: Alignment.center,
+                  child: const WBIcon(WBIconName.basket, size: 16),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              '#${order.id}',
+                              overflow: TextOverflow.ellipsis,
+                              style: WBTypography.body.copyWith(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          VendorOrderStatusPill(stage: order.stage),
+                        ],
+                      ),
+                      const SizedBox(height: 2),
                       Text(
-                        '#${order.id}',
-                        style: WBTypography.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                        '${order.customerName} · ${wbNaira(order.total)}',
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgSecondary,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      VendorOrderStatusPill(stage: order.stage),
                     ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${order.customerName} · ${wbNaira(order.total)}',
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgSecondary,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            if (next != null)
+            if (next != null) ...[
+              const SizedBox(height: 12),
               WBButton(
                 label: next.label,
                 size: WBButtonSize.sm,
+                fullWidth: true,
+                trailingIcon: WBIconName.arrowRight,
                 onPressed: () {
                   VendorOrdersController.instance.advance(order.id);
                   wbShowSnack(context, '${order.id} · ${next.next.label}');
                 },
               ),
+            ],
           ],
         ),
       ),

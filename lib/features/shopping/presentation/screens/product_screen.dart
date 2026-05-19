@@ -9,7 +9,11 @@ import '../../application/mock_data.dart';
 import '../widgets/sticky_action_bar.dart';
 
 class ProductScreen extends StatefulWidget {
-  const ProductScreen({super.key});
+  const ProductScreen({super.key, this.productId});
+
+  /// Id of the tapped product. Null only on legacy direct pushes — the
+  /// screen then falls back to the first menu item.
+  final String? productId;
 
   @override
   State<ProductScreen> createState() => _ProductScreenState();
@@ -21,7 +25,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final product = MockData.menu.first;
+    final product = MockData.productById(widget.productId);
     final total = product.priceNaira * _qty;
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,

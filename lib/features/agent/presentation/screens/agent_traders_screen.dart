@@ -109,55 +109,65 @@ class _TraderRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WBCard(
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: WBColors.bgSoft,
-              borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: () => context.push('${AppRoutes.agentTraderDetail}/${trader.id}'),
+      behavior: HitTestBehavior.opaque,
+      child: WBCard(
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(WBIconName.user, size: 16),
             ),
-            alignment: Alignment.center,
-            child: const WBIcon(WBIconName.user, size: 16),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        trader.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: WBTypography.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          trader.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: WBTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
                         ),
                       ),
-                    ),
-                    if (!trader.synced)
-                      const WBStatusPill(
-                        label: 'Pending sync',
-                        kind: WBStatusKind.warning,
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${trader.type.label} · ${trader.location} · ${trader.phone}',
-                  style: WBTypography.caption.copyWith(
-                    color: WBColors.fgSecondary,
+                      if (!trader.synced)
+                        const WBStatusPill(
+                          label: 'Pending sync',
+                          kind: WBStatusKind.warning,
+                        ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    '${trader.type.label} · ${trader.location} · ${trader.phone}',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 8),
+            const WBIcon(
+              WBIconName.chevronRight,
+              size: 16,
+              color: WBColors.fgPlaceholder,
+            ),
+          ],
+        ),
       ),
     );
   }

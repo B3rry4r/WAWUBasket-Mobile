@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
@@ -62,9 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
         _navSafePad,
       ),
       children: [
-        _padded(_HeaderRow(
-          onBell: () => context.push(AppRoutes.notifications),
-          onBasket: () => context.push(AppRoutes.cart),
+        _padded(WBHomeAppBar(
+          title: 'Hi, Brooks',
+          subtitle: 'Delivering to 12 Adeola Odeku St, V/I',
+          subtitleIcon: WBIconName.pin,
+          trailingExtra: WBHomeAppBarButton(
+            icon: WBIconName.basket,
+            onTap: () => context.push(AppRoutes.cart),
+          ),
         )),
         const SizedBox(height: 22),
         _padded(RichText(
@@ -114,6 +120,65 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: 16,
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+        )),
+        const SizedBox(height: 18),
+        _padded(GestureDetector(
+          onTap: () => context.push(AppRoutes.trade),
+          behavior: HitTestBehavior.opaque,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: WBColors.surfaceDark,
+              borderRadius: BorderRadius.circular(WBRadius.card),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  alignment: Alignment.center,
+                  child: const WBIcon(
+                    WBIconName.basket,
+                    size: 18,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Bulk markets',
+                        style: WBTypography.body.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Wholesale lots & corridor prices, direct from farms',
+                        style: WBTypography.caption.copyWith(
+                          color: Colors.white.withValues(alpha: 0.65),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                const WBIcon(
+                  WBIconName.arrowRight,
+                  size: 16,
+                  color: Colors.white,
                 ),
               ],
             ),
@@ -197,131 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 22),
         _padded(const _OffersBanner()),
       ],
-    );
-  }
-}
-
-class _HeaderRow extends StatelessWidget {
-  const _HeaderRow({required this.onBell, required this.onBasket});
-  final VoidCallback onBell;
-  final VoidCallback onBasket;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Row(
-            children: [
-              ClipOval(
-                child: SizedBox(
-                  width: 44,
-                  height: 44,
-                  child: WBNetworkImage(url: WBImages.avatar),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hi, Brooks',
-                      style: WBTypography.cardTitle.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 17,
-                        letterSpacing: -0.17,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        const WBIcon(
-                          WBIconName.pin,
-                          size: 11,
-                          color: WBColors.fgPlaceholder,
-                        ),
-                        const SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            'Delivering to 12 Adeola Odeku St, V/I',
-                            overflow: TextOverflow.ellipsis,
-                            style: WBTypography.caption.copyWith(
-                              color: WBColors.fgPlaceholder,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const WBIcon(
-                          WBIconName.chevronDown,
-                          size: 11,
-                          color: WBColors.fgPlaceholder,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Row(
-          children: [
-            _HeaderIconButton(icon: WBIconName.bell, badge: true, onTap: onBell),
-            const SizedBox(width: 8),
-            _HeaderIconButton(icon: WBIconName.basket, onTap: onBasket),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _HeaderIconButton extends StatelessWidget {
-  const _HeaderIconButton({
-    required this.icon,
-    required this.onTap,
-    this.badge = false,
-  });
-  final WBIconName icon;
-  final VoidCallback onTap;
-  final bool badge;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: SizedBox(
-        width: 40,
-        height: 40,
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: WBColors.bgPrimary,
-                shape: BoxShape.circle,
-                border: Border.all(color: WBColors.bgDivider),
-              ),
-              alignment: Alignment.center,
-              child: WBIcon(icon, size: 18),
-            ),
-            if (badge)
-              Positioned(
-                top: 9,
-                right: 10,
-                child: Container(
-                  width: 7,
-                  height: 7,
-                  decoration: BoxDecoration(
-                    color: WBColors.statusError,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: WBColors.bgPrimary, width: 1.5),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ),
     );
   }
 }

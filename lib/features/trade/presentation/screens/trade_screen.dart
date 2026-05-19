@@ -235,7 +235,7 @@ class _TabBar extends StatelessWidget {
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: WBColors.surfaceCard,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(WBRadius.pill),
         boxShadow: WBShadows.card,
       ),
       child: Row(
@@ -254,7 +254,7 @@ class _TabBar extends StatelessWidget {
                     color: s.$1 == current
                         ? WBColors.surfaceDark
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(WBRadius.pill),
                   ),
                   child: Text(
                     s.$2,

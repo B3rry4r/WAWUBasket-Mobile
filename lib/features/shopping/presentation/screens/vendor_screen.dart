@@ -9,7 +9,11 @@ import '../../application/mock_data.dart';
 import '../widgets/sticky_action_bar.dart';
 
 class VendorScreen extends StatefulWidget {
-  const VendorScreen({super.key});
+  const VendorScreen({super.key, this.vendorId});
+
+  /// Id of the tapped storefront. Null only on legacy direct pushes —
+  /// the screen then falls back to the first vendor.
+  final String? vendorId;
 
   @override
   State<VendorScreen> createState() => _VendorScreenState();
@@ -21,7 +25,11 @@ class _VendorScreenState extends State<VendorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final vendor = MockData.vendors.first;
+    final vendor = MockData.vendorById(widget.vendorId);
+    final menu = MockData.productsForVendor(vendor.name);
+    // Fall back to the full menu when this vendor has no dedicated
+    // items in the mock data so the storefront is never empty.
+    final items = menu.isEmpty ? MockData.menu : menu;
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       body: Stack(
@@ -156,19 +164,22 @@ class _VendorScreenState extends State<VendorScreen> {
                         style: WBTypography.cardTitle,
                       ),
                     ),
-                    for (var i = 0; i < MockData.menu.length; i++) ...[
+                    for (var i = 0; i < items.length; i++) ...[
                       WBProductCard(
-                        imageUrl: MockData.menu[i].imageUrl,
-                        name: MockData.menu[i].name,
-                        vendorName: MockData.menu[i].vendorName,
-                        priceLabel: MockData.menu[i].formattedPrice,
-                        description: MockData.menu[i].description,
+                        imageUrl: items[i].imageUrl,
+                        name: items[i].name,
+                        vendorName: items[i].vendorName,
+                        priceLabel: items[i].formattedPrice,
+                        description: items[i].description,
                         variant: WBProductCardVariant.row,
-                        onTap: () => context.push(AppRoutes.product),
-                        onAdd: () => context.push(AppRoutes.product),
+                        onTap: () => context.push(
+                          '${AppRoutes.product}/${items[i].id}',
+                        ),
+                        onAdd: () => context.push(
+                          '${AppRoutes.product}/${items[i].id}',
+                        ),
                       ),
-                      if (i != MockData.menu.length - 1)
-                        const SizedBox(height: 12),
+                      if (i != items.length - 1) const SizedBox(height: 12),
                     ],
                   ],
                 ),

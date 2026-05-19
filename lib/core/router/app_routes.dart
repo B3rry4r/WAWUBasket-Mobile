@@ -60,6 +60,7 @@ abstract final class AppRoutes {
   static const walletCards = '/wallet/cards';
 
   // Conversations & receipts
+  static const chatInbox = '/chat';
   static const chatRider = '/chat/rider';
   static const chatSupport = '/chat/support';
   static const receipt = '/receipt';
@@ -96,6 +97,7 @@ abstract final class AppRoutes {
   static const agentSync = '/agent/sync';
   static const agentAccount = '/agent/account';
   static const agentTraders = '/agent/traders';
+  static const agentTraderDetail = '/agent/traders/detail'; // append `/:id`
   static const agentEarnings = '/agent/earnings';
 
   // Rider (food couriers, gated by KYC). Home / Active / Earnings / Account.

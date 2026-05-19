@@ -52,7 +52,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: WBColors.bgSecondary,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(WBRadius.pill),
             ),
             child: Row(
               children: [
@@ -74,7 +74,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             for (var i = 0; i < MockData.vendors.length; i++) ...[
               DSVendorCard(
                 vendor: MockData.vendors[i],
-                onTap: () => context.push(AppRoutes.vendor),
+                onTap: () => context.push(
+                  '${AppRoutes.vendor}/${MockData.vendors[i].id}',
+                ),
               ),
               if (i != MockData.vendors.length - 1)
                 const SizedBox(height: WBSpacing.md),
@@ -88,7 +90,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 priceLabel: MockData.menu[i].formattedPrice,
                 description: MockData.menu[i].description,
                 variant: WBProductCardVariant.row,
-                onTap: () => context.push(AppRoutes.product),
+                onTap: () => context.push(
+                  '${AppRoutes.product}/${MockData.menu[i].id}',
+                ),
                 onAdd: () => wbShowSnack(context, 'Added to basket'),
               ),
               if (i != MockData.menu.length - 1) const SizedBox(height: 12),
@@ -124,7 +128,7 @@ class _SegmentTab extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: active ? WBColors.surfaceDark : Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(WBRadius.pill),
           ),
           child: Text(
             label,

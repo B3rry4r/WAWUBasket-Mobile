@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 
@@ -31,6 +32,11 @@ class AgentHomeScreen extends StatelessWidget {
                   140,
                 ),
                 children: [
+                  const WBHomeAppBar(
+                    title: 'Musa Ibrahim',
+                    subtitle: 'Trade agent · Zone B',
+                  ),
+                  const SizedBox(height: WBSpacing.lg),
                   _Hero(
                     transactionsToday: ctrl.transactionsToday,
                     commissionToday: ctrl.commissionToday,

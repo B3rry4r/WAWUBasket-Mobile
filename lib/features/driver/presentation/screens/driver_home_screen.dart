@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
@@ -46,6 +47,11 @@ class DriverHomeScreen extends StatelessWidget {
                   140,
                 ),
                 children: [
+                  const WBHomeAppBar(
+                    title: 'Aliyu Bala',
+                    subtitle: 'Driver · NRTC Kano',
+                  ),
+                  const SizedBox(height: WBSpacing.lg),
                   _Hero(open: open.length, pendingToday: pending),
                   if (active != null) ...[
                     const SizedBox(height: WBSpacing.md),

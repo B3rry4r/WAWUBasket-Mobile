@@ -160,7 +160,8 @@ class _SearchScreenState extends State<SearchScreen> {
           const SizedBox(height: WBSpacing.sm + 4),
           for (final vendor in MockData.vendors.take(2)) ...[
             GestureDetector(
-              onTap: () => context.push(AppRoutes.vendor),
+              onTap: () =>
+                  context.push('${AppRoutes.vendor}/${vendor.id}'),
               child: Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(

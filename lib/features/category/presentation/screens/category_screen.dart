@@ -137,7 +137,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
             padding: const EdgeInsets.only(bottom: WBSpacing.md),
             child: DSVendorCard(
               vendor: vendors[i],
-              onTap: () => context.push(AppRoutes.vendor),
+              onTap: () =>
+                  context.push('${AppRoutes.vendor}/${vendors[i].id}'),
             ),
           ),
           childCount: vendors.length,
@@ -182,7 +183,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               variant: WBProductCardVariant.grid,
               onTap: () => isLivestock
                   ? context.push('${AppRoutes.meatCut}/${p.id}')
-                  : context.push(AppRoutes.product),
+                  : context.push('${AppRoutes.product}/${p.id}'),
             );
           },
           childCount: products.length,

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/screens/about_screen.dart';
 import '../../features/account/presentation/screens/add_address_screen.dart';
+import '../../features/account/presentation/screens/chat_inbox_screen.dart';
 import '../../features/account/presentation/screens/chat_screen.dart';
 import '../../features/account/presentation/screens/favorites_screen.dart';
 import '../../features/account/presentation/screens/language_screen.dart';
@@ -29,6 +30,7 @@ import '../../features/agent/presentation/screens/agent_record_txn_screen.dart';
 import '../../features/agent/presentation/screens/agent_register_trader_screen.dart';
 import '../../features/agent/presentation/screens/agent_screens.dart';
 import '../../features/agent/presentation/screens/agent_sync_screen.dart';
+import '../../features/agent/presentation/screens/agent_trader_detail_screen.dart';
 import '../../features/agent/presentation/screens/agent_traders_screen.dart';
 import '../../features/category/presentation/screens/category_screen.dart';
 import '../../features/livestock/presentation/screens/meat_cut_screen.dart';
@@ -167,8 +169,18 @@ GoRouter buildRouter() {
         builder: (_, _) => const VendorScreen(),
       ),
       GoRoute(
+        path: '${AppRoutes.vendor}/:id',
+        builder: (_, state) =>
+            VendorScreen(vendorId: state.pathParameters['id']),
+      ),
+      GoRoute(
         path: AppRoutes.product,
         builder: (_, _) => const ProductScreen(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.product}/:id',
+        builder: (_, state) =>
+            ProductScreen(productId: state.pathParameters['id']),
       ),
       GoRoute(
         path: AppRoutes.cart,
@@ -274,6 +286,10 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.walletCards,
         builder: (_, _) => const TopUpScreen(kind: WalletActionKind.cards),
+      ),
+      GoRoute(
+        path: AppRoutes.chatInbox,
+        builder: (_, _) => const ChatInboxScreen(),
       ),
       GoRoute(
         path: AppRoutes.chatRider,
@@ -410,6 +426,12 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.agentTraders,
         builder: (_, _) => const AgentTradersScreen(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.agentTraderDetail}/:id',
+        builder: (_, state) => AgentTraderDetailScreen(
+          traderId: state.pathParameters['id']!,
+        ),
       ),
       GoRoute(
         path: AppRoutes.agentEarnings,

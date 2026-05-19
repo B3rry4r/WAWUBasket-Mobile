@@ -21,7 +21,9 @@ abstract final class WBColors {
   // Surfaces
   static const Color surfaceCard = Color(0xFFFFFFFF);
   static const Color surfaceDark = Color(0xFF111111);
-  static const Color surfaceInput = Color(0xFFF9F9F9);
+  // Input fill — visibly distinct from both bgPrimary (#FFFFFF) and
+  // bgSecondary (#F7F7F7) so empty inputs never blend into the page.
+  static const Color surfaceInput = Color(0xFFEEEEEE);
   static const Color surfaceTag = Color(0xFFF1F1F1);
 
   // Borders (focus / filled state)

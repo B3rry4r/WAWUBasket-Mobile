@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../escrow/application/escrow_controller.dart';
 import '../../../escrow/domain/models/bulk_order.dart';
@@ -38,6 +39,11 @@ class TraderHomeScreen extends StatelessWidget {
               140,
             ),
             children: [
+              const WBHomeAppBar(
+                title: 'Hauwa & Sons Bulk Co.',
+                subtitle: 'Trader dashboard',
+              ),
+              const SizedBox(height: WBSpacing.lg),
               _Hero(
                 listings: active.length,
                 enquiries: totalEnquiries,

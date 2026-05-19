@@ -202,8 +202,10 @@ class _RestaurantBody extends StatelessWidget {
               priceLabel: dishes[i].formattedPrice,
               description: dishes[i].description,
               variant: WBProductCardVariant.row,
-              onTap: () => context.push(AppRoutes.product),
-              onAdd: () => context.push(AppRoutes.product),
+              onTap: () =>
+                  context.push('${AppRoutes.product}/${dishes[i].id}'),
+              onAdd: () =>
+                  context.push('${AppRoutes.product}/${dishes[i].id}'),
             )),
             if (i != dishes.length - 1) const SizedBox(height: 12),
           ],
@@ -428,7 +430,7 @@ class _VendorCarousel extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: 14),
         itemBuilder: (_, i) => DSVendorCard(
           vendor: vendors[i],
-          onTap: () => context.push(AppRoutes.vendor),
+          onTap: () => context.push('${AppRoutes.vendor}/${vendors[i].id}'),
         ),
       ),
     );
@@ -459,7 +461,7 @@ class _ProductGrid extends StatelessWidget {
         priceLabel: products[i].formattedPrice,
         unit: products[i].unit,
         variant: WBProductCardVariant.grid,
-        onTap: () => context.push(AppRoutes.product),
+        onTap: () => context.push('${AppRoutes.product}/${products[i].id}'),
       ),
     );
   }

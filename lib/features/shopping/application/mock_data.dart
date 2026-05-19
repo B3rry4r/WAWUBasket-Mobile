@@ -734,6 +734,36 @@ abstract final class MockData {
   static Category categoryById(String id) =>
       categories.firstWhere((c) => c.id == id);
 
+  /// Every purchasable product across restaurant menus and the
+  /// marketplace, so a detail screen can resolve any tapped id.
+  static List<Product> get allProducts => [...menu, ...marketplaceProducts];
+
+  /// Resolve a product by id. Falls back to the first menu item so a
+  /// stale / missing id never crashes the detail screen.
+  static Product productById(String? id) {
+    if (id == null) return menu.first;
+    for (final p in allProducts) {
+      if (p.id == id) return p;
+    }
+    return menu.first;
+  }
+
+  /// Resolve a vendor by id, falling back to the first vendor.
+  static Vendor vendorById(String? id) {
+    if (id == null) return vendors.first;
+    for (final v in vendors) {
+      if (v.id == id) return v;
+    }
+    return vendors.first;
+  }
+
+  /// The menu items a given vendor sells (matched on vendorName, which
+  /// is what the mock data carries).
+  static List<Product> productsForVendor(String vendorName) => [
+        for (final p in menu)
+          if (p.vendorName == vendorName) p,
+      ];
+
   static List<Product> productsForCategory(
     String categoryId, {
     String? subcategoryId,

@@ -152,6 +152,21 @@ class _StatusBar extends StatelessWidget {
             ),
           ),
           GestureDetector(
+            onTap: () => context.push(AppRoutes.chatInbox),
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(WBIconName.message, size: 16),
+            ),
+          ),
+          const SizedBox(width: 8),
+          GestureDetector(
             onTap: onToggle,
             behavior: HitTestBehavior.opaque,
             child: AnimatedContainer(
