@@ -22,6 +22,10 @@ import '../../features/agent/presentation/screens/agent_screens.dart';
 import '../../features/category/presentation/screens/category_screen.dart';
 import '../../features/livestock/presentation/screens/meat_cut_screen.dart';
 import '../../features/rider/presentation/rider_shell.dart';
+import '../../features/rider/presentation/screens/rider_delivery_complete_screen.dart';
+import '../../features/rider/presentation/screens/rider_delivery_screen.dart';
+import '../../features/rider/presentation/screens/rider_earnings_screen.dart';
+import '../../features/rider/presentation/screens/rider_home_screen.dart';
 import '../../features/rider/presentation/screens/rider_screens.dart';
 import '../../features/trade/presentation/screens/bulk_lot_detail_screen.dart';
 import '../../features/trade/presentation/screens/supplier_detail_screen.dart';
@@ -384,6 +388,10 @@ GoRouter buildRouter() {
                 _tabFade(const OperatorAccountScreen(role: AppRole.rider)),
           ),
         ],
+      ),
+      GoRoute(
+        path: '${AppRoutes.riderDelivery}/complete',
+        builder: (_, _) => const RiderDeliveryCompleteScreen(),
       ),
     ],
   );

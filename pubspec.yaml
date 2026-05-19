@@ -28,6 +28,10 @@ dependencies:
   # Persistence (role status, KYC progress, preferences)
   shared_preferences: ^2.3.2
 
+  # Maps (rider home + active delivery mini-map). Token lives in
+  # lib/core/config/secrets.dart so it never lands in version control.
+  mapbox_maps_flutter: ^2.24.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
