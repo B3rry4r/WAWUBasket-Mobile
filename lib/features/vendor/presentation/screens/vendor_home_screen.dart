@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/vendor_orders_controller.dart';
+import '../widgets/vendor_status_pill.dart';
 
 class VendorHomeScreen extends StatefulWidget {
   const VendorHomeScreen({super.key});
@@ -20,172 +23,245 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       bottom: false,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          WBSpacing.screenPadding,
-          12,
-          WBSpacing.screenPadding,
-          140,
-        ),
-        children: [
-          // Hero
-          Container(
-            padding: const EdgeInsets.all(WBSpacing.lg),
-            decoration: BoxDecoration(
-              color: WBColors.surfaceDark,
-              borderRadius: BorderRadius.circular(WBRadius.card),
+      child: ValueListenableBuilder(
+        valueListenable: VendorOrdersController.instance.orders,
+        builder: (_, orders, _) {
+          final pending = [
+            for (final o in orders)
+              if (o.stage == OrderStage.pending) o,
+          ];
+          final inProgress = [
+            for (final o in orders)
+              if (o.stage == OrderStage.preparing ||
+                  o.stage == OrderStage.ready ||
+                  o.stage == OrderStage.handover)
+                o,
+          ];
+          final todayRevenue =
+              orders.fold<int>(0, (s, o) => s + o.total);
+
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(
+              WBSpacing.screenPadding,
+              12,
+              WBSpacing.screenPadding,
+              140,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Good morning,',
-                            style: WBTypography.caption.copyWith(
-                              color: Colors.white.withValues(alpha: 0.6),
-                            ),
+            children: [
+              _Hero(
+                open: _open,
+                onToggle: () => setState(() => _open = !_open),
+                ordersToday: orders.length,
+                revenue: todayRevenue,
+              ),
+              const SizedBox(height: WBSpacing.lg),
+              _SectionLabel('Quick actions'),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  _Action(
+                    icon: WBIconName.plus,
+                    label: 'Add item',
+                    onTap: () => context.push(AppRoutes.vendorMenuEdit),
+                  ),
+                  const SizedBox(width: 10),
+                  _Action(
+                    icon: WBIconName.more,
+                    label: 'Analytics',
+                    onTap: () => context.push(AppRoutes.vendorAnalytics),
+                  ),
+                  const SizedBox(width: 10),
+                  _Action(
+                    icon: WBIconName.card,
+                    label: 'Payouts',
+                    onTap: () => context.push(AppRoutes.vendorPayouts),
+                  ),
+                ],
+              ),
+              const SizedBox(height: WBSpacing.lg),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _SectionLabel('Fresh orders'),
+                        const SizedBox(height: 4),
+                        Text(
+                          pending.isEmpty
+                              ? 'Nothing pending — enjoy the breather.'
+                              : '${pending.length} waiting for your magic.',
+                          style: WBTypography.caption.copyWith(
+                            color: WBColors.fgSecondary,
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Mama Cass Kitchen',
-                            style: WBTypography.hero.copyWith(
-                              color: Colors.white,
-                              fontSize: 22,
-                            ),
-                          ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => context.go(AppRoutes.vendorOrders),
+                    child: Text(
+                      'See all',
+                      style: WBTypography.caption.copyWith(
+                        color: WBColors.fgSecondary,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () => setState(() => _open = !_open),
-                      child: AnimatedContainer(
-                        duration: WBMotion.base,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: _open
-                              ? Colors.white
-                              : Colors.white.withValues(alpha: 0.12),
-                          borderRadius:
-                              BorderRadius.circular(WBRadius.pill),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                color: _open
-                                    ? const Color(0xFF10B981)
-                                    : Colors.white.withValues(alpha: 0.5),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              _open ? 'Open' : 'Closed',
-                              style: WBTypography.caption.copyWith(
-                                color: _open
-                                    ? WBColors.fgHeader
-                                    : Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: WBSpacing.lg),
-                Row(
-                  children: const [
-                    _StatTile(label: 'Orders', value: '14'),
-                    SizedBox(width: 10),
-                    _StatTile(label: 'Earned', value: '₦68k'),
-                    SizedBox(width: 10),
-                    _StatTile(label: 'Rating', value: '★ 4.8'),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              if (pending.isEmpty)
+                _EmptyTile(label: 'No new orders. Drop a promo to bring them in.')
+              else
+                for (final o in pending.take(3))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _PendingCard(order: o),
+                  ),
+
+              if (inProgress.isNotEmpty) ...[
+                const SizedBox(height: WBSpacing.md),
+                _SectionLabel('In the kitchen'),
+                const SizedBox(height: 10),
+                for (final o in inProgress.take(3))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: _InProgressCard(order: o),
+                  ),
               ],
-            ),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          _SectionLabel(label: 'Quick actions'),
-          const SizedBox(height: 10),
+
+              const SizedBox(height: WBSpacing.lg),
+              _SectionLabel('More'),
+              const SizedBox(height: 10),
+              _MoreRow(
+                icon: WBIconName.basket,
+                label: 'Inventory',
+                sub: 'Stock levels & batches',
+                onTap: () => context.push(AppRoutes.vendorInventory),
+              ),
+              _MoreRow(
+                icon: WBIconName.star,
+                label: 'Reviews',
+                sub: 'What customers say',
+                onTap: () => context.push(AppRoutes.vendorReviews),
+              ),
+              _MoreRow(
+                icon: WBIconName.bell,
+                label: 'Alerts',
+                sub: 'Low stock, late orders, replies waiting',
+                onTap: () => context.push(AppRoutes.vendorAlerts),
+              ),
+              _MoreRow(
+                icon: WBIconName.more,
+                label: 'Store settings',
+                sub: 'Hours, prep time, holiday mode, staff',
+                onTap: () => context.push(AppRoutes.vendorSettings),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _Hero extends StatelessWidget {
+  const _Hero({
+    required this.open,
+    required this.onToggle,
+    required this.ordersToday,
+    required this.revenue,
+  });
+  final bool open;
+  final VoidCallback onToggle;
+  final int ordersToday;
+  final int revenue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(WBSpacing.lg),
+      decoration: BoxDecoration(
+        color: WBColors.surfaceDark,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Row(
             children: [
-              _Action(
-                icon: WBIconName.plus,
-                label: 'Add item',
-                onTap: () => context.push(AppRoutes.vendorMenuEdit),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Good morning,',
+                      style: WBTypography.caption.copyWith(
+                        color: Colors.white.withValues(alpha: 0.6),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Mama Cass Kitchen',
+                      style: WBTypography.hero.copyWith(
+                        color: Colors.white,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(width: 10),
-              _Action(
-                icon: WBIconName.more,
-                label: 'Analytics',
-                onTap: () => context.push(AppRoutes.vendorAnalytics),
-              ),
-              const SizedBox(width: 10),
-              _Action(
-                icon: WBIconName.card,
-                label: 'Payout',
-                onTap: () => context.push(AppRoutes.vendorPayouts),
+              GestureDetector(
+                onTap: onToggle,
+                child: AnimatedContainer(
+                  duration: WBMotion.base,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        open ? Colors.white : Colors.white.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(WBRadius.pill),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: open
+                              ? const Color(0xFF10B981)
+                              : Colors.white.withValues(alpha: 0.5),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        open ? 'Open' : 'Closed',
+                        style: WBTypography.caption.copyWith(
+                          color: open ? WBColors.fgHeader : Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
           const SizedBox(height: WBSpacing.lg),
-          _SectionLabel(label: 'Fresh orders'),
-          const SizedBox(height: 4),
-          Text(
-            'The ones waiting for your magic.',
-            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
-          ),
-          const SizedBox(height: 12),
-          _PendingOrder(
-            id: 'WAWU-8821',
-            customer: 'Adunni · 4 min ago',
-            items: 'Jollof × 2, Suya × 1',
-            onAccept: () => wbShowSnack(context, 'Order accepted'),
-            onDecline: () => wbShowSnack(context, 'Order declined'),
-          ),
-          const SizedBox(height: 12),
-          _PendingOrder(
-            id: 'WAWU-8822',
-            customer: 'Tobi · 7 min ago',
-            items: 'Egusi & pounded yam',
-            onAccept: () => wbShowSnack(context, 'Order accepted'),
-            onDecline: () => wbShowSnack(context, 'Order declined'),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          _SectionLabel(label: 'More'),
-          const SizedBox(height: 10),
-          _MoreRow(
-            icon: WBIconName.basket,
-            label: 'Inventory',
-            sub: 'Stock levels & batches',
-            onTap: () => context.push(AppRoutes.vendorInventory),
-          ),
-          _MoreRow(
-            icon: WBIconName.star,
-            label: 'Reviews',
-            sub: 'What customers say',
-            onTap: () => context.push(AppRoutes.vendorReviews),
-          ),
-          _MoreRow(
-            icon: WBIconName.more,
-            label: 'Store settings',
-            sub: 'Hours, prep time, holiday mode',
-            onTap: () => context.push(AppRoutes.vendorSettings),
+          Row(
+            children: [
+              _DarkStat(label: 'Orders', value: '$ordersToday'),
+              const SizedBox(width: 10),
+              _DarkStat(label: 'Earned', value: wbNaira(revenue)),
+              const SizedBox(width: 10),
+              const _DarkStat(label: 'Rating', value: '★ 4.8'),
+            ],
           ),
         ],
       ),
@@ -193,8 +269,8 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
   }
 }
 
-class _StatTile extends StatelessWidget {
-  const _StatTile({required this.label, required this.value});
+class _DarkStat extends StatelessWidget {
+  const _DarkStat({required this.label, required this.value});
   final String label;
   final String value;
 
@@ -222,10 +298,12 @@ class _StatTile extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: WBTypography.body.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 16,
+                fontSize: 15,
               ),
             ),
           ],
@@ -236,7 +314,7 @@ class _StatTile extends StatelessWidget {
 }
 
 class _SectionLabel extends StatelessWidget {
-  const _SectionLabel({required this.label});
+  const _SectionLabel(this.label);
   final String label;
 
   @override
@@ -303,73 +381,171 @@ class _Action extends StatelessWidget {
   }
 }
 
-class _PendingOrder extends StatelessWidget {
-  const _PendingOrder({
-    required this.id,
-    required this.customer,
-    required this.items,
-    required this.onAccept,
-    required this.onDecline,
-  });
-  final String id;
-  final String customer;
-  final String items;
-  final VoidCallback onAccept;
-  final VoidCallback onDecline;
+class _PendingCard extends StatelessWidget {
+  const _PendingCard({required this.order});
+  final VendorOrder order;
 
   @override
   Widget build(BuildContext context) {
-    return WBCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                '#$id',
-                style: WBTypography.body.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
+    return GestureDetector(
+      onTap: () => context.push('${AppRoutes.vendorOrderDetail}/${order.id}'),
+      behavior: HitTestBehavior.opaque,
+      child: WBCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  '#${order.id}',
+                  style: WBTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              const WBStatusPill(label: 'Pending', kind: WBStatusKind.warning),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Text(
-            customer,
-            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            items,
-            style: WBTypography.body.copyWith(fontSize: 14),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Expanded(
-                child: WBButton(
-                  label: 'Decline',
-                  size: WBButtonSize.sm,
-                  variant: WBButtonVariant.secondary,
-                  fullWidth: true,
-                  onPressed: onDecline,
+                const SizedBox(width: 8),
+                VendorOrderStatusPill(stage: order.stage),
+                const Spacer(),
+                Text(
+                  '${order.placedMinsAgo} min',
+                  style: WBTypography.caption.copyWith(
+                    color: WBColors.fgSecondary,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: WBButton(
-                  label: 'Accept',
-                  size: WBButtonSize.sm,
-                  fullWidth: true,
-                  onPressed: onAccept,
+              ],
+            ),
+            const SizedBox(height: 6),
+            Text(
+              '${order.customerName} · ${order.items.length} item${order.items.length == 1 ? '' : 's'}',
+              style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              [for (final i in order.items) i.name].join(', '),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: WBTypography.body.copyWith(fontSize: 14),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: WBButton(
+                    label: 'Decline',
+                    size: WBButtonSize.sm,
+                    variant: WBButtonVariant.secondary,
+                    fullWidth: true,
+                    onPressed: () {
+                      VendorOrdersController.instance.decline(order.id);
+                      wbShowSnack(context, '${order.id} declined');
+                    },
+                  ),
                 ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: WBButton(
+                    label: 'Accept',
+                    size: WBButtonSize.sm,
+                    fullWidth: true,
+                    onPressed: () {
+                      VendorOrdersController.instance.advance(order.id);
+                      wbShowSnack(context, '${order.id} accepted');
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InProgressCard extends StatelessWidget {
+  const _InProgressCard({required this.order});
+  final VendorOrder order;
+
+  @override
+  Widget build(BuildContext context) {
+    final next = order.stage.advance;
+    return GestureDetector(
+      onTap: () => context.push('${AppRoutes.vendorOrderDetail}/${order.id}'),
+      behavior: HitTestBehavior.opaque,
+      child: WBCard(
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(12),
               ),
-            ],
-          ),
-        ],
+              alignment: Alignment.center,
+              child: const WBIcon(WBIconName.basket, size: 16),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '#${order.id}',
+                        style: WBTypography.body.copyWith(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      VendorOrderStatusPill(stage: order.stage),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${order.customerName} · ${wbNaira(order.total)}',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (next != null)
+              WBButton(
+                label: next.label,
+                size: WBButtonSize.sm,
+                onPressed: () {
+                  VendorOrdersController.instance.advance(order.id);
+                  wbShowSnack(context, '${order.id} · ${next.next.label}');
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _EmptyTile extends StatelessWidget {
+  const _EmptyTile({required this.label});
+  final String label;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Text(
+        label,
+        style: WBTypography.body.copyWith(
+          color: WBColors.fgSecondary,
+          fontSize: 14,
+        ),
       ),
     );
   }

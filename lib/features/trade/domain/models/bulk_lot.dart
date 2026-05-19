@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/utils/wb_format.dart';
+
 class BulkLot extends Equatable {
   const BulkLot({
     required this.id,
@@ -27,19 +29,9 @@ class BulkLot extends Equatable {
   final String region;
   final String imageUrl;
 
-  String get unitPriceLabel => '₦${_n(unitPriceNaira)}';
+  String get unitPriceLabel => wbNaira(unitPriceNaira);
   String get minOrderLabel => 'Min $minOrder ${minOrder == 1 ? 'unit' : 'units'}';
 
   @override
   List<Object?> get props => [id, produce, lotSize];
-}
-
-String _n(int v) {
-  final s = v.toString();
-  final buf = StringBuffer();
-  for (var i = 0; i < s.length; i++) {
-    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
-    buf.write(s[i]);
-  }
-  return buf.toString();
 }

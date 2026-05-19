@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 
@@ -700,7 +701,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
                   ),
                 ),
                 Text(
-                  '₦${_n(_total)}',
+                  wbNaira(_total),
                   style: WBTypography.hero.copyWith(fontSize: 22),
                 ),
               ],
@@ -1057,12 +1058,3 @@ class _SyncRow extends StatelessWidget {
   }
 }
 
-String _n(int v) {
-  final s = v.toString();
-  final buf = StringBuffer();
-  for (var i = 0; i < s.length; i++) {
-    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
-    buf.write(s[i]);
-  }
-  return buf.toString();
-}

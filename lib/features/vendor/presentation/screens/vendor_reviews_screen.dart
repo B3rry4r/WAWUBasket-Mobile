@@ -5,8 +5,17 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
-class VendorReviewsScreen extends StatelessWidget {
+class VendorReviewsScreen extends StatefulWidget {
   const VendorReviewsScreen({super.key});
+
+  @override
+  State<VendorReviewsScreen> createState() => _VendorReviewsScreenState();
+}
+
+class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
+  /// Whether a given review has had a reply submitted in this session. Keyed
+  /// by reviewer name to keep the mock simple.
+  final Set<String> _replied = <String>{};
 
   static const _reviews = [
     (name: 'Adunni O.', rating: 5, text: 'Best jollof in Lagos — period.', date: 'Today'),
@@ -15,6 +24,27 @@ class VendorReviewsScreen extends StatelessWidget {
     (name: 'Daniel U.', rating: 3, text: 'Rice was a bit dry today.', date: '3 days ago'),
     (name: 'Funke I.', rating: 5, text: 'My family loves this place!', date: '1 week ago'),
   ];
+
+  void _openReplySheet({
+    required String reviewer,
+    required String text,
+  }) async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (sheetCtx) =>
+          _ReplySheet(reviewer: reviewer, originalText: text),
+    );
+    if (result != null && mounted) {
+      setState(() => _replied.add(reviewer));
+      wbShowSnack(context, 'Reply posted to $reviewer');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,17 +163,23 @@ class VendorReviewsScreen extends StatelessWidget {
                             ),
                           ),
                           const Spacer(),
-                          GestureDetector(
-                            onTap: () =>
-                                wbShowSnack(context, 'Reply opened'),
-                            child: Text(
-                              'Reply',
-                              style: WBTypography.caption.copyWith(
-                                color: WBColors.fgHeader,
-                                fontWeight: FontWeight.w600,
+                          if (_replied.contains(r.name))
+                            const WBStatusPill(
+                              label: 'Replied',
+                              kind: WBStatusKind.success,
+                            )
+                          else
+                            GestureDetector(
+                              onTap: () =>
+                                  _openReplySheet(reviewer: r.name, text: r.text),
+                              child: Text(
+                                'Reply',
+                                style: WBTypography.caption.copyWith(
+                                  color: WBColors.fgHeader,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
                         ],
                       ),
                     ],
@@ -152,6 +188,93 @@ class VendorReviewsScreen extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ReplySheet extends StatefulWidget {
+  const _ReplySheet({required this.reviewer, required this.originalText});
+  final String reviewer;
+  final String originalText;
+
+  @override
+  State<_ReplySheet> createState() => _ReplySheetState();
+}
+
+class _ReplySheetState extends State<_ReplySheet> {
+  final _ctrl = TextEditingController();
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final canSend = _ctrl.text.trim().isNotEmpty;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: WBSpacing.screenPadding,
+        right: WBSpacing.screenPadding,
+        top: WBSpacing.lg,
+        bottom: MediaQuery.of(context).viewInsets.bottom + WBSpacing.xl,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+              decoration: BoxDecoration(
+                color: WBColors.bgDivider,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+            ),
+          ),
+          Text(
+            'Reply to ${widget.reviewer}',
+            style: WBTypography.cardTitle.copyWith(fontSize: 18),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: WBColors.bgSoft,
+              borderRadius: BorderRadius.circular(WBRadius.card),
+            ),
+            child: Text(
+              '“${widget.originalText}”',
+              style: WBTypography.body.copyWith(
+                fontSize: 14,
+                color: WBColors.fgSecondary,
+                fontStyle: FontStyle.italic,
+                height: 1.45,
+              ),
+            ),
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          WBInput(
+            label: 'Your reply',
+            placeholder: 'Thanks for the feedback — we hear you...',
+            controller: _ctrl,
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          WBButton(
+            label: 'Post reply',
+            size: WBButtonSize.lg,
+            fullWidth: true,
+            disabled: !canSend,
+            onPressed: canSend
+                ? () => Navigator.of(context).pop(_ctrl.text.trim())
+                : null,
+          ),
+        ],
       ),
     );
   }

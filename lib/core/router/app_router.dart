@@ -26,6 +26,7 @@ import '../../features/rider/presentation/screens/rider_screens.dart';
 import '../../features/trade/presentation/screens/bulk_lot_detail_screen.dart';
 import '../../features/trade/presentation/screens/supplier_detail_screen.dart';
 import '../../features/trade/presentation/screens/trade_screen.dart';
+import '../../features/vendor/presentation/screens/vendor_alerts_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_analytics_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_home_screen.dart';
 import '../../features/agent/presentation/screens/agent_kyc_screen.dart';
@@ -35,6 +36,7 @@ import '../../features/vendor/presentation/screens/vendor_kyc_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_login_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_menu_edit_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_menu_screen.dart';
+import '../../features/vendor/presentation/screens/vendor_order_detail_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_orders_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_payouts_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_reviews_screen.dart';
@@ -269,12 +271,25 @@ GoRouter buildRouter() {
         ],
       ),
       GoRoute(
+        path: '${AppRoutes.vendorOrderDetail}/:id',
+        builder: (_, state) => VendorOrderDetailScreen(
+          orderId: state.pathParameters['id']!,
+        ),
+      ),
+      GoRoute(
         path: AppRoutes.vendorPayouts,
         builder: (_, _) => const VendorPayoutsScreen(),
       ),
       GoRoute(
+        path: AppRoutes.vendorAlerts,
+        builder: (_, _) => const VendorAlertsScreen(),
+      ),
+      GoRoute(
         path: AppRoutes.vendorMenuEdit,
-        builder: (_, _) => const VendorMenuEditScreen(),
+        builder: (_, state) {
+          final id = state.uri.queryParameters['id'];
+          return VendorMenuEditScreen(itemId: id);
+        },
       ),
       GoRoute(
         path: AppRoutes.vendorInventory,

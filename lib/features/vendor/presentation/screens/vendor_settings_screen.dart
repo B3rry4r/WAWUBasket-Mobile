@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../auth/application/role_controller.dart';
 
 class VendorSettingsScreen extends StatefulWidget {
   const VendorSettingsScreen({super.key});
@@ -14,13 +12,69 @@ class VendorSettingsScreen extends StatefulWidget {
   State<VendorSettingsScreen> createState() => _VendorSettingsScreenState();
 }
 
+class _StaffMember {
+  _StaffMember({required this.name, required this.role, required this.email});
+  String name;
+  String role;
+  String email;
+}
+
 class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
   bool _holiday = false;
+  DateTimeRange? _holidayRange;
   double _prep = 25;
   double _radius = 8;
   bool _pushOrders = true;
   bool _pushLowStock = true;
   bool _emailReports = true;
+
+  final List<_StaffMember> _staff = [
+    _StaffMember(name: 'Adunni Adesanya', role: 'Manager', email: 'adunni@mama-cass.ng'),
+    _StaffMember(name: 'Sade Akin', role: 'Cashier', email: 'sade@mama-cass.ng'),
+    _StaffMember(name: 'Femi Bello', role: 'Cook', email: 'femi@mama-cass.ng'),
+  ];
+
+  Future<void> _pickHolidayRange() async {
+    final picked = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      initialDateRange: _holidayRange,
+      helpText: 'Pick your holiday window',
+    );
+    if (picked != null) setState(() => _holidayRange = picked);
+  }
+
+  void _addStaff() {
+    showModalBottomSheet<_StaffMember>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => const _StaffSheet(),
+    ).then((m) {
+      if (m == null || !mounted) return;
+      setState(() => _staff.add(m));
+      wbShowSnack(context, 'Invited ${m.name} as ${m.role.toLowerCase()}');
+    });
+  }
+
+  void _removeStaff(_StaffMember m) {
+    setState(() => _staff.remove(m));
+    wbShowSnack(context, '${m.name} removed');
+  }
+
+  String _holidayLabel() {
+    if (!_holiday) return 'Open as usual';
+    final r = _holidayRange;
+    if (r == null) return 'Holiday mode on';
+    final s = r.start;
+    final e = r.end;
+    return 'Closed ${s.day}/${s.month} → ${e.day}/${e.month}';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,64 +213,97 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
             _SectionLabel(label: 'Holiday mode'),
             const SizedBox(height: 10),
             WBCard(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _holiday ? 'On vacation' : 'Open as usual',
-                          style: WBTypography.body.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          "Pause new orders until you're back.",
-                          style: WBTypography.caption.copyWith(
-                            color: WBColors.fgSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Switch.adaptive(
-                    value: _holiday,
-                    activeThumbColor: WBColors.surfaceDark,
-                    onChanged: (v) => setState(() => _holiday = v),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            _SectionLabel(label: 'Account'),
-            const SizedBox(height: 10),
-            WBCard(
-              padding: EdgeInsets.zero,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _Tap(
-                    icon: WBIconName.user,
-                    label: 'Switch role',
-                    sub: 'Customer · Rider · Trade Agent',
-                    onTap: () => context.push(AppRoutes.roleSelect),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _holidayLabel(),
+                              style: WBTypography.body.copyWith(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              "Pause new orders until you're back.",
+                              style: WBTypography.caption.copyWith(
+                                color: WBColors.fgSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Switch.adaptive(
+                        value: _holiday,
+                        activeThumbColor: WBColors.surfaceDark,
+                        onChanged: (v) => setState(() => _holiday = v),
+                      ),
+                    ],
                   ),
-                  const WBDivider(),
-                  _Tap(
-                    icon: WBIconName.close,
-                    label: 'Sign out',
-                    sub: 'End your vendor session',
-                    danger: true,
-                    onTap: () {
-                      RoleController.instance.signOut();
-                      context.go(AppRoutes.welcome);
-                    },
-                  ),
+                  if (_holiday) ...[
+                    const SizedBox(height: 10),
+                    WBButton(
+                      label: _holidayRange == null
+                          ? 'Pick dates'
+                          : 'Change dates',
+                      size: WBButtonSize.sm,
+                      variant: WBButtonVariant.secondary,
+                      onPressed: _pickHolidayRange,
+                    ),
+                  ],
                 ],
               ),
             ),
+
+            const SizedBox(height: WBSpacing.lg),
+            Row(
+              children: [
+                Expanded(child: _SectionLabel(label: 'Staff accounts')),
+                WBButton(
+                  label: 'Invite',
+                  size: WBButtonSize.sm,
+                  trailingIcon: WBIconName.plus,
+                  onPressed: _addStaff,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (_staff.isEmpty)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: WBColors.bgSoft,
+                  borderRadius: BorderRadius.circular(WBRadius.card),
+                ),
+                child: Text(
+                  'No staff yet. Invite a manager, cashier or cook.',
+                  style: WBTypography.body.copyWith(
+                    color: WBColors.fgSecondary,
+                    fontSize: 14,
+                  ),
+                ),
+              )
+            else
+              WBCard(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    for (var i = 0; i < _staff.length; i++) ...[
+                      _StaffRow(
+                        member: _staff[i],
+                        onRemove: () => _removeStaff(_staff[i]),
+                      ),
+                      if (i != _staff.length - 1) const WBDivider(),
+                    ],
+                  ],
+                ),
+              ),
             const SizedBox(height: WBSpacing.lg),
             WBButton(
               label: 'Save changes',
@@ -322,76 +409,167 @@ class _Toggle extends StatelessWidget {
   }
 }
 
-class _Tap extends StatelessWidget {
-  const _Tap({
-    required this.icon,
-    required this.label,
-    required this.sub,
-    required this.onTap,
-    this.danger = false,
-  });
-  final WBIconName icon;
-  final String label;
-  final String sub;
-  final VoidCallback onTap;
-  final bool danger;
+class _StaffRow extends StatelessWidget {
+  const _StaffRow({required this.member, required this.onRemove});
+  final _StaffMember member;
+  final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
+    return Padding(
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: WBColors.bgSoft,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: const WBIcon(WBIconName.user, size: 16),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  member.name,
+                  style: WBTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  '${member.role} · ${member.email}',
+                  style: WBTypography.caption.copyWith(
+                    color: WBColors.fgSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: onRemove,
+            behavior: HitTestBehavior.opaque,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+              child: const WBIcon(
+                WBIconName.close,
+                size: 14,
+                color: WBColors.fgPlaceholder,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StaffSheet extends StatefulWidget {
+  const _StaffSheet();
+
+  @override
+  State<_StaffSheet> createState() => _StaffSheetState();
+}
+
+class _StaffSheetState extends State<_StaffSheet> {
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  String _role = 'Cashier';
+  static const _roles = ['Manager', 'Cashier', 'Cook'];
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final canSend = _name.text.trim().isNotEmpty && _email.text.trim().isNotEmpty;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: WBSpacing.screenPadding,
+        right: WBSpacing.screenPadding,
+        top: WBSpacing.lg,
+        bottom: MediaQuery.of(context).viewInsets.bottom + WBSpacing.xl,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: WBSpacing.lg),
               decoration: BoxDecoration(
-                color: danger
-                    ? const Color(0x14EF4444)
-                    : WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              alignment: Alignment.center,
-              child: WBIcon(
-                icon,
-                size: 16,
-                color: danger ? WBColors.statusError : WBColors.fgHeader,
+                color: WBColors.bgDivider,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
               ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: WBTypography.body.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
-                      color:
-                          danger ? WBColors.statusError : WBColors.fgHeader,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    sub,
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const WBIcon(
-              WBIconName.chevronRight,
-              size: 16,
+          ),
+          Text(
+            'Invite a staff member',
+            style: WBTypography.cardTitle.copyWith(fontSize: 18),
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          WBInput(
+            label: 'Full name',
+            controller: _name,
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: WBSpacing.md),
+          WBInput(
+            label: 'Email',
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: WBSpacing.md),
+          Text(
+            'ROLE',
+            style: WBTypography.label.copyWith(
+              fontWeight: FontWeight.w600,
               color: WBColors.fgPlaceholder,
+              letterSpacing: 0.66,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: [
+              for (final r in _roles)
+                WBTag(
+                  label: r,
+                  active: r == _role,
+                  onTap: () => setState(() => _role = r),
+                ),
+            ],
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          WBButton(
+            label: 'Send invite',
+            size: WBButtonSize.lg,
+            fullWidth: true,
+            disabled: !canSend,
+            onPressed: canSend
+                ? () => Navigator.of(context).pop(
+                      _StaffMember(
+                        name: _name.text.trim(),
+                        role: _role,
+                        email: _email.text.trim(),
+                      ),
+                    )
+                : null,
+          ),
+        ],
       ),
     );
   }

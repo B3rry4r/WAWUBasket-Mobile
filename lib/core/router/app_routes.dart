@@ -62,7 +62,8 @@ abstract final class AppRoutes {
   static const vendorOrders = '/vendor/orders';
   static const vendorMenu = '/vendor/menu';
   static const vendorAccount = '/vendor/account';
-  static const vendorMenuEdit = '/vendor/menu/edit';
+  static const vendorOrderDetail = '/vendor/orders/detail'; // append `/:id`
+  static const vendorMenuEdit = '/vendor/menu/edit'; // optional `?id=`
   static const vendorInventory = '/vendor/inventory';
   static const vendorAnalytics = '/vendor/analytics';
   static const vendorPayouts = '/vendor/payouts';

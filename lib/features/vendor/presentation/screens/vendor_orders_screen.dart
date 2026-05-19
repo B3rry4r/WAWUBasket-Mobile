@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/vendor_orders_controller.dart';
+import '../widgets/vendor_status_pill.dart';
 
 class VendorOrdersScreen extends StatefulWidget {
   const VendorOrdersScreen({super.key});
@@ -12,130 +17,138 @@ class VendorOrdersScreen extends StatefulWidget {
 }
 
 class _VendorOrdersScreenState extends State<VendorOrdersScreen> {
-  String _tab = 'pending';
-  static const _tabs = [
-    ('pending', 'Pending'),
-    ('preparing', 'Preparing'),
-    ('ready', 'Ready'),
-    ('done', 'Done'),
+  static const _filters = [
+    ('Pending', [OrderStage.pending]),
+    ('Preparing', [OrderStage.preparing]),
+    ('Ready', [OrderStage.ready, OrderStage.handover]),
+    ('Done', [OrderStage.done, OrderStage.declined]),
   ];
+  int _tab = 0;
 
-  static const _orders = [
-    (id: 'WAWU-8821', cust: 'Adunni', items: 'Jollof × 2, Suya × 1', total: '₦9,300', mins: '4 min', stage: 'pending'),
-    (id: 'WAWU-8822', cust: 'Tobi', items: 'Egusi & pounded yam', total: '₦5,200', mins: '7 min', stage: 'pending'),
-    (id: 'WAWU-8820', cust: 'Kemi', items: 'Plantain & beans', total: '₦3,200', mins: '12 min', stage: 'preparing'),
-    (id: 'WAWU-8819', cust: 'Daniel', items: 'Suya platter', total: '₦4,800', mins: '18 min', stage: 'preparing'),
-    (id: 'WAWU-8817', cust: 'Funke', items: 'Small chops', total: '₦3,500', mins: '24 min', stage: 'ready'),
-    (id: 'WAWU-8810', cust: 'Yemi', items: 'Jollof & chicken', total: '₦4,500', mins: '1 hr', stage: 'done'),
-  ];
+  void _open(VendorOrder o) =>
+      context.push('${AppRoutes.vendorOrderDetail}/${o.id}');
 
   @override
   Widget build(BuildContext context) {
-    final filtered = [
-      for (final o in _orders)
-        if (o.stage == _tab) o,
-    ];
     return SafeArea(
       bottom: false,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(
-          WBSpacing.screenPadding,
-          12,
-          WBSpacing.screenPadding,
-          140,
-        ),
-        children: [
-          Text('Live orders', style: WBTypography.page),
-          const SizedBox(height: 4),
-          Text(
-            'The ones waiting for your magic.',
-            style: WBTypography.body.copyWith(
-              color: WBColors.fgSecondary,
-              fontSize: 14,
+      child: ValueListenableBuilder(
+        valueListenable: VendorOrdersController.instance.orders,
+        builder: (_, orders, _) {
+          final stages = _filters[_tab].$2;
+          final filtered = [
+            for (final o in orders)
+              if (stages.contains(o.stage)) o,
+          ];
+          return ListView(
+            padding: const EdgeInsets.fromLTRB(
+              WBSpacing.screenPadding,
+              12,
+              WBSpacing.screenPadding,
+              140,
             ),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          SizedBox(
-            height: 36,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: _tabs.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 8),
-              itemBuilder: (_, i) => WBTag(
-                label: _tabs[i].$2,
-                active: _tabs[i].$1 == _tab,
-                onTap: () => setState(() => _tab = _tabs[i].$1),
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Live orders', style: WBTypography.page),
+                        Text(
+                          'The ones waiting for your magic.',
+                          style: WBTypography.body.copyWith(
+                            color: WBColors.fgSecondary,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  WBButton(
+                    label: 'Alerts',
+                    size: WBButtonSize.sm,
+                    variant: WBButtonVariant.secondary,
+                    trailingIcon: WBIconName.bell,
+                    onPressed: () => context.push(AppRoutes.vendorAlerts),
+                  ),
+                ],
               ),
-            ),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          if (filtered.isEmpty)
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
-              child: Text(
-                'No orders right now. Time to take a breath.',
-                style: WBTypography.body.copyWith(
-                  color: WBColors.fgSecondary,
+              const SizedBox(height: WBSpacing.lg),
+              SizedBox(
+                height: 36,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _filters.length,
+                  separatorBuilder: (_, _) => const SizedBox(width: 8),
+                  itemBuilder: (_, i) => WBTag(
+                    label: '${_filters[i].$1} · ${_countFor(orders, _filters[i].$2)}',
+                    active: i == _tab,
+                    onTap: () => setState(() => _tab = i),
+                  ),
                 ),
               ),
-            )
-          else
-            for (final o in filtered)
-              _OrderCard(
-                id: o.id,
-                customer: o.cust,
-                items: o.items,
-                total: o.total,
-                mins: o.mins,
-                stage: o.stage,
-                onAction: (label) => wbShowSnack(context, '$label · #${o.id}'),
-              ),
-        ],
+              const SizedBox(height: WBSpacing.lg),
+              if (filtered.isEmpty)
+                _EmptyState(label: 'No orders right now. Time to take a breath.')
+              else
+                for (final o in filtered)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: _OrderCard(order: o, onOpen: () => _open(o)),
+                  ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  int _countFor(List<VendorOrder> orders, List<OrderStage> stages) {
+    var n = 0;
+    for (final o in orders) {
+      if (stages.contains(o.stage)) n++;
+    }
+    return n;
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.label});
+  final String label;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Text(
+        label,
+        style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
       ),
     );
   }
 }
 
 class _OrderCard extends StatelessWidget {
-  const _OrderCard({
-    required this.id,
-    required this.customer,
-    required this.items,
-    required this.total,
-    required this.mins,
-    required this.stage,
-    required this.onAction,
-  });
-  final String id;
-  final String customer;
-  final String items;
-  final String total;
-  final String mins;
-  final String stage;
-  final ValueChanged<String> onAction;
+  const _OrderCard({required this.order, required this.onOpen});
+  final VendorOrder order;
+  final VoidCallback onOpen;
 
-  (String, WBStatusKind) get _status {
-    switch (stage) {
-      case 'pending':
-        return ('Pending', WBStatusKind.warning);
-      case 'preparing':
-        return ('Preparing', WBStatusKind.info);
-      case 'ready':
-        return ('Ready', WBStatusKind.success);
-      default:
-        return ('Done', WBStatusKind.success);
-    }
+  String get _itemSummary {
+    final parts = [for (final i in order.items) '${i.name} × ${i.qty}'];
+    return parts.join(' · ');
   }
 
   @override
   Widget build(BuildContext context) {
-    final s = _status;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+    final next = order.stage.advance;
+
+    return GestureDetector(
+      onTap: onOpen,
+      behavior: HitTestBehavior.opaque,
       child: WBCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,17 +156,17 @@ class _OrderCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  '#$id',
+                  '#${order.id}',
                   style: WBTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
                   ),
                 ),
                 const SizedBox(width: 8),
-                WBStatusPill(label: s.$1, kind: s.$2),
+                VendorOrderStatusPill(stage: order.stage),
                 const Spacer(),
                 Text(
-                  mins,
+                  '${order.placedMinsAgo} min',
                   style: WBTypography.caption.copyWith(
                     color: WBColors.fgSecondary,
                   ),
@@ -162,56 +175,61 @@ class _OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             Text(
-              customer,
-              style: WBTypography.caption.copyWith(
-                color: WBColors.fgSecondary,
-              ),
+              order.customerName,
+              style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
             ),
             const SizedBox(height: 2),
-            Text(items, style: WBTypography.body.copyWith(fontSize: 14)),
+            Text(
+              _itemSummary,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: WBTypography.body.copyWith(fontSize: 14),
+            ),
             const SizedBox(height: 8),
             Row(
               children: [
                 Text(
-                  total,
+                  wbNaira(order.total),
                   style: WBTypography.body.copyWith(
                     fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
                 ),
                 const Spacer(),
-                if (stage == 'pending') ...[
+                if (order.stage == OrderStage.pending) ...[
                   WBButton(
                     label: 'Decline',
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
-                    onPressed: () => onAction('Declined'),
+                    onPressed: () {
+                      VendorOrdersController.instance.decline(order.id);
+                      wbShowSnack(context, '${order.id} declined');
+                    },
                   ),
                   const SizedBox(width: 8),
                   WBButton(
                     label: 'Accept',
                     size: WBButtonSize.sm,
-                    onPressed: () => onAction('Accepted'),
+                    onPressed: () {
+                      VendorOrdersController.instance.advance(order.id);
+                      wbShowSnack(context, '${order.id} accepted · preparing');
+                    },
                   ),
-                ] else if (stage == 'preparing')
+                ] else if (next != null)
                   WBButton(
-                    label: 'Mark ready',
+                    label: next.label,
                     size: WBButtonSize.sm,
-                    onPressed: () => onAction('Marked ready'),
-                  )
-                else if (stage == 'ready')
-                  WBButton(
-                    label: 'Print ticket',
-                    size: WBButtonSize.sm,
-                    variant: WBButtonVariant.secondary,
-                    onPressed: () => onAction('Ticket printed'),
+                    onPressed: () {
+                      VendorOrdersController.instance.advance(order.id);
+                      wbShowSnack(context, '${order.id} · ${next.next.label}');
+                    },
                   )
                 else
                   WBButton(
                     label: 'Receipt',
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
-                    onPressed: () => onAction('Receipt opened'),
+                    onPressed: onOpen,
                   ),
               ],
             ),
