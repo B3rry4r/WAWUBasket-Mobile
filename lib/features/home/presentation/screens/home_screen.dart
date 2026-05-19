@@ -127,31 +127,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         )),
         const SizedBox(height: 20),
-        SizedBox(
-          height: 84,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            children: [
-              _QuickAction(
-                icon: WBIconName.basket,
-                label: 'Reorder',
-                onTap: () => context.push(AppRoutes.ordersHistory),
-              ),
-              _QuickAction(
-                icon: WBIconName.pin,
-                label: 'Track',
-                onTap: () => context.push(AppRoutes.tracking),
-              ),
-              _QuickAction(
-                icon: WBIconName.message,
-                label: 'Chat',
-                onTap: () => context.push(AppRoutes.chatInbox),
-                last: true,
-              ),
-            ],
-          ),
-        ),
+        _padded(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _QuickAction(
+              icon: WBIconName.basket,
+              label: 'Reorder',
+              onTap: () => context.push(AppRoutes.ordersHistory),
+            ),
+            _QuickAction(
+              icon: WBIconName.pin,
+              label: 'Track',
+              onTap: () => context.push(AppRoutes.tracking),
+            ),
+            _QuickAction(
+              icon: WBIconName.message,
+              label: 'Chat',
+              onTap: () => context.push(AppRoutes.chatInbox),
+            ),
+          ],
+        )),
         const SizedBox(height: 18),
         _padded(GestureDetector(
           onTap: () => context.push(AppRoutes.trade),
@@ -298,48 +293,43 @@ class _QuickAction extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
-    this.last = false,
   });
   final WBIconName icon;
   final String label;
   final VoidCallback onTap;
-  final bool last;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: last ? 0 : 10),
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: SizedBox(
-          width: 68,
-          child: Column(
-            children: [
-              Container(
-                width: 52,
-                height: 52,
-                decoration: BoxDecoration(
-                  color: WBColors.surfaceCard,
-                  borderRadius: BorderRadius.circular(WBRadius.card),
-                  boxShadow: WBShadows.card,
-                ),
-                alignment: Alignment.center,
-                child: WBIcon(icon, size: 20),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: SizedBox(
+        width: 68,
+        child: Column(
+          children: [
+            Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                color: WBColors.surfaceCard,
+                borderRadius: BorderRadius.circular(WBRadius.card),
+                boxShadow: WBShadows.card,
               ),
-              const SizedBox(height: 7),
-              Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: WBTypography.caption.copyWith(
-                  color: WBColors.fgHeader,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
+              alignment: Alignment.center,
+              child: WBIcon(icon, size: 20),
+            ),
+            const SizedBox(height: 7),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: WBTypography.caption.copyWith(
+                color: WBColors.fgHeader,
+                fontWeight: FontWeight.w500,
+                fontSize: 12,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
