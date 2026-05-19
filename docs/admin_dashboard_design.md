@@ -35,7 +35,7 @@ Mirror the mobile tokens 1-for-1 so designers can paste swatches and type ramps 
 
 Status colours appear as a 6px dot or a soft 12% tint behind a pill. Never as full backgrounds.
 
-**Type** — Inter. Sizes: H1 28/36, H2 22/30, H3 17/24, body 14/22, caption 12/18. Numbers in tables tabular-figures. No display fonts.
+**Type** — Albert Sans (Google Fonts). Sizes: H1 28/36, H2 22/30, H3 17/24, body 14/22, caption 12/18. Numbers in tables tabular-figures. No display fonts.
 
 **Spacing** — 4 / 8 / 12 / 16 / 24 / 32 / 48. Cards padded 24. Tables: 14 vertical row padding.
 

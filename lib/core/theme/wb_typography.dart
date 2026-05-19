@@ -3,16 +3,16 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'wb_colors.dart';
 
-/// Inter type scale, semantic styles, and weight tokens.
+/// Albert Sans type scale, semantic styles, and weight tokens.
 abstract final class WBTypography {
-  static TextStyle _inter({
+  static TextStyle _albert({
     required double fontSize,
     required FontWeight weight,
     double? letterSpacing,
     double? height,
     Color? color,
   }) =>
-      GoogleFonts.inter(
+      GoogleFonts.albertSans(
         fontSize: fontSize,
         fontWeight: weight,
         letterSpacing: letterSpacing,
@@ -21,7 +21,7 @@ abstract final class WBTypography {
       );
 
   // Hero — 32px SemiBold, tight tracking
-  static TextStyle hero = _inter(
+  static TextStyle hero = _albert(
     fontSize: 32,
     weight: FontWeight.w600,
     letterSpacing: -0.64, // -0.02em
@@ -30,7 +30,7 @@ abstract final class WBTypography {
   );
 
   // Page title — 24px SemiBold
-  static TextStyle page = _inter(
+  static TextStyle page = _albert(
     fontSize: 24,
     weight: FontWeight.w600,
     letterSpacing: -0.36, // -0.015em
@@ -39,7 +39,7 @@ abstract final class WBTypography {
   );
 
   // Section title — 20px Medium
-  static TextStyle section = _inter(
+  static TextStyle section = _albert(
     fontSize: 20,
     weight: FontWeight.w500,
     letterSpacing: -0.20, // -0.01em
@@ -48,7 +48,7 @@ abstract final class WBTypography {
   );
 
   // Card title — 18px Medium
-  static TextStyle cardTitle = _inter(
+  static TextStyle cardTitle = _albert(
     fontSize: 18,
     weight: FontWeight.w500,
     height: 1.3,
@@ -56,7 +56,7 @@ abstract final class WBTypography {
   );
 
   // Body — 16px Regular
-  static TextStyle body = _inter(
+  static TextStyle body = _albert(
     fontSize: 16,
     weight: FontWeight.w400,
     height: 1.5,
@@ -64,7 +64,7 @@ abstract final class WBTypography {
   );
 
   // Secondary — 14px Regular
-  static TextStyle secondary = _inter(
+  static TextStyle secondary = _albert(
     fontSize: 14,
     weight: FontWeight.w400,
     height: 1.45,
@@ -72,7 +72,7 @@ abstract final class WBTypography {
   );
 
   // Caption — 12px Regular
-  static TextStyle caption = _inter(
+  static TextStyle caption = _albert(
     fontSize: 12,
     weight: FontWeight.w400,
     height: 1.4,
@@ -80,7 +80,7 @@ abstract final class WBTypography {
   );
 
   // Small label — 11px Medium, uppercase
-  static TextStyle label = _inter(
+  static TextStyle label = _albert(
     fontSize: 11,
     weight: FontWeight.w500,
     letterSpacing: 0.44, // 0.04em
@@ -88,7 +88,7 @@ abstract final class WBTypography {
   );
 
   // Button text — 16px Medium
-  static TextStyle button = _inter(
+  static TextStyle button = _albert(
     fontSize: 16,
     weight: FontWeight.w500,
     height: 1,

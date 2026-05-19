@@ -18,7 +18,7 @@ dependencies:
   # Routing
   go_router: ^14.6.2
 
-  # Typography (Inter — design system primary)
+  # Typography (Albert Sans — design system primary)
   google_fonts: ^6.2.1
 
   # Value equality for state objects
@@ -64,4 +64,4 @@ flutter:
   assets:
     - assets/logos/
 
-  # Inter is loaded at runtime via google_fonts.
+  # Albert Sans is loaded at runtime via google_fonts.

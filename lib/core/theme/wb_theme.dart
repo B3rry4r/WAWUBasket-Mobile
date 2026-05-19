@@ -25,7 +25,7 @@ ThemeData buildWBTheme() {
       error: WBColors.statusError,
       onError: Colors.white,
     ),
-    textTheme: GoogleFonts.interTextTheme().apply(
+    textTheme: GoogleFonts.albertSansTextTheme().apply(
       bodyColor: WBColors.fgPrimary,
       displayColor: WBColors.fgHeader,
     ),
