@@ -22,7 +22,14 @@ import '../../features/escrow/presentation/screens/escrow_dispute_screen.dart';
 import '../../features/escrow/presentation/screens/escrow_orders_screen.dart';
 import '../../features/escrow/presentation/screens/escrow_status_screen.dart';
 import '../../features/agent/presentation/agent_shell.dart';
+import '../../features/agent/presentation/screens/agent_cash_payout_screen.dart';
+import '../../features/agent/presentation/screens/agent_earnings_screen.dart';
+import '../../features/agent/presentation/screens/agent_home_screen.dart';
+import '../../features/agent/presentation/screens/agent_record_txn_screen.dart';
+import '../../features/agent/presentation/screens/agent_register_trader_screen.dart';
 import '../../features/agent/presentation/screens/agent_screens.dart';
+import '../../features/agent/presentation/screens/agent_sync_screen.dart';
+import '../../features/agent/presentation/screens/agent_traders_screen.dart';
 import '../../features/category/presentation/screens/category_screen.dart';
 import '../../features/livestock/presentation/screens/meat_cut_screen.dart';
 import '../../features/rider/presentation/rider_shell.dart';
@@ -399,6 +406,14 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.agentSync,
         builder: (_, _) => const AgentSyncScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.agentTraders,
+        builder: (_, _) => const AgentTradersScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.agentEarnings,
+        builder: (_, _) => const AgentEarningsScreen(),
       ),
 
       // ───────── Rider (RBAC) ─────────

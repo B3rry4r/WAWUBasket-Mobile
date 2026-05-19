@@ -95,6 +95,8 @@ abstract final class AppRoutes {
   static const agentCashPayout = '/agent/cash-payout';
   static const agentSync = '/agent/sync';
   static const agentAccount = '/agent/account';
+  static const agentTraders = '/agent/traders';
+  static const agentEarnings = '/agent/earnings';
 
   // Rider (food couriers, gated by KYC). Home / Active / Earnings / Account.
   static const riderLogin = '/rider/login';
