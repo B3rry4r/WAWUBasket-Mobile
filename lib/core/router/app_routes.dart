@@ -18,7 +18,11 @@ abstract final class AppRoutes {
 
   // Pushed routes — shopping
   static const search = '/search';
-  static const vendor = '/vendor';
+
+  /// Customer-side vendor storefront (a restaurant / essentials shop the
+  /// customer is browsing). Distinct from [vendorHome] which is the
+  /// vendor operator's own dashboard.
+  static const vendor = '/storefront';
   static const product = '/product';
   static const cart = '/cart';
   static const checkout = '/checkout';
