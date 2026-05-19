@@ -1,16 +1,27 @@
-/// Local-only secrets. Excluded from version control via .gitignore so a
-/// token never ends up in a commit by accident.
+/// Mapbox access token resolution.
 ///
-/// To enable the Mapbox-backed rider home + active-delivery mini-map:
-///   1. Go to https://account.mapbox.com/access-tokens/
-///   2. Copy your default *public* token (starts with `pk.`).
-///   3. Paste it as the value of [kMapboxPublicToken] below.
+/// Resolution order:
+///   1. `--dart-define=MAPBOX_TOKEN=pk...` (used by CI — value comes from
+///      the `MAPBOX_TOKEN` GitHub Actions secret).
+///   2. The local fallback constant below.
 ///
-/// While the token is empty the rider home renders a graceful placeholder
-/// instead of the map — every other rider screen still works.
+/// The committed copy of this file keeps the fallback EMPTY so a token
+/// never lands in git history (GitHub push-protection blocks it anyway).
+/// For local development, paste your public token into [_localFallback]
+/// — the file is marked `skip-worktree` so that local edit is never
+/// staged or committed. To re-enable tracking:
+///   git update-index --no-skip-worktree lib/core/config/secrets.dart
 library;
 
-const String kMapboxPublicToken = '';
+const String _envToken =
+    String.fromEnvironment('MAPBOX_TOKEN', defaultValue: '');
+
+/// Local-only fallback. Keep this EMPTY in any commit.
+const String _localFallback = '';
+
+/// The effective public token — env-define wins, local fallback second.
+const String kMapboxPublicToken =
+    _envToken.isNotEmpty ? _envToken : _localFallback;
 
 /// True when a usable token is configured. Screens use this to decide
 /// whether to render the Mapbox widget or the placeholder.
