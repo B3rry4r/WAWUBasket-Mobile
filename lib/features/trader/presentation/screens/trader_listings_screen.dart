@@ -22,6 +22,12 @@ class TraderListingsScreen extends StatefulWidget {
 class _TraderListingsScreenState extends State<TraderListingsScreen> {
   ExportListingStatus? _filter; // null = all
 
+  @override
+  void initState() {
+    super.initState();
+    TradeController.instance.loadMyListings();
+  }
+
   bool _matches(ExportListing l) {
     if (_filter == null) return true;
     return l.status == _filter;

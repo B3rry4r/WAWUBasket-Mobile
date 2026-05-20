@@ -12,8 +12,19 @@ import '../../../escrow/domain/models/bulk_order.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/presentation/widgets/export_listing_card.dart';
 
-class TraderHomeScreen extends StatelessWidget {
+class TraderHomeScreen extends StatefulWidget {
   const TraderHomeScreen({super.key});
+
+  @override
+  State<TraderHomeScreen> createState() => _TraderHomeScreenState();
+}
+
+class _TraderHomeScreenState extends State<TraderHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    TradeController.instance.loadMyListings();
+  }
 
   @override
   Widget build(BuildContext context) {

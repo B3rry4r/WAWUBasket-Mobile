@@ -1,23 +1,34 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../data/trade_api.dart';
 import '../domain/models/corridor.dart';
 import '../domain/models/corridor_price.dart';
 import '../domain/models/export_listing.dart';
 
+int _money(dynamic v) {
+  if (v == null) return 0;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
 /// Single source of truth for trader-posted export listings + market
 /// corridor prices. Both the customer-side `/trade` browse and the
-/// trader-side dashboard subscribe to it.
+/// trader-side dashboard subscribe to it; each calls the load method
+/// that suits its audience.
 class TradeController {
   TradeController._()
       : listings = ValueNotifier<List<ExportListing>>([]),
-        prices = ValueNotifier<List<CorridorPrice>>([]) {
-    listings.value = _seedListings();
-    prices.value = _seedPrices();
-  }
+        prices = ValueNotifier<List<CorridorPrice>>([]);
   static final TradeController instance = TradeController._();
 
   final ValueNotifier<List<ExportListing>> listings;
   final ValueNotifier<List<CorridorPrice>> prices;
+  final _api = TradeApi.instance;
+
+  /// True for a listing that exists only in this session's optimistic
+  /// state — its create call may still be in flight.
+  bool _isLocal(String id) => id.startsWith('EXP-');
 
   ExportListing? byId(String id) {
     for (final l in listings.value) {
@@ -26,8 +37,45 @@ class TradeController {
     return null;
   }
 
+  /// Trader dashboard — the signed-in trader's own listings.
+  Future<void> loadMyListings() async {
+    try {
+      final raw = await _api.myExportListings();
+      listings.value = [
+        for (final e in raw)
+          ExportListing.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place — a later refresh retries.
+    }
+  }
+
+  /// Customer `/trade` browse — every active public listing.
+  Future<void> loadPublicListings() async {
+    try {
+      final raw = await _api.publicExportListings();
+      listings.value = [
+        for (final e in raw)
+          ExportListing.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place.
+    }
+  }
+
+  /// Market corridor prices — shown to traders and customers alike.
+  Future<void> loadPrices() async {
+    try {
+      final raw = await _api.corridorPrices();
+      prices.value = _mapPrices(raw);
+    } on ApiException {
+      // Leave the current prices in place.
+    }
+  }
+
   String add(ExportListing l) {
     listings.value = [l, ...listings.value];
+    _create(l);
     return l.id;
   }
 
@@ -36,6 +84,13 @@ class TradeController {
       for (final cur in listings.value)
         if (cur.id == l.id) l else cur,
     ];
+    if (!_isLocal(l.id)) {
+      _api.updateExportListing(l.id, {
+        'quantityKg': l.quantityKg,
+        'pricePerKgNaira': l.pricePerKgNaira,
+        'status': l.status.name,
+      }).catchError((_) {});
+    }
   }
 
   void remove(String id) {
@@ -43,10 +98,13 @@ class TradeController {
       for (final l in listings.value)
         if (l.id != id) l,
     ];
+    if (!_isLocal(id)) {
+      _api.deleteExportListing(id).catchError((_) {});
+    }
   }
 
-  /// Increment enquiry count when a buyer taps the enquiry CTA on a
-  /// listing. Drives the badge on the trader's dashboard.
+  /// Bumps the enquiry tally when a buyer taps the enquiry CTA. Local
+  /// only — there is no enquiry endpoint yet.
   void recordEnquiry(String id) {
     final l = byId(id);
     if (l == null) return;
@@ -54,163 +112,56 @@ class TradeController {
     listings.value = List.of(listings.value);
   }
 
-  List<ExportListing> _seedListings() => [
-        ExportListing(
-          id: 'EXP-1042',
-          produce: 'Tomatoes',
-          quantityKg: 1200,
-          pricePerKgNaira: 380,
-          harvestDate: DateTime.now().subtract(const Duration(days: 1)),
-          originCorridor: Corridor.nigeria,
-          destinationCorridor: Corridor.benin,
-          farmName: 'Hauwa & Sons Bulk Co.',
-          farmRegion: 'Kano',
-          enquiries: 7,
-          imageUrl:
-              'https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=600&q=80&auto=format&fit=crop',
-        ),
-        ExportListing(
-          id: 'EXP-1038',
-          produce: 'Cassava',
-          quantityKg: 5000,
-          pricePerKgNaira: 220,
-          harvestDate: DateTime.now().subtract(const Duration(days: 3)),
-          originCorridor: Corridor.nigeria,
-          destinationCorridor: Corridor.cameroon,
-          farmName: 'Hauwa & Sons Bulk Co.',
-          farmRegion: 'Benue',
-          enquiries: 12,
-          imageUrl:
-              'https://images.unsplash.com/photo-1583224944844-5b268c057b72?w=600&q=80&auto=format&fit=crop',
-        ),
-        ExportListing(
-          id: 'EXP-1031',
-          produce: 'Maize',
-          quantityKg: 8000,
-          pricePerKgNaira: 410,
-          harvestDate: DateTime.now().subtract(const Duration(days: 5)),
-          originCorridor: Corridor.niger,
-          destinationCorridor: Corridor.nigeria,
-          farmName: 'Sahel Grain Union',
-          farmRegion: 'Sokoto',
-          enquiries: 4,
-          imageUrl:
-              'https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=600&q=80&auto=format&fit=crop',
-        ),
-        ExportListing(
-          id: 'EXP-1025',
-          produce: 'Palm oil',
-          quantityKg: 600,
-          pricePerKgNaira: 1450,
-          harvestDate: DateTime.now().subtract(const Duration(days: 8)),
-          originCorridor: Corridor.nigeria,
-          destinationCorridor: Corridor.togo,
-          farmName: 'Delta Mills',
-          farmRegion: 'Edo',
-          enquiries: 3,
-          imageUrl:
-              'https://images.unsplash.com/photo-1604908554049-3a3d3f9d3128?w=600&q=80&auto=format&fit=crop',
-        ),
-        ExportListing(
-          id: 'EXP-1018',
-          produce: 'Cocoa',
-          quantityKg: 2500,
-          pricePerKgNaira: 2800,
-          harvestDate: DateTime.now().subtract(const Duration(days: 11)),
-          originCorridor: Corridor.nigeria,
-          destinationCorridor: Corridor.benin,
-          farmName: 'Ondo Cocoa Co-op',
-          farmRegion: 'Ondo',
-          enquiries: 18,
-          imageUrl:
-              'https://images.unsplash.com/photo-1606767041004-251eee9c2af4?w=600&q=80&auto=format&fit=crop',
-        ),
-      ];
+  Future<void> _create(ExportListing l) async {
+    try {
+      await _api.createExportListing({
+        'produce': l.produce,
+        'quantityKg': l.quantityKg,
+        'pricePerKgNaira': l.pricePerKgNaira,
+        'harvestDate': l.harvestDate.toUtc().toIso8601String(),
+        'originCorridor': l.originCorridor.name,
+        'destinationCorridor': l.destinationCorridor.name,
+        'farmName': l.farmName,
+        'farmRegion': l.farmRegion,
+        if (l.imageUrl.isNotEmpty) 'imageKey': l.imageUrl,
+      });
+    } on ApiException {
+      // Keep the optimistic row; the trader can retry the save.
+    }
+  }
 
-  List<CorridorPrice> _seedPrices() => const [
+  /// Reshapes the API's per-(produce, origin) price rows into one
+  /// [CorridorPrice] per produce, merging every destination price seen.
+  List<CorridorPrice> _mapPrices(List<dynamic> raw) {
+    final order = <String>[];
+    final merged = <String, Map<Corridor, int>>{};
+    final meta = <String, ({String unit, double trend})>{};
+    for (final r in raw) {
+      final m = (r as Map).cast<String, dynamic>();
+      final produce = (m['produce'] ?? '').toString();
+      if (produce.isEmpty) continue;
+      if (!merged.containsKey(produce)) {
+        order.add(produce);
+        merged[produce] = {};
+        final tp = (m['trendPct'] as num?)?.toDouble() ?? 0;
+        meta[produce] = (
+          unit: (m['unit'] ?? 'kg').toString(),
+          trend: tp.abs() > 1.5 ? tp / 100 : tp,
+        );
+      }
+      final pm = (m['prices'] as Map?)?.cast<String, dynamic>() ?? const {};
+      for (final e in pm.entries) {
+        merged[produce]![corridorFromName(e.key)] = _money(e.value);
+      }
+    }
+    return [
+      for (final p in order)
         CorridorPrice(
-          produce: 'Tomatoes',
-          unit: 'kg',
-          trend: 0.06,
-          prices: {
-            Corridor.nigeria: 380,
-            Corridor.benin: 420,
-            Corridor.togo: 460,
-            Corridor.niger: 350,
-            Corridor.cameroon: 510,
-          },
+          produce: p,
+          unit: meta[p]!.unit,
+          trend: meta[p]!.trend,
+          prices: merged[p]!,
         ),
-        CorridorPrice(
-          produce: 'Cassava',
-          unit: 'kg',
-          trend: -0.02,
-          prices: {
-            Corridor.nigeria: 220,
-            Corridor.benin: 240,
-            Corridor.togo: 260,
-            Corridor.niger: 290,
-            Corridor.cameroon: 250,
-          },
-        ),
-        CorridorPrice(
-          produce: 'Maize',
-          unit: 'kg',
-          trend: 0.04,
-          prices: {
-            Corridor.nigeria: 410,
-            Corridor.benin: 430,
-            Corridor.togo: 445,
-            Corridor.niger: 370,
-            Corridor.cameroon: 460,
-          },
-        ),
-        CorridorPrice(
-          produce: 'Palm oil',
-          unit: 'kg',
-          trend: 0.10,
-          prices: {
-            Corridor.nigeria: 1450,
-            Corridor.benin: 1520,
-            Corridor.togo: 1610,
-            Corridor.niger: 1380,
-            Corridor.cameroon: 1700,
-          },
-        ),
-        CorridorPrice(
-          produce: 'Cocoa',
-          unit: 'kg',
-          trend: 0.15,
-          prices: {
-            Corridor.nigeria: 2800,
-            Corridor.benin: 2950,
-            Corridor.togo: 3100,
-            Corridor.niger: 2640,
-            Corridor.cameroon: 3220,
-          },
-        ),
-        CorridorPrice(
-          produce: 'Onions',
-          unit: 'bag',
-          trend: -0.04,
-          prices: {
-            Corridor.nigeria: 35000,
-            Corridor.benin: 38000,
-            Corridor.togo: 42000,
-            Corridor.niger: 30000,
-            Corridor.cameroon: 41000,
-          },
-        ),
-        CorridorPrice(
-          produce: 'Rice',
-          unit: 'kg',
-          trend: 0.02,
-          prices: {
-            Corridor.nigeria: 1200,
-            Corridor.benin: 1250,
-            Corridor.togo: 1290,
-            Corridor.niger: 1180,
-            Corridor.cameroon: 1310,
-          },
-        ),
-      ];
+    ];
+  }
 }

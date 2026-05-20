@@ -7,8 +7,19 @@ import '../../../trade/presentation/widgets/corridor_prices_table.dart';
 /// Read-only corridor price reference for the trader. Same table the
 /// customer sees in `/trade`; identical surface keeps the visual
 /// continuity Excel asked for.
-class TraderPricesScreen extends StatelessWidget {
+class TraderPricesScreen extends StatefulWidget {
   const TraderPricesScreen({super.key});
+
+  @override
+  State<TraderPricesScreen> createState() => _TraderPricesScreenState();
+}
+
+class _TraderPricesScreenState extends State<TraderPricesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    TradeController.instance.loadPrices();
+  }
 
   @override
   Widget build(BuildContext context) {

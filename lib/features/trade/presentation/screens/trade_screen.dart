@@ -42,6 +42,13 @@ class _TradeScreenState extends State<TradeScreen> {
   bool get _showProduceFilter => _tab == _Tab.suppliers || _tab == _Tab.lots;
 
   @override
+  void initState() {
+    super.initState();
+    TradeController.instance.loadPublicListings();
+    TradeController.instance.loadPrices();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
