@@ -217,7 +217,9 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.tracking,
-        builder: (_, _) => const TrackingScreen(),
+        builder: (_, state) => TrackingScreen(
+          orderId: state.uri.queryParameters['orderId'],
+        ),
       ),
       GoRoute(
         path: AppRoutes.ordersHistory,
@@ -346,7 +348,9 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.receipt,
-        builder: (_, _) => const ReceiptScreen(),
+        builder: (_, state) => ReceiptScreen(
+          orderId: state.uri.queryParameters['orderId'],
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.meatCut}/:id',

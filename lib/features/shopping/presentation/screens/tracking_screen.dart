@@ -1,23 +1,118 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/orders_api.dart';
+import '../../domain/models/order.dart';
 
-class TrackingScreen extends StatelessWidget {
-  const TrackingScreen({super.key});
+/// Live order tracking. [orderId] is passed from checkout / order history.
+class TrackingScreen extends StatefulWidget {
+  const TrackingScreen({super.key, this.orderId});
+
+  final String? orderId;
+
+  @override
+  State<TrackingScreen> createState() => _TrackingScreenState();
+}
+
+class _TrackingScreenState extends State<TrackingScreen> {
+  OrderModel? _order;
+  String? _error;
 
   static const _steps = [
-    (label: 'Order confirmed', time: '12:31', done: true, active: false),
-    (label: 'Preparing', time: '12:34', done: true, active: false),
-    (label: 'Picked up', time: '12:48', done: true, active: false),
-    (label: 'En route', time: 'Now', done: true, active: true),
-    (label: 'Delivered', time: '', done: false, active: false),
+    'Order confirmed',
+    'Preparing',
+    'Picked up',
+    'En route',
+    'Delivered',
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    final id = widget.orderId;
+    if (id == null || id.isEmpty) {
+      setState(() => _error = 'No order to track.');
+      return;
+    }
+    try {
+      final res = await OrdersApi.instance.orderDetail(id);
+      if (!mounted) return;
+      setState(() => _order = OrderModel.fromJson(res));
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  int _activeStep(String state) {
+    switch (state) {
+      case 'placed':
+      case 'paid':
+      case 'accepted_by_vendor':
+        return 0;
+      case 'preparing':
+      case 'ready':
+        return 1;
+      case 'rider_assigned':
+      case 'picked_up':
+        return 2;
+      case 'in_transit':
+        return 3;
+      case 'delivered':
+      case 'confirmed':
+      case 'settled':
+        return 4;
+      default:
+        return 0;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_error != null) {
+      return _stateScaffold(
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(_error!,
+                textAlign: TextAlign.center,
+                style:
+                    WBTypography.body.copyWith(color: WBColors.fgSecondary)),
+            const SizedBox(height: 14),
+            WBButton(
+              label: 'Try again',
+              size: WBButtonSize.sm,
+              variant: WBButtonVariant.secondary,
+              onPressed: _load,
+            ),
+          ],
+        ),
+      );
+    }
+    if (_order == null) {
+      return _stateScaffold(
+        const SizedBox(
+          width: 28,
+          height: 28,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.6,
+            valueColor: AlwaysStoppedAnimation(Colors.white),
+          ),
+        ),
+      );
+    }
+
+    final order = _order!;
+    final activeIndex = _activeStep(order.state);
+
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       body: SafeArea(
@@ -25,7 +120,6 @@ class TrackingScreen extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            // Dark hero
             Container(
               color: WBColors.surfaceDark,
               padding: const EdgeInsets.fromLTRB(
@@ -45,7 +139,9 @@ class TrackingScreen extends StatelessWidget {
                         background: Colors.white.withValues(alpha: 0.12),
                         iconColor: Colors.white,
                         shadow: const [],
-                        onPressed: () => context.go(AppRoutes.home),
+                        onPressed: () => context.canPop()
+                            ? context.pop()
+                            : context.go(AppRoutes.home),
                       ),
                       TextButton(
                         onPressed: () => context.push(AppRoutes.support),
@@ -61,25 +157,28 @@ class TrackingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: WBSpacing.md),
                   Text(
-                    'ARRIVING IN',
+                    'ORDER ${order.shortId}',
                     style: WBTypography.label.copyWith(
                       color: Colors.white.withValues(alpha: 0.55),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Text(
-                    '12 min',
+                    order.statusLabel,
                     style: WBTypography.hero.copyWith(
-                      fontSize: 48,
+                      fontSize: 32,
                       color: Colors.white,
-                      letterSpacing: -1.5,
                       height: 1.1,
                     ),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Tunde is bringing your basket.',
+                    order.isDelivered
+                        ? 'Delivered. Enjoy your basket!'
+                        : order.riderName != null
+                            ? '${order.riderName} is handling your delivery.'
+                            : "We'll update you as your order moves.",
                     style: WBTypography.body.copyWith(
                       color: Colors.white.withValues(alpha: 0.65),
                       fontSize: 14,
@@ -89,104 +188,65 @@ class TrackingScreen extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(WBRadius.pill),
                     child: LinearProgressIndicator(
-                      value: 0.68,
+                      value: (activeIndex + 1) / _steps.length,
                       minHeight: 4,
                       backgroundColor: Colors.white.withValues(alpha: 0.15),
-                      valueColor: const AlwaysStoppedAnimation(Colors.white),
+                      valueColor:
+                          const AlwaysStoppedAnimation(Colors.white),
                     ),
                   ),
                 ],
               ),
             ),
-            // Map placeholder (grayscale block grid + dashed route)
-            SizedBox(
-              height: 200,
-              child: CustomPaint(painter: _MapPainter()),
-            ),
-            // Rider card overlaps map by 20px
-            Transform.translate(
-              offset: const Offset(0, -20),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: WBSpacing.screenPadding,
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(WBSpacing.md + 2),
-                  decoration: BoxDecoration(
-                    color: WBColors.surfaceCard,
-                    borderRadius: BorderRadius.circular(WBRadius.card),
-                    boxShadow: WBShadows.float,
+            SizedBox(height: 200, child: CustomPaint(painter: _MapPainter())),
+            if (order.riderName != null)
+              Transform.translate(
+                offset: const Offset(0, -20),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: WBSpacing.screenPadding,
                   ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 52,
-                        height: 52,
-                        decoration: const BoxDecoration(
-                          color: WBColors.bgSoft,
-                          shape: BoxShape.circle,
+                  child: Container(
+                    padding: const EdgeInsets.all(WBSpacing.md + 2),
+                    decoration: BoxDecoration(
+                      color: WBColors.surfaceCard,
+                      borderRadius: BorderRadius.circular(WBRadius.card),
+                      boxShadow: WBShadows.float,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 52,
+                          height: 52,
+                          decoration: const BoxDecoration(
+                            color: WBColors.bgSoft,
+                            shape: BoxShape.circle,
+                          ),
+                          alignment: Alignment.center,
+                          child: const WBIcon(WBIconName.user,
+                              size: 24, color: WBColors.fgPlaceholder),
                         ),
-                        alignment: Alignment.center,
-                        child: const WBIcon(
-                          WBIconName.user,
-                          size: 24,
-                          color: WBColors.fgPlaceholder,
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Text(
+                            order.riderName!,
+                            style: WBTypography.cardTitle
+                                .copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Tunde Adeyemi',
-                              style: WBTypography.cardTitle.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                const WBIcon(WBIconName.star, size: 12),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '4.9',
-                                  style: WBTypography.caption.copyWith(
-                                    color: WBColors.fgHeader,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '· 1,204 deliveries',
-                                  style: WBTypography.caption.copyWith(
-                                    color: WBColors.fgSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                        _ContactCircle(
+                          icon: WBIconName.message,
+                          onTap: () => context.push(AppRoutes.chatRider),
                         ),
-                      ),
-                      _ContactCircle(
-                        icon: WBIconName.phone,
-                        onTap: () => context.push(AppRoutes.chatRider),
-                      ),
-                      const SizedBox(width: 10),
-                      _ContactCircle(
-                        icon: WBIconName.message,
-                        onTap: () => context.push(AppRoutes.chatRider),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            // Timeline
             Padding(
-              padding: const EdgeInsets.fromLTRB(
+              padding: EdgeInsets.fromLTRB(
                 WBSpacing.screenPadding,
-                0,
+                order.riderName != null ? 0 : 20,
                 WBSpacing.screenPadding,
                 40,
               ),
@@ -203,13 +263,42 @@ class TrackingScreen extends StatelessWidget {
                   const SizedBox(height: WBSpacing.md),
                   for (var i = 0; i < _steps.length; i++)
                     _TimelineRow(
-                      label: _steps[i].label,
-                      time: _steps[i].time,
-                      done: _steps[i].done,
-                      active: _steps[i].active,
+                      label: _steps[i],
+                      done: i <= activeIndex,
+                      active: i == activeIndex && !order.isDelivered,
                       isLast: i == _steps.length - 1,
                     ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _stateScaffold(Widget child) {
+    return Scaffold(
+      backgroundColor: WBColors.surfaceDark,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(WBSpacing.screenPadding),
+              child: WBCircleIconButton(
+                icon: WBIconName.chevronLeft,
+                background: Colors.white.withValues(alpha: 0.12),
+                iconColor: Colors.white,
+                shadow: const [],
+                onPressed: () => context.canPop()
+                    ? context.pop()
+                    : context.go(AppRoutes.home),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(WBSpacing.screenPadding),
+                child: child,
               ),
             ),
           ],
@@ -245,14 +334,12 @@ class _ContactCircle extends StatelessWidget {
 class _TimelineRow extends StatelessWidget {
   const _TimelineRow({
     required this.label,
-    required this.time,
     required this.done,
     required this.active,
     required this.isLast,
   });
 
   final String label;
-  final String time;
   final bool done;
   final bool active;
   final bool isLast;
@@ -278,7 +365,8 @@ class _TimelineRow extends StatelessWidget {
                           ? WBColors.surfaceDark
                           : WBColors.bgSoft,
                       border: active
-                          ? Border.all(color: WBColors.surfaceDark, width: 2)
+                          ? Border.all(
+                              color: WBColors.surfaceDark, width: 2)
                           : null,
                     ),
                     alignment: Alignment.center,
@@ -304,7 +392,9 @@ class _TimelineRow extends StatelessWidget {
                     Expanded(
                       child: Container(
                         width: 1.5,
-                        color: done ? WBColors.surfaceDark : WBColors.bgDivider,
+                        color: done
+                            ? WBColors.surfaceDark
+                            : WBColors.bgDivider,
                       ),
                     ),
                 ],
@@ -313,27 +403,13 @@ class _TimelineRow extends StatelessWidget {
             const SizedBox(width: 14),
             Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: WBTypography.body.copyWith(
-                      fontSize: 14,
-                      fontWeight: active ? FontWeight.w600 : FontWeight.w500,
-                      color: done ? WBColors.fgHeader : WBColors.fgDisabled,
-                    ),
-                  ),
-                  if (time.isNotEmpty) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      time,
-                      style: WBTypography.caption.copyWith(
-                        color: WBColors.fgSecondary,
-                      ),
-                    ),
-                  ],
-                ],
+              child: Text(
+                label,
+                style: WBTypography.body.copyWith(
+                  fontSize: 14,
+                  fontWeight: active ? FontWeight.w600 : FontWeight.w500,
+                  color: done ? WBColors.fgHeader : WBColors.fgDisabled,
+                ),
               ),
             ),
           ],
@@ -348,82 +424,27 @@ class _MapPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final bg = Paint()..color = const Color(0xFFEBEBEB);
     canvas.drawRect(Offset.zero & size, bg);
-
     final block = Paint()..color = const Color(0xFFDEDEDE);
-    // Approximate the grid blocks from the JSX prototype, scaled to width
-    final blocks = [
+    final sx = size.width / 350;
+    for (final b in [
       [0.0, 0.0, 110.0, 90.0],
       [130.0, 0.0, 90.0, 90.0],
       [240.0, 0.0, 110.0, 90.0],
       [0.0, 110.0, 80.0, size.height - 110],
       [100.0, 110.0, 120.0, size.height - 110],
       [240.0, 110.0, 110.0, size.height - 110],
-    ];
-    final sx = size.width / 350;
-    for (final b in blocks) {
+    ]) {
       canvas.drawRect(
         Rect.fromLTWH(b[0] * sx, b[1], b[2] * sx, b[3]),
         block,
       );
     }
-
-    // Dashed route
-    final route = Path()
-      ..moveTo(80 * sx, 50)
-      ..lineTo(175 * sx, 50)
-      ..lineTo(175 * sx, size.height - 40)
-      ..lineTo(280 * sx, size.height - 40);
-    final routePaint = Paint()
-      ..color = const Color(0xFF111111)
-      ..strokeWidth = 2.5
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-    _dashPath(canvas, route, routePaint, dashWidth: 10, dashSpace: 6);
-
-    // Destination pin
     final dest = Paint()..color = const Color(0xFF111111);
     canvas.drawCircle(Offset(280 * sx, size.height - 40), 11, dest);
+    canvas.drawCircle(Offset(280 * sx, size.height - 40), 4.5,
+        Paint()..color = Colors.white);
     canvas.drawCircle(
-      Offset(280 * sx, size.height - 40),
-      4.5,
-      Paint()..color = Colors.white,
-    );
-
-    // Rider pin
-    canvas.drawCircle(Offset(80 * sx, 50), 18, Paint()..color = Colors.white);
-    canvas.drawCircle(
-      Offset(80 * sx, 50),
-      18,
-      Paint()
-        ..color = const Color(0xFFD4D4D4)
-        ..strokeWidth = 1.5
-        ..style = PaintingStyle.stroke,
-    );
-    canvas.drawCircle(
-      Offset(80 * sx, 50),
-      12,
-      Paint()..color = const Color(0xFFBDBDBD),
-    );
-  }
-
-  void _dashPath(
-    Canvas canvas,
-    Path source,
-    Paint paint, {
-    required double dashWidth,
-    required double dashSpace,
-  }) {
-    for (final metric in source.computeMetrics()) {
-      var distance = 0.0;
-      while (distance < metric.length) {
-        final next = distance + dashWidth;
-        canvas.drawPath(
-          metric.extractPath(distance, next.clamp(0, metric.length)),
-          paint,
-        );
-        distance = next + dashSpace;
-      }
-    }
+        Offset(80 * sx, 50), 12, Paint()..color = const Color(0xFFBDBDBD));
   }
 
   @override

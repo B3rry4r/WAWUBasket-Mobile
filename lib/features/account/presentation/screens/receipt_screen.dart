@@ -1,188 +1,248 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../shopping/data/orders_api.dart';
+import '../../../shopping/domain/models/order.dart';
 
-class ReceiptScreen extends StatelessWidget {
-  const ReceiptScreen({super.key});
+/// Order receipt. [orderId] is passed from order history.
+class ReceiptScreen extends StatefulWidget {
+  const ReceiptScreen({super.key, this.orderId});
 
-  static const _items = [
-    (name: 'Jollof rice & grilled chicken', qty: 2, total: '₦9,000'),
-    (name: 'Suya platter', qty: 1, total: '₦4,800'),
-  ];
+  final String? orderId;
+
+  @override
+  State<ReceiptScreen> createState() => _ReceiptScreenState();
+}
+
+class _ReceiptScreenState extends State<ReceiptScreen> {
+  OrderModel? _order;
+  String? _error;
+  bool _reordering = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    final id = widget.orderId;
+    if (id == null || id.isEmpty) {
+      setState(() => _error = 'Receipt not found.');
+      return;
+    }
+    try {
+      final res = await OrdersApi.instance.orderDetail(id);
+      if (!mounted) return;
+      setState(() => _order = OrderModel.fromJson(res));
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  Future<void> _reorder() async {
+    final order = _order;
+    if (order == null) return;
+    setState(() => _reordering = true);
+    try {
+      await OrdersApi.instance.reorder(order.id);
+      if (!mounted) return;
+      wbShowSnack(context, 'Items added to your basket');
+      context.go(AppRoutes.cart);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _reordering = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(
-            WBSpacing.screenPadding,
-            12,
-            WBSpacing.screenPadding,
-            40,
-          ),
-          children: [
-            Row(
-              children: [
-                WBBackChip(onPressed: () => context.pop()),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Receipt', style: WBTypography.page),
-                      Text(
-                        'Order #WBK-8821',
-                        style: WBTypography.caption.copyWith(
-                          color: WBColors.fgSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const WBStatusPill(
-                  label: 'Delivered',
-                  kind: WBStatusKind.success,
-                ),
-              ],
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            Container(
-              padding: const EdgeInsets.all(WBSpacing.md + 2),
-              decoration: BoxDecoration(
-                color: WBColors.surfaceCard,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-                boxShadow: WBShadows.card,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Mama Cass Kitchen',
-                    style: WBTypography.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
+        child: _error != null
+            ? _state(
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(_error!,
+                        textAlign: TextAlign.center,
+                        style: WBTypography.body
+                            .copyWith(color: WBColors.fgSecondary)),
+                    const SizedBox(height: 14),
+                    WBButton(
+                      label: 'Try again',
+                      size: WBButtonSize.sm,
+                      variant: WBButtonVariant.secondary,
+                      onPressed: _load,
                     ),
-                  ),
-                  Text(
-                    'Delivered · Mon 18 May · 12:47 PM',
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgSecondary,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  const WBDivider(),
-                  const SizedBox(height: 14),
-                  for (final it in _items) ...[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            '${it.name}  × ${it.qty}',
-                            style: WBTypography.body.copyWith(fontSize: 14),
-                          ),
-                        ),
-                        Text(
-                          it.total,
-                          style: WBTypography.body.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
                   ],
-                  const WBDivider(),
-                  const SizedBox(height: 14),
-                  _Line(label: 'Subtotal', value: '₦13,800'),
-                  const SizedBox(height: 8),
-                  _Line(label: 'Delivery', value: '₦600'),
-                  const SizedBox(height: 8),
-                  _Line(label: 'Service fee', value: '₦200'),
-                  const SizedBox(height: 14),
-                  const WBDivider(),
-                  const SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total paid',
-                        style: WBTypography.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        '₦14,600',
-                        style: WBTypography.body.copyWith(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 17,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: WBSpacing.md),
-            Container(
-              padding: const EdgeInsets.all(WBSpacing.md + 2),
-              decoration: BoxDecoration(
-                color: WBColors.surfaceCard,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-                boxShadow: WBShadows.card,
-              ),
-              child: Column(
-                children: [
-                  _DetailRow(
-                    icon: WBIconName.pin,
-                    label: 'Delivered to',
-                    value: '12 Adeola Odeku St, Victoria Island',
-                  ),
-                  const SizedBox(height: 14),
-                  _DetailRow(
-                    icon: WBIconName.card,
-                    label: 'Paid with',
-                    value: 'Visa  •••• 4218',
-                  ),
-                  const SizedBox(height: 14),
-                  _DetailRow(
-                    icon: WBIconName.bike,
-                    label: 'Rider',
-                    value: 'Tunde · 4.9 ★',
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            WBButton(
-              label: 'Reorder',
-              size: WBButtonSize.lg,
-              fullWidth: true,
-              trailingIcon: WBIconName.arrowRight,
-              onPressed: () {
-                wbShowSnack(context, 'Items added to your basket');
-                context.go(AppRoutes.cart);
-              },
-            ),
-            const SizedBox(height: 10),
-            WBButton(
-              label: 'Report an issue',
-              size: WBButtonSize.lg,
-              fullWidth: true,
-              variant: WBButtonVariant.secondary,
-              onPressed: () => context.push(AppRoutes.support),
-            ),
-          ],
-        ),
+                ),
+              )
+            : _order == null
+                ? _state(const SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.4,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
+                    ),
+                  ))
+                : _body(_order!),
       ),
     );
   }
+
+  Widget _state(Widget child) {
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(WBSpacing.screenPadding),
+          child: WBBackChip(onPressed: () => context.pop()),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(WBSpacing.screenPadding),
+            child: child,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _body(OrderModel order) {
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        WBSpacing.screenPadding,
+        12,
+        WBSpacing.screenPadding,
+        40,
+      ),
+      children: [
+        Row(
+          children: [
+            WBBackChip(onPressed: () => context.pop()),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Receipt', style: WBTypography.page),
+                  Text(
+                    'Order ${order.shortId}',
+                    style: WBTypography.caption
+                        .copyWith(color: WBColors.fgSecondary),
+                  ),
+                ],
+              ),
+            ),
+            WBStatusPill(
+              label: order.statusLabel,
+              kind: order.isCancelled
+                  ? WBStatusKind.error
+                  : order.isDelivered
+                      ? WBStatusKind.success
+                      : WBStatusKind.info,
+            ),
+          ],
+        ),
+        const SizedBox(height: WBSpacing.lg),
+        Container(
+          padding: const EdgeInsets.all(WBSpacing.md + 2),
+          decoration: BoxDecoration(
+            color: WBColors.surfaceCard,
+            borderRadius: BorderRadius.circular(WBRadius.card),
+            boxShadow: WBShadows.card,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final it in order.items) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${it.title}  × ${it.quantity}',
+                        style: WBTypography.body.copyWith(fontSize: 14),
+                      ),
+                    ),
+                    Text(
+                      '₦${_n(it.lineTotal)}',
+                      style: WBTypography.body.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+              ],
+              const WBDivider(),
+              const SizedBox(height: 14),
+              _Line(label: 'Subtotal', value: '₦${_n(order.subtotal)}'),
+              const SizedBox(height: 8),
+              _Line(label: 'Delivery', value: '₦${_n(order.deliveryFee)}'),
+              const SizedBox(height: 8),
+              _Line(label: 'Service fee', value: '₦${_n(order.serviceFee)}'),
+              const SizedBox(height: 14),
+              const WBDivider(),
+              const SizedBox(height: 14),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Total paid',
+                      style: WBTypography.body
+                          .copyWith(fontWeight: FontWeight.w600)),
+                  Text(
+                    '₦${_n(order.total)}',
+                    style: WBTypography.body.copyWith(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: WBSpacing.lg),
+        WBButton(
+          label: 'Reorder',
+          size: WBButtonSize.lg,
+          fullWidth: true,
+          trailingIcon: WBIconName.arrowRight,
+          loading: _reordering,
+          onPressed: _reorder,
+        ),
+        const SizedBox(height: 10),
+        WBButton(
+          label: 'Report an issue',
+          size: WBButtonSize.lg,
+          fullWidth: true,
+          variant: WBButtonVariant.secondary,
+          onPressed: () => context.push(AppRoutes.support),
+        ),
+      ],
+    );
+  }
+}
+
+String _n(int v) {
+  final s = v.toString();
+  final buf = StringBuffer();
+  for (var i = 0; i < s.length; i++) {
+    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
+    buf.write(s[i]);
+  }
+  return buf.toString();
 }
 
 class _Line extends StatelessWidget {
@@ -201,57 +261,6 @@ class _Line extends StatelessWidget {
           style: WBTypography.secondary.copyWith(
             color: WBColors.fgHeader,
             fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _DetailRow extends StatelessWidget {
-  const _DetailRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
-  final WBIconName icon;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            color: WBColors.bgSoft,
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
-          child: WBIcon(icon, size: 18),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: WBTypography.caption.copyWith(
-                  color: WBColors.fgPlaceholder,
-                ),
-              ),
-              const SizedBox(height: 1),
-              Text(
-                value,
-                style: WBTypography.body.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
           ),
         ),
       ],

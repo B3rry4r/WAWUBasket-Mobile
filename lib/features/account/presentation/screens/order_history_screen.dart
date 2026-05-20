@@ -1,80 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../shopping/data/orders_api.dart';
+import '../../../shopping/domain/models/order.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key, this.standalone = false});
 
-  /// When reached as a pushed route (e.g. the Home "Reorder" quick
-  /// action) we render a back chip. As a bottom-nav tab it stays
-  /// chrome-free since the nav bar is the way back.
+  /// When pushed (e.g. the Home "Reorder" quick action) we render a back
+  /// chip; as a bottom-nav tab it stays chrome-free.
   final bool standalone;
 
   @override
   State<OrderHistoryScreen> createState() => _OrderHistoryScreenState();
 }
 
-enum _OrderStatus { active, done, cancelled }
-
-class _Order {
-  const _Order({
-    required this.id,
-    required this.vendor,
-    required this.items,
-    required this.total,
-    required this.date,
-    required this.status,
-  });
-  final String id;
-  final String vendor;
-  final String items;
-  final String total;
-  final String date;
-  final _OrderStatus status;
-}
-
 class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   static const _tabs = ['All', 'Active', 'Past'];
-  static const _orders = [
-    _Order(
-      id: 'ORD-8821',
-      vendor: 'Mama Cass Kitchen',
-      items: 'Jollof rice, Suya platter',
-      total: '₦14,600',
-      date: 'Today, 12:31',
-      status: _OrderStatus.active,
-    ),
-    _Order(
-      id: 'ORD-8804',
-      vendor: 'The Daily Grain',
-      items: 'Garden bowl × 2',
-      total: '₦7,400',
-      date: 'Yesterday, 18:02',
-      status: _OrderStatus.done,
-    ),
-    _Order(
-      id: 'ORD-8790',
-      vendor: 'Suya & Smoke',
-      items: 'Suya platter, Drinks',
-      total: '₦6,200',
-      date: 'Mon 12 May',
-      status: _OrderStatus.done,
-    ),
-    _Order(
-      id: 'ORD-8771',
-      vendor: 'Hako Sushi',
-      items: 'Salmon nigiri set',
-      total: '₦9,800',
-      date: 'Sat 10 May',
-      status: _OrderStatus.cancelled,
-    ),
-  ];
-
   String _activeTab = 'All';
+
+  List<OrderModel> _orders = const [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final raw = await OrdersApi.instance.myOrders();
+      if (!mounted) return;
+      setState(() {
+        _orders = raw
+            .map((e) => OrderModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        _loading = false;
+      });
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.message;
+          _loading = false;
+        });
+      }
+    }
+  }
+
+  List<OrderModel> get _filtered {
+    switch (_activeTab) {
+      case 'Active':
+        return _orders.where((o) => o.isActive).toList();
+      case 'Past':
+        return _orders
+            .where((o) => o.isDelivered || o.isCancelled)
+            .toList();
+      default:
+        return _orders;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,10 +110,34 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             ),
           ),
           const SizedBox(height: WBSpacing.lg),
-          for (final order in _orders) ...[
-            _OrderCard(order: order),
-            const SizedBox(height: WBSpacing.md),
-          ],
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 56),
+              child: Center(
+                child: SizedBox(
+                  width: 26,
+                  height: 26,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.4,
+                    valueColor:
+                        AlwaysStoppedAnimation(WBColors.surfaceDark),
+                  ),
+                ),
+              ),
+            )
+          else if (_error != null)
+            _Hint(
+              text: _error!,
+              actionLabel: 'Try again',
+              onAction: _load,
+            )
+          else if (_filtered.isEmpty)
+            const _Hint(text: 'No orders here yet.')
+          else
+            for (final order in _filtered) ...[
+              _OrderCard(order: order, onChanged: _load),
+              const SizedBox(height: WBSpacing.md),
+            ],
         ],
       ),
     );
@@ -129,29 +148,62 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 }
 
+class _Hint extends StatelessWidget {
+  const _Hint({required this.text, this.actionLabel, this.onAction});
+  final String text;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(WBSpacing.md + 4),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+          ),
+          if (actionLabel != null && onAction != null) ...[
+            const SizedBox(height: 10),
+            WBButton(
+              label: actionLabel!,
+              size: WBButtonSize.sm,
+              variant: WBButtonVariant.secondary,
+              onPressed: onAction,
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
 class _OrderCard extends StatelessWidget {
-  const _OrderCard({required this.order});
-  final _Order order;
+  const _OrderCard({required this.order, required this.onChanged});
+  final OrderModel order;
+  final VoidCallback onChanged;
 
   WBStatusKind get _statusKind {
-    switch (order.status) {
-      case _OrderStatus.active:
-        return WBStatusKind.info;
-      case _OrderStatus.done:
-        return WBStatusKind.success;
-      case _OrderStatus.cancelled:
-        return WBStatusKind.error;
-    }
+    if (order.isCancelled) return WBStatusKind.error;
+    if (order.isDelivered) return WBStatusKind.success;
+    return WBStatusKind.info;
   }
 
-  String get _statusLabel {
-    switch (order.status) {
-      case _OrderStatus.active:
-        return 'On the way';
-      case _OrderStatus.done:
-        return 'Delivered';
-      case _OrderStatus.cancelled:
-        return 'Cancelled';
+  Future<void> _reorder(BuildContext context) async {
+    try {
+      await OrdersApi.instance.reorder(order.id);
+      if (!context.mounted) return;
+      wbShowSnack(context, 'Items added to your basket');
+      context.push(AppRoutes.cart);
+    } on ApiException catch (e) {
+      if (context.mounted) wbShowSnack(context, e.message);
     }
   }
 
@@ -170,7 +222,7 @@ class _OrderCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.vendor,
+                      order.shortId,
                       style: WBTypography.body.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -178,7 +230,9 @@ class _OrderCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      order.items,
+                      order.itemsSummary,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                       ),
@@ -186,21 +240,20 @@ class _OrderCard extends StatelessWidget {
                   ],
                 ),
               ),
-              WBStatusPill(label: _statusLabel, kind: _statusKind),
+              WBStatusPill(label: order.statusLabel, kind: _statusKind),
             ],
           ),
           const SizedBox(height: 14),
           const WBDivider(),
           const SizedBox(height: 14),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.total,
+                      '₦${_n(order.total)}',
                       style: WBTypography.body.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
@@ -208,7 +261,7 @@ class _OrderCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      order.date,
+                      _date(order.placedAt),
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                       ),
@@ -216,37 +269,31 @@ class _OrderCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (order.status == _OrderStatus.active)
+              if (order.isActive)
                 WBButton(
                   label: 'Track order',
                   size: WBButtonSize.sm,
-                  onPressed: () => context.push(AppRoutes.tracking),
+                  onPressed: () => context.push(
+                    '${AppRoutes.tracking}?orderId=${order.id}',
+                  ),
                 )
               else ...[
-                if (order.status == _OrderStatus.done) ...[
-                  WBButton(
-                    label: 'Receipt',
-                    size: WBButtonSize.sm,
-                    variant: WBButtonVariant.secondary,
-                    onPressed: () => context.push(AppRoutes.receipt),
-                  ),
-                  const SizedBox(width: 8),
-                ],
                 WBButton(
-                  label: order.status == _OrderStatus.done ? 'Reorder' : 'View',
+                  label: 'Receipt',
                   size: WBButtonSize.sm,
-                  variant: order.status == _OrderStatus.done
-                      ? WBButtonVariant.primary
-                      : WBButtonVariant.secondary,
-                  onPressed: () {
-                    if (order.status == _OrderStatus.done) {
-                      wbShowSnack(context, 'Items added to your basket');
-                      context.push(AppRoutes.cart);
-                    } else {
-                      context.push(AppRoutes.receipt);
-                    }
-                  },
+                  variant: WBButtonVariant.secondary,
+                  onPressed: () => context.push(
+                    '${AppRoutes.receipt}?orderId=${order.id}',
+                  ),
                 ),
+                if (order.isDelivered) ...[
+                  const SizedBox(width: 8),
+                  WBButton(
+                    label: 'Reorder',
+                    size: WBButtonSize.sm,
+                    onPressed: () => _reorder(context),
+                  ),
+                ],
               ],
             ],
           ),
@@ -254,4 +301,27 @@ class _OrderCard extends StatelessWidget {
       ),
     );
   }
+}
+
+String _n(int v) {
+  final s = v.toString();
+  final buf = StringBuffer();
+  for (var i = 0; i < s.length; i++) {
+    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
+    buf.write(s[i]);
+  }
+  return buf.toString();
+}
+
+String _date(DateTime d) {
+  final now = DateTime.now();
+  final sameDay =
+      d.year == now.year && d.month == now.month && d.day == now.day;
+  String two(int n) => n.toString().padLeft(2, '0');
+  if (sameDay) return 'Today, ${two(d.hour)}:${two(d.minute)}';
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+  ];
+  return '${d.day} ${months[d.month - 1]}';
 }
