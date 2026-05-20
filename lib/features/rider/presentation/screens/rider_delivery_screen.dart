@@ -144,6 +144,32 @@ class _Body extends StatelessWidget {
                 onTapOffer: (_) {},
               ),
             ),
+            const SizedBox(height: 10),
+
+            // Hands turn-by-turn off to the device maps app. Pre-pickup it
+            // routes to the vendor; once picked up, to the customer.
+            WBButton(
+              label: _prePickup
+                  ? 'Navigate to ${offer.vendorName}'
+                  : 'Navigate to ${offer.customerName}',
+              fullWidth: true,
+              size: WBButtonSize.lg,
+              variant: WBButtonVariant.secondary,
+              trailingIcon: WBIconName.pin,
+              onPressed: () => _prePickup
+                  ? wbLaunchNavigation(
+                      context,
+                      offer.vendorLat,
+                      offer.vendorLng,
+                      label: offer.vendorName,
+                    )
+                  : wbLaunchNavigation(
+                      context,
+                      offer.dropLat,
+                      offer.dropLng,
+                      label: offer.customerName,
+                    ),
+            ),
             const SizedBox(height: WBSpacing.lg),
 
             _StagePillRow(stage: active.stage),

@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../theme/wb_theme_exports.dart';
+
+/// Hands turn-by-turn navigation off to the device's maps app, routing to
+/// [lat]/[lng]. Uses the universal Google Maps directions URL, which opens
+/// Google Maps when installed and otherwise falls back to the browser /
+/// Apple Maps. [label] is only used for the failure snackbar.
+Future<void> wbLaunchNavigation(
+  BuildContext context,
+  double lat,
+  double lng, {
+  String label = 'destination',
+}) async {
+  final uri = Uri.parse(
+    'https://www.google.com/maps/dir/?api=1'
+    '&destination=$lat,$lng&travelmode=driving',
+  );
+  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!ok && context.mounted) {
+    wbShowSnack(context, "Couldn't open maps for $label");
+  }
+}
 
 /// Shows a soft snackbar at the bottom of the screen — used for placeholder
 /// actions while the underlying flow isn't wired to a backend yet.

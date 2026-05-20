@@ -36,6 +36,9 @@ dependencies:
   # current-position read for the rider map.
   permission_handler: ^11.3.1
   geolocator: ^13.0.2
+  # Hands navigation off to the device's maps app (rider directions to
+  # the vendor pickup and the customer drop-off).
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

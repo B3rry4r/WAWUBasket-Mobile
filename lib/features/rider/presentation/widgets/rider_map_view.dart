@@ -1,4 +1,6 @@
 import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -16,28 +18,35 @@ import '../../application/rider_controller.dart';
 /// token is configured AND the platform supports it, or a stylized
 /// placeholder built with `CustomPainter` otherwise.
 ///
-/// Offer "pins" float over the map. Tapping one calls [onTapOffer].
+/// Offer "pins" float over the map as detail pills (dot + fee + distance).
+/// Tapping one calls [onTapOffer]. A recenter button snaps the camera
+/// back to the rider's live GPS.
 class RiderMapView extends StatelessWidget {
   const RiderMapView({
     super.key,
     required this.offers,
     required this.onTapOffer,
+    this.bottomInset = 0,
   });
 
   final List<DeliveryOffer> offers;
   final ValueChanged<DeliveryOffer> onTapOffer;
 
+  /// Extra space at the bottom of the map kept clear of overlays (e.g. the
+  /// rider-home offer sheet). The recenter button floats above this inset.
+  final double bottomInset;
+
   bool get _useMapbox => kMapboxConfigured && !kIsWeb;
 
   @override
   Widget build(BuildContext context) {
-    // On Mapbox we use real circle annotations anchored to coordinates,
-    // so markers + the rider's location puck pan/zoom with the map. On
-    // the stylized fallback (web / no-token) we keep the Align overlays
-    // so something is visible.
     return SizedBox.expand(
       child: _useMapbox
-          ? _MapboxLayer(offers: offers, onTapOffer: onTapOffer)
+          ? _MapboxLayer(
+              offers: offers,
+              onTapOffer: onTapOffer,
+              bottomInset: bottomInset,
+            )
           : Stack(
               children: [
                 const Positioned.fill(child: _StylizedMap()),
@@ -59,9 +68,11 @@ class _MapboxLayer extends StatefulWidget {
   const _MapboxLayer({
     required this.offers,
     required this.onTapOffer,
+    required this.bottomInset,
   });
   final List<DeliveryOffer> offers;
   final ValueChanged<DeliveryOffer> onTapOffer;
+  final double bottomInset;
 
   @override
   State<_MapboxLayer> createState() => _MapboxLayerState();
@@ -69,8 +80,12 @@ class _MapboxLayer extends StatefulWidget {
 
 class _MapboxLayerState extends State<_MapboxLayer> {
   mb.MapboxMap? _map;
-  mb.CircleAnnotationManager? _circleManager;
-  final Map<String, mb.CircleAnnotation> _annotations = {};
+  mb.PointAnnotationManager? _pointManager;
+
+  /// annotation id → offer, so a tapped pin maps back to its offer.
+  final Map<String, DeliveryOffer> _annotationOffers = {};
+
+  bool _locating = false;
 
   @override
   void didUpdateWidget(covariant _MapboxLayer oldWidget) {
@@ -78,15 +93,6 @@ class _MapboxLayerState extends State<_MapboxLayer> {
     if (widget.offers != oldWidget.offers) _syncAnnotations();
   }
 
-  @override
-  void dispose() {
-    _circleManager?.deleteAll();
-    super.dispose();
-  }
-
-  /// Hides the default Mapbox scale-bar + compass + attribution chrome
-  /// so the top-left and top-right corners stay clean. We re-surface
-  /// attribution in the offer drawer footer instead.
   Future<void> _onMapCreated(mb.MapboxMap map) async {
     _map = map;
     map.scaleBar.updateSettings(mb.ScaleBarSettings(enabled: false));
@@ -97,105 +103,250 @@ class _MapboxLayerState extends State<_MapboxLayer> {
     map.logo.updateSettings(
       mb.LogoSettings(position: mb.OrnamentPosition.BOTTOM_LEFT),
     );
-    // Show the user's location puck if we have permission. Mapbox's own
-    // location component handles the puck rendering + heading rotation.
+
+    // Show the user's location puck if we have permission. Pulsing is off
+    // so the puck reads as a steady marker — GPS already jitters the
+    // position on its own and a pulse ring on top looks like extra motion.
     final granted = await WBPermissions.hasLocation();
     if (granted) {
       await map.location.updateSettings(
-        mb.LocationComponentSettings(enabled: true, pulsingEnabled: true),
+        mb.LocationComponentSettings(enabled: true, pulsingEnabled: false),
       );
       _centerOnCurrent();
     }
-    _circleManager = await map.annotations.createCircleAnnotationManager();
+
+    _pointManager = await map.annotations.createPointAnnotationManager();
     // ignore: deprecated_member_use
-    _circleManager!.addOnCircleAnnotationClickListener(
+    _pointManager!.addOnPointAnnotationClickListener(
       _OfferClickListener((id) {
-        final offer = _annotations.entries
-            .firstWhere((e) => e.value.id == id,
-                orElse: () => MapEntry('', _annotations.values.first))
-            .key;
-        for (final o in widget.offers) {
-          if (o.id == offer) {
-            widget.onTapOffer(o);
-            return;
-          }
-        }
+        final offer = _annotationOffers[id];
+        if (offer != null) widget.onTapOffer(offer);
       }),
     );
     _syncAnnotations();
   }
 
-  /// Read the device's current GPS once and re-centre the camera so the
-  /// rider sees their own location at the centre of the map instead of
-  /// the hard-coded Lagos seed.
+  /// Read the device's current GPS and re-centre the camera on the rider.
+  /// Called once on map create and again every time the recenter button
+  /// is tapped, so the rider can always snap back to themselves.
   Future<void> _centerOnCurrent() async {
+    if (_locating) return;
+    setState(() => _locating = true);
     try {
-      final pos = await Geolocator.getCurrentPosition();
+      final granted = await WBPermissions.requestLocation();
+      if (!granted) return;
+      final pos = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
+      );
+      RiderController.instance.updatePosition(pos.latitude, pos.longitude);
       if (!mounted || _map == null) return;
-      await _map!.setCamera(
+      await _map!.flyTo(
         mb.CameraOptions(
           center: mb.Point(
             coordinates: mb.Position(pos.longitude, pos.latitude),
           ),
-          zoom: 14,
+          zoom: 15,
         ),
+        mb.MapAnimationOptions(duration: 700),
       );
     } catch (_) {
-      // Service disabled or permission revoked between checks. Keep the
-      // initial camera position.
+      // Service disabled or fix unavailable — keep the current camera.
+    } finally {
+      if (mounted) setState(() => _locating = false);
     }
   }
 
   Future<void> _syncAnnotations() async {
-    final mgr = _circleManager;
+    final mgr = _pointManager;
     if (mgr == null) return;
     await mgr.deleteAll();
-    _annotations.clear();
+    _annotationOffers.clear();
+
     for (final o in widget.offers) {
+      final image = await _buildPillImage(o);
       final ann = await mgr.create(
-        mb.CircleAnnotationOptions(
+        mb.PointAnnotationOptions(
           geometry: mb.Point(
             coordinates: mb.Position(o.vendorLng, o.vendorLat),
           ),
-          circleRadius: 10,
-          circleColor: 0xff111111,
-          circleStrokeColor: 0xffffffff,
-          circleStrokeWidth: 3,
+          image: image,
+          // LEFT anchor → the dot at the pill's left edge sits exactly on
+          // the vendor coordinate; the detail pill extends to the side.
+          iconAnchor: mb.IconAnchor.LEFT,
+          iconSize: 1.0,
         ),
       );
-      _annotations[o.id] = ann;
+      _annotationOffers[ann.id] = o;
     }
+  }
+
+  /// Renders an offer detail pill (dark dot + "₦600 · 4.2km") to PNG bytes
+  /// for use as a Mapbox marker image. Drawn at 3× for retina crispness.
+  Future<Uint8List> _buildPillImage(DeliveryOffer offer) async {
+    const scale = 3.0;
+    const h = 30.0;
+    const padL = 9.0;
+    const padR = 12.0;
+    const dot = 8.0;
+    const gap = 7.0;
+    const radius = h / 2;
+
+    final feeText = wbNaira(offer.feeNaira);
+    final distText = ' · ${offer.distanceKm.toStringAsFixed(1)}km';
+
+    // Lay out the two-tone label to measure its width.
+    final builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+      fontSize: 12.5,
+      textAlign: TextAlign.left,
+    ))
+      ..pushStyle(ui.TextStyle(
+        color: WBColors.fgHeader,
+        fontWeight: FontWeight.w700,
+        fontSize: 12.5,
+      ))
+      ..addText(feeText)
+      ..pushStyle(ui.TextStyle(
+        color: WBColors.fgSecondary,
+        fontWeight: FontWeight.w500,
+        fontSize: 11.5,
+      ))
+      ..addText(distText);
+    final paragraph = builder.build()
+      ..layout(const ui.ParagraphConstraints(width: 400));
+    final textW = paragraph.longestLine;
+
+    final w = padL + dot + gap + textW + padR;
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    canvas.scale(scale);
+
+    final pillRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, w, h),
+      const Radius.circular(radius),
+    );
+
+    // Soft drop shadow.
+    canvas.drawRRect(
+      pillRect.shift(const Offset(0, 2)),
+      Paint()
+        ..color = const Color(0x22000000)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4),
+    );
+    // White pill body + hairline border.
+    canvas.drawRRect(pillRect, Paint()..color = Colors.white);
+    canvas.drawRRect(
+      pillRect.deflate(0.5),
+      Paint()
+        ..color = WBColors.bgDivider
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1,
+    );
+    // The dark locator dot at the left.
+    canvas.drawCircle(
+      Offset(padL + dot / 2, h / 2),
+      dot / 2,
+      Paint()..color = WBColors.surfaceDark,
+    );
+    // The fee + distance label.
+    canvas.drawParagraph(
+      paragraph,
+      Offset(padL + dot + gap, (h - paragraph.height) / 2),
+    );
+
+    final picture = recorder.endRecording();
+    final img = await picture.toImage(
+      (w * scale).ceil(),
+      (h * scale).ceil(),
+    );
+    final bytes = await img.toByteData(format: ui.ImageByteFormat.png);
+    return bytes!.buffer.asUint8List();
   }
 
   @override
   Widget build(BuildContext context) {
-    return mb.MapWidget(
-      // `cameraOptions` is still the public knob in mapbox_maps_flutter
-      // 2.x. The `viewport`/CameraViewportState replacement isn't fully
-      // landed yet, so we keep the working API and silence the warning.
-      // ignore: deprecated_member_use
-      cameraOptions: mb.CameraOptions(
-        center: mb.Point(
-          coordinates: mb.Position(
-            RiderController.riderLng,
-            RiderController.riderLat,
+    return Stack(
+      children: [
+        mb.MapWidget(
+          // ignore: deprecated_member_use
+          cameraOptions: mb.CameraOptions(
+            center: mb.Point(
+              coordinates: mb.Position(
+                RiderController.riderLng,
+                RiderController.riderLat,
+              ),
+            ),
+            zoom: 13.2,
+          ),
+          styleUri: mb.MapboxStyles.LIGHT,
+          onMapCreated: _onMapCreated,
+        ),
+        Positioned(
+          right: 14,
+          bottom: 14 + widget.bottomInset,
+          child: _RecenterButton(
+            busy: _locating,
+            onTap: _centerOnCurrent,
           ),
         ),
-        zoom: 13.2,
+      ],
+    );
+  }
+}
+
+/// Circular white button that snaps the camera to the rider's live GPS.
+class _RecenterButton extends StatelessWidget {
+  const _RecenterButton({required this.busy, required this.onTap});
+  final bool busy;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: busy ? null : onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: 46,
+        height: 46,
+        decoration: BoxDecoration(
+          color: WBColors.surfaceCard,
+          shape: BoxShape.circle,
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x26000000),
+              blurRadius: 14,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: busy
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(WBColors.surfaceDark),
+                ),
+              )
+            : const WBIcon(
+                WBIconName.pin,
+                size: 20,
+                color: WBColors.surfaceDark,
+              ),
       ),
-      styleUri: mb.MapboxStyles.LIGHT,
-      onMapCreated: _onMapCreated,
     );
   }
 }
 
 // ignore: deprecated_member_use
-class _OfferClickListener extends mb.OnCircleAnnotationClickListener {
+class _OfferClickListener extends mb.OnPointAnnotationClickListener {
   _OfferClickListener(this._onTap);
   final void Function(String annotationId) _onTap;
 
   @override
-  void onCircleAnnotationClick(mb.CircleAnnotation annotation) {
+  void onPointAnnotationClick(mb.PointAnnotation annotation) {
     _onTap(annotation.id);
   }
 }
@@ -239,7 +390,6 @@ class _RoadsPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // Three soft curves, the eye sees city roads.
     final p1 = Path()
       ..moveTo(-10, h * 0.78)
       ..cubicTo(w * 0.25, h * 0.62, w * 0.55, h * 0.74, w + 10, h * 0.58);
@@ -305,13 +455,11 @@ class _OfferMarker extends StatelessWidget {
   /// the rider, far ones at the edge. Avoids overlapping the rider pin
   /// and the bottom sheet handle.
   Alignment _slotAlignment() {
-    // Fan markers across the top hemisphere of the map so the bottom
-    // sheet (~38% of the height) doesn't cover any of them.
     final t = slotCount == 1 ? 0.5 : slot / (slotCount - 1);
-    final angle = (math.pi + math.pi * t) * 0.9 + math.pi * 0.05; // 162° → 342°
+    final angle = (math.pi + math.pi * t) * 0.9 + math.pi * 0.05;
     final r = 0.55 + (slot.isOdd ? -0.05 : 0.05);
     final dx = r * math.cos(angle);
-    final dy = r * math.sin(angle) * 0.85; // squash vertically
+    final dy = r * math.sin(angle) * 0.85;
     return Alignment(dx.clamp(-0.9, 0.9), dy.clamp(-0.9, 0.4));
   }
 

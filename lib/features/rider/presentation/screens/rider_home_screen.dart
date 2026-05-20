@@ -78,6 +78,14 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
                         child: RiderMapView(
                           offers: online ? offers : const [],
                           onTapOffer: _open,
+                          // Float the recenter button above the collapsed
+                          // offer sheet (~30% of the screen) so it is
+                          // never hidden behind it.
+                          bottomInset: (MediaQuery.of(context).size.height *
+                                          0.30 -
+                                      96)
+                                  .clamp(0.0, double.infinity) +
+                              8,
                         ),
                       ),
                     ),
