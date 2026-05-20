@@ -29,6 +29,12 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
   final _distance = TextEditingController(text: '1280');
 
   @override
+  void initState() {
+    super.initState();
+    TransportController.instance.loadMyLoads();
+  }
+
+  @override
   void dispose() {
     _originLabel.dispose();
     _destinationLabel.dispose();

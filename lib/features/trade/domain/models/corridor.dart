@@ -20,3 +20,13 @@ extension CorridorX on Corridor {
         Corridor.cameroon => 'CM',
       };
 }
+
+/// Maps an API corridor / country string onto the [Corridor] enum,
+/// falling back to Nigeria when the value is unknown.
+Corridor corridorFromName(String? s) {
+  final v = (s ?? '').toLowerCase();
+  for (final c in Corridor.values) {
+    if (c.name == v) return c;
+  }
+  return Corridor.nigeria;
+}

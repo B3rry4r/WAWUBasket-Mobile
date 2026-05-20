@@ -64,15 +64,6 @@ int _exportInt(dynamic v) {
   return int.tryParse(v.toString()) ?? 0;
 }
 
-/// Maps an API corridor string onto the [Corridor] enum.
-Corridor corridorFromName(String? s) {
-  final v = (s ?? '').toLowerCase();
-  for (final c in Corridor.values) {
-    if (c.name == v) return c;
-  }
-  return Corridor.nigeria;
-}
-
 ExportListingStatus exportStatusFromName(String? s) {
   for (final v in ExportListingStatus.values) {
     if (v.name == s) return v;

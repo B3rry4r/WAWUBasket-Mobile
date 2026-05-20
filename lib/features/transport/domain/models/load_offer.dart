@@ -71,7 +71,46 @@ class LoadOffer {
   /// True when the current driver has logged the last checkpoint.
   bool get atFinalCheckpoint =>
       reachedCheckpoints.length >= checkpointNames.length;
+
+  /// Builds a load from the `/v1/trader/loads` payload.
+  factory LoadOffer.fromJson(Map<String, dynamic> j) {
+    return LoadOffer(
+      id: (j['id'] ?? '').toString(),
+      origin: corridorFromName(j['originCountry']?.toString()),
+      destination: corridorFromName(j['destCountry']?.toString()),
+      originLabel: (j['originLabel'] ?? '').toString(),
+      destinationLabel: (j['destLabel'] ?? '').toString(),
+      weightKg: (j['weightKg'] as num?)?.toInt() ?? 0,
+      offerNaira: _loadInt(j['offerNaira']),
+      traderName: (j['traderName'] ?? '').toString(),
+      distanceKm: (j['distanceKm'] as num?)?.toDouble() ?? 0,
+      checkpointNames: [
+        for (final c in (j['checkpoints'] as List? ?? const [])) c.toString(),
+      ],
+      postedAt:
+          DateTime.tryParse('${j['postedAt'] ?? ''}') ?? DateTime.now(),
+      status: _loadStatusFromName(j['status']?.toString()),
+      bids: [
+        for (final b in (j['bids'] as List? ?? const []))
+          LoadBid.fromJson((b as Map).cast<String, dynamic>()),
+      ],
+    );
+  }
 }
+
+int _loadInt(dynamic v) {
+  if (v == null) return 0;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
+LoadStatus _loadStatusFromName(String? s) => switch (s) {
+      'assigned' => LoadStatus.assigned,
+      'in_transit' => LoadStatus.inTransit,
+      'delivered' => LoadStatus.delivered,
+      'cancelled' => LoadStatus.cancelled,
+      _ => LoadStatus.open,
+    };
 
 /// One driver's bid on an open load.
 class LoadBid {
@@ -85,4 +124,11 @@ class LoadBid {
   final int priceNaira;
   final int etaHours;
   final String notes;
+
+  factory LoadBid.fromJson(Map<String, dynamic> j) => LoadBid(
+        driverName: (j['driverName'] ?? '').toString(),
+        priceNaira: _loadInt(j['priceNaira']),
+        etaHours: (j['etaHours'] as num?)?.toInt() ?? 0,
+        notes: (j['notes'] ?? '').toString(),
+      );
 }
