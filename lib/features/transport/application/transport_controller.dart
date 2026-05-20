@@ -1,20 +1,17 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../core/network/api_exception.dart';
-import '../../trade/domain/models/corridor.dart';
+import '../../driver/data/driver_api.dart';
 import '../data/transport_api.dart';
 import '../domain/models/load_offer.dart';
 
-/// Single source of truth for transport loads. Trader's Transport screen
-/// posts to it; driver's load board reads from it; the same in-memory
-/// list backs both so a fresh post shows up on the driver's home
-/// instantly.
+/// Single source of truth for transport loads. The trader's Transport
+/// screen posts + lists their own loads; the driver's board lists every
+/// open load. Each screen calls the load method that suits its audience.
 class TransportController {
   TransportController._()
       : loads = ValueNotifier<List<LoadOffer>>([]),
-        activeTrip = ValueNotifier<LoadOffer?>(null) {
-    loads.value = _seed();
-  }
+        activeTrip = ValueNotifier<LoadOffer?>(null);
   static final TransportController instance = TransportController._();
 
   static const driverName = 'Aliyu Bala';
@@ -26,6 +23,7 @@ class TransportController {
   final ValueNotifier<LoadOffer?> activeTrip;
 
   final _api = TransportApi.instance;
+  final _driverApi = DriverApi.instance;
 
   LoadOffer? byId(String id) {
     for (final l in loads.value) {
@@ -44,6 +42,29 @@ class TransportController {
       ];
     } on ApiException {
       // Leave the current list in place — a later refresh retries.
+    }
+  }
+
+  /// Driver board — every open load across the network.
+  Future<void> loadOpenLoads() async {
+    try {
+      final raw = await _driverApi.openLoads();
+      loads.value = [
+        for (final e in raw)
+          LoadOffer.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place — a later refresh retries.
+    }
+  }
+
+  /// Driver's currently assigned trip, if any.
+  Future<void> loadActiveTrip() async {
+    try {
+      final j = await _driverApi.activeTrip();
+      activeTrip.value = j == null ? null : LoadOffer.fromJson(j);
+    } on ApiException {
+      // Leave the current trip in place.
     }
   }
 
@@ -77,6 +98,9 @@ class TransportController {
     if (l == null) return;
     l.bids = [...l.bids, bid];
     _bump();
+    _driverApi
+        .submitBid(id, bid.priceNaira, bid.etaHours, bid.notes)
+        .catchError((_) {});
   }
 
   /// Driver "auto-wins" the bid in the prototype (no trader-side accept
@@ -112,6 +136,7 @@ class TransportController {
     }
     activeTrip.value = l;
     _bump();
+    _driverApi.logCheckpoint(l.id).catchError((_) {});
   }
 
   /// Driver closes the trip post-delivery, freeing them up for the next
@@ -121,77 +146,4 @@ class TransportController {
   }
 
   void _bump() => loads.value = List.of(loads.value);
-
-  List<LoadOffer> _seed() => [
-        LoadOffer(
-          id: 'LOAD-0042',
-          origin: Corridor.nigeria,
-          destination: Corridor.benin,
-          originLabel: 'Kano',
-          destinationLabel: 'Cotonou',
-          weightKg: 8000,
-          offerNaira: 620000,
-          traderName: 'Hauwa & Sons Bulk Co.',
-          distanceKm: 1280,
-          checkpointNames: const [
-            'Kaduna depot',
-            'Ilorin yard',
-            'Seme border',
-            'Cotonou warehouse',
-          ],
-          postedAt: DateTime.now().subtract(const Duration(hours: 2)),
-        ),
-        LoadOffer(
-          id: 'LOAD-0039',
-          origin: Corridor.nigeria,
-          destination: Corridor.togo,
-          originLabel: 'Ondo',
-          destinationLabel: 'Lomé',
-          weightKg: 2500,
-          offerNaira: 280000,
-          traderName: 'Ondo Cocoa Co-op',
-          distanceKm: 540,
-          checkpointNames: const [
-            'Lagos depot',
-            'Hilla-Condji border',
-            'Lomé warehouse',
-          ],
-          postedAt: DateTime.now().subtract(const Duration(hours: 5)),
-        ),
-        LoadOffer(
-          id: 'LOAD-0035',
-          origin: Corridor.nigeria,
-          destination: Corridor.niger,
-          originLabel: 'Lagos',
-          destinationLabel: 'Niamey',
-          weightKg: 12000,
-          offerNaira: 1100000,
-          traderName: 'Sahel Grain Union',
-          distanceKm: 1620,
-          checkpointNames: const [
-            'Ibadan depot',
-            'Kaduna depot',
-            'Illela border',
-            'Niamey warehouse',
-          ],
-          postedAt: DateTime.now().subtract(const Duration(hours: 8)),
-        ),
-        LoadOffer(
-          id: 'LOAD-0029',
-          origin: Corridor.nigeria,
-          destination: Corridor.cameroon,
-          originLabel: 'Calabar',
-          destinationLabel: 'Douala',
-          weightKg: 4500,
-          offerNaira: 540000,
-          traderName: 'Delta Mills',
-          distanceKm: 760,
-          checkpointNames: const [
-            'Mfum border',
-            'Mamfe yard',
-            'Douala warehouse',
-          ],
-          postedAt: DateTime.now().subtract(const Duration(hours: 12)),
-        ),
-      ];
 }

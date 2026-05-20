@@ -12,8 +12,20 @@ import '../../../transport/domain/models/load_offer.dart';
 /// Driver's home, load board. Shows open loads with route, weight,
 /// distance, offer; the resume banner appears whenever there's an
 /// active trip so the driver can hop back into it.
-class DriverHomeScreen extends StatelessWidget {
+class DriverHomeScreen extends StatefulWidget {
   const DriverHomeScreen({super.key});
+
+  @override
+  State<DriverHomeScreen> createState() => _DriverHomeScreenState();
+}
+
+class _DriverHomeScreenState extends State<DriverHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    TransportController.instance.loadOpenLoads();
+    TransportController.instance.loadActiveTrip();
+  }
 
   @override
   Widget build(BuildContext context) {
