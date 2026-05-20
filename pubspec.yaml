@@ -28,6 +28,11 @@ dependencies:
   # Persistence (role status, KYC progress, preferences)
   shared_preferences: ^2.3.2
 
+  # API networking — HTTP client for the WAWUBasket API, plus encrypted
+  # storage for the JWT access/refresh tokens.
+  dio: ^5.7.0
+  flutter_secure_storage: ^9.2.2
+
   # Maps (rider home + active delivery mini-map). Token lives in
   # lib/core/config/secrets.dart so it never lands in version control.
   mapbox_maps_flutter: ^2.24.1

@@ -1,49 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/auth_api.dart';
 
+/// Phone-OTP verification. Reached after sign-up (`flow=signup`) or the
+/// password-less OTP sign-in (`flow=login`); [phone] is the E.164 number
+/// the code was sent to.
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key});
+  const OtpScreen({super.key, required this.phone, this.flow = 'signup'});
+
+  final String phone;
+  final String flow;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen>
-    with SingleTickerProviderStateMixin {
-  // 4-of-6 entered, matching the design. Tapping the grid fills the
-  // remaining digits so the prototype is navigable end-to-end.
-  final _digits = ['8', '1', '4', '2', '', ''];
-  late final _caret = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 900),
-  )..repeat(reverse: true);
+class _OtpScreenState extends State<OtpScreen> {
+  final _code = TextEditingController();
+  final _focus = FocusNode();
+  bool _busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
+  }
 
   @override
   void dispose() {
-    _caret.dispose();
+    _code.dispose();
+    _focus.dispose();
     super.dispose();
   }
 
-  int get _activeIndex => _digits.indexOf('');
+  String get _masked {
+    final p = widget.phone;
+    if (p.length < 7) return p;
+    return '${p.substring(0, p.length - 4)}•••${p.substring(p.length - 1)}';
+  }
 
-  void _fillRemaining() {
-    setState(() {
-      for (var i = 0; i < _digits.length; i++) {
-        if (_digits[i].isEmpty) {
-          // Mock digits, completes the 6-digit code.
-          _digits[i] = '${(i * 3) % 10}';
-        }
+  Future<void> _verify() async {
+    if (_code.text.length != 6 || _busy) return;
+    setState(() => _busy = true);
+    try {
+      if (widget.flow == 'login') {
+        await AuthApi.instance.verifyOtp(widget.phone, _code.text);
+      } else {
+        await AuthApi.instance.verifySignup(widget.phone, _code.text);
       }
-    });
+      if (!mounted) return;
+      context.go(AppRoutes.roleSelect);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _resend() async {
+    try {
+      await AuthApi.instance.startOtp(widget.phone);
+      if (mounted) wbShowSnack(context, 'A new code is on its way.');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final filled = _digits.every((d) => d.isNotEmpty);
+    final code = _code.text;
+    final filled = code.length == 6;
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       body: SafeArea(
@@ -65,14 +98,14 @@ class _OtpScreenState extends State<OtpScreen>
                     color: WBColors.fgSecondary,
                     fontSize: 15,
                   ),
-                  children: const [
-                    TextSpan(text: 'Check your WhatsApp. We sent a short one to '),
+                  children: [
+                    const TextSpan(
+                        text: 'Check your WhatsApp. We sent a short one to '),
                     TextSpan(
-                      text: '+234 803 ••• 1820',
-                      style: TextStyle(
+                      text: _masked,
+                      style: const TextStyle(
                         color: WBColors.fgHeader,
                         fontWeight: FontWeight.w500,
-                        fontFeatures: [FontFeature.tabularFigures()],
                       ),
                     ),
                   ],
@@ -84,11 +117,8 @@ class _OtpScreenState extends State<OtpScreen>
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const WBIcon(
-                      WBIconName.phone,
-                      size: 13,
-                      color: WBColors.fgHeader,
-                    ),
+                    const WBIcon(WBIconName.phone,
+                        size: 13, color: WBColors.fgHeader),
                     const SizedBox(width: 4),
                     Text(
                       'Edit number',
@@ -102,51 +132,60 @@ class _OtpScreenState extends State<OtpScreen>
                 ),
               ),
               const SizedBox(height: WBSpacing.xl),
+              // The 6 boxes are a visual display; an invisible field below
+              // captures the keystrokes. Tapping the row focuses it.
               GestureDetector(
-                onTap: _fillRemaining,
+                onTap: () => _focus.requestFocus(),
                 behavior: HitTestBehavior.opaque,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    for (var i = 0; i < _digits.length; i++)
+                    for (var i = 0; i < 6; i++)
                       _OtpBox(
-                        digit: _digits[i],
-                        active: i == _activeIndex,
-                        caret: _caret,
+                        digit: i < code.length ? code[i] : '',
+                        active: i == code.length,
                       ),
                   ],
                 ),
               ),
+              SizedBox(
+                height: 0,
+                child: Opacity(
+                  opacity: 0,
+                  child: TextField(
+                    controller: _code,
+                    focusNode: _focus,
+                    keyboardType: TextInputType.number,
+                    maxLength: 6,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onChanged: (v) {
+                      setState(() {});
+                      if (v.length == 6) _verify();
+                    },
+                  ),
+                ),
+              ),
               const SizedBox(height: WBSpacing.xl),
               Center(
-                child: RichText(
-                  text: TextSpan(
+                child: GestureDetector(
+                  onTap: _resend,
+                  child: Text(
+                    'Resend code',
                     style: WBTypography.caption.copyWith(
-                      color: WBColors.fgPlaceholder,
+                      color: WBColors.fgHeader,
+                      fontWeight: FontWeight.w600,
                       fontSize: 13,
                     ),
-                    children: const [
-                      TextSpan(text: 'Resend code in '),
-                      TextSpan(
-                        text: '0:42',
-                        style: TextStyle(
-                          color: WBColors.fgHeader,
-                          fontWeight: FontWeight.w600,
-                          fontFeatures: [FontFeature.tabularFigures()],
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ),
               const Spacer(),
               WBButton(
-                label: filled ? 'Verify and go in' : 'Tap the code boxes to fill',
+                label: filled ? 'Verify and go in' : 'Enter the 6-digit code',
                 size: WBButtonSize.lg,
                 fullWidth: true,
-                onPressed: filled
-                    ? () => context.go(AppRoutes.roleSelect)
-                    : _fillRemaining,
+                loading: _busy,
+                onPressed: filled ? _verify : null,
               ),
               const SizedBox(height: WBSpacing.xl),
             ],
@@ -158,15 +197,10 @@ class _OtpScreenState extends State<OtpScreen>
 }
 
 class _OtpBox extends StatelessWidget {
-  const _OtpBox({
-    required this.digit,
-    required this.active,
-    required this.caret,
-  });
+  const _OtpBox({required this.digit, required this.active});
 
   final String digit;
   final bool active;
-  final Animation<double> caret;
 
   @override
   Widget build(BuildContext context) {
@@ -185,27 +219,13 @@ class _OtpBox extends StatelessWidget {
         ),
       ),
       alignment: Alignment.center,
-      child: filled
-          ? Text(
-              digit,
-              style: WBTypography.hero.copyWith(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          : (active
-              ? AnimatedBuilder(
-                  animation: caret,
-                  builder: (_, _) => Opacity(
-                    opacity: caret.value,
-                    child: Container(
-                      width: 2,
-                      height: 24,
-                      color: WBColors.fgHeader,
-                    ),
-                  ),
-                )
-              : null),
+      child: Text(
+        digit,
+        style: WBTypography.hero.copyWith(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }

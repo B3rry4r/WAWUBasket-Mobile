@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/auth_api.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -13,7 +16,33 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  final _identifier = TextEditingController();
   String _method = 'sms';
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _identifier.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_identifier.text.trim().isEmpty) {
+      wbShowSnack(context, 'Enter your phone number or email.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      final id = _identifier.text.trim();
+      await AuthApi.instance.forgotPassword(id, method: _method);
+      if (!mounted) return;
+      context.push('${AppRoutes.resetPassword}?identifier=$id');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +69,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
               const SizedBox(height: WBSpacing.lg + 4),
-              const WBInput(
+              WBInput(
                 label: 'Phone or email',
-                initialValue: 'brooks@wawu.africa',
+                controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.lg + 4),
@@ -60,7 +89,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Expanded(
                     child: _MethodCard(
                       label: 'SMS',
-                      sub: '+234 803 ••• 1820',
+                      sub: 'To your phone',
                       active: _method == 'sms',
                       onTap: () => setState(() => _method = 'sms'),
                     ),
@@ -69,7 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Expanded(
                     child: _MethodCard(
                       label: 'Email',
-                      sub: 'brooks@…africa',
+                      sub: 'To your inbox',
                       active: _method == 'email',
                       onTap: () => setState(() => _method = 'email'),
                     ),
@@ -82,26 +111,30 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () => context.push(AppRoutes.resetPassword),
+                loading: _busy,
+                onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.sm + 4),
               Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgPlaceholder,
-                      fontSize: 13,
-                    ),
-                    children: const [
-                      TextSpan(text: "Didn't get a code last time? "),
-                      TextSpan(
-                        text: 'Contact support',
-                        style: TextStyle(
-                          color: WBColors.fgHeader,
-                          fontWeight: FontWeight.w500,
-                        ),
+                child: GestureDetector(
+                  onTap: () => context.push(AppRoutes.support),
+                  child: RichText(
+                    text: TextSpan(
+                      style: WBTypography.caption.copyWith(
+                        color: WBColors.fgPlaceholder,
+                        fontSize: 13,
                       ),
-                    ],
+                      children: const [
+                        TextSpan(text: "Didn't get a code last time? "),
+                        TextSpan(
+                          text: 'Contact support',
+                          style: TextStyle(
+                            color: WBColors.fgHeader,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

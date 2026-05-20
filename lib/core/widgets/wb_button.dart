@@ -22,6 +22,7 @@ class WBButton extends StatefulWidget {
     this.leading,
     this.fullWidth = false,
     this.disabled = false,
+    this.loading = false,
   });
 
   final String label;
@@ -34,6 +35,10 @@ class WBButton extends StatefulWidget {
   final Widget? leading;
   final bool fullWidth;
   final bool disabled;
+
+  /// When true the button shows a centred spinner and ignores taps —
+  /// used while an async action (API call) is in flight.
+  final bool loading;
 
   @override
   State<WBButton> createState() => _WBButtonState();
@@ -73,7 +78,8 @@ class _WBButtonState extends State<WBButton> {
   Widget build(BuildContext context) {
     final s = _sizeSpec;
     final v = _variantSpec;
-    final disabled = widget.disabled || widget.onPressed == null;
+    final disabled =
+        widget.disabled || widget.loading || widget.onPressed == null;
 
     return GestureDetector(
       onTapDown: disabled ? null : (_) => setState(() => _pressed = true),
@@ -94,7 +100,18 @@ class _WBButtonState extends State<WBButton> {
             color: v.bg,
             borderRadius: BorderRadius.circular(WBRadius.pill),
           ),
-          child: Row(
+          child: widget.loading
+              ? Center(
+                  child: SizedBox(
+                    width: s.fs + 4,
+                    height: s.fs + 4,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.4,
+                      valueColor: AlwaysStoppedAnimation(v.fg),
+                    ),
+                  ),
+                )
+              : Row(
             mainAxisSize: widget.fullWidth ? MainAxisSize.max : MainAxisSize.min,
             mainAxisAlignment: widget.trailing == null
                 ? MainAxisAlignment.center

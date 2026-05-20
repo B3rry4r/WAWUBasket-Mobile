@@ -1,19 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/role_controller.dart';
+import '../../data/auth_api.dart';
 
-class ResetPasswordScreen extends StatelessWidget {
-  const ResetPasswordScreen({super.key});
+/// Second half of the password-recovery flow: the user enters the 6-digit
+/// code sent to [identifier] plus a new password. On success the API
+/// returns a session, so we drop straight into the customer home.
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key, required this.identifier});
 
-  static const _rules = [
-    (true, 'At least 8 characters'),
-    (true, 'One uppercase letter'),
-    (true, 'One number'),
-    (false, 'One symbol'),
-  ];
+  final String identifier;
+
+  @override
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+}
+
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
+  final _code = TextEditingController();
+  final _password = TextEditingController();
+  final _confirm = TextEditingController();
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _code.dispose();
+    _password.dispose();
+    _confirm.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_code.text.length != 6) {
+      wbShowSnack(context, 'Enter the 6-digit code we sent you.');
+      return;
+    }
+    if (_password.text.length < 8) {
+      wbShowSnack(context, 'Password must be at least 8 characters.');
+      return;
+    }
+    if (_password.text != _confirm.text) {
+      wbShowSnack(context, "Passwords don't match.");
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await AuthApi.instance.resetPassword(
+        widget.identifier,
+        _code.text,
+        _password.text,
+      );
+      RoleController.instance.setRole(AppRole.customer);
+      if (!mounted) return;
+      context.go(AppRoutes.home);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +83,7 @@ class ResetPasswordScreen extends StatelessWidget {
               Text('Choose a new\npassword', style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm + 2),
               Text(
-                'Make it different from your last one.',
+                'Enter the code we sent you, then set a new password.',
                 style: WBTypography.body.copyWith(
                   color: WBColors.fgSecondary,
                   fontSize: 15,
@@ -41,79 +91,25 @@ class ResetPasswordScreen extends StatelessWidget {
               ),
               const SizedBox(height: WBSpacing.lg + 4),
               WBInput(
-                label: 'New password',
-                initialValue: '••••••••••••',
-                trailing: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                  child: Text(
-                    'Show',
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgSecondary,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
+                label: 'Verification code',
+                controller: _code,
+                keyboardType: TextInputType.number,
+                leadingIcon: WBIconName.message,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
-              const WBInput(
-                label: 'Confirm password',
-                initialValue: '••••••••••••',
+              WBInput(
+                label: 'New password',
+                controller: _password,
+                obscureText: true,
+                leadingIcon: WBIconName.card,
+                placeholder: 'At least 8 characters',
               ),
-              const SizedBox(height: WBSpacing.lg),
-              Container(
-                padding: const EdgeInsets.all(WBSpacing.md),
-                decoration: BoxDecoration(
-                  color: WBColors.bgSecondary,
-                  borderRadius: BorderRadius.circular(WBRadius.card),
-                ),
-                child: Column(
-                  children: [
-                    for (final (ok, label) in _rules) ...[
-                      Row(
-                        children: [
-                          Container(
-                            width: 18,
-                            height: 18,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: ok ? WBColors.surfaceDark : WBColors.bgDivider,
-                            ),
-                            alignment: Alignment.center,
-                            child: ok
-                                ? const WBIcon(
-                                    WBIconName.check,
-                                    size: 11,
-                                    color: Colors.white,
-                                    strokeWidth: 2.5,
-                                  )
-                                : Container(
-                                    width: 4,
-                                    height: 4,
-                                    decoration: const BoxDecoration(
-                                      color: WBColors.bgPrimary,
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            label,
-                            style: WBTypography.caption.copyWith(
-                              color: ok
-                                  ? WBColors.fgHeader
-                                  : WBColors.fgPlaceholder,
-                              fontWeight: ok ? FontWeight.w500 : FontWeight.w400,
-                              fontSize: 13,
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (label != _rules.last.$2) const SizedBox(height: 10),
-                    ],
-                  ],
-                ),
+              const SizedBox(height: WBSpacing.sm + 6),
+              WBInput(
+                label: 'Confirm password',
+                controller: _confirm,
+                obscureText: true,
+                leadingIcon: WBIconName.card,
               ),
               const Spacer(),
               WBButton(
@@ -121,7 +117,8 @@ class ResetPasswordScreen extends StatelessWidget {
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () => context.go(AppRoutes.home),
+                loading: _busy,
+                onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.xl),
             ],

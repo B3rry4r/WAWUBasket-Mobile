@@ -123,7 +123,10 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.otp,
-        builder: (_, _) => const OtpScreen(),
+        builder: (_, state) => OtpScreen(
+          phone: state.uri.queryParameters['phone'] ?? '',
+          flow: state.uri.queryParameters['flow'] ?? 'signup',
+        ),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,
@@ -131,7 +134,9 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.resetPassword,
-        builder: (_, _) => const ResetPasswordScreen(),
+        builder: (_, state) => ResetPasswordScreen(
+          identifier: state.uri.queryParameters['identifier'] ?? '',
+        ),
       ),
       GoRoute(
         path: AppRoutes.roleSelect,

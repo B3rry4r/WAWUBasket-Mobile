@@ -1,12 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/role_controller.dart';
+import '../../data/auth_api.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _identifier = TextEditingController();
+  final _password = TextEditingController();
+  bool _obscure = true;
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _identifier.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
+      wbShowSnack(context, 'Enter your phone/email and password.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      // A fresh login always starts in the customer shell; the user can
+      // switch into an approved operator role from their account.
+      RoleController.instance.setRole(AppRole.customer);
+      if (!mounted) return;
+      context.go(AppRoutes.home);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +55,8 @@ class LoginScreen extends StatelessWidget {
       backgroundColor: WBColors.bgPrimary,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: WBSpacing.screenPadding),
+          padding:
+              const EdgeInsets.symmetric(horizontal: WBSpacing.screenPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -29,26 +70,26 @@ class LoginScreen extends StatelessWidget {
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.xl),
-              const WBInput(
+              WBInput(
                 label: 'Phone or email',
-                initialValue: 'brooks@wawu.africa',
+                controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.md),
               WBInput(
                 label: 'Password',
-                initialValue: '••••••••••',
+                controller: _password,
                 leadingIcon: WBIconName.card,
-                obscureText: false,
+                obscureText: _obscure,
                 trailing: TextButton(
-                  onPressed: () {},
+                  onPressed: () => setState(() => _obscure = !_obscure),
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     minimumSize: const Size(40, 24),
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    'Show',
+                    _obscure ? 'Show' : 'Hide',
                     style: WBTypography.caption.copyWith(
                       color: WBColors.fgSecondary,
                       fontWeight: FontWeight.w500,
@@ -79,30 +120,8 @@ class LoginScreen extends StatelessWidget {
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () => context.go(AppRoutes.home),
-              ),
-              const SizedBox(height: WBSpacing.md),
-              Row(
-                children: [
-                  const Expanded(child: WBDivider()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      'or',
-                      style: WBTypography.caption.copyWith(
-                        color: WBColors.fgPlaceholder,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  const Expanded(child: WBDivider()),
-                ],
-              ),
-              const SizedBox(height: WBSpacing.md),
-              _OutlineCta(
-                label: 'Use Face ID',
-                icon: WBIconName.user,
-                onPressed: () => context.go(AppRoutes.home),
+                loading: _busy,
+                onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.md),
               Center(
@@ -128,47 +147,6 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: WBSpacing.xl),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _OutlineCta extends StatelessWidget {
-  const _OutlineCta({
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-  });
-  final String label;
-  final WBIconName icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        height: 56,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: WBColors.bgPrimary,
-          borderRadius: BorderRadius.circular(WBRadius.pill),
-          border: Border.all(color: WBColors.bgDivider),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            WBIcon(icon, size: 18, color: WBColors.fgHeader),
-            const SizedBox(width: 10),
-            Text(
-              label,
-              style: WBTypography.body.copyWith(
-                fontWeight: FontWeight.w500,
-                color: WBColors.fgHeader,
-              ),
-            ),
-          ],
         ),
       ),
     );

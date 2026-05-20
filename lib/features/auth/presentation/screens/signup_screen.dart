@@ -1,12 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/auth_api.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  bool _agreed = true;
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    _email.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  /// Normalises the local number into E.164 (`803 421 1820` → `+2348034211820`).
+  String get _e164Phone {
+    final digits = _phone.text.replaceAll(RegExp(r'\D'), '');
+    final local = digits.startsWith('0') ? digits.substring(1) : digits;
+    return '+234$local';
+  }
+
+  Future<void> _submit() async {
+    if (_name.text.trim().isEmpty ||
+        _phone.text.trim().isEmpty ||
+        _email.text.trim().isEmpty) {
+      wbShowSnack(context, 'Fill in your name, number and email.');
+      return;
+    }
+    if (_password.text.length < 8) {
+      wbShowSnack(context, 'Password must be at least 8 characters.');
+      return;
+    }
+    if (!_agreed) {
+      wbShowSnack(context, 'Accept the Terms to continue.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await AuthApi.instance.signup(
+        fullName: _name.text.trim(),
+        phone: _e164Phone,
+        email: _email.text.trim(),
+        password: _password.text,
+      );
+      if (!mounted) return;
+      context.push('${AppRoutes.otp}?phone=$_e164Phone&flow=signup');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +93,15 @@ class SignupScreen extends StatelessWidget {
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.lg),
-              const WBInput(
+              WBInput(
                 label: 'Full name',
-                initialValue: 'Brooks Adesanya',
+                controller: _name,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
               WBInput(
                 label: 'WhatsApp number',
-                initialValue: '803 421 1820',
+                controller: _phone,
                 leadingIcon: WBIconName.phone,
                 keyboardType: TextInputType.phone,
                 trailing: Container(
@@ -72,71 +135,87 @@ class SignupScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: WBSpacing.sm + 6),
-              const WBInput(
+              WBInput(
                 label: 'Email',
-                initialValue: 'brooks@wawu.africa',
+                controller: _email,
+                keyboardType: TextInputType.emailAddress,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
-              const WBInput(
+              WBInput(
                 label: 'Password',
+                controller: _password,
                 placeholder: 'At least 8 characters',
                 leadingIcon: WBIconName.card,
                 obscureText: true,
               ),
               const SizedBox(height: WBSpacing.lg),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    margin: const EdgeInsets.only(top: 2),
-                    decoration: BoxDecoration(
-                      color: WBColors.surfaceDark,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const WBIcon(
-                      WBIconName.check,
-                      size: 12,
-                      color: Colors.white,
-                      strokeWidth: 2.5,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: RichText(
-                      text: TextSpan(
-                        style: WBTypography.caption.copyWith(
-                          color: WBColors.fgSecondary,
-                          fontSize: 13,
-                          height: 1.5,
+              GestureDetector(
+                onTap: () => setState(() => _agreed = !_agreed),
+                behavior: HitTestBehavior.opaque,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      margin: const EdgeInsets.only(top: 2),
+                      decoration: BoxDecoration(
+                        color: _agreed
+                            ? WBColors.surfaceDark
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: _agreed
+                              ? WBColors.surfaceDark
+                              : WBColors.bgDivider,
+                          width: 1.5,
                         ),
-                        children: const [
-                          TextSpan(text: 'I agree to the '),
-                          TextSpan(
-                            text: 'Terms',
-                            style: TextStyle(
-                              color: WBColors.fgHeader,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
-                            ),
+                      ),
+                      child: _agreed
+                          ? const WBIcon(
+                              WBIconName.check,
+                              size: 12,
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            )
+                          : null,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          style: WBTypography.caption.copyWith(
+                            color: WBColors.fgSecondary,
+                            fontSize: 13,
+                            height: 1.5,
                           ),
-                          TextSpan(text: ' and '),
-                          TextSpan(
-                            text: 'Privacy Policy',
-                            style: TextStyle(
-                              color: WBColors.fgHeader,
-                              fontWeight: FontWeight.w500,
-                              decoration: TextDecoration.underline,
+                          children: const [
+                            TextSpan(text: 'I agree to the '),
+                            TextSpan(
+                              text: 'Terms',
+                              style: TextStyle(
+                                color: WBColors.fgHeader,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
-                          ),
-                          TextSpan(text: '.'),
-                        ],
+                            TextSpan(text: ' and '),
+                            TextSpan(
+                              text: 'Privacy Policy',
+                              style: TextStyle(
+                                color: WBColors.fgHeader,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            TextSpan(text: '.'),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: WBSpacing.lg),
               WBButton(
@@ -144,7 +223,8 @@ class SignupScreen extends StatelessWidget {
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () => context.push(AppRoutes.otp),
+                loading: _busy,
+                onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.sm + 4),
               Center(
