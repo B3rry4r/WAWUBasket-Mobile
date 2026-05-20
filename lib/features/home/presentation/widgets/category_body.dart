@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../category/domain/models/category_kind.dart';
 import '../../../shopping/application/mock_data.dart';
+import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
 import '../../../trade/presentation/widgets/bulk_lot_card.dart';
 import '../../../trade/presentation/widgets/supplier_card.dart';
@@ -139,28 +141,73 @@ class _LivestockBody extends StatelessWidget {
   }
 }
 
-class _AllBody extends StatelessWidget {
+/// Home default view — vendors + trending dishes pulled live from the
+/// catalog API. Falls back to a retry card if the request fails.
+class _AllBody extends StatefulWidget {
   const _AllBody();
 
   @override
+  State<_AllBody> createState() => _AllBodyState();
+}
+
+class _AllBodyState extends State<_AllBody> {
+  List<Vendor>? _vendors;
+  List<Product>? _products;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final vendors = await CatalogApi.instance.vendors();
+      final products = await CatalogApi.instance.items();
+      if (!mounted) return;
+      setState(() {
+        _vendors = vendors;
+        _products = products;
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final products = MockData.menu.take(4).toList();
+    if (_error != null) {
+      return _padH(_RetryHint(text: _error!, onRetry: _load));
+    }
+    if (_vendors == null || _products == null) {
+      return const _LoadingHint();
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _padH(_SectionHeader(
           title: 'Popular near you',
-          onSeeAll: () => context.push('${AppRoutes.categoryDetail}/restaurants'),
+          onSeeAll: () =>
+              context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 14),
-        _VendorCarousel(vendors: MockData.vendors),
+        if (_vendors!.isEmpty)
+          _padH(const _EmptyHint(text: 'No vendors open near you yet.'))
+        else
+          _VendorCarousel(vendors: _vendors!),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
           title: 'Trending dishes today',
-          onSeeAll: () => context.push('${AppRoutes.categoryDetail}/restaurants'),
+          onSeeAll: () =>
+              context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 14),
-        _padH(_ProductGrid(products: products)),
+        if (_products!.isEmpty)
+          _padH(const _EmptyHint(text: 'No dishes listed yet.'))
+        else
+          _padH(_ProductGrid(products: _products!.take(4).toList())),
       ],
     );
   }
@@ -483,6 +530,63 @@ class _EmptyHint extends StatelessWidget {
       child: Text(
         text,
         style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+      ),
+    );
+  }
+}
+
+/// Centred spinner shown while a section's API data loads.
+class _LoadingHint extends StatelessWidget {
+  const _LoadingHint();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 48),
+      child: Center(
+        child: SizedBox(
+          width: 26,
+          height: 26,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.4,
+            valueColor: AlwaysStoppedAnimation(WBColors.surfaceDark),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Error card with a retry action for a failed section load.
+class _RetryHint extends StatelessWidget {
+  const _RetryHint({required this.text, required this.onRetry});
+  final String text;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(WBSpacing.md + 4),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+          ),
+          const SizedBox(height: 10),
+          WBButton(
+            label: 'Try again',
+            size: WBButtonSize.sm,
+            variant: WBButtonVariant.secondary,
+            onPressed: onRetry,
+          ),
+        ],
       ),
     );
   }
