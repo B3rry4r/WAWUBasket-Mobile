@@ -30,6 +30,7 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
   @override
   void initState() {
     super.initState();
+    RiderController.instance.loadOffers();
     // Ask for location once the first build settles. Granting lets the
     // map render the user puck + we recompute every offer's distance +
     // ETA against the rider's real GPS reading.

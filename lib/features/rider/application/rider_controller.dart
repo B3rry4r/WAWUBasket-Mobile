@@ -2,6 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../data/rider_api.dart';
+
 /// Stage the active delivery is in. Mirrors the customer-facing tracking
 /// progression but from the rider's perspective.
 enum DeliveryStage {
@@ -35,11 +38,18 @@ extension DeliveryStageX on DeliveryStage {
       };
 }
 
+int _riderInt(dynamic v) {
+  if (v == null) return 0;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
 /// One nearby delivery offer rendered on the rider's map + bottom-sheet
 /// peek. After accepting, the offer is promoted to the active delivery.
 class DeliveryOffer {
   const DeliveryOffer({
     required this.id,
+    required this.deliveryId,
     required this.vendorName,
     required this.vendorAddress,
     required this.vendorLat,
@@ -56,6 +66,10 @@ class DeliveryOffer {
   });
 
   final String id;
+
+  /// The underlying delivery id — what the picked-up / delivered
+  /// endpoints key on (distinct from the offer [id]).
+  final String deliveryId;
   final String vendorName;
   final String vendorAddress;
   final double vendorLat;
@@ -84,6 +98,37 @@ class DeliveryOffer {
     final hours = (pickup + delivery) / 25.0;
     return (hours * 60).round() + 5;
   }
+
+  factory DeliveryOffer.fromJson(Map<String, dynamic> j) {
+    final delivery = (j['delivery'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final order = (delivery['order'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final vendor = (order['vendor'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final address =
+        (order['address'] as Map?)?.cast<String, dynamic>() ?? const {};
+    return DeliveryOffer(
+      id: (j['id'] ?? '').toString(),
+      deliveryId: (delivery['id'] ?? '').toString(),
+      vendorName: (vendor['businessName'] ?? 'Vendor').toString(),
+      vendorAddress: (vendor['addressLine'] ?? '').toString(),
+      vendorLat:
+          (vendor['lat'] as num?)?.toDouble() ?? RiderController.riderLat,
+      vendorLng:
+          (vendor['lng'] as num?)?.toDouble() ?? RiderController.riderLng,
+      customerName: (order['customerName'] ?? 'Customer').toString(),
+      customerPhone: (order['customerPhone'] ?? '').toString(),
+      dropAddress:
+          (address['line'] ?? order['dropoffAddress'] ?? '').toString(),
+      dropLat:
+          (address['lat'] as num?)?.toDouble() ?? RiderController.riderLat,
+      dropLng:
+          (address['lng'] as num?)?.toDouble() ?? RiderController.riderLng,
+      distanceKm: (delivery['distanceKm'] as num?)?.toDouble() ?? 0,
+      etaMin: (delivery['etaMin'] as num?)?.toInt() ?? 0,
+      feeNaira: _riderInt(delivery['fee']),
+      specialInstructions:
+          (order['notes'] ?? address['noteForRider'] ?? '').toString(),
+    );
+  }
 }
 
 double _haversineKm(double lat1, double lng1, double lat2, double lng2) {
@@ -110,9 +155,7 @@ class RiderController {
   RiderController._()
       : online = ValueNotifier(true),
         offers = ValueNotifier<List<DeliveryOffer>>([]),
-        active = ValueNotifier<ActiveDelivery?>(null) {
-    offers.value = _seedOffers();
-  }
+        active = ValueNotifier<ActiveDelivery?>(null);
   static final RiderController instance = RiderController._();
 
   /// Rider's home coordinate, used to center the map and to give offer
@@ -123,6 +166,7 @@ class RiderController {
   final ValueNotifier<bool> online;
   final ValueNotifier<List<DeliveryOffer>> offers;
   final ValueNotifier<ActiveDelivery?> active;
+  final _api = RiderApi.instance;
 
   /// The rider's last known GPS reading. Null until permission is
   /// granted + a Geolocator one-shot returns. Drives the offer cards'
@@ -132,9 +176,26 @@ class RiderController {
 
   void updatePosition(double lat, double lng) {
     currentPosition.value = (lat: lat, lng: lng);
+    _api.updateLocation(lat, lng).catchError((_) {});
   }
 
-  void toggleOnline() => online.value = !online.value;
+  /// Pulls the rider's pending delivery offers from the API.
+  Future<void> loadOffers() async {
+    try {
+      final raw = await _api.offers();
+      offers.value = [
+        for (final e in raw)
+          DeliveryOffer.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place — a later refresh retries.
+    }
+  }
+
+  void toggleOnline() {
+    online.value = !online.value;
+    _api.setOnline(online.value).catchError((_) {});
+  }
 
   /// Promote an offer to the active delivery and pull it out of the
   /// nearby list. Idempotent, no-op if there's already an active.
@@ -145,6 +206,7 @@ class RiderController {
       for (final o in offers.value)
         if (o.id != offer.id) o,
     ];
+    _api.acceptOffer(offer.id).catchError((_) {});
   }
 
   void advance() {
@@ -153,6 +215,12 @@ class RiderController {
     if (a == null || next == null) return;
     a.stage = next.next;
     active.value = ActiveDelivery(offer: a.offer, stage: a.stage);
+    if (a.offer.deliveryId.isEmpty) return;
+    if (a.stage == DeliveryStage.pickedUp) {
+      _api.markPickedUp(a.offer.deliveryId).catchError((_) {});
+    } else if (a.stage == DeliveryStage.delivered) {
+      _api.markDelivered(a.offer.deliveryId).catchError((_) {});
+    }
   }
 
   /// Clear the active delivery after the rider closes the
@@ -160,68 +228,4 @@ class RiderController {
   void clearActive() {
     active.value = null;
   }
-
-  List<DeliveryOffer> _seedOffers() => const [
-        DeliveryOffer(
-          id: 'WAWU-8821',
-          vendorName: 'Mama Cass Kitchen',
-          vendorAddress: '12 Adeola Odeku St, V/I',
-          vendorLat: 6.4275,
-          vendorLng: 3.4172,
-          customerName: 'Adunni',
-          customerPhone: '+234 803 421 1820',
-          dropAddress: '7B Awolowo Rd, Ikoyi · Apt 12',
-          dropLat: 6.4541,
-          dropLng: 3.4326,
-          distanceKm: 4.2,
-          etaMin: 22,
-          feeNaira: 600,
-          specialInstructions: 'Call when you arrive, security will escort.',
-        ),
-        DeliveryOffer(
-          id: 'WAWU-8822',
-          vendorName: 'Suya & Smoke',
-          vendorAddress: '24 Saka Tinubu St, V/I',
-          vendorLat: 6.4309,
-          vendorLng: 3.4234,
-          customerName: 'Tobi',
-          customerPhone: '+234 802 988 0421',
-          dropAddress: '3 Sapele Rd, Lekki Phase 1',
-          dropLat: 6.4474,
-          dropLng: 3.4709,
-          distanceKm: 6.1,
-          etaMin: 28,
-          feeNaira: 800,
-        ),
-        DeliveryOffer(
-          id: 'WAWU-8825',
-          vendorName: 'Iya Basira Buka',
-          vendorAddress: '18 Kingsway Rd, Ikoyi',
-          vendorLat: 6.4505,
-          vendorLng: 3.4263,
-          customerName: 'Kemi',
-          customerPhone: '+234 805 117 7032',
-          dropAddress: '5 Bourdillon Rd, Ikoyi',
-          dropLat: 6.4577,
-          dropLng: 3.4373,
-          distanceKm: 2.8,
-          etaMin: 16,
-          feeNaira: 500,
-        ),
-        DeliveryOffer(
-          id: 'WAWU-8830',
-          vendorName: 'Chicken Republic',
-          vendorAddress: '1 Akin Adesola, V/I',
-          vendorLat: 6.4274,
-          vendorLng: 3.4135,
-          customerName: 'Daniel',
-          customerPhone: '+234 802 244 9911',
-          dropAddress: '20 Olosa St, V/I',
-          dropLat: 6.4302,
-          dropLng: 3.4187,
-          distanceKm: 1.4,
-          etaMin: 11,
-          feeNaira: 450,
-        ),
-      ];
 }
