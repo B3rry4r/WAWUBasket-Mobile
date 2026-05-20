@@ -1,15 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/vendor_api.dart';
 
-class VendorAlertsScreen extends StatelessWidget {
+class VendorAlertsScreen extends StatefulWidget {
   const VendorAlertsScreen({super.key});
 
   @override
+  State<VendorAlertsScreen> createState() => _VendorAlertsScreenState();
+}
+
+class _VendorAlertsScreenState extends State<VendorAlertsScreen> {
+  List<_Alert>? _alerts;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final raw = await VendorApi.instance.alerts();
+      if (!mounted) return;
+      setState(() => _alerts = [
+            for (final e in raw)
+              _Alert.fromJson((e as Map).cast<String, dynamic>()),
+          ]);
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  String get _subtitle {
+    final n = _alerts?.length ?? 0;
+    if (n == 0) return "You're all caught up.";
+    return n == 1
+        ? '1 thing needs your attention.'
+        : '$n things need your attention.';
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final alerts = _alerts;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
@@ -32,7 +71,7 @@ class VendorAlertsScreen extends StatelessWidget {
                     children: [
                       Text('Alerts', style: WBTypography.page),
                       Text(
-                        '3 things need your attention.',
+                        _subtitle,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                         ),
@@ -43,35 +82,123 @@ class VendorAlertsScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            _AlertRow(
-              icon: WBIconName.basket,
-              label: 'Goat meat is out of stock',
-              sub: 'Restock to keep accepting orders',
-              kind: WBStatusKind.error,
-              cta: 'Restock',
-              onTap: () => context.push(AppRoutes.vendorInventory),
-            ),
-            _AlertRow(
-              icon: WBIconName.bell,
-              label: 'Tomatoes running low',
-              sub: '6 baskets left · low at 8',
-              kind: WBStatusKind.warning,
-              cta: 'Restock',
-              onTap: () => context.push(AppRoutes.vendorInventory),
-            ),
-            _AlertRow(
-              icon: WBIconName.star,
-              label: '1 new review needs a reply',
-              sub: 'Daniel U. · ★★★☆☆',
-              kind: WBStatusKind.info,
-              cta: 'Reply',
-              onTap: () => context.push(AppRoutes.vendorReviews),
-            ),
+            if (alerts == null && _error == null)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 48),
+                child: Center(
+                  child: SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.4,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
+                    ),
+                  ),
+                ),
+              )
+            else if (_error != null)
+              _Hint(text: _error!)
+            else if (alerts!.isEmpty)
+              const _Hint(text: 'No alerts right now. Enjoy the breather.')
+            else
+              for (final a in alerts)
+                _AlertRow(
+                  icon: a.icon,
+                  label: a.label,
+                  sub: a.sub,
+                  kind: a.kind,
+                  cta: a.cta,
+                  onTap: () => context.push(a.route),
+                ),
           ],
         ),
       ),
     );
   }
+}
+
+class _Hint extends StatelessWidget {
+  const _Hint({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(WBSpacing.md + 4),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Text(
+        text,
+        style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+      ),
+    );
+  }
+}
+
+/// A vendor alert mapped from the `/v1/vendor/alerts` payload onto the
+/// presentation fields the row needs.
+class _Alert {
+  const _Alert({
+    required this.icon,
+    required this.label,
+    required this.sub,
+    required this.kind,
+    required this.cta,
+    required this.route,
+  });
+
+  final WBIconName icon;
+  final String label;
+  final String sub;
+  final WBStatusKind kind;
+  final String cta;
+  final String route;
+
+  factory _Alert.fromJson(Map<String, dynamic> j) {
+    final type = (j['type'] ?? '').toString();
+    final title = (j['title'] ?? 'Alert').toString();
+    final at = DateTime.tryParse('${j['at'] ?? ''}')?.toLocal();
+    final sub = _ago(at);
+    return switch (type) {
+      'inventory.low' => _Alert(
+          icon: WBIconName.basket,
+          label: title,
+          sub: 'Restock to keep accepting orders',
+          kind: WBStatusKind.warning,
+          cta: 'Restock',
+          route: AppRoutes.vendorInventory,
+        ),
+      'order.disputed' => _Alert(
+          icon: WBIconName.bell,
+          label: title,
+          sub: sub,
+          kind: WBStatusKind.error,
+          cta: 'Review',
+          route: AppRoutes.vendorOrders,
+        ),
+      _ => _Alert(
+          icon: WBIconName.bell,
+          label: title,
+          sub: sub,
+          kind: WBStatusKind.info,
+          cta: 'View',
+          route: AppRoutes.vendorOrders,
+        ),
+    };
+  }
+}
+
+String _ago(DateTime? t) {
+  if (t == null) return 'Just now';
+  final d = DateTime.now().difference(t);
+  if (d.inMinutes < 1) return 'Just now';
+  if (d.inMinutes < 60) return '${d.inMinutes} min ago';
+  if (d.inHours < 24) return '${d.inHours}h ago';
+  return '${d.inDays}d ago';
 }
 
 class _AlertRow extends StatelessWidget {
