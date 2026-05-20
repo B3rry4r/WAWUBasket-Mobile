@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/vendor_api.dart';
 
 class VendorReviewsScreen extends StatefulWidget {
   const VendorReviewsScreen({super.key});
@@ -13,19 +15,51 @@ class VendorReviewsScreen extends StatefulWidget {
 }
 
 class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
-  /// Whether a given review has had a reply submitted in this session. Keyed
-  /// by reviewer name to keep the mock simple.
+  /// Review ids that carry a reply (either from the server or posted in
+  /// this session).
   final Set<String> _replied = <String>{};
 
-  static const _reviews = [
-    (name: 'Adunni O.', rating: 5, text: 'Best jollof in Lagos, period.', date: 'Today'),
-    (name: 'Tobi K.', rating: 4, text: 'Great food, suya could be hotter.', date: 'Yesterday'),
-    (name: 'Kemi A.', rating: 5, text: 'Fast delivery, food still hot 🔥', date: '2 days ago'),
-    (name: 'Daniel U.', rating: 3, text: 'Rice was a bit dry today.', date: '3 days ago'),
-    (name: 'Funke I.', rating: 5, text: 'My family loves this place!', date: '1 week ago'),
-  ];
+  List<_Review>? _reviews;
+  String _avgRating = '0.0';
+  Map<int, double> _distribution = const {};
+  String? _error;
 
-  void _openReplySheet({
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final res = await VendorApi.instance.reviews();
+      final raw = (res as Map).cast<String, dynamic>();
+      final list = (raw['reviews'] as List? ?? const [])
+          .map((e) => _Review.fromJson((e as Map).cast<String, dynamic>()))
+          .toList();
+      final total = list.isEmpty ? 1 : list.length;
+      final dist = (raw['distribution'] as Map?)?.cast<String, dynamic>() ??
+          const {};
+      if (!mounted) return;
+      setState(() {
+        _reviews = list;
+        _avgRating = (raw['avgRating'] ?? '0.0').toString();
+        _distribution = {
+          for (var s = 1; s <= 5; s++)
+            s: ((dist['$s'] as num?)?.toDouble() ?? 0) / total,
+        };
+        _replied
+          ..clear()
+          ..addAll(list.where((r) => r.hasReply).map((r) => r.id));
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  Future<void> _openReplySheet({
+    required String id,
     required String reviewer,
     required String text,
   }) async {
@@ -40,14 +74,22 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
       builder: (sheetCtx) =>
           _ReplySheet(reviewer: reviewer, originalText: text),
     );
-    if (result != null && mounted) {
-      setState(() => _replied.add(reviewer));
-      wbShowSnack(context, 'Reply posted to $reviewer');
+    if (result == null || !mounted) return;
+    setState(() => _replied.add(id));
+    try {
+      await VendorApi.instance.replyReview(id, result);
+      if (mounted) wbShowSnack(context, 'Reply posted to $reviewer');
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _replied.remove(id));
+        wbShowSnack(context, e.message);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final reviews = _reviews;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
@@ -81,113 +123,214 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            Container(
-              padding: const EdgeInsets.all(WBSpacing.lg),
-              decoration: BoxDecoration(
-                color: WBColors.surfaceCard,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-                boxShadow: WBShadows.card,
-              ),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '★ 4.8',
-                        style: WBTypography.hero.copyWith(fontSize: 36),
-                      ),
-                      Text(
-                        'Based on 247 reviews',
-                        style: WBTypography.caption.copyWith(
-                          color: WBColors.fgSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 18),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        _Bucket(stars: 5, pct: 0.72),
-                        _Bucket(stars: 4, pct: 0.20),
-                        _Bucket(stars: 3, pct: 0.05),
-                        _Bucket(stars: 2, pct: 0.02),
-                        _Bucket(stars: 1, pct: 0.01),
-                      ],
+            if (reviews == null && _error == null)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 56),
+                child: Center(
+                  child: SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.4,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            for (final r in _reviews)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: WBCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            r.name,
-                            style: WBTypography.body.copyWith(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
+                ),
+              )
+            else if (_error != null)
+              _Hint(text: _error!)
+            else ...[
+              Container(
+                padding: const EdgeInsets.all(WBSpacing.lg),
+                decoration: BoxDecoration(
+                  color: WBColors.surfaceCard,
+                  borderRadius: BorderRadius.circular(WBRadius.card),
+                  boxShadow: WBShadows.card,
+                ),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '★ $_avgRating',
+                          style: WBTypography.hero.copyWith(fontSize: 36),
+                        ),
+                        Text(
+                          'Based on ${reviews!.length} '
+                          '${reviews.length == 1 ? 'review' : 'reviews'}',
+                          style: WBTypography.caption.copyWith(
+                            color: WBColors.fgSecondary,
                           ),
-                          const Spacer(),
-                          for (var i = 0; i < 5; i++)
-                            WBIcon(
-                              WBIconName.star,
-                              size: 12,
-                              color: i < r.rating
-                                  ? WBColors.fgHeader
-                                  : WBColors.bgDivider,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 18),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          for (var s = 5; s >= 1; s--)
+                            _Bucket(
+                              stars: s,
+                              pct: _distribution[s] ?? 0,
                             ),
                         ],
                       ),
-                      const SizedBox(height: 6),
-                      Text(
-                        r.text,
-                        style: WBTypography.body.copyWith(fontSize: 14),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Text(
-                            r.date,
-                            style: WBTypography.caption.copyWith(
-                              color: WBColors.fgSecondary,
-                            ),
-                          ),
-                          const Spacer(),
-                          if (_replied.contains(r.name))
-                            const WBStatusPill(
-                              label: 'Replied',
-                              kind: WBStatusKind.success,
-                            )
-                          else
-                            GestureDetector(
-                              onTap: () =>
-                                  _openReplySheet(reviewer: r.name, text: r.text),
-                              child: Text(
-                                'Reply',
-                                style: WBTypography.caption.copyWith(
-                                  color: WBColors.fgHeader,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+              const SizedBox(height: WBSpacing.lg),
+              if (reviews.isEmpty)
+                const _Hint(
+                  text: 'No reviews yet. They land here as orders complete.',
+                )
+              else
+                for (final r in reviews)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: WBCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                r.name,
+                                style: WBTypography.body.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const Spacer(),
+                              for (var i = 0; i < 5; i++)
+                                WBIcon(
+                                  WBIconName.star,
+                                  size: 12,
+                                  color: i < r.rating
+                                      ? WBColors.fgHeader
+                                      : WBColors.bgDivider,
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            r.text,
+                            style: WBTypography.body.copyWith(fontSize: 14),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                r.date,
+                                style: WBTypography.caption.copyWith(
+                                  color: WBColors.fgSecondary,
+                                ),
+                              ),
+                              const Spacer(),
+                              if (_replied.contains(r.id))
+                                const WBStatusPill(
+                                  label: 'Replied',
+                                  kind: WBStatusKind.success,
+                                )
+                              else
+                                GestureDetector(
+                                  onTap: () => _openReplySheet(
+                                    id: r.id,
+                                    reviewer: r.name,
+                                    text: r.text,
+                                  ),
+                                  child: Text(
+                                    'Reply',
+                                    style: WBTypography.caption.copyWith(
+                                      color: WBColors.fgHeader,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+            ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// A vendor review mapped from the `/v1/vendor/reviews` payload.
+class _Review {
+  const _Review({
+    required this.id,
+    required this.name,
+    required this.rating,
+    required this.text,
+    required this.date,
+    required this.hasReply,
+  });
+
+  final String id;
+  final String name;
+  final int rating;
+  final String text;
+  final String date;
+  final bool hasReply;
+
+  factory _Review.fromJson(Map<String, dynamic> j) {
+    final created = DateTime.tryParse('${j['createdAt'] ?? ''}')?.toLocal();
+    return _Review(
+      id: (j['id'] ?? '').toString(),
+      name: _shortName(j['reviewerName'] as String?),
+      rating: (j['score'] as num?)?.toInt() ?? 0,
+      text: (j['review'] ?? '').toString(),
+      date: _ago(created),
+      hasReply: (j['reply'] ?? '').toString().isNotEmpty,
+    );
+  }
+}
+
+String _shortName(String? full) {
+  final name = (full ?? '').trim();
+  if (name.isEmpty) return 'Customer';
+  final parts = name.split(RegExp(r'\s+'));
+  if (parts.length == 1) return parts.first;
+  return '${parts.first} ${parts.last[0].toUpperCase()}.';
+}
+
+String _ago(DateTime? t) {
+  if (t == null) return '';
+  final now = DateTime.now();
+  final d = DateTime(now.year, now.month, now.day)
+      .difference(DateTime(t.year, t.month, t.day))
+      .inDays;
+  if (d <= 0) return 'Today';
+  if (d == 1) return 'Yesterday';
+  if (d < 7) return '$d days ago';
+  final w = d ~/ 7;
+  return w == 1 ? '1 week ago' : '$w weeks ago';
+}
+
+class _Hint extends StatelessWidget {
+  const _Hint({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(WBSpacing.md + 4),
+      decoration: BoxDecoration(
+        color: WBColors.bgSoft,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Text(
+        text,
+        style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
       ),
     );
   }
