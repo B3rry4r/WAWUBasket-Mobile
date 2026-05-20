@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/country_api.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -20,6 +21,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _phone = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  Country? _country;
   bool _agreed = true;
   bool _busy = false;
 
@@ -32,11 +34,12 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  /// Normalises the local number into E.164 (`803 421 1820` → `+2348034211820`).
+  /// Normalises the local number into E.164 using the picked country's
+  /// dial code (`803 421 1820` + NG → `+2348034211820`).
   String get _e164Phone {
     final digits = _phone.text.replaceAll(RegExp(r'\D'), '');
     final local = digits.startsWith('0') ? digits.substring(1) : digits;
-    return '+234$local';
+    return '${_country?.dialCode ?? '+234'}$local';
   }
 
   Future<void> _submit() async {
@@ -99,40 +102,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
-              WBInput(
+              WBPhoneField(
                 label: 'WhatsApp number',
                 controller: _phone,
-                leadingIcon: WBIconName.phone,
-                keyboardType: TextInputType.phone,
-                trailing: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: WBColors.bgSoft,
-                    borderRadius: BorderRadius.circular(WBRadius.pill),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '+234',
-                        style: WBTypography.caption.copyWith(
-                          color: WBColors.fgHeader,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const WBIcon(
-                        WBIconName.chevronDown,
-                        size: 12,
-                        color: WBColors.fgSecondary,
-                      ),
-                    ],
-                  ),
-                ),
+                onCountryChanged: (c) => _country = c,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
               WBInput(

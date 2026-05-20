@@ -136,6 +136,7 @@ GoRouter buildRouter() {
         path: AppRoutes.resetPassword,
         builder: (_, state) => ResetPasswordScreen(
           identifier: state.uri.queryParameters['identifier'] ?? '',
+          code: state.uri.queryParameters['code'] ?? '',
         ),
       ),
       GoRoute(

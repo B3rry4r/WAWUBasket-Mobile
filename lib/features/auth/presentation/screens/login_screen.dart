@@ -37,8 +37,6 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _busy = true);
     try {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
-      // A fresh login always starts in the customer shell; the user can
-      // switch into an approved operator role from their account.
       RoleController.instance.setRole(AppRole.customer);
       if (!mounted) return;
       context.go(AppRoutes.home);
@@ -55,8 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: WBColors.bgPrimary,
       body: SafeArea(
         child: Padding(
-          padding:
-              const EdgeInsets.symmetric(horizontal: WBSpacing.screenPadding),
+          padding: const EdgeInsets.symmetric(
+              horizontal: WBSpacing.screenPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -124,6 +122,30 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.md),
+              Row(
+                children: [
+                  const Expanded(child: WBDivider()),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Text(
+                      'or',
+                      style: WBTypography.caption.copyWith(
+                        color: WBColors.fgPlaceholder,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const Expanded(child: WBDivider()),
+                ],
+              ),
+              const SizedBox(height: WBSpacing.md),
+              _OutlineCta(
+                label: 'Use Face ID',
+                icon: WBIconName.user,
+                onPressed: () =>
+                    wbShowSnack(context, 'Biometric sign-in is coming soon'),
+              ),
+              const SizedBox(height: WBSpacing.md),
               Center(
                 child: GestureDetector(
                   onTap: () => context.push(AppRoutes.signup),
@@ -147,6 +169,47 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: WBSpacing.xl),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _OutlineCta extends StatelessWidget {
+  const _OutlineCta({
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+  final String label;
+  final WBIconName icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 56,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: WBColors.bgPrimary,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+          border: Border.all(color: WBColors.bgDivider),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            WBIcon(icon, size: 18, color: WBColors.fgHeader),
+            const SizedBox(width: 10),
+            Text(
+              label,
+              style: WBTypography.body.copyWith(
+                fontWeight: FontWeight.w500,
+                color: WBColors.fgHeader,
+              ),
+            ),
+          ],
         ),
       ),
     );

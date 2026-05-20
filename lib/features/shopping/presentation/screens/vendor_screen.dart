@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -7,21 +8,22 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
+import '../../application/cart_controller.dart';
 import '../../data/catalog_api.dart';
 import '../../domain/models/product.dart';
 import '../widgets/sticky_action_bar.dart';
 
-class VendorScreen extends StatefulWidget {
+class VendorScreen extends ConsumerStatefulWidget {
   const VendorScreen({super.key, this.vendorId});
 
   /// Id of the tapped storefront.
   final String? vendorId;
 
   @override
-  State<VendorScreen> createState() => _VendorScreenState();
+  ConsumerState<VendorScreen> createState() => _VendorScreenState();
 }
 
-class _VendorScreenState extends State<VendorScreen> {
+class _VendorScreenState extends ConsumerState<VendorScreen> {
   static const _tabs = ['All', 'Mains', 'Sides', 'Drinks'];
   String _activeTab = 'All';
 
@@ -93,6 +95,10 @@ class _VendorScreenState extends State<VendorScreen> {
     final items = _activeTab == 'All'
         ? _menu
         : _menu.where((p) => p.categoryId == _activeTab).toList();
+
+    final cart = ref.watch(cartControllerProvider);
+    final cartCount = cart.items.fold<int>(0, (s, l) => s + l.quantity);
+    final cartTotal = cart.items.fold<int>(0, (s, l) => s + l.total);
 
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
@@ -226,7 +232,7 @@ class _VendorScreenState extends State<VendorScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 12, bottom: 4),
-                      child: Text('Menu', style: WBTypography.cardTitle),
+                      child: Text('Mains', style: WBTypography.cardTitle),
                     ),
                     if (items.isEmpty)
                       Padding(
@@ -271,7 +277,31 @@ class _VendorScreenState extends State<VendorScreen> {
                 label: 'View basket',
                 fullWidth: true,
                 size: WBButtonSize.lg,
-                trailingIcon: WBIconName.arrowRight,
+                leading: Container(
+                  width: 26,
+                  height: 26,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.18),
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    '$cartCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                trailing: Text(
+                  '₦${_naira(cartTotal)}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 onPressed: () => context.push(AppRoutes.cart),
               ),
             ),
@@ -280,6 +310,16 @@ class _VendorScreenState extends State<VendorScreen> {
       ),
     );
   }
+}
+
+String _naira(int v) {
+  final s = v.toString();
+  final buf = StringBuffer();
+  for (var i = 0; i < s.length; i++) {
+    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
+    buf.write(s[i]);
+  }
+  return buf.toString();
 }
 
 /// Shared scaffold for the vendor screen's loading + error states.

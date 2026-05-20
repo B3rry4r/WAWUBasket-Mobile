@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../theme/wb_theme_exports.dart';
 import 'wb_icon.dart';
@@ -22,6 +23,9 @@ class WBInput extends StatefulWidget {
     this.onSubmitted,
     this.autofocus = false,
     this.initialValue,
+    this.maxLength,
+    this.inputFormatters,
+    this.enabled = true,
   });
 
   final String? label;
@@ -37,6 +41,15 @@ class WBInput extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final bool autofocus;
   final String? initialValue;
+
+  /// Hard character cap (e.g. NIN/BVN = 11). The counter is hidden.
+  final int? maxLength;
+
+  /// Keystroke filters — e.g. `FilteringTextInputFormatter.digitsOnly`.
+  final List<TextInputFormatter>? inputFormatters;
+
+  /// When false the field is read-only (used by tappable picker fields).
+  final bool enabled;
 
   @override
   State<WBInput> createState() => _WBInputState();
@@ -118,6 +131,14 @@ class _WBInputState extends State<WBInput> {
                   autofocus: widget.autofocus,
                   obscureText: widget.obscureText,
                   keyboardType: widget.keyboardType,
+                  enabled: widget.enabled,
+                  maxLength: widget.maxLength,
+                  inputFormatters: widget.inputFormatters,
+                  buildCounter: (_,
+                          {required currentLength,
+                          required isFocused,
+                          maxLength}) =>
+                      null,
                   onChanged: widget.onChanged,
                   onSubmitted: widget.onSubmitted,
                   cursorColor: WBColors.fgHeader,

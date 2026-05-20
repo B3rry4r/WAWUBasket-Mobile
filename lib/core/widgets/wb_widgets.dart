@@ -3,6 +3,7 @@ export 'wb_bottom_nav.dart';
 export 'wb_button.dart';
 export 'wb_card.dart';
 export 'wb_circle_icon_button.dart';
+export 'wb_form_fields.dart';
 export 'wb_icon.dart';
 export 'wb_input.dart';
 export 'wb_logo.dart';

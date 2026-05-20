@@ -36,7 +36,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       final id = _identifier.text.trim();
       await AuthApi.instance.forgotPassword(id, method: _method);
       if (!mounted) return;
-      context.push('${AppRoutes.resetPassword}?identifier=$id');
+      context.push('${AppRoutes.otp}?phone=$id&flow=reset');
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/search_field.dart';
@@ -20,7 +21,14 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  static const _filters = ['All', 'Vendors', 'Dishes'];
+  static const _filters = [
+    'All',
+    'Vendors',
+    'Dishes',
+    'Near me',
+    '4.5+',
+    'Free delivery',
+  ];
   static const _navSafePad = 120.0;
 
   final _query = TextEditingController();
@@ -28,6 +36,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Timer? _debounce;
 
   String _activeFilter = 'All';
+  List<String> _recent = ['Jollof rice', 'Suya platter', 'Smoothies', 'Pasta'];
+
+  List<Vendor> _idleVendors = const [];
   List<Vendor> _vendors = const [];
   List<Product> _products = const [];
   bool _loading = false;
@@ -38,6 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _focus.requestFocus());
+    _loadIdleVendors();
   }
 
   @override
@@ -46,6 +58,15 @@ class _SearchScreenState extends State<SearchScreen> {
     _query.dispose();
     _focus.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadIdleVendors() async {
+    try {
+      final vendors = await CatalogApi.instance.vendors();
+      if (mounted) setState(() => _idleVendors = vendors);
+    } on ApiException {
+      // The idle storefront list is non-critical — leave it empty.
+    }
   }
 
   void _onChanged(String value) {
@@ -84,6 +105,12 @@ class _SearchScreenState extends State<SearchScreen> {
         });
       }
     }
+  }
+
+  void _runRecent(String term) {
+    _query.text = term;
+    _onChanged(term);
+    _run(term);
   }
 
   @override
@@ -171,7 +198,94 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
-            if (_loading)
+            if (!_searched) ...[
+              if (_recent.isNotEmpty) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Recent searches',
+                      style: WBTypography.cardTitle
+                          .copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() => _recent = const []);
+                        wbShowSnack(context, 'Recent searches cleared');
+                      },
+                      child: Text(
+                        'Clear',
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: WBSpacing.sm + 4),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: _recent
+                      .map((r) => GestureDetector(
+                            onTap: () => _runRecent(r),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: WBColors.bgSoft,
+                                borderRadius:
+                                    BorderRadius.circular(WBRadius.pill),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const WBIcon(
+                                    WBIconName.clock,
+                                    size: 14,
+                                    color: WBColors.fgPlaceholder,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    r,
+                                    style: WBTypography.caption.copyWith(
+                                      color: WBColors.fgHeader,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  GestureDetector(
+                                    onTap: () => setState(
+                                        () => _recent = _recent
+                                            .where((e) => e != r)
+                                            .toList()),
+                                    child: const WBIcon(
+                                      WBIconName.close,
+                                      size: 12,
+                                      color: WBColors.fgPlaceholder,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                ),
+                const SizedBox(height: WBSpacing.lg),
+                const WBDivider(),
+                const SizedBox(height: WBSpacing.lg),
+              ],
+              const SectionHeader(title: 'Vendors'),
+              const SizedBox(height: WBSpacing.sm + 4),
+              for (final vendor in _idleVendors.take(2)) ...[
+                _VendorRow(vendor: vendor),
+                const SizedBox(height: WBSpacing.sm + 4),
+              ],
+            ] else if (_loading)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 48),
                 child: Center(
@@ -188,8 +302,6 @@ class _SearchScreenState extends State<SearchScreen> {
               )
             else if (_error != null)
               _hint(_error!)
-            else if (!_searched)
-              _hint('Type at least 2 characters to search.')
             else if (_vendors.isEmpty && _products.isEmpty)
               _hint('Nothing matched "${_query.text}".')
             else ...[
@@ -260,8 +372,8 @@ class _VendorRow extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: SizedBox(
-                width: 64,
-                height: 64,
+                width: 72,
+                height: 72,
                 child: WBNetworkImage(url: vendor.imageUrl),
               ),
             ),
@@ -278,6 +390,13 @@ class _VendorRow extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
+                  Text(
+                    vendor.cuisine,
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
                   Row(
                     children: [
                       const WBIcon(WBIconName.star, size: 12),
@@ -298,11 +417,38 @@ class _VendorRow extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '· ${vendor.feeLabel}',
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
+            if (vendor.badge != null)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                decoration: BoxDecoration(
+                  color: WBColors.bgSoft,
+                  borderRadius: BorderRadius.circular(WBRadius.pill),
+                ),
+                child: Text(
+                  vendor.badge!,
+                  style: WBTypography.caption.copyWith(
+                    color: WBColors.fgHeader,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                  ),
+                ),
+              ),
           ],
         ),
       ),
