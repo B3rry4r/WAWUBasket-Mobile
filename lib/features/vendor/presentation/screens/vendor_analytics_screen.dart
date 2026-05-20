@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/vendor_api.dart';
 
 class VendorAnalyticsScreen extends StatefulWidget {
   const VendorAnalyticsScreen({super.key});
@@ -12,17 +15,82 @@ class VendorAnalyticsScreen extends StatefulWidget {
   State<VendorAnalyticsScreen> createState() => _VendorAnalyticsScreenState();
 }
 
+int _int(dynamic v) =>
+    v is num ? v.toInt() : int.tryParse('${v ?? 0}') ?? 0;
+
+String _compactNaira(int v) {
+  if (v >= 1000000) {
+    final m = v / 1000000;
+    return '₦${m == m.roundToDouble() ? m.toInt() : m.toStringAsFixed(1)}m';
+  }
+  if (v >= 1000) return '₦${(v / 1000).round()}k';
+  return '₦$v';
+}
+
 class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
   String _range = '7d';
   static const _ranges = [('7d', 'Last 7 days'), ('30d', 'Last 30 days'), ('90d', 'Last 90 days')];
 
+  Map<String, dynamic>? _data;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final d = await VendorApi.instance.analytics(range: _range);
+      if (mounted) {
+        setState(() {
+          _data = d;
+          _loading = false;
+        });
+      }
+    } on ApiException {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  /// Daily revenue normalised to 0–1 for the trend line.
+  List<double> get _trendPoints {
+    final trend = (_data?['revenueTrend'] as List?) ?? const [];
+    final revs = [
+      for (final t in trend) _int((t as Map)['revenue']).toDouble(),
+    ];
+    if (revs.isEmpty) return List.filled(7, 0.1);
+    final max = revs.reduce((a, b) => a > b ? a : b);
+    if (max <= 0) return [for (final _ in revs) 0.08];
+    return [for (final r in revs) (r / max).clamp(0.05, 1.0)];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final d = _data ?? const <String, dynamic>{};
+    final orders = _int(d['orders']).toString();
+    final revenue = _compactNaira(_int(d['revenue']));
+    final avgOrder = wbNaira(_int(d['avgOrderValue']));
+    final rating = '★ ${d['rating'] ?? '0.0'}';
+
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
         bottom: false,
-        child: ListView(
+        child: _loading
+            ? const Center(
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.6,
+                    valueColor:
+                        AlwaysStoppedAnimation(WBColors.surfaceDark),
+                  ),
+                ),
+              )
+            : ListView(
           padding: const EdgeInsets.fromLTRB(
             WBSpacing.screenPadding,
             12,
@@ -60,24 +128,27 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                 itemBuilder: (_, i) => WBTag(
                   label: _ranges[i].$2,
                   active: _ranges[i].$1 == _range,
-                  onTap: () => setState(() => _range = _ranges[i].$1),
+                  onTap: () {
+                    setState(() => _range = _ranges[i].$1);
+                    _load();
+                  },
                 ),
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
             Row(
-              children: const [
-                _Metric(label: 'Orders', value: '187'),
-                SizedBox(width: 10),
-                _Metric(label: 'Revenue', value: '₦612k'),
+              children: [
+                _Metric(label: 'Orders', value: orders),
+                const SizedBox(width: 10),
+                _Metric(label: 'Revenue', value: revenue),
               ],
             ),
             const SizedBox(height: 10),
             Row(
-              children: const [
-                _Metric(label: 'Avg order', value: '₦3,274'),
-                SizedBox(width: 10),
-                _Metric(label: 'Rating', value: '★ 4.8'),
+              children: [
+                _Metric(label: 'Avg order', value: avgOrder),
+                const SizedBox(width: 10),
+                _Metric(label: 'Rating', value: rating),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -89,7 +160,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
             WBCard(
               child: SizedBox(
                 height: 140,
-                child: CustomPaint(painter: _LinePainter()),
+                child: CustomPaint(painter: _LinePainter(_trendPoints)),
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -502,9 +573,14 @@ class _DonutPainter extends CustomPainter {
 }
 
 class _LinePainter extends CustomPainter {
+  _LinePainter(this.points);
+
+  /// Daily revenue normalised to 0–1, oldest first.
+  final List<double> points;
+
   @override
   void paint(Canvas canvas, Size size) {
-    final points = [0.4, 0.5, 0.35, 0.6, 0.55, 0.72, 0.65];
+    if (points.length < 2) return;
     final path = Path();
     for (var i = 0; i < points.length; i++) {
       final x = (size.width / (points.length - 1)) * i;
@@ -533,5 +609,6 @@ class _LinePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _LinePainter oldDelegate) =>
+      oldDelegate.points != points;
 }

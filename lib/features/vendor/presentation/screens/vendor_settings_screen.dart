@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/vendor_api.dart';
 
 class VendorSettingsScreen extends StatefulWidget {
   const VendorSettingsScreen({super.key});
@@ -27,12 +29,71 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
   bool _pushOrders = true;
   bool _pushLowStock = true;
   bool _emailReports = true;
+  bool _loading = true;
+  bool _saving = false;
 
   final List<_StaffMember> _staff = [
     _StaffMember(name: 'Adunni Adesanya', role: 'Manager', email: 'adunni@mama-cass.ng'),
     _StaffMember(name: 'Sade Akin', role: 'Cashier', email: 'sade@mama-cass.ng'),
     _StaffMember(name: 'Femi Bello', role: 'Cook', email: 'femi@mama-cass.ng'),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final res = await VendorApi.instance.settings();
+      final j = (res as Map).cast<String, dynamic>();
+      if (!mounted) return;
+      final hs = DateTime.tryParse('${j['holidayStart'] ?? ''}');
+      final he = DateTime.tryParse('${j['holidayEnd'] ?? ''}');
+      setState(() {
+        _holiday = j['holidayMode'] == true;
+        if (hs != null && he != null) {
+          _holidayRange = DateTimeRange(start: hs, end: he);
+        }
+        _prep = ((j['prepMins'] as num?)?.toDouble() ?? _prep)
+            .clamp(5, 90)
+            .toDouble();
+        _radius = ((j['deliveryRadiusKm'] as num?)?.toDouble() ?? _radius)
+            .clamp(1, 25)
+            .toDouble();
+        _pushOrders = j['notifyNewOrders'] != false;
+        _pushLowStock = j['notifyLowStock'] != false;
+        _emailReports = j['emailReports'] == true;
+        _loading = false;
+      });
+    } on ApiException {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    try {
+      await VendorApi.instance.updateSettings({
+        'holidayMode': _holiday,
+        if (_holiday && _holidayRange != null)
+          'holidayStart': _holidayRange!.start.toUtc().toIso8601String(),
+        if (_holiday && _holidayRange != null)
+          'holidayEnd': _holidayRange!.end.toUtc().toIso8601String(),
+        'prepMins': _prep.toInt(),
+        'deliveryRadiusKm': _radius,
+        'notifyNewOrders': _pushOrders,
+        'notifyLowStock': _pushLowStock,
+        'emailReports': _emailReports,
+      });
+      if (mounted) wbShowSnack(context, 'Settings saved');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
 
   Future<void> _pickHolidayRange() async {
     final picked = await showDateRangePicker(
@@ -82,7 +143,19 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
         bottom: false,
-        child: ListView(
+        child: _loading
+            ? const Center(
+                child: SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.6,
+                    valueColor:
+                        AlwaysStoppedAnimation(WBColors.surfaceDark),
+                  ),
+                ),
+              )
+            : ListView(
           padding: const EdgeInsets.fromLTRB(
             WBSpacing.screenPadding,
             12,
@@ -309,7 +382,8 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
               label: 'Save changes',
               size: WBButtonSize.lg,
               fullWidth: true,
-              onPressed: () => wbShowSnack(context, 'Settings saved'),
+              loading: _saving,
+              onPressed: _save,
             ),
           ],
         ),

@@ -72,8 +72,8 @@ class VendorApi {
 
   // ─── Extras ────────────────────────────────────────────────────────────
 
-  Future<Map<String, dynamic>> analytics() async {
-    final res = await _api.get('/vendor/analytics');
+  Future<Map<String, dynamic>> analytics({String range = '7d'}) async {
+    final res = await _api.get('/vendor/analytics', query: {'range': range});
     return (res as Map).cast<String, dynamic>();
   }
 
