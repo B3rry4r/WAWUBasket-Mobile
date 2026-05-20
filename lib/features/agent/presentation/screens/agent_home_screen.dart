@@ -8,8 +8,20 @@ import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 
-class AgentHomeScreen extends StatelessWidget {
+class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
+
+  @override
+  State<AgentHomeScreen> createState() => _AgentHomeScreenState();
+}
+
+class _AgentHomeScreenState extends State<AgentHomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    AgentController.instance.loadTraders();
+    AgentController.instance.loadTransactions();
+  }
 
   @override
   Widget build(BuildContext context) {

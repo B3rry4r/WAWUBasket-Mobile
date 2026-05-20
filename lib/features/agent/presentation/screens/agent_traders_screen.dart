@@ -20,6 +20,12 @@ class _AgentTradersScreenState extends State<AgentTradersScreen> {
   String _query = '';
 
   @override
+  void initState() {
+    super.initState();
+    AgentController.instance.loadTraders();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,

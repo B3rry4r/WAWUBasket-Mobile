@@ -2,6 +2,9 @@ import 'dart:ui' show Offset;
 
 import 'package:flutter/foundation.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../data/agent_api.dart';
+
 /// Business classification for traders an agent registers in the field.
 enum BusinessType { farmer, trader, processor, other }
 
@@ -39,6 +42,17 @@ class Trader {
   final BusinessType type;
   final DateTime registeredAt;
   bool synced;
+
+  factory Trader.fromJson(Map<String, dynamic> j) => Trader(
+        id: (j['id'] ?? '').toString(),
+        name: (j['name'] ?? '').toString(),
+        phone: (j['phone'] ?? '').toString(),
+        location: (j['location'] ?? '').toString(),
+        type: BusinessTypeX.fromKey('${j['businessType'] ?? 'other'}'),
+        registeredAt:
+            DateTime.tryParse('${j['registeredAt'] ?? ''}') ?? DateTime.now(),
+        synced: true,
+      );
 }
 
 class AgentTransaction {
@@ -66,6 +80,19 @@ class AgentTransaction {
 
   /// Agent commission. Fixed 0.5% per the build guide.
   int get commissionNaira => (totalNaira * 0.005).round();
+
+  factory AgentTransaction.fromJson(Map<String, dynamic> j) =>
+      AgentTransaction(
+        id: (j['id'] ?? '').toString(),
+        traderId: (j['traderId'] ?? '').toString(),
+        traderName: (j['traderName'] ?? '').toString(),
+        product: (j['product'] ?? '').toString(),
+        quantityKg: (j['quantityKg'] as num?)?.toInt() ?? 0,
+        pricePerKgNaira: (j['pricePerKgNaira'] as num?)?.toInt() ?? 0,
+        recordedAt:
+            DateTime.tryParse('${j['recordedAt'] ?? ''}') ?? DateTime.now(),
+        synced: true,
+      );
 }
 
 class AgentPayout {
@@ -114,25 +141,22 @@ class SyncConflict {
   final int serverPrice;
 }
 
-/// In-memory state for the trade-agent module. Drives the home stats,
-/// trader directory, transactions list, payouts list, and the sync
-/// status indicator.
+/// State for the trade-agent module. Traders + transactions load from the
+/// `/v1/agent` API; field records POST through and fall back to an
+/// unsynced local row when the call fails (offline-first).
 class AgentController {
   AgentController._()
       : traders = ValueNotifier<List<Trader>>([]),
         transactions = ValueNotifier<List<AgentTransaction>>([]),
         payouts = ValueNotifier<List<AgentPayout>>([]),
-        conflicts = ValueNotifier<List<SyncConflict>>([]) {
-    traders.value = _seedTraders();
-    transactions.value = _seedTransactions();
-    payouts.value = _seedPayouts();
-  }
+        conflicts = ValueNotifier<List<SyncConflict>>([]);
   static final AgentController instance = AgentController._();
 
   final ValueNotifier<List<Trader>> traders;
   final ValueNotifier<List<AgentTransaction>> transactions;
   final ValueNotifier<List<AgentPayout>> payouts;
   final ValueNotifier<List<SyncConflict>> conflicts;
+  final _api = AgentApi.instance;
 
   /// Total items waiting on sync, drives the badge on the home hero
   /// and the sync screen's pending counts.
@@ -187,6 +211,33 @@ class AgentController {
     ];
   }
 
+  /// Pulls the agent's linked traders from the API.
+  Future<void> loadTraders() async {
+    try {
+      final raw = await _api.linkedTraders();
+      traders.value = [
+        for (final e in raw)
+          Trader.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place — a later refresh retries.
+    }
+  }
+
+  /// Pulls the last month of recorded transactions from the API.
+  Future<void> loadTransactions() async {
+    try {
+      final res = await _api.earnings(range: 'month');
+      final items = (res['transactions'] as List?) ?? const [];
+      transactions.value = [
+        for (final e in items)
+          AgentTransaction.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place.
+    }
+  }
+
   String addTrader({
     required String name,
     required String phone,
@@ -206,7 +257,27 @@ class AgentController {
       ),
       ...traders.value,
     ];
+    _syncTrader(name, phone, location, type);
     return id;
+  }
+
+  Future<void> _syncTrader(
+    String name,
+    String phone,
+    String location,
+    BusinessType type,
+  ) async {
+    try {
+      await _api.registerTrader({
+        'name': name,
+        'phone': phone,
+        'location': location,
+        'businessType': type.name,
+      });
+      await loadTraders();
+    } on ApiException {
+      // Keep the unsynced local row; the sync screen will retry.
+    }
   }
 
   String addTransaction({
@@ -230,7 +301,28 @@ class AgentController {
       ),
       ...transactions.value,
     ];
+    _syncTransaction(id, traderId, product, quantityKg, pricePerKgNaira);
     return id;
+  }
+
+  Future<void> _syncTransaction(
+    String localId,
+    String traderId,
+    String product,
+    int quantityKg,
+    int pricePerKgNaira,
+  ) async {
+    try {
+      await _api.recordTransaction({
+        'traderId': traderId,
+        'product': product,
+        'quantityKg': quantityKg,
+        'pricePerKgNaira': pricePerKgNaira,
+      });
+      _markSynced(transactionId: localId);
+    } on ApiException {
+      // Keep the unsynced local row.
+    }
   }
 
   String addPayout({
@@ -252,37 +344,57 @@ class AgentController {
       ),
       ...payouts.value,
     ];
+    _syncPayout(id, traderId, amountNaira);
     return id;
   }
 
-  /// Pretend-sync. Flips everything to `synced=true`, then seeds one
-  /// conflict if there were two or more pending items (so the conflict
-  /// resolver has something to do).
-  void runSync() {
-    final pending = pendingSyncCount;
-    for (final t in traders.value) {
-      t.synced = true;
+  Future<void> _syncPayout(
+    String localId,
+    String traderId,
+    int amountNaira,
+  ) async {
+    try {
+      await _api.recordPayout({
+        'traderId': traderId,
+        'amountNaira': amountNaira,
+      });
+      _markSynced(payoutId: localId);
+    } on ApiException {
+      // Keep the unsynced local row.
+    }
+  }
+
+  void _markSynced({String? transactionId, String? payoutId}) {
+    if (transactionId != null) {
+      for (final t in transactions.value) {
+        if (t.id == transactionId) t.synced = true;
+      }
+    }
+    if (payoutId != null) {
+      for (final p in payouts.value) {
+        if (p.id == payoutId) p.synced = true;
+      }
+    }
+    _bump();
+  }
+
+  /// Retries any unsynced field records against the API.
+  Future<void> runSync() async {
+    for (final t in List.of(traders.value)) {
+      if (!t.synced) {
+        await _syncTrader(t.name, t.phone, t.location, t.type);
+      }
     }
     for (final t in transactions.value) {
-      t.synced = true;
+      if (!t.synced) {
+        await _syncTransaction(
+            t.id, t.traderId, t.product, t.quantityKg, t.pricePerKgNaira);
+      }
     }
     for (final p in payouts.value) {
-      p.synced = true;
-    }
-    if (pending >= 2 && transactions.value.isNotEmpty) {
-      final first = transactions.value.first;
-      conflicts.value = [
-        SyncConflict(
-          id: first.id,
-          traderName: first.traderName,
-          product: first.product,
-          localQty: first.quantityKg,
-          localPrice: first.pricePerKgNaira,
-          serverQty: first.quantityKg,
-          // Pretend the server has a higher price recorded.
-          serverPrice: first.pricePerKgNaira + 20,
-        ),
-      ];
+      if (!p.synced) {
+        await _syncPayout(p.id, p.traderId, p.amountNaira);
+      }
     }
     _bump();
   }
@@ -291,7 +403,6 @@ class AgentController {
     final c = conflicts.value.where((c) => c.id == id).firstOrNull;
     if (c == null) return;
     if (!keepLocal) {
-      // Apply server price to the local transaction.
       for (final t in transactions.value) {
         if (t.id == id) {
           transactions.value = [
@@ -325,90 +436,4 @@ class AgentController {
     transactions.value = List.of(transactions.value);
     payouts.value = List.of(payouts.value);
   }
-
-  // ─── Seeds ─────────────────────────────────────────────────────
-
-  List<Trader> _seedTraders() => [
-        Trader(
-          id: 'T-101',
-          name: 'Adamu Bello',
-          phone: '+234 803 421 1820',
-          location: 'Mile 12 Market',
-          type: BusinessType.farmer,
-          registeredAt: DateTime.now().subtract(const Duration(days: 14)),
-        ),
-        Trader(
-          id: 'T-102',
-          name: 'Hauwa Sani',
-          phone: '+234 802 988 0421',
-          location: 'Kano Central',
-          type: BusinessType.trader,
-          registeredAt: DateTime.now().subtract(const Duration(days: 8)),
-        ),
-        Trader(
-          id: 'T-103',
-          name: 'Sani Audu',
-          phone: '+234 805 117 7032',
-          location: 'Idumota',
-          type: BusinessType.processor,
-          registeredAt: DateTime.now().subtract(const Duration(days: 5)),
-        ),
-        Trader(
-          id: 'T-104',
-          name: 'Aisha Garba',
-          phone: '+234 808 110 4200',
-          location: 'Aba',
-          type: BusinessType.trader,
-          registeredAt: DateTime.now().subtract(const Duration(days: 2)),
-        ),
-      ];
-
-  List<AgentTransaction> _seedTransactions() => [
-        AgentTransaction(
-          id: 'TX-101',
-          traderId: 'T-101',
-          traderName: 'Adamu Bello',
-          product: 'Tomatoes',
-          quantityKg: 50,
-          pricePerKgNaira: 360,
-          recordedAt: DateTime.now().subtract(const Duration(minutes: 12)),
-        ),
-        AgentTransaction(
-          id: 'TX-100',
-          traderId: 'T-102',
-          traderName: 'Hauwa Sani',
-          product: 'Maize',
-          quantityKg: 100,
-          pricePerKgNaira: 550,
-          recordedAt: DateTime.now().subtract(const Duration(minutes: 34)),
-        ),
-        AgentTransaction(
-          id: 'TX-099',
-          traderId: 'T-103',
-          traderName: 'Sani Audu',
-          product: 'Onions',
-          quantityKg: 25,
-          pricePerKgNaira: 900,
-          recordedAt: DateTime.now().subtract(const Duration(hours: 1)),
-        ),
-        AgentTransaction(
-          id: 'TX-098',
-          traderId: 'T-104',
-          traderName: 'Aisha Garba',
-          product: 'Cassava',
-          quantityKg: 80,
-          pricePerKgNaira: 280,
-          recordedAt: DateTime.now().subtract(const Duration(hours: 2)),
-        ),
-      ];
-
-  List<AgentPayout> _seedPayouts() => [
-        AgentPayout(
-          id: 'P-101',
-          traderId: 'T-101',
-          traderName: 'Adamu Bello',
-          amountNaira: 18000,
-          recordedAt: DateTime.now().subtract(const Duration(hours: 1)),
-        ),
-      ];
 }
