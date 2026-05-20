@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -8,6 +9,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
 import '../../../shopping/application/mock_data.dart';
+import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
 import '../../domain/models/category_kind.dart';
 import '../widgets/subcategory_chip_row.dart';
@@ -24,14 +26,49 @@ class _CategoryScreenState extends State<CategoryScreen> {
   String? _activeSubcategory;
   bool _premium = false;
 
+  // Category presentation (label, image, subcategory chips) is static app
+  // content; the products + vendors below it load live from the catalog.
+  List<Product> _products = const [];
+  List<Vendor> _vendors = const [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final products =
+          await CatalogApi.instance.items(category: widget.categoryId);
+      final vendors = await CatalogApi.instance.vendors();
+      if (!mounted) return;
+      setState(() {
+        _products = products;
+        _vendors = vendors;
+        _loading = false;
+      });
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.message;
+          _loading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final category = MockData.categoryById(widget.categoryId);
-    final products = MockData.productsForCategory(
-      widget.categoryId,
-      subcategoryId: _activeSubcategory,
-    );
-    final vendors = MockData.vendorsForCategory(widget.categoryId);
+    final products = _products;
+    final vendors = _vendors;
 
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
@@ -114,7 +151,45 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 onQualityChanged: (v) => setState(() => _premium = v),
               ),
             ),
-            if (category.kind == CategoryKind.restaurant)
+            if (_loading)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 48),
+                  child: Center(
+                    child: SizedBox(
+                      width: 26,
+                      height: 26,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        valueColor:
+                            AlwaysStoppedAnimation(WBColors.surfaceDark),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            else if (_error != null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: WBSpacing.screenPadding,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _emptyHint(_error!),
+                      const SizedBox(height: 10),
+                      WBButton(
+                        label: 'Try again',
+                        size: WBButtonSize.sm,
+                        variant: WBButtonVariant.secondary,
+                        onPressed: _load,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else if (category.kind == CategoryKind.restaurant)
               _vendorList(context, vendors)
             else
               _productGrid(context, products),
