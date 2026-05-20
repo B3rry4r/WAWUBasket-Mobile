@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../data/vendor_api.dart';
+
 /// State machine an order moves through from the vendor's perspective.
 /// Mirrors the lifecycle in the build-guide order service (pending →
 /// confirmed → preparing → ready → picked_up → en_route → delivered).
@@ -19,6 +22,13 @@ extension RiderTypeX on RiderType {
         RiderType.bicycle => 'Small parcels, under 2 km',
         RiderType.motorbike => 'Standard food orders',
         RiderType.car => 'Bulky items, multi-vendor baskets',
+      };
+
+  /// The `VehicleType` enum value the API expects.
+  String get apiValue => switch (this) {
+        RiderType.bicycle => 'bicycle',
+        RiderType.motorbike => 'motorbike',
+        RiderType.car => 'car',
       };
 }
 
@@ -55,6 +65,49 @@ extension OrderStageX on OrderStage {
       };
 }
 
+/// Maps an API `OrderState` string onto the vendor-facing [OrderStage].
+OrderStage _stageFromState(String state) => switch (state) {
+      'placed' || 'paid' => OrderStage.pending,
+      'accepted_by_vendor' || 'preparing' => OrderStage.preparing,
+      'ready' => OrderStage.ready,
+      'rider_assigned' || 'picked_up' || 'in_transit' => OrderStage.handover,
+      'delivered' || 'confirmed' || 'settled' => OrderStage.done,
+      'cancelled_by_customer' ||
+      'cancelled_by_vendor' ||
+      'refunded' ||
+      'disputed' =>
+        OrderStage.declined,
+      _ => OrderStage.pending,
+    };
+
+RiderType? _riderTypeFromVehicle(String? vehicle) => switch (vehicle) {
+      'bicycle' => RiderType.bicycle,
+      'motorbike' || 'motorcycle' => RiderType.motorbike,
+      'car' || 'van' || 'truck' => RiderType.car,
+      _ => null,
+    };
+
+/// Money fields cross the wire as BigInt strings; coerce to a plain int.
+int _toInt(dynamic v) {
+  if (v == null) return 0;
+  if (v is int) return v;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
+List<String> _modifiers(dynamic raw) {
+  if (raw is! List) return const [];
+  return [
+    for (final m in raw)
+      if (m is String)
+        m
+      else if (m is Map)
+        (m['label'] ?? m['name'] ?? m['value'] ?? '').toString()
+      else
+        m.toString(),
+  ].where((s) => s.isNotEmpty).toList();
+}
+
 /// One line item inside a [VendorOrder]. `mods` is the free-text summary of
 /// the modifiers the customer chose (e.g., "Hot · extra plantain").
 class OrderItem {
@@ -72,6 +125,14 @@ class OrderItem {
   final String note;
 
   int get lineTotal => qty * priceNaira;
+
+  factory OrderItem.fromJson(Map<String, dynamic> j) => OrderItem(
+        name: (j['title'] ?? j['name'] ?? '').toString(),
+        qty: (j['quantity'] as num?)?.toInt() ?? 1,
+        priceNaira: _toInt(j['unitPrice']),
+        mods: _modifiers(j['modifiers']),
+        note: (j['note'] ?? '').toString(),
+      );
 }
 
 class VendorOrder {
@@ -110,18 +171,58 @@ class VendorOrder {
 
   int get subtotal => items.fold(0, (s, i) => s + i.lineTotal);
   int get total => subtotal + serviceFee + deliveryFee;
+
+  factory VendorOrder.fromJson(Map<String, dynamic> j) {
+    final placedAt = DateTime.tryParse('${j['placedAt'] ?? ''}')?.toLocal();
+    final mins =
+        placedAt == null ? 0 : DateTime.now().difference(placedAt).inMinutes;
+    final customer = (j['customer'] as Map?)?.cast<String, dynamic>();
+    final address = (j['address'] as Map?)?.cast<String, dynamic>();
+    final delivery = (j['delivery'] as Map?)?.cast<String, dynamic>();
+    final items = (j['items'] as List?)
+            ?.map((e) =>
+                OrderItem.fromJson((e as Map).cast<String, dynamic>()))
+            .toList() ??
+        const <OrderItem>[];
+
+    return VendorOrder(
+      id: (j['id'] ?? '').toString(),
+      customerName: (customer?['fullName'] ?? 'Customer').toString(),
+      customerPhone: (customer?['phone'] ?? '').toString(),
+      address: _addressLabel(address, j['dropoffAddress']),
+      items: items,
+      placedMinsAgo: mins < 0 ? 0 : mins,
+      stage: _stageFromState('${j['state'] ?? ''}'),
+      riderType: _riderTypeFromVehicle(delivery?['vehicleType']?.toString()),
+      specialInstructions: (j['notes'] ?? '').toString(),
+      serviceFee: _toInt(j['serviceFee']),
+      deliveryFee: _toInt(j['deliveryFee']),
+    );
+  }
 }
 
-/// In-memory state for the vendor's live order board. Lets the screens
-/// share progress through the stage machine instead of every card
-/// resetting after a snackbar.
+String _addressLabel(Map<String, dynamic>? address, dynamic fallback) {
+  if (address != null) {
+    final line = (address['line'] ?? '').toString();
+    final apt = (address['apartment'] ?? '').toString();
+    final note = (address['noteForRider'] ?? '').toString();
+    return [line, apt, note].where((s) => s.isNotEmpty).join(' · ');
+  }
+  return (fallback ?? '').toString();
+}
+
+/// Live state for the vendor's order board, backed by `/v1/vendor/orders`.
+/// Screens listen to [orders]; mutations update optimistically and then
+/// reconcile against the server.
 class VendorOrdersController {
-  VendorOrdersController._() : orders = ValueNotifier<List<VendorOrder>>([]) {
-    orders.value = _seed();
+  VendorOrdersController._()
+      : orders = ValueNotifier<List<VendorOrder>>([]) {
+    load();
   }
   static final VendorOrdersController instance = VendorOrdersController._();
 
   final ValueNotifier<List<VendorOrder>> orders;
+  final _api = VendorApi.instance;
 
   VendorOrder? byId(String id) {
     for (final o in orders.value) {
@@ -130,17 +231,56 @@ class VendorOrdersController {
     return null;
   }
 
+  /// Pulls the latest order board from the API.
+  Future<void> load() async {
+    try {
+      final raw = await _api.listOrders();
+      orders.value = [
+        for (final e in raw)
+          VendorOrder.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current board in place — a later refresh will retry.
+    }
+  }
+
   /// Advance an order to the next stage. No-op if it's already terminal.
   void advance(String id) {
     final o = byId(id);
     final next = o?.stage.advance;
     if (o == null || next == null) return;
+    final from = o.stage;
     o.stage = next.next;
     if (next.next == OrderStage.handover && o.riderName == null) {
-      o.riderName = 'Tunde Adeyemi';
-      o.riderEta = '12 min to drop off';
+      o.riderEta = 'Finding a rider…';
     }
     _bump();
+    _syncAdvance(o, from);
+  }
+
+  Future<void> _syncAdvance(VendorOrder o, OrderStage from) async {
+    try {
+      switch (from) {
+        case OrderStage.pending:
+          await _api.acceptOrder(o.id);
+          await load();
+        case OrderStage.preparing:
+          await _api.markReady(o.id);
+          await load();
+        case OrderStage.ready:
+          await _api.requestRider(
+            o.id,
+            (o.riderType ?? RiderType.motorbike).apiValue,
+          );
+          await load();
+        case OrderStage.handover:
+        case OrderStage.done:
+        case OrderStage.declined:
+          break;
+      }
+    } on ApiException {
+      // Keep the optimistic stage; the next refresh reconciles it.
+    }
   }
 
   void decline(String id) {
@@ -148,117 +288,17 @@ class VendorOrdersController {
     if (o == null) return;
     o.stage = OrderStage.declined;
     _bump();
+    _syncDecline(id);
+  }
+
+  Future<void> _syncDecline(String id) async {
+    try {
+      await _api.rejectOrder(id);
+      await load();
+    } on ApiException {
+      // Keep the optimistic decline.
+    }
   }
 
   void _bump() => orders.value = List.of(orders.value);
-
-  List<VendorOrder> _seed() => [
-        VendorOrder(
-          id: 'WAWU-8821',
-          customerName: 'Adunni',
-          customerPhone: '+234 803 421 1820',
-          address: '12 Adeola Odeku St, Victoria Island · Lekki gate, blue door',
-          placedMinsAgo: 4,
-          stage: OrderStage.pending,
-          specialInstructions:
-              'No onions please. Extra suya pepper on the side. Call when you arrive, security needs to escort.',
-          items: const [
-            OrderItem(
-              name: 'Jollof rice & grilled chicken',
-              qty: 2,
-              priceNaira: 4500,
-              mods: ['Medium spice', 'Add plantain'],
-              note: 'No onions',
-            ),
-            OrderItem(
-              name: 'Suya platter',
-              qty: 1,
-              priceNaira: 4800,
-              mods: ['Hot', 'Extra peppers'],
-            ),
-          ],
-        ),
-        VendorOrder(
-          id: 'WAWU-8822',
-          customerName: 'Tobi',
-          customerPhone: '+234 802 988 0421',
-          address: '7B Awolowo Rd, Ikoyi · Apt 12',
-          placedMinsAgo: 7,
-          stage: OrderStage.pending,
-          items: const [
-            OrderItem(
-              name: 'Egusi & pounded yam',
-              qty: 1,
-              priceNaira: 5200,
-              mods: ['Add stockfish'],
-            ),
-          ],
-        ),
-        VendorOrder(
-          id: 'WAWU-8820',
-          customerName: 'Kemi',
-          customerPhone: '+234 805 117 7032',
-          address: '24 Glover Rd, Ikoyi',
-          placedMinsAgo: 12,
-          stage: OrderStage.preparing,
-          items: const [
-            OrderItem(
-              name: 'Plantain & beans',
-              qty: 2,
-              priceNaira: 3200,
-              mods: ['Mild spice'],
-            ),
-          ],
-        ),
-        VendorOrder(
-          id: 'WAWU-8819',
-          customerName: 'Daniel',
-          customerPhone: '+234 802 244 9911',
-          address: '3 Bourdillon Rd, Ikoyi',
-          placedMinsAgo: 18,
-          stage: OrderStage.preparing,
-          items: const [
-            OrderItem(
-              name: 'Suya platter',
-              qty: 1,
-              priceNaira: 4800,
-              mods: ['Extra hot'],
-            ),
-          ],
-        ),
-        VendorOrder(
-          id: 'WAWU-8817',
-          customerName: 'Funke',
-          customerPhone: '+234 808 110 4200',
-          address: '12 Akin Adesola St, V/I',
-          placedMinsAgo: 24,
-          stage: OrderStage.ready,
-          riderName: 'Tunde Adeyemi',
-          riderEta: '5 min to pickup',
-          items: const [
-            OrderItem(
-              name: 'Small chops platter',
-              qty: 1,
-              priceNaira: 3500,
-            ),
-          ],
-        ),
-        VendorOrder(
-          id: 'WAWU-8810',
-          customerName: 'Yemi',
-          customerPhone: '+234 803 511 7099',
-          address: '1 Glover Rd, Ikoyi',
-          placedMinsAgo: 62,
-          stage: OrderStage.done,
-          riderName: 'Bola Okoye',
-          riderEta: 'Delivered',
-          items: const [
-            OrderItem(
-              name: 'Jollof rice & grilled chicken',
-              qty: 1,
-              priceNaira: 4500,
-            ),
-          ],
-        ),
-      ];
 }

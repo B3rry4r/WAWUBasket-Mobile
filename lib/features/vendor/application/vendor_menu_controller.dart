@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/network/api_exception.dart';
 import '../../../core/utils/wb_format.dart';
+import '../data/vendor_api.dart';
 
 /// One configurable modifier on a menu item (size, spice, extras). Cleanly
 /// separated from the item itself so the menu-edit screen can add/remove
@@ -20,6 +22,34 @@ class ModifierGroup {
   final String name;
   final List<ModifierOption> options;
   final bool required;
+}
+
+/// Money fields cross the wire as BigInt strings; coerce to a plain int.
+int _money(dynamic v) {
+  if (v == null) return 0;
+  if (v is int) return v;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
+List<ModifierGroup> _parseGroups(dynamic raw) {
+  if (raw is! List) return const [];
+  return [
+    for (final g in raw)
+      if (g is Map)
+        ModifierGroup(
+          name: (g['name'] ?? '').toString(),
+          required: g['required'] == true,
+          options: [
+            for (final o in (g['options'] as List? ?? const []))
+              if (o is Map)
+                ModifierOption(
+                  label: (o['label'] ?? '').toString(),
+                  priceDeltaNaira: _money(o['priceDeltaNaira'] ?? o['price']),
+                ),
+          ],
+        ),
+  ];
 }
 
 /// The vendor-side projection of a menu item. Distinct from the
@@ -49,13 +79,28 @@ class VendorMenuItem {
   List<ModifierGroup> modifierGroups;
 
   String get formattedPrice => wbNaira(priceNaira);
+
+  factory VendorMenuItem.fromJson(Map<String, dynamic> j) {
+    final images = (j['images'] as List?) ?? const [];
+    return VendorMenuItem(
+      id: (j['id'] ?? '').toString(),
+      name: (j['title'] ?? j['name'] ?? '').toString(),
+      description: (j['description'] ?? '').toString(),
+      priceNaira: _money(j['price']),
+      category: (j['category'] ?? 'Mains').toString(),
+      imageUrl: images.isNotEmpty ? images.first.toString() : '',
+      available: '${j['status'] ?? 'active'}' == 'active',
+      prepMins: (j['prepMins'] as num?)?.toInt() ?? 15,
+      modifierGroups: _parseGroups(j['modifierGroups']),
+    );
+  }
 }
 
-/// In-memory store for the vendor's menu. Screens subscribe to [items];
-/// edit / clone / toggle calls mutate the list and notify listeners.
+/// Live menu store backed by `/v1/vendor/products`. Screens subscribe to
+/// [items]; edits update optimistically and POST/PATCH to the API.
 class VendorMenuController {
   VendorMenuController._() : items = ValueNotifier<List<VendorMenuItem>>([]) {
-    items.value = _seed();
+    load();
   }
   static final VendorMenuController instance = VendorMenuController._();
 
@@ -65,6 +110,11 @@ class VendorMenuController {
   static const categories = ['Popular', 'Mains', 'Sides', 'Drinks'];
 
   final ValueNotifier<List<VendorMenuItem>> items;
+  final _api = VendorApi.instance;
+
+  /// True for an item that exists only in this session's optimistic state
+  /// (its create call may still be in flight or have failed).
+  bool _isLocal(String id) => id.startsWith('m-') || id.contains('-copy-');
 
   VendorMenuItem? byId(String id) {
     for (final it in items.value) {
@@ -81,6 +131,19 @@ class VendorMenuController {
     ];
   }
 
+  /// Pulls the vendor's products from the API.
+  Future<void> load() async {
+    try {
+      final raw = await _api.listProducts();
+      items.value = [
+        for (final e in raw)
+          VendorMenuItem.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place — a later refresh will retry.
+    }
+  }
+
   void toggleAvailable(String id) {
     final it = byId(id);
     if (it == null) return;
@@ -94,20 +157,19 @@ class VendorMenuController {
     final src = byId(id);
     if (src == null) return id;
     final newId = '${src.id}-copy-${DateTime.now().millisecondsSinceEpoch}';
-    items.value = [
-      ...items.value,
-      VendorMenuItem(
-        id: newId,
-        name: '${src.name} (copy)',
-        description: src.description,
-        priceNaira: src.priceNaira,
-        category: src.category,
-        imageUrl: src.imageUrl,
-        available: src.available,
-        prepMins: src.prepMins,
-        modifierGroups: src.modifierGroups,
-      ),
-    ];
+    final item = VendorMenuItem(
+      id: newId,
+      name: '${src.name} (copy)',
+      description: src.description,
+      priceNaira: src.priceNaira,
+      category: src.category,
+      imageUrl: src.imageUrl,
+      available: src.available,
+      prepMins: src.prepMins,
+      modifierGroups: src.modifierGroups,
+    );
+    items.value = [...items.value, item];
+    _create(item);
     return newId;
   }
 
@@ -116,6 +178,9 @@ class VendorMenuController {
       for (final it in items.value)
         if (it.id != id) it,
     ];
+    if (!_isLocal(id)) {
+      _api.deleteProduct(id).catchError((_) {});
+    }
   }
 
   /// Save edits to an existing item. Caller can pass any non-null field;
@@ -140,6 +205,15 @@ class VendorMenuController {
     if (available != null) it.available = available;
     if (modifierGroups != null) it.modifierGroups = modifierGroups;
     _bump();
+    if (!_isLocal(id)) {
+      _api.updateProduct(id, {
+        'title': ?name,
+        'description': ?description,
+        'price': ?priceNaira,
+        'category': ?category,
+        'prepMins': ?prepMins,
+      }).catchError((_) {});
+    }
   }
 
   /// Insert a new item authored from the menu-edit form. Returns the new id.
@@ -155,120 +229,38 @@ class VendorMenuController {
     List<ModifierGroup> modifierGroups = const [],
   }) {
     final newId = 'm-${DateTime.now().millisecondsSinceEpoch}';
-    items.value = [
-      ...items.value,
-      VendorMenuItem(
-        id: newId,
-        name: name,
-        description: description,
-        priceNaira: priceNaira,
-        category: category,
-        imageUrl: imageUrl,
-        available: available,
-        prepMins: prepMins,
-        modifierGroups: modifierGroups,
-      ),
-    ];
+    final item = VendorMenuItem(
+      id: newId,
+      name: name,
+      description: description,
+      priceNaira: priceNaira,
+      category: category,
+      imageUrl: imageUrl,
+      available: available,
+      prepMins: prepMins,
+      modifierGroups: modifierGroups,
+    );
+    items.value = [...items.value, item];
+    _create(item);
     return newId;
   }
 
+  /// Pushes a freshly-added item to the API. The optimistic row keeps its
+  /// local id for the session; the next [load] reconciles to the real one.
+  Future<void> _create(VendorMenuItem item) async {
+    try {
+      await _api.createProduct({
+        'title': item.name,
+        'description': item.description,
+        'price': item.priceNaira,
+        'category': item.category,
+        'prepMins': item.prepMins,
+        'images': [if (item.imageUrl.isNotEmpty) item.imageUrl],
+      });
+    } on ApiException {
+      // Keep the optimistic row; the vendor can retry the save.
+    }
+  }
+
   void _bump() => items.value = List.of(items.value);
-
-  List<VendorMenuItem> _seed() => [
-        VendorMenuItem(
-          id: 'm1',
-          name: 'Jollof rice & grilled chicken',
-          description:
-              'Smoky party-style jollof, charcoal-grilled chicken, fried plantain.',
-          priceNaira: 4500,
-          category: 'Popular',
-          imageUrl:
-              'https://images.unsplash.com/photo-1604908554049-3a3d3f9d3128?w=600&q=80&auto=format&fit=crop',
-          prepMins: 25,
-          modifierGroups: const [
-            ModifierGroup(
-              name: 'Spice level',
-              required: true,
-              options: [
-                ModifierOption(label: 'Mild'),
-                ModifierOption(label: 'Medium'),
-                ModifierOption(label: 'Hot'),
-                ModifierOption(label: 'Extra hot'),
-              ],
-            ),
-            ModifierGroup(
-              name: 'Add-ons',
-              options: [
-                ModifierOption(label: 'Add plantain', priceDeltaNaira: 500),
-                ModifierOption(label: 'Add egg', priceDeltaNaira: 400),
-                ModifierOption(label: 'Extra chicken', priceDeltaNaira: 1500),
-              ],
-            ),
-          ],
-        ),
-        VendorMenuItem(
-          id: 'm2',
-          name: 'Egusi & pounded yam',
-          description:
-              'Hand-pounded yam, rich egusi, assorted meats and stockfish.',
-          priceNaira: 5200,
-          category: 'Mains',
-          imageUrl:
-              'https://images.unsplash.com/photo-1568827999250-3f6afff96e66?w=600&q=80&auto=format&fit=crop',
-          prepMins: 35,
-          modifierGroups: const [
-            ModifierGroup(
-              name: 'Protein',
-              required: true,
-              options: [
-                ModifierOption(label: 'Mixed meat'),
-                ModifierOption(label: 'Beef only'),
-                ModifierOption(label: 'Goat meat', priceDeltaNaira: 700),
-              ],
-            ),
-          ],
-        ),
-        VendorMenuItem(
-          id: 'm3',
-          name: 'Suya platter',
-          description: 'Char-grilled spiced beef, onions, fresh tomato salad.',
-          priceNaira: 4800,
-          category: 'Popular',
-          imageUrl:
-              'https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?w=600&q=80&auto=format&fit=crop',
-          prepMins: 20,
-        ),
-        VendorMenuItem(
-          id: 'm4',
-          name: 'Plantain & beans',
-          description: 'Soft beans porridge served with ripe fried plantain.',
-          priceNaira: 3200,
-          category: 'Mains',
-          imageUrl:
-              'https://images.unsplash.com/photo-1611764596828-eda4d10ec4f6?w=600&q=80&auto=format&fit=crop',
-          prepMins: 25,
-          available: false,
-        ),
-        VendorMenuItem(
-          id: 'm5',
-          name: 'Small chops platter',
-          description: 'Puff puff, samosa, spring roll, peppered gizzard.',
-          priceNaira: 3500,
-          category: 'Sides',
-          imageUrl:
-              'https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=600&q=80&auto=format&fit=crop',
-          prepMins: 15,
-        ),
-        VendorMenuItem(
-          id: 'm6',
-          name: 'Zobo (chilled)',
-          description: 'Hibiscus drink, ginger, pineapple, a squeeze of lime.',
-          priceNaira: 1200,
-          category: 'Drinks',
-          imageUrl:
-              'https://images.unsplash.com/photo-1567448400815-59d5b8b6a36e?w=600&q=80&auto=format&fit=crop',
-          prepMins: 5,
-        ),
-      ];
 }
-
