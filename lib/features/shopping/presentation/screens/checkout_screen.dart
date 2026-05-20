@@ -1,22 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/cart_controller.dart';
+import '../../data/orders_api.dart';
 import '../widgets/sticky_action_bar.dart';
 
-class CheckoutScreen extends StatefulWidget {
+class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
   @override
-  State<CheckoutScreen> createState() => _CheckoutScreenState();
+  ConsumerState<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
-class _CheckoutScreenState extends State<CheckoutScreen> {
+class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   String _payment = 'card';
   bool _scheduled = false;
+  bool _placing = false;
   _ScheduleSlot? _slot;
+
+  /// Converts the picked slot into an ISO datetime for the API.
+  String? _scheduledForIso() {
+    if (!_scheduled || _slot == null) return null;
+    final dayOffset = int.tryParse(_slot!.dateKey.substring(1)) ?? 0;
+    final slotIndex = int.tryParse(_slot!.timeKey.substring(1)) ?? 1;
+    final base = DateTime.now().add(Duration(days: dayOffset));
+    return DateTime(base.year, base.month, base.day, 10 + slotIndex)
+        .toIso8601String();
+  }
+
+  Future<void> _placeOrder() async {
+    setState(() => _placing = true);
+    try {
+      final order = await OrdersApi.instance.placeOrder(
+        scheduledFor: _scheduledForIso(),
+      );
+      // The API empties the cart server-side on order creation.
+      await ref.read(cartControllerProvider.notifier).load();
+      if (!mounted) return;
+      context.go('${AppRoutes.tracking}?orderId=${order['id']}');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _placing = false);
+    }
+  }
 
   static const _payOptions = [
     (id: 'card', icon: WBIconName.card, label: 'Debit card', sub: '•••• 4218'),
@@ -47,6 +80,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final cart = ref.watch(cartControllerProvider);
+    final lines = cart.items;
+    final subtotal = lines.fold<int>(0, (s, l) => s + l.total);
+    const delivery = 600;
+    const serviceFee = 200;
+    final total = subtotal + delivery + serviceFee;
+
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: Stack(
@@ -173,10 +213,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   label: 'Your basket',
                   child: Column(
                     children: [
-                      const _Line(label: 'Jollof rice × 2', value: '₦9,000'),
-                      const SizedBox(height: 10),
-                      const _Line(label: 'Suya platter × 1', value: '₦4,800'),
-                      const SizedBox(height: 14),
+                      for (final l in lines) ...[
+                        _Line(
+                          label: '${l.product.name} × ${l.quantity}',
+                          value: l.totalLabel,
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                      const SizedBox(height: 4),
                       const WBDivider(),
                       const SizedBox(height: 14),
                       const _Line(label: 'Delivery', value: '₦600'),
@@ -195,7 +239,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           ),
                           Text(
-                            '₦14,600',
+                            '₦${_n(total)}',
                             style: WBTypography.body.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 17,
@@ -240,15 +284,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 label: 'Place order',
                 fullWidth: true,
                 size: WBButtonSize.lg,
-                trailing: const Text(
-                  '₦14,600',
-                  style: TextStyle(
+                loading: _placing,
+                trailing: Text(
+                  '₦${_n(total)}',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                onPressed: () => context.go(AppRoutes.tracking),
+                onPressed: lines.isEmpty ? null : _placeOrder,
               ),
             ),
           ),
@@ -256,6 +301,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
+}
+
+String _n(int v) {
+  final s = v.toString();
+  final buf = StringBuffer();
+  for (var i = 0; i < s.length; i++) {
+    if (i != 0 && (s.length - i) % 3 == 0) buf.write(',');
+    buf.write(s[i]);
+  }
+  return buf.toString();
 }
 
 class _Section extends StatelessWidget {

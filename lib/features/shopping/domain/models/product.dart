@@ -55,23 +55,43 @@ class CartLine extends Equatable {
     required this.product,
     required this.quantity,
     this.note,
+    this.cartItemId,
   });
 
   final Product product;
   final int quantity;
   final String? note;
 
+  /// The API `cart_items.id` — needed to PATCH/DELETE the line.
+  final String? cartItemId;
+
   int get total => product.priceNaira * quantity;
   String get totalLabel => '₦${_n(total)}';
 
-  CartLine copyWith({Product? product, int? quantity, String? note}) => CartLine(
+  CartLine copyWith({
+    Product? product,
+    int? quantity,
+    String? note,
+    String? cartItemId,
+  }) =>
+      CartLine(
         product: product ?? this.product,
         quantity: quantity ?? this.quantity,
         note: note ?? this.note,
+        cartItemId: cartItemId ?? this.cartItemId,
+      );
+
+  /// Parses one entry of the API `/v1/cart` `items` array.
+  factory CartLine.fromJson(Map<String, dynamic> j) => CartLine(
+        cartItemId: (j['id'] ?? '').toString(),
+        product: Product.fromJson(
+            (j['item'] as Map?)?.cast<String, dynamic>() ?? const {}),
+        quantity: (j['quantity'] as num?)?.toInt() ?? 1,
+        note: j['note'] as String?,
       );
 
   @override
-  List<Object?> get props => [product, quantity, note];
+  List<Object?> get props => [cartItemId, product, quantity, note];
 }
 
 String _n(int v) {

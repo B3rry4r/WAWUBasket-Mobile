@@ -1,48 +1,94 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../data/cart_api.dart';
 import '../domain/models/product.dart';
-import 'mock_data.dart';
 
-/// Minimal in-memory cart for the prototype. Lines come pre-seeded from the
-/// design's mock data so the screens render with real content.
-class CartController extends StateNotifier<List<CartLine>> {
-  CartController() : super(List.of(MockData.cart));
+/// Snapshot of the cart the screens render.
+class CartState {
+  const CartState({
+    this.items = const [],
+    this.loading = true,
+    this.error,
+  });
 
-  void add(Product product, {int qty = 1, String? note}) {
-    final idx = state.indexWhere((l) => l.product.id == product.id);
-    if (idx == -1) {
-      state = [...state, CartLine(product: product, quantity: qty, note: note)];
-    } else {
-      final updated = [...state];
-      updated[idx] = updated[idx].copyWith(
-        quantity: updated[idx].quantity + qty,
-        note: note ?? updated[idx].note,
+  final List<CartLine> items;
+  final bool loading;
+  final String? error;
+
+  CartState copyWith({
+    List<CartLine>? items,
+    bool? loading,
+    String? error,
+  }) =>
+      CartState(
+        items: items ?? this.items,
+        loading: loading ?? this.loading,
+        error: error,
       );
-      state = updated;
+}
+
+/// API-backed cart. Every mutation hits `/v1/cart` then refreshes from the
+/// server so the basket stays the single source of truth.
+class CartController extends StateNotifier<CartState> {
+  CartController() : super(const CartState()) {
+    load();
+  }
+
+  final _api = CartApi.instance;
+
+  Future<void> load() async {
+    state = state.copyWith(loading: true, error: null);
+    try {
+      final items = await _api.getCart();
+      state = CartState(items: items, loading: false);
+    } on ApiException catch (e) {
+      state = state.copyWith(loading: false, error: e.message);
     }
   }
 
-  void setQuantity(String productId, int qty) {
-    final updated = <CartLine>[];
-    for (final l in state) {
-      if (l.product.id == productId) {
-        if (qty > 0) updated.add(l.copyWith(quantity: qty));
-      } else {
-        updated.add(l);
-      }
+  Future<void> add(Product product, {int qty = 1, String? note}) async {
+    try {
+      await _api.addItem(product.id, qty, note: note);
+      await load();
+    } on ApiException catch (e) {
+      state = state.copyWith(error: e.message);
     }
-    state = updated;
   }
 
-  void remove(String productId) {
-    state = state.where((l) => l.product.id != productId).toList();
+  Future<void> setQuantity(String productId, int qty) async {
+    final line = state.items
+        .where((l) => l.product.id == productId)
+        .cast<CartLine?>()
+        .firstWhere((_) => true, orElse: () => null);
+    if (line?.cartItemId == null) return;
+    try {
+      await _api.updateItem(line!.cartItemId!, qty);
+      await load();
+    } on ApiException catch (e) {
+      state = state.copyWith(error: e.message);
+    }
   }
 
-  int get subtotal => state.fold(0, (s, l) => s + l.total);
-  int get itemCount => state.fold(0, (s, l) => s + l.quantity);
+  Future<void> remove(String productId) async {
+    final line = state.items
+        .where((l) => l.product.id == productId)
+        .cast<CartLine?>()
+        .firstWhere((_) => true, orElse: () => null);
+    if (line?.cartItemId == null) return;
+    try {
+      await _api.removeItem(line!.cartItemId!);
+      await load();
+    } on ApiException catch (e) {
+      state = state.copyWith(error: e.message);
+    }
+  }
+
+  int get subtotal => state.items.fold(0, (s, l) => s + l.total);
+  int get itemCount => state.items.fold(0, (s, l) => s + l.quantity);
 }
 
 final cartControllerProvider =
-    StateNotifierProvider<CartController, List<CartLine>>(
+    StateNotifierProvider<CartController, CartState>(
   (ref) => CartController(),
 );

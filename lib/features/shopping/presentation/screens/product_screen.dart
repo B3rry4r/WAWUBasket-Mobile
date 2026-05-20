@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -6,22 +7,24 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/cart_controller.dart';
 import '../../data/catalog_api.dart';
 import '../../domain/models/product.dart';
 import '../widgets/sticky_action_bar.dart';
 
-class ProductScreen extends StatefulWidget {
+class ProductScreen extends ConsumerStatefulWidget {
   const ProductScreen({super.key, this.productId});
 
   /// Id of the tapped product.
   final String? productId;
 
   @override
-  State<ProductScreen> createState() => _ProductScreenState();
+  ConsumerState<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenState extends ConsumerState<ProductScreen> {
   int _qty = 1;
+  bool _adding = false;
   Product? _product;
   String? _error;
 
@@ -44,6 +47,23 @@ class _ProductScreenState extends State<ProductScreen> {
       setState(() => _product = p);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  Future<void> _addToBasket() async {
+    final product = _product;
+    if (product == null) return;
+    setState(() => _adding = true);
+    await ref
+        .read(cartControllerProvider.notifier)
+        .add(product, qty: _qty);
+    if (!mounted) return;
+    setState(() => _adding = false);
+    final error = ref.read(cartControllerProvider).error;
+    if (error != null) {
+      wbShowSnack(context, error);
+    } else {
+      context.push(AppRoutes.cart);
     }
   }
 
@@ -186,6 +206,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 label: 'Add to basket',
                 fullWidth: true,
                 size: WBButtonSize.lg,
+                loading: _adding,
                 trailing: Text(
                   '₦${_n(total)}',
                   style: const TextStyle(
@@ -194,7 +215,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                onPressed: () => context.push(AppRoutes.cart),
+                onPressed: _addToBasket,
               ),
             ),
           ),

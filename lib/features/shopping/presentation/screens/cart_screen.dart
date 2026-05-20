@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
-import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/cart_controller.dart';
 import '../widgets/sticky_action_bar.dart';
@@ -16,10 +15,47 @@ class CartScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cart = ref.watch(cartControllerProvider);
     final controller = ref.read(cartControllerProvider.notifier);
+
+    if (cart.loading) {
+      return _scaffold(
+        context,
+        const Center(
+          child: SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.6,
+              valueColor: AlwaysStoppedAnimation(WBColors.surfaceDark),
+            ),
+          ),
+        ),
+      );
+    }
+    if (cart.error != null) {
+      return _scaffold(
+        context,
+        _CenterHint(
+          text: cart.error!,
+          actionLabel: 'Try again',
+          onAction: controller.load,
+        ),
+      );
+    }
+    if (cart.items.isEmpty) {
+      return _scaffold(
+        context,
+        const _CenterHint(text: 'Your basket is empty.'),
+      );
+    }
+
+    final lines = cart.items;
     final subtotal = controller.subtotal;
     const delivery = 600;
     const serviceFee = 200;
     final total = subtotal + delivery + serviceFee;
+    final vendorName = lines.first.product.vendorName.isEmpty
+        ? 'Your vendor'
+        : lines.first.product.vendorName;
 
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
@@ -40,13 +76,10 @@ class CartScreen extends ConsumerWidget {
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(width: 14),
                     Expanded(
-                      child: Text(
-                        'Your basket',
-                        style: WBTypography.page,
-                      ),
+                      child: Text('Your basket', style: WBTypography.page),
                     ),
                     Text(
-                      '1 vendor · ${controller.itemCount} items',
+                      '${controller.itemCount} items',
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                         fontSize: 13,
@@ -74,21 +107,23 @@ class CartScreen extends ConsumerWidget {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            const Expanded(
-                              child: _Heading(
-                                title: 'Mama Cass Kitchen',
-                                subtitle: 'Arrives in 25–35 min',
+                            Expanded(
+                              child: Text(
+                                vendorName,
+                                style: WBTypography.body.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
                       const WBDivider(),
-                      for (var i = 0; i < cart.length; i++) ...[
+                      for (var i = 0; i < lines.length; i++) ...[
                         Padding(
                           padding: const EdgeInsets.all(WBSpacing.md - 2),
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
@@ -96,26 +131,28 @@ class CartScreen extends ConsumerWidget {
                                   width: 60,
                                   height: 60,
                                   child: WBNetworkImage(
-                                    url: cart[i].product.imageUrl,
+                                    url: lines[i].product.imageUrl,
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      cart[i].product.name,
+                                      lines[i].product.name,
                                       style: WBTypography.body.copyWith(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 14,
                                       ),
                                     ),
-                                    if (cart[i].note != null) ...[
+                                    if (lines[i].note != null &&
+                                        lines[i].note!.isNotEmpty) ...[
                                       const SizedBox(height: 2),
                                       Text(
-                                        cart[i].note!,
+                                        lines[i].note!,
                                         style: WBTypography.caption.copyWith(
                                           color: WBColors.fgSecondary,
                                         ),
@@ -123,7 +160,7 @@ class CartScreen extends ConsumerWidget {
                                     ],
                                     const SizedBox(height: 6),
                                     Text(
-                                      cart[i].totalLabel,
+                                      lines[i].totalLabel,
                                       style: WBTypography.body.copyWith(
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -132,54 +169,17 @@ class CartScreen extends ConsumerWidget {
                                 ),
                               ),
                               WBQtyStepper(
-                                value: cart[i].quantity,
+                                value: lines[i].quantity,
                                 onChanged: (q) => controller.setQuantity(
-                                  cart[i].product.id,
+                                  lines[i].product.id,
                                   q,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        if (i != cart.length - 1) const WBDivider(),
+                        if (i != lines.length - 1) const WBDivider(),
                       ],
-                    ],
-                  ),
-                ),
-                const SizedBox(height: WBSpacing.md),
-                // Promo code
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: WBColors.bgPrimary,
-                    borderRadius: BorderRadius.circular(WBRadius.pill),
-                    border: Border.all(color: WBColors.bgDivider),
-                    boxShadow: WBShadows.card,
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 16),
-                      const WBIcon(
-                        WBIconName.star,
-                        size: 16,
-                        color: WBColors.fgPlaceholder,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          'Promo code',
-                          style: WBTypography.caption.copyWith(
-                            color: WBColors.fgPlaceholder,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                      WBButton(
-                        label: 'Apply',
-                        size: WBButtonSize.sm,
-                        onPressed: () =>
-                            wbShowSnack(context, 'Promo code applied'),
-                      ),
                     ],
                   ),
                 ),
@@ -187,11 +187,14 @@ class CartScreen extends ConsumerWidget {
                 WBCard(
                   child: Column(
                     children: [
-                      _SummaryRow(label: 'Subtotal', value: '₦${_n(subtotal)}'),
+                      _SummaryRow(
+                          label: 'Subtotal', value: '₦${_n(subtotal)}'),
                       const SizedBox(height: 12),
-                      const _SummaryRow(label: 'Delivery fee', value: '₦600'),
+                      const _SummaryRow(
+                          label: 'Delivery fee', value: '₦600'),
                       const SizedBox(height: 12),
-                      const _SummaryRow(label: 'Service fee', value: '₦200'),
+                      const _SummaryRow(
+                          label: 'Service fee', value: '₦200'),
                       const SizedBox(height: 14),
                       const WBDivider(),
                       const SizedBox(height: 14),
@@ -231,6 +234,35 @@ class CartScreen extends ConsumerWidget {
       ),
     );
   }
+
+  Widget _scaffold(BuildContext context, Widget body) {
+    return Scaffold(
+      backgroundColor: WBColors.bgSecondary,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                WBSpacing.screenPadding,
+                12,
+                WBSpacing.screenPadding,
+                0,
+              ),
+              child: Row(
+                children: [
+                  WBBackChip(onPressed: () => context.pop()),
+                  const SizedBox(width: 14),
+                  Text('Your basket', style: WBTypography.page),
+                ],
+              ),
+            ),
+            Expanded(child: body),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 String _n(int v) {
@@ -243,26 +275,37 @@ String _n(int v) {
   return buf.toString();
 }
 
-class _Heading extends StatelessWidget {
-  const _Heading({required this.title, required this.subtitle});
-  final String title;
-  final String subtitle;
+class _CenterHint extends StatelessWidget {
+  const _CenterHint({required this.text, this.actionLabel, this.onAction});
+  final String text;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: WBTypography.body.copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-          ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(WBSpacing.screenPadding),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
+            ),
+            if (actionLabel != null && onAction != null) ...[
+              const SizedBox(height: 14),
+              WBButton(
+                label: actionLabel!,
+                size: WBButtonSize.sm,
+                variant: WBButtonVariant.secondary,
+                onPressed: onAction,
+              ),
+            ],
+          ],
         ),
-        const SizedBox(height: 1),
-        Text(subtitle, style: WBTypography.caption),
-      ],
+      ),
     );
   }
 }
