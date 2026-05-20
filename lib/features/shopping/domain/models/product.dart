@@ -29,6 +29,23 @@ class Product extends Equatable {
 
   String get formattedPrice => '₦${_n(priceNaira)}';
 
+  /// Builds a [Product] from the API's `catalog_items` payload. `price`
+  /// arrives as a BigInt-string; `images` is a URL list.
+  factory Product.fromJson(Map<String, dynamic> j) {
+    final images = (j['images'] as List?)?.cast<dynamic>() ?? const [];
+    return Product(
+      id: (j['id'] ?? '').toString(),
+      name: (j['title'] ?? j['name'] ?? '').toString(),
+      description: (j['description'] ?? '').toString(),
+      priceNaira: int.tryParse('${j['price'] ?? 0}') ?? 0,
+      vendorName: (j['vendorName'] ?? '').toString(),
+      imageUrl: images.isNotEmpty ? images.first.toString() : '',
+      categoryId: (j['category'] ?? 'all').toString(),
+      subcategoryId: (j['subcategory'] ?? '').toString(),
+      unit: j['unit'] as String?,
+    );
+  }
+
   @override
   List<Object?> get props => [id, name, priceNaira, categoryId, subcategoryId];
 }

@@ -39,6 +39,28 @@ class Vendor extends Equatable {
   String get etaShort => '$etaMax';
   String get feeLabel => deliveryFee == 0 ? 'Free' : '₦$deliveryFee';
 
+  /// Builds a [Vendor] from the API's `/v1/vendors` payload. The list
+  /// endpoint is sparse, so rating/cuisine/fee fall back to sane defaults
+  /// and the storefront detail (`/v1/vendors/:id`) fills the rest in.
+  factory Vendor.fromJson(Map<String, dynamic> j) {
+    final name = (j['name'] ?? j['businessName'] ?? 'Vendor').toString();
+    return Vendor(
+      id: (j['id'] ?? j['userId'] ?? '').toString(),
+      name: name,
+      shortName: (j['shortName'] ?? name).toString(),
+      cuisine: (j['cuisine'] ?? j['description'] ?? '').toString(),
+      rating: double.tryParse('${j['rating'] ?? ''}') ?? 4.6,
+      reviews: (j['reviews'] ?? '').toString(),
+      etaMin: (j['etaMin'] as num?)?.toInt() ?? 20,
+      etaMax: (j['etaMax'] as num?)?.toInt() ?? 35,
+      deliveryFee: (j['deliveryFee'] as num?)?.toInt() ?? 600,
+      imageUrl: (j['imageUrl'] ?? j['logoKey'] ?? '').toString(),
+      badge: j['badge'] as String?,
+      tags: (j['tags'] as List?)?.map((e) => e.toString()).toList() ??
+          const [],
+    );
+  }
+
   @override
   List<Object?> get props =>
       [id, name, cuisine, rating, etaMin, etaMax, deliveryFee, badge, tags];
