@@ -317,7 +317,9 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.addAddress,
-        builder: (_, _) => const AddAddressScreen(),
+        builder: (_, state) => AddAddressScreen(
+          addressId: state.uri.queryParameters['id'],
+        ),
       ),
       GoRoute(
         path: AppRoutes.walletTopUp,

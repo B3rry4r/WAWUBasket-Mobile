@@ -1,13 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/application/wb_images.dart';
+import '../../application/profile_controller.dart';
 
-class PersonalInfoScreen extends StatelessWidget {
+class PersonalInfoScreen extends StatefulWidget {
   const PersonalInfoScreen({super.key});
+
+  @override
+  State<PersonalInfoScreen> createState() => _PersonalInfoScreenState();
+}
+
+const _months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _phone = TextEditingController();
+  final _dob = TextEditingController();
+  bool _busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    _phone.dispose();
+    _dob.dispose();
+    super.dispose();
+  }
+
+  Future<void> _load() async {
+    final cached = ProfileController.instance.profile.value;
+    if (cached != null) _apply(cached);
+    await ProfileController.instance.load();
+    final fresh = ProfileController.instance.profile.value;
+    if (fresh != null && mounted) setState(() => _apply(fresh));
+  }
+
+  void _apply(UserProfile p) {
+    _name.text = p.fullName;
+    _email.text = p.email;
+    _phone.text = p.phone;
+    final d = p.dateOfBirth;
+    _dob.text =
+        d == null ? '' : '${d.day} ${_months[d.month - 1]} ${d.year}';
+  }
+
+  Future<void> _save() async {
+    if (_name.text.trim().isEmpty) {
+      wbShowSnack(context, 'Enter your full name.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await ProfileController.instance.update(
+        fullName: _name.text.trim(),
+        email: _email.text.trim(),
+      );
+      if (!mounted) return;
+      wbShowSnack(context, 'Changes saved');
+      context.pop();
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,38 +159,39 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
-            const WBInput(
+            WBInput(
               label: 'Full name',
-              initialValue: 'Brooks Adesanya',
+              controller: _name,
               leadingIcon: WBIconName.user,
             ),
             const SizedBox(height: WBSpacing.md),
-            const WBInput(
+            WBInput(
               label: 'Email',
-              initialValue: 'brooks@wawu.africa',
+              controller: _email,
               leadingIcon: WBIconName.message,
+              keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: WBSpacing.md),
-            const WBInput(
+            WBInput(
               label: 'Phone number',
-              initialValue: '+234 803 421 1820',
+              controller: _phone,
               leadingIcon: WBIconName.phone,
+              enabled: false,
             ),
             const SizedBox(height: WBSpacing.md),
-            const WBInput(
+            WBInput(
               label: 'Date of birth',
-              initialValue: '14 Mar 1996',
+              controller: _dob,
               leadingIcon: WBIconName.clock,
+              enabled: false,
             ),
             const SizedBox(height: WBSpacing.xl),
             WBButton(
               label: 'Save changes',
               size: WBButtonSize.lg,
               fullWidth: true,
-              onPressed: () {
-                wbShowSnack(context, 'Changes saved');
-                context.pop();
-              },
+              loading: _busy,
+              onPressed: _save,
             ),
           ],
         ),

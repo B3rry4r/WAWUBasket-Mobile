@@ -7,11 +7,23 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../shopping/application/wb_images.dart';
+import '../../application/profile_controller.dart';
 import '../widgets/account_menu.dart';
 import '../widgets/role_switcher_sheet.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ProfileController.instance.load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,26 +96,33 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 14),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Brooks Adesanya',
-                          style: WBTypography.cardTitle.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: WBColors.fgHeader,
-                            fontSize: 20,
+                    child: ValueListenableBuilder(
+                      valueListenable: ProfileController.instance.profile,
+                      builder: (_, profile, _) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            profile?.fullName.isNotEmpty == true
+                                ? profile!.fullName
+                                : 'WAWUBasket user',
+                            style: WBTypography.cardTitle.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: WBColors.fgHeader,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          'brooks@wawu.africa',
-                          style: WBTypography.caption.copyWith(
-                            color: WBColors.fgSecondary,
-                            fontSize: 13,
+                          const SizedBox(height: 3),
+                          Text(
+                            profile?.email.isNotEmpty == true
+                                ? profile!.email
+                                : (profile?.phone ?? ''),
+                            style: WBTypography.caption.copyWith(
+                              color: WBColors.fgSecondary,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   GestureDetector(

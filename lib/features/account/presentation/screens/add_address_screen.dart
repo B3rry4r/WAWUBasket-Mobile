@@ -1,21 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/address_controller.dart';
 
 class AddAddressScreen extends StatefulWidget {
-  const AddAddressScreen({super.key, this.editing = false});
-  final bool editing;
+  const AddAddressScreen({super.key, this.addressId});
+
+  /// When set, the screen edits that saved address instead of adding one.
+  final String? addressId;
 
   @override
   State<AddAddressScreen> createState() => _AddAddressScreenState();
 }
 
 class _AddAddressScreenState extends State<AddAddressScreen> {
+  final _line = TextEditingController();
+  final _apartment = TextEditingController();
+  final _note = TextEditingController();
   bool _saveDefault = false;
   String _label = 'home';
+  bool _busy = false;
+
+  bool get _editing => widget.addressId != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_editing) _loadForEdit();
+  }
+
+  @override
+  void dispose() {
+    _line.dispose();
+    _apartment.dispose();
+    _note.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadForEdit() async {
+    var a = AddressController.instance.byId(widget.addressId!);
+    if (a == null) {
+      await AddressController.instance.load();
+      a = AddressController.instance.byId(widget.addressId!);
+    }
+    if (a == null || !mounted) return;
+    final addr = a;
+    setState(() {
+      _line.text = addr.line;
+      _apartment.text = addr.apartment;
+      _note.text = addr.noteForRider;
+      _label = addr.label;
+      _saveDefault = addr.isDefault;
+    });
+  }
+
+  Future<void> _save() async {
+    if (_line.text.trim().isEmpty) {
+      wbShowSnack(context, 'Enter the address line.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      final ctrl = AddressController.instance;
+      if (_editing) {
+        await ctrl.update(
+          widget.addressId!,
+          label: _label,
+          line: _line.text.trim(),
+          apartment: _apartment.text.trim(),
+          noteForRider: _note.text.trim(),
+          isDefault: _saveDefault,
+        );
+      } else {
+        await ctrl.create(
+          label: _label,
+          line: _line.text.trim(),
+          apartment: _apartment.text.trim(),
+          noteForRider: _note.text.trim(),
+          isDefault: _saveDefault,
+        );
+      }
+      if (!mounted) return;
+      wbShowSnack(context, _editing ? 'Address updated' : 'Address saved');
+      context.pop();
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +112,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
                 Text(
-                  widget.editing ? 'Edit address' : 'Add address',
+                  _editing ? 'Edit address' : 'Add address',
                   style: WBTypography.page,
                 ),
               ],
@@ -67,24 +144,25 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            const WBInput(
+            WBInput(
               label: 'Address line',
               placeholder: 'Street, area, city',
               leadingIcon: WBIconName.pin,
-              initialValue: '12 Adeola Odeku St, Victoria Island',
+              controller: _line,
             ),
             const SizedBox(height: WBSpacing.md),
-            const WBInput(
+            WBInput(
               label: 'Apartment / unit',
               placeholder: 'Optional',
               leadingIcon: WBIconName.home,
-              initialValue: 'Apt 4B',
+              controller: _apartment,
             ),
             const SizedBox(height: WBSpacing.md),
-            const WBInput(
+            WBInput(
               label: 'Note for the rider',
               placeholder: 'Use the gate on Akin Adesola',
               leadingIcon: WBIconName.message,
+              controller: _note,
             ),
             const SizedBox(height: WBSpacing.lg),
             GestureDetector(
@@ -130,18 +208,11 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             ),
             const SizedBox(height: WBSpacing.xl),
             WBButton(
-              label: widget.editing ? 'Save changes' : 'Save address',
+              label: _editing ? 'Save changes' : 'Save address',
               size: WBButtonSize.lg,
               fullWidth: true,
-              onPressed: () {
-                wbShowSnack(
-                  context,
-                  widget.editing
-                      ? 'Address updated'
-                      : 'Address saved',
-                );
-                context.pop();
-              },
+              loading: _busy,
+              onPressed: _save,
             ),
           ],
         ),
