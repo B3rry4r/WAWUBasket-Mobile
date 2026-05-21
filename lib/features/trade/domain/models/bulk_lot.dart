@@ -32,6 +32,22 @@ class BulkLot extends Equatable {
   String get unitPriceLabel => wbNaira(unitPriceNaira);
   String get minOrderLabel => 'Min $minOrder ${minOrder == 1 ? 'unit' : 'units'}';
 
+  factory BulkLot.fromJson(Map<String, dynamic> j) {
+    final images = (j['images'] as List?) ?? const [];
+    final price = j['price'];
+    return BulkLot(
+      id: (j['id'] ?? '').toString(),
+      produce: (j['title'] ?? j['produce'] ?? '').toString(),
+      lotSize: (j['unit'] ?? j['lotSize'] ?? '').toString(),
+      unitPriceNaira:
+          price is num ? price.toInt() : int.tryParse('${price ?? 0}') ?? 0,
+      minOrder: (j['moq'] as num?)?.toInt() ?? 1,
+      supplierName: (j['supplierName'] ?? 'Supplier').toString(),
+      region: (j['region'] ?? '').toString(),
+      imageUrl: images.isNotEmpty ? images.first.toString() : '',
+    );
+  }
+
   @override
   List<Object?> get props => [id, produce, lotSize];
 }

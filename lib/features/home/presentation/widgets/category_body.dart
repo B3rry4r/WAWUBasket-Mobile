@@ -6,10 +6,9 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../category/domain/models/category_kind.dart';
-// MockData still backs the trade body (bulk lots + suppliers); wired in 7b.
-import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
+import '../../../trade/application/trade_controller.dart';
 import '../../../trade/presentation/widgets/bulk_lot_card.dart';
 import '../../../trade/presentation/widgets/supplier_card.dart';
 import '../../domain/models/vendor.dart';
@@ -415,13 +414,23 @@ class _MarketplaceBodyState extends State<_MarketplaceBody> {
   }
 }
 
-class _TradeBody extends StatelessWidget {
+class _TradeBody extends StatefulWidget {
   const _TradeBody();
 
   @override
+  State<_TradeBody> createState() => _TradeBodyState();
+}
+
+class _TradeBodyState extends State<_TradeBody> {
+  @override
+  void initState() {
+    super.initState();
+    TradeController.instance.loadBulkLots();
+    TradeController.instance.loadSuppliers();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final lots = MockData.bulkLots;
-    final suppliers = MockData.suppliers;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -499,22 +508,30 @@ class _TradeBody extends StatelessWidget {
         const SizedBox(height: 14),
         // Full-bleed bulk-lot carousel, height reserves vertical room for
         // the card content plus its soft shadow bleed so nothing clips.
-        SizedBox(
-          height: 360,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.fromLTRB(_hPad, 6, _hPad, 18),
-            itemCount: lots.length,
-            separatorBuilder: (_, _) => const SizedBox(width: 14),
-            itemBuilder: (_, i) => SizedBox(
-              width: 220,
-              child: BulkLotCard(
-                lot: lots[i],
-                onTap: () =>
-                    context.push('${AppRoutes.tradeLot}/${lots[i].id}'),
+        ValueListenableBuilder(
+          valueListenable: TradeController.instance.bulkLots,
+          builder: (_, lots, _) {
+            if (lots.isEmpty) {
+              return _padH(const _EmptyHint(text: 'No bulk lots listed yet.'));
+            }
+            return SizedBox(
+              height: 360,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.fromLTRB(_hPad, 6, _hPad, 18),
+                itemCount: lots.length,
+                separatorBuilder: (_, _) => const SizedBox(width: 14),
+                itemBuilder: (_, i) => SizedBox(
+                  width: 220,
+                  child: BulkLotCard(
+                    lot: lots[i],
+                    onTap: () =>
+                        context.push('${AppRoutes.tradeLot}/${lots[i].id}'),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          },
         ),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
@@ -522,15 +539,29 @@ class _TradeBody extends StatelessWidget {
           onSeeAll: () => context.push(AppRoutes.trade),
         )),
         const SizedBox(height: 14),
-        for (var i = 0; i < 3 && i < suppliers.length; i++) ...[
-          _padH(SupplierCard(
-            supplier: suppliers[i],
-            onTap: () => context.push(
-              '${AppRoutes.tradeSupplier}/${suppliers[i].id}',
-            ),
-          )),
-          if (i < 2 && i + 1 < suppliers.length) const SizedBox(height: 12),
-        ],
+        ValueListenableBuilder(
+          valueListenable: TradeController.instance.suppliers,
+          builder: (_, suppliers, _) {
+            if (suppliers.isEmpty) {
+              return _padH(
+                  const _EmptyHint(text: 'No suppliers listed yet.'));
+            }
+            return Column(
+              children: [
+                for (var i = 0; i < 3 && i < suppliers.length; i++) ...[
+                  _padH(SupplierCard(
+                    supplier: suppliers[i],
+                    onTap: () => context.push(
+                      '${AppRoutes.tradeSupplier}/${suppliers[i].id}',
+                    ),
+                  )),
+                  if (i < 2 && i + 1 < suppliers.length)
+                    const SizedBox(height: 12),
+                ],
+              ],
+            );
+          },
+        ),
       ],
     );
   }

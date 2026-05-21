@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../data/trade_api.dart';
+import '../domain/models/bulk_lot.dart';
 import '../domain/models/corridor.dart';
 import '../domain/models/corridor_price.dart';
 import '../domain/models/export_listing.dart';
+import '../domain/models/supplier.dart';
 
 int _money(dynamic v) {
   if (v == null) return 0;
@@ -19,11 +21,15 @@ int _money(dynamic v) {
 class TradeController {
   TradeController._()
       : listings = ValueNotifier<List<ExportListing>>([]),
-        prices = ValueNotifier<List<CorridorPrice>>([]);
+        prices = ValueNotifier<List<CorridorPrice>>([]),
+        suppliers = ValueNotifier<List<Supplier>>([]),
+        bulkLots = ValueNotifier<List<BulkLot>>([]);
   static final TradeController instance = TradeController._();
 
   final ValueNotifier<List<ExportListing>> listings;
   final ValueNotifier<List<CorridorPrice>> prices;
+  final ValueNotifier<List<Supplier>> suppliers;
+  final ValueNotifier<List<BulkLot>> bulkLots;
   final _api = TradeApi.instance;
 
   /// True for a listing that exists only in this session's optimistic
@@ -35,6 +41,46 @@ class TradeController {
       if (l.id == id) return l;
     }
     return null;
+  }
+
+  Supplier? supplierById(String id) {
+    for (final s in suppliers.value) {
+      if (s.id == id) return s;
+    }
+    return null;
+  }
+
+  BulkLot? bulkLotById(String id) {
+    for (final l in bulkLots.value) {
+      if (l.id == id) return l;
+    }
+    return null;
+  }
+
+  /// Public supplier directory for the customer trade browse.
+  Future<void> loadSuppliers() async {
+    try {
+      final raw = await _api.suppliers();
+      suppliers.value = [
+        for (final e in raw)
+          Supplier.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place.
+    }
+  }
+
+  /// Public wholesale-lot board for the customer trade browse.
+  Future<void> loadBulkLots() async {
+    try {
+      final raw = await _api.bulkLots();
+      bulkLots.value = [
+        for (final e in raw)
+          BulkLot.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+    } on ApiException {
+      // Leave the current list in place.
+    }
   }
 
   /// Trader dashboard — the signed-in trader's own listings.

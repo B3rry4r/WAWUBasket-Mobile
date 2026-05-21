@@ -5,8 +5,9 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../shopping/application/mock_data.dart';
+import '../../application/trade_controller.dart';
 import '../../domain/models/bulk_lot.dart';
+import '../../domain/models/supplier.dart';
 
 class BulkLotDetailScreen extends StatefulWidget {
   const BulkLotDetailScreen({super.key, required this.lotId});
@@ -18,16 +19,66 @@ class BulkLotDetailScreen extends StatefulWidget {
 }
 
 class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
-  late final BulkLot _lot = MockData.bulkLots.firstWhere(
-    (l) => l.id == widget.lotId,
-    orElse: () => MockData.bulkLots.first,
-  );
+  BulkLot? _lot;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolve();
+  }
+
+  Future<void> _resolve() async {
+    final ctrl = TradeController.instance;
+    if (ctrl.bulkLots.value.isEmpty) await ctrl.loadBulkLots();
+    if (ctrl.suppliers.value.isEmpty) await ctrl.loadSuppliers();
+    if (mounted) {
+      setState(() {
+        _lot = ctrl.bulkLotById(widget.lotId);
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final supplier = MockData.suppliers.firstWhere(
-      (s) => s.name == _lot.supplierName,
-      orElse: () => MockData.suppliers.first,
+    final lot = _lot;
+    if (lot == null) {
+      return Scaffold(
+        backgroundColor: WBColors.bgSecondary,
+        body: SafeArea(
+          child: Center(
+            child: _loading
+                ? const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.6,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
+                    ),
+                  )
+                : Text(
+                    'Bulk lot not found.',
+                    style: WBTypography.body
+                        .copyWith(color: WBColors.fgSecondary),
+                  ),
+          ),
+        ),
+      );
+    }
+    final supplier = TradeController.instance.suppliers.value.firstWhere(
+      (s) => s.name == lot.supplierName,
+      orElse: () => Supplier(
+        id: '',
+        name: lot.supplierName,
+        region: lot.region,
+        capacity: '',
+        rating: 0,
+        reviews: 0,
+        avatarUrl: '',
+        specialties: const [],
+      ),
     );
 
     return Scaffold(
@@ -41,7 +92,7 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                 children: [
                   AspectRatio(
                     aspectRatio: 16 / 11,
-                    child: WBNetworkImage(url: _lot.imageUrl),
+                    child: WBNetworkImage(url: lot.imageUrl),
                   ),
                   SafeArea(
                     child: Padding(
@@ -92,12 +143,12 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _lot.produce,
+                      lot.produce,
                       style: WBTypography.hero.copyWith(fontSize: 26),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${_lot.lotSize} · ${_lot.region}',
+                      '${lot.lotSize} · ${lot.region}',
                       style: WBTypography.body.copyWith(
                         color: WBColors.fgSecondary,
                         fontSize: 14,
@@ -106,11 +157,11 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                     const SizedBox(height: WBSpacing.lg),
                     Row(
                       children: [
-                        _StatTile(label: 'Unit price', value: _lot.unitPriceLabel),
+                        _StatTile(label: 'Unit price', value: lot.unitPriceLabel),
                         const SizedBox(width: 10),
-                        _StatTile(label: 'Lot size', value: _lot.lotSize),
+                        _StatTile(label: 'Lot size', value: lot.lotSize),
                         const SizedBox(width: 10),
-                        _StatTile(label: 'MOQ', value: _lot.minOrderLabel),
+                        _StatTile(label: 'MOQ', value: lot.minOrderLabel),
                       ],
                     ),
                     const SizedBox(height: WBSpacing.lg),
@@ -129,7 +180,7 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                           const SizedBox(height: 12),
                           _LineRow(
                             label: 'Origin',
-                            value: '${_lot.region}, Nigeria',
+                            value: '${lot.region}, Nigeria',
                           ),
                           const SizedBox(height: 12),
                           _LineRow(
@@ -218,7 +269,7 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                   fullWidth: true,
                   size: WBButtonSize.lg,
                   trailingIcon: WBIconName.arrowRight,
-                  onPressed: () => _openQuoteSheet(context),
+                  onPressed: () => _openQuoteSheet(context, lot),
                 ),
               ),
             ),
@@ -228,12 +279,12 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
     );
   }
 
-  void _openQuoteSheet(BuildContext context) {
+  void _openQuoteSheet(BuildContext context, BulkLot lot) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _QuoteSheet(lot: _lot),
+      builder: (_) => _QuoteSheet(lot: lot),
     );
   }
 }

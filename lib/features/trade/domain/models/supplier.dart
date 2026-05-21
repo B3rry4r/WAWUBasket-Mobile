@@ -23,6 +23,20 @@ class Supplier extends Equatable {
   final String avatarUrl;
   final List<String> specialties;
 
+  factory Supplier.fromJson(Map<String, dynamic> j) => Supplier(
+        id: (j['userId'] ?? j['id'] ?? '').toString(),
+        name: (j['businessName'] ?? j['name'] ?? 'Supplier').toString(),
+        region: (j['farmRegion'] ?? j['region'] ?? '').toString(),
+        capacity: (j['capacity'] ?? '').toString(),
+        rating: double.tryParse('${j['rating'] ?? ''}') ?? 0,
+        reviews: (j['reviews'] as num?)?.toInt() ?? 0,
+        avatarUrl: (j['logoKey'] ?? j['avatarUrl'] ?? '').toString(),
+        specialties: (j['specialties'] as List?)
+                ?.map((e) => e.toString())
+                .toList() ??
+            const [],
+      );
+
   @override
   List<Object?> get props => [id, name, region];
 }

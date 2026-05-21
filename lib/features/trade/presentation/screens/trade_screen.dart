@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../shopping/application/mock_data.dart';
 import '../../application/trade_controller.dart';
 import '../widgets/bulk_lot_card.dart';
 import '../widgets/corridor_prices_table.dart';
@@ -46,6 +45,8 @@ class _TradeScreenState extends State<TradeScreen> {
     super.initState();
     TradeController.instance.loadPublicListings();
     TradeController.instance.loadPrices();
+    TradeController.instance.loadSuppliers();
+    TradeController.instance.loadBulkLots();
   }
 
   @override
@@ -128,46 +129,61 @@ class _TradeScreenState extends State<TradeScreen> {
   Widget _tabBody() {
     switch (_tab) {
       case _Tab.suppliers:
-        final suppliers = MockData.suppliers;
-        return ListView.separated(
-          padding: const EdgeInsets.fromLTRB(
-            WBSpacing.screenPadding,
-            4,
-            WBSpacing.screenPadding,
-            40,
-          ),
-          itemCount: suppliers.length,
-          separatorBuilder: (_, _) => const SizedBox(height: WBSpacing.md),
-          itemBuilder: (_, i) => SupplierCard(
-            supplier: suppliers[i],
-            onTap: () => context.push(
-              '${AppRoutes.tradeSupplier}/${suppliers[i].id}',
-            ),
-          ),
+        return ValueListenableBuilder(
+          valueListenable: TradeController.instance.suppliers,
+          builder: (_, suppliers, _) {
+            if (suppliers.isEmpty) {
+              return _Empty(label: 'No suppliers listed yet.');
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.fromLTRB(
+                WBSpacing.screenPadding,
+                4,
+                WBSpacing.screenPadding,
+                40,
+              ),
+              itemCount: suppliers.length,
+              separatorBuilder: (_, _) =>
+                  const SizedBox(height: WBSpacing.md),
+              itemBuilder: (_, i) => SupplierCard(
+                supplier: suppliers[i],
+                onTap: () => context.push(
+                  '${AppRoutes.tradeSupplier}/${suppliers[i].id}',
+                ),
+              ),
+            );
+          },
         );
       case _Tab.lots:
-        final lots = MockData.bulkLots;
-        return GridView.builder(
-          padding: const EdgeInsets.fromLTRB(
-            WBSpacing.screenPadding,
-            4,
-            WBSpacing.screenPadding,
-            40,
-          ),
-          itemCount: lots.length,
-          gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 14,
-            childAspectRatio: 0.62,
-          ),
-          itemBuilder: (_, i) => BulkLotCard(
-            lot: lots[i],
-            onTap: () => context.push(
-              '${AppRoutes.tradeLot}/${lots[i].id}',
-            ),
-          ),
+        return ValueListenableBuilder(
+          valueListenable: TradeController.instance.bulkLots,
+          builder: (_, lots, _) {
+            if (lots.isEmpty) {
+              return _Empty(label: 'No bulk lots listed yet.');
+            }
+            return GridView.builder(
+              padding: const EdgeInsets.fromLTRB(
+                WBSpacing.screenPadding,
+                4,
+                WBSpacing.screenPadding,
+                40,
+              ),
+              itemCount: lots.length,
+              gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 14,
+                childAspectRatio: 0.62,
+              ),
+              itemBuilder: (_, i) => BulkLotCard(
+                lot: lots[i],
+                onTap: () => context.push(
+                  '${AppRoutes.tradeLot}/${lots[i].id}',
+                ),
+              ),
+            );
+          },
         );
       case _Tab.listings:
         return ValueListenableBuilder(

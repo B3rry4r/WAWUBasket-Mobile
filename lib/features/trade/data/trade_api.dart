@@ -43,4 +43,16 @@ class TradeApi {
     final res = await _api.get('/trade/corridor-prices');
     return (res as List?) ?? const [];
   }
+
+  /// Public supplier directory.
+  Future<List<dynamic>> suppliers() async {
+    final res = await _api.get('/trade/suppliers');
+    return (res as List?) ?? const [];
+  }
+
+  /// Public wholesale-lot board.
+  Future<List<dynamic>> bulkLots() async {
+    final res = await _api.get('/trade/lots');
+    return (res as List?) ?? const [];
+  }
 }

@@ -5,22 +5,64 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../shopping/application/mock_data.dart';
+import '../../application/trade_controller.dart';
 import '../widgets/bulk_lot_card.dart';
 
-class SupplierDetailScreen extends StatelessWidget {
+class SupplierDetailScreen extends StatefulWidget {
   const SupplierDetailScreen({super.key, required this.supplierId});
 
   final String supplierId;
 
   @override
+  State<SupplierDetailScreen> createState() => _SupplierDetailScreenState();
+}
+
+class _SupplierDetailScreenState extends State<SupplierDetailScreen> {
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolve();
+  }
+
+  Future<void> _resolve() async {
+    final ctrl = TradeController.instance;
+    if (ctrl.suppliers.value.isEmpty) await ctrl.loadSuppliers();
+    if (ctrl.bulkLots.value.isEmpty) await ctrl.loadBulkLots();
+    if (mounted) setState(() => _loading = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final supplier = MockData.suppliers.firstWhere(
-      (s) => s.id == supplierId,
-      orElse: () => MockData.suppliers.first,
-    );
+    final ctrl = TradeController.instance;
+    final supplier = ctrl.supplierById(widget.supplierId);
+    if (supplier == null) {
+      return Scaffold(
+        backgroundColor: WBColors.bgSecondary,
+        body: SafeArea(
+          child: Center(
+            child: _loading
+                ? const SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.6,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
+                    ),
+                  )
+                : Text(
+                    'Supplier not found.',
+                    style: WBTypography.body
+                        .copyWith(color: WBColors.fgSecondary),
+                  ),
+          ),
+        ),
+      );
+    }
     final lots = [
-      for (final l in MockData.bulkLots)
+      for (final l in ctrl.bulkLots.value)
         if (l.supplierName == supplier.name) l,
     ];
 
