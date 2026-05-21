@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../shopping/application/mock_data.dart';
+import '../../../shopping/data/catalog_api.dart';
+import '../../../shopping/domain/models/product.dart';
 
 class MeatCutScreen extends StatefulWidget {
   const MeatCutScreen({super.key, required this.productId});
@@ -21,6 +23,25 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
   bool _fresh = true;
   bool _removeSkin = false;
   final _instructions = TextEditingController();
+
+  Product? _product;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final p = await CatalogApi.instance.item(widget.productId);
+      if (mounted) setState(() => _product = p);
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
 
   @override
   void dispose() {
@@ -63,10 +84,56 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final product = MockData.marketplaceProducts.firstWhere(
-      (p) => p.id == widget.productId,
-      orElse: () => MockData.marketplaceProducts.first,
-    );
+    final product = _product;
+    if (product == null) {
+      return Scaffold(
+        backgroundColor: WBColors.bgSecondary,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(WBSpacing.screenPadding),
+                child: WBBackChip(onPressed: () => context.pop()),
+              ),
+              Center(
+                child: _error != null
+                    ? Padding(
+                        padding:
+                            const EdgeInsets.all(WBSpacing.screenPadding),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              _error!,
+                              textAlign: TextAlign.center,
+                              style: WBTypography.body.copyWith(
+                                  color: WBColors.fgSecondary),
+                            ),
+                            const SizedBox(height: 14),
+                            WBButton(
+                              label: 'Try again',
+                              size: WBButtonSize.sm,
+                              variant: WBButtonVariant.secondary,
+                              onPressed: _load,
+                            ),
+                          ],
+                        ),
+                      )
+                    : const SizedBox(
+                        width: 28,
+                        height: 28,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.6,
+                          valueColor:
+                              AlwaysStoppedAnimation(WBColors.surfaceDark),
+                        ),
+                      ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     final cuts =
         _cutsByCat[product.subcategoryId] ?? _cutsByCat['chicken']!;
     final total = (product.priceNaira * _weight).round();
