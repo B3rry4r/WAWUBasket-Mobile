@@ -5,11 +5,13 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
 
-/// Surfaced chat section. WAWU Support is a universal entry point; the
-/// order conversations below it come live from `/v1/chats` — everyone the
-/// current role can message on its active orders.
+/// Surfaced chat section. WAWU Support is a universal entry point backed by
+/// the support-ticket thread; the order conversations below it come live
+/// from `/v1/chats`.
 class ChatInboxScreen extends StatefulWidget {
   const ChatInboxScreen({super.key});
 
@@ -20,6 +22,8 @@ class ChatInboxScreen extends StatefulWidget {
 class _ChatInboxScreenState extends State<ChatInboxScreen> {
   List<_Conversation>? _chats;
   String? _error;
+  String? _supportPreview;
+  String? _supportTime;
 
   @override
   void initState() {
@@ -29,6 +33,7 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
 
   Future<void> _load() async {
     setState(() => _error = null);
+    _loadSupport();
     try {
       final raw = await ChatApi.instance.inbox();
       if (!mounted) return;
@@ -38,6 +43,27 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
           ]);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  /// Best-effort: pull the latest support ticket so the support row shows a
+  /// real last message. A failure just leaves the default prompt in place.
+  Future<void> _loadSupport() async {
+    try {
+      final tickets = await AccountExtrasApi.instance.tickets();
+      if (!mounted || tickets.isEmpty) return;
+      final t = (tickets.first as Map).cast<String, dynamic>();
+      final msgs = (t['messages'] as List?) ?? const [];
+      final at = DateTime.tryParse('${t['updatedAt'] ?? ''}');
+      setState(() {
+        if (msgs.isNotEmpty) {
+          final body = (msgs.first as Map)['body']?.toString() ?? '';
+          if (body.isNotEmpty) _supportPreview = body;
+        }
+        _supportTime = _ago(at);
+      });
+    } catch (_) {
+      // Support row still renders with its default prompt.
     }
   }
 
@@ -57,10 +83,11 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const support = _Conversation(
+    final l10n = AppLocalizations.of(context);
+    final support = _Conversation(
       name: 'WAWU Support',
-      preview: 'Hey 👋 how can we help?',
-      time: 'Now',
+      preview: _supportPreview ?? l10n.chatSupportPrompt,
+      time: _supportTime ?? '',
       unread: false,
       orderId: null,
     );
@@ -126,10 +153,7 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
                   else if (_error != null)
                     _InboxHint(text: _error!)
                   else if (chats!.isEmpty)
-                    const _InboxHint(
-                      text: 'No order chats yet. They show up here once '
-                          'you have an active order.',
-                    )
+                    _InboxHint(text: l10n.chatInboxEmpty)
                   else
                     for (var i = 0; i < chats.length; i++) ...[
                       _ConversationRow(
@@ -171,7 +195,7 @@ class _Conversation {
   final String time;
   final bool unread;
 
-  /// The order this thread belongs to. Null for the static support row.
+  /// The order this thread belongs to. Null for the support row.
   final String? orderId;
 
   factory _Conversation.fromJson(Map<String, dynamic> j) {

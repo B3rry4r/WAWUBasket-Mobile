@@ -21,5 +21,11 @@
   "languageSubtitle": "Escolha como o WAWUBasket fala consigo.",
   "signIn": "Entrar",
   "signUp": "Criar conta",
-  "logOut": "Terminar sessão"
+  "logOut": "Terminar sessão",
+  "chatEmpty": "Ainda não há mensagens. Envie a primeira abaixo.",
+  "chatInboxEmpty": "Ainda não há conversas de pedidos. Aparecem aqui quando tiver um pedido ativo.",
+  "chatSupportPrompt": "Dúvidas? Fale com a nossa equipa.",
+  "chatAttachmentFailed": "Não foi possível enviar o anexo.",
+  "kycSubmitted": "Pedido enviado. Vamos analisá-lo e avisá-lo.",
+  "kycUploadFailed": "Não foi possível carregar o documento. Tente novamente."
 }

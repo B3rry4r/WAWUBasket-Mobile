@@ -73,4 +73,22 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get logOut => 'ውጣ';
+
+  @override
+  String get chatEmpty => 'እስካሁን መልእክት የለም። የመጀመሪያውን ከታች ይላኩ።';
+
+  @override
+  String get chatInboxEmpty => 'እስካሁን የትዕዛዝ ውይይቶች የሉም። ንቁ ትዕዛዝ ሲኖርዎት እዚህ ይታያሉ።';
+
+  @override
+  String get chatSupportPrompt => 'ጥያቄ አለዎት? ከቡድናችን ጋር ይነጋገሩ።';
+
+  @override
+  String get chatAttachmentFailed => 'አባሪውን መላክ አልተቻለም።';
+
+  @override
+  String get kycSubmitted => 'ማመልከቻው ተልኳል። እንገመግመዋለን፣ እናሳውቅዎታለን።';
+
+  @override
+  String get kycUploadFailed => 'ሰነዱን መስቀል አልተቻለም። እንደገና ይሞክሩ።';
 }

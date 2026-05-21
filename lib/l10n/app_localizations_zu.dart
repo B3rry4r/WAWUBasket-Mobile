@@ -74,4 +74,26 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get logOut => 'Phuma';
+
+  @override
+  String get chatEmpty =>
+      'Ayikho imilayezo okwamanje. Thumela owokuqala ngezansi.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Azikho izingxoxo zama-oda okwamanje. Zivela lapha uma une-oda elisebenzayo.';
+
+  @override
+  String get chatSupportPrompt => 'Unemibuzo? Xoxa nethimba lethu.';
+
+  @override
+  String get chatAttachmentFailed => 'Ayikwazanga ukuthumela isinamathiselo.';
+
+  @override
+  String get kycSubmitted =>
+      'Isicelo sithunyelwe. Sizosibuyekeza futhi sikwazise.';
+
+  @override
+  String get kycUploadFailed =>
+      'Ayikwazanga ukulayisha idokhumenti. Zama futhi.';
 }

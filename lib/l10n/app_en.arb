@@ -21,5 +21,11 @@
   "languageSubtitle": "Choose how WAWUBasket speaks to you.",
   "signIn": "Sign in",
   "signUp": "Create account",
-  "logOut": "Log out"
+  "logOut": "Log out",
+  "chatEmpty": "No messages yet. Send the first one below.",
+  "chatInboxEmpty": "No order chats yet. They appear here once you have an active order.",
+  "chatSupportPrompt": "Questions? Chat with our team.",
+  "chatAttachmentFailed": "Couldn't send the attachment.",
+  "kycSubmitted": "Application submitted. We'll review it and let you know.",
+  "kycUploadFailed": "Couldn't upload the document. Try again."
 }

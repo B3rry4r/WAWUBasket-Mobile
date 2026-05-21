@@ -73,4 +73,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get logOut => 'تسجيل الخروج';
+
+  @override
+  String get chatEmpty => 'لا توجد رسائل بعد. أرسل أول رسالة بالأسفل.';
+
+  @override
+  String get chatInboxEmpty =>
+      'لا توجد محادثات طلبات بعد. تظهر هنا عند وجود طلب نشط.';
+
+  @override
+  String get chatSupportPrompt => 'لديك أسئلة؟ تحدّث مع فريقنا.';
+
+  @override
+  String get chatAttachmentFailed => 'تعذّر إرسال المرفق.';
+
+  @override
+  String get kycSubmitted => 'تم إرسال الطلب. سنراجعه ونبلغك بالنتيجة.';
+
+  @override
+  String get kycUploadFailed => 'تعذّر رفع المستند. حاول مرة أخرى.';
 }

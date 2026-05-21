@@ -245,6 +245,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log out'**
   String get logOut;
+
+  /// No description provided for @chatEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet. Send the first one below.'**
+  String get chatEmpty;
+
+  /// No description provided for @chatInboxEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No order chats yet. They appear here once you have an active order.'**
+  String get chatInboxEmpty;
+
+  /// No description provided for @chatSupportPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Questions? Chat with our team.'**
+  String get chatSupportPrompt;
+
+  /// No description provided for @chatAttachmentFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t send the attachment.'**
+  String get chatAttachmentFailed;
+
+  /// No description provided for @kycSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Application submitted. We\'ll review it and let you know.'**
+  String get kycSubmitted;
+
+  /// No description provided for @kycUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t upload the document. Try again.'**
+  String get kycUploadFailed;
 }
 
 class _AppLocalizationsDelegate

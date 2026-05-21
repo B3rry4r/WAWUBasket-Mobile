@@ -73,4 +73,24 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get logOut => 'Terminar sessão';
+
+  @override
+  String get chatEmpty => 'Ainda não há mensagens. Envie a primeira abaixo.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Ainda não há conversas de pedidos. Aparecem aqui quando tiver um pedido ativo.';
+
+  @override
+  String get chatSupportPrompt => 'Dúvidas? Fale com a nossa equipa.';
+
+  @override
+  String get chatAttachmentFailed => 'Não foi possível enviar o anexo.';
+
+  @override
+  String get kycSubmitted => 'Pedido enviado. Vamos analisá-lo e avisá-lo.';
+
+  @override
+  String get kycUploadFailed =>
+      'Não foi possível carregar o documento. Tente novamente.';
 }

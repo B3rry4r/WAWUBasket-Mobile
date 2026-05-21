@@ -73,4 +73,23 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get logOut => 'Fita';
+
+  @override
+  String get chatEmpty => 'Babu saƙonni tukuna. Aika na farko a ƙasa.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Babu hirar oda tukuna. Suna bayyana nan idan kana da oda mai aiki.';
+
+  @override
+  String get chatSupportPrompt => 'Kana da tambayoyi? Yi hira da ƙungiyarmu.';
+
+  @override
+  String get chatAttachmentFailed => 'An kasa aika abin haɗawa.';
+
+  @override
+  String get kycSubmitted => 'An aika buƙatar. Za mu duba ta mu sanar da kai.';
+
+  @override
+  String get kycUploadFailed => 'An kasa loda takardar. Sake gwadawa.';
 }

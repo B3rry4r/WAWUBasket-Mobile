@@ -73,4 +73,24 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get logOut => 'Jáde';
+
+  @override
+  String get chatEmpty => 'Kò sí àwọn ọ̀rọ̀ síbẹ̀. Fi àkọ́kọ́ ránṣẹ́ nísàlẹ̀.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Kò sí ìbánisọ̀rọ̀ ọ̀ràn síbẹ̀. Wọ́n á farahàn níbí nígbà tí o bá ní ọ̀ràn tó ń lọ lọ́wọ́.';
+
+  @override
+  String get chatSupportPrompt => 'Ìbéèrè kan? Bá ẹgbẹ́ wa sọ̀rọ̀.';
+
+  @override
+  String get chatAttachmentFailed => 'Kò lè fi ohun ìfikún ránṣẹ́.';
+
+  @override
+  String get kycSubmitted =>
+      'A ti fi ìbéèrè ránṣẹ́. A ó ṣàyẹ̀wò rẹ̀ a ó sì jẹ́ kí o mọ̀.';
+
+  @override
+  String get kycUploadFailed => 'Kò lè gbé ìwé náà sókè. Gbìyànjú lẹ́ẹ̀kansí.';
 }

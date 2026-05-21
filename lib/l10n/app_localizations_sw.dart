@@ -74,4 +74,23 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get logOut => 'Toka';
+
+  @override
+  String get chatEmpty => 'Bado hakuna ujumbe. Tuma wa kwanza hapa chini.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Bado hakuna mazungumzo ya oda. Yataonekana hapa ukiwa na oda inayoendelea.';
+
+  @override
+  String get chatSupportPrompt => 'Una maswali? Zungumza na timu yetu.';
+
+  @override
+  String get chatAttachmentFailed => 'Imeshindwa kutuma kiambatisho.';
+
+  @override
+  String get kycSubmitted => 'Ombi limetumwa. Tutalikagua na kukujulisha.';
+
+  @override
+  String get kycUploadFailed => 'Imeshindwa kupakia hati. Jaribu tena.';
 }

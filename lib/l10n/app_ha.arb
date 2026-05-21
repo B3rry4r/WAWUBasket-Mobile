@@ -21,5 +21,11 @@
   "languageSubtitle": "Zaɓi yadda WAWUBasket zai yi maka magana.",
   "signIn": "Shiga",
   "signUp": "Ƙirƙiri asusu",
-  "logOut": "Fita"
+  "logOut": "Fita",
+  "chatEmpty": "Babu saƙonni tukuna. Aika na farko a ƙasa.",
+  "chatInboxEmpty": "Babu hirar oda tukuna. Suna bayyana nan idan kana da oda mai aiki.",
+  "chatSupportPrompt": "Kana da tambayoyi? Yi hira da ƙungiyarmu.",
+  "chatAttachmentFailed": "An kasa aika abin haɗawa.",
+  "kycSubmitted": "An aika buƙatar. Za mu duba ta mu sanar da kai.",
+  "kycUploadFailed": "An kasa loda takardar. Sake gwadawa."
 }

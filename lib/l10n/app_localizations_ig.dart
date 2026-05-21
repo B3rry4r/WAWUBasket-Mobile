@@ -73,4 +73,25 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get logOut => 'Pụọ';
+
+  @override
+  String get chatEmpty => 'Enwebeghị ozi. Ziga nke mbụ n\'okpuru.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Enwebeghị mkparịta ụka oda. Ha na-apụta ebe a mgbe ị nwere oda na-arụ ọrụ.';
+
+  @override
+  String get chatSupportPrompt =>
+      'Ị nwere ajụjụ? Soro ndị otu anyị kparịta ụka.';
+
+  @override
+  String get chatAttachmentFailed => 'Enweghị ike izipu ihe agbakwunyere.';
+
+  @override
+  String get kycSubmitted =>
+      'Ezigaala arịrịọ. Anyị ga-enyochaa ya ma mee ka ị mara.';
+
+  @override
+  String get kycUploadFailed => 'Enweghị ike ibugo akwụkwọ ahụ. Nwaa ọzọ.';
 }

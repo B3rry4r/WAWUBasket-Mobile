@@ -21,5 +21,11 @@
   "languageSubtitle": "WAWUBasket እንዴት እንደሚያናግርዎ ይምረጡ።",
   "signIn": "ግባ",
   "signUp": "መለያ ፍጠር",
-  "logOut": "ውጣ"
+  "logOut": "ውጣ",
+  "chatEmpty": "እስካሁን መልእክት የለም። የመጀመሪያውን ከታች ይላኩ።",
+  "chatInboxEmpty": "እስካሁን የትዕዛዝ ውይይቶች የሉም። ንቁ ትዕዛዝ ሲኖርዎት እዚህ ይታያሉ።",
+  "chatSupportPrompt": "ጥያቄ አለዎት? ከቡድናችን ጋር ይነጋገሩ።",
+  "chatAttachmentFailed": "አባሪውን መላክ አልተቻለም።",
+  "kycSubmitted": "ማመልከቻው ተልኳል። እንገመግመዋለን፣ እናሳውቅዎታለን።",
+  "kycUploadFailed": "ሰነዱን መስቀል አልተቻለም። እንደገና ይሞክሩ።"
 }

@@ -21,5 +21,11 @@
   "languageSubtitle": "Khetha ukuthi i-WAWUBasket ikhulume kanjani nawe.",
   "signIn": "Ngena",
   "signUp": "Dala i-akhawunti",
-  "logOut": "Phuma"
+  "logOut": "Phuma",
+  "chatEmpty": "Ayikho imilayezo okwamanje. Thumela owokuqala ngezansi.",
+  "chatInboxEmpty": "Azikho izingxoxo zama-oda okwamanje. Zivela lapha uma une-oda elisebenzayo.",
+  "chatSupportPrompt": "Unemibuzo? Xoxa nethimba lethu.",
+  "chatAttachmentFailed": "Ayikwazanga ukuthumela isinamathiselo.",
+  "kycSubmitted": "Isicelo sithunyelwe. Sizosibuyekeza futhi sikwazise.",
+  "kycUploadFailed": "Ayikwazanga ukulayisha idokhumenti. Zama futhi."
 }

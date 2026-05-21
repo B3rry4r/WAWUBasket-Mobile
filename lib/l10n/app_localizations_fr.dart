@@ -73,4 +73,26 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get logOut => 'Se déconnecter';
+
+  @override
+  String get chatEmpty =>
+      'Aucun message pour l\'instant. Envoyez le premier ci-dessous.';
+
+  @override
+  String get chatInboxEmpty =>
+      'Aucune conversation de commande. Elles apparaîtront ici dès que vous aurez une commande active.';
+
+  @override
+  String get chatSupportPrompt => 'Des questions ? Discutez avec notre équipe.';
+
+  @override
+  String get chatAttachmentFailed => 'Impossible d\'envoyer la pièce jointe.';
+
+  @override
+  String get kycSubmitted =>
+      'Demande envoyée. Nous l\'examinerons et vous tiendrons informé.';
+
+  @override
+  String get kycUploadFailed =>
+      'Impossible de téléverser le document. Réessayez.';
 }

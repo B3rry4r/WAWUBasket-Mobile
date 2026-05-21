@@ -74,4 +74,17 @@ class AccountExtrasApi {
         body: {'subject': subject, 'body': body});
     return (res as Map).cast<String, dynamic>();
   }
+
+  /// A single support ticket with its full message thread.
+  Future<Map<String, dynamic>> ticket(String id) async {
+    final res = await _api.get('/support/tickets/$id');
+    return (res as Map).cast<String, dynamic>();
+  }
+
+  /// Posts a reply onto an existing support ticket.
+  Future<Map<String, dynamic>> replyTicket(String id, String body) async {
+    final res = await _api.post('/support/tickets/$id/reply',
+        body: {'body': body});
+    return (res as Map).cast<String, dynamic>();
+  }
 }

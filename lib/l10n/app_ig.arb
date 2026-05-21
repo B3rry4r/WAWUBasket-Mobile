@@ -21,5 +21,11 @@
   "languageSubtitle": "Họrọ ka WAWUBasket ga-esi agwa gị okwu.",
   "signIn": "Banye",
   "signUp": "Mepụta akaụntụ",
-  "logOut": "Pụọ"
+  "logOut": "Pụọ",
+  "chatEmpty": "Enwebeghị ozi. Ziga nke mbụ n'okpuru.",
+  "chatInboxEmpty": "Enwebeghị mkparịta ụka oda. Ha na-apụta ebe a mgbe ị nwere oda na-arụ ọrụ.",
+  "chatSupportPrompt": "Ị nwere ajụjụ? Soro ndị otu anyị kparịta ụka.",
+  "chatAttachmentFailed": "Enweghị ike izipu ihe agbakwunyere.",
+  "kycSubmitted": "Ezigaala arịrịọ. Anyị ga-enyochaa ya ma mee ka ị mara.",
+  "kycUploadFailed": "Enweghị ike ibugo akwụkwọ ahụ. Nwaa ọzọ."
 }

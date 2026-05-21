@@ -21,5 +21,11 @@
   "languageSubtitle": "Yan bí WAWUBasket ṣe máa bá ọ sọ̀rọ̀.",
   "signIn": "Wọlé",
   "signUp": "Ṣẹ̀dá àkàǹtì",
-  "logOut": "Jáde"
+  "logOut": "Jáde",
+  "chatEmpty": "Kò sí àwọn ọ̀rọ̀ síbẹ̀. Fi àkọ́kọ́ ránṣẹ́ nísàlẹ̀.",
+  "chatInboxEmpty": "Kò sí ìbánisọ̀rọ̀ ọ̀ràn síbẹ̀. Wọ́n á farahàn níbí nígbà tí o bá ní ọ̀ràn tó ń lọ lọ́wọ́.",
+  "chatSupportPrompt": "Ìbéèrè kan? Bá ẹgbẹ́ wa sọ̀rọ̀.",
+  "chatAttachmentFailed": "Kò lè fi ohun ìfikún ránṣẹ́.",
+  "kycSubmitted": "A ti fi ìbéèrè ránṣẹ́. A ó ṣàyẹ̀wò rẹ̀ a ó sì jẹ́ kí o mọ̀.",
+  "kycUploadFailed": "Kò lè gbé ìwé náà sókè. Gbìyànjú lẹ́ẹ̀kansí."
 }

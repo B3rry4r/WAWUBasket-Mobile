@@ -6,7 +6,9 @@ import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
 
 enum ChatContextKind { rider, support }
@@ -23,10 +25,9 @@ class _ChatMessage {
   final String time;
   final String? attachUrl;
 
-  /// Maps a `/v1/chats` message payload. A message is "from me" when its
-  /// sender role matches the active role — each order chat has one
-  /// participant per role (customer / vendor / rider).
-  factory _ChatMessage.fromJson(Map<String, dynamic> j) {
+  /// An order chat message. "From me" when the sender role matches the
+  /// active role — each order thread has one participant per role.
+  factory _ChatMessage.fromChat(Map<String, dynamic> j) {
     final created = DateTime.tryParse('${j['createdAt'] ?? ''}');
     final attach = (j['attachUrl'] ?? '').toString();
     return _ChatMessage(
@@ -35,6 +36,16 @@ class _ChatMessage {
           RoleController.instance.role.name,
       time: _fmtTime(created),
       attachUrl: attach.isEmpty ? null : attach,
+    );
+  }
+
+  /// A support-ticket message. "From me" unless it came from an admin.
+  factory _ChatMessage.fromTicket(Map<String, dynamic> j) {
+    final created = DateTime.tryParse('${j['createdAt'] ?? ''}');
+    return _ChatMessage(
+      (j['body'] ?? '').toString(),
+      fromMe: j['fromAdmin'] != true,
+      time: _fmtTime(created),
     );
   }
 }
@@ -57,8 +68,7 @@ class ChatScreen extends StatefulWidget {
 
   final ChatContextKind kind;
 
-  /// The order whose chat thread to open. When set, the screen loads
-  /// messages from the live API instead of showing the static placeholder.
+  /// The order whose chat thread to open (rider chats only).
   final String? orderId;
 
   /// Counterpart name shown in the header (passed by the inbox / call site).
@@ -71,48 +81,24 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   late final TextEditingController _composer = TextEditingController();
 
-  /// Live mode = a rider/order thread with an order id. Otherwise the
-  /// screen falls back to the static support placeholder.
-  bool get _live =>
+  /// Support thread — a /v1/support ticket conversation.
+  bool get _isSupport => widget.kind == ChatContextKind.support;
+
+  /// Order thread — a /v1/chats conversation keyed by an order id.
+  bool get _isOrder =>
       widget.kind == ChatContextKind.rider && widget.orderId != null;
 
-  // Live-mode state.
   List<_ChatMessage>? _messages;
   String? _error;
   bool _busy = false;
 
-  // Static fallback (support live-chat placeholder).
-  late final List<_ChatMessage> _staticMessages =
-      widget.kind == ChatContextKind.rider
-          ? [
-              const _ChatMessage(
-                'Hi Brooks, I just picked up your order from Mama Cass.',
-                fromMe: false,
-                time: '12:34',
-              ),
-              const _ChatMessage(
-                'Great, please use the gate on Akin Adesola, thank you!',
-                fromMe: true,
-                time: '12:35',
-              ),
-              const _ChatMessage(
-                "On my way, ETA 12 min.",
-                fromMe: false,
-                time: '12:35',
-              ),
-            ]
-          : [
-              const _ChatMessage(
-                'Hey 👋 thanks for reaching out. How can we help?',
-                fromMe: false,
-                time: 'Just now',
-              ),
-            ];
+  /// The support ticket backing this thread, once one exists.
+  String? _ticketId;
 
   @override
   void initState() {
     super.initState();
-    if (_live) _load();
+    _load();
   }
 
   @override
@@ -122,51 +108,81 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String get _title {
-    if (_live) {
-      final t = widget.title?.trim() ?? '';
-      return t.isEmpty ? 'Conversation' : t;
-    }
-    return widget.kind == ChatContextKind.rider ? 'Tunde · Rider' : 'Live chat';
+    if (_isSupport) return 'Live chat';
+    final t = widget.title?.trim() ?? '';
+    return t.isEmpty ? 'Conversation' : t;
   }
 
   String get _sub {
-    if (_live) {
-      final id = widget.orderId!;
-      return 'Order #${id.length > 8 ? id.substring(0, 8) : id}';
-    }
-    return widget.kind == ChatContextKind.rider
-        ? 'Honda CG · LAG 4892'
-        : 'Replies usually in under 2 min';
+    if (_isSupport) return 'Replies usually in under 2 min';
+    final id = widget.orderId;
+    if (id == null) return '';
+    return 'Order #${id.length > 8 ? id.substring(0, 8) : id}';
   }
 
   Future<void> _load() async {
     setState(() => _error = null);
     try {
-      final raw = await ChatApi.instance.messages(widget.orderId!);
-      if (!mounted) return;
-      setState(() => _messages = [
-            for (final e in raw)
-              _ChatMessage.fromJson((e as Map).cast<String, dynamic>()),
-          ]);
+      if (_isSupport) {
+        await _loadSupport();
+      } else if (_isOrder) {
+        final raw = await ChatApi.instance.messages(widget.orderId!);
+        if (!mounted) return;
+        setState(() => _messages = [
+              for (final e in raw)
+                _ChatMessage.fromChat((e as Map).cast<String, dynamic>()),
+            ]);
+      } else {
+        setState(() => _messages = []);
+      }
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
     }
   }
 
+  /// Opens the user's most recent support ticket, if any.
+  Future<void> _loadSupport() async {
+    final tickets = await AccountExtrasApi.instance.tickets();
+    if (tickets.isEmpty) {
+      if (mounted) setState(() => _messages = []);
+      return;
+    }
+    final latest = (tickets.first as Map).cast<String, dynamic>();
+    final id = latest['id']?.toString();
+    if (id == null) {
+      if (mounted) setState(() => _messages = []);
+      return;
+    }
+    final ticket = await AccountExtrasApi.instance.ticket(id);
+    final msgs = (ticket['messages'] as List?) ?? const [];
+    if (!mounted) return;
+    setState(() {
+      _ticketId = id;
+      _messages = [
+        for (final e in msgs)
+          _ChatMessage.fromTicket((e as Map).cast<String, dynamic>()),
+      ];
+    });
+  }
+
   Future<void> _send() async {
     final text = _composer.text.trim();
-    if (text.isEmpty || _busy) return;
+    if (text.isEmpty || _busy || (!_isSupport && !_isOrder)) return;
     setState(() => _busy = true);
     try {
-      final m = await ChatApi.instance.sendMessage(widget.orderId!, body: text);
-      if (!mounted) return;
-      setState(() {
-        _error = null;
-        (_messages ??= []).add(
-          _ChatMessage.fromJson(m.cast<String, dynamic>()),
-        );
-        _composer.clear();
-      });
+      if (_isSupport) {
+        await _sendSupport(text);
+      } else {
+        final m =
+            await ChatApi.instance.sendMessage(widget.orderId!, body: text);
+        if (!mounted) return;
+        setState(() {
+          _error = null;
+          (_messages ??= [])
+              .add(_ChatMessage.fromChat(m.cast<String, dynamic>()));
+          _composer.clear();
+        });
+      }
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
@@ -174,8 +190,37 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  /// Sends on the support thread — opening a ticket on the first message,
+  /// replying to it afterwards.
+  Future<void> _sendSupport(String text) async {
+    if (_ticketId == null) {
+      final ticket =
+          await AccountExtrasApi.instance.createTicket('Live chat', text);
+      final msgs = (ticket['messages'] as List?) ?? const [];
+      if (!mounted) return;
+      setState(() {
+        _error = null;
+        _ticketId = ticket['id']?.toString();
+        _messages = [
+          for (final e in msgs)
+            _ChatMessage.fromTicket((e as Map).cast<String, dynamic>()),
+        ];
+        _composer.clear();
+      });
+    } else {
+      final m = await AccountExtrasApi.instance.replyTicket(_ticketId!, text);
+      if (!mounted) return;
+      setState(() {
+        _error = null;
+        (_messages ??= [])
+            .add(_ChatMessage.fromTicket(m.cast<String, dynamic>()));
+        _composer.clear();
+      });
+    }
+  }
+
   Future<void> _attach() async {
-    if (_busy) return;
+    if (_busy || !_isOrder) return;
     setState(() => _busy = true);
     try {
       final up = await UploadService.instance.pickAndUpload(
@@ -190,42 +235,19 @@ class _ChatScreenState extends State<ChatScreen> {
       if (!mounted) return;
       setState(() {
         _error = null;
-        (_messages ??= []).add(
-          _ChatMessage.fromJson(m.cast<String, dynamic>()),
-        );
+        (_messages ??= [])
+            .add(_ChatMessage.fromChat(m.cast<String, dynamic>()));
         _composer.clear();
       });
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } catch (_) {
-      if (mounted) wbShowSnack(context, 'Could not send the attachment.');
+      if (mounted) {
+        wbShowSnack(context, AppLocalizations.of(context).chatAttachmentFailed);
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
     }
-  }
-
-  /// Static echo used by the support placeholder thread.
-  void _sendStatic() {
-    final text = _composer.text.trim();
-    if (text.isEmpty) return;
-    setState(() {
-      _staticMessages.add(_ChatMessage(text, fromMe: true, time: 'Now'));
-      _composer.clear();
-    });
-    Future.delayed(const Duration(milliseconds: 800), () {
-      if (!mounted) return;
-      setState(() {
-        _staticMessages.add(
-          _ChatMessage(
-            widget.kind == ChatContextKind.rider
-                ? 'Got it 👍'
-                : "Thanks, we'll follow up shortly.",
-            fromMe: false,
-            time: 'Now',
-          ),
-        );
-      });
-    });
   }
 
   @override
@@ -256,9 +278,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     alignment: Alignment.center,
                     child: WBIcon(
-                      widget.kind == ChatContextKind.rider
-                          ? WBIconName.bike
-                          : WBIconName.message,
+                      _isSupport ? WBIconName.message : WBIconName.bike,
                       size: 20,
                     ),
                   ),
@@ -305,7 +325,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       child: TextField(
                         controller: _composer,
-                        onSubmitted: (_) => _live ? _send() : _sendStatic(),
+                        onSubmitted: (_) => _send(),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Message',
@@ -316,7 +336,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
-                  if (_live) ...[
+                  if (_isOrder) ...[
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: _attach,
@@ -334,7 +354,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ],
                   const SizedBox(width: 10),
                   GestureDetector(
-                    onTap: _live ? _send : _sendStatic,
+                    onTap: _send,
                     child: Container(
                       width: 48,
                       height: 48,
@@ -370,7 +390,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildBody() {
-    if (!_live) return _messageList(_staticMessages);
     if (_messages == null && _error == null) {
       return const Center(
         child: SizedBox(
@@ -386,7 +405,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (_error != null) return _stateHint(_error!);
     final msgs = _messages!;
     if (msgs.isEmpty) {
-      return _stateHint('No messages yet. Send the first one below.');
+      return _stateHint(AppLocalizations.of(context).chatEmpty);
     }
     return _messageList(msgs);
   }

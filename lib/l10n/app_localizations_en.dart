@@ -73,4 +73,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logOut => 'Log out';
+
+  @override
+  String get chatEmpty => 'No messages yet. Send the first one below.';
+
+  @override
+  String get chatInboxEmpty =>
+      'No order chats yet. They appear here once you have an active order.';
+
+  @override
+  String get chatSupportPrompt => 'Questions? Chat with our team.';
+
+  @override
+  String get chatAttachmentFailed => 'Couldn\'t send the attachment.';
+
+  @override
+  String get kycSubmitted =>
+      'Application submitted. We\'ll review it and let you know.';
+
+  @override
+  String get kycUploadFailed => 'Couldn\'t upload the document. Try again.';
 }

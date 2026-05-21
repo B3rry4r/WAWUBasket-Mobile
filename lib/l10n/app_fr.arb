@@ -21,5 +21,11 @@
   "languageSubtitle": "Choisissez la langue de WAWUBasket.",
   "signIn": "Se connecter",
   "signUp": "Créer un compte",
-  "logOut": "Se déconnecter"
+  "logOut": "Se déconnecter",
+  "chatEmpty": "Aucun message pour l'instant. Envoyez le premier ci-dessous.",
+  "chatInboxEmpty": "Aucune conversation de commande. Elles apparaîtront ici dès que vous aurez une commande active.",
+  "chatSupportPrompt": "Des questions ? Discutez avec notre équipe.",
+  "chatAttachmentFailed": "Impossible d'envoyer la pièce jointe.",
+  "kycSubmitted": "Demande envoyée. Nous l'examinerons et vous tiendrons informé.",
+  "kycUploadFailed": "Impossible de téléverser le document. Réessayez."
 }

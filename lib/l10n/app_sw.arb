@@ -21,5 +21,11 @@
   "languageSubtitle": "Chagua jinsi WAWUBasket itakavyozungumza nawe.",
   "signIn": "Ingia",
   "signUp": "Fungua akaunti",
-  "logOut": "Toka"
+  "logOut": "Toka",
+  "chatEmpty": "Bado hakuna ujumbe. Tuma wa kwanza hapa chini.",
+  "chatInboxEmpty": "Bado hakuna mazungumzo ya oda. Yataonekana hapa ukiwa na oda inayoendelea.",
+  "chatSupportPrompt": "Una maswali? Zungumza na timu yetu.",
+  "chatAttachmentFailed": "Imeshindwa kutuma kiambatisho.",
+  "kycSubmitted": "Ombi limetumwa. Tutalikagua na kukujulisha.",
+  "kycUploadFailed": "Imeshindwa kupakia hati. Jaribu tena."
 }
