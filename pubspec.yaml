@@ -49,6 +49,9 @@ dependencies:
   # documents and chat attachments; uploaded to R2 via a presigned PUT.
   image_picker: ^1.1.2
 
+  # Face ID / fingerprint unlock for returning users.
+  local_auth: ^2.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

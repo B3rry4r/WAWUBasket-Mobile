@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -39,11 +41,70 @@ class _LoginScreenState extends State<LoginScreen> {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
       RoleController.instance.setRole(AppRole.customer);
       if (!mounted) return;
+      await _offerBiometric();
+      if (!mounted) return;
       context.go(AppRoutes.home);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// After a password sign-in, offers to turn on biometric unlock so the
+  /// next launch can skip the password.
+  Future<void> _offerBiometric() async {
+    final bio = BiometricService.instance;
+    if (!await bio.isAvailable() || await bio.isEnabled()) return;
+    if (!mounted) return;
+    final enable = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Faster sign-in'),
+        content: const Text(
+          'Use Face ID or your fingerprint to sign in next time?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Not now'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Enable'),
+          ),
+        ],
+      ),
+    );
+    if (enable == true) await bio.setEnabled(true);
+  }
+
+  /// Unlocks an existing session with Face ID / fingerprint. Needs a prior
+  /// password sign-in (the refresh token is what gets unlocked).
+  Future<void> _biometricSignIn() async {
+    final bio = BiometricService.instance;
+    if (!await bio.isAvailable()) {
+      if (mounted) {
+        wbShowSnack(context, "Biometric unlock isn't set up on this device.");
+      }
+      return;
+    }
+    final refresh = TokenStore.instance.refreshToken;
+    if (refresh == null || refresh.isEmpty || !await bio.isEnabled()) {
+      if (mounted) {
+        wbShowSnack(
+          context,
+          'Sign in with your password once to turn on Face ID.',
+        );
+      }
+      return;
+    }
+    final ok = await bio.authenticate(reason: 'Sign in to WAWUBasket');
+    if (!mounted) return;
+    if (ok) {
+      context.go(AppRoutes.home);
+    } else {
+      wbShowSnack(context, "Couldn't verify it's you — try your password.");
     }
   }
 
@@ -142,8 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
               _OutlineCta(
                 label: 'Use Face ID',
                 icon: WBIconName.user,
-                onPressed: () =>
-                    wbShowSnack(context, 'Biometric sign-in is coming soon'),
+                onPressed: _biometricSignIn,
               ),
               const SizedBox(height: WBSpacing.md),
               Center(

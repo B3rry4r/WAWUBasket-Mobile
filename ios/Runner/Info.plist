@@ -6,6 +6,8 @@
 	<string>WAWUBasket needs photo access so you can set a profile picture and add photos to your listings.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>WAWUBasket needs camera access so you can take photos for your profile, listings and verification documents.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>WAWUBasket uses Face ID to unlock your account so you can sign in without your password.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
