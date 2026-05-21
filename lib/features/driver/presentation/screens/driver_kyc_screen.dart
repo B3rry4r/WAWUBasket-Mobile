@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
 
 class DriverKycScreen extends StatefulWidget {
@@ -17,6 +20,15 @@ class DriverKycScreen extends StatefulWidget {
 
 class _DriverKycScreenState extends State<DriverKycScreen> {
   String _vehicleType = 'truck';
+  bool _busy = false;
+  final Map<String, String> _docs = {};
+
+  final _fullName = TextEditingController(text: 'Aliyu Bala');
+  final _phone = TextEditingController(text: '803 421 1820');
+  final _union = TextEditingController(text: 'NRTC Kano');
+  final _plate = TextEditingController(text: 'KN-541-XA');
+  final _capacity = TextEditingController(text: '15,000');
+  final _payout = TextEditingController(text: '+234 805 0214 311');
 
   static const _vehicleTypes = [
     ('truck', 'Long-haul truck'),
@@ -24,6 +36,46 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
     ('flatbed', 'Flatbed'),
     ('reefer', 'Reefer / cold chain'),
   ];
+
+  @override
+  void dispose() {
+    for (final c in [_fullName, _phone, _union, _plate, _capacity, _payout]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await KycApi.instance.submit(
+        role: 'driver',
+        profile: {
+          'fullName': _fullName.text.trim(),
+          'phone': _phone.text.trim(),
+          'union': _union.text.trim(),
+          'vehicleType': _vehicleType,
+          'plate': _plate.text.trim(),
+          'capacityKg': _capacity.text.trim(),
+          'payout': _payout.text.trim(),
+        },
+        documents: [
+          for (final e in _docs.entries) {'label': e.key, 'key': e.value},
+        ],
+      );
+      if (!mounted) return;
+      RoleController.instance.completeKyc(AppRole.driver);
+      RoleController.instance.setRole(AppRole.driver);
+      wbShowSnack(context, 'Application approved · Time to roll');
+      context.go(AppRoutes.driverHome);
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _busy = false);
+        wbShowSnack(context, e.message);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,22 +122,22 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                   sub: "Drivers' licence name, please.",
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Full name',
-                  initialValue: 'Aliyu Bala',
+                  controller: _fullName,
                   leadingIcon: WBIconName.user,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Phone',
-                  initialValue: '803 421 1820',
+                  controller: _phone,
                   leadingIcon: WBIconName.phone,
                   keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Transport union',
-                  initialValue: 'NRTC Kano',
+                  controller: _union,
                   leadingIcon: WBIconName.home,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -107,15 +159,15 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                   ],
                 ),
                 const SizedBox(height: WBSpacing.md),
-                const WBInput(
+                WBInput(
                   label: 'Plate number',
-                  initialValue: 'KN-541-XA',
+                  controller: _plate,
                   leadingIcon: WBIconName.bike,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Capacity (kg)',
-                  initialValue: '15,000',
+                  controller: _capacity,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -124,28 +176,36 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                   sub: 'All required before your first trip.',
                 ),
                 const SizedBox(height: 12),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Driver licence',
                   sub: 'Front + back',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['Driver licence'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Vehicle registration',
                   sub: 'Plate number visible',
                   icon: WBIconName.bike,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['Vehicle registration'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Insurance certificate',
                   sub: 'Cargo + liability',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['Insurance certificate'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Union endorsement',
                   sub: 'Signed letter from your union office',
                   icon: WBIconName.home,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['Union endorsement'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -153,28 +213,38 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                   sub: 'Required if you run loads across ECOWAS borders.',
                 ),
                 const SizedBox(height: 12),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'ECOWAS Trade Liberalisation Scheme certificate',
                   sub: 'ETLS approval issued by your country trade ministry',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) =>
+                      _docs['ECOWAS Trade Liberalisation Scheme certificate'] =
+                          key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'AfCFTA registration',
                   sub: 'African Continental Free Trade Area papers',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['AfCFTA registration'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Customs clearance licence',
                   sub: 'Or partnership with a licensed customs agent',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['Customs clearance licence'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'International passport',
                   sub: 'Bio data page',
                   icon: WBIconName.user,
+                  folder: UploadFolder.kyc('driver'),
+                  onUploaded: (key) => _docs['International passport'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -182,9 +252,9 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                   sub: 'Where we settle each completed trip.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Mobile money / bank',
-                  initialValue: '+234 805 0214 311',
+                  controller: _payout,
                   leadingIcon: WBIconName.card,
                   keyboardType: TextInputType.phone,
                 ),
@@ -207,15 +277,8 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,
-                    onPressed: () {
-                      RoleController.instance.completeKyc(AppRole.driver);
-                      RoleController.instance.setRole(AppRole.driver);
-                      wbShowSnack(
-                        context,
-                        'Application approved · Time to roll',
-                      );
-                      context.go(AppRoutes.driverHome);
-                    },
+                    loading: _busy,
+                    onPressed: _submit,
                   ),
                 ),
               ),

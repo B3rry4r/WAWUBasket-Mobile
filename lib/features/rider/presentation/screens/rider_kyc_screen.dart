@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
 
 class RiderKycScreen extends StatefulWidget {
@@ -17,12 +20,57 @@ class RiderKycScreen extends StatefulWidget {
 
 class _RiderKycScreenState extends State<RiderKycScreen> {
   String _vehicle = 'motorbike';
+  bool _busy = false;
+  final Map<String, String> _docs = {};
+
+  final _fullName = TextEditingController(text: 'Tunde Adeyemi');
+  final _phone = TextEditingController(text: '803 421 1820');
+  final _homeAddress = TextEditingController(text: 'Lekki Phase 1, Lagos');
+  final _payout = TextEditingController(text: '+234 805 0214 311');
 
   static const _vehicles = [
     ('bicycle', 'Bicycle'),
     ('motorbike', 'Motorbike'),
     ('car', 'Car'),
   ];
+
+  @override
+  void dispose() {
+    for (final c in [_fullName, _phone, _homeAddress, _payout]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await KycApi.instance.submit(
+        role: 'rider',
+        profile: {
+          'fullName': _fullName.text.trim(),
+          'phone': _phone.text.trim(),
+          'homeAddress': _homeAddress.text.trim(),
+          'vehicle': _vehicle,
+          'payout': _payout.text.trim(),
+        },
+        documents: [
+          for (final e in _docs.entries) {'label': e.key, 'key': e.value},
+        ],
+      );
+      if (!mounted) return;
+      RoleController.instance.completeKyc(AppRole.rider);
+      RoleController.instance.setRole(AppRole.rider);
+      wbShowSnack(context, 'Application approved · Time to ride');
+      context.go(AppRoutes.riderHome);
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _busy = false);
+        wbShowSnack(context, e.message);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,22 +114,22 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                   sub: 'Used to match you to customers.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Full name',
-                  initialValue: 'Tunde Adeyemi',
+                  controller: _fullName,
                   leadingIcon: WBIconName.user,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Phone number',
-                  initialValue: '803 421 1820',
+                  controller: _phone,
                   leadingIcon: WBIconName.phone,
                   keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Home address',
-                  initialValue: 'Lekki Phase 1, Lagos',
+                  controller: _homeAddress,
                   leadingIcon: WBIconName.pin,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -90,16 +138,20 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                   sub: 'NIN, passport or driver licence.',
                 ),
                 const SizedBox(height: 12),
-                const KycUploadTile(
+                KycUploadTile(
                   label: "Photo of ID",
                   sub: 'Clear shot of front side',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('rider'),
+                  onUploaded: (key) => _docs['Photo of ID'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Selfie',
                   sub: 'Holding your ID',
                   icon: WBIconName.user,
+                  folder: UploadFolder.kyc('rider'),
+                  onUploaded: (key) => _docs['Selfie'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -121,23 +173,29 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                 ),
                 const SizedBox(height: WBSpacing.md),
                 if (_vehicle != 'bicycle') ...[
-                  const KycUploadTile(
+                  KycUploadTile(
                     label: 'Vehicle registration',
                     sub: 'Plate number visible',
                     icon: WBIconName.bike,
+                    folder: UploadFolder.kyc('rider'),
+                    onUploaded: (key) => _docs['Vehicle registration'] = key,
                   ),
                   const SizedBox(height: 10),
-                  const KycUploadTile(
+                  KycUploadTile(
                     label: 'Driver licence',
                     sub: 'Both sides',
                     icon: WBIconName.card,
+                    folder: UploadFolder.kyc('rider'),
+                    onUploaded: (key) => _docs['Driver licence'] = key,
                   ),
                   const SizedBox(height: 10),
                 ],
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Insurance certificate',
                   sub: 'Optional but helps approval',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('rider'),
+                  onUploaded: (key) => _docs['Insurance certificate'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -145,9 +203,9 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                   sub: 'Where we send your earnings.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Mobile money / bank',
-                  initialValue: '+234 805 0214 311',
+                  controller: _payout,
                   leadingIcon: WBIconName.card,
                   keyboardType: TextInputType.phone,
                 ),
@@ -170,15 +228,8 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,
-                    onPressed: () {
-                      RoleController.instance.completeKyc(AppRole.rider);
-                      RoleController.instance.setRole(AppRole.rider);
-                      wbShowSnack(
-                        context,
-                        'Application approved · Time to ride',
-                      );
-                      context.go(AppRoutes.riderHome);
-                    },
+                    loading: _busy,
+                    onPressed: _submit,
                   ),
                 ),
               ),

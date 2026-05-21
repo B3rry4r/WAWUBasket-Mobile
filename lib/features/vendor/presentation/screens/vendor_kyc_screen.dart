@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
 
 class VendorKycScreen extends StatefulWidget {
@@ -17,6 +20,19 @@ class VendorKycScreen extends StatefulWidget {
 
 class _VendorKycScreenState extends State<VendorKycScreen> {
   String _type = 'restaurant';
+  bool _busy = false;
+  final Map<String, String> _docs = {};
+
+  final _businessName = TextEditingController(text: 'Mama Cass Kitchen');
+  final _ownerName = TextEditingController(text: 'Adunni Adesanya');
+  final _phone = TextEditingController(text: '803 421 1820');
+  final _email = TextEditingController(text: 'mamacass@wawu.africa');
+  final _addressLine = TextEditingController(text: '12 Adeola Odeku St, V/I');
+  final _city = TextEditingController(text: 'Lagos');
+  final _state = TextEditingController(text: 'Lagos');
+  final _bankName = TextEditingController(text: 'GTBank');
+  final _accountNumber = TextEditingController(text: '0123456789');
+  final _accountName = TextEditingController(text: 'Adunni Adesanya');
 
   static const _types = [
     ('restaurant', 'Restaurant'),
@@ -25,6 +41,61 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
     ('essentials', 'Kitchen Essentials'),
     ('produce', 'Farm Produce'),
   ];
+
+  @override
+  void dispose() {
+    for (final c in [
+      _businessName,
+      _ownerName,
+      _phone,
+      _email,
+      _addressLine,
+      _city,
+      _state,
+      _bankName,
+      _accountNumber,
+      _accountName,
+    ]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await KycApi.instance.submit(
+        role: 'vendor',
+        profile: {
+          'businessName': _businessName.text.trim(),
+          'ownerName': _ownerName.text.trim(),
+          'businessType': _type,
+          'phone': _phone.text.trim(),
+          'email': _email.text.trim(),
+          'addressLine': _addressLine.text.trim(),
+          'city': _city.text.trim(),
+          'state': _state.text.trim(),
+          'bankName': _bankName.text.trim(),
+          'accountNumber': _accountNumber.text.trim(),
+          'accountName': _accountName.text.trim(),
+        },
+        documents: [
+          for (final e in _docs.entries) {'label': e.key, 'key': e.value},
+        ],
+      );
+      if (!mounted) return;
+      RoleController.instance.completeKyc(AppRole.vendor);
+      RoleController.instance.setRole(AppRole.vendor);
+      wbShowSnack(context, 'Application approved · Welcome aboard');
+      context.go(AppRoutes.vendorHome);
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _busy = false);
+        wbShowSnack(context, e.message);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +139,15 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   sub: 'How customers find you in the app.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Business name',
-                  initialValue: 'Mama Cass Kitchen',
+                  controller: _businessName,
                   leadingIcon: WBIconName.home,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Owner full name',
-                  initialValue: 'Adunni Adesanya',
+                  controller: _ownerName,
                   leadingIcon: WBIconName.user,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
@@ -102,16 +173,16 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   ],
                 ),
                 const SizedBox(height: WBSpacing.md),
-                const WBInput(
+                WBInput(
                   label: 'Phone number',
-                  initialValue: '803 421 1820',
+                  controller: _phone,
                   leadingIcon: WBIconName.phone,
                   keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Business email',
-                  initialValue: 'mamacass@wawu.africa',
+                  controller: _email,
                   leadingIcon: WBIconName.message,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -120,26 +191,26 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   sub: 'Where deliveries pick up from.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Address line',
-                  initialValue: '12 Adeola Odeku St, V/I',
+                  controller: _addressLine,
                   leadingIcon: WBIconName.pin,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const Row(
+                Row(
                   children: [
                     Expanded(
                       child: WBInput(
                         label: 'City',
-                        initialValue: 'Lagos',
+                        controller: _city,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: WBInput(
                         label: 'State',
-                        initialValue: 'Lagos',
-                        trailing: WBIcon(WBIconName.chevronDown, size: 14),
+                        controller: _state,
+                        trailing: const WBIcon(WBIconName.chevronDown, size: 14),
                       ),
                     ),
                   ],
@@ -150,34 +221,44 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   sub: 'All required. We never share these.',
                 ),
                 const SizedBox(height: 12),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Business certificate',
                   sub: 'CAC or equivalent registration',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('vendor'),
+                  onUploaded: (key) => _docs['Business certificate'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Operating permit',
                   sub: 'Trade / food / pharmacy permit',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('vendor'),
+                  onUploaded: (key) => _docs['Operating permit'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: "Owner's ID",
                   sub: 'NIN, passport or driver licence',
                   icon: WBIconName.user,
+                  folder: UploadFolder.kyc('vendor'),
+                  onUploaded: (key) => _docs["Owner's ID"] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Store location photo',
                   sub: 'Outside shot of your shop',
                   icon: WBIconName.home,
+                  folder: UploadFolder.kyc('vendor'),
+                  onUploaded: (key) => _docs['Store location photo'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Utility bill',
                   sub: 'Proof of store address',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('vendor'),
+                  onUploaded: (key) => _docs['Utility bill'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -185,21 +266,21 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   sub: 'Where we send your earnings.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Bank name',
-                  initialValue: 'GTBank',
+                  controller: _bankName,
                   leadingIcon: WBIconName.card,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Account number',
-                  initialValue: '0123456789',
+                  controller: _accountNumber,
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Account name',
-                  initialValue: 'Adunni Adesanya',
+                  controller: _accountName,
                 ),
               ],
             ),
@@ -220,15 +301,8 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,
-                    onPressed: () {
-                      RoleController.instance.completeKyc(AppRole.vendor);
-                      RoleController.instance.setRole(AppRole.vendor);
-                      wbShowSnack(
-                        context,
-                        'Application approved · Welcome aboard',
-                      );
-                      context.go(AppRoutes.vendorHome);
-                    },
+                    loading: _busy,
+                    onPressed: _submit,
                   ),
                 ),
               ),

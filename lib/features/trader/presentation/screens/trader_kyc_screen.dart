@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
 import '../../../trade/domain/models/corridor.dart';
 
@@ -18,6 +21,30 @@ class TraderKycScreen extends StatefulWidget {
 
 class _TraderKycScreenState extends State<TraderKycScreen> {
   final Set<Corridor> _corridors = {Corridor.nigeria, Corridor.benin};
+  bool _busy = false;
+  final Map<String, String> _docs = {};
+
+  final _businessName = TextEditingController(text: 'Hauwa & Sons Bulk Co.');
+  final _region = TextEditingController(text: 'Kano');
+  final _contact = TextEditingController(text: 'Hauwa Sani');
+  final _phone = TextEditingController(text: '803 421 1820');
+  final _bankName = TextEditingController(text: 'Access Bank');
+  final _accountNumber = TextEditingController(text: '0123456789');
+
+  @override
+  void dispose() {
+    for (final c in [
+      _businessName,
+      _region,
+      _contact,
+      _phone,
+      _bankName,
+      _accountNumber,
+    ]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
 
   void _toggle(Corridor c) {
     setState(() {
@@ -27,6 +54,38 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
         _corridors.add(c);
       }
     });
+  }
+
+  Future<void> _submit() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await KycApi.instance.submit(
+        role: 'trader',
+        profile: {
+          'businessName': _businessName.text.trim(),
+          'region': _region.text.trim(),
+          'contact': _contact.text.trim(),
+          'phone': _phone.text.trim(),
+          'corridors': [for (final c in _corridors) c.name],
+          'bankName': _bankName.text.trim(),
+          'accountNumber': _accountNumber.text.trim(),
+        },
+        documents: [
+          for (final e in _docs.entries) {'label': e.key, 'key': e.value},
+        ],
+      );
+      if (!mounted) return;
+      RoleController.instance.completeKyc(AppRole.trader);
+      RoleController.instance.setRole(AppRole.trader);
+      wbShowSnack(context, 'Application approved · Welcome trader');
+      context.go(AppRoutes.traderHome);
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _busy = false);
+        wbShowSnack(context, e.message);
+      }
+    }
   }
 
   @override
@@ -74,27 +133,27 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                   sub: 'How buyers find you.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Business / farm name',
-                  initialValue: 'Hauwa & Sons Bulk Co.',
+                  controller: _businessName,
                   leadingIcon: WBIconName.home,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Region',
-                  initialValue: 'Kano',
+                  controller: _region,
                   leadingIcon: WBIconName.pin,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Primary contact',
-                  initialValue: 'Hauwa Sani',
+                  controller: _contact,
                   leadingIcon: WBIconName.user,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Phone',
-                  initialValue: '803 421 1820',
+                  controller: _phone,
                   keyboardType: TextInputType.phone,
                   leadingIcon: WBIconName.phone,
                 ),
@@ -122,22 +181,28 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                   sub: 'Required before your first listing goes live.',
                 ),
                 const SizedBox(height: 12),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Business registration',
                   sub: 'CAC / co-op certificate',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('trader'),
+                  onUploaded: (key) => _docs['Business registration'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Owner ID',
                   sub: 'NIN, passport or driver licence',
                   icon: WBIconName.user,
+                  folder: UploadFolder.kyc('trader'),
+                  onUploaded: (key) => _docs['Owner ID'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Farm / warehouse photo',
                   sub: 'Outside shot, geo-tagged if possible',
                   icon: WBIconName.home,
+                  folder: UploadFolder.kyc('trader'),
+                  onUploaded: (key) => _docs['Farm / warehouse photo'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -145,15 +210,15 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                   sub: 'Where we release escrow once a sale clears.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Bank name',
-                  initialValue: 'Access Bank',
+                  controller: _bankName,
                   leadingIcon: WBIconName.card,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Account number',
-                  initialValue: '0123456789',
+                  controller: _accountNumber,
                   keyboardType: TextInputType.number,
                 ),
               ],
@@ -175,15 +240,8 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,
-                    onPressed: () {
-                      RoleController.instance.completeKyc(AppRole.trader);
-                      RoleController.instance.setRole(AppRole.trader);
-                      wbShowSnack(
-                        context,
-                        'Application approved · Welcome trader',
-                      );
-                      context.go(AppRoutes.traderHome);
-                    },
+                    loading: _busy,
+                    onPressed: _submit,
                   ),
                 ),
               ),

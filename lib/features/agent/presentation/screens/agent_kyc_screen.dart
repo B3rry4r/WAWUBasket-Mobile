@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
 
 class AgentKycScreen extends StatefulWidget {
@@ -17,6 +20,15 @@ class AgentKycScreen extends StatefulWidget {
 
 class _AgentKycScreenState extends State<AgentKycScreen> {
   String _zone = 'mile-12';
+  bool _busy = false;
+  final Map<String, String> _docs = {};
+
+  final _fullName = TextEditingController(text: 'Musa Ibrahim');
+  final _phone = TextEditingController(text: '803 421 1820');
+  final _email = TextEditingController(text: 'musa@wawu.africa');
+  final _union = TextEditingController(text: 'NRTC Lagos');
+  final _bankName = TextEditingController(text: 'Access Bank');
+  final _accountNumber = TextEditingController(text: '0123456789');
 
   static const _zones = [
     ('mile-12', 'Mile 12 Market'),
@@ -25,6 +37,53 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
     ('kano', 'Kano Central'),
     ('aba', 'Aba'),
   ];
+
+  @override
+  void dispose() {
+    for (final c in [
+      _fullName,
+      _phone,
+      _email,
+      _union,
+      _bankName,
+      _accountNumber,
+    ]) {
+      c.dispose();
+    }
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await KycApi.instance.submit(
+        role: 'agent',
+        profile: {
+          'fullName': _fullName.text.trim(),
+          'phone': _phone.text.trim(),
+          'email': _email.text.trim(),
+          'zone': _zone,
+          'union': _union.text.trim(),
+          'bankName': _bankName.text.trim(),
+          'accountNumber': _accountNumber.text.trim(),
+        },
+        documents: [
+          for (final e in _docs.entries) {'label': e.key, 'key': e.value},
+        ],
+      );
+      if (!mounted) return;
+      RoleController.instance.completeKyc(AppRole.agent);
+      RoleController.instance.setRole(AppRole.agent);
+      wbShowSnack(context, 'Application approved · Welcome agent');
+      context.go(AppRoutes.agentHome);
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _busy = false);
+        wbShowSnack(context, e.message);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,22 +130,22 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                   sub: 'Used to assign you a zone.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Full name',
-                  initialValue: 'Musa Ibrahim',
+                  controller: _fullName,
                   leadingIcon: WBIconName.user,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Phone number',
-                  initialValue: '803 421 1820',
+                  controller: _phone,
                   leadingIcon: WBIconName.phone,
                   keyboardType: TextInputType.phone,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Email',
-                  initialValue: 'musa@wawu.africa',
+                  controller: _email,
                   leadingIcon: WBIconName.message,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -95,16 +154,20 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                   sub: 'For Face ID match at every payout.',
                 ),
                 const SizedBox(height: 12),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Photo of ID',
                   sub: 'NIN or driver licence',
                   icon: WBIconName.card,
+                  folder: UploadFolder.kyc('agent'),
+                  onUploaded: (key) => _docs['Photo of ID'] = key,
                 ),
                 const SizedBox(height: 10),
-                const KycUploadTile(
+                KycUploadTile(
                   label: 'Face capture',
                   sub: 'Live selfie, anti-fraud',
                   icon: WBIconName.user,
+                  folder: UploadFolder.kyc('agent'),
+                  onUploaded: (key) => _docs['Face capture'] = key,
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
@@ -125,9 +188,9 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                   ],
                 ),
                 const SizedBox(height: WBSpacing.md),
-                const WBInput(
+                WBInput(
                   label: 'Union or cover (optional)',
-                  initialValue: 'NRTC Lagos',
+                  controller: _union,
                   leadingIcon: WBIconName.home,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -136,15 +199,15 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                   sub: 'Commission settlement account.',
                 ),
                 const SizedBox(height: 12),
-                const WBInput(
+                WBInput(
                   label: 'Bank name',
-                  initialValue: 'Access Bank',
+                  controller: _bankName,
                   leadingIcon: WBIconName.card,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                const WBInput(
+                WBInput(
                   label: 'Account number',
-                  initialValue: '0123456789',
+                  controller: _accountNumber,
                   keyboardType: TextInputType.number,
                 ),
               ],
@@ -166,15 +229,8 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,
-                    onPressed: () {
-                      RoleController.instance.completeKyc(AppRole.agent);
-                      RoleController.instance.setRole(AppRole.agent);
-                      wbShowSnack(
-                        context,
-                        'Application approved · Welcome agent',
-                      );
-                      context.go(AppRoutes.agentHome);
-                    },
+                    loading: _busy,
+                    onPressed: _submit,
                   ),
                 ),
               ),

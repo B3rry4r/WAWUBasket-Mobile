@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -39,13 +40,15 @@ class KycSectionLabel extends StatelessWidget {
   }
 }
 
-/// Dashed-border upload tile. Tapping fires [onTap] (which should open the
-/// camera / file picker, here it just snackbars). Once "uploaded" the
-/// tile shows a filled state.
+/// Dashed-border upload tile. Tapping opens the image picker and uploads
+/// the document to R2; once the upload succeeds the tile shows a filled
+/// state and hands the stored object key back through [onUploaded].
 class KycUploadTile extends StatefulWidget {
   const KycUploadTile({
     super.key,
     required this.label,
+    required this.folder,
+    required this.onUploaded,
     this.sub,
     this.icon = WBIconName.plus,
   });
@@ -54,20 +57,42 @@ class KycUploadTile extends StatefulWidget {
   final String? sub;
   final WBIconName icon;
 
+  /// R2 folder the document goes into, e.g. `UploadFolder.kyc('vendor')`.
+  final String folder;
+
+  /// Called with the stored object key once an upload succeeds.
+  final ValueChanged<String> onUploaded;
+
   @override
   State<KycUploadTile> createState() => _KycUploadTileState();
 }
 
 class _KycUploadTileState extends State<KycUploadTile> {
   bool _uploaded = false;
+  bool _uploading = false;
+
+  Future<void> _pick() async {
+    if (_uploading) return;
+    setState(() => _uploading = true);
+    try {
+      final res = await UploadService.instance.pickAndUpload(
+        folder: widget.folder,
+      );
+      if (res != null) {
+        widget.onUploaded(res.key);
+        if (mounted) setState(() => _uploaded = true);
+      }
+    } catch (_) {
+      if (mounted) wbShowSnack(context, 'Could not upload ${widget.label}.');
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() => _uploaded = true);
-        wbShowSnack(context, '${widget.label} captured');
-      },
+      onTap: _pick,
       behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: WBMotion.base,
@@ -93,12 +118,23 @@ class _KycUploadTileState extends State<KycUploadTile> {
                 borderRadius: BorderRadius.circular(12),
               ),
               alignment: Alignment.center,
-              child: WBIcon(
-                _uploaded ? WBIconName.check : widget.icon,
-                size: 16,
-                color:
-                    _uploaded ? const Color(0xFF10B981) : WBColors.fgHeader,
-              ),
+              child: _uploading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor:
+                            AlwaysStoppedAnimation(WBColors.fgHeader),
+                      ),
+                    )
+                  : WBIcon(
+                      _uploaded ? WBIconName.check : widget.icon,
+                      size: 16,
+                      color: _uploaded
+                          ? const Color(0xFF10B981)
+                          : WBColors.fgHeader,
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(
