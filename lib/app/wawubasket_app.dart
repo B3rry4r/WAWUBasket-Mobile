@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../core/i18n/locale_controller.dart';
 import '../core/router/app_router.dart';
 import '../core/theme/wb_theme_exports.dart';
+import '../l10n/app_localizations.dart';
 
 class WAWUBasketApp extends StatefulWidget {
   const WAWUBasketApp({super.key});
@@ -29,11 +31,19 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'WAWUBasket',
-      debugShowCheckedModeBanner: false,
-      theme: buildWBTheme(),
-      routerConfig: _router,
+    return ValueListenableBuilder<Locale?>(
+      valueListenable: LocaleController.instance.locale,
+      builder: (_, locale, _) {
+        return MaterialApp.router(
+          title: 'WAWUBasket',
+          debugShowCheckedModeBanner: false,
+          theme: buildWBTheme(),
+          routerConfig: _router,
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        );
+      },
     );
   }
 }

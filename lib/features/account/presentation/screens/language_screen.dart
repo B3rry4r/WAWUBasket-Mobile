@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/i18n/locale_controller.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -12,15 +14,19 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  String _selected = 'english';
+  late String _selected =
+      LocaleController.instance.locale.value?.languageCode ?? 'en';
 
+  // `id` is the locale code. English, French and Arabic ship now; the
+  // rest fall back to English until their translations land (Phase 12).
   static const _languages = [
-    (id: 'english', label: 'English', sub: 'Default'),
-    (id: 'pidgin', label: 'Pidgin', sub: 'Naija'),
-    (id: 'yoruba', label: 'Yorùbá', sub: 'Èdè Yorùbá'),
-    (id: 'igbo', label: 'Igbo', sub: 'Asụsụ Igbo'),
-    (id: 'hausa', label: 'Hausa', sub: 'Harshen Hausa'),
-    (id: 'french', label: 'French', sub: 'Français'),
+    (id: 'en', label: 'English', sub: 'Default'),
+    (id: 'fr', label: 'French', sub: 'Français'),
+    (id: 'ar', label: 'Arabic', sub: 'العربية'),
+    (id: 'pcm', label: 'Pidgin', sub: 'Naija'),
+    (id: 'yo', label: 'Yorùbá', sub: 'Èdè Yorùbá'),
+    (id: 'ig', label: 'Igbo', sub: 'Asụsụ Igbo'),
+    (id: 'ha', label: 'Hausa', sub: 'Harshen Hausa'),
   ];
 
   @override
@@ -40,8 +46,19 @@ class _LanguageScreenState extends State<LanguageScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Language', style: WBTypography.page),
+                Text(
+                  AppLocalizations.of(context).languageTitle,
+                  style: WBTypography.page,
+                ),
               ],
+            ),
+            const SizedBox(height: WBSpacing.sm),
+            Text(
+              AppLocalizations.of(context).languageSubtitle,
+              style: WBTypography.body.copyWith(
+                color: WBColors.fgSecondary,
+                fontSize: 14,
+              ),
             ),
             const SizedBox(height: WBSpacing.lg),
             Container(
@@ -55,8 +72,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 children: [
                   for (var i = 0; i < _languages.length; i++) ...[
                     GestureDetector(
-                      onTap: () =>
-                          setState(() => _selected = _languages[i].id),
+                      onTap: () {
+                        LocaleController.instance
+                            .setLocale(_languages[i].id);
+                        setState(() => _selected = _languages[i].id);
+                      },
                       behavior: HitTestBehavior.opaque,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(

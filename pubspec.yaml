@@ -55,6 +55,11 @@ dependencies:
   # WAWU+ subscription via App Store / Play Store in-app purchase.
   in_app_purchase: ^3.2.0
 
+  # Localization — African-language support via ARB files + gen-l10n.
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -78,6 +83,7 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/logos/
