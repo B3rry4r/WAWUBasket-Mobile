@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../category/domain/models/category_kind.dart';
+// MockData still backs the trade body (bulk lots + suppliers); wired in 7b.
 import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
@@ -54,16 +55,47 @@ class CategoryBody extends StatelessWidget {
   }
 }
 
-class _LivestockBody extends StatelessWidget {
+class _LivestockBody extends StatefulWidget {
   const _LivestockBody({required this.subcategoryId});
   final String? subcategoryId;
 
   @override
+  State<_LivestockBody> createState() => _LivestockBodyState();
+}
+
+class _LivestockBodyState extends State<_LivestockBody> {
+  List<Product>? _cuts;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant _LivestockBody old) {
+    super.didUpdateWidget(old);
+    if (old.subcategoryId != widget.subcategoryId) _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _error = null;
+      _cuts = null;
+    });
+    try {
+      final cuts = await CatalogApi.instance
+          .items(category: widget.subcategoryId ?? 'livestock');
+      if (mounted) setState(() => _cuts = cuts);
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final cuts = MockData.productsForCategory(
-      'livestock',
-      subcategoryId: subcategoryId,
-    );
+    final cuts = _cuts;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,7 +142,11 @@ class _LivestockBody extends StatelessWidget {
               context.push('${AppRoutes.categoryDetail}/livestock'),
         )),
         const SizedBox(height: 14),
-        if (cuts.isEmpty)
+        if (_error != null)
+          _padH(_RetryHint(text: _error!, onRetry: _load))
+        else if (cuts == null)
+          const _LoadingHint()
+        else if (cuts.isEmpty)
           _padH(const _EmptyHint(text: 'No cuts match this filter yet.'))
         else
           _padH(GridView.builder(
@@ -213,32 +249,80 @@ class _AllBodyState extends State<_AllBody> {
   }
 }
 
-class _RestaurantBody extends StatelessWidget {
+class _RestaurantBody extends StatefulWidget {
   const _RestaurantBody({required this.subcategoryId});
   final String? subcategoryId;
 
   @override
+  State<_RestaurantBody> createState() => _RestaurantBodyState();
+}
+
+class _RestaurantBodyState extends State<_RestaurantBody> {
+  List<Vendor>? _vendors;
+  List<Product>? _dishes;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant _RestaurantBody old) {
+    super.didUpdateWidget(old);
+    if (old.subcategoryId != widget.subcategoryId) _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _error = null;
+      _dishes = null;
+    });
+    try {
+      final vendors = await CatalogApi.instance.vendors();
+      final dishes =
+          await CatalogApi.instance.items(category: widget.subcategoryId);
+      if (!mounted) return;
+      setState(() {
+        _vendors = vendors;
+        _dishes = dishes;
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final dishes = MockData.productsForCategory(
-      'restaurants',
-      subcategoryId: subcategoryId,
-    );
+    final dishes = _dishes;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _padH(_SectionHeader(
           title: 'Featured restaurants',
-          onSeeAll: () => context.push('${AppRoutes.categoryDetail}/restaurants'),
+          onSeeAll: () =>
+              context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 14),
-        _VendorCarousel(vendors: MockData.vendors),
+        if (_vendors == null && _error == null)
+          const _LoadingHint()
+        else if ((_vendors ?? const []).isEmpty)
+          _padH(const _EmptyHint(text: 'No restaurants open near you yet.'))
+        else
+          _VendorCarousel(vendors: _vendors!),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
           title: 'Popular dishes',
-          onSeeAll: () => context.push('${AppRoutes.categoryDetail}/restaurants'),
+          onSeeAll: () =>
+              context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 12),
-        if (dishes.isEmpty)
+        if (_error != null)
+          _padH(_RetryHint(text: _error!, onRetry: _load))
+        else if (dishes == null)
+          const _LoadingHint()
+        else if (dishes.isEmpty)
           _padH(const _EmptyHint(text: 'No dishes match this filter yet.'))
         else
           for (var i = 0; i < dishes.length; i++) ...[
@@ -261,7 +345,7 @@ class _RestaurantBody extends StatelessWidget {
   }
 }
 
-class _MarketplaceBody extends StatelessWidget {
+class _MarketplaceBody extends StatefulWidget {
   const _MarketplaceBody({
     required this.categoryId,
     required this.subcategoryId,
@@ -270,21 +354,59 @@ class _MarketplaceBody extends StatelessWidget {
   final String? subcategoryId;
 
   @override
+  State<_MarketplaceBody> createState() => _MarketplaceBodyState();
+}
+
+class _MarketplaceBodyState extends State<_MarketplaceBody> {
+  List<Product>? _products;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  @override
+  void didUpdateWidget(covariant _MarketplaceBody old) {
+    super.didUpdateWidget(old);
+    if (old.categoryId != widget.categoryId ||
+        old.subcategoryId != widget.subcategoryId) {
+      _load();
+    }
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _error = null;
+      _products = null;
+    });
+    try {
+      final products = await CatalogApi.instance
+          .items(category: widget.subcategoryId ?? widget.categoryId);
+      if (mounted) setState(() => _products = products);
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final products = MockData.productsForCategory(
-      categoryId,
-      subcategoryId: subcategoryId,
-    );
+    final products = _products;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _padH(_SectionHeader(
           title: 'Top picks',
           onSeeAll: () =>
-              context.push('${AppRoutes.categoryDetail}/$categoryId'),
+              context.push('${AppRoutes.categoryDetail}/${widget.categoryId}'),
         )),
         const SizedBox(height: 14),
-        if (products.isEmpty)
+        if (_error != null)
+          _padH(_RetryHint(text: _error!, onRetry: _load))
+        else if (products == null)
+          const _LoadingHint()
+        else if (products.isEmpty)
           _padH(const _EmptyHint(text: 'No products match this filter yet.'))
         else
           _padH(_ProductGrid(products: products)),
