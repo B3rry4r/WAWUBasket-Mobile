@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -255,6 +256,9 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                                   label: 'Weight (kg)',
                                   controller: _weight,
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -263,6 +267,9 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                                   label: 'Offer (₦)',
                                   controller: _offer,
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
                                 ),
                               ),
                             ],
@@ -271,7 +278,14 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                           WBInput(
                             label: 'Distance (km)',
                             controller: _distance,
-                            keyboardType: TextInputType.number,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true,
+                            ),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'[0-9.]'),
+                              ),
+                            ],
                           ),
                         ],
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -260,6 +261,9 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                         label: 'Quantity (kg)',
                         controller: _quantity,
                         keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -268,6 +272,9 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                         label: 'Price per kg (₦)',
                         controller: _price,
                         keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                       ),
                     ),
                   ],

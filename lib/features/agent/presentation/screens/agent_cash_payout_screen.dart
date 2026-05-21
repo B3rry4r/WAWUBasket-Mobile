@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
@@ -183,6 +184,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
             label: 'Amount (₦)',
             controller: _amount,
             keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             leadingIcon: WBIconName.card,
           ),
           const SizedBox(height: WBSpacing.md),

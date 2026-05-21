@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
@@ -219,6 +220,9 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
                   label: 'Quantity (kg)',
                   controller: _qty,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   onChanged: (_) => setState(() {}),
                 ),
               ),
@@ -228,6 +232,9 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
                   label: 'Unit price (₦)',
                   controller: _price,
                   keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
                   onChanged: (_) => setState(() {}),
                 ),
               ),
