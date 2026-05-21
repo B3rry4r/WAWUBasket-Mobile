@@ -27,6 +27,7 @@ class RiderMapView extends StatelessWidget {
     required this.offers,
     required this.onTapOffer,
     this.bottomInset = 0,
+    this.route,
   });
 
   final List<DeliveryOffer> offers;
@@ -35,6 +36,10 @@ class RiderMapView extends StatelessWidget {
   /// Extra space at the bottom of the map kept clear of overlays (e.g. the
   /// rider-home offer sheet). The recenter button floats above this inset.
   final double bottomInset;
+
+  /// When set, the map draws the in-app trip line for this active
+  /// delivery — rider position → vendor → drop-off.
+  final DeliveryOffer? route;
 
   bool get _useMapbox => kMapboxConfigured && !kIsWeb;
 
@@ -46,6 +51,7 @@ class RiderMapView extends StatelessWidget {
               offers: offers,
               onTapOffer: onTapOffer,
               bottomInset: bottomInset,
+              route: route,
             )
           : Stack(
               children: [
@@ -69,10 +75,12 @@ class _MapboxLayer extends StatefulWidget {
     required this.offers,
     required this.onTapOffer,
     required this.bottomInset,
+    this.route,
   });
   final List<DeliveryOffer> offers;
   final ValueChanged<DeliveryOffer> onTapOffer;
   final double bottomInset;
+  final DeliveryOffer? route;
 
   @override
   State<_MapboxLayer> createState() => _MapboxLayerState();
@@ -81,6 +89,7 @@ class _MapboxLayer extends StatefulWidget {
 class _MapboxLayerState extends State<_MapboxLayer> {
   mb.MapboxMap? _map;
   mb.PointAnnotationManager? _pointManager;
+  mb.PolylineAnnotationManager? _polylineManager;
 
   /// annotation id → offer, so a tapped pin maps back to its offer.
   final Map<String, DeliveryOffer> _annotationOffers = {};
@@ -91,6 +100,33 @@ class _MapboxLayerState extends State<_MapboxLayer> {
   void didUpdateWidget(covariant _MapboxLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.offers != oldWidget.offers) _syncAnnotations();
+    if (widget.route != oldWidget.route) _syncRoute();
+  }
+
+  /// Draws the active delivery's trip line — rider → vendor → drop-off —
+  /// as a polyline so the rider follows it in-app instead of leaving for
+  /// an external maps app.
+  Future<void> _syncRoute() async {
+    final mgr = _polylineManager;
+    if (mgr == null) return;
+    await mgr.deleteAll();
+    final r = widget.route;
+    if (r == null) return;
+    final pos = RiderController.instance.currentPosition.value;
+    final coords = <mb.Position>[
+      if (pos != null) mb.Position(pos.lng, pos.lat),
+      mb.Position(r.vendorLng, r.vendorLat),
+      mb.Position(r.dropLng, r.dropLat),
+    ];
+    if (coords.length < 2) return;
+    await mgr.create(
+      mb.PolylineAnnotationOptions(
+        geometry: mb.LineString(coordinates: coords),
+        lineColor: WBColors.surfaceDark.toARGB32(),
+        lineWidth: 4.0,
+        lineJoin: mb.LineJoin.ROUND,
+      ),
+    );
   }
 
   Future<void> _onMapCreated(mb.MapboxMap map) async {
@@ -114,6 +150,10 @@ class _MapboxLayerState extends State<_MapboxLayer> {
       );
       _centerOnCurrent();
     }
+
+    // The route line sits under the offer pins so the pins stay tappable.
+    _polylineManager = await map.annotations.createPolylineAnnotationManager();
+    _syncRoute();
 
     _pointManager = await map.annotations.createPointAnnotationManager();
     // ignore: deprecated_member_use

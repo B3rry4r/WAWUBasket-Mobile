@@ -141,6 +141,7 @@ class _Body extends StatelessWidget {
               height: 200,
               child: RiderMapView(
                 offers: [offer],
+                route: offer,
                 onTapOffer: (_) {},
               ),
             ),
