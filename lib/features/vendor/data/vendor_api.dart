@@ -102,4 +102,10 @@ class VendorApi {
     final res = await _api.get('/vendor/payouts');
     return (res as List?) ?? const [];
   }
+
+  /// The vendor's wallet — available balance + escrow held.
+  Future<Map<String, dynamic>> wallet() async {
+    final res = await _api.get('/wallet');
+    return (res as Map).cast<String, dynamic>();
+  }
 }

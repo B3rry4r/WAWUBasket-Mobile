@@ -68,11 +68,29 @@ class VendorPayoutsScreen extends StatefulWidget {
 class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
   List<_Payout>? _payouts;
   String? _error;
+  int? _balance;
+  int _escrow = 0;
 
   @override
   void initState() {
     super.initState();
     _load();
+    _loadWallet();
+  }
+
+  Future<void> _loadWallet() async {
+    try {
+      final w = await VendorApi.instance.wallet();
+      final bal = w['balanceNaira'];
+      final esc = w['escrowHeldNaira'];
+      if (!mounted) return;
+      setState(() {
+        _balance = bal is num ? bal.toInt() : int.tryParse('${bal ?? 0}') ?? 0;
+        _escrow = esc is num ? esc.toInt() : int.tryParse('${esc ?? 0}') ?? 0;
+      });
+    } on ApiException {
+      // Non-critical — the hero falls back to a dash.
+    }
   }
 
   Future<void> _load() async {
@@ -143,7 +161,7 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '₦184,250',
+                    _balance == null ? '₦—' : wbNaira(_balance!),
                     style: WBTypography.hero.copyWith(
                       color: Colors.white,
                       fontSize: 36,
@@ -152,7 +170,7 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'Pending ₦68,400 · WAWU fee 8%',
+                    'Held in escrow ${wbNaira(_escrow)} · WAWU fee 8%',
                     style: WBTypography.caption.copyWith(
                       color: Colors.white.withValues(alpha: 0.6),
                     ),
