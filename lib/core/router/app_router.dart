@@ -343,7 +343,11 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.chatRider,
-        builder: (_, _) => const ChatScreen(kind: ChatContextKind.rider),
+        builder: (_, state) => ChatScreen(
+          kind: ChatContextKind.rider,
+          orderId: state.uri.queryParameters['orderId'],
+          title: state.uri.queryParameters['title'],
+        ),
       ),
       GoRoute(
         path: AppRoutes.chatSupport,

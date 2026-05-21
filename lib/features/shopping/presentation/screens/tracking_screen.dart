@@ -236,7 +236,15 @@ class _TrackingScreenState extends State<TrackingScreen> {
                         ),
                         _ContactCircle(
                           icon: WBIconName.message,
-                          onTap: () => context.push(AppRoutes.chatRider),
+                          onTap: () => context.push(
+                            Uri(
+                              path: AppRoutes.chatRider,
+                              queryParameters: {
+                                'orderId': order.id,
+                                'title': order.riderName!,
+                              },
+                            ).toString(),
+                          ),
                         ),
                       ],
                     ),

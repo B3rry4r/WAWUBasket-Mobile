@@ -50,6 +50,7 @@ class DeliveryOffer {
   const DeliveryOffer({
     required this.id,
     required this.deliveryId,
+    required this.orderId,
     required this.vendorName,
     required this.vendorAddress,
     required this.vendorLat,
@@ -70,6 +71,9 @@ class DeliveryOffer {
   /// The underlying delivery id — what the picked-up / delivered
   /// endpoints key on (distinct from the offer [id]).
   final String deliveryId;
+
+  /// The order this delivery belongs to — the key the chat thread uses.
+  final String orderId;
   final String vendorName;
   final String vendorAddress;
   final double vendorLat;
@@ -108,6 +112,7 @@ class DeliveryOffer {
     return DeliveryOffer(
       id: (j['id'] ?? '').toString(),
       deliveryId: (delivery['id'] ?? '').toString(),
+      orderId: (order['id'] ?? '').toString(),
       vendorName: (vendor['businessName'] ?? 'Vendor').toString(),
       vendorAddress: (vendor['addressLine'] ?? '').toString(),
       vendorLat:

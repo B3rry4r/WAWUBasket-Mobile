@@ -1,78 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../auth/application/role_controller.dart';
-import 'chat_screen.dart';
+import '../../data/chat_api.dart';
 
-/// Surfaced chat section. Lists everyone the current role can message —
-/// WAWU Support is universal; the contextual contact changes with the
-/// role (customer ↔ rider, vendor ↔ rider, agent ↔ trader, etc).
-class ChatInboxScreen extends StatelessWidget {
+/// Surfaced chat section. WAWU Support is a universal entry point; the
+/// order conversations below it come live from `/v1/chats` — everyone the
+/// current role can message on its active orders.
+class ChatInboxScreen extends StatefulWidget {
   const ChatInboxScreen({super.key});
 
-  List<_Conversation> _conversationsFor(AppRole role) {
-    final support = const _Conversation(
-      name: 'WAWU Support',
-      preview: 'Hey 👋 how can we help?',
-      time: 'Now',
-      kind: ChatContextKind.support,
-      unread: true,
-    );
-    switch (role) {
-      case AppRole.customer:
-        return [
-          const _Conversation(
-            name: 'Tunde · Rider',
-            preview: 'On my way, ETA 12 min.',
-            time: '12:35',
-            kind: ChatContextKind.rider,
-            unread: true,
-          ),
-          support,
-        ];
-      case AppRole.vendor:
-        return [
-          const _Conversation(
-            name: 'Tunde · Rider',
-            preview: "I'm outside for order WAWU-8821.",
-            time: '12:31',
-            kind: ChatContextKind.rider,
-          ),
-          support,
-        ];
-      case AppRole.rider:
-        return [
-          const _Conversation(
-            name: 'Adunni · Customer',
-            preview: 'Please use the Akin Adesola gate.',
-            time: '12:35',
-            kind: ChatContextKind.rider,
-            unread: true,
-          ),
-          support,
-        ];
-      case AppRole.trader:
-      case AppRole.agent:
-      case AppRole.driver:
-        return [
-          const _Conversation(
-            name: 'Hauwa · Trader',
-            preview: 'Load is ready for pickup at the depot.',
-            time: '11:02',
-            kind: ChatContextKind.rider,
-          ),
-          support,
-        ];
+  @override
+  State<ChatInboxScreen> createState() => _ChatInboxScreenState();
+}
+
+class _ChatInboxScreenState extends State<ChatInboxScreen> {
+  List<_Conversation>? _chats;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final raw = await ChatApi.instance.inbox();
+      if (!mounted) return;
+      setState(() => _chats = [
+            for (final e in raw)
+              _Conversation.fromJson((e as Map).cast<String, dynamic>()),
+          ]);
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
     }
+  }
+
+  void _open(_Conversation c) {
+    final id = c.orderId;
+    if (id == null) {
+      context.push(AppRoutes.chatSupport);
+      return;
+    }
+    context.push(
+      Uri(
+        path: AppRoutes.chatRider,
+        queryParameters: {'orderId': id, 'title': c.name},
+      ).toString(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final role = RoleController.instance.role;
-    final conversations = _conversationsFor(role);
+    const support = _Conversation(
+      name: 'WAWU Support',
+      preview: 'Hey 👋 how can we help?',
+      time: 'Now',
+      unread: false,
+      orderId: null,
+    );
+    final chats = _chats;
 
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
@@ -111,17 +103,41 @@ class ChatInboxScreen extends StatelessWidget {
               padding: EdgeInsets.zero,
               child: Column(
                 children: [
-                  for (var i = 0; i < conversations.length; i++) ...[
-                    _ConversationRow(
-                      conversation: conversations[i],
-                      onTap: () => context.push(
-                        conversations[i].kind == ChatContextKind.rider
-                            ? AppRoutes.chatRider
-                            : AppRoutes.chatSupport,
+                  _ConversationRow(
+                    conversation: support,
+                    onTap: () => _open(support),
+                  ),
+                  const WBDivider(),
+                  if (chats == null && _error == null)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 32),
+                      child: Center(
+                        child: SizedBox(
+                          width: 26,
+                          height: 26,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.4,
+                            valueColor:
+                                AlwaysStoppedAnimation(WBColors.surfaceDark),
+                          ),
+                        ),
                       ),
-                    ),
-                    if (i != conversations.length - 1) const WBDivider(),
-                  ],
+                    )
+                  else if (_error != null)
+                    _InboxHint(text: _error!)
+                  else if (chats!.isEmpty)
+                    const _InboxHint(
+                      text: 'No order chats yet. They show up here once '
+                          'you have an active order.',
+                    )
+                  else
+                    for (var i = 0; i < chats.length; i++) ...[
+                      _ConversationRow(
+                        conversation: chats[i],
+                        onTap: () => _open(chats[i]),
+                      ),
+                      if (i != chats.length - 1) const WBDivider(),
+                    ],
                 ],
               ),
             ),
@@ -132,19 +148,60 @@ class ChatInboxScreen extends StatelessWidget {
   }
 }
 
+String _ago(DateTime? t) {
+  if (t == null) return '';
+  final d = DateTime.now().difference(t.toLocal());
+  if (d.inMinutes < 1) return 'Now';
+  if (d.inMinutes < 60) return '${d.inMinutes}m';
+  if (d.inHours < 24) return '${d.inHours}h';
+  return '${d.inDays}d';
+}
+
 class _Conversation {
   const _Conversation({
     required this.name,
     required this.preview,
     required this.time,
-    required this.kind,
-    this.unread = false,
+    required this.unread,
+    required this.orderId,
   });
+
   final String name;
   final String preview;
   final String time;
-  final ChatContextKind kind;
   final bool unread;
+
+  /// The order this thread belongs to. Null for the static support row.
+  final String? orderId;
+
+  factory _Conversation.fromJson(Map<String, dynamic> j) {
+    final cp = (j['counterpart'] as Map?)?.cast<String, dynamic>() ??
+        const <String, dynamic>{};
+    final at = DateTime.tryParse('${j['lastMessageAt'] ?? ''}');
+    return _Conversation(
+      name: (cp['name'] ?? 'Conversation').toString(),
+      preview: (j['lastMessage'] ?? '').toString(),
+      time: _ago(at),
+      unread: j['unread'] == true,
+      orderId: j['orderId']?.toString(),
+    );
+  }
+}
+
+class _InboxHint extends StatelessWidget {
+  const _InboxHint({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(14),
+      child: Text(
+        text,
+        style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+      ),
+    );
+  }
 }
 
 class _ConversationRow extends StatelessWidget {

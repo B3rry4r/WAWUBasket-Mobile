@@ -323,7 +323,15 @@ class _Body extends StatelessWidget {
                         label: 'Message',
                         size: WBButtonSize.sm,
                         variant: WBButtonVariant.secondary,
-                        onPressed: () => context.push(AppRoutes.chatRider),
+                        onPressed: () => context.push(
+                          Uri(
+                            path: AppRoutes.chatRider,
+                            queryParameters: {
+                              'orderId': order.id,
+                              'title': order.riderName!,
+                            },
+                          ).toString(),
+                        ),
                       ),
                     ],
                   ),

@@ -231,7 +231,15 @@ class _Body extends StatelessWidget {
                   child: WBButton(
                     label: 'Open chat',
                     variant: WBButtonVariant.secondary,
-                    onPressed: () => context.push(AppRoutes.chatRider),
+                    onPressed: () => context.push(
+                      Uri(
+                        path: AppRoutes.chatRider,
+                        queryParameters: {
+                          'orderId': offer.orderId,
+                          'title': offer.customerName,
+                        },
+                      ).toString(),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
