@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/account_extras_api.dart';
+import '../../data/iap_service.dart';
 
 /// WAWU+ subscription screen, benefits, monthly/yearly pricing, trial CTA.
 class WawuPlusScreen extends StatefulWidget {
@@ -35,18 +37,20 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
     }
   }
 
-  Future<void> _startTrial() async {
+  Future<void> _subscribe() async {
+    if (kIsWeb) {
+      wbShowSnack(context, 'Open WAWUBasket on your phone to join WAWU+.');
+      return;
+    }
     setState(() => _busy = true);
     try {
-      await AccountExtrasApi.instance
-          .startTrial(_yearly ? 'yearly' : 'monthly');
-      if (!mounted) return;
-      wbShowSnack(
-        context,
-        'WAWU+ trial started · ${_yearly ? 'yearly' : 'monthly'} plan',
+      await WawuPlusIap.instance.buy(
+        _yearly ? WawuPlusIap.yearlyId : WawuPlusIap.monthlyId,
       );
+      if (!mounted) return;
+      wbShowSnack(context, 'Welcome to WAWU+!');
       context.pop();
-    } on ApiException catch (e) {
+    } on IapException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -206,7 +210,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                         _active ? WBIconName.check : WBIconName.arrowRight,
                     loading: _busy,
                     disabled: _active,
-                    onPressed: _active ? null : _startTrial,
+                    onPressed: _active ? null : _subscribe,
                   ),
                 ),
               ),
