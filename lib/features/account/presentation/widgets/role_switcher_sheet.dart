@@ -2,11 +2,13 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/auth_api.dart';
 
 /// In-place role switcher. Lists every role the user could be in with its
 /// current KYC status, then routes accordingly when one is tapped:
@@ -92,9 +94,7 @@ class RoleSwitcherSheet extends StatelessWidget {
     }
 
     if (role == AppRole.customer) {
-      ctrl.setRole(AppRole.customer);
-      Navigator.of(context).pop();
-      context.go(AppRole.customer.homeRoute);
+      _switchTo(context, AppRole.customer);
       return;
     }
 
@@ -114,9 +114,7 @@ class RoleSwitcherSheet extends StatelessWidget {
     final status = ctrl.statusOf(role);
     switch (status) {
       case RoleStatus.approved:
-        ctrl.setRole(role);
-        Navigator.of(context).pop();
-        context.go(role.homeRoute);
+        _switchTo(context, role);
       case RoleStatus.pending:
         wbShowSnack(
           context,
@@ -127,6 +125,24 @@ class RoleSwitcherSheet extends StatelessWidget {
         Navigator.of(context).pop();
         if (kyc != null) context.push(kyc);
     }
+  }
+
+  /// Mints a fresh token carrying the new `activeRole`, then routes into
+  /// that role's shell. A failed switch leaves the user where they were.
+  Future<void> _switchTo(BuildContext context, AppRole role) async {
+    final router = GoRouter.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    Navigator.of(context).pop();
+    try {
+      await AuthApi.instance.switchRole(role.name);
+    } on ApiException catch (e) {
+      messenger
+        ..clearSnackBars()
+        ..showSnackBar(SnackBar(content: Text(e.message)));
+      return;
+    }
+    RoleController.instance.setRole(role);
+    router.go(role.homeRoute);
   }
 }
 
