@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
@@ -65,10 +66,13 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
         ],
       );
       if (!mounted) return;
-      RoleController.instance.completeKyc(AppRole.driver);
-      RoleController.instance.setRole(AppRole.driver);
-      wbShowSnack(context, 'Application approved · Time to roll');
-      context.go(AppRoutes.driverHome);
+      RoleController.instance.markPending(AppRole.driver);
+      wbShowSnack(context, AppLocalizations.of(context).kycSubmitted);
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go(AppRoutes.roleSelect);
+      }
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _busy = false);

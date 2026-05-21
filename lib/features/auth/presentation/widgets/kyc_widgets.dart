@@ -4,6 +4,7 @@ import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../l10n/app_localizations.dart';
 
 /// Section header used in every KYC screen, UPPERCASE label + spacing.
 /// Mirrors the look of the Profile screen menu-section labels so KYC feels
@@ -83,7 +84,9 @@ class _KycUploadTileState extends State<KycUploadTile> {
         if (mounted) setState(() => _uploaded = true);
       }
     } catch (_) {
-      if (mounted) wbShowSnack(context, 'Could not upload ${widget.label}.');
+      if (mounted) {
+        wbShowSnack(context, AppLocalizations.of(context).kycUploadFailed);
+      }
     } finally {
       if (mounted) setState(() => _uploading = false);
     }

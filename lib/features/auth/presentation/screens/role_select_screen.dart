@@ -79,7 +79,12 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
         );
       case RoleStatus.unregistered:
         final kyc = _selected.kycRoute;
-        if (kyc != null) context.push(kyc);
+        if (kyc != null) {
+          // Refresh when KYC returns so the new "In review" status shows.
+          context.push(kyc).then((_) {
+            if (mounted) setState(() {});
+          });
+        }
     }
   }
 
