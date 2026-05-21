@@ -1,64 +1,112 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/account_extras_api.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
-  static const _groups = [
-    _Group(
-      date: 'Today',
-      items: [
-        _Notif(
-          icon: WBIconName.bike,
-          title: 'Tunde is on the way',
-          body: 'Your order from Mama Cass Kitchen arrives in 12 min.',
-          time: '12:31',
-          unread: true,
-        ),
-        _Notif(
-          icon: WBIconName.check,
-          title: 'Order confirmed',
-          body: 'Mama Cass has accepted your order. Preparing now.',
-          time: '12:29',
-          unread: true,
-        ),
-        _Notif(
-          icon: WBIconName.star,
-          title: '20% off your next order',
-          body: 'Use code WELCOME20 before Sunday.',
-          time: '09:00',
-          unread: false,
-        ),
-      ],
-    ),
-    _Group(
-      date: 'Yesterday',
-      items: [
-        _Notif(
-          icon: WBIconName.check,
-          title: 'Delivered',
-          body: 'Your order from The Daily Grain was delivered.',
-          time: '18:44',
-          unread: false,
-        ),
-        _Notif(
-          icon: WBIconName.card,
-          title: 'Payment confirmed',
-          body: '₦7,400 deducted for order #8804.',
-          time: '18:01',
-          unread: false,
-        ),
-      ],
-    ),
-  ];
+  @override
+  State<NotificationsScreen> createState() => _NotificationsScreenState();
+}
+
+const _months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+WBIconName _iconFrom(String s) => switch (s) {
+      'bike' => WBIconName.bike,
+      'check' => WBIconName.check,
+      'star' => WBIconName.star,
+      'card' => WBIconName.card,
+      _ => WBIconName.bell,
+    };
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  List<_Notif>? _items;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final res = await AccountExtrasApi.instance.notifications();
+      final raw = (res['items'] as List?) ?? const [];
+      if (!mounted) return;
+      setState(() => _items = [
+            for (final e in raw)
+              _Notif.fromJson((e as Map).cast<String, dynamic>()),
+          ]);
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  Future<void> _markAll() async {
+    final items = _items;
+    if (items == null) return;
+    setState(() => _items = [for (final n in items) n.copyRead()]);
+    try {
+      await AccountExtrasApi.instance.markAllNotificationsRead();
+      if (mounted) wbShowSnack(context, 'All notifications marked read');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    }
+  }
+
+  void _open(_Notif n) {
+    if (n.unread) {
+      setState(() => _items = [
+            for (final cur in _items ?? const <_Notif>[])
+              cur.id == n.id ? cur.copyRead() : cur,
+          ]);
+      AccountExtrasApi.instance.markNotificationRead(n.id).catchError((_) {});
+    }
+    if (n.icon == WBIconName.bike || n.icon == WBIconName.check) {
+      context.push(AppRoutes.tracking);
+    } else {
+      wbShowSnack(context, n.title);
+    }
+  }
+
+  /// Groups notifications under Today / Yesterday / date headers.
+  List<({String label, List<_Notif> items})> get _grouped {
+    final items = _items ?? const <_Notif>[];
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final order = <String>[];
+    final map = <String, List<_Notif>>{};
+    for (final n in items) {
+      final d = DateTime(n.at.year, n.at.month, n.at.day);
+      final diff = today.difference(d).inDays;
+      final label = diff <= 0
+          ? 'Today'
+          : diff == 1
+              ? 'Yesterday'
+              : '${n.at.day} ${_months[n.at.month - 1]}';
+      if (!map.containsKey(label)) {
+        order.add(label);
+        map[label] = [];
+      }
+      map[label]!.add(n);
+    }
+    return [for (final l in order) (label: l, items: map[l]!)];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final items = _items;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
@@ -81,7 +129,7 @@ class NotificationsScreen extends StatelessWidget {
                   ],
                 ),
                 GestureDetector(
-                  onTap: () => wbShowSnack(context, 'All notifications marked read'),
+                  onTap: _markAll,
                   child: Text(
                     'Mark all read',
                     style: WBTypography.caption.copyWith(
@@ -94,74 +142,116 @@ class NotificationsScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            for (final group in _groups) ...[
-              Text(
-                group.date.toUpperCase(),
-                style: WBTypography.label.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: WBColors.fgPlaceholder,
-                  letterSpacing: 0.66,
+            if (items == null && _error == null)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 56),
+                child: Center(
+                  child: SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.4,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: WBColors.surfaceCard,
-                  borderRadius: BorderRadius.circular(WBRadius.card),
-                  boxShadow: WBShadows.card,
+              )
+            else if (_error != null)
+              _hint(_error!)
+            else if (items!.isEmpty)
+              _hint("You're all caught up — no notifications yet.")
+            else
+              for (final group in _grouped) ...[
+                Text(
+                  group.label.toUpperCase(),
+                  style: WBTypography.label.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: WBColors.fgPlaceholder,
+                    letterSpacing: 0.66,
+                  ),
                 ),
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: [
-                    for (var i = 0; i < group.items.length; i++) ...[
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          // Order-related notifications land on tracking;
-                          // promotional ones surface a snackbar.
-                          final n = group.items[i];
-                          if (n.icon == WBIconName.bike ||
-                              n.icon == WBIconName.check) {
-                            context.push(AppRoutes.tracking);
-                          } else {
-                            wbShowSnack(context, n.title);
-                          }
-                        },
-                        child: _NotifRow(notif: group.items[i]),
-                      ),
-                      if (i != group.items.length - 1) const WBDivider(),
+                const SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    color: WBColors.surfaceCard,
+                    borderRadius: BorderRadius.circular(WBRadius.card),
+                    boxShadow: WBShadows.card,
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < group.items.length; i++) ...[
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => _open(group.items[i]),
+                          child: _NotifRow(notif: group.items[i]),
+                        ),
+                        if (i != group.items.length - 1) const WBDivider(),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: WBSpacing.lg),
-            ],
+                const SizedBox(height: WBSpacing.lg),
+              ],
           ],
         ),
       ),
     );
   }
-}
 
-class _Group {
-  const _Group({required this.date, required this.items});
-  final String date;
-  final List<_Notif> items;
+  Widget _hint(String text) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(WBSpacing.md + 4),
+        decoration: BoxDecoration(
+          color: WBColors.bgSoft,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+        ),
+        child: Text(
+          text,
+          style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+        ),
+      );
 }
 
 class _Notif {
   const _Notif({
+    required this.id,
     required this.icon,
     required this.title,
     required this.body,
-    required this.time,
+    required this.at,
     required this.unread,
   });
+
+  final String id;
   final WBIconName icon;
   final String title;
   final String body;
-  final String time;
+  final DateTime at;
   final bool unread;
+
+  String get time =>
+      '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}';
+
+  _Notif copyRead() => _Notif(
+        id: id,
+        icon: icon,
+        title: title,
+        body: body,
+        at: at,
+        unread: false,
+      );
+
+  factory _Notif.fromJson(Map<String, dynamic> j) => _Notif(
+        id: (j['id'] ?? '').toString(),
+        icon: _iconFrom('${j['icon'] ?? 'bell'}'),
+        title: (j['title'] ?? '').toString(),
+        body: (j['body'] ?? '').toString(),
+        at: DateTime.tryParse('${j['createdAt'] ?? ''}')?.toLocal() ??
+            DateTime.now(),
+        unread: j['read'] != true,
+      );
 }
 
 class _NotifRow extends StatelessWidget {

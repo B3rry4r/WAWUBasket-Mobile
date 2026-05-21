@@ -1,15 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/presentation/widgets/search_field.dart';
+import '../../data/account_extras_api.dart';
 
-class WalletScreen extends StatelessWidget {
+class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
 
+  @override
+  State<WalletScreen> createState() => _WalletScreenState();
+}
+
+const _months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+const _days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+int _money(dynamic v) {
+  if (v == null) return 0;
+  if (v is num) return v.toInt();
+  return int.tryParse(v.toString()) ?? 0;
+}
+
+String _txnTime(DateTime? t) {
+  if (t == null) return '';
+  final l = t.toLocal();
+  final now = DateTime.now();
+  final d = DateTime(now.year, now.month, now.day)
+      .difference(DateTime(l.year, l.month, l.day))
+      .inDays;
+  final hm =
+      '${l.hour.toString().padLeft(2, '0')}:${l.minute.toString().padLeft(2, '0')}';
+  if (d == 0) return 'Today $hm';
+  if (d == 1) return 'Yesterday';
+  return '${_days[l.weekday - 1]} ${l.day} ${_months[l.month - 1]}';
+}
+
+class _Txn {
+  const _Txn({
+    required this.label,
+    required this.sub,
+    required this.amount,
+    required this.time,
+    required this.out,
+  });
+
+  final String label;
+  final String sub;
+  final String amount;
+  final String time;
+  final bool out;
+
+  factory _Txn.fromJson(Map<String, dynamic> j) {
+    final out = '${j['direction'] ?? 'out'}' == 'out';
+    final n = _money(j['amountNaira']);
+    return _Txn(
+      label: (j['label'] ?? '').toString(),
+      sub: (j['sub'] ?? '').toString(),
+      amount: '${out ? '-' : '+'}${wbNaira(n)}',
+      time: _txnTime(DateTime.tryParse('${j['createdAt'] ?? ''}')),
+      out: out,
+    );
+  }
+}
+
+class _WalletScreenState extends State<WalletScreen> {
   static const _actions = [
     (icon: WBIconName.plus, label: 'Top up', route: AppRoutes.walletTopUp),
     (icon: WBIconName.arrowRight, label: 'Send', route: AppRoutes.walletSend),
@@ -17,46 +79,39 @@ class WalletScreen extends StatelessWidget {
     (icon: WBIconName.card, label: 'Cards', route: AppRoutes.walletCards),
   ];
 
-  static const _txns = [
-    (
-      label: 'Mama Cass Kitchen',
-      sub: 'Order #8821',
-      amount: '-₦14,600',
-      time: 'Today 12:31',
-      out: true,
-    ),
-    (
-      label: 'Wallet top-up',
-      sub: 'Via Paystack',
-      amount: '+₦20,000',
-      time: 'Today 09:15',
-      out: false,
-    ),
-    (
-      label: 'The Daily Grain',
-      sub: 'Order #8804',
-      amount: '-₦7,400',
-      time: 'Yesterday',
-      out: true,
-    ),
-    (
-      label: 'Escrow released',
-      sub: 'Trade #TR-0041',
-      amount: '+₦3,000',
-      time: 'Mon 12 May',
-      out: false,
-    ),
-    (
-      label: 'Hako Sushi',
-      sub: 'Order #8790',
-      amount: '-₦9,800',
-      time: 'Sat 10 May',
-      out: true,
-    ),
-  ];
+  int _balance = 0;
+  int _escrow = 0;
+  List<_Txn>? _txns;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final res = await AccountExtrasApi.instance.wallet();
+      final raw = (res['transactions'] as List?) ?? const [];
+      if (!mounted) return;
+      setState(() {
+        _balance = _money(res['balanceNaira']);
+        _escrow = _money(res['escrowHeldNaira']);
+        _txns = [
+          for (final e in raw)
+            _Txn.fromJson((e as Map).cast<String, dynamic>()),
+        ];
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final txns = _txns;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: ListView(
@@ -103,7 +158,7 @@ class WalletScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  '₦12,500',
+                  txns == null && _error == null ? '₦—' : wbNaira(_balance),
                   style: WBTypography.hero.copyWith(
                     fontSize: 48,
                     color: Colors.white,
@@ -111,40 +166,44 @@ class WalletScreen extends StatelessWidget {
                     height: 1.1,
                   ),
                 ),
-                const SizedBox(height: WBSpacing.md),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: WBColors.statusWarning.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: WBColors.statusWarning.withValues(alpha: 0.25),
+                if (_escrow > 0) ...[
+                  const SizedBox(height: WBSpacing.md),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      const WBIcon(
-                        WBIconName.clock,
-                        size: 15,
-                        color: WBColors.statusWarning,
+                    decoration: BoxDecoration(
+                      color: WBColors.statusWarning.withValues(alpha: 0.14),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color:
+                            WBColors.statusWarning.withValues(alpha: 0.25),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          '₦3,000 held in escrow, releases in 48 hrs',
-                          style: WBTypography.caption.copyWith(
-                            color: WBColors.statusWarning,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
+                    ),
+                    child: Row(
+                      children: [
+                        const WBIcon(
+                          WBIconName.clock,
+                          size: 15,
+                          color: WBColors.statusWarning,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            '${wbNaira(_escrow)} held in escrow, '
+                            'releases on delivery',
+                            style: WBTypography.caption.copyWith(
+                              color: WBColors.statusWarning,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ],
             ),
           ),
@@ -209,35 +268,55 @@ class WalletScreen extends StatelessWidget {
                   action: 'See all',
                 ),
                 const SizedBox(height: WBSpacing.md),
-                Container(
-                  decoration: BoxDecoration(
-                    color: WBColors.surfaceCard,
-                    borderRadius: BorderRadius.circular(WBRadius.card),
-                    boxShadow: WBShadows.card,
-                  ),
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      for (var i = 0; i < _txns.length; i++) ...[
-                        GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => wbShowSnack(
-                            context,
-                            '${_txns[i].label} · ${_txns[i].amount}',
-                          ),
-                          child: _TxnRow(
-                            label: _txns[i].label,
-                            sub: _txns[i].sub,
-                            amount: _txns[i].amount,
-                            time: _txns[i].time,
-                            out: _txns[i].out,
-                          ),
+                if (txns == null && _error == null)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40),
+                    child: Center(
+                      child: SizedBox(
+                        width: 26,
+                        height: 26,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2.4,
+                          valueColor:
+                              AlwaysStoppedAnimation(WBColors.surfaceDark),
                         ),
-                        if (i != _txns.length - 1) const WBDivider(),
+                      ),
+                    ),
+                  )
+                else if (_error != null)
+                  _hint(_error!)
+                else if (txns!.isEmpty)
+                  _hint('No transactions yet.')
+                else
+                  Container(
+                    decoration: BoxDecoration(
+                      color: WBColors.surfaceCard,
+                      borderRadius: BorderRadius.circular(WBRadius.card),
+                      boxShadow: WBShadows.card,
+                    ),
+                    clipBehavior: Clip.antiAlias,
+                    child: Column(
+                      children: [
+                        for (var i = 0; i < txns.length; i++) ...[
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () => wbShowSnack(
+                              context,
+                              '${txns[i].label} · ${txns[i].amount}',
+                            ),
+                            child: _TxnRow(
+                              label: txns[i].label,
+                              sub: txns[i].sub,
+                              amount: txns[i].amount,
+                              time: txns[i].time,
+                              out: txns[i].out,
+                            ),
+                          ),
+                          if (i != txns.length - 1) const WBDivider(),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -245,6 +324,19 @@ class WalletScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _hint(String text) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(WBSpacing.md + 4),
+        decoration: BoxDecoration(
+          color: WBColors.bgSoft,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+        ),
+        child: Text(
+          text,
+          style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+        ),
+      );
 }
 
 class _TxnRow extends StatelessWidget {

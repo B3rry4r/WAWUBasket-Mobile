@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
-import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
-import '../../../shopping/application/mock_data.dart';
+import '../../../shopping/domain/models/product.dart';
+import '../../data/account_extras_api.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -18,8 +20,45 @@ class FavoritesScreen extends StatefulWidget {
 class _FavoritesScreenState extends State<FavoritesScreen> {
   String _tab = 'vendors';
 
+  List<Vendor>? _vendors;
+  List<Product> _items = const [];
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() => _error = null);
+    try {
+      final res = await AccountExtrasApi.instance.favorites();
+      final vendors = (res['vendors'] as List?) ?? const [];
+      final items = (res['items'] as List?) ?? const [];
+      if (!mounted) return;
+      setState(() {
+        _vendors = [
+          for (final v in vendors)
+            Vendor.fromJson((v as Map).cast<String, dynamic>()),
+        ];
+        _items = [
+          for (final i in items)
+            Product.fromJson((i as Map).cast<String, dynamic>()),
+        ];
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _error = e.message);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final vendors = _vendors;
+    final count = _tab == 'vendors'
+        ? '${vendors?.length ?? 0} vendors'
+        : '${_items.length} dishes';
+
     return SafeArea(
       bottom: false,
       child: ListView(
@@ -35,9 +74,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             children: [
               Text('Favorites', style: WBTypography.page),
               Text(
-                _tab == 'vendors'
-                    ? '${MockData.vendors.length} vendors'
-                    : '${MockData.menu.length} dishes',
+                count,
                 style: WBTypography.caption.copyWith(
                   color: WBColors.fgSecondary,
                   fontWeight: FontWeight.w500,
@@ -70,38 +107,73 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ),
           ),
           const SizedBox(height: WBSpacing.lg),
-          if (_tab == 'vendors') ...[
-            for (var i = 0; i < MockData.vendors.length; i++) ...[
-              DSVendorCard(
-                vendor: MockData.vendors[i],
-                onTap: () => context.push(
-                  '${AppRoutes.vendor}/${MockData.vendors[i].id}',
+          if (vendors == null && _error == null)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 56),
+              child: Center(
+                child: SizedBox(
+                  width: 26,
+                  height: 26,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.4,
+                    valueColor:
+                        AlwaysStoppedAnimation(WBColors.surfaceDark),
+                  ),
                 ),
               ),
-              if (i != MockData.vendors.length - 1)
-                const SizedBox(height: WBSpacing.md),
-            ],
+            )
+          else if (_error != null)
+            _hint(_error!)
+          else if (_tab == 'vendors') ...[
+            if (vendors!.isEmpty)
+              _hint('No favorite vendors yet. Tap the heart on a storefront.')
+            else
+              for (var i = 0; i < vendors.length; i++) ...[
+                DSVendorCard(
+                  vendor: vendors[i],
+                  onTap: () => context.push(
+                    '${AppRoutes.vendor}/${vendors[i].id}',
+                  ),
+                ),
+                if (i != vendors.length - 1)
+                  const SizedBox(height: WBSpacing.md),
+              ],
           ] else ...[
-            for (var i = 0; i < MockData.menu.length; i++) ...[
-              WBProductCard(
-                imageUrl: MockData.menu[i].imageUrl,
-                name: MockData.menu[i].name,
-                vendorName: MockData.menu[i].vendorName,
-                priceLabel: MockData.menu[i].formattedPrice,
-                description: MockData.menu[i].description,
-                variant: WBProductCardVariant.row,
-                onTap: () => context.push(
-                  '${AppRoutes.product}/${MockData.menu[i].id}',
+            if (_items.isEmpty)
+              _hint('No favorite dishes yet. Tap the heart on a dish.')
+            else
+              for (var i = 0; i < _items.length; i++) ...[
+                WBProductCard(
+                  imageUrl: _items[i].imageUrl,
+                  name: _items[i].name,
+                  vendorName: _items[i].vendorName,
+                  priceLabel: _items[i].formattedPrice,
+                  description: _items[i].description,
+                  variant: WBProductCardVariant.row,
+                  onTap: () => context.push(
+                    '${AppRoutes.product}/${_items[i].id}',
+                  ),
                 ),
-                onAdd: () => wbShowSnack(context, 'Added to basket'),
-              ),
-              if (i != MockData.menu.length - 1) const SizedBox(height: 12),
-            ],
+                if (i != _items.length - 1) const SizedBox(height: 12),
+              ],
           ],
         ],
       ),
     );
   }
+
+  Widget _hint(String text) => Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(WBSpacing.md + 4),
+        decoration: BoxDecoration(
+          color: WBColors.bgSoft,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+        ),
+        child: Text(
+          text,
+          style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+        ),
+      );
 }
 
 class _SegmentTab extends StatelessWidget {
