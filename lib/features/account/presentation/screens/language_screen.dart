@@ -17,16 +17,20 @@ class _LanguageScreenState extends State<LanguageScreen> {
   late String _selected =
       LocaleController.instance.locale.value?.languageCode ?? 'en';
 
-  // `id` is the locale code. English, French and Arabic ship now; the
-  // rest fall back to English until their translations land (Phase 12).
+  // `id` is the locale code. Pidgin has no translations yet and falls
+  // back to English until its ARB lands.
   static const _languages = [
     (id: 'en', label: 'English', sub: 'Default'),
     (id: 'fr', label: 'French', sub: 'Français'),
     (id: 'ar', label: 'Arabic', sub: 'العربية'),
-    (id: 'pcm', label: 'Pidgin', sub: 'Naija'),
+    (id: 'pt', label: 'Portuguese', sub: 'Português'),
+    (id: 'sw', label: 'Swahili', sub: 'Kiswahili'),
+    (id: 'ha', label: 'Hausa', sub: 'Harshen Hausa'),
     (id: 'yo', label: 'Yorùbá', sub: 'Èdè Yorùbá'),
     (id: 'ig', label: 'Igbo', sub: 'Asụsụ Igbo'),
-    (id: 'ha', label: 'Hausa', sub: 'Harshen Hausa'),
+    (id: 'am', label: 'Amharic', sub: 'አማርኛ'),
+    (id: 'zu', label: 'Zulu', sub: 'isiZulu'),
+    (id: 'pcm', label: 'Pidgin', sub: 'Naija'),
   ];
 
   @override
