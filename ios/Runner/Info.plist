@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>WAWUBasket needs photo access so you can set a profile picture and add photos to your listings.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>WAWUBasket needs camera access so you can take photos for your profile, listings and verification documents.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

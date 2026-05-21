@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/application/wb_images.dart';
 import '../../application/profile_controller.dart';
+import '../../data/profile_api.dart';
 
 class PersonalInfoScreen extends StatefulWidget {
   const PersonalInfoScreen({super.key});
@@ -26,6 +28,37 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final _phone = TextEditingController();
   final _dob = TextEditingController();
   bool _busy = false;
+  bool _uploadingAvatar = false;
+  String? _avatarUrl;
+
+  Future<void> _pickAvatar() async {
+    setState(() => _uploadingAvatar = true);
+    try {
+      final res = await UploadService.instance
+          .pickAndUpload(folder: UploadFolder.avatars);
+      if (res == null) {
+        if (mounted) setState(() => _uploadingAvatar = false);
+        return;
+      }
+      await ProfileApi.instance.updateAvatar(res.key);
+      if (!mounted) return;
+      setState(() {
+        _avatarUrl = res.publicUrl;
+        _uploadingAvatar = false;
+      });
+      wbShowSnack(context, 'Photo updated');
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() => _uploadingAvatar = false);
+        wbShowSnack(context, e.message);
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() => _uploadingAvatar = false);
+        wbShowSnack(context, "Couldn't upload that photo.");
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -104,7 +137,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             // Profile photo picker
             Center(
               child: GestureDetector(
-                onTap: () => wbShowSnack(context, 'Choose a profile photo'),
+                onTap: _uploadingAvatar ? null : _pickAvatar,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -119,8 +152,29 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: const WBNetworkImage(url: WBImages.avatar),
+                      child: WBNetworkImage(
+                        url: _avatarUrl ?? WBImages.avatar,
+                      ),
                     ),
+                    if (_uploadingAvatar)
+                      Positioned.fill(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color(0x66000000),
+                          ),
+                          alignment: Alignment.center,
+                          child: const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.4,
+                              valueColor:
+                                  AlwaysStoppedAnimation(Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
                     Positioned(
                       right: 2,
                       bottom: 2,

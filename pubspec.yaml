@@ -45,6 +45,10 @@ dependencies:
   # the vendor pickup and the customer drop-off).
   url_launcher: ^6.3.1
 
+  # Picks images for avatar, product photos, listing images, KYC
+  # documents and chat attachments; uploaded to R2 via a presigned PUT.
+  image_picker: ^1.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -15,6 +15,10 @@ class ProfileApi {
   Future<void> update(Map<String, dynamic> dto) =>
       _api.patch('/profile', body: dto);
 
+  /// Persists a freshly-uploaded avatar key to the active role profile.
+  Future<void> updateAvatar(String avatarKey) =>
+      _api.patch('/profile/avatar', body: {'avatarKey': avatarKey});
+
   Future<Map<String, dynamic>> stats() async {
     final res = await _api.get('/profile/stats');
     return (res as Map).cast<String, dynamic>();
