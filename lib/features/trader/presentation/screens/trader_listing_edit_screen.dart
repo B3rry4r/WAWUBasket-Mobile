@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -27,6 +28,8 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
   late Corridor _origin;
   late Corridor _destination;
   late DateTime _harvest;
+  String? _imageUrl;
+  bool _uploadingPhoto = false;
 
   bool get _isEdit => widget.listingId != null;
   ExportListing? get _source =>
@@ -42,6 +45,25 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     _origin = s?.originCorridor ?? Corridor.nigeria;
     _destination = s?.destinationCorridor ?? Corridor.benin;
     _harvest = s?.harvestDate ?? DateTime.now();
+    _imageUrl = (s?.imageUrl.isNotEmpty ?? false) ? s!.imageUrl : null;
+  }
+
+  Future<void> _pickPhoto() async {
+    setState(() => _uploadingPhoto = true);
+    try {
+      final res = await UploadService.instance
+          .pickAndUpload(folder: UploadFolder.exportListings);
+      if (!mounted) return;
+      setState(() {
+        if (res != null) _imageUrl = res.publicUrl;
+        _uploadingPhoto = false;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(() => _uploadingPhoto = false);
+        wbShowSnack(context, "Couldn't upload that photo.");
+      }
+    }
   }
 
   @override
@@ -70,7 +92,8 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
       destinationCorridor: _destination,
       farmName: s?.farmName ?? 'Hauwa & Sons Bulk Co.',
       farmRegion: s?.farmRegion ?? 'Kano',
-      imageUrl: s?.imageUrl ??
+      imageUrl: _imageUrl ??
+          s?.imageUrl ??
           'https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=600&q=80&auto=format&fit=crop',
       enquiries: s?.enquiries ?? 0,
       status: s?.status ?? ExportListingStatus.active,
@@ -206,16 +229,58 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 GestureDetector(
-                  onTap: () =>
-                      wbShowSnack(context, 'Pick a photo from your camera'),
+                  onTap: _uploadingPhoto ? null : _pickPhoto,
                   child: Container(
                     height: 160,
+                    clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       color: WBColors.bgSoft,
                       borderRadius: BorderRadius.circular(WBRadius.card),
                       border: Border.all(color: WBColors.bgDivider),
                     ),
-                    child: Column(
+                    child: _uploadingPhoto
+                        ? const Center(
+                            child: SizedBox(
+                              width: 26,
+                              height: 26,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.4,
+                                valueColor: AlwaysStoppedAnimation(
+                                    WBColors.surfaceDark),
+                              ),
+                            ),
+                          )
+                        : _imageUrl != null
+                            ? Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  WBNetworkImage(url: _imageUrl!),
+                                  Positioned(
+                                    right: 10,
+                                    bottom: 10,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: WBColors.surfaceDark,
+                                        borderRadius:
+                                            BorderRadius.circular(
+                                                WBRadius.pill),
+                                      ),
+                                      child: Text(
+                                        'Change photo',
+                                        style:
+                                            WBTypography.caption.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
