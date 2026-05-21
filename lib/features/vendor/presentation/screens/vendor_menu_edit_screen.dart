@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_menu_controller.dart';
+
+/// Placeholder image for a new dish saved without a photo.
+const _defaultMenuImage =
+    'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80&auto=format&fit=crop';
 
 /// Add-or-edit form for one menu item. With an `itemId` it loads that item
 /// for editing; without one it stages a new item to be added on save.
@@ -28,6 +33,8 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
   late bool _available;
   late double _prep;
   late List<_EditableGroup> _groups;
+  String? _imageUrl;
+  bool _uploadingPhoto = false;
 
   bool get _isEdit => widget.itemId != null;
 
@@ -42,9 +49,28 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
     _category = src?.category ?? VendorMenuController.categories.first;
     _available = src?.available ?? true;
     _prep = (src?.prepMins ?? 15).toDouble();
+    _imageUrl = (src?.imageUrl.isNotEmpty ?? false) ? src!.imageUrl : null;
     _groups = (src?.modifierGroups ?? const <ModifierGroup>[])
         .map(_EditableGroup.fromGroup)
         .toList();
+  }
+
+  Future<void> _pickPhoto() async {
+    setState(() => _uploadingPhoto = true);
+    try {
+      final res = await UploadService.instance
+          .pickAndUpload(folder: UploadFolder.catalogItems);
+      if (!mounted) return;
+      setState(() {
+        if (res != null) _imageUrl = res.publicUrl;
+        _uploadingPhoto = false;
+      });
+    } catch (_) {
+      if (mounted) {
+        setState(() => _uploadingPhoto = false);
+        wbShowSnack(context, "Couldn't upload that photo.");
+      }
+    }
   }
 
   @override
@@ -72,6 +98,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
         category: _category,
         prepMins: _prep.toInt(),
         available: _available,
+        imageUrl: _imageUrl,
         modifierGroups: groups,
       );
       wbShowSnack(context, '${_name.text.trim()} updated');
@@ -83,6 +110,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
         category: _category,
         prepMins: _prep.toInt(),
         available: _available,
+        imageUrl: _imageUrl ?? _defaultMenuImage,
         modifierGroups: groups,
       );
       wbShowSnack(context, '${_name.text.trim()} added to the menu');
@@ -219,45 +247,88 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 GestureDetector(
-                  onTap: () =>
-                      wbShowSnack(context, 'Pick a photo from your camera'),
+                  onTap: _uploadingPhoto ? null : _pickPhoto,
                   child: Container(
                     height: 160,
+                    clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       color: WBColors.bgSoft,
                       borderRadius: BorderRadius.circular(WBRadius.card),
                       border: Border.all(color: WBColors.bgDivider),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: const BoxDecoration(
-                            color: WBColors.bgPrimary,
-                            shape: BoxShape.circle,
-                          ),
-                          alignment: Alignment.center,
-                          child: const WBIcon(WBIconName.plus, size: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Upload photo',
-                          style: WBTypography.body.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Tap to add, at least one shot',
-                          style: WBTypography.caption.copyWith(
-                            color: WBColors.fgSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: _uploadingPhoto
+                        ? const Center(
+                            child: SizedBox(
+                              width: 26,
+                              height: 26,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.4,
+                                valueColor: AlwaysStoppedAnimation(
+                                    WBColors.surfaceDark),
+                              ),
+                            ),
+                          )
+                        : _imageUrl != null
+                            ? Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  WBNetworkImage(url: _imageUrl!),
+                                  Positioned(
+                                    right: 10,
+                                    bottom: 10,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: WBColors.surfaceDark,
+                                        borderRadius:
+                                            BorderRadius.circular(
+                                                WBRadius.pill),
+                                      ),
+                                      child: Text(
+                                        'Change photo',
+                                        style:
+                                            WBTypography.caption.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: const BoxDecoration(
+                                      color: WBColors.bgPrimary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: const WBIcon(WBIconName.plus,
+                                        size: 18),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    'Upload photo',
+                                    style: WBTypography.body.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    'Tap to add, at least one shot',
+                                    style: WBTypography.caption.copyWith(
+                                      color: WBColors.fgSecondary,
+                                    ),
+                                  ),
+                                ],
+                              ),
                   ),
                 ),
                 const SizedBox(height: WBSpacing.lg),

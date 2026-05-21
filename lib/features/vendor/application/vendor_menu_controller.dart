@@ -193,6 +193,7 @@ class VendorMenuController {
     String? category,
     int? prepMins,
     bool? available,
+    String? imageUrl,
     List<ModifierGroup>? modifierGroups,
   }) {
     final it = byId(id);
@@ -203,6 +204,7 @@ class VendorMenuController {
     if (category != null) it.category = category;
     if (prepMins != null) it.prepMins = prepMins;
     if (available != null) it.available = available;
+    if (imageUrl != null) it.imageUrl = imageUrl;
     if (modifierGroups != null) it.modifierGroups = modifierGroups;
     _bump();
     if (!_isLocal(id)) {
@@ -212,6 +214,7 @@ class VendorMenuController {
         'price': ?priceNaira,
         'category': ?category,
         'prepMins': ?prepMins,
+        'images': ?(imageUrl == null ? null : [imageUrl]),
       }).catchError((_) {});
     }
   }
