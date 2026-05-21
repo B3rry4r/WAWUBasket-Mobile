@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/presentation/widgets/search_field.dart';
+import '../../data/account_extras_api.dart';
 
-class SupportScreen extends StatelessWidget {
+class SupportScreen extends StatefulWidget {
   const SupportScreen({super.key});
 
-  static const _faqs = [
-    (
-      q: 'How do I track my order?',
-      a: 'Open the order from your Orders tab and tap Track order.',
-    ),
-    (
-      q: 'Can I cancel after placing?',
-      a: 'Within 2 minutes of placing, cancellations are free. After that, a ₦200 fee applies.',
-    ),
-    (
-      q: 'My order arrived wrong',
-      a: "Tap Report an issue on the order receipt and we'll resolve it within 24 hrs.",
-    ),
-    (
-      q: 'How long does delivery take?',
-      a: 'Typically 20–45 minutes depending on your distance from the vendor.',
-    ),
-  ];
+  @override
+  State<SupportScreen> createState() => _SupportScreenState();
+}
 
+const _months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+class _Faq {
+  const _Faq(this.q, this.a);
+  final String q;
+  final String a;
+}
+
+class _Ticket {
+  const _Ticket({required this.subject, required this.status, required this.opened});
+  final String subject;
+  final String status;
+  final String opened;
+}
+
+class _SupportScreenState extends State<SupportScreen> {
   static const _contacts = [
     (
       icon: WBIconName.message,
@@ -50,8 +56,52 @@ class SupportScreen extends StatelessWidget {
     ),
   ];
 
+  List<_Faq>? _faqs;
+  _Ticket? _ticket;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final faqs = await AccountExtrasApi.instance.faqs();
+      if (mounted) {
+        setState(() => _faqs = [
+              for (final f in faqs)
+                _Faq(
+                  ((f as Map)['question'] ?? '').toString(),
+                  (f['answer'] ?? '').toString(),
+                ),
+            ]);
+      }
+    } on ApiException {
+      if (mounted) setState(() => _faqs = const []);
+    }
+    try {
+      final tickets = await AccountExtrasApi.instance.tickets();
+      if (tickets.isNotEmpty && mounted) {
+        final t = (tickets.first as Map).cast<String, dynamic>();
+        final created = DateTime.tryParse('${t['createdAt'] ?? ''}');
+        setState(() => _ticket = _Ticket(
+              subject: (t['subject'] ?? 'Support ticket').toString(),
+              status: (t['status'] ?? 'open').toString(),
+              opened: created == null
+                  ? ''
+                  : 'Opened ${created.day} ${_months[created.month - 1]}. '
+                      'Our team will respond within 24 hrs.',
+            ));
+      }
+    } on ApiException {
+      // No ticket card when the fetch fails.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final faqs = _faqs;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
@@ -174,118 +224,140 @@ class SupportScreen extends StatelessWidget {
             const SizedBox(height: WBSpacing.md),
             const SectionHeader(title: 'Common questions', action: 'See all'),
             const SizedBox(height: WBSpacing.sm + 2),
-            Container(
-              decoration: BoxDecoration(
-                color: WBColors.surfaceCard,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-                boxShadow: WBShadows.card,
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                children: [
-                  for (var i = 0; i < _faqs.length; i++) ...[
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () => wbShowSnack(context, _faqs[i].q),
-                      child: Padding(
-                      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+            if (faqs == null)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32),
+                child: Center(
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.4,
+                      valueColor:
+                          AlwaysStoppedAnimation(WBColors.surfaceDark),
+                    ),
+                  ),
+                ),
+              )
+            else if (faqs.isNotEmpty)
+              Container(
+                decoration: BoxDecoration(
+                  color: WBColors.surfaceCard,
+                  borderRadius: BorderRadius.circular(WBRadius.card),
+                  boxShadow: WBShadows.card,
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    for (var i = 0; i < faqs.length; i++) ...[
+                      GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () => wbShowSnack(context, faqs[i].q),
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(18, 16, 18, 16),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: Text(
-                                  _faqs[i].q,
-                                  style: WBTypography.body.copyWith(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.4,
+                              Row(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      faqs[i].q,
+                                      style: WBTypography.body.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.4,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(width: 12),
+                                  const WBIcon(
+                                    WBIconName.chevronRight,
+                                    size: 16,
+                                    color: WBColors.fgPlaceholder,
+                                  ),
+                                ],
                               ),
-                              const SizedBox(width: 12),
-                              const WBIcon(
-                                WBIconName.chevronRight,
-                                size: 16,
-                                color: WBColors.fgPlaceholder,
+                              const SizedBox(height: 6),
+                              Text(
+                                faqs[i].a,
+                                style: WBTypography.caption.copyWith(
+                                  color: WBColors.fgSecondary,
+                                  fontSize: 13,
+                                  height: 1.5,
+                                ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6),
-                          Text(
-                            _faqs[i].a,
-                            style: WBTypography.caption.copyWith(
-                              color: WBColors.fgSecondary,
-                              fontSize: 13,
-                              height: 1.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                      ),
-                    ),
-                    if (i != _faqs.length - 1) const WBDivider(),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: WBSpacing.md),
-            // Active ticket
-            Container(
-              padding: const EdgeInsets.all(WBSpacing.md + 2),
-              decoration: BoxDecoration(
-                color: WBColors.surfaceCard,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-                boxShadow: WBShadows.card,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'OPEN TICKET',
-                        style: WBTypography.label.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: WBColors.fgPlaceholder,
-                          letterSpacing: 0.66,
                         ),
                       ),
-                      const WBStatusPill(
-                        label: 'Pending',
-                        kind: WBStatusKind.warning,
-                      ),
+                      if (i != faqs.length - 1) const WBDivider(),
                     ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Missing item, Order #8804',
-                    style: WBTypography.body.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Opened Mon 12 May. Our team will respond within 24 hrs.',
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgSecondary,
-                      height: 1.4,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  WBButton(
-                    label: 'View ticket',
-                    variant: WBButtonVariant.secondary,
-                    size: WBButtonSize.sm,
-                    onPressed: () => context.push(AppRoutes.chatSupport),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            if (_ticket != null) ...[
+              const SizedBox(height: WBSpacing.md),
+              Container(
+                padding: const EdgeInsets.all(WBSpacing.md + 2),
+                decoration: BoxDecoration(
+                  color: WBColors.surfaceCard,
+                  borderRadius: BorderRadius.circular(WBRadius.card),
+                  boxShadow: WBShadows.card,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'OPEN TICKET',
+                          style: WBTypography.label.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: WBColors.fgPlaceholder,
+                            letterSpacing: 0.66,
+                          ),
+                        ),
+                        WBStatusPill(
+                          label: _ticket!.status,
+                          kind: _ticket!.status.toLowerCase() == 'resolved' ||
+                                  _ticket!.status.toLowerCase() == 'closed'
+                              ? WBStatusKind.success
+                              : WBStatusKind.warning,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _ticket!.subject,
+                      style: WBTypography.body.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _ticket!.opened,
+                      style: WBTypography.caption.copyWith(
+                        color: WBColors.fgSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    WBButton(
+                      label: 'View ticket',
+                      variant: WBButtonVariant.secondary,
+                      size: WBButtonSize.sm,
+                      onPressed: () => context.push(AppRoutes.chatSupport),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ),

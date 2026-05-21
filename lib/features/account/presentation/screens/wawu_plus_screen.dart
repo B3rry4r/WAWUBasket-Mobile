@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/account_extras_api.dart';
 
 /// WAWU+ subscription screen, benefits, monthly/yearly pricing, trial CTA.
 class WawuPlusScreen extends StatefulWidget {
@@ -15,6 +17,41 @@ class WawuPlusScreen extends StatefulWidget {
 
 class _WawuPlusScreenState extends State<WawuPlusScreen> {
   bool _yearly = true;
+  bool _busy = false;
+  bool _active = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStatus();
+  }
+
+  Future<void> _loadStatus() async {
+    try {
+      final s = await AccountExtrasApi.instance.subscriptionStatus();
+      if (mounted) setState(() => _active = s['active'] == true);
+    } on ApiException {
+      // Non-critical — leave the CTA as the trial offer.
+    }
+  }
+
+  Future<void> _startTrial() async {
+    setState(() => _busy = true);
+    try {
+      await AccountExtrasApi.instance
+          .startTrial(_yearly ? 'yearly' : 'monthly');
+      if (!mounted) return;
+      wbShowSnack(
+        context,
+        'WAWU+ trial started · ${_yearly ? 'yearly' : 'monthly'} plan',
+      );
+      context.pop();
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   static const _benefits = [
     'Up to 50% off delivery on every order',
@@ -160,17 +197,16 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                     20,
                   ),
                   child: WBButton(
-                    label: 'Start free trial, 7 days',
+                    label: _active
+                        ? "You're a WAWU+ member"
+                        : 'Start free trial, 7 days',
                     fullWidth: true,
                     size: WBButtonSize.lg,
-                    trailingIcon: WBIconName.arrowRight,
-                    onPressed: () {
-                      wbShowSnack(
-                        context,
-                        'WAWU+ trial started · ${_yearly ? 'yearly' : 'monthly'} plan',
-                      );
-                      context.pop();
-                    },
+                    trailingIcon:
+                        _active ? WBIconName.check : WBIconName.arrowRight,
+                    loading: _busy,
+                    disabled: _active,
+                    onPressed: _active ? null : _startTrial,
                   ),
                 ),
               ),
