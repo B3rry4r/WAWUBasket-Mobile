@@ -66,6 +66,38 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
     return [for (final r in revs) (r / max).clamp(0.05, 1.0)];
   }
 
+  /// Best-selling items for the range, highest first.
+  List<({String label, int count})> get _topSellers {
+    final raw = (_data?['topSellers'] as List?) ?? const [];
+    return [
+      for (final t in raw)
+        (
+          label: ((t as Map)['label'] ?? '').toString(),
+          count: (t['count'] as num?)?.toInt() ?? 0,
+        ),
+    ];
+  }
+
+  /// 7×8 peak-hours grid normalised to 0–1 for the heatmap.
+  List<List<double>> get _heatmap {
+    final raw = (_data?['peakHours'] as List?) ?? const [];
+    final grid = [
+      for (final row in raw)
+        [for (final c in (row as List)) (c as num).toDouble()],
+    ];
+    if (grid.isEmpty) return const [];
+    var max = 0.0;
+    for (final row in grid) {
+      for (final c in row) {
+        if (c > max) max = c;
+      }
+    }
+    if (max <= 0) return grid;
+    return [
+      for (final row in grid) [for (final c in row) c / max],
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final d = _data ?? const <String, dynamic>{};
@@ -184,9 +216,9 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
             WBCard(
               child: SizedBox(
                 height: 180,
-                child: _HeatmapPainter.demoIntensities().isEmpty
+                child: _heatmap.isEmpty
                     ? const SizedBox.shrink()
-                    : CustomPaint(painter: _HeatmapPainter()),
+                    : CustomPaint(painter: _HeatmapPainter(_heatmap)),
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -267,18 +299,31 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
             ),
             const SizedBox(height: 10),
             WBCard(
-              child: Column(
-                children: const [
-                  _Bar(label: 'Jollof rice & chicken', value: 42, total: 50),
-                  SizedBox(height: 10),
-                  _Bar(label: 'Suya platter', value: 33, total: 50),
-                  SizedBox(height: 10),
-                  _Bar(label: 'Egusi & pounded yam', value: 24, total: 50),
-                  SizedBox(height: 10),
-                  _Bar(label: 'Small chops', value: 19, total: 50),
-                  SizedBox(height: 10),
-                  _Bar(label: 'Plantain & beans', value: 12, total: 50),
-                ],
+              child: Builder(
+                builder: (_) {
+                  final sellers = _topSellers;
+                  if (sellers.isEmpty) {
+                    return Text(
+                      'No sales in this range yet.',
+                      style: WBTypography.caption
+                          .copyWith(color: WBColors.fgSecondary),
+                    );
+                  }
+                  final top = sellers.first.count;
+                  return Column(
+                    children: [
+                      for (var i = 0; i < sellers.length; i++) ...[
+                        _Bar(
+                          label: sellers[i].label,
+                          value: sellers[i].count,
+                          total: top == 0 ? 1 : top,
+                        ),
+                        if (i != sellers.length - 1)
+                          const SizedBox(height: 10),
+                      ],
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -425,19 +470,12 @@ class _LegendRow extends StatelessWidget {
 /// widths stay legible on small screens; bucketing 24h into 8 reads more
 /// like "morning/midday/dinner" than 24 thin columns.
 class _HeatmapPainter extends CustomPainter {
+  const _HeatmapPainter(this.intensities);
+
   static const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-  static const _intensities = <List<double>>[
-    [0.05, 0.10, 0.40, 0.85, 0.55, 0.30, 0.65, 0.45],
-    [0.05, 0.12, 0.45, 0.80, 0.50, 0.28, 0.70, 0.50],
-    [0.05, 0.10, 0.42, 0.78, 0.48, 0.30, 0.72, 0.52],
-    [0.06, 0.11, 0.50, 0.88, 0.55, 0.32, 0.78, 0.60],
-    [0.08, 0.14, 0.55, 0.95, 0.60, 0.40, 0.92, 0.85],
-    [0.12, 0.18, 0.60, 0.92, 0.70, 0.55, 0.98, 0.95],
-    [0.10, 0.15, 0.42, 0.70, 0.55, 0.45, 0.80, 0.65],
-  ];
-
-  static List<List<double>> demoIntensities() => _intensities;
+  /// 7 rows × 8 buckets, each value normalised to 0–1.
+  final List<List<double>> intensities;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -451,7 +489,9 @@ class _HeatmapPainter extends CustomPainter {
     final paint = Paint();
     for (var d = 0; d < 7; d++) {
       for (var b = 0; b < 8; b++) {
-        final v = _intensities[d][b];
+        final v = d < intensities.length && b < intensities[d].length
+            ? intensities[d][b]
+            : 0.0;
         paint.color = WBColors.surfaceDark.withValues(alpha: 0.08 + v * 0.92);
         final rect = Rect.fromLTWH(
           leftPad + b * cellW + 1,
@@ -503,7 +543,8 @@ class _HeatmapPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _HeatmapPainter oldDelegate) =>
+      oldDelegate.intensities != intensities;
 }
 
 class _DonutPainter extends CustomPainter {
