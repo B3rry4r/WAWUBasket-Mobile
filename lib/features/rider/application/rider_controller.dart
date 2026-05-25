@@ -160,7 +160,8 @@ class RiderController {
   RiderController._()
       : online = ValueNotifier(true),
         offers = ValueNotifier<List<DeliveryOffer>>([]),
-        active = ValueNotifier<ActiveDelivery?>(null);
+        active = ValueNotifier<ActiveDelivery?>(null),
+        mutationError = ValueNotifier<String?>(null);
   static final RiderController instance = RiderController._();
 
   /// Rider's home coordinate, used to center the map and to give offer
@@ -171,6 +172,11 @@ class RiderController {
   final ValueNotifier<bool> online;
   final ValueNotifier<List<DeliveryOffer>> offers;
   final ValueNotifier<ActiveDelivery?> active;
+
+  /// Set to a non-null message when a mutation fails; screens can listen and
+  /// show a snackbar, then reset to null.
+  final ValueNotifier<String?> mutationError;
+
   final _api = RiderApi.instance;
 
   /// The rider's last known GPS reading. Null until permission is
@@ -199,32 +205,50 @@ class RiderController {
 
   void toggleOnline() {
     online.value = !online.value;
-    _api.setOnline(online.value).catchError((_) {});
+    _api.setOnline(online.value).catchError((Object e) {
+      // Revert toggle and surface the error to listeners.
+      online.value = !online.value;
+      if (e is ApiException) mutationError.value = e.message;
+    });
   }
 
-  /// Promote an offer to the active delivery and pull it out of the
-  /// nearby list. Idempotent, no-op if there's already an active.
-  void accept(DeliveryOffer offer) {
+  /// Promote an offer to the active delivery and pull it out of the nearby
+  /// list. Throws [ApiException] if the server rejects the acceptance so the
+  /// caller can show the error and the optimistic state is reverted.
+  Future<void> accept(DeliveryOffer offer) async {
     if (active.value != null) return;
     active.value = ActiveDelivery(offer: offer, stage: DeliveryStage.accepted);
-    offers.value = [
-      for (final o in offers.value)
-        if (o.id != offer.id) o,
-    ];
-    _api.acceptOffer(offer.id).catchError((_) {});
+    offers.value = [for (final o in offers.value) if (o.id != offer.id) o];
+    try {
+      await _api.acceptOffer(offer.id);
+    } on ApiException {
+      active.value = null;
+      offers.value = [offer, ...offers.value];
+      rethrow;
+    }
   }
 
-  void advance() {
+  /// Advances the active delivery stage and notifies the server. Throws
+  /// [ApiException] on server failure so the caller can show the error and
+  /// the optimistic stage change is reverted.
+  Future<void> advance() async {
     final a = active.value;
     final next = a?.stage.advance;
     if (a == null || next == null) return;
+    final prevStage = a.stage;
     a.stage = next.next;
     active.value = ActiveDelivery(offer: a.offer, stage: a.stage);
     if (a.offer.deliveryId.isEmpty) return;
-    if (a.stage == DeliveryStage.pickedUp) {
-      _api.markPickedUp(a.offer.deliveryId).catchError((_) {});
-    } else if (a.stage == DeliveryStage.delivered) {
-      _api.markDelivered(a.offer.deliveryId).catchError((_) {});
+    try {
+      if (a.stage == DeliveryStage.pickedUp) {
+        await _api.markPickedUp(a.offer.deliveryId);
+      } else if (a.stage == DeliveryStage.delivered) {
+        await _api.markDelivered(a.offer.deliveryId);
+      }
+    } on ApiException {
+      a.stage = prevStage;
+      active.value = ActiveDelivery(offer: a.offer, stage: prevStage);
+      rethrow;
     }
   }
 

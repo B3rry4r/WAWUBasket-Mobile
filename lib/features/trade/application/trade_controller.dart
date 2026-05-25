@@ -23,13 +23,19 @@ class TradeController {
       : listings = ValueNotifier<List<ExportListing>>([]),
         prices = ValueNotifier<List<CorridorPrice>>([]),
         suppliers = ValueNotifier<List<Supplier>>([]),
-        bulkLots = ValueNotifier<List<BulkLot>>([]);
+        bulkLots = ValueNotifier<List<BulkLot>>([]),
+        mutationError = ValueNotifier<String?>(null);
   static final TradeController instance = TradeController._();
 
   final ValueNotifier<List<ExportListing>> listings;
   final ValueNotifier<List<CorridorPrice>> prices;
   final ValueNotifier<List<Supplier>> suppliers;
   final ValueNotifier<List<BulkLot>> bulkLots;
+
+  /// Non-null when an update or remove call fails. Screens can listen and
+  /// show a snackbar, then reset to null.
+  final ValueNotifier<String?> mutationError;
+
   final _api = TradeApi.instance;
 
   /// True for a listing that exists only in this session's optimistic
@@ -126,26 +132,26 @@ class TradeController {
   }
 
   void update(ExportListing l) {
-    listings.value = [
-      for (final cur in listings.value)
-        if (cur.id == l.id) l else cur,
-    ];
+    listings.value = [for (final cur in listings.value) if (cur.id == l.id) l else cur];
     if (!_isLocal(l.id)) {
       _api.updateExportListing(l.id, {
         'quantityKg': l.quantityKg,
         'pricePerKgNaira': l.pricePerKgNaira,
         'status': l.status.name,
-      }).catchError((_) {});
+      }).catchError((Object e) {
+        if (e is ApiException) mutationError.value = e.message;
+      });
     }
   }
 
   void remove(String id) {
-    listings.value = [
-      for (final l in listings.value)
-        if (l.id != id) l,
-    ];
+    final removed = byId(id);
+    listings.value = [for (final l in listings.value) if (l.id != id) l];
     if (!_isLocal(id)) {
-      _api.deleteExportListing(id).catchError((_) {});
+      _api.deleteExportListing(id).catchError((Object e) {
+        if (e is ApiException) mutationError.value = e.message;
+        if (removed != null) listings.value = [removed, ...listings.value];
+      });
     }
   }
 

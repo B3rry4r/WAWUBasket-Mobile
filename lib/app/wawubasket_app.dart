@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../core/i18n/locale_controller.dart';
+import '../core/network/api_client.dart';
 import '../core/router/app_router.dart';
+import '../core/router/app_routes.dart';
 import '../core/theme/wb_theme_exports.dart';
 import '../l10n/app_localizations.dart';
 
@@ -19,6 +21,7 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
   @override
   void initState() {
     super.initState();
+    ApiClient.instance.onSessionExpired = () => _router.go(AppRoutes.welcome);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

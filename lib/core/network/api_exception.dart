@@ -33,11 +33,22 @@ class ApiException implements Exception {
             isNetwork: true);
       default:
         final status = e.response?.statusCode;
-        return ApiException(_extractMessage(e.response?.data) ??
-            'Something went wrong. Please try again.',
-            statusCode: status);
+        return ApiException(
+          _extractMessage(e.response?.data) ?? _fallbackForStatus(status),
+          statusCode: status,
+        );
     }
   }
+
+  static String _fallbackForStatus(int? status) => switch (status) {
+        401 => 'Incorrect code or password. Please try again.',
+        403 => "You don't have permission to do that.",
+        404 => 'Not found.',
+        409 => 'This already exists.',
+        422 => 'Invalid input. Please check your details.',
+        500 || 502 || 503 => 'Server error. Please try again later.',
+        _ => 'Something went wrong. Please try again.',
+      };
 
   /// The API's error body is `{ statusCode, message, ... }`, where
   /// `message` is a string or (from class-validator) a list of strings.

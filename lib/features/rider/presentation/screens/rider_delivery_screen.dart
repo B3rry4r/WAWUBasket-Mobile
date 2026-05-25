@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -82,16 +83,21 @@ class _Body extends StatelessWidget {
       active.stage == DeliveryStage.accepted ||
       active.stage == DeliveryStage.arrivedPickup;
 
-  void _advance(BuildContext context) {
+  Future<void> _advance(BuildContext context) async {
     final next = active.stage.advance;
     if (next == null) return;
-    RiderController.instance.advance();
-    if (next.next == DeliveryStage.delivered) {
-      // Hand off to the delivery-complete screen; it clears the active
-      // delivery and routes back to the map when the rider closes it.
-      context.push('${AppRoutes.riderDelivery}/complete');
-    } else {
-      wbShowSnack(context, next.next.label);
+    try {
+      await RiderController.instance.advance();
+      if (!context.mounted) return;
+      if (next.next == DeliveryStage.delivered) {
+        // Hand off to the delivery-complete screen; it clears the active
+        // delivery and routes back to the map when the rider closes it.
+        context.push('${AppRoutes.riderDelivery}/complete');
+      } else {
+        wbShowSnack(context, next.next.label);
+      }
+    } on ApiException catch (e) {
+      if (context.mounted) wbShowSnack(context, e.message);
     }
   }
 

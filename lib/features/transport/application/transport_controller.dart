@@ -11,7 +11,8 @@ import '../domain/models/load_offer.dart';
 class TransportController {
   TransportController._()
       : loads = ValueNotifier<List<LoadOffer>>([]),
-        activeTrip = ValueNotifier<LoadOffer?>(null);
+        activeTrip = ValueNotifier<LoadOffer?>(null),
+        mutationError = ValueNotifier<String?>(null);
   static final TransportController instance = TransportController._();
 
   static const driverName = 'Aliyu Bala';
@@ -21,6 +22,10 @@ class TransportController {
 
   /// Whichever load the driver is currently moving. Null when idle.
   final ValueNotifier<LoadOffer?> activeTrip;
+
+  /// Non-null when a bid or checkpoint call fails. Screens can listen and
+  /// show a snackbar, then reset to null.
+  final ValueNotifier<String?> mutationError;
 
   final _api = TransportApi.instance;
   final _driverApi = DriverApi.instance;
@@ -98,9 +103,9 @@ class TransportController {
     if (l == null) return;
     l.bids = [...l.bids, bid];
     _bump();
-    _driverApi
-        .submitBid(id, bid.priceNaira, bid.etaHours, bid.notes)
-        .catchError((_) {});
+    _driverApi.submitBid(id, bid.priceNaira, bid.etaHours, bid.notes).catchError((Object e) {
+      if (e is ApiException) mutationError.value = e.message;
+    });
   }
 
   /// Driver "auto-wins" the bid in the prototype (no trader-side accept
@@ -136,7 +141,9 @@ class TransportController {
     }
     activeTrip.value = l;
     _bump();
-    _driverApi.logCheckpoint(l.id).catchError((_) {});
+    _driverApi.logCheckpoint(l.id).catchError((Object e) {
+      if (e is ApiException) mutationError.value = e.message;
+    });
   }
 
   /// Driver closes the trip post-delivery, freeing them up for the next

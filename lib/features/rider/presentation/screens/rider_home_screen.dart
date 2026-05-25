@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -52,9 +53,14 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
   Future<void> _open(DeliveryOffer offer) async {
     final accepted = await AcceptOfferSheet.show(context, offer);
     if (!mounted || accepted != true) return;
-    RiderController.instance.accept(offer);
-    wbShowSnack(context, 'Offer ${offer.id} accepted');
-    context.push(AppRoutes.riderDelivery);
+    try {
+      await RiderController.instance.accept(offer);
+      if (!mounted) return;
+      wbShowSnack(context, 'Offer accepted!');
+      context.push(AppRoutes.riderDelivery);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    }
   }
 
   @override

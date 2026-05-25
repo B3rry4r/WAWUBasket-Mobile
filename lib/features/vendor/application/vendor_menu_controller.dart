@@ -99,7 +99,9 @@ class VendorMenuItem {
 /// Live menu store backed by `/v1/vendor/products`. Screens subscribe to
 /// [items]; edits update optimistically and POST/PATCH to the API.
 class VendorMenuController {
-  VendorMenuController._() : items = ValueNotifier<List<VendorMenuItem>>([]) {
+  VendorMenuController._()
+      : items = ValueNotifier<List<VendorMenuItem>>([]),
+        mutationError = ValueNotifier<String?>(null) {
     load();
   }
   static final VendorMenuController instance = VendorMenuController._();
@@ -110,6 +112,11 @@ class VendorMenuController {
   static const categories = ['Popular', 'Mains', 'Sides', 'Drinks'];
 
   final ValueNotifier<List<VendorMenuItem>> items;
+
+  /// Non-null when a delete or update call fails. Screens can listen and
+  /// show a snackbar, then reset to null.
+  final ValueNotifier<String?> mutationError;
+
   final _api = VendorApi.instance;
 
   /// True for an item that exists only in this session's optimistic state
@@ -174,12 +181,13 @@ class VendorMenuController {
   }
 
   void delete(String id) {
-    items.value = [
-      for (final it in items.value)
-        if (it.id != id) it,
-    ];
+    final removed = byId(id);
+    items.value = [for (final it in items.value) if (it.id != id) it];
     if (!_isLocal(id)) {
-      _api.deleteProduct(id).catchError((_) {});
+      _api.deleteProduct(id).catchError((Object e) {
+        if (e is ApiException) mutationError.value = e.message;
+        if (removed != null) items.value = [...items.value, removed];
+      });
     }
   }
 
@@ -215,7 +223,9 @@ class VendorMenuController {
         'category': ?category,
         'prepMins': ?prepMins,
         'images': ?(imageUrl == null ? null : [imageUrl]),
-      }).catchError((_) {});
+      }).catchError((Object e) {
+        if (e is ApiException) mutationError.value = e.message;
+      });
     }
   }
 
