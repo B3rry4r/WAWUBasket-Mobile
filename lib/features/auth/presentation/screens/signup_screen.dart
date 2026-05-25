@@ -66,7 +66,7 @@ class _SignupScreenState extends State<SignupScreen> {
         password: _password.text,
       );
       if (!mounted) return;
-      context.push('${AppRoutes.otp}?phone=$_e164Phone&flow=signup');
+      context.push('${AppRoutes.otp}?phone=${Uri.encodeComponent(_e164Phone)}&flow=signup');
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {

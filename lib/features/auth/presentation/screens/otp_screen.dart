@@ -81,7 +81,7 @@ class _OtpScreenState extends State<OtpScreen>
         // Carry the code forward — the reset screen sets the password.
         if (!mounted) return;
         context.push(
-          '${AppRoutes.resetPassword}?identifier=${widget.phone}'
+          '${AppRoutes.resetPassword}?identifier=${Uri.encodeComponent(widget.phone)}'
           '&code=${_code.text}',
         );
       } else if (widget.flow == 'login') {
