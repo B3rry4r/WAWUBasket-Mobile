@@ -127,6 +127,8 @@ class _ChatScreenState extends State<ChatScreen> {
         await _loadSupport();
       } else if (_isOrder) {
         final raw = await ChatApi.instance.messages(widget.orderId!);
+        // Mark messages as read — fire and forget, non-critical
+        ChatApi.instance.markRead(widget.orderId!).ignore();
         if (!mounted) return;
         setState(() => _messages = [
               for (final e in raw)

@@ -21,6 +21,10 @@ class ChatApi {
     return (m['messages'] as List?) ?? const [];
   }
 
+  /// Marks all messages in this thread as read for the current user.
+  Future<void> markRead(String orderId) =>
+      _api.patch('/chats/$orderId/read');
+
   /// Posts a message. [attachKey] is an uploaded R2 object key for an
   /// optional image attachment.
   Future<Map<String, dynamic>> sendMessage(

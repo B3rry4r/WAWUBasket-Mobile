@@ -7,6 +7,7 @@ import 'app/wawubasket_app.dart';
 import 'core/config/secrets.dart';
 import 'core/i18n/locale_controller.dart';
 import 'core/network/token_store.dart';
+import 'core/services/notification_service.dart';
 import 'features/auth/application/role_controller.dart';
 
 Future<void> main() async {
@@ -16,6 +17,14 @@ Future<void> main() async {
   await RoleController.instance.load();
   await TokenStore.instance.load();
   await LocaleController.instance.load();
+  // Firebase / push notifications. Wrapped in try/catch so the app still
+  // launches on builds where google-services.json / GoogleService-Info.plist
+  // have not yet been added.
+  try {
+    await NotificationService.instance.init();
+  } catch (_) {
+    // Firebase not configured — push notifications will be unavailable.
+  }
   // Mapbox: only initialise on the platforms it supports (Android/iOS).
   // On web (or when no token is configured) the rider map falls back to
   // a stylized placeholder, so we just skip the init.

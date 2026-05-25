@@ -5,13 +5,13 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../domain/models/bulk_order.dart';
 
-/// Simulated Flutterwave checkout sheet. Lets the buyer pick a payment
-/// method, runs a 3-second processing animation, then returns the chosen
-/// [PaymentMethod]. The caller is responsible for persisting the order
-/// once the future resolves.
+/// Flutterwave checkout method-picker sheet. Lets the buyer select a payment
+/// method and immediately returns the chosen [PaymentMethod] to the caller.
 ///
-/// Stays UI-only, no real Flutterwave SDK call. The "Powered by
-/// Flutterwave" footer makes the simulated brand explicit.
+/// The caller is responsible for opening the actual Flutterwave checkout URL
+/// (via url_launcher) and persisting the order once payment is confirmed.
+///
+/// No fake delay — the sheet closes as soon as the user taps "Pay".
 class FlutterwavePaymentSheet extends StatefulWidget {
   const FlutterwavePaymentSheet({
     super.key,
@@ -56,11 +56,10 @@ class FlutterwavePaymentSheet extends StatefulWidget {
 
 class _FlutterwavePaymentSheetState extends State<FlutterwavePaymentSheet> {
   PaymentMethod _method = PaymentMethod.card;
-  bool _processing = false;
 
+  // The actual Flutterwave checkout URL is opened by the caller (bulk_checkout_screen)
+  // using url_launcher after this sheet returns the selected PaymentMethod.
   Future<void> _pay() async {
-    setState(() => _processing = true);
-    await Future<void>.delayed(const Duration(milliseconds: 2400));
     if (!mounted) return;
     Navigator.of(context).pop(_method);
   }
@@ -89,51 +88,47 @@ class _FlutterwavePaymentSheetState extends State<FlutterwavePaymentSheet> {
               ),
             ),
           ),
-          if (_processing)
-            _ProcessingView(amount: widget.amountNaira)
-          else ...[
-            _Header(
-              amount: widget.amountNaira,
-              purpose: widget.purpose,
-              recipientName: widget.recipientName,
+          _Header(
+            amount: widget.amountNaira,
+            purpose: widget.purpose,
+            recipientName: widget.recipientName,
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          Text(
+            'PAYMENT METHOD',
+            style: WBTypography.label.copyWith(
+              fontWeight: FontWeight.w600,
+              color: WBColors.fgPlaceholder,
+              letterSpacing: 0.66,
             ),
-            const SizedBox(height: WBSpacing.lg),
-            Text(
-              'PAYMENT METHOD',
-              style: WBTypography.label.copyWith(
-                fontWeight: FontWeight.w600,
-                color: WBColors.fgPlaceholder,
-                letterSpacing: 0.66,
-              ),
+          ),
+          const SizedBox(height: 8),
+          for (final m in PaymentMethod.values) ...[
+            _MethodRow(
+              method: m,
+              selected: _method == m,
+              onTap: () => setState(() => _method = m),
             ),
-            const SizedBox(height: 8),
-            for (final m in PaymentMethod.values) ...[
-              _MethodRow(
-                method: m,
-                selected: _method == m,
-                onTap: () => setState(() => _method = m),
-              ),
-              if (m != PaymentMethod.values.last) const SizedBox(height: 8),
-            ],
-            const SizedBox(height: WBSpacing.lg),
-            WBButton(
-              label: 'Pay ${wbNaira(widget.amountNaira)}',
-              size: WBButtonSize.lg,
-              fullWidth: true,
-              trailingIcon: WBIconName.arrowRight,
-              onPressed: _pay,
-            ),
-            const SizedBox(height: 10),
-            Center(
-              child: Text(
-                'Powered by Flutterwave · 256-bit encrypted',
-                style: WBTypography.caption.copyWith(
-                  color: WBColors.fgPlaceholder,
-                  fontSize: 11,
-                ),
-              ),
-            ),
+            if (m != PaymentMethod.values.last) const SizedBox(height: 8),
           ],
+          const SizedBox(height: WBSpacing.lg),
+          WBButton(
+            label: 'Pay ${wbNaira(widget.amountNaira)}',
+            size: WBButtonSize.lg,
+            fullWidth: true,
+            trailingIcon: WBIconName.arrowRight,
+            onPressed: _pay,
+          ),
+          const SizedBox(height: 10),
+          Center(
+            child: Text(
+              'Powered by Flutterwave · 256-bit encrypted',
+              style: WBTypography.caption.copyWith(
+                color: WBColors.fgPlaceholder,
+                fontSize: 11,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -293,47 +288,3 @@ class _MethodRow extends StatelessWidget {
   }
 }
 
-class _ProcessingView extends StatelessWidget {
-  const _ProcessingView({required this.amount});
-  final int amount;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: WBSpacing.xl),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(
-            width: 56,
-            height: 56,
-            child: CircularProgressIndicator(
-              strokeWidth: 3.5,
-              color: WBColors.surfaceDark,
-              backgroundColor: WBColors.bgSoft,
-            ),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          Text(
-            'Processing ${wbNaira(amount)}…',
-            style: WBTypography.cardTitle.copyWith(fontSize: 17),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            "Hold tight, we're moving funds into escrow.",
-            textAlign: TextAlign.center,
-            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          Text(
-            'Powered by Flutterwave',
-            style: WBTypography.caption.copyWith(
-              color: WBColors.fgPlaceholder,
-              fontSize: 11,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

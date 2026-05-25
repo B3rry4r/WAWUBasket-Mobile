@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
@@ -24,6 +25,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   String _payment = 'card';
   bool _scheduled = false;
   bool _placing = false;
+  bool _waitingForPayment = false;
+  bool _paymentTimedOut = false;
+  String? _pendingOrderId;
   _ScheduleSlot? _slot;
   String? _walletBalance;
 
@@ -67,12 +71,56 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       // The API empties the cart server-side on order creation.
       await ref.read(cartControllerProvider.notifier).load();
       if (!mounted) return;
-      context.go('${AppRoutes.tracking}?orderId=${order['id']}');
+
+      final orderId = order['id'] as String? ?? '';
+      final checkoutUrl = order['checkoutUrl'] as String? ?? '';
+
+      if (checkoutUrl.isNotEmpty) {
+        // Open the Flutterwave hosted checkout page in the device browser.
+        await launchUrl(
+          Uri.parse(checkoutUrl),
+          mode: LaunchMode.externalApplication,
+        );
+      }
+
+      if (!mounted) return;
+      setState(() {
+        _placing = false;
+        _waitingForPayment = true;
+        _paymentTimedOut = false;
+        _pendingOrderId = orderId;
+      });
+
+      _waitForPayment(orderId);
+      return; // skip the finally setState below — state already set
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
-      if (mounted) setState(() => _placing = false);
+      if (mounted && _placing) setState(() => _placing = false);
     }
+  }
+
+  /// Polls GET /orders/{orderId} every 3 seconds (max 10 minutes / 200 tries).
+  /// Navigates to tracking once the order leaves the `awaiting_payment` state.
+  Future<void> _waitForPayment(String orderId) async {
+    for (var i = 0; i < 200; i++) {
+      await Future<void>.delayed(const Duration(seconds: 3));
+      if (!mounted) return;
+      try {
+        final order = await OrdersApi.instance.orderDetail(orderId);
+        final state = order['state'] as String? ?? '';
+        if (state.isNotEmpty && state != 'awaiting_payment') {
+          if (mounted) {
+            context.go('${AppRoutes.tracking}?orderId=$orderId');
+          }
+          return;
+        }
+      } catch (_) {
+        // Network blip — keep polling.
+      }
+    }
+    // 10-minute timeout reached.
+    if (mounted) setState(() => _paymentTimedOut = true);
   }
 
   List<({String id, WBIconName icon, String label, String sub})>
@@ -133,6 +181,90 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     var delivery = 600;
     const serviceFee = 200;
     final total = subtotal + delivery + serviceFee;
+
+    // Show waiting-for-payment screen while polling.
+    if (_waitingForPayment) {
+      return Scaffold(
+        backgroundColor: WBColors.bgSecondary,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(WBSpacing.screenPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (!_paymentTimedOut) ...[
+                  const SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3.5,
+                      color: WBColors.surfaceDark,
+                      backgroundColor: WBColors.bgSoft,
+                    ),
+                  ),
+                  const SizedBox(height: WBSpacing.lg),
+                  Text(
+                    'Waiting for payment…',
+                    style: WBTypography.cardTitle.copyWith(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Complete payment in the browser. We\'ll move you to order tracking automatically.',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ] else ...[
+                  const WBIcon(WBIconName.bell, size: 40),
+                  const SizedBox(height: WBSpacing.lg),
+                  Text(
+                    'Payment not confirmed',
+                    style: WBTypography.cardTitle.copyWith(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'We didn\'t receive a payment confirmation. Tap below to check again, or go back.',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                      height: 1.5,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: WBSpacing.lg),
+                  WBButton(
+                    label: 'Check payment status',
+                    fullWidth: true,
+                    size: WBButtonSize.lg,
+                    onPressed: () {
+                      if (_pendingOrderId != null) {
+                        setState(() => _paymentTimedOut = false);
+                        _waitForPayment(_pendingOrderId!);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  WBButton(
+                    label: 'Go back',
+                    fullWidth: true,
+                    size: WBButtonSize.lg,
+                    onPressed: () => setState(() {
+                      _waitingForPayment = false;
+                      _paymentTimedOut = false;
+                      _pendingOrderId = null;
+                    }),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,

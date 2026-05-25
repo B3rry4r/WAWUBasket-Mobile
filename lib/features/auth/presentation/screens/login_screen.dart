@@ -5,6 +5,7 @@ import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -43,6 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
       // actual approved/pending roles on the role-select screen.
       await RoleController.instance.syncFromApi();
       RoleController.instance.setRole(AppRole.customer);
+      // Register FCM token — fire-and-forget, non-critical.
+      NotificationService.instance.registerToken();
       if (!mounted) return;
       await _offerBiometric();
       if (!mounted) return;

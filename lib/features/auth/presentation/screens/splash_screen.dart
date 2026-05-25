@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_logo.dart';
 import '../../application/role_controller.dart';
@@ -39,6 +40,8 @@ class _SplashScreenState extends State<SplashScreen>
       context.go(AppRoutes.welcome);
       return;
     }
+    // Refresh FCM token on every app launch for returning users.
+    NotificationService.instance.registerToken();
     final prefs = await SharedPreferences.getInstance();
     final onboardingDone = prefs.getBool('onboardingDone') ?? false;
     if (!mounted) return;

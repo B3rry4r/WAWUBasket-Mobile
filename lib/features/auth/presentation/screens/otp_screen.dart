@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -89,12 +90,16 @@ class _OtpScreenState extends State<OtpScreen>
         await AuthApi.instance.verifyOtp(widget.phone, _code.text);
         // Sync role / KYC status from the backend before showing roleSelect.
         await RoleController.instance.syncFromApi();
+        // Register FCM token — fire-and-forget, non-critical.
+        NotificationService.instance.registerToken();
         if (!mounted) return;
         context.go(AppRoutes.roleSelect);
       } else {
         await AuthApi.instance.verifySignup(widget.phone, _code.text);
         // Sync role / KYC status from the backend before showing roleSelect.
         await RoleController.instance.syncFromApi();
+        // Register FCM token — fire-and-forget, non-critical.
+        NotificationService.instance.registerToken();
         if (!mounted) return;
         context.go(AppRoutes.roleSelect);
       }

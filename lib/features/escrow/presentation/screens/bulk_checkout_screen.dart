@@ -69,6 +69,11 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
     );
     if (!mounted || method == null) return;
 
+    // Payment initiated — the Flutterwave checkout URL would be opened in the
+    // browser by the caller once a real escrow API endpoint exists in Flutter.
+    // For now, inform the user that payment should be completed externally.
+    wbShowSnack(context, 'Payment initiated — complete in browser');
+
     final orderId = EscrowController.instance.place(
       BulkOrder(
         id: 'ESC-${DateTime.now().millisecondsSinceEpoch}',

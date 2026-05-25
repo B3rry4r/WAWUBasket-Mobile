@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../data/vendor_api.dart';
 
 /// One payout row mapped from the `/v1/vendor/payouts` payload.
@@ -186,7 +187,7 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                       size: WBButtonSize.md,
                       trailingIcon: WBIconName.arrowRight,
                       variant: WBButtonVariant.ghost,
-                      onPressed: () => _openPayoutSheet(context),
+                      onPressed: () => _openPayoutSheet(context, _balance),
                     ),
                   ),
                 ],
@@ -292,7 +293,11 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
   }
 }
 
-void _openPayoutSheet(BuildContext context) {
+void _openPayoutSheet(BuildContext context, int? availableBalance) {
+  final profile = ProfileController.instance.profile.value;
+  final vendorName = profile?.vendorBusinessName ?? profile?.fullName ?? 'Vendor';
+  final balanceStr = availableBalance != null ? availableBalance.toString() : '';
+
   showModalBottomSheet<void>(
     context: context,
     backgroundColor: Colors.transparent,
@@ -329,13 +334,13 @@ void _openPayoutSheet(BuildContext context) {
           ),
           const SizedBox(height: 4),
           Text(
-            'GTBank · 0123•••456 · Mama Cass Kitchen',
+            vendorName,
             style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
           ),
           const SizedBox(height: 14),
-          const WBInput(
+          WBInput(
             label: 'Amount (₦)',
-            initialValue: '184,250',
+            initialValue: balanceStr,
             keyboardType: TextInputType.number,
           ),
           const SizedBox(height: 14),
