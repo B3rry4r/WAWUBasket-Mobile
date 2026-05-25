@@ -9,6 +9,7 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../application/rider_controller.dart';
 import '../widgets/accept_offer_sheet.dart';
 import '../widgets/rider_map_view.dart';
@@ -32,6 +33,8 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
   void initState() {
     super.initState();
     RiderController.instance.loadOffers();
+    ProfileController.instance.load();
+    ProfileController.instance.loadStats();
     // Ask for location once the first build settles. Granting lets the
     // map render the user puck + we recompute every offer's distance +
     // ETA against the rider's real GPS reading.
@@ -105,9 +108,25 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
                           WBSpacing.screenPadding,
                           0,
                         ),
-                        child: _StatusBar(
-                          online: online,
-                          onToggle: ctrl.toggleOnline,
+                        child: ValueListenableBuilder(
+                          valueListenable: ProfileController.instance.profile,
+                          builder: (_, profile, _) => ValueListenableBuilder(
+                            valueListenable: ProfileController.instance.stats,
+                            builder: (_, stats, _) => _StatusBar(
+                              online: online,
+                              onToggle: ctrl.toggleOnline,
+                              displayName:
+                                  profile?.riderDisplayName?.isNotEmpty == true
+                                      ? profile!.riderDisplayName!.split(' ').first
+                                      : profile?.fullName.isNotEmpty == true
+                                          ? profile!.fullName.split(' ').first
+                                          : null,
+                              tripsToday: stats?.riderTripsToday,
+                              earnedNairaToday: stats?.riderEarnedNaira != null
+                                  ? int.tryParse(stats!.riderEarnedNaira!)
+                                  : null,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -136,9 +155,18 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
 }
 
 class _StatusBar extends StatelessWidget {
-  const _StatusBar({required this.online, required this.onToggle});
+  const _StatusBar({
+    required this.online,
+    required this.onToggle,
+    this.displayName,
+    this.tripsToday,
+    this.earnedNairaToday,
+  });
   final bool online;
   final VoidCallback onToggle;
+  final String? displayName;
+  final int? tripsToday;
+  final int? earnedNairaToday;
 
   @override
   Widget build(BuildContext context) {
@@ -174,13 +202,15 @@ class _StatusBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Tunde · Today',
+                  displayName != null ? '$displayName · Today' : 'Today',
                   style: WBTypography.caption.copyWith(
                     color: WBColors.fgSecondary,
                   ),
                 ),
                 Text(
-                  '${wbNaira(4800)} · 6 deliveries',
+                  earnedNairaToday != null && tripsToday != null
+                      ? '${wbNaira(earnedNairaToday!)} · $tripsToday ${tripsToday == 1 ? 'delivery' : 'deliveries'}'
+                      : '– · –',
                   style: WBTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,

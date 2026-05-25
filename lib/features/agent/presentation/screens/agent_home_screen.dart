@@ -7,6 +7,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
+import '../../../account/application/profile_controller.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
@@ -21,6 +22,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     super.initState();
     AgentController.instance.loadTraders();
     AgentController.instance.loadTransactions();
+    ProfileController.instance.load();
   }
 
   @override
@@ -44,15 +46,33 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   140,
                 ),
                 children: [
-                  const WBHomeAppBar(
-                    title: 'Musa Ibrahim',
-                    subtitle: 'Trade agent · Zone B',
+                  ValueListenableBuilder(
+                    valueListenable: ProfileController.instance.profile,
+                    builder: (_, profile, _) => WBHomeAppBar(
+                      title: profile?.agentDisplayName?.isNotEmpty == true
+                          ? profile!.agentDisplayName!
+                          : profile?.fullName.isNotEmpty == true
+                              ? profile!.fullName
+                              : 'Trade Agent',
+                      subtitle: profile?.agentRegionName?.isNotEmpty == true
+                          ? 'Trade agent · ${profile!.agentRegionName}'
+                          : 'Trade agent',
+                    ),
                   ),
                   const SizedBox(height: WBSpacing.lg),
-                  _Hero(
-                    transactionsToday: ctrl.transactionsToday,
-                    commissionToday: ctrl.commissionToday,
-                    pending: pending,
+                  ValueListenableBuilder(
+                    valueListenable: ProfileController.instance.profile,
+                    builder: (_, profile, _) => _Hero(
+                      transactionsToday: ctrl.transactionsToday,
+                      commissionToday: ctrl.commissionToday,
+                      pending: pending,
+                      displayName: profile?.agentDisplayName?.isNotEmpty == true
+                          ? profile!.agentDisplayName!
+                          : profile?.fullName.isNotEmpty == true
+                              ? profile!.fullName.split(' ').first
+                              : null,
+                      regionName: profile?.agentRegionName,
+                    ),
                   ),
                   const SizedBox(height: WBSpacing.md),
                   _SyncBanner(pending: pending),
@@ -192,10 +212,14 @@ class _Hero extends StatelessWidget {
     required this.transactionsToday,
     required this.commissionToday,
     required this.pending,
+    this.displayName,
+    this.regionName,
   });
   final int transactionsToday;
   final int commissionToday;
   final int pending;
+  final String? displayName;
+  final String? regionName;
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +235,7 @@ class _Hero extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Hello, Musa',
+                displayName != null ? 'Hello, $displayName' : 'Hello',
                 style: WBTypography.hero.copyWith(
                   color: Colors.white,
                   fontSize: 22,
@@ -253,12 +277,13 @@ class _Hero extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-          Text(
-            'Zone B · Mile 12 Market',
-            style: WBTypography.caption.copyWith(
-              color: Colors.white.withValues(alpha: 0.6),
+          if (regionName?.isNotEmpty == true)
+            Text(
+              regionName!,
+              style: WBTypography.caption.copyWith(
+                color: Colors.white.withValues(alpha: 0.6),
+              ),
             ),
-          ),
           const SizedBox(height: WBSpacing.lg),
           Row(
             children: [

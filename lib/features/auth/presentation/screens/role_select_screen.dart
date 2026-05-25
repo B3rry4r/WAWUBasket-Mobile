@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -50,10 +51,13 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
       _selected != AppRole.customer &&
       RoleController.instance.statusOf(_selected) == RoleStatus.pending;
 
-  void _commit() {
+  Future<void> _commit() async {
     if (_selected == AppRole.customer) {
       RoleController.instance.setRole(AppRole.customer);
-      context.go(AppRoutes.onboarding);
+      final prefs = await SharedPreferences.getInstance();
+      final onboardingDone = prefs.getBool('onboardingDone') ?? false;
+      if (!mounted) return;
+      context.go(onboardingDone ? AppRoutes.home : AppRoutes.onboarding);
       return;
     }
     // Rider and Driver are mobile-only — block them on Flutter web with
@@ -107,9 +111,15 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
                 children: [
                   const WBBackChip(),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       RoleController.instance.setRole(AppRole.customer);
-                      context.go(AppRoutes.onboarding);
+                      final prefs = await SharedPreferences.getInstance();
+                      final onboardingDone =
+                          prefs.getBool('onboardingDone') ?? false;
+                      if (!context.mounted) return;
+                      context.go(
+                        onboardingDone ? AppRoutes.home : AppRoutes.onboarding,
+                      );
                     },
                     child: Text(
                       'Skip',

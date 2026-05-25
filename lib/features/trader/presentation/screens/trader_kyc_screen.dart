@@ -25,12 +25,12 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
   bool _busy = false;
   final Map<String, String> _docs = {};
 
-  final _businessName = TextEditingController(text: 'Hauwa & Sons Bulk Co.');
-  final _region = TextEditingController(text: 'Kano');
-  final _contact = TextEditingController(text: 'Hauwa Sani');
-  final _phone = TextEditingController(text: '803 421 1820');
-  final _bankName = TextEditingController(text: 'Access Bank');
-  final _accountNumber = TextEditingController(text: '0123456789');
+  final _businessName = TextEditingController();
+  final _region = TextEditingController();
+  final _contact = TextEditingController();
+  final _phone = TextEditingController();
+  final _bankName = TextEditingController();
+  final _accountNumber = TextEditingController();
 
   @override
   void dispose() {

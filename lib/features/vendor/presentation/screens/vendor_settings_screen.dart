@@ -32,11 +32,8 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
   bool _loading = true;
   bool _saving = false;
 
-  final List<_StaffMember> _staff = [
-    _StaffMember(name: 'Adunni Adesanya', role: 'Manager', email: 'adunni@mama-cass.ng'),
-    _StaffMember(name: 'Sade Akin', role: 'Cashier', email: 'sade@mama-cass.ng'),
-    _StaffMember(name: 'Femi Bello', role: 'Cook', email: 'femi@mama-cass.ng'),
-  ];
+  // Staff list is populated via invitations only — no hardcoded members.
+  final List<_StaffMember> _staff = [];
 
   @override
   void initState() {

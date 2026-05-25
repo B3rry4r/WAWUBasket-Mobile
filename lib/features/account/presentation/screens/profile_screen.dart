@@ -23,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     ProfileController.instance.load();
+    ProfileController.instance.loadStats();
   }
 
   @override
@@ -152,12 +153,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     top: BorderSide(color: WBColors.bgDivider),
                   ),
                 ),
-                child: const Row(
-                  children: [
-                    _Stat(value: '48', label: 'Orders'),
-                    _Stat(value: '₦12.5k', label: 'Wallet'),
-                    _Stat(value: '12', label: 'Favorites', last: true),
-                  ],
+                child: ValueListenableBuilder(
+                  valueListenable: ProfileController.instance.stats,
+                  builder: (_, stats, _) => Row(
+                    children: [
+                      _Stat(
+                        value: stats?.orders != null ? '${stats!.orders}' : '–',
+                        label: 'Orders',
+                      ),
+                      _Stat(
+                        value: stats?.walletBalanceNaira != null
+                            ? _fmtNaira(int.tryParse(stats!.walletBalanceNaira!) ?? 0)
+                            : '–',
+                        label: 'Wallet',
+                      ),
+                      _Stat(
+                        value: stats?.favorites != null ? '${stats!.favorites}' : '–',
+                        label: 'Favorites',
+                        last: true,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -304,6 +320,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     return 'Active: ${switchable.map((r) => r.title).join(' · ')}';
   }
+}
+
+/// Compact naira formatter for stat tiles: 12500 → ₦12.5k
+String _fmtNaira(int naira) {
+  if (naira >= 1000000) {
+    final m = naira / 1000000;
+    return '₦${m % 1 == 0 ? m.toInt() : m.toStringAsFixed(1)}M';
+  }
+  if (naira >= 1000) {
+    final k = naira / 1000;
+    return '₦${k % 1 == 0 ? k.toInt() : k.toStringAsFixed(1)}k';
+  }
+  return '₦$naira';
 }
 
 void _showRateSheet(BuildContext context) {

@@ -1,13 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/auth_api.dart';
 
-class VendorLoginScreen extends StatelessWidget {
+class VendorLoginScreen extends StatefulWidget {
   const VendorLoginScreen({super.key});
+
+  @override
+  State<VendorLoginScreen> createState() => _VendorLoginScreenState();
+}
+
+class _VendorLoginScreenState extends State<VendorLoginScreen> {
+  final _identifier = TextEditingController();
+  final _password = TextEditingController();
+  bool _obscure = true;
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _identifier.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
+      wbShowSnack(context, 'Enter your phone/email and password.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      RoleController.instance.setRole(AppRole.vendor);
+      if (!mounted) return;
+      context.go(AppRoutes.vendorHome);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +69,47 @@ class VendorLoginScreen extends StatelessWidget {
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.xl),
-              const WBInput(
+              WBInput(
                 label: 'Business email',
-                initialValue: 'mamacass@wawu.africa',
+                controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.md),
-              const WBInput(
+              WBInput(
                 label: 'Password',
-                initialValue: '••••••••••',
+                controller: _password,
                 leadingIcon: WBIconName.card,
-                obscureText: true,
+                obscureText: _obscure,
+                trailing: TextButton(
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(40, 24),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    _obscure ? 'Show' : 'Hide',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: WBSpacing.sm),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  'Forgot password?',
-                  style: WBTypography.caption.copyWith(
-                    color: WBColors.fgHeader,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 13,
+                child: TextButton(
+                  onPressed: () => context.push(AppRoutes.forgotPassword),
+                  style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                  child: Text(
+                    'Forgot password?',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgHeader,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
               ),
@@ -61,11 +119,8 @@ class VendorLoginScreen extends StatelessWidget {
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () {
-                  RoleController.instance.completeKyc(AppRole.vendor);
-                  RoleController.instance.setRole(AppRole.vendor);
-                  context.go(AppRoutes.vendorHome);
-                },
+                loading: _busy,
+                onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.md),
               Center(

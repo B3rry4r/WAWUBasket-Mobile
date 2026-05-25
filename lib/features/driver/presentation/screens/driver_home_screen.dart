@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
 
@@ -25,6 +26,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     super.initState();
     TransportController.instance.loadOpenLoads();
     TransportController.instance.loadActiveTrip();
+    ProfileController.instance.load();
   }
 
   @override
@@ -59,12 +61,33 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   140,
                 ),
                 children: [
-                  const WBHomeAppBar(
-                    title: 'Aliyu Bala',
-                    subtitle: 'Driver · NRTC Kano',
+                  ValueListenableBuilder(
+                    valueListenable: ProfileController.instance.profile,
+                    builder: (_, profile, _) => WBHomeAppBar(
+                      title: profile?.driverDisplayName?.isNotEmpty == true
+                          ? profile!.driverDisplayName!
+                          : profile?.fullName.isNotEmpty == true
+                              ? profile!.fullName
+                              : 'Driver',
+                      subtitle: profile?.driverPlateNumber?.isNotEmpty == true
+                          ? 'Driver · ${profile!.driverPlateNumber}'
+                          : 'Driver dashboard',
+                    ),
                   ),
                   const SizedBox(height: WBSpacing.lg),
-                  _Hero(open: open.length, pendingToday: pending),
+                  ValueListenableBuilder(
+                    valueListenable: ProfileController.instance.profile,
+                    builder: (_, profile, _) => _Hero(
+                      open: open.length,
+                      pendingToday: pending,
+                      displayName: profile?.driverDisplayName?.isNotEmpty == true
+                          ? profile!.driverDisplayName!
+                          : profile?.fullName.isNotEmpty == true
+                              ? profile!.fullName
+                              : null,
+                      plateNumber: profile?.driverPlateNumber,
+                    ),
+                  ),
                   if (active != null) ...[
                     const SizedBox(height: WBSpacing.md),
                     _ResumeBanner(
@@ -117,9 +140,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 }
 
 class _Hero extends StatelessWidget {
-  const _Hero({required this.open, required this.pendingToday});
+  const _Hero({
+    required this.open,
+    required this.pendingToday,
+    this.displayName,
+    this.plateNumber,
+  });
   final int open;
   final int pendingToday;
+  final String? displayName;
+  final String? plateNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -140,19 +170,21 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            'Aliyu Bala',
+            displayName ?? 'Driver',
             style: WBTypography.hero.copyWith(
               color: Colors.white,
               fontSize: 22,
             ),
           ),
-          const SizedBox(height: 2),
-          Text(
-            'NRTC Kano · KN-541-XA',
-            style: WBTypography.caption.copyWith(
-              color: Colors.white.withValues(alpha: 0.55),
+          if (plateNumber?.isNotEmpty == true) ...[
+            const SizedBox(height: 2),
+            Text(
+              plateNumber!,
+              style: WBTypography.caption.copyWith(
+                color: Colors.white.withValues(alpha: 0.55),
+              ),
             ),
-          ),
+          ],
           const SizedBox(height: WBSpacing.lg),
           Row(
             children: [

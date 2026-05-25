@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -20,15 +21,22 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int _step = 0;
 
+  Future<void> _markDoneAndGo() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboardingDone', true);
+    if (!mounted) return;
+    context.go(AppRoutes.home);
+  }
+
   void _next() {
     if (_step < 2) {
       setState(() => _step++);
     } else {
-      context.go(AppRoutes.home);
+      _markDoneAndGo();
     }
   }
 
-  void _skipAll() => context.go(AppRoutes.home);
+  void _skipAll() => _markDoneAndGo();
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +138,7 @@ class _PermissionsStep extends StatelessWidget {
           tertiary: 'Not now',
           onPrimary: WBPermissions.requestLocation,
           onSecondary: WBPermissions.requestLocation,
+          onTertiary: onNext,
         ),
         const SizedBox(height: WBSpacing.md),
         _PermissionCard(
@@ -163,6 +172,7 @@ class _PermissionCard extends StatelessWidget {
     this.tertiary,
     this.onPrimary,
     this.onSecondary,
+    this.onTertiary,
   });
   final WBIconName icon;
   final String title;
@@ -175,6 +185,9 @@ class _PermissionCard extends StatelessWidget {
   /// granted the permission. The card surfaces a snackbar either way.
   final Future<bool> Function()? onPrimary;
   final Future<bool> Function()? onSecondary;
+
+  /// Called when the user taps the tertiary ("Not now") link.
+  final VoidCallback? onTertiary;
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +272,7 @@ class _PermissionCard extends StatelessWidget {
             const SizedBox(height: 6),
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: onTertiary,
                 child: Text(
                   tertiary!,
                   style: WBTypography.caption.copyWith(

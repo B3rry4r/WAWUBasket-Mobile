@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/router/app_routes.dart';
+import '../data/auth_api.dart';
 
 /// The operator roles in the app. `customer` is the default; every other role
 /// is gated behind a KYC onboarding flow and (later) admin approval.
@@ -184,6 +185,32 @@ class RoleController {
       if (v == null) continue;
       final st = RoleStatus.values.where((s) => s.name == v).firstOrNull;
       if (st != null) _status[r] = st;
+    }
+  }
+
+  /// Fetches the user's roles and KYC statuses from the backend and updates
+  /// the local [_status] map. Should be called immediately after any login so
+  /// [RoleSelectScreen] reflects the server's truth rather than stale cache.
+  ///
+  /// Failures are swallowed — the local state is retained as a fallback.
+  Future<void> syncFromApi() async {
+    try {
+      final roles = await AuthApi.instance.getRoles();
+      for (final entry in roles) {
+        final map = entry as Map<String, dynamic>;
+        final roleName = map['role'] as String?;
+        final statusName = map['status'] as String?;
+        if (roleName == null || statusName == null) continue;
+        final role = AppRole.values.where((r) => r.name == roleName).firstOrNull;
+        final status =
+            RoleStatus.values.where((s) => s.name == statusName).firstOrNull;
+        if (role != null && status != null) {
+          _status[role] = status;
+          _persistStatus(role);
+        }
+      }
+    } catch (_) {
+      // Network unavailable or token expired — keep cached status.
     }
   }
 

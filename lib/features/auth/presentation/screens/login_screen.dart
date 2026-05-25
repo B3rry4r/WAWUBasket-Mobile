@@ -39,11 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _busy = true);
     try {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      // Sync role / KYC status from the backend so returning users see their
+      // actual approved/pending roles on the role-select screen.
+      await RoleController.instance.syncFromApi();
       RoleController.instance.setRole(AppRole.customer);
       if (!mounted) return;
       await _offerBiometric();
       if (!mounted) return;
-      context.go(AppRoutes.home);
+      context.go(AppRoutes.roleSelect);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {

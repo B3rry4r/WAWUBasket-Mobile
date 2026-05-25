@@ -24,12 +24,12 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
   bool _busy = false;
   final Map<String, String> _docs = {};
 
-  final _fullName = TextEditingController(text: 'Musa Ibrahim');
-  final _phone = TextEditingController(text: '803 421 1820');
-  final _email = TextEditingController(text: 'musa@wawu.africa');
-  final _union = TextEditingController(text: 'NRTC Lagos');
-  final _bankName = TextEditingController(text: 'Access Bank');
-  final _accountNumber = TextEditingController(text: '0123456789');
+  final _fullName = TextEditingController();
+  final _phone = TextEditingController();
+  final _email = TextEditingController();
+  final _union = TextEditingController();
+  final _bankName = TextEditingController();
+  final _accountNumber = TextEditingController();
 
   static const _zones = [
     ('mile-12', 'Mile 12 Market'),

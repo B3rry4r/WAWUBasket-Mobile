@@ -1,13 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../auth/data/auth_api.dart';
 
-class DriverLoginScreen extends StatelessWidget {
+class DriverLoginScreen extends StatefulWidget {
   const DriverLoginScreen({super.key});
+
+  @override
+  State<DriverLoginScreen> createState() => _DriverLoginScreenState();
+}
+
+class _DriverLoginScreenState extends State<DriverLoginScreen> {
+  final _identifier = TextEditingController();
+  final _password = TextEditingController();
+  bool _obscure = true;
+  bool _busy = false;
+
+  @override
+  void dispose() {
+    _identifier.dispose();
+    _password.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
+      wbShowSnack(context, 'Enter your phone/email and password.');
+      return;
+    }
+    setState(() => _busy = true);
+    try {
+      await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      RoleController.instance.setRole(AppRole.driver);
+      if (!mounted) return;
+      context.go(AppRoutes.driverHome);
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +68,33 @@ class DriverLoginScreen extends StatelessWidget {
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.xl),
-              const WBInput(
-                label: 'Union ID',
-                initialValue: 'WAWU-DR-0044',
+              WBInput(
+                label: 'Phone or email',
+                controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.md),
-              const WBInput(
+              WBInput(
                 label: 'Password',
-                initialValue: '••••••••',
+                controller: _password,
                 leadingIcon: WBIconName.card,
-                obscureText: true,
+                obscureText: _obscure,
+                trailing: TextButton(
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(40, 24),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    _obscure ? 'Show' : 'Hide',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
               ),
               const Spacer(),
               WBButton(
@@ -48,11 +102,8 @@ class DriverLoginScreen extends StatelessWidget {
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () {
-                  RoleController.instance.completeKyc(AppRole.driver);
-                  RoleController.instance.setRole(AppRole.driver);
-                  context.go(AppRoutes.driverHome);
-                },
+                loading: _busy,
+                onPressed: _submit,
               ),
               const SizedBox(height: WBSpacing.md),
               Center(

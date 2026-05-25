@@ -9,6 +9,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/role_controller.dart';
 import '../../data/auth_api.dart';
 
 /// Phone-OTP verification. Reached after sign-up (`flow=signup`), the
@@ -86,10 +87,14 @@ class _OtpScreenState extends State<OtpScreen>
         );
       } else if (widget.flow == 'login') {
         await AuthApi.instance.verifyOtp(widget.phone, _code.text);
+        // Sync role / KYC status from the backend before showing roleSelect.
+        await RoleController.instance.syncFromApi();
         if (!mounted) return;
         context.go(AppRoutes.roleSelect);
       } else {
         await AuthApi.instance.verifySignup(widget.phone, _code.text);
+        // Sync role / KYC status from the backend before showing roleSelect.
+        await RoleController.instance.syncFromApi();
         if (!mounted) return;
         context.go(AppRoutes.roleSelect);
       }

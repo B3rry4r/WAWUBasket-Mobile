@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../shopping/application/wb_images.dart';
+import '../../application/profile_controller.dart';
 import '../widgets/account_menu.dart';
 import '../widgets/role_switcher_sheet.dart';
 
@@ -18,18 +20,26 @@ import '../widgets/role_switcher_sheet.dart';
 /// What changes per role is just the hero name, the role badge, and the
 /// three stat tiles. Everything else is identical so the user feels
 /// continuity when switching between shells.
-class OperatorAccountScreen extends StatelessWidget {
+class OperatorAccountScreen extends StatefulWidget {
   const OperatorAccountScreen({super.key, required this.role});
   final AppRole role;
 
-  _OperatorProfile get _profile => switch (role) {
-        AppRole.vendor => const _OperatorProfile(
-            name: 'Mama Cass Kitchen',
-            handle: 'mamacass@wawu.africa',
+  @override
+  State<OperatorAccountScreen> createState() => _OperatorAccountScreenState();
+}
+
+class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
+  @override
+  void initState() {
+    super.initState();
+    ProfileController.instance.load();
+    ProfileController.instance.loadStats();
+  }
+
+  /// Fixed (non-data-driven) fields that don't change with profile data.
+  _RoleConfig get _config => switch (widget.role) {
+        AppRole.vendor => const _RoleConfig(
             badge: 'Vendor · Restaurant',
-            stat1: _Stat('Orders', '14'),
-            stat2: _Stat('Earned', '₦68k'),
-            stat3: _Stat('Rating', '★ 4.8'),
             payoutLabel: 'Payouts & invoices',
             payoutSub: 'Bank account, history, commission',
             payoutRoute: AppRoutes.vendorPayouts,
@@ -37,44 +47,26 @@ class OperatorAccountScreen extends StatelessWidget {
             settingsSub: 'Hours, prep time, staff, holiday mode',
             settingsRoute: AppRoutes.vendorSettings,
           ),
-        AppRole.agent => const _OperatorProfile(
-            name: 'Musa Ibrahim',
-            handle: 'WAWU-AG-0142 · Mile 12 Market',
+        AppRole.agent => const _RoleConfig(
             badge: 'Trade Agent',
-            stat1: _Stat('Today', '12 txns'),
-            stat2: _Stat('Commission', '₦4,250'),
-            stat3: _Stat('To sync', '3'),
             payoutLabel: 'Commission & payout',
-            payoutSub: 'Access Bank · ••• 6789',
+            payoutSub: 'Earnings & bank account',
             payoutRoute: AppRoutes.agentCashPayout,
             settingsLabel: 'Sync centre',
             settingsSub: 'Pending uploads & conflicts',
             settingsRoute: AppRoutes.agentSync,
           ),
-        AppRole.rider => const _OperatorProfile(
-            name: 'Tunde Adeyemi',
-            handle: 'WAWU-RD-0821 · Motorbike',
+        AppRole.rider => const _RoleConfig(
             badge: 'Rider',
-            stat1: _Stat('Today', '6 trips'),
-            stat2: _Stat('Earned', '₦4,800'),
-            stat3: _Stat('Rating', '★ 4.9'),
             payoutLabel: 'Earnings & withdraw',
-            payoutSub: 'Mobile money · ••• 2114',
+            payoutSub: 'Mobile money & payout history',
             payoutRoute: AppRoutes.riderEarnings,
             settingsLabel: null,
             settingsSub: null,
             settingsRoute: null,
           ),
-        // Trader & driver are returned here for completeness, their shells
-        // (and therefore this screen as the Account tab body) come online
-        // in batches C and E.
-        AppRole.trader => const _OperatorProfile(
-            name: 'Hauwa & Sons Bulk Co.',
-            handle: 'TRADER-0211 · Kano corridor',
+        AppRole.trader => const _RoleConfig(
             badge: 'Trader',
-            stat1: _Stat('Listings', '8'),
-            stat2: _Stat('Enquiries', '23'),
-            stat3: _Stat('Earned', '₦2.1M'),
             payoutLabel: 'Escrow & settlements',
             payoutSub: 'Held funds, released funds',
             payoutRoute: AppRoutes.traderHome,
@@ -82,27 +74,17 @@ class OperatorAccountScreen extends StatelessWidget {
             settingsSub: 'Loads posted for drivers',
             settingsRoute: AppRoutes.traderTransport,
           ),
-        AppRole.driver => const _OperatorProfile(
-            name: 'Aliyu Bala',
-            handle: 'DR-0044 · NRTC Kano',
+        AppRole.driver => const _RoleConfig(
             badge: 'Driver',
-            stat1: _Stat('Week', '3 trips'),
-            stat2: _Stat('Earned', '₦120k'),
-            stat3: _Stat('Rating', '★ 4.7'),
             payoutLabel: 'Earnings & withdraw',
-            payoutSub: 'Mobile money · ••• 8090',
+            payoutSub: 'Mobile money & payout history',
             payoutRoute: AppRoutes.driverEarnings,
             settingsLabel: null,
             settingsSub: null,
             settingsRoute: null,
           ),
-        AppRole.customer => const _OperatorProfile(
-            name: 'Brooks Adesanya',
-            handle: 'brooks@wawu.africa',
+        AppRole.customer => const _RoleConfig(
             badge: 'Customer',
-            stat1: _Stat('Orders', '48'),
-            stat2: _Stat('Wallet', '₦12.5k'),
-            stat3: _Stat('Favorites', '12'),
             payoutLabel: 'Wallet & payment methods',
             payoutSub: 'Cards, bank, mobile money',
             payoutRoute: AppRoutes.wallet,
@@ -112,38 +94,190 @@ class OperatorAccountScreen extends StatelessWidget {
           ),
       };
 
+  /// Resolve the display name from the loaded profile (role-specific business
+  /// / display name where available, falling back to fullName, then a generic
+  /// placeholder while loading).
+  String _resolveName(UserProfile? profile) {
+    if (profile == null) return '—';
+    return switch (widget.role) {
+      AppRole.vendor =>
+        profile.vendorBusinessName?.isNotEmpty == true
+            ? profile.vendorBusinessName!
+            : profile.fullName.isNotEmpty
+                ? profile.fullName
+                : '—',
+      AppRole.trader =>
+        profile.traderBusinessName?.isNotEmpty == true
+            ? profile.traderBusinessName!
+            : profile.fullName.isNotEmpty
+                ? profile.fullName
+                : '—',
+      AppRole.agent =>
+        profile.agentDisplayName?.isNotEmpty == true
+            ? profile.agentDisplayName!
+            : profile.fullName.isNotEmpty
+                ? profile.fullName
+                : '—',
+      AppRole.rider =>
+        profile.riderDisplayName?.isNotEmpty == true
+            ? profile.riderDisplayName!
+            : profile.fullName.isNotEmpty
+                ? profile.fullName
+                : '—',
+      AppRole.driver =>
+        profile.driverDisplayName?.isNotEmpty == true
+            ? profile.driverDisplayName!
+            : profile.fullName.isNotEmpty
+                ? profile.fullName
+                : '—',
+      _ => profile.fullName.isNotEmpty ? profile.fullName : '—',
+    };
+  }
+
+  /// The sub-handle line beneath the name (agent region, rider vehicle type,
+  /// email for vendor/trader/customer, etc.).
+  String _resolveHandle(UserProfile? profile) {
+    if (profile == null) return '—';
+    return switch (widget.role) {
+      AppRole.agent =>
+        profile.agentRegionName?.isNotEmpty == true
+            ? profile.agentRegionName!
+            : profile.email.isNotEmpty
+                ? profile.email
+                : '—',
+      AppRole.driver =>
+        profile.driverPlateNumber?.isNotEmpty == true
+            ? profile.driverPlateNumber!
+            : profile.email.isNotEmpty
+                ? profile.email
+                : '—',
+      _ =>
+        profile.email.isNotEmpty
+            ? profile.email
+            : profile.phone.isNotEmpty
+                ? profile.phone
+                : '—',
+    };
+  }
+
+  /// Build the three stat tiles from API stats. Falls back to '–' when stats
+  /// haven't loaded yet or the field is absent for the active role.
+  List<_Stat> _resolveStats(ProfileStats? s) {
+    String dash = '–';
+    return switch (widget.role) {
+      AppRole.vendor => [
+          _Stat('Orders', s?.orders != null ? '${s!.orders}' : dash),
+          _Stat('Earned', s?.vendorEarnedNaira != null
+              ? _nairaK(int.tryParse(s!.vendorEarnedNaira!) ?? 0)
+              : dash),
+          _Stat('Rating', s?.vendorRating != null
+              ? '★ ${s!.vendorRating}'
+              : dash),
+        ],
+      AppRole.agent => [
+          _Stat('Today', s?.agentTodayTransactions != null
+              ? '${s!.agentTodayTransactions} txns'
+              : dash),
+          _Stat('Commission', s?.agentTodayCommissionNaira != null
+              ? _nairaK(s!.agentTodayCommissionNaira!)
+              : dash),
+          _Stat('To sync', s?.agentToSync != null ? '${s!.agentToSync}' : dash),
+        ],
+      AppRole.rider => [
+          _Stat('Today', s?.riderTripsToday != null
+              ? '${s!.riderTripsToday} trips'
+              : dash),
+          _Stat('Earned', s?.riderEarnedNaira != null
+              ? _nairaK(int.tryParse(s!.riderEarnedNaira!) ?? 0)
+              : dash),
+          _Stat('Rating', s?.riderRating != null
+              ? '★ ${s!.riderRating}'
+              : dash),
+        ],
+      AppRole.trader => [
+          _Stat('Listings', s?.traderListings != null
+              ? '${s!.traderListings}'
+              : dash),
+          _Stat('Enquiries', s?.traderEnquiries != null
+              ? '${s!.traderEnquiries}'
+              : dash),
+          _Stat('Earned', s?.traderEarnedNaira != null
+              ? _nairaK(int.tryParse(s!.traderEarnedNaira!) ?? 0)
+              : dash),
+        ],
+      AppRole.driver => [
+          _Stat('Week', s?.driverTripsThisWeek != null
+              ? '${s!.driverTripsThisWeek} trips'
+              : dash),
+          _Stat('Earned', s?.driverEarnedNaira != null
+              ? _nairaK(int.tryParse(s!.driverEarnedNaira!) ?? 0)
+              : dash),
+          _Stat('Rating', s?.driverRating != null
+              ? '★ ${s!.driverRating}'
+              : dash),
+        ],
+      AppRole.customer => [
+          _Stat('Orders', s?.orders != null ? '${s!.orders}' : dash),
+          _Stat('Wallet', s?.walletBalanceNaira != null
+              ? _nairaK(int.tryParse(s!.walletBalanceNaira!) ?? 0)
+              : dash),
+          _Stat('Favorites', s?.favorites != null ? '${s!.favorites}' : dash),
+        ],
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
-    final profile = _profile;
-    final sections = _buildSections(context, profile);
+    final config = _config;
 
-    return ListView(
-      padding: const EdgeInsets.only(bottom: 140),
-      children: [
-        _Hero(profile: profile, role: role),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            WBSpacing.screenPadding,
-            WBSpacing.lg,
-            WBSpacing.screenPadding,
-            0,
-          ),
-          child: Column(
+    return ValueListenableBuilder(
+      valueListenable: ProfileController.instance.profile,
+      builder: (_, profile, _) => ValueListenableBuilder(
+        valueListenable: ProfileController.instance.stats,
+        builder: (_, stats, _) {
+          final name = _resolveName(profile);
+          final handle = _resolveHandle(profile);
+          final statTiles = _resolveStats(stats);
+          final sections = _buildSections(context, config);
+
+          return ListView(
+            padding: const EdgeInsets.only(bottom: 140),
             children: [
-              for (final s in sections) ...[
-                AccountMenuSectionCard(section: s),
-                const SizedBox(height: WBSpacing.sm + 2),
-              ],
+              _Hero(
+                name: name,
+                handle: handle,
+                badge: config.badge,
+                stat1: statTiles[0],
+                stat2: statTiles[1],
+                stat3: statTiles[2],
+                role: widget.role,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  WBSpacing.screenPadding,
+                  WBSpacing.lg,
+                  WBSpacing.screenPadding,
+                  0,
+                ),
+                child: Column(
+                  children: [
+                    for (final s in sections) ...[
+                      AccountMenuSectionCard(section: s),
+                      const SizedBox(height: WBSpacing.sm + 2),
+                    ],
+                  ],
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
+          );
+        },
+      ),
     );
   }
 
   List<AccountMenuSection> _buildSections(
     BuildContext context,
-    _OperatorProfile profile,
+    _RoleConfig config,
   ) {
     return [
       AccountMenuSection(
@@ -151,9 +285,9 @@ class OperatorAccountScreen extends StatelessWidget {
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,
-            label: profile.payoutLabel,
-            sub: profile.payoutSub,
-            onTap: () => context.push(profile.payoutRoute),
+            label: config.payoutLabel,
+            sub: config.payoutSub,
+            onTap: () => context.push(config.payoutRoute),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
@@ -175,15 +309,15 @@ class OperatorAccountScreen extends StatelessWidget {
           ),
         ],
       ),
-      if (profile.settingsRoute != null)
+      if (config.settingsRoute != null)
         AccountMenuSection(
           title: 'Operations',
           rows: [
             AccountMenuRow(
               icon: WBIconName.more,
-              label: profile.settingsLabel!,
-              sub: profile.settingsSub,
-              onTap: () => context.push(profile.settingsRoute!),
+              label: config.settingsLabel!,
+              sub: config.settingsSub,
+              onTap: () => context.push(config.settingsRoute!),
             ),
           ],
         ),
@@ -243,9 +377,35 @@ class OperatorAccountScreen extends StatelessWidget {
   }
 }
 
+/// Format a naira integer compactly: 4800 → ₦4.8k, 120000 → ₦120k, etc.
+String _nairaK(int naira) {
+  if (naira >= 1000000) {
+    final m = (naira / 1000000);
+    return '₦${m % 1 == 0 ? m.toInt() : m.toStringAsFixed(1)}M';
+  }
+  if (naira >= 1000) {
+    final k = (naira / 1000);
+    return '₦${k % 1 == 0 ? k.toInt() : k.toStringAsFixed(1)}k';
+  }
+  return wbNaira(naira);
+}
+
 class _Hero extends StatelessWidget {
-  const _Hero({required this.profile, required this.role});
-  final _OperatorProfile profile;
+  const _Hero({
+    required this.name,
+    required this.handle,
+    required this.badge,
+    required this.stat1,
+    required this.stat2,
+    required this.stat3,
+    required this.role,
+  });
+  final String name;
+  final String handle;
+  final String badge;
+  final _Stat stat1;
+  final _Stat stat2;
+  final _Stat stat3;
   final AppRole role;
 
   @override
@@ -320,7 +480,7 @@ class _Hero extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      profile.name,
+                      name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: WBTypography.cardTitle.copyWith(
@@ -331,7 +491,7 @@ class _Hero extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      profile.handle,
+                      handle,
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                         fontSize: 13,
@@ -348,7 +508,7 @@ class _Hero extends StatelessWidget {
                         borderRadius: BorderRadius.circular(WBRadius.pill),
                       ),
                       child: Text(
-                        profile.badge,
+                        badge,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgHeader,
                           fontWeight: FontWeight.w600,
@@ -389,9 +549,9 @@ class _Hero extends StatelessWidget {
             ),
             child: Row(
               children: [
-                _StatTile(stat: profile.stat1),
-                _StatTile(stat: profile.stat2),
-                _StatTile(stat: profile.stat3, last: true),
+                _StatTile(stat: stat1),
+                _StatTile(stat: stat2),
+                _StatTile(stat: stat3, last: true),
               ],
             ),
           ),
@@ -509,14 +669,10 @@ void _showSignOutSheet(BuildContext context) {
   );
 }
 
-class _OperatorProfile {
-  const _OperatorProfile({
-    required this.name,
-    required this.handle,
+/// Fixed, non-data-driven configuration for each operator role.
+class _RoleConfig {
+  const _RoleConfig({
     required this.badge,
-    required this.stat1,
-    required this.stat2,
-    required this.stat3,
     required this.payoutLabel,
     required this.payoutSub,
     required this.payoutRoute,
@@ -524,12 +680,7 @@ class _OperatorProfile {
     required this.settingsSub,
     required this.settingsRoute,
   });
-  final String name;
-  final String handle;
   final String badge;
-  final _Stat stat1;
-  final _Stat stat2;
-  final _Stat stat3;
   final String payoutLabel;
   final String payoutSub;
   final String payoutRoute;

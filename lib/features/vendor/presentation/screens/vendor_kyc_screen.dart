@@ -24,16 +24,16 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
   bool _busy = false;
   final Map<String, String> _docs = {};
 
-  final _businessName = TextEditingController(text: 'Mama Cass Kitchen');
-  final _ownerName = TextEditingController(text: 'Adunni Adesanya');
-  final _phone = TextEditingController(text: '803 421 1820');
-  final _email = TextEditingController(text: 'mamacass@wawu.africa');
-  final _addressLine = TextEditingController(text: '12 Adeola Odeku St, V/I');
-  final _city = TextEditingController(text: 'Lagos');
-  final _state = TextEditingController(text: 'Lagos');
-  final _bankName = TextEditingController(text: 'GTBank');
-  final _accountNumber = TextEditingController(text: '0123456789');
-  final _accountName = TextEditingController(text: 'Adunni Adesanya');
+  final _businessName = TextEditingController();
+  final _ownerName = TextEditingController();
+  final _phone = TextEditingController();
+  final _email = TextEditingController();
+  final _addressLine = TextEditingController();
+  final _city = TextEditingController();
+  final _state = TextEditingController();
+  final _bankName = TextEditingController();
+  final _accountNumber = TextEditingController();
+  final _accountName = TextEditingController();
 
   static const _types = [
     ('restaurant', 'Restaurant'),

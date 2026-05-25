@@ -24,12 +24,12 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
   bool _busy = false;
   final Map<String, String> _docs = {};
 
-  final _fullName = TextEditingController(text: 'Aliyu Bala');
-  final _phone = TextEditingController(text: '803 421 1820');
-  final _union = TextEditingController(text: 'NRTC Kano');
-  final _plate = TextEditingController(text: 'KN-541-XA');
-  final _capacity = TextEditingController(text: '15,000');
-  final _payout = TextEditingController(text: '+234 805 0214 311');
+  final _fullName = TextEditingController();
+  final _phone = TextEditingController();
+  final _union = TextEditingController();
+  final _plate = TextEditingController();
+  final _capacity = TextEditingController();
+  final _payout = TextEditingController();
 
   static const _vehicleTypes = [
     ('truck', 'Long-haul truck'),

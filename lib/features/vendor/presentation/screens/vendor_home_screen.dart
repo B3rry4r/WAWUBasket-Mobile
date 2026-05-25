@@ -8,6 +8,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../application/vendor_orders_controller.dart';
 import '../widgets/vendor_status_pill.dart';
 
@@ -20,6 +21,12 @@ class VendorHomeScreen extends StatefulWidget {
 
 class _VendorHomeScreenState extends State<VendorHomeScreen> {
   bool _open = true;
+
+  @override
+  void initState() {
+    super.initState();
+    ProfileController.instance.load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +57,16 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
               140,
             ),
             children: [
-              const WBHomeAppBar(
-                title: 'Mama Cass Kitchen',
-                subtitle: 'Vendor dashboard',
+              ValueListenableBuilder(
+                valueListenable: ProfileController.instance.profile,
+                builder: (_, profile, _) => WBHomeAppBar(
+                  title: profile?.vendorBusinessName?.isNotEmpty == true
+                      ? profile!.vendorBusinessName!
+                      : profile?.fullName.isNotEmpty == true
+                          ? profile!.fullName
+                          : 'My Store',
+                  subtitle: 'Vendor dashboard',
+                ),
               ),
               const SizedBox(height: WBSpacing.lg),
               const WBRandomTagline(
@@ -60,11 +74,19 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                 fontSize: 26,
               ),
               const SizedBox(height: WBSpacing.lg),
-              _Hero(
-                open: _open,
-                onToggle: () => setState(() => _open = !_open),
-                ordersToday: orders.length,
-                revenue: todayRevenue,
+              ValueListenableBuilder(
+                valueListenable: ProfileController.instance.profile,
+                builder: (_, profile, _) => _Hero(
+                  open: _open,
+                  onToggle: () => setState(() => _open = !_open),
+                  ordersToday: orders.length,
+                  revenue: todayRevenue,
+                  businessName: profile?.vendorBusinessName?.isNotEmpty == true
+                      ? profile!.vendorBusinessName!
+                      : profile?.fullName.isNotEmpty == true
+                          ? profile!.fullName
+                          : 'My Store',
+                ),
               ),
               const SizedBox(height: WBSpacing.lg),
               _SectionLabel('Quick actions'),
@@ -184,11 +206,13 @@ class _Hero extends StatelessWidget {
     required this.onToggle,
     required this.ordersToday,
     required this.revenue,
+    required this.businessName,
   });
   final bool open;
   final VoidCallback onToggle;
   final int ordersToday;
   final int revenue;
+  final String businessName;
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +239,7 @@ class _Hero extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Mama Cass Kitchen',
+                      businessName,
                       style: WBTypography.hero.copyWith(
                         color: Colors.white,
                         fontSize: 22,

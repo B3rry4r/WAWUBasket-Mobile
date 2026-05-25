@@ -24,10 +24,10 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
   bool _busy = false;
   final Map<String, String> _docs = {};
 
-  final _fullName = TextEditingController(text: 'Tunde Adeyemi');
-  final _phone = TextEditingController(text: '803 421 1820');
-  final _homeAddress = TextEditingController(text: 'Lekki Phase 1, Lagos');
-  final _payout = TextEditingController(text: '+234 805 0214 311');
+  final _fullName = TextEditingController();
+  final _phone = TextEditingController();
+  final _homeAddress = TextEditingController();
+  final _payout = TextEditingController();
 
   static const _vehicles = [
     ('bicycle', 'Bicycle'),

@@ -7,6 +7,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../../escrow/application/escrow_controller.dart';
 import '../../../escrow/domain/models/bulk_order.dart';
 import '../../../trade/application/trade_controller.dart';
@@ -24,6 +25,7 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
   void initState() {
     super.initState();
     TradeController.instance.loadMyListings();
+    ProfileController.instance.load();
   }
 
   @override
@@ -51,9 +53,16 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
               140,
             ),
             children: [
-              const WBHomeAppBar(
-                title: 'Hauwa & Sons Bulk Co.',
-                subtitle: 'Trader dashboard',
+              ValueListenableBuilder(
+                valueListenable: ProfileController.instance.profile,
+                builder: (_, profile, _) => WBHomeAppBar(
+                  title: profile?.traderBusinessName?.isNotEmpty == true
+                      ? profile!.traderBusinessName!
+                      : profile?.fullName.isNotEmpty == true
+                          ? profile!.fullName
+                          : 'My Business',
+                  subtitle: 'Trader dashboard',
+                ),
               ),
               const SizedBox(height: WBSpacing.lg),
               const WBRandomTagline(
@@ -61,10 +70,18 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
                 fontSize: 26,
               ),
               const SizedBox(height: WBSpacing.lg),
-              _Hero(
-                listings: active.length,
-                enquiries: totalEnquiries,
-                lotValue: totalLotValue,
+              ValueListenableBuilder(
+                valueListenable: ProfileController.instance.profile,
+                builder: (_, profile, _) => _Hero(
+                  listings: active.length,
+                  enquiries: totalEnquiries,
+                  lotValue: totalLotValue,
+                  businessName: profile?.traderBusinessName?.isNotEmpty == true
+                      ? profile!.traderBusinessName!
+                      : profile?.fullName.isNotEmpty == true
+                          ? profile!.fullName
+                          : 'My Business',
+                ),
               ),
               const SizedBox(height: WBSpacing.lg),
               Text(
@@ -289,10 +306,12 @@ class _Hero extends StatelessWidget {
     required this.listings,
     required this.enquiries,
     required this.lotValue,
+    required this.businessName,
   });
   final int listings;
   final int enquiries;
   final int lotValue;
+  final String businessName;
 
   @override
   Widget build(BuildContext context) {
@@ -313,7 +332,7 @@ class _Hero extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            'Hauwa & Sons Bulk Co.',
+            businessName,
             style: WBTypography.hero.copyWith(
               color: Colors.white,
               fontSize: 22,

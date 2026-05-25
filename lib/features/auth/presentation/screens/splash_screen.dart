@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -31,13 +32,16 @@ class _SplashScreenState extends State<SplashScreen>
   /// After the splash animation, drop the user into the right place:
   /// signed-out users hit `/welcome`, signed-in users land in the home
   /// of whatever role they were last using.
-  void _route() {
+  Future<void> _route() async {
     if (!mounted) return;
     final ctrl = RoleController.instance;
     if (!ctrl.signedIn) {
       context.go(AppRoutes.welcome);
       return;
     }
+    final prefs = await SharedPreferences.getInstance();
+    final onboardingDone = prefs.getBool('onboardingDone') ?? false;
+    if (!mounted) return;
     final role = ctrl.role;
     final canResume = role == AppRole.customer ||
         (role.shellReady && ctrl.statusOf(role) == RoleStatus.approved);
@@ -45,7 +49,13 @@ class _SplashScreenState extends State<SplashScreen>
       // Saved role lost its approval or its shell isn't built yet, fall
       // back to customer so we never strand the user on a dead route.
       ctrl.setRole(AppRole.customer);
-      context.go(AppRoutes.home);
+      // Only skip onboarding if the user has already completed it.
+      context.go(onboardingDone ? AppRoutes.home : AppRoutes.onboarding);
+      return;
+    }
+    // For the customer role, check whether onboarding has been completed.
+    if (role == AppRole.customer && !onboardingDone) {
+      context.go(AppRoutes.onboarding);
       return;
     }
     context.go(role.homeRoute);

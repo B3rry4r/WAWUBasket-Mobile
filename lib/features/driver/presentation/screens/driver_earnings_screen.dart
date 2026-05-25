@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/driver_api.dart';
 
 /// Driver earnings dashboard. Per-trip / weekly / monthly toggles a
 /// different hero amount + trip list. Withdraw opens a bottom sheet to
@@ -14,44 +16,108 @@ class DriverEarningsScreen extends StatefulWidget {
   State<DriverEarningsScreen> createState() => _DriverEarningsScreenState();
 }
 
-class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
-  int _tab = 1;
-  static const _tabs = ['Last trip', 'This week', 'This month'];
+class _TripRow {
+  const _TripRow({
+    required this.id,
+    required this.route,
+    required this.amountNaira,
+    required this.completedAt,
+  });
+  final String id;
+  final String route;
+  final int amountNaira;
+  final DateTime completedAt;
 
-  static const _data = [
-    (
-      620000,
-      'Kano → Cotonou',
-      [
-        (id: 'LOAD-0042', route: 'Kano → Cotonou', amount: 620000, when: 'Today'),
-      ],
-    ),
-    (
-      1480000,
-      '3 trips this week',
-      [
-        (id: 'LOAD-0042', route: 'Kano → Cotonou', amount: 620000, when: 'Today'),
-        (id: 'LOAD-0038', route: 'Lagos → Lomé', amount: 320000, when: 'Mon'),
-        (id: 'LOAD-0034', route: 'Lagos → Niamey', amount: 540000, when: 'Sat'),
-      ],
-    ),
-    (
-      5320000,
-      '11 trips this month',
-      [
-        (id: 'LOAD-0042', route: 'Kano → Cotonou', amount: 620000, when: 'Today'),
-        (id: 'LOAD-0038', route: 'Lagos → Lomé', amount: 320000, when: 'Mon'),
-        (id: 'LOAD-0034', route: 'Lagos → Niamey', amount: 540000, when: 'Sat'),
-        (id: 'LOAD-0031', route: 'Calabar → Douala', amount: 480000, when: '8 days ago'),
-        (id: 'LOAD-0028', route: 'Kano → Cotonou', amount: 600000, when: '11 days ago'),
-        (id: 'LOAD-0022', route: 'Lagos → Lomé', amount: 290000, when: '15 days ago'),
-      ],
-    ),
-  ];
+  factory _TripRow.fromJson(Map<String, dynamic> j) => _TripRow(
+        id: '${j['id'] ?? ''}',
+        route: '${j['route'] ?? 'Route'}',
+        amountNaira: int.tryParse('${j['amountNaira'] ?? 0}') ?? 0,
+        completedAt:
+            DateTime.tryParse('${j['completedAt'] ?? ''}') ?? DateTime.now(),
+      );
+
+  String get timeLabel {
+    final now = DateTime.now();
+    final diff = now.difference(completedAt);
+    if (diff.inDays == 0) return 'Today';
+    if (diff.inDays == 1) return 'Yesterday';
+    if (diff.inDays < 7) {
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return days[completedAt.weekday - 1];
+    }
+    return '${diff.inDays} days ago';
+  }
+}
+
+class _EarningsData {
+  const _EarningsData({
+    required this.totalNaira,
+    required this.count,
+    required this.trips,
+  });
+  final int totalNaira;
+  final int count;
+  final List<_TripRow> trips;
+
+  factory _EarningsData.fromJson(Map<String, dynamic> j) => _EarningsData(
+        totalNaira: int.tryParse('${j['totalNaira'] ?? 0}') ?? 0,
+        count: (j['count'] as num?)?.toInt() ?? 0,
+        trips: [
+          for (final t in (j['trips'] as List?) ?? const [])
+            _TripRow.fromJson((t as Map).cast<String, dynamic>()),
+        ],
+      );
+}
+
+class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
+  int _tab = 1; // default: This week
+  static const _tabs = ['Last trip', 'This week', 'This month'];
+  static const _ranges = ['today', 'week', 'month'];
+
+  _EarningsData? _data;
+  bool _loading = false;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final j = await DriverApi.instance.earnings(range: _ranges[_tab]);
+      if (!mounted) return;
+      setState(() {
+        _data = _EarningsData.fromJson(j);
+        _loading = false;
+      });
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.message;
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _error = 'Could not load earnings. Try again.';
+        _loading = false;
+      });
+    }
+  }
+
+  void _switchTab(int i) {
+    setState(() => _tab = i);
+    _load();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final tab = _data[_tab];
     return SafeArea(
       bottom: false,
       child: ListView(
@@ -70,112 +136,161 @@ class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
                 _RangeTab(
                   label: _tabs[i],
                   active: i == _tab,
-                  onTap: () => setState(() => _tab = i),
+                  onTap: () => _switchTab(i),
                 ),
                 if (i != _tabs.length - 1) const SizedBox(width: 8),
               ],
             ],
           ),
           const SizedBox(height: WBSpacing.md),
-          Container(
-            padding: const EdgeInsets.all(WBSpacing.lg),
-            decoration: BoxDecoration(
-              color: WBColors.surfaceDark,
-              borderRadius: BorderRadius.circular(WBRadius.card),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _tabs[_tab].toUpperCase(),
-                  style: WBTypography.label.copyWith(
-                    color: Colors.white.withValues(alpha: 0.55),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  wbNaira(tab.$1),
-                  style: WBTypography.hero.copyWith(
-                    color: Colors.white,
-                    fontSize: 36,
-                    letterSpacing: -0.9,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  tab.$2,
-                  style: WBTypography.caption.copyWith(
-                    color: Colors.white.withValues(alpha: 0.6),
-                  ),
-                ),
-                const SizedBox(height: WBSpacing.md),
-                Container(
+          _loading
+              ? Container(
+                  height: 140,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(WBRadius.pill),
+                    color: WBColors.surfaceDark,
+                    borderRadius: BorderRadius.circular(WBRadius.card),
                   ),
-                  child: WBButton(
-                    label: 'Withdraw to wallet',
-                    size: WBButtonSize.md,
-                    trailingIcon: WBIconName.arrowRight,
-                    variant: WBButtonVariant.ghost,
-                    onPressed: () => _openWithdraw(context, tab.$1),
+                  alignment: Alignment.center,
+                  child: const SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation(Colors.white54),
+                    ),
+                  ),
+                )
+              : Container(
+                  padding: const EdgeInsets.all(WBSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: WBColors.surfaceDark,
+                    borderRadius: BorderRadius.circular(WBRadius.card),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _tabs[_tab].toUpperCase(),
+                        style: WBTypography.label.copyWith(
+                          color: Colors.white.withValues(alpha: 0.55),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _data != null ? wbNaira(_data!.totalNaira) : '–',
+                        style: WBTypography.hero.copyWith(
+                          color: Colors.white,
+                          fontSize: 36,
+                          letterSpacing: -0.9,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _data != null
+                            ? '${_data!.count} ${_data!.count == 1 ? 'trip' : 'trips'}'
+                            : '–',
+                        style: WBTypography.caption.copyWith(
+                          color: Colors.white.withValues(alpha: 0.6),
+                        ),
+                      ),
+                      const SizedBox(height: WBSpacing.md),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(WBRadius.pill),
+                        ),
+                        child: WBButton(
+                          label: 'Withdraw to wallet',
+                          size: WBButtonSize.md,
+                          trailingIcon: WBIconName.arrowRight,
+                          variant: WBButtonVariant.ghost,
+                          onPressed: () =>
+                              _openWithdraw(context, _data?.totalNaira ?? 0),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
           const SizedBox(height: WBSpacing.lg),
           Text(
             'Trips',
             style: WBTypography.cardTitle.copyWith(fontSize: 16),
           ),
           const SizedBox(height: 10),
-          WBCard(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                for (var i = 0; i < tab.$3.length; i++) ...[
-                  Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tab.$3[i].route,
-                                style: WBTypography.body.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
+          if (_error != null)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(WBRadius.card),
+              ),
+              child: Text(
+                _error!,
+                style: WBTypography.body
+                    .copyWith(color: WBColors.fgSecondary, fontSize: 14),
+              ),
+            )
+          else if (_loading)
+            const SizedBox.shrink()
+          else if (_data == null || _data!.trips.isEmpty)
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(WBRadius.card),
+              ),
+              child: Text(
+                'No trips for this period.',
+                style: WBTypography.body
+                    .copyWith(color: WBColors.fgSecondary, fontSize: 14),
+              ),
+            )
+          else
+            WBCard(
+              padding: EdgeInsets.zero,
+              child: Column(
+                children: [
+                  for (var i = 0; i < _data!.trips.length; i++) ...[
+                    Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _data!.trips[i].route,
+                                  style: WBTypography.body.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '#${tab.$3[i].id} · ${tab.$3[i].when}',
-                                style: WBTypography.caption.copyWith(
-                                  color: WBColors.fgSecondary,
+                                const SizedBox(height: 2),
+                                Text(
+                                  '#${_data!.trips[i].id} · ${_data!.trips[i].timeLabel}',
+                                  style: WBTypography.caption.copyWith(
+                                    color: WBColors.fgSecondary,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Text(
-                          wbNaira(tab.$3[i].amount),
-                          style: WBTypography.body.copyWith(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
+                          Text(
+                            wbNaira(_data!.trips[i].amountNaira),
+                            style: WBTypography.body.copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  if (i != tab.$3.length - 1) const WBDivider(),
+                    if (i != _data!.trips.length - 1) const WBDivider(),
+                  ],
                 ],
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -266,7 +381,6 @@ void _openWithdraw(BuildContext context, int balance) {
             const SizedBox(height: WBSpacing.md),
             const WBInput(
               label: 'Mobile money / wallet',
-              initialValue: '+234 805 ••• 8090',
               keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: WBSpacing.lg),
