@@ -13,8 +13,7 @@ library;
 const String _envBaseUrl =
     String.fromEnvironment('API_BASE_URL', defaultValue: '');
 
-/// Local fallback — replace with the Railway URL once it is live.
-const String _localFallback = 'http://10.0.2.2:3000';
+const String _localFallback = 'https://wawubasket-api-production.up.railway.app';
 
 /// The effective API origin, no trailing slash, no `/v1`.
 String get apiOrigin =>
