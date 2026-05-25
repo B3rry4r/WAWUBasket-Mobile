@@ -7,6 +7,8 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/address_controller.dart';
+import '../../../account/data/account_extras_api.dart';
 import '../../application/cart_controller.dart';
 import '../../data/orders_api.dart';
 import '../widgets/sticky_action_bar.dart';
@@ -23,6 +25,28 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   bool _scheduled = false;
   bool _placing = false;
   _ScheduleSlot? _slot;
+  String? _walletBalance;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWallet();
+    AddressController.instance.load();
+  }
+
+  Future<void> _loadWallet() async {
+    try {
+      final data = await AccountExtrasApi.instance.wallet();
+      if (mounted) {
+        setState(() {
+          _walletBalance = data['balance']?.toString() ??
+              data['balanceNaira']?.toString();
+        });
+      }
+    } catch (_) {
+      // Leave as null — the UI shows "Balance ₦--" while loading or on error.
+    }
+  }
 
   /// Converts the picked slot into an ISO datetime for the API.
   String? _scheduledForIso() {
@@ -51,12 +75,35 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     }
   }
 
-  static const _payOptions = [
-    (id: 'card', icon: WBIconName.card, label: 'Debit card', sub: '•••• 4218'),
-    (id: 'wallet', icon: WBIconName.star, label: 'Wallet', sub: 'Balance ₦12,500'),
-    (id: 'xfer', icon: WBIconName.arrowRight, label: 'Bank transfer', sub: 'Pay directly from app'),
-    (id: 'mobile', icon: WBIconName.phone, label: 'Mobile money', sub: 'OPay, Palmpay, others'),
-  ];
+  List<({String id, WBIconName icon, String label, String sub})>
+      get _payOptions => [
+            (
+              id: 'card',
+              icon: WBIconName.card,
+              label: 'Debit card',
+              sub: '•••• 4218'
+            ),
+            (
+              id: 'wallet',
+              icon: WBIconName.star,
+              label: 'Wallet',
+              sub: _walletBalance != null
+                  ? 'Balance ₦$_walletBalance'
+                  : 'Balance ₦--'
+            ),
+            (
+              id: 'xfer',
+              icon: WBIconName.arrowRight,
+              label: 'Bank transfer',
+              sub: 'Pay directly from app'
+            ),
+            (
+              id: 'mobile',
+              icon: WBIconName.phone,
+              label: 'Mobile money',
+              sub: 'OPay, Palmpay, others'
+            ),
+          ];
 
   String get _scheduleSubtitle {
     if (_slot == null) return 'Pick a time slot';
@@ -83,7 +130,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final cart = ref.watch(cartControllerProvider);
     final lines = cart.items;
     final subtotal = lines.fold<int>(0, (s, l) => s + l.total);
-    const delivery = 600;
+    var delivery = 600;
     const serviceFee = 200;
     final total = subtotal + delivery + serviceFee;
 
@@ -111,54 +158,70 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 const SizedBox(height: WBSpacing.lg),
                 _Section(
                   label: 'Where are we sending this?',
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          color: WBColors.bgSoft,
-                          shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.center,
-                        child: const WBIcon(WBIconName.pin, size: 18),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '2118 Thornridge Cir',
-                              style: WBTypography.body.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
+                  child: ValueListenableBuilder<List<Address>>(
+                    valueListenable: AddressController.instance.addresses,
+                    builder: (_, addresses, _) {
+                      final defaultAddr = addresses.where((a) => a.isDefault).firstOrNull;
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              color: WBColors.bgSoft,
+                              shape: BoxShape.circle,
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              'Surulere, Lagos · Apt 4B',
+                            alignment: Alignment.center,
+                            child: const WBIcon(WBIconName.pin, size: 18),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: defaultAddr == null
+                                ? Text(
+                                    'No address saved — add one',
+                                    style: WBTypography.body.copyWith(
+                                      color: WBColors.fgSecondary,
+                                      fontSize: 14,
+                                    ),
+                                  )
+                                : Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        defaultAddr.line,
+                                        style: WBTypography.body.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      if (defaultAddr.detail.isNotEmpty) ...[
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          defaultAddr.detail,
+                                          style: WBTypography.caption.copyWith(
+                                            color: WBColors.fgSecondary,
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                          ),
+                          GestureDetector(
+                            onTap: () => context.push(AppRoutes.savedAddresses),
+                            child: Text(
+                              'Change',
                               style: WBTypography.caption.copyWith(
-                                color: WBColors.fgSecondary,
+                                color: WBColors.fgHeader,
+                                fontWeight: FontWeight.w500,
                                 fontSize: 13,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => context.push(AppRoutes.savedAddresses),
-                        child: Text(
-                          'Change',
-                          style: WBTypography.caption.copyWith(
-                            color: WBColors.fgHeader,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
                           ),
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                 ),
                 const SizedBox(height: WBSpacing.md),

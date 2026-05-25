@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../data/profile_api.dart';
 
 /// Empathetic delete-account flow, pre-leave checklist, reason chips,
 /// destructive confirm. UI-only: confirming signs the user out.
@@ -17,6 +20,7 @@ class DeleteAccountScreen extends StatefulWidget {
 
 class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   String _reason = '';
+  bool _deleting = false;
 
   static const _checklist = [
     'Use your wallet balance, it will be lost',
@@ -39,60 +43,77 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         borderRadius:
             BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
       ),
-      builder: (sheetCtx) => Padding(
-        padding: EdgeInsets.only(
-          left: WBSpacing.screenPadding,
-          right: WBSpacing.screenPadding,
-          top: WBSpacing.lg,
-          bottom: MediaQuery.of(sheetCtx).padding.bottom + WBSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-                decoration: BoxDecoration(
-                  color: WBColors.bgDivider,
-                  borderRadius: BorderRadius.circular(WBRadius.pill),
+      builder: (sheetCtx) => StatefulBuilder(
+        builder: (sheetCtx, setSheet) => Padding(
+          padding: EdgeInsets.only(
+            left: WBSpacing.screenPadding,
+            right: WBSpacing.screenPadding,
+            top: WBSpacing.lg,
+            bottom: MediaQuery.of(sheetCtx).padding.bottom + WBSpacing.xl,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: WBColors.bgDivider,
+                    borderRadius: BorderRadius.circular(WBRadius.pill),
+                  ),
                 ),
               ),
-            ),
-            Text(
-              'Delete your account permanently?',
-              style: WBTypography.page,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: WBSpacing.sm),
-            Text(
-              'This cannot be undone.',
-              textAlign: TextAlign.center,
-              style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
-            ),
-            const SizedBox(height: WBSpacing.xl),
-            WBButton(
-              label: 'Yes, delete my account',
-              size: WBButtonSize.lg,
-              fullWidth: true,
-              variant: WBButtonVariant.danger,
-              onPressed: () {
-                RoleController.instance.signOut();
-                Navigator.of(sheetCtx).pop();
-                context.go(AppRoutes.welcome);
-              },
-            ),
-            const SizedBox(height: WBSpacing.sm + 4),
-            WBButton(
-              label: 'No, I want to stay',
-              size: WBButtonSize.lg,
-              fullWidth: true,
-              variant: WBButtonVariant.secondary,
-              onPressed: () => Navigator.of(sheetCtx).pop(),
-            ),
-          ],
+              Text(
+                'Delete your account permanently?',
+                style: WBTypography.page,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: WBSpacing.sm),
+              Text(
+                'This cannot be undone.',
+                textAlign: TextAlign.center,
+                style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
+              ),
+              const SizedBox(height: WBSpacing.xl),
+              WBButton(
+                label: 'Yes, delete my account',
+                size: WBButtonSize.lg,
+                fullWidth: true,
+                variant: WBButtonVariant.danger,
+                loading: _deleting,
+                onPressed: _deleting
+                    ? null
+                    : () async {
+                        setSheet(() => _deleting = true);
+                        try {
+                          await ProfileApi.instance.deleteAccount(
+                            reason: _reason.isEmpty ? null : _reason,
+                          );
+                        } on ApiException catch (e) {
+                          if (sheetCtx.mounted) {
+                            wbShowSnack(sheetCtx, e.message);
+                          }
+                          setSheet(() => _deleting = false);
+                          return;
+                        }
+                        RoleController.instance.signOut();
+                        if (sheetCtx.mounted) Navigator.of(sheetCtx).pop();
+                        if (mounted) context.go(AppRoutes.welcome);
+                      },
+              ),
+              const SizedBox(height: WBSpacing.sm + 4),
+              WBButton(
+                label: 'No, I want to stay',
+                size: WBButtonSize.lg,
+                fullWidth: true,
+                variant: WBButtonVariant.secondary,
+                onPressed: _deleting ? null : () => Navigator.of(sheetCtx).pop(),
+              ),
+            ],
+          ),
         ),
       ),
     );

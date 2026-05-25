@@ -23,4 +23,7 @@ class ProfileApi {
     final res = await _api.get('/profile/stats');
     return (res as Map).cast<String, dynamic>();
   }
+
+  Future<void> deleteAccount({String? reason}) =>
+      _api.delete('/profile/account', body: reason != null ? {'reason': reason} : null);
 }

@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/domain/models/export_listing.dart';
 import '../../application/escrow_controller.dart';
@@ -77,8 +78,8 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
         pricePerKgNaira: l.pricePerKgNaira,
         feeNaira: _fee(l),
         imageUrl: l.imageUrl,
-        buyerName: 'Adunni Adesanya',
-        buyerPhone: '+234 803 421 1820',
+        buyerName: ProfileController.instance.profile.value?.fullName ?? '',
+        buyerPhone: ProfileController.instance.profile.value?.phone ?? '',
         dropoffAddress: _address.text.trim(),
         sellerName: l.farmName,
         sellerRegion: l.farmRegion,

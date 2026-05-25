@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/data/account_extras_api.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../application/cart_controller.dart';
 import '../../data/catalog_api.dart';
@@ -30,6 +31,8 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
   Vendor? _vendor;
   List<Product> _menu = const [];
   String? _error;
+  bool _isFavorited = false;
+  bool _togglingFavorite = false;
 
   @override
   void initState() {
@@ -51,8 +54,46 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
         _vendor = result.vendor;
         _menu = result.menu;
       });
+      _loadFavoriteState(id);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  Future<void> _loadFavoriteState(String vendorId) async {
+    try {
+      final data = await AccountExtrasApi.instance.favorites();
+      final vendors = (data['vendors'] as List?) ?? const [];
+      final favorited = vendors.any((v) {
+        final id = v is Map ? (v['id'] ?? v['vendorId']) : v;
+        return id?.toString() == vendorId;
+      });
+      if (mounted) setState(() => _isFavorited = favorited);
+    } on ApiException {
+      // Leave default (false) — non-critical.
+    }
+  }
+
+  Future<void> _toggleFavorite() async {
+    final id = widget.vendorId;
+    if (id == null || _togglingFavorite) return;
+    setState(() => _togglingFavorite = true);
+    // Optimistic update
+    final wasF = _isFavorited;
+    setState(() => _isFavorited = !wasF);
+    try {
+      await AccountExtrasApi.instance.toggleFavoriteVendor(id);
+      if (!mounted) return;
+      wbShowSnack(
+        context,
+        _isFavorited ? 'Saved to favorites' : 'Removed from favorites',
+      );
+    } on ApiException catch (e) {
+      // Revert on error
+      if (mounted) setState(() => _isFavorited = wasF);
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _togglingFavorite = false);
     }
   }
 
@@ -125,8 +166,10 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
                     right: WBSpacing.screenPadding,
                     child: WBCircleIconButton(
                       icon: WBIconName.heart,
-                      onPressed: () =>
-                          wbShowSnack(context, 'Saved to favorites'),
+                      iconColor: _isFavorited
+                          ? WBColors.statusError
+                          : WBColors.fgHeader,
+                      onPressed: _toggleFavorite,
                     ),
                   ),
                 ],

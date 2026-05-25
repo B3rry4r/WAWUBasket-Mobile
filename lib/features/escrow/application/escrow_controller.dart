@@ -74,8 +74,8 @@ class EscrowController {
           feeNaira: 12000,
           imageUrl:
               'https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=600&q=80&auto=format&fit=crop',
-          buyerName: 'Adunni Adesanya',
-          buyerPhone: '+234 803 421 1820',
+          buyerName: 'Demo Buyer',
+          buyerPhone: '+2348030000001',
           dropoffAddress: 'Kano Central Market · Warehouse 14',
           sellerName: 'Sahel Grain Union',
           sellerRegion: 'Sokoto',

@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/data/account_extras_api.dart';
 import '../../application/cart_controller.dart';
 import '../../data/catalog_api.dart';
 import '../../domain/models/product.dart';
@@ -26,6 +27,8 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   int _qty = 1;
   String _protein = 'chicken';
   bool _adding = false;
+  bool _isFavorited = false;
+  bool _togglingFavorite = false;
 
   Product? _product;
   String? _error;
@@ -34,6 +37,38 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   void initState() {
     super.initState();
     _load();
+  }
+
+  Future<void> _loadFavoriteState(String itemId) async {
+    try {
+      final data = await AccountExtrasApi.instance.favorites();
+      final items = (data['items'] as List?) ?? const [];
+      final favorited = items.any((v) {
+        final id = v is Map ? (v['id'] ?? v['itemId']) : v;
+        return id?.toString() == itemId;
+      });
+      if (mounted) setState(() => _isFavorited = favorited);
+    } on ApiException {
+      // Non-critical — leave default false.
+    }
+  }
+
+  Future<void> _toggleFavorite() async {
+    final id = widget.productId;
+    if (id == null || _togglingFavorite) return;
+    setState(() => _togglingFavorite = true);
+    final wasF = _isFavorited;
+    setState(() => _isFavorited = !wasF);
+    try {
+      await AccountExtrasApi.instance.toggleFavoriteItem(id);
+      if (!mounted) return;
+      wbShowSnack(context, _isFavorited ? 'Saved to favorites' : 'Removed from favorites');
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _isFavorited = wasF);
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _togglingFavorite = false);
+    }
   }
 
   Future<void> _load() async {
@@ -47,6 +82,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
       final p = await CatalogApi.instance.item(id);
       if (!mounted) return;
       setState(() => _product = p);
+      _loadFavoriteState(id);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
     }
@@ -145,8 +181,10 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     right: WBSpacing.screenPadding,
                     child: WBCircleIconButton(
                       icon: WBIconName.heart,
-                      onPressed: () =>
-                          wbShowSnack(context, 'Saved to favorites'),
+                      iconColor: _isFavorited
+                          ? WBColors.statusError
+                          : WBColors.fgHeader,
+                      onPressed: _toggleFavorite,
                     ),
                   ),
                 ],

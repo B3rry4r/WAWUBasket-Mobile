@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../auth/data/auth_api.dart';
 
 /// Account security, change password, biometric login, 2FA. UI-only:
 /// toggles flip local state and snack; password opens a sheet.
@@ -19,6 +21,11 @@ class _SecurityScreenState extends State<SecurityScreen> {
   bool _twoFactor = false;
 
   void _changePassword() {
+    final current = TextEditingController();
+    final next = TextEditingController();
+    final confirm = TextEditingController();
+    var busy = false;
+
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: WBColors.bgPrimary,
@@ -27,50 +34,73 @@ class _SecurityScreenState extends State<SecurityScreen> {
         borderRadius:
             BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
       ),
-      builder: (sheetCtx) => Padding(
-        padding: EdgeInsets.only(
-          left: WBSpacing.screenPadding,
-          right: WBSpacing.screenPadding,
-          top: WBSpacing.lg,
-          bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + WBSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-                decoration: BoxDecoration(
-                  color: WBColors.bgDivider,
-                  borderRadius: BorderRadius.circular(WBRadius.pill),
+      builder: (sheetCtx) => StatefulBuilder(
+        builder: (sheetCtx, setSheet) => Padding(
+          padding: EdgeInsets.only(
+            left: WBSpacing.screenPadding,
+            right: WBSpacing.screenPadding,
+            top: WBSpacing.lg,
+            bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + WBSpacing.xl,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: WBColors.bgDivider,
+                    borderRadius: BorderRadius.circular(WBRadius.pill),
+                  ),
                 ),
               ),
-            ),
-            Text('Change password',
-                style: WBTypography.cardTitle.copyWith(fontSize: 18)),
-            const SizedBox(height: WBSpacing.lg),
-            const WBInput(label: 'Current password', obscureText: true),
-            const SizedBox(height: WBSpacing.md),
-            const WBInput(label: 'New password', obscureText: true),
-            const SizedBox(height: WBSpacing.md),
-            const WBInput(label: 'Confirm new password', obscureText: true),
-            const SizedBox(height: WBSpacing.lg),
-            WBButton(
-              label: 'Update password',
-              fullWidth: true,
-              size: WBButtonSize.lg,
-              onPressed: () {
-                Navigator.of(sheetCtx).pop();
-                wbShowSnack(context, 'Password updated');
-              },
-            ),
-          ],
+              Text('Change password',
+                  style: WBTypography.cardTitle.copyWith(fontSize: 18)),
+              const SizedBox(height: WBSpacing.lg),
+              WBInput(label: 'Current password', controller: current, obscureText: true),
+              const SizedBox(height: WBSpacing.md),
+              WBInput(label: 'New password', controller: next, obscureText: true),
+              const SizedBox(height: WBSpacing.md),
+              WBInput(label: 'Confirm new password', controller: confirm, obscureText: true),
+              const SizedBox(height: WBSpacing.lg),
+              WBButton(
+                label: 'Update password',
+                fullWidth: true,
+                size: WBButtonSize.lg,
+                loading: busy,
+                onPressed: () async {
+                  if (next.text != confirm.text) {
+                    wbShowSnack(sheetCtx, 'Passwords do not match.');
+                    return;
+                  }
+                  if (next.text.length < 8) {
+                    wbShowSnack(sheetCtx, 'New password must be at least 8 characters.');
+                    return;
+                  }
+                  setSheet(() => busy = true);
+                  try {
+                    await AuthApi.instance.changePassword(current.text, next.text);
+                    if (sheetCtx.mounted) Navigator.of(sheetCtx).pop();
+                    if (mounted) wbShowSnack(context, 'Password updated successfully.');
+                  } on ApiException catch (e) {
+                    if (sheetCtx.mounted) wbShowSnack(sheetCtx, e.message);
+                  } finally {
+                    if (sheetCtx.mounted) setSheet(() => busy = false);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
-    );
+    ).whenComplete(() {
+      current.dispose();
+      next.dispose();
+      confirm.dispose();
+    });
   }
 
   @override
