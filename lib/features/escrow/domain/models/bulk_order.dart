@@ -11,7 +11,9 @@ extension EscrowStatusX on EscrowStatus {
       };
 }
 
-/// Which Flutterwave-style channel funded the escrow.
+/// Preferred payment channel hint passed to Flutterwave. Flutterwave's hosted
+/// checkout handles the actual processing — Apple Pay and Google Pay are
+/// available natively on their page regardless of this selection.
 enum PaymentMethod { card, bankTransfer, mobileMoney }
 
 extension PaymentMethodX on PaymentMethod {
@@ -22,9 +24,9 @@ extension PaymentMethodX on PaymentMethod {
       };
 
   String get hint => switch (this) {
-        PaymentMethod.card => 'Visa, Mastercard, Verve',
-        PaymentMethod.bankTransfer => 'Direct bank transfer',
-        PaymentMethod.mobileMoney => 'MTN, Airtel, Moov',
+        PaymentMethod.card => 'Visa, Mastercard, Verve · Apple/Google Pay on Flutterwave',
+        PaymentMethod.bankTransfer => 'Direct bank transfer · all currencies',
+        PaymentMethod.mobileMoney => 'MTN, Airtel, Moov, M-Pesa',
       };
 }
 

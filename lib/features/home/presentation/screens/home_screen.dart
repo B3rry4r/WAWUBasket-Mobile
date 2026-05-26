@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/feature_flag_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
@@ -227,97 +228,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )),
               const SizedBox(height: 22),
-              // Category pills (full-bleed) — driven by CategoryController
-              ValueListenableBuilder<List<Category>?>(
-                valueListenable: CategoryController.instance.categories,
-                builder: (_, cats, _) {
-                  if (cats == null) {
-                    // Shimmer skeleton row while loading
-                    return SizedBox(
-                      height: 44,
-                      child: Shimmer.fromColors(
-                        baseColor: WBColors.bgSoft,
-                        highlightColor: WBColors.bgSecondary,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          itemCount: 5,
-                          separatorBuilder: (_, _) => const SizedBox(width: 8),
-                          itemBuilder: (_, _) => Container(
-                            width: 110,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(WBRadius.pill),
-                            ),
+              ValueListenableBuilder<Map<String, bool>>(
+                valueListenable: FeatureFlagService.instance.flags,
+                builder: (_, flags, _) {
+                  final newUI = flags['new_categories_ui'] ?? true;
+                  return ValueListenableBuilder<List<Category>?>(
+                    valueListenable: CategoryController.instance.categories,
+                    builder: (_, cats, _) => newUI
+                        ? _CategoryPillRow(
+                            cats: cats,
+                            activeCategoryId: _activeCategoryId,
+                            onTap: _onCategoryTap,
+                          )
+                        : _CategoryGrid(
+                            cats: cats,
+                            activeCategoryId: _activeCategoryId,
+                            onTap: _onCategoryTap,
                           ),
-                        ),
-                      ),
-                    );
-                  }
-                  return SizedBox(
-                    height: 44,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: cats.length,
-                      separatorBuilder: (_, _) => const SizedBox(width: 8),
-                      itemBuilder: (_, i) {
-                        final c = cats[i];
-                        final active = c.id == _activeCategoryId;
-                        return GestureDetector(
-                          onTap: () => _onCategoryTap(c.id),
-                          child: AnimatedContainer(
-                            duration: WBMotion.base,
-                            curve: WBMotion.easeSoft,
-                            padding: const EdgeInsets.only(left: 6, right: 16),
-                            decoration: BoxDecoration(
-                              color: active
-                                  ? WBColors.surfaceDark
-                                  : WBColors.surfaceTag,
-                              borderRadius:
-                                  BorderRadius.circular(WBRadius.pill),
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 6),
-                                  child: Container(
-                                    width: 32,
-                                    height: 32,
-                                    decoration: BoxDecoration(
-                                      color: active
-                                          ? Colors.white.withValues(alpha: 0.12)
-                                          : WBColors.bgPrimary,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    padding: const EdgeInsets.all(4),
-                                    child: (c.svgAsset != null &&
-                                            c.svgAsset!.isNotEmpty)
-                                        ? SvgPicture.asset(
-                                            c.svgAsset!,
-                                            fit: BoxFit.contain,
-                                          )
-                                        : const SizedBox.shrink(),
-                                  ),
-                                ),
-                                const SizedBox(width: 9),
-                                Text(
-                                  c.label,
-                                  style: WBTypography.caption.copyWith(
-                                    color: active
-                                        ? Colors.white
-                                        : WBColors.fgHeader,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
                   );
                 },
               ),
@@ -651,6 +578,200 @@ class _OffersBanner extends StatelessWidget {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+// ── New UI: scrollable pill row ───────────────────────────────────────────────
+
+class _CategoryPillRow extends StatelessWidget {
+  const _CategoryPillRow({
+    required this.cats,
+    required this.activeCategoryId,
+    required this.onTap,
+  });
+  final List<Category>? cats;
+  final String? activeCategoryId;
+  final ValueChanged<String> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (cats == null) {
+      return SizedBox(
+        height: 44,
+        child: Shimmer.fromColors(
+          baseColor: WBColors.bgSoft,
+          highlightColor: WBColors.bgSecondary,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: 5,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (_, _) => Container(
+              width: 110,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return SizedBox(
+      height: 44,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: cats!.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (_, i) {
+          final c = cats![i];
+          final active = c.id == activeCategoryId;
+          return GestureDetector(
+            onTap: () => onTap(c.id),
+            child: AnimatedContainer(
+              duration: WBMotion.base,
+              curve: WBMotion.easeSoft,
+              padding: const EdgeInsets.only(left: 6, right: 16),
+              decoration: BoxDecoration(
+                color: active ? WBColors.surfaceDark : WBColors.surfaceTag,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: active
+                            ? Colors.white.withValues(alpha: 0.12)
+                            : WBColors.bgPrimary,
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
+                          ? SvgPicture.asset(c.svgAsset!, fit: BoxFit.contain)
+                          : const SizedBox.shrink(),
+                    ),
+                  ),
+                  const SizedBox(width: 9),
+                  Text(
+                    c.label,
+                    style: WBTypography.caption.copyWith(
+                      color: active ? Colors.white : WBColors.fgHeader,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ── Old UI: 3-column icon grid ────────────────────────────────────────────────
+
+class _CategoryGrid extends StatelessWidget {
+  const _CategoryGrid({
+    required this.cats,
+    required this.activeCategoryId,
+    required this.onTap,
+  });
+  final List<Category>? cats;
+  final String? activeCategoryId;
+  final ValueChanged<String> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    if (cats == null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Shimmer.fromColors(
+          baseColor: WBColors.bgSoft,
+          highlightColor: WBColors.bgSecondary,
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1,
+            ),
+            itemCount: 9,
+            itemBuilder: (_, _) => Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(WBRadius.card),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 1.1,
+        ),
+        itemCount: cats!.length,
+        itemBuilder: (_, i) {
+          final c = cats![i];
+          final active = c.id == activeCategoryId;
+          return GestureDetector(
+            onTap: () => onTap(c.id),
+            child: AnimatedContainer(
+              duration: WBMotion.base,
+              curve: WBMotion.easeSoft,
+              decoration: BoxDecoration(
+                color: active ? WBColors.surfaceDark : WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(WBRadius.card),
+              ),
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (c.svgAsset != null && c.svgAsset!.isNotEmpty)
+                    SvgPicture.asset(
+                      c.svgAsset!,
+                      width: 28,
+                      height: 28,
+                      colorFilter: active
+                          ? const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn)
+                          : null,
+                    ),
+                  const SizedBox(height: 6),
+                  Text(
+                    c.label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: WBTypography.caption.copyWith(
+                      color: active ? Colors.white : WBColors.fgHeader,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

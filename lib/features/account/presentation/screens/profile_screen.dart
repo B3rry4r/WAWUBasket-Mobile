@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/guest_mode.dart';
@@ -238,10 +237,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         label: 'Orders',
                       ),
                       _Stat(
-                        value: stats?.walletBalanceNaira != null
-                            ? _fmtNaira(int.tryParse(stats!.walletBalanceNaira!) ?? 0)
-                            : '–',
-                        label: 'Wallet',
+                        value: stats?.orders != null ? '${stats!.orders}' : '–',
+                        label: 'Bulk',
                       ),
                       _Stat(
                         value: stats?.favorites != null ? '${stats!.favorites}' : '–',
@@ -284,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: WBIconName.card,
             label: context.l10n.profileWalletMenu,
             sub: context.l10n.profileWalletSub,
-            onTap: () => context.push(AppRoutes.wallet),
+            onTap: () => context.push(AppRoutes.escrowOrders),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
@@ -303,12 +300,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: context.l10n.profileNotifications,
             sub: context.l10n.profileNotificationsSub,
             onTap: () => context.push(AppRoutes.notifications),
-          ),
-          AccountMenuRow(
-            icon: WBIconName.basket,
-            label: context.l10n.profileBulkOrders,
-            sub: context.l10n.profileBulkOrdersSub,
-            onTap: () => context.push(AppRoutes.escrowOrders),
           ),
           AccountMenuRow(
             icon: WBIconName.star,
@@ -332,11 +323,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: context.l10n.profileDietary,
             sub: context.l10n.profileDietarySub,
             onTap: () => context.push(AppRoutes.dietary),
-          ),
-          AccountMenuRow(
-            icon: WBIconName.star,
-            label: context.l10n.profileRateApp,
-            onTap: () => _showRateSheet(context),
           ),
           AccountMenuRow(
             icon: WBIconName.more,
@@ -443,140 +429,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return 'Apply to be a vendor, trader, agent, rider or driver';
     }
     return 'Active: ${switchable.map((r) => r.title).join(' · ')}';
-  }
-}
-
-/// Compact naira formatter for stat tiles: 12500 → ₦12.5k
-String _fmtNaira(int naira) {
-  if (naira >= 1000000) {
-    final m = naira / 1000000;
-    return '₦${m % 1 == 0 ? m.toInt() : m.toStringAsFixed(1)}M';
-  }
-  if (naira >= 1000) {
-    final k = naira / 1000;
-    return '₦${k % 1 == 0 ? k.toInt() : k.toStringAsFixed(1)}k';
-  }
-  return '₦$naira';
-}
-
-void _showRateSheet(BuildContext context) {
-  showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: WBColors.bgPrimary,
-    isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
-    ),
-    builder: (ctx) => const _RateSheet(),
-  );
-}
-
-class _RateSheet extends StatefulWidget {
-  const _RateSheet();
-
-  @override
-  State<_RateSheet> createState() => _RateSheetState();
-}
-
-class _RateSheetState extends State<_RateSheet> {
-  int _rating = 0;
-  bool _submitting = false;
-
-  Future<void> _openStore() async {
-    setState(() => _submitting = true);
-    try {
-      // TODO: real store ids — replace with the production Apple App Store ID
-      // and Play Store package once the listings are live.
-      final uri = Uri.parse(
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? 'https://apps.apple.com/app/idXXXXXXXXX'
-            : 'https://play.google.com/store/apps/details?id=africa.wawu.basket',
-      );
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (_) {
-      // Snackbar shown by the caller — keep the sheet open so they can
-      // retry without redoing the rating.
-    } finally {
-      if (mounted) setState(() => _submitting = false);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: WBSpacing.screenPadding,
-        right: WBSpacing.screenPadding,
-        top: WBSpacing.lg,
-        // Combine bottom safe-area inset + keyboard inset so the CTA never
-        // hides behind the system nav bar or the floating tab pill.
-        bottom: MediaQuery.of(context).padding.bottom +
-            MediaQuery.of(context).viewInsets.bottom +
-            WBSpacing.xl,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-            decoration: BoxDecoration(
-              color: WBColors.bgDivider,
-              borderRadius: BorderRadius.circular(WBRadius.pill),
-            ),
-          ),
-          Text(context.l10n.profileRateWawu, style: WBTypography.page),
-          const SizedBox(height: WBSpacing.sm),
-          Text(
-            context.l10n.profileRateFeedback,
-            textAlign: TextAlign.center,
-            style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (i) {
-              final filled = i < _rating;
-              return GestureDetector(
-                onTap: () => setState(() => _rating = i + 1),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: WBIcon(
-                    WBIconName.star,
-                    size: 36,
-                    color: filled ? WBColors.fgHeader : WBColors.bgDivider,
-                  ),
-                ),
-              );
-            }),
-          ),
-          const SizedBox(height: WBSpacing.xl),
-          WBButton(
-            label: _rating == 0
-                ? context.l10n.profileRateTapStar
-                : context.l10n.profileRateSubmit,
-            size: WBButtonSize.lg,
-            fullWidth: true,
-            disabled: _rating == 0,
-            loading: _submitting,
-            onPressed: _rating == 0
-                ? null
-                : () async {
-                    final messenger = ScaffoldMessenger.of(context);
-                    final nav = Navigator.of(context);
-                    final thanks = context.l10n.profileRateThanks('$_rating');
-                    if (_rating >= 4) {
-                      await _openStore();
-                    }
-                    if (!mounted) return;
-                    nav.pop();
-                    messenger.showSnackBar(SnackBar(content: Text(thanks)));
-                  },
-          ),
-        ],
-      ),
-    );
   }
 }
 
