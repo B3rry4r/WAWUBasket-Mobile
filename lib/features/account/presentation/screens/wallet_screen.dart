@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
@@ -73,13 +72,6 @@ class _Txn {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
-  List<({WBIconName icon, String label, String route})> _actions(BuildContext context) => [
-    (icon: WBIconName.plus, label: context.l10n.walletTopUp, route: AppRoutes.walletTopUp),
-    (icon: WBIconName.arrowRight, label: context.l10n.walletSend, route: AppRoutes.walletSend),
-    (icon: WBIconName.arrowLeft, label: context.l10n.walletWithdraw, route: AppRoutes.walletWithdraw),
-    (icon: WBIconName.card, label: context.l10n.walletCards, route: AppRoutes.walletCards),
-  ];
-
   int _balance = 0;
   int _escrow = 0;
   List<_Txn>? _txns;
@@ -151,7 +143,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 Text(
-                  context.l10n.walletAvailableBalance,
+                  'TOTAL PAID',
                   style: WBTypography.label.copyWith(
                     color: Colors.white.withValues(alpha: 0.5),
                     fontWeight: FontWeight.w500,
@@ -159,7 +151,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  txns == null && _error == null ? '₦—' : wbNaira(_balance),
+                  txns == null && _error == null ? '—' : wbNaira(_balance),
                   style: WBTypography.hero.copyWith(
                     fontSize: 48,
                     color: Colors.white,
@@ -201,51 +193,6 @@ class _WalletScreenState extends State<WalletScreen> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          // Quick actions
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              WBSpacing.screenPadding,
-              WBSpacing.lg,
-              WBSpacing.screenPadding,
-              0,
-            ),
-            child: Row(
-              children: [
-                for (final a in _actions(context)) ...[
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () => context.push(a.route),
-                      behavior: HitTestBehavior.opaque,
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 52,
-                            height: 52,
-                            decoration: const BoxDecoration(
-                              color: WBColors.bgPrimary,
-                              shape: BoxShape.circle,
-                              boxShadow: WBShadows.card,
-                            ),
-                            alignment: Alignment.center,
-                            child: WBIcon(a.icon, size: 20),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            a.label,
-                            style: WBTypography.caption.copyWith(
-                              color: WBColors.fgSecondary,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ],

@@ -281,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: WBIconName.card,
             label: context.l10n.profileWalletMenu,
             sub: context.l10n.profileWalletSub,
-            onTap: () => context.push(AppRoutes.escrowOrders),
+            onTap: () => context.push(AppRoutes.wallet),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
