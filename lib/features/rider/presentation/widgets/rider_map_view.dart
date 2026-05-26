@@ -178,6 +178,7 @@ class _MapboxLayerState extends State<_MapboxLayer> {
       final pos = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 10),
         ),
       );
       RiderController.instance.updatePosition(pos.latitude, pos.longitude);

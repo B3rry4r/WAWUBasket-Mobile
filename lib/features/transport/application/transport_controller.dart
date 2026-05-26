@@ -108,8 +108,8 @@ class TransportController {
     });
   }
 
-  /// Driver "auto-wins" the bid in the prototype (no trader-side accept
-  /// flow yet). Marks the load assigned + sets active trip.
+  /// Marks the load assigned + sets active trip, and notifies the backend
+  /// that the driver has accepted the assignment.
   void accept(String id) {
     final l = byId(id);
     if (l == null) return;
@@ -117,6 +117,9 @@ class TransportController {
     l.assignedDriver = driverName;
     activeTrip.value = l;
     _bump();
+    _driverApi.acceptLoad(id).catchError((Object e) {
+      if (e is ApiException) mutationError.value = e.message;
+    });
   }
 
   /// Log the next checkpoint on the active trip. Auto-advances status
