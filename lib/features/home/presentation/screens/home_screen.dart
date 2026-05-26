@@ -179,43 +179,50 @@ class _HomeScreenState extends State<HomeScreen> {
                   final circleUI = flags['new_categories_ui'] ?? false;
                   return ValueListenableBuilder<List<Category>?>(
                     valueListenable: CategoryController.instance.categories,
-                    builder: (_, cats, _) => circleUI
-                        ? _CategoryCircleRow(
-                            cats: cats,
-                            activeCategoryId: _activeCategoryId,
-                            onTap: _onCategoryTap,
-                          )
-                        : _CategoryPillRow(
+                    builder: (_, cats, _) {
+                      if (circleUI) {
+                        return _CategoryCircleRow(cats: cats);
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _CategoryPillRow(
                             cats: cats,
                             activeCategoryId: _activeCategoryId,
                             onTap: _onCategoryTap,
                           ),
+                          // Subcategory chips — animated reveal below pills
+                          AnimatedSize(
+                            duration: WBMotion.base,
+                            curve: WBMotion.easeSoft,
+                            alignment: Alignment.topCenter,
+                            child: activeCategory == null
+                                ? const SizedBox(width: double.infinity)
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: WBSpacing.md),
+                                    child: SubcategoryChipRow(
+                                      subcategories:
+                                          activeCategory.subcategories,
+                                      activeId: _activeSubcategoryId,
+                                      onTap: _onSubcategoryTap,
+                                      visible: true,
+                                      horizontalPadding: 20,
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(height: 22),
+                          CategoryBody(
+                            kind: kind,
+                            categoryId: _activeCategoryId,
+                            subcategoryId: _activeSubcategoryId,
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
-              ),
-              // Subcategory chips (animated reveal, full-bleed)
-              AnimatedSize(
-                duration: WBMotion.base,
-                curve: WBMotion.easeSoft,
-                alignment: Alignment.topCenter,
-                child: activeCategory == null
-                    ? const SizedBox(width: double.infinity)
-                    : Padding(
-                        padding: const EdgeInsets.only(top: WBSpacing.md),
-                        child: SubcategoryChipRow(
-                          subcategories: activeCategory.subcategories,
-                          activeId: _activeSubcategoryId,
-                          onTap: _onSubcategoryTap,
-                          visible: true,
-                          horizontalPadding: 20,
-                        ),
-                      ),
-              ),
-              const SizedBox(height: 22),
-              CategoryBody(
-                kind: kind,
-                categoryId: _activeCategoryId,
-                subcategoryId: _activeSubcategoryId,
               ),
               const SizedBox(height: 22),
               _padded(_CookTonightHeader()),
@@ -525,25 +532,55 @@ class _CategoryPillRow extends StatelessWidget {
   }
 }
 
-// ── Feature-flag UI: Glovo-style horizontal circle row ───────────────────────
-// Horizontally scrollable row of large icon circles with label underneath.
-// The active circle gets a filled dark background; inactive stays subtle.
+// ── Feature-flag UI: Glovo-style animated circle carousel ────────────────────
+// Horizontally scrollable row. Each circle scales up as it nears the viewport
+// centre — the same parallax-magnify feel Glovo uses. Tapping navigates to
+// the dedicated CategoryScreen rather than dropping chips inline.
 
-class _CategoryCircleRow extends StatelessWidget {
-  const _CategoryCircleRow({
-    required this.cats,
-    required this.activeCategoryId,
-    required this.onTap,
-  });
+class _CategoryCircleRow extends StatefulWidget {
+  const _CategoryCircleRow({required this.cats});
   final List<Category>? cats;
-  final String? activeCategoryId;
-  final ValueChanged<String> onTap;
+
+  @override
+  State<_CategoryCircleRow> createState() => _CategoryCircleRowState();
+}
+
+class _CategoryCircleRowState extends State<_CategoryCircleRow> {
+  final _scroll = ScrollController();
+
+  // Item width + gap used to compute each tile's distance from viewport centre.
+  static const _tileW = 72.0;
+  static const _gap = 14.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  double _scale(int i) {
+    if (!_scroll.hasClients) return i == 0 ? 1.0 : 0.85;
+    final viewW = _scroll.position.viewportDimension;
+    final offset = _scroll.offset;
+    final itemCenter = 20.0 + i * (_tileW + _gap) + _tileW / 2;
+    final viewCenter = offset + viewW / 2;
+    final dist = (itemCenter - viewCenter).abs();
+    // Scale 1.0 at centre, 0.82 at >half a tile away
+    return (1.0 - (dist / (viewW * 0.6)).clamp(0.0, 1.0) * 0.18)
+        .clamp(0.82, 1.0);
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (cats == null) {
+    if (widget.cats == null) {
       return SizedBox(
-        height: 90,
+        height: 100,
         child: Shimmer.fromColors(
           baseColor: WBColors.bgSoft,
           highlightColor: WBColors.bgSecondary,
@@ -551,27 +588,30 @@ class _CategoryCircleRow extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: 7,
-            separatorBuilder: (_, _) => const SizedBox(width: 16),
-            itemBuilder: (_, _) => Column(
-              children: [
-                Container(
-                  width: 58,
-                  height: 58,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
+            separatorBuilder: (_, _) => const SizedBox(width: _gap),
+            itemBuilder: (_, _) => SizedBox(
+              width: _tileW,
+              child: Column(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Container(
-                  width: 48,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 44,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -579,59 +619,65 @@ class _CategoryCircleRow extends StatelessWidget {
     }
 
     return SizedBox(
-      height: 90,
+      height: 100,
       child: ListView.separated(
+        controller: _scroll,
         scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: cats!.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 16),
+        itemCount: widget.cats!.length,
+        separatorBuilder: (_, _) => const SizedBox(width: _gap),
         itemBuilder: (_, i) {
-          final c = cats![i];
-          final active = c.id == activeCategoryId;
+          final c = widget.cats![i];
+          final scale = _scale(i);
           return GestureDetector(
-            onTap: () => onTap(c.id),
-            child: SizedBox(
-              width: 66,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AnimatedContainer(
-                    duration: WBMotion.base,
-                    curve: WBMotion.easeSoft,
-                    width: 58,
-                    height: 58,
-                    decoration: BoxDecoration(
-                      color: active ? WBColors.surfaceDark : WBColors.surfaceCard,
-                      shape: BoxShape.circle,
-                      boxShadow: active ? null : WBShadows.card,
+            onTap: () =>
+                context.push('${AppRoutes.categoryDetail}/${c.id}'),
+            child: Transform.scale(
+              scale: scale,
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: _tileW,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: WBColors.surfaceCard,
+                        shape: BoxShape.circle,
+                        boxShadow: WBShadows.card,
+                      ),
+                      padding: const EdgeInsets.all(14),
+                      child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
+                          ? SvgPicture.asset(
+                              c.svgAsset!,
+                              fit: BoxFit.contain,
+                              colorFilter: ColorFilter.mode(
+                                WBColors.fgPrimary, BlendMode.srcIn),
+                            )
+                          : const SizedBox.shrink(),
                     ),
-                    padding: const EdgeInsets.all(14),
-                    child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
-                        ? SvgPicture.asset(
-                            c.svgAsset!,
-                            fit: BoxFit.contain,
-                            colorFilter: active
-                                ? const ColorFilter.mode(
-                                    Colors.white, BlendMode.srcIn)
-                                : ColorFilter.mode(
-                                    WBColors.fgSecondary, BlendMode.srcIn),
-                          )
-                        : const SizedBox.shrink(),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    c.label,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: WBTypography.caption.copyWith(
-                      color: active ? WBColors.fgPrimary : WBColors.fgSecondary,
-                      fontWeight: active ? FontWeight.w700 : FontWeight.w500,
-                      fontSize: 11,
-                      height: 1.2,
+                    const SizedBox(height: 6),
+                    Text(
+                      c.label,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: WBTypography.caption.copyWith(
+                        color: scale > 0.94
+                            ? WBColors.fgPrimary
+                            : WBColors.fgSecondary,
+                        fontWeight: scale > 0.94
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        fontSize: 11,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
