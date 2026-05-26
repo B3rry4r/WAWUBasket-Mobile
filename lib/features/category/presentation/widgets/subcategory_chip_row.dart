@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../domain/models/subcategory.dart';
 
 /// Horizontal scrolling row of subcategory chips with an animated reveal.
-/// Renders [Subcategory] objects via the existing `WBTag` widget so the
-/// visual style matches Search filters exactly.
+/// The leading "All" chip uses the standard [WBTag]; each subcategory chip
+/// shows its SVG icon inside a circle, matching the home category pill row.
 ///
 /// Pass [visible] = `false` to collapse the row; the parent will animate
 /// the slot's height via [AnimatedSize]. This widget itself just handles
@@ -62,10 +63,56 @@ class SubcategoryChipRow extends StatelessWidget {
                     );
                   }
                   final sub = subcategories[i - 1];
-                  return WBTag(
-                    label: sub.label,
-                    active: sub.id == activeId,
+                  final active = sub.id == activeId;
+                  return GestureDetector(
                     onTap: () => onTap(sub.id),
+                    behavior: HitTestBehavior.opaque,
+                    child: AnimatedContainer(
+                      duration: WBMotion.base,
+                      curve: WBMotion.easeSoft,
+                      padding: const EdgeInsets.only(left: 4, right: 12),
+                      decoration: BoxDecoration(
+                        color: active
+                            ? WBColors.surfaceDark
+                            : WBColors.surfaceTag,
+                        borderRadius: BorderRadius.circular(WBRadius.pill),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 24,
+                            height: 24,
+                            margin: const EdgeInsets.symmetric(vertical: 6),
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: active
+                                  ? Colors.white.withValues(alpha: 0.12)
+                                  : WBColors.bgPrimary,
+                              shape: BoxShape.circle,
+                            ),
+                            child: (sub.svgAsset != null &&
+                                    sub.svgAsset!.isNotEmpty)
+                                ? SvgPicture.asset(
+                                    sub.svgAsset!,
+                                    fit: BoxFit.contain,
+                                  )
+                                : const SizedBox.shrink(),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            sub.label,
+                            style: WBTypography.caption.copyWith(
+                              color: active
+                                  ? Colors.white
+                                  : WBColors.fgHeader,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               ),

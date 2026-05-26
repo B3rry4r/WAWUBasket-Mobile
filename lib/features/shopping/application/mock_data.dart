@@ -11,69 +11,73 @@ import 'wb_images.dart';
 /// suppliers, bulk lots. Mirrors the WAWUBasket brand taxonomy.
 abstract final class MockData {
   // ─── 9 brand categories — 4 primary verticals lead, then secondary ──
-  static const categories = [
+  static final categories = [
     // Primary verticals (shown first in home pill row)
     Category(
       id: 'restaurants',
-      label: 'Eat now',
+      label: 'Restaurants',
       imageUrl: WBImages.jollof,
+      svgAsset: 'assets/categories/category_restaurants.svg',
       kind: CategoryKind.restaurant,
       tagline: 'Hot meals. Fast.',
       subcategories: [
-        Subcategory(id: 'chicken-republic', label: 'Chicken Republic', imageUrl: WBImages.friedChicken),
-        Subcategory(id: 'local', label: 'Local restaurants', imageUrl: WBImages.jollof),
-        Subcategory(id: 'shawarma', label: 'Shawarma', imageUrl: WBImages.shawarma),
-        Subcategory(id: 'pizza', label: 'Pizza', imageUrl: WBImages.cake),
-        Subcategory(id: 'burgers', label: 'Burgers', imageUrl: WBImages.friedChicken),
-        Subcategory(id: 'small-chops', label: 'Small chops', imageUrl: WBImages.puffPuff),
-        Subcategory(id: 'bbq', label: 'BBQ', imageUrl: WBImages.suya),
-        Subcategory(id: 'rice', label: 'Rice dishes', imageUrl: WBImages.jollof),
+        Subcategory(id: 'chicken-republic', label: 'Chicken Republic', imageUrl: WBImages.friedChicken, svgAsset: 'assets/categories/sub_chicken_republic.svg'),
+        Subcategory(id: 'local', label: 'Local restaurants', imageUrl: WBImages.jollof, svgAsset: 'assets/categories/sub_local.svg'),
+        Subcategory(id: 'shawarma', label: 'Shawarma', imageUrl: WBImages.shawarma, svgAsset: 'assets/categories/sub_shawarma.svg'),
+        Subcategory(id: 'pizza', label: 'Pizza', imageUrl: WBImages.cake, svgAsset: 'assets/categories/sub_pizza.svg'),
+        Subcategory(id: 'burgers', label: 'Burgers', imageUrl: WBImages.friedChicken, svgAsset: 'assets/categories/sub_burgers.svg'),
+        Subcategory(id: 'small-chops', label: 'Small chops', imageUrl: WBImages.puffPuff, svgAsset: 'assets/categories/sub_small_chops.svg'),
+        Subcategory(id: 'bbq', label: 'BBQ', imageUrl: WBImages.suya, svgAsset: 'assets/categories/sub_bbq.svg'),
+        Subcategory(id: 'rice', label: 'Rice dishes', imageUrl: WBImages.jollof, svgAsset: 'assets/categories/sub_rice.svg'),
       ],
     ),
     Category(
       id: 'fresh-market',
-      label: 'Gather',
+      label: 'Fresh Market',
       imageUrl: WBImages.tomato,
+      svgAsset: 'assets/categories/category_fresh_market.svg',
       kind: CategoryKind.marketplace,
       tagline: 'Straight from the farm.',
       subcategories: [
-        Subcategory(id: 'tomatoes', label: 'Tomatoes', imageUrl: WBImages.tomato),
-        Subcategory(id: 'pepper', label: 'Pepper', imageUrl: WBImages.pepper),
-        Subcategory(id: 'onion', label: 'Onion', imageUrl: WBImages.onion),
-        Subcategory(id: 'yam', label: 'Yam', imageUrl: WBImages.yam),
-        Subcategory(id: 'plantain', label: 'Plantain', imageUrl: WBImages.plantain),
-        Subcategory(id: 'vegetables', label: 'Vegetables', imageUrl: WBImages.vegetables),
-        Subcategory(id: 'fresh-fish', label: 'Fresh fish', imageUrl: WBImages.freshFish),
-        Subcategory(id: 'fresh-meat', label: 'Fresh meat', imageUrl: WBImages.freshMeat),
-        Subcategory(id: 'fruits', label: 'Fruits', imageUrl: WBImages.fruits),
+        Subcategory(id: 'tomatoes', label: 'Tomatoes', imageUrl: WBImages.tomato, svgAsset: 'assets/categories/sub_tomatoes.svg'),
+        Subcategory(id: 'pepper', label: 'Pepper', imageUrl: WBImages.pepper, svgAsset: 'assets/categories/sub_pepper.svg'),
+        Subcategory(id: 'onion', label: 'Onion', imageUrl: WBImages.onion, svgAsset: 'assets/categories/sub_onion.svg'),
+        Subcategory(id: 'yam', label: 'Yam', imageUrl: WBImages.yam, svgAsset: 'assets/categories/sub_yam.svg'),
+        Subcategory(id: 'plantain', label: 'Plantain', imageUrl: WBImages.plantain, svgAsset: 'assets/categories/sub_plantain.svg'),
+        Subcategory(id: 'vegetables', label: 'Vegetables', imageUrl: WBImages.vegetables, svgAsset: 'assets/categories/sub_vegetables.svg'),
+        Subcategory(id: 'fresh-fish', label: 'Fresh fish', imageUrl: WBImages.freshFish, svgAsset: 'assets/categories/sub_fresh_fish.svg'),
+        Subcategory(id: 'fresh-meat', label: 'Fresh meat', imageUrl: WBImages.freshMeat, svgAsset: 'assets/categories/sub_fresh_meat.svg'),
+        Subcategory(id: 'fruits', label: 'Fruits', imageUrl: WBImages.fruits, svgAsset: 'assets/categories/sub_fruits.svg'),
       ],
     ),
     Category(
       id: 'livestock',
-      label: 'Chop',
+      label: 'Livestock',
       imageUrl: WBImages.chicken,
+      svgAsset: 'assets/categories/category_livestock.svg',
       kind: CategoryKind.livestock,
       tagline: 'Cut exactly how you want.',
       subcategories: [
-        Subcategory(id: 'chicken', label: 'Chicken', imageUrl: WBImages.chicken),
-        Subcategory(id: 'beef', label: 'Beef', imageUrl: WBImages.beef),
-        Subcategory(id: 'goat', label: 'Goat', imageUrl: WBImages.goat),
-        Subcategory(id: 'fish', label: 'Fish', imageUrl: WBImages.fish),
-        Subcategory(id: 'seafood', label: 'Seafood', imageUrl: WBImages.seafood),
+        Subcategory(id: 'chicken', label: 'Chicken', imageUrl: WBImages.chicken, svgAsset: 'assets/categories/sub_chicken.svg'),
+        Subcategory(id: 'beef', label: 'Beef', imageUrl: WBImages.beef, svgAsset: 'assets/categories/sub_beef.svg'),
+        Subcategory(id: 'goat', label: 'Goat', imageUrl: WBImages.goat, svgAsset: 'assets/categories/sub_goat.svg'),
+        Subcategory(id: 'fish', label: 'Fish', imageUrl: WBImages.fish, svgAsset: 'assets/categories/sub_fish.svg'),
+        Subcategory(id: 'seafood', label: 'Seafood', imageUrl: WBImages.seafood, svgAsset: 'assets/categories/sub_seafood.svg'),
       ],
     ),
     Category(
       id: 'kitchen-essentials',
-      label: 'Stock up',
+      label: 'Kitchen Essentials',
       imageUrl: WBImages.kitchenSupplies,
+      svgAsset: 'assets/categories/category_kitchen_essentials.svg',
       kind: CategoryKind.marketplace,
       tagline: 'Pots, pans, and everything else.',
       subcategories: [
-        Subcategory(id: 'cookware', label: 'Cookware', imageUrl: WBImages.kitchenSupplies),
-        Subcategory(id: 'utensils', label: 'Utensils', imageUrl: WBImages.kitchenSupplies),
-        Subcategory(id: 'spices-oil', label: 'Spices & Oil', imageUrl: WBImages.spices),
-        Subcategory(id: 'pantry', label: 'Pantry', imageUrl: WBImages.rice),
-        Subcategory(id: 'cleaning', label: 'Cleaning', imageUrl: WBImages.cleaning),
+        Subcategory(id: 'cookware', label: 'Cookware', imageUrl: WBImages.kitchenSupplies, svgAsset: 'assets/categories/sub_cookware.svg'),
+        Subcategory(id: 'utensils', label: 'Utensils', imageUrl: WBImages.kitchenSupplies, svgAsset: 'assets/categories/sub_utensils.svg'),
+        Subcategory(id: 'spices-oil', label: 'Spices & Oil', imageUrl: WBImages.spices, svgAsset: 'assets/categories/sub_spices_oil.svg'),
+        Subcategory(id: 'pantry', label: 'Pantry', imageUrl: WBImages.rice, svgAsset: 'assets/categories/sub_pantry.svg'),
+        Subcategory(id: 'cleaning', label: 'Cleaning', imageUrl: WBImages.cleaning, svgAsset: 'assets/categories/sub_cleaning.svg'),
       ],
     ),
     // Secondary categories
@@ -81,74 +85,79 @@ abstract final class MockData {
       id: 'groceries',
       label: 'Groceries',
       imageUrl: WBImages.rice,
+      svgAsset: 'assets/categories/category_groceries.svg',
       kind: CategoryKind.marketplace,
       tagline: 'Pantry · Daily essentials',
       subcategories: [
-        Subcategory(id: 'rice', label: 'Rice', imageUrl: WBImages.rice),
-        Subcategory(id: 'beans', label: 'Beans', imageUrl: WBImages.beans),
-        Subcategory(id: 'garri', label: 'Garri', imageUrl: WBImages.garri),
-        Subcategory(id: 'oil', label: 'Oil', imageUrl: WBImages.oil),
-        Subcategory(id: 'sugar', label: 'Sugar', imageUrl: WBImages.sugar),
-        Subcategory(id: 'milk', label: 'Milk', imageUrl: WBImages.milk),
-        Subcategory(id: 'bread', label: 'Bread', imageUrl: WBImages.bread),
-        Subcategory(id: 'eggs', label: 'Eggs', imageUrl: WBImages.eggs),
-        Subcategory(id: 'spices', label: 'Spices', imageUrl: WBImages.spices),
+        Subcategory(id: 'rice', label: 'Rice', imageUrl: WBImages.rice, svgAsset: 'assets/categories/sub_rice_g.svg'),
+        Subcategory(id: 'beans', label: 'Beans', imageUrl: WBImages.beans, svgAsset: 'assets/categories/sub_beans.svg'),
+        Subcategory(id: 'garri', label: 'Garri', imageUrl: WBImages.garri, svgAsset: 'assets/categories/sub_garri.svg'),
+        Subcategory(id: 'oil', label: 'Oil', imageUrl: WBImages.oil, svgAsset: 'assets/categories/sub_oil.svg'),
+        Subcategory(id: 'sugar', label: 'Sugar', imageUrl: WBImages.sugar, svgAsset: 'assets/categories/sub_sugar.svg'),
+        Subcategory(id: 'milk', label: 'Milk', imageUrl: WBImages.milk, svgAsset: 'assets/categories/sub_milk.svg'),
+        Subcategory(id: 'bread', label: 'Bread', imageUrl: WBImages.bread, svgAsset: 'assets/categories/sub_bread.svg'),
+        Subcategory(id: 'eggs', label: 'Eggs', imageUrl: WBImages.eggs, svgAsset: 'assets/categories/sub_eggs.svg'),
+        Subcategory(id: 'spices', label: 'Spices', imageUrl: WBImages.spices, svgAsset: 'assets/categories/sub_spices.svg'),
       ],
     ),
     Category(
       id: 'farm-produce',
       label: 'Farm Produce',
       imageUrl: WBImages.riceBag,
+      svgAsset: 'assets/categories/category_farm_produce.svg',
       kind: CategoryKind.trade,
       tagline: 'Bulk · Wholesale · Direct from farm',
       subcategories: [
-        Subcategory(id: 'rice-bags', label: 'Bags of rice', imageUrl: WBImages.riceBag),
-        Subcategory(id: 'cassava', label: 'Cassava', imageUrl: WBImages.cassava),
-        Subcategory(id: 'palm-oil', label: 'Palm oil', imageUrl: WBImages.palmOil),
-        Subcategory(id: 'cocoa', label: 'Cocoa', imageUrl: WBImages.cocoa),
-        Subcategory(id: 'maize', label: 'Maize', imageUrl: WBImages.maize),
-        Subcategory(id: 'feed', label: 'Livestock feed', imageUrl: WBImages.livestockFeed),
-        Subcategory(id: 'fertilizer', label: 'Fertilizer', imageUrl: WBImages.fertilizer),
-        Subcategory(id: 'bulk-veg', label: 'Bulk vegetables', imageUrl: WBImages.vegetables),
+        Subcategory(id: 'rice-bags', label: 'Bags of rice', imageUrl: WBImages.riceBag, svgAsset: 'assets/categories/sub_rice_bags.svg'),
+        Subcategory(id: 'cassava', label: 'Cassava', imageUrl: WBImages.cassava, svgAsset: 'assets/categories/sub_cassava.svg'),
+        Subcategory(id: 'palm-oil', label: 'Palm oil', imageUrl: WBImages.palmOil, svgAsset: 'assets/categories/sub_palm_oil.svg'),
+        Subcategory(id: 'cocoa', label: 'Cocoa', imageUrl: WBImages.cocoa, svgAsset: 'assets/categories/sub_cocoa.svg'),
+        Subcategory(id: 'maize', label: 'Maize', imageUrl: WBImages.maize, svgAsset: 'assets/categories/sub_maize.svg'),
+        Subcategory(id: 'feed', label: 'Livestock feed', imageUrl: WBImages.livestockFeed, svgAsset: 'assets/categories/sub_feed.svg'),
+        Subcategory(id: 'fertilizer', label: 'Fertilizer', imageUrl: WBImages.fertilizer, svgAsset: 'assets/categories/sub_fertilizer.svg'),
+        Subcategory(id: 'bulk-veg', label: 'Bulk vegetables', imageUrl: WBImages.vegetables, svgAsset: 'assets/categories/sub_bulk_veg.svg'),
       ],
     ),
     Category(
       id: 'drinks',
       label: 'Drinks',
       imageUrl: WBImages.softDrinks,
+      svgAsset: 'assets/categories/category_drinks.svg',
       kind: CategoryKind.marketplace,
       tagline: 'Soft drinks · Water · Juice',
       subcategories: [
-        Subcategory(id: 'soft', label: 'Soft drinks', imageUrl: WBImages.softDrinks),
-        Subcategory(id: 'water', label: 'Water', imageUrl: WBImages.water),
-        Subcategory(id: 'juice', label: 'Juice', imageUrl: WBImages.juice),
-        Subcategory(id: 'energy', label: 'Energy drinks', imageUrl: WBImages.energyDrink),
+        Subcategory(id: 'soft', label: 'Soft drinks', imageUrl: WBImages.softDrinks, svgAsset: 'assets/categories/sub_soft.svg'),
+        Subcategory(id: 'water', label: 'Water', imageUrl: WBImages.water, svgAsset: 'assets/categories/sub_water.svg'),
+        Subcategory(id: 'juice', label: 'Juice', imageUrl: WBImages.juice, svgAsset: 'assets/categories/sub_juice.svg'),
+        Subcategory(id: 'energy', label: 'Energy drinks', imageUrl: WBImages.energyDrink, svgAsset: 'assets/categories/sub_energy.svg'),
       ],
     ),
     Category(
       id: 'snacks',
       label: 'Snacks',
       imageUrl: WBImages.cake,
+      svgAsset: 'assets/categories/category_snacks.svg',
       kind: CategoryKind.marketplace,
       tagline: 'Bakery · Treats',
       subcategories: [
-        Subcategory(id: 'cakes', label: 'Cakes', imageUrl: WBImages.cake),
-        Subcategory(id: 'bread', label: 'Bread', imageUrl: WBImages.bread),
-        Subcategory(id: 'pastries', label: 'Pastries', imageUrl: WBImages.pastry),
-        Subcategory(id: 'cookies', label: 'Cookies', imageUrl: WBImages.cookies),
-        Subcategory(id: 'snacks', label: 'Snacks', imageUrl: WBImages.snacks),
+        Subcategory(id: 'cakes', label: 'Cakes', imageUrl: WBImages.cake, svgAsset: 'assets/categories/sub_cakes.svg'),
+        Subcategory(id: 'bread', label: 'Bread', imageUrl: WBImages.bread, svgAsset: 'assets/categories/sub_bread_snacks.svg'),
+        Subcategory(id: 'pastries', label: 'Pastries', imageUrl: WBImages.pastry, svgAsset: 'assets/categories/sub_pastries.svg'),
+        Subcategory(id: 'cookies', label: 'Cookies', imageUrl: WBImages.cookies, svgAsset: 'assets/categories/sub_cookies.svg'),
+        Subcategory(id: 'snacks', label: 'Snacks', imageUrl: WBImages.snacks, svgAsset: 'assets/categories/sub_snacks.svg'),
       ],
     ),
     Category(
       id: 'pharmacy',
       label: 'Pharmacy',
       imageUrl: WBImages.pharmacy,
+      svgAsset: 'assets/categories/category_pharmacy.svg',
       kind: CategoryKind.marketplace,
       tagline: 'Wellness · OTC',
       subcategories: [
-        Subcategory(id: 'otc', label: 'OTC medication', imageUrl: WBImages.pharmacy),
-        Subcategory(id: 'wellness', label: 'Wellness', imageUrl: WBImages.vitamins),
-        Subcategory(id: 'vitamins', label: 'Vitamins', imageUrl: WBImages.vitamins),
+        Subcategory(id: 'otc', label: 'OTC medication', imageUrl: WBImages.pharmacy, svgAsset: 'assets/categories/sub_otc.svg'),
+        Subcategory(id: 'wellness', label: 'Wellness', imageUrl: WBImages.vitamins, svgAsset: 'assets/categories/sub_wellness.svg'),
+        Subcategory(id: 'vitamins', label: 'Vitamins', imageUrl: WBImages.vitamins, svgAsset: 'assets/categories/sub_vitamins.svg'),
       ],
     ),
   ];
@@ -734,8 +743,16 @@ abstract final class MockData {
   ];
 
   // ─── Helpers ─────────────────────────────────────────────────
-  static Category categoryById(String id) =>
-      categories.firstWhere((c) => c.id == id);
+  static Category categoryById(String id) {
+    // Prefer the live API list when available, fall back to static mock.
+    final live = liveCategories();
+    if (live != null) return live.firstWhere((c) => c.id == id);
+    return categories.firstWhere((c) => c.id == id);
+  }
+
+  // Resolved lazily via a function reference to avoid a circular import
+  // at class-load time. Assigned by CategoryController once it is initialised.
+  static List<Category>? Function() liveCategories = () => null;
 
   /// Every purchasable product across restaurant menus and the
   /// marketplace, so a detail screen can resolve any tapped id.

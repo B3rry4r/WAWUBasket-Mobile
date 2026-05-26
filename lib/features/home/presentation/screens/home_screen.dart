@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -13,6 +15,8 @@ import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
 import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/application/wb_images.dart';
+import '../../application/category_controller.dart';
+import '../../domain/models/category.dart';
 import '../widgets/category_body.dart';
 
 String _greeting(String? firstName) {
@@ -50,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     ProfileController.instance.load();
     AddressController.instance.load();
+    CategoryController.instance.load();
   }
 
   void _onCategoryTap(String id) {
@@ -219,54 +224,99 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )),
               const SizedBox(height: 22),
-              // Category pills (full-bleed)
-              SizedBox(
-                height: 44,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: MockData.categories.length,
-                  separatorBuilder: (_, _) => const SizedBox(width: 8),
-                  itemBuilder: (_, i) {
-                    final c = MockData.categories[i];
-                    final active = c.id == _activeCategoryId;
-                    return GestureDetector(
-                      onTap: () => _onCategoryTap(c.id),
-                      child: AnimatedContainer(
-                        duration: WBMotion.base,
-                        curve: WBMotion.easeSoft,
-                        padding: const EdgeInsets.only(left: 6, right: 16),
-                        decoration: BoxDecoration(
-                          color: active ? WBColors.surfaceDark : WBColors.surfaceTag,
-                          borderRadius: BorderRadius.circular(WBRadius.pill),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              child: ClipOval(
-                                child: SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: WBNetworkImage(url: c.imageUrl ?? ''),
-                                ),
-                              ),
+              // Category pills (full-bleed) — driven by CategoryController
+              ValueListenableBuilder<List<Category>?>(
+                valueListenable: CategoryController.instance.categories,
+                builder: (_, cats, _) {
+                  if (cats == null) {
+                    // Shimmer skeleton row while loading
+                    return SizedBox(
+                      height: 44,
+                      child: Shimmer.fromColors(
+                        baseColor: WBColors.bgSoft,
+                        highlightColor: WBColors.bgSecondary,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: 5,
+                          separatorBuilder: (_, _) => const SizedBox(width: 8),
+                          itemBuilder: (_, _) => Container(
+                            width: 110,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(WBRadius.pill),
                             ),
-                            const SizedBox(width: 9),
-                            Text(
-                              c.label,
-                              style: WBTypography.caption.copyWith(
-                                color: active ? Colors.white : WBColors.fgHeader,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     );
-                  },
-                ),
+                  }
+                  return SizedBox(
+                    height: 44,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: cats.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 8),
+                      itemBuilder: (_, i) {
+                        final c = cats[i];
+                        final active = c.id == _activeCategoryId;
+                        return GestureDetector(
+                          onTap: () => _onCategoryTap(c.id),
+                          child: AnimatedContainer(
+                            duration: WBMotion.base,
+                            curve: WBMotion.easeSoft,
+                            padding: const EdgeInsets.only(left: 6, right: 16),
+                            decoration: BoxDecoration(
+                              color: active
+                                  ? WBColors.surfaceDark
+                                  : WBColors.surfaceTag,
+                              borderRadius:
+                                  BorderRadius.circular(WBRadius.pill),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 6),
+                                  child: Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      color: active
+                                          ? Colors.white.withValues(alpha: 0.12)
+                                          : WBColors.bgPrimary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    child: (c.svgAsset != null &&
+                                            c.svgAsset!.isNotEmpty)
+                                        ? SvgPicture.asset(
+                                            c.svgAsset!,
+                                            fit: BoxFit.contain,
+                                          )
+                                        : const SizedBox.shrink(),
+                                  ),
+                                ),
+                                const SizedBox(width: 9),
+                                Text(
+                                  c.label,
+                                  style: WBTypography.caption.copyWith(
+                                    color: active
+                                        ? Colors.white
+                                        : WBColors.fgHeader,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
               // Subcategory chips (animated reveal, full-bleed)
               AnimatedSize(
