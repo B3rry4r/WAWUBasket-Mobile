@@ -197,6 +197,16 @@ class VendorMenuController {
     if (it == null) return;
     it.available = !it.available;
     _bump();
+    if (!_isLocal(id)) {
+      _vendorApi.updateProduct(id, {
+        'status': it.available ? 'active' : 'draft',
+      }).catchError((Object e) {
+        if (e is ApiException) mutationError.value = e.message;
+        // Roll back optimistic toggle on failure.
+        it.available = !it.available;
+        _bump();
+      });
+    }
   }
 
   /// Clone an item with " (copy)" appended to its name. Returns the new id
@@ -264,6 +274,7 @@ class VendorMenuController {
         'category': ?category,
         'prepMins': ?prepMins,
         'images': ?(imageUrl != null ? [imageUrl] : null),
+        if (available != null) 'status': available ? 'active' : 'draft',
       }).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
       });

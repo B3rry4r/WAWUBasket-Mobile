@@ -329,6 +329,7 @@ class AgentController {
     required String traderId,
     required String traderName,
     required int amountNaira,
+    String? note,
     List<List<Offset>>? signatureBytes,
   }) {
     final id = 'P-${DateTime.now().millisecondsSinceEpoch}';
@@ -344,23 +345,45 @@ class AgentController {
       ),
       ...payouts.value,
     ];
-    _syncPayout(id, traderId, amountNaira);
+    _syncPayout(id, traderId, amountNaira, note: note);
     return id;
   }
 
   Future<void> _syncPayout(
     String localId,
     String traderId,
-    int amountNaira,
-  ) async {
+    int amountNaira, {
+    String? note,
+  }) async {
     try {
       await _api.recordPayout({
         'traderId': traderId,
         'amountNaira': amountNaira,
+        if (note != null && note.isNotEmpty) 'note': note,
       });
       _markSynced(payoutId: localId);
     } on ApiException {
       // Keep the unsynced local row.
+    }
+  }
+
+  /// Pulls the agent's recorded payouts from the API.
+  Future<void> loadPayouts() async {
+    try {
+      final raw = await _api.listPayouts();
+      payouts.value = [
+        for (final e in raw)
+          AgentPayout(
+            id: (e['id'] ?? '').toString(),
+            traderId: (e['traderId'] ?? '').toString(),
+            traderName: (e['linkedTrader']?['name'] ?? '').toString(),
+            amountNaira: (e['amountNaira'] as num?)?.toInt() ?? 0,
+            recordedAt: DateTime.tryParse('${e['recordedAt'] ?? ''}') ?? DateTime.now(),
+            synced: true,
+          ),
+      ];
+    } on ApiException {
+      // Leave current list in place.
     }
   }
 

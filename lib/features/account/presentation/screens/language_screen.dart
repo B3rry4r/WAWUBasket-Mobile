@@ -30,7 +30,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
     (id: 'ig', label: 'Igbo', sub: 'Asụsụ Igbo'),
     (id: 'am', label: 'Amharic', sub: 'አማርኛ'),
     (id: 'zu', label: 'Zulu', sub: 'isiZulu'),
-    (id: 'pcm', label: 'Pidgin', sub: 'Naija'),
+    (id: 'tw', label: 'Twi', sub: 'Akan'),
+    (id: 'wo', label: 'Wolof', sub: 'Wollof'),
+    (id: 'ln', label: 'Lingala', sub: 'Lingála'),
+    (id: 'rw', label: 'Kinyarwanda', sub: 'Ikinyarwanda'),
+    (id: 'ee', label: 'Ewe', sub: 'Eʋegbe'),
   ];
 
   @override

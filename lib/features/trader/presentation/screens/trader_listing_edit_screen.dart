@@ -39,6 +39,8 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
   late final _produce = TextEditingController();
   late final _quantity = TextEditingController();
   late final _price = TextEditingController();
+  late final _farmName = TextEditingController();
+  late final _farmRegion = TextEditingController();
   late Corridor _origin;
   late Corridor _destination;
   late DateTime _harvest;
@@ -59,6 +61,8 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     _produce.text = s?.produce ?? '';
     _quantity.text = s == null ? '' : '${s.quantityKg}';
     _price.text = s == null ? '' : '${s.pricePerKgNaira}';
+    _farmName.text = s?.farmName ?? '';
+    _farmRegion.text = s?.farmRegion ?? '';
     _origin = s?.originCorridor ?? Corridor.nigeria;
     _destination = s?.destinationCorridor ?? Corridor.benin;
     _harvest = s?.harvestDate ?? DateTime.now();
@@ -113,6 +117,8 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     _produce.dispose();
     _quantity.dispose();
     _price.dispose();
+    _farmName.dispose();
+    _farmRegion.dispose();
     super.dispose();
   }
 
@@ -121,6 +127,10 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     final p = int.tryParse(_price.text.replaceAll(',', '')) ?? 0;
     if (_produce.text.trim().isEmpty || q <= 0 || p <= 0) {
       wbShowSnack(context, 'Produce, quantity and price are required.');
+      return;
+    }
+    if (_farmName.text.trim().isEmpty || _farmRegion.text.trim().isEmpty) {
+      wbShowSnack(context, 'Farm name and region are required.');
       return;
     }
     final s = _source;
@@ -132,8 +142,8 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
       harvestDate: _harvest,
       originCorridor: _origin,
       destinationCorridor: _destination,
-      farmName: s?.farmName ?? 'Hauwa & Sons Bulk Co.',
-      farmRegion: s?.farmRegion ?? 'Kano',
+      farmName: _farmName.text.trim(),
+      farmRegion: _farmRegion.text.trim(),
       imageUrl: _imageUrl ??
           s?.imageUrl ??
           'https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=600&q=80&auto=format&fit=crop',
@@ -499,6 +509,26 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: WBSpacing.md),
+                Row(
+                  children: [
+                    Expanded(
+                      child: WBInput(
+                        label: 'Farm name',
+                        placeholder: 'e.g. Hauwa & Sons Farm',
+                        controller: _farmName,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: WBInput(
+                        label: 'Farm region',
+                        placeholder: 'e.g. Kano',
+                        controller: _farmRegion,
                       ),
                     ),
                   ],

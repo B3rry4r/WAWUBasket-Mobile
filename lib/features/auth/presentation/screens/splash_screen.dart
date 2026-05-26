@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_logo.dart';
+import '../../application/role_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,19 +30,14 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(const Duration(milliseconds: 1400), _route);
   }
 
-  /// Cold-start routing: we deliberately do NOT auto-drop the user into
-  /// the role home, even when a valid access token is on disk. The user
-  /// wanted a "fresh login each launch" feel — tokens are preserved so
-  /// the login screen can offer a one-tap biometric unlock, but the
-  /// landing surface is always /welcome or /login. This matches the
-  /// perceived "sign out on close" behaviour without losing the
-  /// refresh-token-driven biometric path.
+  /// Cold-start routing: new users go to /welcome (onboarding); returning
+  /// users (signedIn flag + refresh token on disk) go directly to /login
+  /// where biometrics will auto-trigger.
   Future<void> _route() async {
     if (!mounted) return;
-    // Always head to /welcome on cold start. Returning users see the
-    // "Sign in" CTA + biometric option there; new users see the marketing
-    // intro. The router treats /login as the real auth surface.
-    context.go(AppRoutes.welcome);
+    final isReturning = RoleController.instance.signedIn &&
+        (TokenStore.instance.refreshToken ?? '').isNotEmpty;
+    context.go(isReturning ? AppRoutes.login : AppRoutes.welcome);
   }
 
   @override
