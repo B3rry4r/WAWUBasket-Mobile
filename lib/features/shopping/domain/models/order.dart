@@ -55,7 +55,11 @@ class OrderModel {
   final DateTime? scheduledFor;
 
   /// Short id for display, e.g. `#WBK-3F9A2C`.
-  String get shortId => '#${id.replaceAll('-', '').substring(0, 6).toUpperCase()}';
+  String get shortId {
+    final cleaned = id.replaceAll('-', '');
+    final short = cleaned.length >= 6 ? cleaned.substring(0, 6) : cleaned;
+    return '#${short.toUpperCase()}';
+  }
 
   String get itemsSummary => items.map((i) => i.title).join(', ');
 

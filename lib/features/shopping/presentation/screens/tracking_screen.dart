@@ -146,7 +146,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       TextButton(
                         onPressed: () => context.push(AppRoutes.support),
                         child: Text(
-                          'Support',
+                          'Need help?',
                           style: WBTypography.secondary.copyWith(
                             color: Colors.white.withValues(alpha: 0.75),
                             fontWeight: FontWeight.w500,
@@ -177,7 +177,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     order.isDelivered
                         ? 'Delivered. Enjoy your basket!'
                         : order.riderName != null
-                            ? '${order.riderName} is handling your delivery.'
+                            ? '${order.riderName} is bringing your basket.'
                             : "We'll update you as your order moves.",
                     style: WBTypography.body.copyWith(
                       color: Colors.white.withValues(alpha: 0.65),
@@ -276,6 +276,18 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       active: i == activeIndex && !order.isDelivered,
                       isLast: i == _steps.length - 1,
                     ),
+                  if (order.isDelivered) ...[
+                    const SizedBox(height: WBSpacing.lg),
+                    WBButton(
+                      label: 'Rate your order',
+                      fullWidth: true,
+                      size: WBButtonSize.md,
+                      trailingIcon: WBIconName.star,
+                      onPressed: () => context.push(
+                        '${AppRoutes.deliveryComplete}?orderId=${order.id}',
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

@@ -63,19 +63,42 @@ class CartScreen extends ConsumerWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text(
-                                state.error ?? 'Your basket is empty.',
-                                textAlign: TextAlign.center,
-                                style: WBTypography.body.copyWith(
-                                    color: WBColors.fgSecondary),
-                              ),
                               if (state.error != null) ...[
+                                Text(
+                                  state.error!,
+                                  textAlign: TextAlign.center,
+                                  style: WBTypography.body.copyWith(
+                                      color: WBColors.fgSecondary),
+                                ),
                                 const SizedBox(height: 14),
                                 WBButton(
                                   label: 'Try again',
                                   size: WBButtonSize.sm,
                                   variant: WBButtonVariant.secondary,
                                   onPressed: controller.load,
+                                ),
+                              ] else ...[
+                                Text(
+                                  'Your basket is empty',
+                                  textAlign: TextAlign.center,
+                                  style: WBTypography.body.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  'Want to fill it? We have ideas.',
+                                  textAlign: TextAlign.center,
+                                  style: WBTypography.body.copyWith(
+                                      color: WBColors.fgSecondary),
+                                ),
+                                const SizedBox(height: 18),
+                                WBButton(
+                                  label: 'Start shopping',
+                                  size: WBButtonSize.sm,
+                                  trailingIcon: WBIconName.arrowRight,
+                                  onPressed: () => context.go(AppRoutes.home),
                                 ),
                               ],
                             ],

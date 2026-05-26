@@ -164,7 +164,7 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Store settings', style: WBTypography.page),
+                Text('Your store settings', style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),

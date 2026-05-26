@@ -7,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/data/profile_api.dart';
 
 /// Post-OTP customer onboarding. Three steps in one screen:
 /// permissions → preference quiz → first-order gift. Lands on /home.
@@ -303,6 +304,7 @@ class _QuizStepState extends State<_QuizStep> {
   final Set<String> _wants = {};
   String _speed = '';
   final _avoid = TextEditingController();
+  bool _saving = false;
 
   static const _wantOptions = [
     'Cooked meals from restaurants',
@@ -320,6 +322,22 @@ class _QuizStepState extends State<_QuizStep> {
   void dispose() {
     _avoid.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveAndNext() async {
+    setState(() => _saving = true);
+    try {
+      await ProfileApi.instance.saveQuizPreferences(
+        wantCategories: _wants.toList(),
+        deliverySpeed: _speed.isNotEmpty ? _speed : null,
+        avoidFoods: _avoid.text.trim().isNotEmpty ? _avoid.text.trim() : null,
+      );
+    } catch (_) {
+      // Non-blocking — proceed to next step regardless.
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+    if (mounted) widget.onNext();
   }
 
   @override
@@ -389,12 +407,13 @@ class _QuizStepState extends State<_QuizStep> {
           size: WBButtonSize.lg,
           fullWidth: true,
           trailingIcon: WBIconName.arrowRight,
-          onPressed: widget.onNext,
+          loading: _saving,
+          onPressed: _saving ? null : _saveAndNext,
         ),
         const SizedBox(height: WBSpacing.sm + 4),
         Center(
           child: GestureDetector(
-            onTap: widget.onNext,
+            onTap: _saving ? null : widget.onNext,
             child: Text(
               "I'll figure it out later",
               style: WBTypography.secondary.copyWith(

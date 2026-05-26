@@ -100,12 +100,12 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Open loads',
+                          'Loads near you',
                           style: WBTypography.cardTitle.copyWith(fontSize: 17),
                         ),
                       ),
                       Text(
-                        '${open.length} nearby',
+                        'Pick one and go.',
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                         ),

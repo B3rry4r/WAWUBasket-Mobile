@@ -93,6 +93,8 @@ import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/shell/presentation/customer_shell.dart';
 import '../../features/shopping/presentation/screens/cart_screen.dart';
 import '../../features/shopping/presentation/screens/checkout_screen.dart';
+import '../../features/shopping/presentation/screens/delivery_complete_screen.dart';
+import '../../features/shopping/presentation/screens/order_confirmation_screen.dart';
 import '../../features/shopping/presentation/screens/product_screen.dart';
 import '../../features/shopping/presentation/screens/search_screen.dart';
 import '../../features/shopping/presentation/screens/tracking_screen.dart';
@@ -215,6 +217,18 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.checkout,
         builder: (_, _) => const CheckoutScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.orderConfirmation,
+        builder: (_, state) => OrderConfirmationScreen(
+          orderId: state.uri.queryParameters['orderId'],
+        ),
+      ),
+      GoRoute(
+        path: AppRoutes.deliveryComplete,
+        builder: (_, state) => DeliveryCompleteScreen(
+          orderId: state.uri.queryParameters['orderId'] ?? '',
+        ),
       ),
       GoRoute(
         path: AppRoutes.tracking,

@@ -248,7 +248,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AccountMenuRow(
             icon: WBIconName.message,
             label: 'Language',
-            sub: 'English',
+            sub: 'English · Français · Hausa · Yorùbá · Igbo',
             onTap: () => context.push(AppRoutes.language),
           ),
           AccountMenuRow(
@@ -275,9 +275,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,
-            label: 'Password & security',
-            sub: 'Change password, biometric, 2FA',
+            label: 'Change password',
+            sub: 'Keep your account safe',
             onTap: () => context.push(AppRoutes.security),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.user,
+            label: 'Biometric login',
+            sub: 'Use your face or fingerprint',
+            onTap: () => context.push(AppRoutes.security),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.phone,
+            label: 'Two-factor authentication',
+            sub: 'Extra layer of protection',
+            onTap: () => context.push(AppRoutes.security),
+          ),
+        ],
+      ),
+      AccountMenuSection(
+        title: 'Support',
+        rows: [
+          AccountMenuRow(
+            icon: WBIconName.message,
+            label: 'Help center',
+            sub: 'Answers to common questions',
+            onTap: () => context.push(AppRoutes.support),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.phone,
+            label: 'Chat with us',
+            sub: "We're here to help",
+            onTap: () => context.push(AppRoutes.support),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.more,
+            label: 'Report a problem',
+            sub: 'Tell us what went wrong',
+            onTap: () => context.push(AppRoutes.support),
+          ),
+        ],
+      ),
+      AccountMenuSection(
+        title: 'Legal',
+        rows: [
+          AccountMenuRow(
+            icon: WBIconName.card,
+            label: 'Terms of service',
+            sub: 'The rules of the basket',
+            onTap: () => context.push(AppRoutes.about),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.user,
+            label: 'Privacy policy',
+            sub: 'How we handle your info',
+            onTap: () => context.push(AppRoutes.about),
           ),
         ],
       ),
@@ -289,11 +341,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: 'Switch role',
             sub: _switchSub(),
             onTap: () => RoleSwitcherSheet.show(context),
-          ),
-          AccountMenuRow(
-            icon: WBIconName.phone,
-            label: 'Help & support',
-            onTap: () => context.push(AppRoutes.support),
           ),
           AccountMenuRow(
             icon: WBIconName.close,

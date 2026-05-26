@@ -111,7 +111,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         final state = order['state'] as String? ?? '';
         if (state.isNotEmpty && state != 'awaiting_payment') {
           if (mounted) {
-            context.go('${AppRoutes.tracking}?orderId=$orderId');
+            context.go('${AppRoutes.orderConfirmation}?orderId=$orderId');
           }
           return;
         }
@@ -799,12 +799,12 @@ class _ScheduleSheetState extends State<_ScheduleSheet> {
             ),
             const SizedBox(height: 14),
             Text(
-              'Schedule delivery',
+              'When do you want it?',
               style: WBTypography.cardTitle.copyWith(fontSize: 18),
             ),
             const SizedBox(height: 4),
             Text(
-              'Pick a date and time slot',
+              'Choose a time that works for you.',
               style: WBTypography.caption.copyWith(
                 color: WBColors.fgSecondary,
               ),

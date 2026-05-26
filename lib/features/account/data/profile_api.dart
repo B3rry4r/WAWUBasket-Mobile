@@ -26,4 +26,24 @@ class ProfileApi {
 
   Future<void> deleteAccount({String? reason}) =>
       _api.delete('/profile/account', body: reason != null ? {'reason': reason} : null);
+
+  Future<void> saveQuizPreferences({
+    required List<String> wantCategories,
+    String? deliverySpeed,
+    String? avoidFoods,
+  }) =>
+      _api.post('/profile/preferences', body: {
+        'wantCategories': wantCategories,
+        if (deliverySpeed != null && deliverySpeed.isNotEmpty)
+          'deliverySpeed': deliverySpeed,
+        if (avoidFoods != null && avoidFoods.isNotEmpty)
+          'avoidFoods': avoidFoods,
+      });
+
+  Future<Map<String, dynamic>?> getQuizPreferences() async {
+    final res = await _api.get('/profile/preferences');
+    final prefs = (res as Map<String, dynamic>)['quizPreferences'];
+    if (prefs == null) return null;
+    return (prefs as Map).cast<String, dynamic>();
+  }
 }

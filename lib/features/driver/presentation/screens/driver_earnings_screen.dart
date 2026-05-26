@@ -200,7 +200,7 @@ class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
                           borderRadius: BorderRadius.circular(WBRadius.pill),
                         ),
                         child: WBButton(
-                          label: 'Withdraw to wallet',
+                          label: 'Send to my mobile money',
                           size: WBButtonSize.md,
                           trailingIcon: WBIconName.arrowRight,
                           variant: WBButtonVariant.ghost,

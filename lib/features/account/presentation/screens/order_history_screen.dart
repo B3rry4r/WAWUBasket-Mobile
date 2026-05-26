@@ -132,7 +132,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               onAction: _load,
             )
           else if (_filtered.isEmpty)
-            const _Hint(text: 'No orders here yet.')
+            const _Hint(text: 'No orders yet. Time to change that.')
           else
             for (final order in _filtered) ...[
               _OrderCard(order: order, onChanged: _load),

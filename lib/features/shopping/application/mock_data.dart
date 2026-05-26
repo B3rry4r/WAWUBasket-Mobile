@@ -14,10 +14,10 @@ abstract final class MockData {
   static const categories = [
     Category(
       id: 'restaurants',
-      label: 'Restaurants',
+      label: 'Eat now',
       imageUrl: WBImages.jollof,
       kind: CategoryKind.restaurant,
-      tagline: 'Hot meals · Fast delivery',
+      tagline: 'Hot meals. Fast.',
       subcategories: [
         Subcategory(id: 'chicken-republic', label: 'Chicken Republic', imageUrl: WBImages.friedChicken),
         Subcategory(id: 'local', label: 'Local restaurants', imageUrl: WBImages.jollof),
@@ -49,10 +49,10 @@ abstract final class MockData {
     ),
     Category(
       id: 'fresh-market',
-      label: 'Fresh Market',
+      label: 'Gather',
       imageUrl: WBImages.tomato,
       kind: CategoryKind.marketplace,
-      tagline: 'Local · Fresh · Today',
+      tagline: 'Straight from the farm.',
       subcategories: [
         Subcategory(id: 'tomatoes', label: 'Tomatoes', imageUrl: WBImages.tomato),
         Subcategory(id: 'pepper', label: 'Pepper', imageUrl: WBImages.pepper),
@@ -84,10 +84,10 @@ abstract final class MockData {
     ),
     Category(
       id: 'livestock',
-      label: 'Livestock',
+      label: 'Chop',
       imageUrl: WBImages.chicken,
       kind: CategoryKind.livestock,
-      tagline: 'Chop fresh · Cut to order · Halal',
+      tagline: 'Cut exactly how you want.',
       subcategories: [
         Subcategory(id: 'chicken', label: 'Chicken', imageUrl: WBImages.chicken),
         Subcategory(id: 'beef', label: 'Beef', imageUrl: WBImages.beef),
@@ -98,10 +98,10 @@ abstract final class MockData {
     ),
     Category(
       id: 'household',
-      label: 'Household',
+      label: 'Stock up',
       imageUrl: WBImages.cleaning,
       kind: CategoryKind.marketplace,
-      tagline: 'Home essentials',
+      tagline: 'Pots, pans, and everything else.',
       subcategories: [
         Subcategory(id: 'cleaning', label: 'Cleaning supplies', imageUrl: WBImages.cleaning),
         Subcategory(id: 'toiletries', label: 'Toiletries', imageUrl: WBImages.toiletries),

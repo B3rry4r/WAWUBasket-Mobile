@@ -123,7 +123,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                         const SizedBox(height: 4),
                         Text(
                           pending.isEmpty
-                              ? 'Nothing pending, enjoy the breather.'
+                              ? 'No orders right now. Time to take a breath.'
                               : '${pending.length} waiting for your magic.',
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,

@@ -14,6 +14,15 @@ import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/application/wb_images.dart';
 import '../widgets/category_body.dart';
 
+String _greeting(String? firstName) {
+  final h = DateTime.now().hour;
+  final name = firstName != null ? ', $firstName' : '';
+  if (h >= 5 && h < 12) return 'Good morning$name. What\'s cooking?';
+  if (h >= 12 && h < 17) return 'Hey$name. Lunch break?';
+  if (h >= 17 && h < 22) return 'Evening$name. Dinner plans?';
+  return 'Late night craving$name? We see you.';
+}
+
 /// Padding helper, wraps a non-carousel section in the standard 20 px safe
 /// area so carousels can stay full-bleed.
 Widget _padded(Widget child) =>
@@ -73,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final firstName = profile?.fullName.isNotEmpty == true
               ? profile!.fullName.split(' ').first
               : null;
+          final greeting = _greeting(firstName);
           final defaultAddr =
               addresses.where((a) => a.isDefault).firstOrNull;
           return ListView(
@@ -84,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             children: [
               _padded(WBHomeAppBar(
-                title: firstName != null ? 'Hi, $firstName' : 'Hi there',
+                title: greeting,
                 subtitle: defaultAddr != null
                     ? 'Delivering to ${defaultAddr.line}'
                     : 'Add a delivery address',

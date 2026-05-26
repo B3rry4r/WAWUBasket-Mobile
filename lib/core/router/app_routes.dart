@@ -28,6 +28,8 @@ abstract final class AppRoutes {
   static const product = '/product';
   static const cart = '/cart';
   static const checkout = '/checkout';
+  static const orderConfirmation = '/order-confirmation';
+  static const deliveryComplete = '/delivery-complete';
   static const tracking = '/tracking';
 
   // Category & trade

@@ -58,7 +58,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
   }
 
   static const _benefits = [
-    'Up to 50% off delivery on every order',
+    'Discounted delivery on every order',
     'Member-only deals every week',
     'Priority support, skip the line',
     'Free returns on wrong items',
