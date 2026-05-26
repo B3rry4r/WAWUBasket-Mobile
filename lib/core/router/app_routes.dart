@@ -60,6 +60,7 @@ abstract final class AppRoutes {
   static const dietary = '/account/dietary';
   static const security = '/account/security';
   static const deleteAccount = '/account/delete';
+  static const devSettings = '/dev-settings';
 
   // Wallet sub-flows
   static const walletTopUp = '/wallet/top-up';

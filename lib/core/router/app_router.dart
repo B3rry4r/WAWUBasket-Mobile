@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/screens/about_screen.dart';
 import '../../features/account/presentation/screens/delete_account_screen.dart';
+import '../../features/account/presentation/screens/dev_settings_screen.dart';
 import '../../features/account/presentation/screens/dietary_preferences_screen.dart';
 import '../../features/account/presentation/screens/security_screen.dart';
 import '../../features/account/presentation/screens/wawu_plus_screen.dart';
@@ -285,6 +286,10 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.deleteAccount,
         builder: (_, _) => const DeleteAccountScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.devSettings,
+        builder: (_, _) => const DevSettingsScreen(),
       ),
       GoRoute(
         path: AppRoutes.trade,

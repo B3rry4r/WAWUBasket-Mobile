@@ -10,7 +10,7 @@ import '../data/auth_api.dart';
 /// The full set lives here even when some shells haven't been built yet so
 /// the persistence layer and the role-switcher can reference them safely.
 /// Trader is added in batch C, driver in batch E.
-enum AppRole { customer, vendor, trader, agent, rider, driver }
+enum AppRole { customer, vendor, trader, agent, rider, driver, admin }
 
 extension AppRoleX on AppRole {
   String get title => switch (this) {
@@ -20,6 +20,7 @@ extension AppRoleX on AppRole {
         AppRole.agent => 'Trade Agent',
         AppRole.rider => 'Rider',
         AppRole.driver => 'Driver',
+        AppRole.admin => 'Dev',
       };
 
   /// One-line tagline used on the role-select cards and the in-account
@@ -31,6 +32,7 @@ extension AppRoleX on AppRole {
         AppRole.agent => 'Register traders. Log sales. Pay them out.',
         AppRole.rider => 'Deliver baskets across your city.',
         AppRole.driver => 'Move long-haul loads across borders.',
+        AppRole.admin => 'Toggle features and inspect platform state.',
       };
 
   /// Where the role's "home" lives in the router. Used right after
@@ -42,9 +44,10 @@ extension AppRoleX on AppRole {
         AppRole.agent => AppRoutes.agentHome,
         AppRole.rider => AppRoutes.riderHome,
         AppRole.driver => AppRoutes.driverHome,
+        AppRole.admin => AppRoutes.home,
       };
 
-  /// Where the role's KYC flow starts. Customer has no KYC.
+  /// Where the role's KYC flow starts. Customer and admin have no KYC.
   String? get kycRoute => switch (this) {
         AppRole.customer => null,
         AppRole.vendor => AppRoutes.vendorKyc,
@@ -52,10 +55,10 @@ extension AppRoleX on AppRole {
         AppRole.agent => AppRoutes.agentKyc,
         AppRole.rider => AppRoutes.riderKyc,
         AppRole.driver => AppRoutes.driverKyc,
+        AppRole.admin => null,
       };
 
-  /// Where the role's Account tab lives (or null for customer, which uses
-  /// the existing `/profile`).
+  /// Where the role's Account tab lives.
   String? get accountRoute => switch (this) {
         AppRole.customer => AppRoutes.profile,
         AppRole.vendor => AppRoutes.vendorAccount,
@@ -63,6 +66,7 @@ extension AppRoleX on AppRole {
         AppRole.agent => AppRoutes.agentAccount,
         AppRole.rider => AppRoutes.riderAccount,
         AppRole.driver => AppRoutes.driverAccount,
+        AppRole.admin => AppRoutes.profile,
       };
 
   /// Every role's shell is built and wired into the router. The role

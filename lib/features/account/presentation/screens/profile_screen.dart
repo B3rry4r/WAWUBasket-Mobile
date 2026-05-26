@@ -412,6 +412,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             sub: _switchSub(),
             onTap: () => RoleSwitcherSheet.show(context),
           ),
+          if (RoleController.instance.statusOf(AppRole.admin) == RoleStatus.approved)
+            AccountMenuRow(
+              icon: WBIconName.filter,
+              label: 'Dev Settings',
+              sub: 'Feature flags & platform controls',
+              onTap: () => context.push(AppRoutes.devSettings),
+            ),
           AccountMenuRow(
             icon: WBIconName.close,
             label: context.l10n.profileDeleteAccount,
