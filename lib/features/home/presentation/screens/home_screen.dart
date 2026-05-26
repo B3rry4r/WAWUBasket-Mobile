@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: SizedBox(
                                   width: 32,
                                   height: 32,
-                                  child: WBNetworkImage(url: c.imageUrl),
+                                  child: WBNetworkImage(url: c.imageUrl ?? ''),
                                 ),
                               ),
                             ),

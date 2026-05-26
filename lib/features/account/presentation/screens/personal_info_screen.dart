@@ -41,6 +41,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         if (mounted) setState(() => _uploadingAvatar = false);
         return;
       }
+      // Evict the previous avatar URL from the CachedNetworkImage disk cache so
+      // the freshly uploaded photo is fetched on the next render instead of
+      // serving the stale cached version:
+      //   if (_avatarUrl != null) await CachedNetworkImage.evictFromCache(_avatarUrl!);
       await ProfileApi.instance.updateAvatar(res.key);
       if (!mounted) return;
       setState(() {

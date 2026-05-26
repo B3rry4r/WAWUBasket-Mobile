@@ -130,7 +130,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   borderRadius: BorderRadius.circular(WBRadius.card),
                   child: AspectRatio(
                     aspectRatio: 2.2,
-                    child: WBNetworkImage(url: category.imageUrl),
+                    child: WBNetworkImage(url: category.imageUrl ?? ''),
                   ),
                 ),
               ),

@@ -60,6 +60,12 @@ dependencies:
   firebase_messaging: ^15.1.3
   flutter_local_notifications: ^17.2.2
 
+  # Image caching — disk-persistent cache for vendor, profile, category images.
+  cached_network_image: ^3.4.1
+
+  # Shimmer skeleton loaders for async content (categories, vendor lists).
+  shimmer: ^3.0.0
+
   # Localization — African-language support via ARB files + gen-l10n.
   flutter_localizations:
     sdk: flutter
@@ -92,5 +98,6 @@ flutter:
 
   assets:
     - assets/logos/
+    - assets/categories/
 
   # Albert Sans is loaded at runtime via google_fonts.
