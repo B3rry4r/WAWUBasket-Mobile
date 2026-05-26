@@ -93,21 +93,62 @@ class _LoginScreenState extends State<LoginScreen> {
     final bio = BiometricService.instance;
     if (!await bio.isAvailable() || await bio.isEnabled()) return;
     if (!mounted) return;
-    final enable = await showDialog<bool>(
+    final enable = await showModalBottomSheet<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(context.l10n.loginBiometricOfferTitle),
-        content: Text(context.l10n.loginBiometricOfferBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: Text(context.l10n.loginBiometricNotNow),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: Text(context.l10n.loginBiometricEnable),
-          ),
-        ],
+      backgroundColor: WBColors.bgPrimary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(WBRadius.sheet),
+        ),
+      ),
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(
+          WBSpacing.screenPadding,
+          WBSpacing.lg,
+          WBSpacing.screenPadding,
+          WBSpacing.xl,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+                decoration: BoxDecoration(
+                  color: WBColors.bgDivider,
+                  borderRadius: BorderRadius.circular(WBRadius.pill),
+                ),
+              ),
+            ),
+            Text(
+              context.l10n.loginBiometricOfferTitle,
+              style: WBTypography.cardTitle.copyWith(fontSize: 18),
+            ),
+            const SizedBox(height: WBSpacing.sm),
+            Text(
+              context.l10n.loginBiometricOfferBody,
+              style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
+            ),
+            const SizedBox(height: WBSpacing.lg),
+            WBButton(
+              label: context.l10n.loginBiometricEnable,
+              fullWidth: true,
+              size: WBButtonSize.lg,
+              onPressed: () => Navigator.pop(ctx, true),
+            ),
+            const SizedBox(height: WBSpacing.sm),
+            WBButton(
+              label: context.l10n.loginBiometricNotNow,
+              fullWidth: true,
+              size: WBButtonSize.lg,
+              variant: WBButtonVariant.ghost,
+              onPressed: () => Navigator.pop(ctx, false),
+            ),
+          ],
+        ),
       ),
     );
     if (enable == true) await bio.setEnabled(true);

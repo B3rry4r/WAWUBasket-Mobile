@@ -1,8 +1,13 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:local_auth/local_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Wraps device biometric unlock (Face ID / fingerprint) plus the opt-in
 /// flag recording whether the returning user enabled it.
+///
+/// The enabled flag is stored in SharedPreferences (not flutter_secure_storage)
+/// because it is a non-sensitive preference and SharedPreferences works
+/// reliably across all platforms including web.
 class BiometricService {
   BiometricService._();
   static final BiometricService instance = BiometricService._();
@@ -10,12 +15,11 @@ class BiometricService {
   static const _kEnabled = 'wb.biometric.enabled';
 
   final _auth = LocalAuthentication();
-  final _storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
-  );
 
   /// True when the device has biometric hardware with an enrolled identity.
+  /// Always false on web (local_auth has no web implementation).
   Future<bool> isAvailable() async {
+    if (kIsWeb) return false;
     try {
       if (!await _auth.isDeviceSupported()) return false;
       return await _auth.canCheckBiometrics;
@@ -27,10 +31,8 @@ class BiometricService {
   /// Returns the user-facing name of the most prominent biometric the OS
   /// reports. Falls back to the generic "Biometric" so copy never claims
   /// Face ID on a fingerprint-only Android phone.
-  ///
-  /// TODO(i18n): key=biometricLabelFace / biometricLabelFingerprint /
-  /// biometricLabelGeneric — these labels are not localised yet.
   Future<String> label() async {
+    if (kIsWeb) return 'Biometric';
     try {
       if (!await _auth.isDeviceSupported()) return 'Biometric';
       final types = await _auth.getAvailableBiometrics();
@@ -48,14 +50,19 @@ class BiometricService {
   }
 
   /// Whether the user opted into biometric unlock on this device.
-  Future<bool> isEnabled() async =>
-      (await _storage.read(key: _kEnabled)) == 'true';
+  Future<bool> isEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_kEnabled) ?? false;
+  }
 
-  Future<void> setEnabled(bool value) =>
-      _storage.write(key: _kEnabled, value: value ? 'true' : 'false');
+  Future<void> setEnabled(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kEnabled, value);
+  }
 
   /// Shows the device biometric sheet; returns true only on success.
   Future<bool> authenticate({String reason = 'Unlock WAWUBasket'}) async {
+    if (kIsWeb) return false;
     try {
       return await _auth.authenticate(
         localizedReason: reason,

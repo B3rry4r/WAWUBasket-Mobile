@@ -49,7 +49,11 @@ Future<void> main() async {
   // Restore the user's last role + KYC progress and JWT session before
   // the splash routes.
   await RoleController.instance.load();
-  await TokenStore.instance.load();
+  // flutter_secure_storage uses platform keychains/keystores that are not
+  // available on all web environments — catch and continue gracefully.
+  try {
+    await TokenStore.instance.load();
+  } catch (_) {}
   await LocaleController.instance.load();
   // Pre-decode the home-screen category SVGs so the first paint has them
   // in the flutter_svg in-memory cache. Failures are non-fatal — the
@@ -61,13 +65,15 @@ Future<void> main() async {
   // optional — when it 404s we fall back to the compiled-in defaults so
   // the launch never blocks on this call.
   await FeatureFlagService.instance.load();
-  // Firebase / push notifications. Wrapped in try/catch so the app still
-  // launches on builds where google-services.json / GoogleService-Info.plist
-  // have not yet been added.
-  try {
-    await NotificationService.instance.init();
-  } catch (_) {
-    // Firebase not configured — push notifications will be unavailable.
+  // Firebase / push notifications. Skip entirely on web — Firebase web
+  // requires a separate JS SDK config that is not included in this build,
+  // and flutter_local_notifications has no web implementation.
+  if (!kIsWeb) {
+    try {
+      await NotificationService.instance.init();
+    } catch (_) {
+      // Firebase not configured — push notifications will be unavailable.
+    }
   }
   // Refresh the notifications badge from the backend so the red dot only
   // appears when there's at least one unread message. Skipped when the
@@ -87,10 +93,11 @@ Future<void> main() async {
   // wiring required.
   WebSocketService.instance.init();
   // On logout, wipe the offline chat cache so the next signed-in user
-  // never sees the previous user's threads.
+  // never sees the previous user's threads. sqflite has no web
+  // implementation so the chat store is skipped on web.
   TokenStore.instance.tokenNotifier.addListener(() {
     if (TokenStore.instance.accessToken == null) {
-      ChatLocalStore.instance.clearAll().ignore();
+      if (!kIsWeb) ChatLocalStore.instance.clearAll().ignore();
       NotificationsController.instance.markAllRead();
     }
   });
