@@ -263,6 +263,10 @@ class _TrackingScreenState extends State<TrackingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (order.isRecipeParent) ...[
+                    _RecipeMultiPickup(order: order),
+                    const SizedBox(height: WBSpacing.lg),
+                  ],
                   Text(
                     context.l10n.trackingJourney,
                     style: WBTypography.cardTitle.copyWith(
@@ -325,6 +329,92 @@ class _TrackingScreenState extends State<TrackingScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Multi-vendor breakdown shown on the parent order of a recipe combo.
+/// Lists every child order (one per vendor) with its current status badge.
+class _RecipeMultiPickup extends StatelessWidget {
+  const _RecipeMultiPickup({required this.order});
+
+  final OrderModel order;
+
+  WBStatusKind _kindFor(OrderModel child) {
+    if (child.isDelivered) return WBStatusKind.success;
+    if (child.isCancelled) return WBStatusKind.error;
+    if (child.state == 'placed' || child.state == 'paid') {
+      return WBStatusKind.info;
+    }
+    return WBStatusKind.warning;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(WBSpacing.md),
+      decoration: BoxDecoration(
+        color: WBColors.surfaceCard,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+        boxShadow: WBShadows.card,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.l10n.trackingRecipeMultiPickup(order.childOrders.length),
+            style: WBTypography.body.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            context.l10n.recipeOrderChildVendors,
+            style: WBTypography.caption.copyWith(
+              color: WBColors.fgSecondary,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 12),
+          for (var i = 0; i < order.childOrders.length; i++) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: const BoxDecoration(
+                      color: WBColors.bgSoft,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: const WBIcon(WBIconName.basket, size: 14),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      order.childOrders[i].vendorName ??
+                          order.childOrders[i].shortId,
+                      style: WBTypography.body.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  WBStatusPill(
+                    label: order.childOrders[i].statusLabel,
+                    kind: _kindFor(order.childOrders[i]),
+                  ),
+                ],
+              ),
+            ),
+            if (i != order.childOrders.length - 1)
+              const WBDivider(),
+          ],
+        ],
       ),
     );
   }

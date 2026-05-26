@@ -1,19 +1,17 @@
 import 'package:flutter/foundation.dart';
 
+import '../../../core/network/api_exception.dart';
+import '../data/escrow_api.dart';
 import '../domain/models/bulk_order.dart';
 
-/// In-memory store of every escrow-backed bulk order. The buyer's status
-/// screen and the seller's order dashboard both subscribe to the same
-/// list, so a single transition (release / refund / dispute) updates
-/// every surface.
 class EscrowController {
-  EscrowController._()
-      : orders = ValueNotifier<List<BulkOrder>>([]) {
-    orders.value = _seed();
-  }
+  EscrowController._() : orders = ValueNotifier<List<BulkOrder>>([]);
   static final EscrowController instance = EscrowController._();
 
   final ValueNotifier<List<BulkOrder>> orders;
+  bool _loaded = false;
+
+  final _api = EscrowApi.instance;
 
   BulkOrder? byId(String id) {
     for (final o in orders.value) {
@@ -22,35 +20,92 @@ class EscrowController {
     return null;
   }
 
-  /// Stage a new escrow order from the buyer checkout. Returns the new
-  /// id so the caller can navigate straight into the status screen.
-  String place(BulkOrder order) {
+  Future<void> load() async {
+    try {
+      final raw = await _api.listOrders();
+      orders.value = [
+        for (final e in raw)
+          BulkOrder.fromApi((e as Map).cast<String, dynamic>()),
+      ];
+      _loaded = true;
+    } on ApiException {
+      // Keep existing list; a later refresh retries.
+    }
+  }
+
+  Future<void> loadOnce() async {
+    if (!_loaded) await load();
+  }
+
+  /// Places the order via the API and returns the created [BulkOrder]
+  /// including the Flutterwave [checkoutUrl].
+  Future<BulkOrder> place({
+    required String listingId,
+    required int quantityKg,
+    required String dropoffAddress,
+  }) async {
+    final res = await _api.placeOrder(
+      listingId: listingId,
+      quantityKg: quantityKg,
+      dropoffAddress: dropoffAddress,
+    );
+
+    final order = BulkOrder(
+      id: (res['orderId'] ?? '').toString(),
+      listingId: listingId,
+      produce: (res['produce'] ?? 'Goods').toString(),
+      quantityKg: quantityKg,
+      pricePerKgNaira: _money(res['subtotalNaira']) ~/ (quantityKg > 0 ? quantityKg : 1),
+      feeNaira: _money(res['feeNaira']),
+      imageUrl: '',
+      buyerName: '',
+      buyerPhone: '',
+      dropoffAddress: dropoffAddress,
+      sellerName: (res['sellerName'] ?? '').toString(),
+      sellerRegion: (res['sellerRegion'] ?? '').toString(),
+      method: PaymentMethod.bankTransfer,
+      status: EscrowStatus.held,
+      placedAt: DateTime.now(),
+      checkoutUrl: res['checkoutUrl']?.toString(),
+    );
+
     orders.value = [order, ...orders.value];
-    return order.id;
+    return order;
   }
 
-  /// Buyer confirms receipt, releases the held amount to the seller.
-  void release(String id) => _setStatus(id, EscrowStatus.released);
-
-  /// Admin sided with the buyer (or buyer cancelled before delivery).
-  void refund(String id) => _setStatus(id, EscrowStatus.refunded);
-
-  /// Open a dispute with a reason. Stays in [EscrowStatus.disputed]
-  /// until manual resolution.
-  void dispute(String id, String reason) {
-    final o = byId(id);
-    if (o == null) return;
-    o.disputeReason = reason;
-    o.status = EscrowStatus.disputed;
-    _bump();
+  Future<void> release(String id) async {
+    try {
+      await _api.release(id);
+      _setStatus(id, EscrowStatus.released);
+    } on ApiException {
+      // Optimistic update already applied — revert on error.
+      rethrow;
+    }
   }
 
-  /// Seller flags shipment ready so the buyer is nudged to confirm.
-  void markDeliveredBySeller(String id) {
-    final o = byId(id);
-    if (o == null) return;
-    o.markedDeliveredBySeller = true;
-    _bump();
+  Future<void> dispute(String id, String reason) async {
+    try {
+      await _api.dispute(id, reason: reason);
+      final o = byId(id);
+      if (o == null) return;
+      o.disputeReason = reason;
+      o.status = EscrowStatus.disputed;
+      _bump();
+    } on ApiException {
+      rethrow;
+    }
+  }
+
+  Future<void> markDeliveredBySeller(String id) async {
+    try {
+      await _api.markDelivered(id);
+      final o = byId(id);
+      if (o == null) return;
+      o.markedDeliveredBySeller = true;
+      _bump();
+    } on ApiException {
+      rethrow;
+    }
   }
 
   void _setStatus(String id, EscrowStatus next) {
@@ -62,26 +117,9 @@ class EscrowController {
 
   void _bump() => orders.value = List.of(orders.value);
 
-  /// One pre-existing order so the trader dashboard isn't empty on first
-  /// run. Buyer/seller-side flows still work without it.
-  List<BulkOrder> _seed() => [
-        BulkOrder(
-          id: 'ESC-${DateTime.now().millisecondsSinceEpoch}',
-          listingId: 'EXP-1031',
-          produce: 'Maize',
-          quantityKg: 2000,
-          pricePerKgNaira: 410,
-          feeNaira: 12000,
-          imageUrl:
-              'https://images.unsplash.com/photo-1601612628452-9e99ced43524?w=600&q=80&auto=format&fit=crop',
-          buyerName: 'Demo Buyer',
-          buyerPhone: '+2348030000001',
-          dropoffAddress: 'Kano Central Market · Warehouse 14',
-          sellerName: 'Sahel Grain Union',
-          sellerRegion: 'Sokoto',
-          method: PaymentMethod.bankTransfer,
-          status: EscrowStatus.held,
-          placedAt: DateTime.now().subtract(const Duration(hours: 6)),
-        ),
-      ];
+  static int _money(dynamic v) {
+    if (v == null) return 0;
+    if (v is num) return v.toInt();
+    return int.tryParse(v.toString()) ?? 0;
+  }
 }

@@ -3129,6 +3129,198 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We\'ll review evidence and resolve within 48 hours.'**
   String get escrowStatusReviewNote;
+
+  /// No description provided for @recipesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cook tonight'**
+  String get recipesTitle;
+
+  /// No description provided for @recipesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Real ingredients. Real vendors. One basket.'**
+  String get recipesSubtitle;
+
+  /// No description provided for @recipeDetailIngredients.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s in the basket'**
+  String get recipeDetailIngredients;
+
+  /// No description provided for @recipeDetailServes.
+  ///
+  /// In en, this message translates to:
+  /// **'Serves'**
+  String get recipeDetailServes;
+
+  /// No description provided for @recipeDetailCookingTime.
+  ///
+  /// In en, this message translates to:
+  /// **'{mins} min cook'**
+  String recipeDetailCookingTime(int mins);
+
+  /// No description provided for @recipeSizeSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get recipeSizeSmall;
+
+  /// No description provided for @recipeSizeMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get recipeSizeMedium;
+
+  /// No description provided for @recipeSizeFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get recipeSizeFamily;
+
+  /// No description provided for @recipeSizeParty.
+  ///
+  /// In en, this message translates to:
+  /// **'Party'**
+  String get recipeSizeParty;
+
+  /// No description provided for @recipeAddToBasket.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to basket — ₦{price}'**
+  String recipeAddToBasket(String price);
+
+  /// No description provided for @recipeUnavailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Some ingredients are missing'**
+  String get recipeUnavailableTitle;
+
+  /// No description provided for @recipeUnavailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'These aren\'t available in your area right now: {items}'**
+  String recipeUnavailableBody(String items);
+
+  /// No description provided for @recipeEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'No recipes yet. Check back soon.'**
+  String get recipeEmptyState;
+
+  /// No description provided for @recipeCartSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe combos'**
+  String get recipeCartSection;
+
+  /// No description provided for @recipeCartFromVendors.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ingredients from {vendors} vendors'**
+  String recipeCartFromVendors(int count, int vendors);
+
+  /// No description provided for @recipeRemoveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this recipe?'**
+  String get recipeRemoveTitle;
+
+  /// No description provided for @recipeRemoveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your basket will lose this combo.'**
+  String get recipeRemoveBody;
+
+  /// No description provided for @homeCookTonight.
+  ///
+  /// In en, this message translates to:
+  /// **'Cook tonight'**
+  String get homeCookTonight;
+
+  /// No description provided for @homeCookTonightSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get homeCookTonightSeeAll;
+
+  /// No description provided for @recipeFromPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'From ₦{amount}'**
+  String recipeFromPrice(String amount);
+
+  /// No description provided for @trackingRecipeMultiPickup.
+  ///
+  /// In en, this message translates to:
+  /// **'Picking up from {count} vendors'**
+  String trackingRecipeMultiPickup(int count);
+
+  /// No description provided for @recipeIngredientsSeeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all ingredients'**
+  String get recipeIngredientsSeeAll;
+
+  /// No description provided for @recipeIngredientsCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get recipeIngredientsCollapse;
+
+  /// No description provided for @recipeAddedToBasket.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to basket.'**
+  String get recipeAddedToBasket;
+
+  /// No description provided for @recipeAddFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t add to basket. Try again.'**
+  String get recipeAddFailed;
+
+  /// No description provided for @recipeMatchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t fetch price. Try a different size.'**
+  String get recipeMatchFailed;
+
+  /// No description provided for @recipeDetailNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t find that recipe.'**
+  String get recipeDetailNotFound;
+
+  /// No description provided for @recipeDetailDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'About this dish'**
+  String get recipeDetailDescription;
+
+  /// No description provided for @recipeDetailCuisine.
+  ///
+  /// In en, this message translates to:
+  /// **'Cuisine'**
+  String get recipeDetailCuisine;
+
+  /// No description provided for @recipeLoadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load recipes. Pull to retry.'**
+  String get recipeLoadFailed;
+
+  /// No description provided for @actionRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get actionRemove;
+
+  /// No description provided for @recipeOrderChildVendors.
+  ///
+  /// In en, this message translates to:
+  /// **'Sourced from these vendors'**
+  String get recipeOrderChildVendors;
 }
 
 class _AppLocalizationsDelegate

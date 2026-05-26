@@ -1571,4 +1571,113 @@ class AppLocalizationsLn extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Tokotala bilembeteli mpé tokosilisa na ngonga 48.';
+
+  @override
+  String get recipesTitle => 'Pamba lelo butu';
+
+  @override
+  String get recipesSubtitle =>
+      'Biloko ya solo. Batekisi ya solo. Kofuta moko.';
+
+  @override
+  String get recipeDetailIngredients => 'Biloko oyo ezali na kofuta';
+
+  @override
+  String get recipeDetailServes => 'Ekoki na';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Miniti $mins ya kopamba';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Moke';
+
+  @override
+  String get recipeSizeMedium => 'Katikati';
+
+  @override
+  String get recipeSizeFamily => 'Libota';
+
+  @override
+  String get recipeSizeParty => 'Fɛti';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Tia na kofuta — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Biloko mosusu ezali te';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Oyo ezali te na esika na yo sikoyo: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Bilanga ezali naino te. Zonga sikoyo.';
+
+  @override
+  String get recipeCartSection => 'Bilanga ya kobundisa';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Biloko $count na batekisi $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Longola bilanga oyo?';
+
+  @override
+  String get recipeRemoveBody => 'Kofuta na yo ekobeba kobundisa oyo.';
+
+  @override
+  String get homeCookTonight => 'Pamba lelo butu';
+
+  @override
+  String get homeCookTonightSeeAll => 'Tala nyonso';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Banda ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Kozwa epai ya batekisi $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Tala biloko nyonso';
+
+  @override
+  String get recipeIngredientsCollapse => 'Monisa moke';
+
+  @override
+  String get recipeAddedToBasket => 'Esiimami na kofuta.';
+
+  @override
+  String get recipeAddFailed => 'Ekoki te kotia na kofuta. Luka lisusu.';
+
+  @override
+  String get recipeMatchFailed => 'Ekoki te kozwa motuya. Luka bonene mosusu.';
+
+  @override
+  String get recipeDetailNotFound => 'Tóyaki bilanga yango te.';
+
+  @override
+  String get recipeDetailDescription => 'Mpo na bilanga oyo';
+
+  @override
+  String get recipeDetailCuisine => 'Ndenge ya bilanga';
+
+  @override
+  String get recipeLoadFailed => 'Ekoki te kocharger bilanga. Kɔtɔ lisusu.';
+
+  @override
+  String get actionRemove => 'Longola';
+
+  @override
+  String get recipeOrderChildVendors => 'Euti na batekisi oyo';
 }

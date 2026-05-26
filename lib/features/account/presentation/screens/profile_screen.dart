@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -23,12 +24,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    ProfileController.instance.load();
-    ProfileController.instance.loadStats();
+    if (!GuestModeController.instance.isGuest.value) {
+      ProfileController.instance.load();
+      ProfileController.instance.loadStats();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: GuestModeController.instance.isGuest,
+      builder: (_, isGuest, _) {
+        if (isGuest) return _buildGuest(context);
+        return _buildSignedIn(context);
+      },
+    );
+  }
+
+  Widget _buildGuest(BuildContext context) {
+    // TODO(i18n): key=profileGuestTitle / profileGuestBody / profileGuestCta
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        WBSpacing.screenPadding,
+        80,
+        WBSpacing.screenPadding,
+        180,
+      ),
+      children: [
+        Center(
+          child: Container(
+            width: 96,
+            height: 96,
+            decoration: BoxDecoration(
+              color: WBColors.bgSoft,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            alignment: Alignment.center,
+            child: const WBIcon(
+              WBIconName.user,
+              size: 36,
+              color: WBColors.fgHeader,
+            ),
+          ),
+        ),
+        const SizedBox(height: WBSpacing.lg),
+        Text(
+          "You're browsing as a guest",
+          textAlign: TextAlign.center,
+          style: WBTypography.hero.copyWith(fontSize: 24),
+        ),
+        const SizedBox(height: WBSpacing.sm),
+        Text(
+          'Sign in to manage your profile, orders, wallet and favorites.',
+          textAlign: TextAlign.center,
+          style: WBTypography.body.copyWith(
+            color: WBColors.fgSecondary,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: WBSpacing.xl),
+        WBButton(
+          label: 'Sign in',
+          size: WBButtonSize.lg,
+          fullWidth: true,
+          trailingIcon: WBIconName.arrowRight,
+          onPressed: () => context.push(AppRoutes.login),
+        ),
+        const SizedBox(height: WBSpacing.sm + 4),
+        WBButton(
+          label: 'Create an account',
+          size: WBButtonSize.lg,
+          fullWidth: true,
+          variant: WBButtonVariant.secondary,
+          onPressed: () => context.push(AppRoutes.signup),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignedIn(BuildContext context) {
     final sections = _buildSections(context);
 
     return ListView(
@@ -163,10 +237,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         label: 'Orders',
                       ),
                       _Stat(
-                        value: stats?.walletBalanceNaira != null
-                            ? _fmtNaira(int.tryParse(stats!.walletBalanceNaira!) ?? 0)
-                            : '–',
-                        label: 'Wallet',
+                        value: stats?.orders != null ? '${stats!.orders}' : '–',
+                        label: 'Bulk',
                       ),
                       _Stat(
                         value: stats?.favorites != null ? '${stats!.favorites}' : '–',
@@ -209,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: WBIconName.card,
             label: context.l10n.profileWalletMenu,
             sub: context.l10n.profileWalletSub,
-            onTap: () => context.push(AppRoutes.wallet),
+            onTap: () => context.push(AppRoutes.escrowOrders),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
@@ -228,12 +300,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             label: context.l10n.profileNotifications,
             sub: context.l10n.profileNotificationsSub,
             onTap: () => context.push(AppRoutes.notifications),
-          ),
-          AccountMenuRow(
-            icon: WBIconName.basket,
-            label: context.l10n.profileBulkOrders,
-            sub: context.l10n.profileBulkOrdersSub,
-            onTap: () => context.push(AppRoutes.escrowOrders),
           ),
           AccountMenuRow(
             icon: WBIconName.star,
@@ -259,11 +325,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () => context.push(AppRoutes.dietary),
           ),
           AccountMenuRow(
-            icon: WBIconName.star,
-            label: context.l10n.profileRateApp,
-            onTap: () => _showRateSheet(context),
-          ),
-          AccountMenuRow(
             icon: WBIconName.more,
             label: context.l10n.profileAbout,
             sub: 'v2.1.0',
@@ -284,12 +345,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: WBIconName.user,
             label: context.l10n.profileBiometricLogin,
             sub: context.l10n.profileBiometricLoginSub,
-            onTap: () => context.push(AppRoutes.security),
-          ),
-          AccountMenuRow(
-            icon: WBIconName.phone,
-            label: context.l10n.profileTwoFactor,
-            sub: context.l10n.profileTwoFactorSub,
             onTap: () => context.push(AppRoutes.security),
           ),
         ],
@@ -343,6 +398,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             sub: _switchSub(),
             onTap: () => RoleSwitcherSheet.show(context),
           ),
+          if (RoleController.instance.statusOf(AppRole.admin) == RoleStatus.approved)
+            AccountMenuRow(
+              icon: WBIconName.filter,
+              label: 'Dev Settings',
+              sub: 'Feature flags & platform controls',
+              onTap: () => context.push(AppRoutes.devSettings),
+            ),
           AccountMenuRow(
             icon: WBIconName.close,
             label: context.l10n.profileDeleteAccount,
@@ -367,108 +429,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return 'Apply to be a vendor, trader, agent, rider or driver';
     }
     return 'Active: ${switchable.map((r) => r.title).join(' · ')}';
-  }
-}
-
-/// Compact naira formatter for stat tiles: 12500 → ₦12.5k
-String _fmtNaira(int naira) {
-  if (naira >= 1000000) {
-    final m = naira / 1000000;
-    return '₦${m % 1 == 0 ? m.toInt() : m.toStringAsFixed(1)}M';
-  }
-  if (naira >= 1000) {
-    final k = naira / 1000;
-    return '₦${k % 1 == 0 ? k.toInt() : k.toStringAsFixed(1)}k';
-  }
-  return '₦$naira';
-}
-
-void _showRateSheet(BuildContext context) {
-  showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: WBColors.bgPrimary,
-    isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
-    ),
-    builder: (ctx) => const _RateSheet(),
-  );
-}
-
-class _RateSheet extends StatefulWidget {
-  const _RateSheet();
-
-  @override
-  State<_RateSheet> createState() => _RateSheetState();
-}
-
-class _RateSheetState extends State<_RateSheet> {
-  int _rating = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: WBSpacing.screenPadding,
-        right: WBSpacing.screenPadding,
-        top: WBSpacing.lg,
-        bottom: MediaQuery.of(context).viewInsets.bottom + WBSpacing.xl,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-            decoration: BoxDecoration(
-              color: WBColors.bgDivider,
-              borderRadius: BorderRadius.circular(WBRadius.pill),
-            ),
-          ),
-          Text(context.l10n.profileRateWawu, style: WBTypography.page),
-          const SizedBox(height: WBSpacing.sm),
-          Text(
-            context.l10n.profileRateFeedback,
-            textAlign: TextAlign.center,
-            style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
-          ),
-          const SizedBox(height: WBSpacing.lg),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(5, (i) {
-              final filled = i < _rating;
-              return GestureDetector(
-                onTap: () => setState(() => _rating = i + 1),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  child: WBIcon(
-                    WBIconName.star,
-                    size: 36,
-                    color: filled ? WBColors.fgHeader : WBColors.bgDivider,
-                  ),
-                ),
-              );
-            }),
-          ),
-          const SizedBox(height: WBSpacing.xl),
-          WBButton(
-            label: _rating == 0 ? context.l10n.profileRateTapStar : context.l10n.profileRateSubmit,
-            size: WBButtonSize.lg,
-            fullWidth: true,
-            disabled: _rating == 0,
-            onPressed: _rating == 0
-                ? null
-                : () {
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(context.l10n.profileRateThanks('$_rating'))),
-                    );
-                  },
-          ),
-        ],
-      ),
-    );
   }
 }
 

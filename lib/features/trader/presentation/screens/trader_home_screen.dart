@@ -27,6 +27,7 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
     super.initState();
     TradeController.instance.loadMyListings();
     ProfileController.instance.load();
+    EscrowController.instance.load();
   }
 
   @override

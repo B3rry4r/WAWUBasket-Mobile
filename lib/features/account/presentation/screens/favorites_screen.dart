@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -28,7 +29,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   void initState() {
     super.initState();
-    _load();
+    if (!GuestModeController.instance.isGuest.value) _load();
   }
 
   Future<void> _load() async {
@@ -55,6 +56,72 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: GuestModeController.instance.isGuest,
+      builder: (_, isGuest, _) {
+        if (isGuest) return _buildGuest(context);
+        return _buildSignedIn(context);
+      },
+    );
+  }
+
+  Widget _buildGuest(BuildContext context) {
+    // TODO(i18n): key=favoritesGuestTitle / favoritesGuestBody
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          WBSpacing.screenPadding,
+          80 + MediaQuery.of(context).padding.top,
+          WBSpacing.screenPadding,
+          120,
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(28),
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(
+                WBIconName.heart,
+                size: 36,
+                color: WBColors.fgHeader,
+              ),
+            ),
+            const SizedBox(height: WBSpacing.lg),
+            Text(
+              'Save what you love',
+              textAlign: TextAlign.center,
+              style: WBTypography.hero.copyWith(fontSize: 22),
+            ),
+            const SizedBox(height: WBSpacing.sm),
+            Text(
+              'Sign in to favorite vendors and dishes so you can find them faster next time.',
+              textAlign: TextAlign.center,
+              style: WBTypography.body.copyWith(
+                color: WBColors.fgSecondary,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: WBSpacing.xl),
+            WBButton(
+              label: 'Sign in',
+              size: WBButtonSize.lg,
+              fullWidth: true,
+              trailingIcon: WBIconName.arrowRight,
+              onPressed: () => context.push(AppRoutes.login),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignedIn(BuildContext context) {
     final vendors = _vendors;
     final count = _tab == 'vendors'
         ? '${vendors?.length ?? 0} vendors'

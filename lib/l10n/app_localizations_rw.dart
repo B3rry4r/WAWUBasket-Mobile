@@ -1584,4 +1584,116 @@ class AppLocalizationsRw extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Tuzasuzuma ibimenyetso maze dukemure mu masaha 48.';
+
+  @override
+  String get recipesTitle => 'Teka iri joro';
+
+  @override
+  String get recipesSubtitle =>
+      'Ibikoresho nyabyo. Abacuruzi nyabo. Agaseke kamwe.';
+
+  @override
+  String get recipeDetailIngredients => 'Ibiri muri agaseke';
+
+  @override
+  String get recipeDetailServes => 'Ifasha';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Iminota $mins yo guteka';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Gito';
+
+  @override
+  String get recipeSizeMedium => 'Hagati';
+
+  @override
+  String get recipeSizeFamily => 'Umuryango';
+
+  @override
+  String get recipeSizeParty => 'Ibirori';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Ongereza muri agaseke — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Ibikoresho bimwe ntibihari';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Ibi ntibiboneka mu karere kawe ubu: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Nta mbahuka irahari. Garuka vuba.';
+
+  @override
+  String get recipeCartSection => 'Imfatiro yo guteka';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Ibikoresho $count kuva abacuruzi $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Kura imbahuka iyi?';
+
+  @override
+  String get recipeRemoveBody => 'Agaseke kawe kazatakaza iri fatabuguzi.';
+
+  @override
+  String get homeCookTonight => 'Teka iri joro';
+
+  @override
+  String get homeCookTonightSeeAll => 'Reba byose';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Kuva ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Gufata mu bacuruzi $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Reba ibikoresho byose';
+
+  @override
+  String get recipeIngredientsCollapse => 'Erekana bike';
+
+  @override
+  String get recipeAddedToBasket => 'Ongerejwe muri agaseke.';
+
+  @override
+  String get recipeAddFailed =>
+      'Ntishobotse kongereza muri agaseke. Gerageza nanone.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Ntishobotse kubona igiciro. Gerageza ingano indi.';
+
+  @override
+  String get recipeDetailNotFound => 'Ntitwabonetse imbahuka iyo.';
+
+  @override
+  String get recipeDetailDescription => 'Ibirebana niri tanura';
+
+  @override
+  String get recipeDetailCuisine => 'Ubwoko bw\'indyo';
+
+  @override
+  String get recipeLoadFailed =>
+      'Ntishobotse gupakurura imbahuka. Shyira hasi ugerageze.';
+
+  @override
+  String get actionRemove => 'Kura';
+
+  @override
+  String get recipeOrderChildVendors => 'Ivuye kuri aba bacuruzi';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/account/application/notifications_controller.dart';
 import '../../features/auth/application/role_controller.dart';
 import '../../features/shopping/application/wb_images.dart';
 import '../router/app_routes.dart';
@@ -110,10 +111,16 @@ class WBHomeAppBar extends StatelessWidget {
               ),
               const SizedBox(width: 8),
             ],
-            WBHomeAppBarButton(
-              icon: WBIconName.bell,
-              badge: notificationBadge,
-              onTap: () => context.push(AppRoutes.notifications),
+            // The badge is driven by the live unread count — even when
+            // the caller passes notificationBadge=true the dot only
+            // appears while at least one notification is unread.
+            ValueListenableBuilder<int>(
+              valueListenable: NotificationsController.instance.unreadCount,
+              builder: (_, count, _) => WBHomeAppBarButton(
+                icon: WBIconName.bell,
+                badge: notificationBadge && count > 0,
+                onTap: () => context.push(AppRoutes.notifications),
+              ),
             ),
             if (trailingExtra != null) ...[
               const SizedBox(width: 8),

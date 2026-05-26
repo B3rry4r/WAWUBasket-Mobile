@@ -38,6 +38,12 @@ class OrderModel {
     this.riderName,
     this.notes,
     this.scheduledFor,
+    this.parentOrderId,
+    this.orderType,
+    this.recipeId,
+    this.recipeSizeId,
+    this.childOrders = const [],
+    this.vendorName,
   });
 
   final String id;
@@ -53,6 +59,26 @@ class OrderModel {
   final String? riderName;
   final String? notes;
   final DateTime? scheduledFor;
+
+  /// Parent order id when this is a child of a multi-vendor recipe order.
+  final String? parentOrderId;
+
+  /// `'recipe'` for the parent of a multi-vendor recipe pickup, otherwise
+  /// `null` (regular single-vendor order).
+  final String? orderType;
+  final String? recipeId;
+  final String? recipeSizeId;
+
+  /// Populated on the parent recipe order — one per vendor we're sourcing
+  /// ingredients from.
+  final List<OrderModel> childOrders;
+
+  /// Display name of the vendor fulfilling this (child) order.
+  final String? vendorName;
+
+  /// Convenience: this order is the parent of a multi-vendor recipe combo.
+  bool get isRecipeParent =>
+      orderType == 'recipe' && childOrders.isNotEmpty;
 
   /// Short id for display, e.g. `#WBK-3F9A2C`.
   String get shortId {
@@ -108,6 +134,7 @@ class OrderModel {
     final escrow = (j['escrowHold'] as Map?)?.cast<String, dynamic>();
     final delivery = (j['delivery'] as Map?)?.cast<String, dynamic>();
     final rider = (delivery?['rider'] as Map?)?.cast<String, dynamic>();
+    final vendor = (j['vendor'] as Map?)?.cast<String, dynamic>();
     return OrderModel(
       id: (j['id'] ?? '').toString(),
       state: (j['state'] ?? 'placed').toString(),
@@ -127,6 +154,15 @@ class OrderModel {
       scheduledFor: j['scheduledFor'] != null
           ? DateTime.tryParse('${j['scheduledFor']}')
           : null,
+      parentOrderId: j['parentOrderId'] as String?,
+      orderType: j['orderType'] as String?,
+      recipeId: j['recipeId'] as String?,
+      recipeSizeId: j['recipeSizeId'] as String?,
+      vendorName: vendor?['displayName'] as String? ??
+          j['vendorName'] as String?,
+      childOrders: ((j['childOrders'] as List?) ?? const [])
+          .map((e) => OrderModel.fromJson((e as Map).cast<String, dynamic>()))
+          .toList(),
     );
   }
 }

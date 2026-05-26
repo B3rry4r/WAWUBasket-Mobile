@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/data/location_data.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
@@ -24,9 +25,11 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
   final Set<Corridor> _corridors = {Corridor.nigeria, Corridor.benin};
   bool _busy = false;
   final Map<String, String> _docs = {};
+  String? _selectedCountry;
+  String? _selectedState;
 
   final _businessName = TextEditingController();
-  final _region = TextEditingController();
+  final _stateText = TextEditingController();
   final _contact = TextEditingController();
   final _phone = TextEditingController();
   final _bankName = TextEditingController();
@@ -36,7 +39,7 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
   void dispose() {
     for (final c in [
       _businessName,
-      _region,
+      _stateText,
       _contact,
       _phone,
       _bankName,
@@ -45,6 +48,50 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
       c.dispose();
     }
     super.dispose();
+  }
+
+  Future<void> _pickState(BuildContext context) async {
+    final states = kCountryStates[_selectedCountry];
+    if (states == null) return;
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.6,
+        maxChildSize: 0.9,
+        builder: (_, scrollCtrl) => Column(
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: WBColors.bgDivider,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollCtrl,
+                itemCount: states.length,
+                itemBuilder: (_, i) => ListTile(
+                  title: Text(states[i], style: WBTypography.body),
+                  onTap: () => Navigator.of(context).pop(states[i]),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) setState(() => _selectedState = picked);
   }
 
   void _toggle(Corridor c) {
@@ -65,7 +112,8 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
         role: 'trader',
         profile: {
           'businessName': _businessName.text.trim(),
-          'region': _region.text.trim(),
+          'country': _selectedCountry ?? '',
+          'region': _selectedState ?? _stateText.text.trim(),
           'contact': _contact.text.trim(),
           'phone': _phone.text.trim(),
           'corridors': [for (final c in _corridors) c.name],
@@ -143,11 +191,26 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                   leadingIcon: WBIconName.home,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                WBInput(
-                  label: 'Region',
-                  controller: _region,
-                  leadingIcon: WBIconName.pin,
+                WBCountryField(
+                  value: _selectedCountry,
+                  onChanged: (v) => setState(() {
+                    _selectedCountry = v;
+                    _selectedState = null;
+                    _stateText.clear();
+                  }),
                 ),
+                const SizedBox(height: WBSpacing.md - 2),
+                kCountryStates.containsKey(_selectedCountry)
+                    ? _PickerField(
+                        value: _selectedState,
+                        placeholder: 'State / Region',
+                        onTap: () => _pickState(context),
+                      )
+                    : WBInput(
+                        label: 'State / Region',
+                        controller: _stateText,
+                        leadingIcon: WBIconName.pin,
+                      ),
                 const SizedBox(height: WBSpacing.md - 2),
                 WBInput(
                   label: 'Primary contact',
@@ -250,6 +313,50 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PickerField extends StatelessWidget {
+  const _PickerField({
+    required this.placeholder,
+    required this.onTap,
+    this.value,
+  });
+
+  final String placeholder;
+  final String? value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: WBColors.surfaceInput,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                value ?? placeholder,
+                style: WBTypography.body.copyWith(
+                  color:
+                      value != null ? WBColors.fgHeader : WBColors.fgPlaceholder,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const WBIcon(WBIconName.chevronDown,
+                size: 14, color: WBColors.fgPlaceholder),
           ],
         ),
       ),

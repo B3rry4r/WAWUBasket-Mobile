@@ -12,8 +12,19 @@ import '../../domain/models/bulk_order.dart';
 /// Buyer-side list of every escrow-backed bulk order they've placed.
 /// Tap into an order to confirm delivery, release funds, or open a
 /// dispute via [EscrowStatusScreen].
-class EscrowOrdersScreen extends StatelessWidget {
+class EscrowOrdersScreen extends StatefulWidget {
   const EscrowOrdersScreen({super.key});
+
+  @override
+  State<EscrowOrdersScreen> createState() => _EscrowOrdersScreenState();
+}
+
+class _EscrowOrdersScreenState extends State<EscrowOrdersScreen> {
+  @override
+  void initState() {
+    super.initState();
+    EscrowController.instance.load();
+  }
 
   @override
   Widget build(BuildContext context) {

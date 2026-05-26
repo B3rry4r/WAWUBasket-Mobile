@@ -50,4 +50,16 @@ class ProfileApi {
     if (prefs == null) return null;
     return (prefs as Map).cast<String, dynamic>();
   }
+
+  Future<List<String>> getDietaryPreferences() async {
+    final profile = await get();
+    final customer = profile['profileCustomer'];
+    if (customer == null) return [];
+    final list = customer['dietaryPreferences'];
+    if (list == null) return [];
+    return (list as List).cast<String>();
+  }
+
+  Future<void> saveDietaryPreferences(List<String> preferences) =>
+      _api.patch('/profile/dietary-preferences', body: {'preferences': preferences});
 }

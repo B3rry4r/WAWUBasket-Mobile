@@ -7,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/notifications_controller.dart';
 import '../../data/account_extras_api.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -45,10 +46,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       final res = await AccountExtrasApi.instance.notifications();
       final raw = (res['items'] as List?) ?? const [];
       if (!mounted) return;
-      setState(() => _items = [
-            for (final e in raw)
-              _Notif.fromJson((e as Map).cast<String, dynamic>()),
-          ]);
+      final items = [
+        for (final e in raw)
+          _Notif.fromJson((e as Map).cast<String, dynamic>()),
+      ];
+      setState(() => _items = items);
+      // Sync the badge with the real unread count.
+      NotificationsController.instance.unreadCount.value =
+          items.where((n) => n.unread).length;
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
     }
@@ -58,6 +63,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     final items = _items;
     if (items == null) return;
     setState(() => _items = [for (final n in items) n.copyRead()]);
+    NotificationsController.instance.markAllRead();
     try {
       await AccountExtrasApi.instance.markAllNotificationsRead();
       if (mounted) wbShowSnack(context, context.l10n.notificationsAllRead);
@@ -72,6 +78,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             for (final cur in _items ?? const <_Notif>[])
               cur.id == n.id ? cur.copyRead() : cur,
           ]);
+      NotificationsController.instance.decrement();
       AccountExtrasApi.instance.markNotificationRead(n.id).catchError((_) {});
     }
     if (n.icon == WBIconName.bike || n.icon == WBIconName.check) {

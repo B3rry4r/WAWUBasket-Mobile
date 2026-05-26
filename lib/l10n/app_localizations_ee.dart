@@ -1566,4 +1566,113 @@ class AppLocalizationsEe extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Míakpɔ kpeɖodzi me eye míakpɔ egbɔ le gaƒoƒo 48 me.';
+
+  @override
+  String get recipesTitle => 'Wɔ nu nyuie fiafi';
+
+  @override
+  String get recipesSubtitle =>
+      'Dɔwɔwɔlawo si le eŋu. Miawo si le eŋu. Ado ɖeka.';
+
+  @override
+  String get recipeDetailIngredients => 'Nu siwo le ado me';
+
+  @override
+  String get recipeDetailServes => 'Na';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return '$mins minit wɔwɔ';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Lolo';
+
+  @override
+  String get recipeSizeMedium => 'Katã';
+
+  @override
+  String get recipeSizeFamily => 'Fomeɖeke';
+
+  @override
+  String get recipeSizeParty => 'Xɔme';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Tsɔ kpɔ ado me — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Dɔwɔwɔla bubuwo me le o';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Mewoem ɖe wò gãme fifia: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Wɔ nu nyuie aɖeke meli o. Xlẽ be matso.';
+
+  @override
+  String get recipeCartSection => 'Nu wɔwɔ ŋutilã';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Dɔwɔwɔlawo $count le miawo $vendors si me';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Bɔ nu wɔwɔ sia?';
+
+  @override
+  String get recipeRemoveBody => 'Ado tso nu wɔwɔ sia.';
+
+  @override
+  String get homeCookTonight => 'Wɔ nu nyuie fiafi';
+
+  @override
+  String get homeCookTonightSeeAll => 'Kpɔ bubuwo katã';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Sɔ ₦$amount dzi';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Ɖo nu le miawo $count si';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Kpɔ dɔwɔwɔlawo katã';
+
+  @override
+  String get recipeIngredientsCollapse => 'Kpɔ susu';
+
+  @override
+  String get recipeAddedToBasket => 'Wotsɔ kpɔ ado me.';
+
+  @override
+  String get recipeAddFailed => 'Mewoem ɖo ado me o. Lé vui.';
+
+  @override
+  String get recipeMatchFailed => 'Mede nu faɖe o. Taflatse gblɔ susu bubu.';
+
+  @override
+  String get recipeDetailNotFound => 'Mekpɔ nu wɔwɔ sia o.';
+
+  @override
+  String get recipeDetailDescription => 'Kpɔdzedze nu wɔwɔ sia ŋuti';
+
+  @override
+  String get recipeDetailCuisine => 'Nu wɔwɔ ɣeyiɣi';
+
+  @override
+  String get recipeLoadFailed => 'Mede nu wɔwɔ la ŋu o. Ɖo asi ɖe ŋkeke.';
+
+  @override
+  String get actionRemove => 'Bɔ';
+
+  @override
+  String get recipeOrderChildVendors => 'Metɔ le miawo siwo si';
 }

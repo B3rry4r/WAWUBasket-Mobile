@@ -1566,4 +1566,113 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'Cook tonight';
+
+  @override
+  String get recipesSubtitle => 'Real ingredients. Real vendors. One basket.';
+
+  @override
+  String get recipeDetailIngredients => 'What\'s in the basket';
+
+  @override
+  String get recipeDetailServes => 'Serves';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return '$mins min cook';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Small';
+
+  @override
+  String get recipeSizeMedium => 'Medium';
+
+  @override
+  String get recipeSizeFamily => 'Family';
+
+  @override
+  String get recipeSizeParty => 'Party';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Add to basket — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Some ingredients are missing';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'These aren\'t available in your area right now: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'No recipes yet. Check back soon.';
+
+  @override
+  String get recipeCartSection => 'Recipe combos';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return '$count ingredients from $vendors vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Remove this recipe?';
+
+  @override
+  String get recipeRemoveBody => 'Your basket will lose this combo.';
+
+  @override
+  String get homeCookTonight => 'Cook tonight';
+
+  @override
+  String get homeCookTonightSeeAll => 'See all';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'From ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Picking up from $count vendors';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'See all ingredients';
+
+  @override
+  String get recipeIngredientsCollapse => 'Show less';
+
+  @override
+  String get recipeAddedToBasket => 'Added to basket.';
+
+  @override
+  String get recipeAddFailed => 'Couldn\'t add to basket. Try again.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Couldn\'t fetch price. Try a different size.';
+
+  @override
+  String get recipeDetailNotFound => 'We couldn\'t find that recipe.';
+
+  @override
+  String get recipeDetailDescription => 'About this dish';
+
+  @override
+  String get recipeDetailCuisine => 'Cuisine';
+
+  @override
+  String get recipeLoadFailed => 'Couldn\'t load recipes. Pull to retry.';
+
+  @override
+  String get actionRemove => 'Remove';
+
+  @override
+  String get recipeOrderChildVendors => 'Sourced from these vendors';
 }

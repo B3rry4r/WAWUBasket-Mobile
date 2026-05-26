@@ -1559,4 +1559,112 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'اطبخ الليلة';
+
+  @override
+  String get recipesSubtitle => 'مكونات حقيقية. باعة حقيقيون. سلة واحدة.';
+
+  @override
+  String get recipeDetailIngredients => 'ما يوجد في السلة';
+
+  @override
+  String get recipeDetailServes => 'يكفي لـ';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return '$mins دقيقة طهي';
+  }
+
+  @override
+  String get recipeSizeSmall => 'صغير';
+
+  @override
+  String get recipeSizeMedium => 'متوسط';
+
+  @override
+  String get recipeSizeFamily => 'عائلي';
+
+  @override
+  String get recipeSizeParty => 'حفلة';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'أضف إلى السلة — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'بعض المكونات مفقودة';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'هذه غير متوفرة في منطقتك الآن: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'لا توجد وصفات حتى الآن. عد قريبًا.';
+
+  @override
+  String get recipeCartSection => 'وصفات الطبخ';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return '$count مكونات من $vendors باعة';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'إزالة هذه الوصفة؟';
+
+  @override
+  String get recipeRemoveBody => 'ستفقد سلتك هذه المجموعة.';
+
+  @override
+  String get homeCookTonight => 'اطبخ الليلة';
+
+  @override
+  String get homeCookTonightSeeAll => 'عرض الكل';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'ابتداءً من ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'الاستلام من $count باعة';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'عرض جميع المكونات';
+
+  @override
+  String get recipeIngredientsCollapse => 'إظهار أقل';
+
+  @override
+  String get recipeAddedToBasket => 'أُضيفت إلى السلة.';
+
+  @override
+  String get recipeAddFailed => 'تعذرت الإضافة إلى السلة. حاول مرة أخرى.';
+
+  @override
+  String get recipeMatchFailed => 'تعذر جلب السعر. جرب حجمًا مختلفًا.';
+
+  @override
+  String get recipeDetailNotFound => 'لم نتمكن من العثور على هذه الوصفة.';
+
+  @override
+  String get recipeDetailDescription => 'عن هذا الطبق';
+
+  @override
+  String get recipeDetailCuisine => 'المطبخ';
+
+  @override
+  String get recipeLoadFailed => 'تعذر تحميل الوصفات. اسحب لإعادة المحاولة.';
+
+  @override
+  String get actionRemove => 'إزالة';
+
+  @override
+  String get recipeOrderChildVendors => 'من هؤلاء الباعة';
 }

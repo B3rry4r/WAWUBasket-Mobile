@@ -470,5 +470,69 @@
   "escrowDispute": "Pingamizi",
   "escrowPending": "Inasubiri",
   "escrowCompleted": "Imekamilika",
-  "escrowFunded": "Imefadhiliwa"
+  "escrowFunded": "Imefadhiliwa",
+
+  "recipesTitle": "Pika usiku huu",
+  "recipesSubtitle": "Viungo halisi. Wauzaji halisi. Kikapu kimoja.",
+  "recipeDetailIngredients": "Vilivyo ndani ya kikapu",
+  "recipeDetailServes": "Inahudumia",
+  "recipeDetailCookingTime": "Dakika {mins} za kupika",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "Ndogo",
+  "recipeSizeMedium": "Wastani",
+  "recipeSizeFamily": "Familia",
+  "recipeSizeParty": "Sherehe",
+  "recipeAddToBasket": "Ongeza kikapuni — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "Baadhi ya viungo havipatikani",
+  "recipeUnavailableBody": "Hivi havipatikani katika eneo lako sasa: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "Hakuna mapishi bado. Rudi hivi karibuni.",
+  "recipeCartSection": "Mapishi mchanganyiko",
+  "recipeCartFromVendors": "Viungo {count} kutoka kwa wauzaji {vendors}",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "Ondoa mapishi haya?",
+  "recipeRemoveBody": "Kikapu chako kitapoteza mchanganyiko huu.",
+  "homeCookTonight": "Pika usiku huu",
+  "homeCookTonightSeeAll": "Tazama yote",
+  "recipeFromPrice": "Kuanzia ₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "Yanachukuliwa kutoka kwa wauzaji {count}",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "Tazama viungo vyote",
+  "recipeIngredientsCollapse": "Onyesha kidogo",
+  "recipeAddedToBasket": "Imeongezwa kikapuni.",
+  "recipeAddFailed": "Imeshindikana kuongeza kikapuni. Jaribu tena.",
+  "recipeMatchFailed": "Imeshindikana kupata bei. Jaribu ukubwa tofauti.",
+  "recipeDetailNotFound": "Hatukupata mapishi hayo.",
+  "recipeDetailDescription": "Kuhusu chakula hiki",
+  "recipeDetailCuisine": "Aina ya chakula",
+  "recipeLoadFailed": "Imeshindikana kupakia mapishi. Vuta kujaribu tena.",
+  "actionRemove": "Ondoa",
+  "recipeOrderChildVendors": "Kutoka kwa wauzaji hawa"
 }

@@ -561,5 +561,69 @@
   "escrowDisputeDetailsHint": "Tell us specifics, what arrived vs what you expected?",
   "escrowOrdersEmpty": "You haven't placed any bulk orders yet. Head to Trade to start.",
   "escrowStatusNotFound": "Can't find that order",
-  "escrowStatusReviewNote": "We'll review evidence and resolve within 48 hours."
+  "escrowStatusReviewNote": "We'll review evidence and resolve within 48 hours.",
+
+  "recipesTitle": "Cook tonight",
+  "recipesSubtitle": "Real ingredients. Real vendors. One basket.",
+  "recipeDetailIngredients": "What's in the basket",
+  "recipeDetailServes": "Serves",
+  "recipeDetailCookingTime": "{mins} min cook",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "Small",
+  "recipeSizeMedium": "Medium",
+  "recipeSizeFamily": "Family",
+  "recipeSizeParty": "Party",
+  "recipeAddToBasket": "Add to basket — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "Some ingredients are missing",
+  "recipeUnavailableBody": "These aren't available in your area right now: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "No recipes yet. Check back soon.",
+  "recipeCartSection": "Recipe combos",
+  "recipeCartFromVendors": "{count} ingredients from {vendors} vendors",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "Remove this recipe?",
+  "recipeRemoveBody": "Your basket will lose this combo.",
+  "homeCookTonight": "Cook tonight",
+  "homeCookTonightSeeAll": "See all",
+  "recipeFromPrice": "From ₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "Picking up from {count} vendors",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "See all ingredients",
+  "recipeIngredientsCollapse": "Show less",
+  "recipeAddedToBasket": "Added to basket.",
+  "recipeAddFailed": "Couldn't add to basket. Try again.",
+  "recipeMatchFailed": "Couldn't fetch price. Try a different size.",
+  "recipeDetailNotFound": "We couldn't find that recipe.",
+  "recipeDetailDescription": "About this dish",
+  "recipeDetailCuisine": "Cuisine",
+  "recipeLoadFailed": "Couldn't load recipes. Pull to retry.",
+  "actionRemove": "Remove",
+  "recipeOrderChildVendors": "Sourced from these vendors"
 }

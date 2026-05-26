@@ -1568,4 +1568,117 @@ class AppLocalizationsZu extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'Pheka kusihlwa';
+
+  @override
+  String get recipesSubtitle =>
+      'Izithako zangempela. Abathengisi bangempela. Ubhasikidi owodwa.';
+
+  @override
+  String get recipeDetailIngredients => 'Okukubhasikidi';
+
+  @override
+  String get recipeDetailServes => 'Kufaka';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Imizuzu engu-$mins yokupheka';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Encane';
+
+  @override
+  String get recipeSizeMedium => 'Maphakathi';
+
+  @override
+  String get recipeSizeFamily => 'Umndeni';
+
+  @override
+  String get recipeSizeParty => 'Iphathi';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Faka ebhasikidini — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Ezinye izithako azitholakali';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Lezi azitholakali endaweni yakho manje: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Awekho amaresiphi okwamanje. Buya maduze.';
+
+  @override
+  String get recipeCartSection => 'Amaresiphi ahlanganisiwe';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Izithako ezingu-$count kubathengisi abangu-$vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Khipha le resiphi?';
+
+  @override
+  String get recipeRemoveBody =>
+      'Ubhasikidi wakho uzolahlekelwa yilokhu okuhlangene.';
+
+  @override
+  String get homeCookTonight => 'Pheka kusihlwa';
+
+  @override
+  String get homeCookTonightSeeAll => 'Buka konke';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Kusukela ku-₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Kuthathwa kubathengisi abangu-$count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Buka zonke izithako';
+
+  @override
+  String get recipeIngredientsCollapse => 'Bonisa okuncane';
+
+  @override
+  String get recipeAddedToBasket => 'Kufakwe ebhasikidini.';
+
+  @override
+  String get recipeAddFailed =>
+      'Akukwazanga ukufakwa ebhasikidini. Zama futhi.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Akukwazanga ukuthola intengo. Zama usayizi ohlukile.';
+
+  @override
+  String get recipeDetailNotFound => 'Asikwazanga ukuthola iresiphi.';
+
+  @override
+  String get recipeDetailDescription => 'Mayelana nalokhu okuphekiwe';
+
+  @override
+  String get recipeDetailCuisine => 'Uhlobo lokudla';
+
+  @override
+  String get recipeLoadFailed =>
+      'Akukwazanga ukulayisha amaresiphi. Donsa ukuze uzame futhi.';
+
+  @override
+  String get actionRemove => 'Khipha';
+
+  @override
+  String get recipeOrderChildVendors => 'Kuvelele kubathengisi laba';
 }

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../account/application/profile_controller.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/domain/models/export_listing.dart';
 import '../../application/escrow_controller.dart';
-import '../../domain/models/bulk_order.dart';
-import '../widgets/flutterwave_payment_sheet.dart';
 
 /// Buyer checkout for one [ExportListing]. Picks a quantity, drop-off
 /// address, then hands off to [FlutterwavePaymentSheet]. On success,
@@ -28,9 +27,8 @@ class BulkCheckoutScreen extends StatefulWidget {
 
 class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
   late int _quantityKg;
-  final _address = TextEditingController(
-    text: 'Tin Can Port · Warehouse 7, Apapa',
-  );
+  bool _busy = false;
+  final _address = TextEditingController();
 
   /// WAWU service fee on a bulk trade. Set as a flat 2% of subtotal so
   /// the math is visible to the buyer.
@@ -55,48 +53,36 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
 
   Future<void> _checkout(ExportListing l) async {
     if (_quantityKg <= 0 || _quantityKg > l.quantityKg) {
-      wbShowSnack(context, 'Quantity must be between 1 and ${l.quantityKg} kg.');
+      wbShowSnack(context,
+          'Quantity must be between 1 and ${l.quantityKg} kg.');
       return;
     }
     if (_address.text.trim().isEmpty) {
       wbShowSnack(context, 'Add a drop-off address.');
       return;
     }
-    final method = await FlutterwavePaymentSheet.show(
-      context,
-      amountNaira: _total(l),
-      purpose: '$_quantityKg kg ${l.produce}',
-      recipientName: l.farmName,
-    );
-    if (!mounted || method == null) return;
-
-    // Payment initiated — the Flutterwave checkout URL would be opened in the
-    // browser by the caller once a real escrow API endpoint exists in Flutter.
-    // For now, inform the user that payment should be completed externally.
-    wbShowSnack(context, 'Payment initiated — complete in browser');
-
-    final orderId = EscrowController.instance.place(
-      BulkOrder(
-        id: 'ESC-${DateTime.now().millisecondsSinceEpoch}',
+    setState(() => _busy = true);
+    try {
+      final order = await EscrowController.instance.place(
         listingId: l.id,
-        produce: l.produce,
         quantityKg: _quantityKg,
-        pricePerKgNaira: l.pricePerKgNaira,
-        feeNaira: _fee(l),
-        imageUrl: l.imageUrl,
-        buyerName: ProfileController.instance.profile.value?.fullName ?? '',
-        buyerPhone: ProfileController.instance.profile.value?.phone ?? '',
         dropoffAddress: _address.text.trim(),
-        sellerName: l.farmName,
-        sellerRegion: l.farmRegion,
-        method: method,
-        status: EscrowStatus.held,
-        placedAt: DateTime.now(),
-      ),
-    );
+      );
 
-    if (!mounted) return;
-    context.pushReplacement('${AppRoutes.escrowStatus}/$orderId');
+      if (order.checkoutUrl != null) {
+        final uri = Uri.parse(order.checkoutUrl!);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
+      }
+
+      if (!mounted) return;
+      context.pushReplacement('${AppRoutes.escrowStatus}/${order.id}');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
   @override
@@ -255,7 +241,8 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon: WBIconName.arrowRight,
-                    onPressed: () => _checkout(l),
+                    loading: _busy,
+                    onPressed: _busy ? null : () => _checkout(l),
                   ),
                 ),
               ),

@@ -560,5 +560,69 @@
   "escrowDisputeDetailsHint": "Ka kyerɛ yɛn deɛ aba vs deɛ wo hwɛ?",
   "escrowOrdersEmpty": "Wonto bulk nkɔso biara. Kɔ Trade sɛ wo hyɛ ase.",
   "escrowStatusNotFound": "Wɔanhu nkɔso no",
-  "escrowStatusReviewNote": "Yɛbɛhwɛ adansi mu na yɛwie wɔ 48 dɔɔso."
+  "escrowStatusReviewNote": "Yɛbɛhwɛ adansi mu na yɛwie wɔ 48 dɔɔso.",
+
+  "recipesTitle": "Noa aduane anadwo yi",
+  "recipesSubtitle": "Aduane nneɛma ankasa. Adetɔnfoɔ ankasa. Kɛntɛn baako.",
+  "recipeDetailIngredients": "Deɛ ɛwɔ kɛntɛn mu",
+  "recipeDetailServes": "Ɛsom",
+  "recipeDetailCookingTime": "Simma {mins} a wɔnoa",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "Ketewa",
+  "recipeSizeMedium": "Ntam",
+  "recipeSizeFamily": "Abusua",
+  "recipeSizeParty": "Apontoɔ",
+  "recipeAddToBasket": "Fa kɔ kɛntɛn mu — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "Aduane nneɛma bi nni hɔ",
+  "recipeUnavailableBody": "Yeinom nni wo mpɔtam ha seesei: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "Aduane nsane biara nni hɔ. San bra ntɛm.",
+  "recipeCartSection": "Aduane ahodoɔ",
+  "recipeCartFromVendors": "Aduane nneɛma {count} firi adetɔnfoɔ {vendors} hɔ",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "Yi aduane noaso yi?",
+  "recipeRemoveBody": "Wo kɛntɛn bɛhwere ka yi.",
+  "homeCookTonight": "Noa aduane anadwo yi",
+  "homeCookTonightSeeAll": "Hwɛ ne nyinaa",
+  "recipeFromPrice": "Ɛfiri ₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "Yɛrefa firi adetɔnfoɔ {count} hɔ",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "Hwɛ aduane nneɛma nyinaa",
+  "recipeIngredientsCollapse": "Yi so",
+  "recipeAddedToBasket": "Wɔde aka kɛntɛn ho.",
+  "recipeAddFailed": "Yɛantumi amfa anka kɛntɛn ho. Sɔ hwɛ bio.",
+  "recipeMatchFailed": "Yɛantumi annya boɔ no. Sɔ kɛseyɛ foforɔ hwɛ.",
+  "recipeDetailNotFound": "Yɛanhu aduane noaso no.",
+  "recipeDetailDescription": "Aduane yi ho asɛm",
+  "recipeDetailCuisine": "Aduane suban",
+  "recipeLoadFailed": "Yɛantumi amfa aduane noaso no. Twe na sɔ hwɛ bio.",
+  "actionRemove": "Yi",
+  "recipeOrderChildVendors": "Ɛfiri adetɔnfoɔ yi nkyɛn"
 }
