@@ -3,3 +3,19 @@ template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 output-dir: lib/l10n
 nullable-getter: false
+supported-locales:
+  - en
+  - fr
+  - yo
+  - ha
+  - ig
+  - ar
+  - am
+  - pt
+  - sw
+  - zu
+  - tw
+  - wo
+  - ln
+  - rw
+  - ee
