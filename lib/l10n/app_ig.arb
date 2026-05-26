@@ -470,5 +470,69 @@
   "escrowDispute": "Arọ",
   "escrowPending": "Na-atọ ntị",
   "escrowCompleted": "Emechara",
-  "escrowFunded": "Enye ụgwọ"
+  "escrowFunded": "Enye ụgwọ",
+
+  "recipesTitle": "Sie nri n'abalị a",
+  "recipesSubtitle": "Ihe ndị eji esi nri n'ezie. Ndị na-ere ezigbo. Otu nkata.",
+  "recipeDetailIngredients": "Ihe dị n'ime nkata",
+  "recipeDetailServes": "Erufere",
+  "recipeDetailCookingTime": "Nkeji {mins} maka isi",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "Obere",
+  "recipeSizeMedium": "Etiti",
+  "recipeSizeFamily": "Ezinụlọ",
+  "recipeSizeParty": "Oriri",
+  "recipeAddToBasket": "Tinye na nkata — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "Ụfọdụ ihe nri adịghị",
+  "recipeUnavailableBody": "Ndị a anọghị na mpaghara gị ugbu a: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "Enwebeghị uzo isi nri. Lọghachi n'oge na-adịghị anya.",
+  "recipeCartSection": "Mkpokọta nri",
+  "recipeCartFromVendors": "Ihe nri {count} site n'aka ndị na-ere {vendors}",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "Wepụ uzo isi nri a?",
+  "recipeRemoveBody": "Nkata gị ga-atụfu mkpokọta a.",
+  "homeCookTonight": "Sie nri n'abalị a",
+  "homeCookTonightSeeAll": "Hụ niile",
+  "recipeFromPrice": "Site na ₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "Ana-eburu site n'aka ndị na-ere {count}",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "Hụ ihe niile",
+  "recipeIngredientsCollapse": "Mechie",
+  "recipeAddedToBasket": "Etinyere na nkata.",
+  "recipeAddFailed": "Enweghị ike ịtinye na nkata. Nwaa ọzọ.",
+  "recipeMatchFailed": "Enweghị ike inweta ọnụahịa. Nwaa nha dị iche.",
+  "recipeDetailNotFound": "Anyị achọtaghị uzo isi nri ahụ.",
+  "recipeDetailDescription": "Banyere nri a",
+  "recipeDetailCuisine": "Ụdị nri",
+  "recipeLoadFailed": "Enweghị ike ibudata uzo isi nri. Dọkpụrụ ka ịnwaa ọzọ.",
+  "actionRemove": "Wepu",
+  "recipeOrderChildVendors": "Sitere n'aka ndị a na-ere"
 }

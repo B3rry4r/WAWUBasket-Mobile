@@ -1565,4 +1565,113 @@ class AppLocalizationsWo extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Dinañu xool firnde te jeexal ci diir 48 waxtu.';
+
+  @override
+  String get recipesTitle => 'Togg ci guddi bi';
+
+  @override
+  String get recipesSubtitle =>
+      'Xam-xam yu dëkk yu fi. Jiital yi yu dëkk yu fi. Mbóot benn.';
+
+  @override
+  String get recipeDetailIngredients => 'Luy am ci mbóot bi';
+
+  @override
+  String get recipeDetailServes => 'Dëkk';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Simili $mins ci togg';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Ndaw';
+
+  @override
+  String get recipeSizeMedium => 'Ci biir';
+
+  @override
+  String get recipeSizeFamily => 'Kër gi';
+
+  @override
+  String get recipeSizeParty => 'Feŋ bi';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Yor ci mbóot bi — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Ñaari xam-xam ñu mën a bokk';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Lii mënga dëkk ci biir waa yagg bi: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Dañu bëri togg amul foofu. Dellu yagg bi.';
+
+  @override
+  String get recipeCartSection => 'Togg yi ñu bokk';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Xam-xam $count ci jiital yi $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Dëkkal togg bi?';
+
+  @override
+  String get recipeRemoveBody => 'Mbóot bi dina fàttal mbootaay bi.';
+
+  @override
+  String get homeCookTonight => 'Togg ci guddi bi';
+
+  @override
+  String get homeCookTonightSeeAll => 'Xool lépp';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Cantik ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Jël ci jiital yi $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Xool xam-xam yépp';
+
+  @override
+  String get recipeIngredientsCollapse => 'Wone ndaw';
+
+  @override
+  String get recipeAddedToBasket => 'Yor na ci mbóot bi.';
+
+  @override
+  String get recipeAddFailed => 'Mënul yor ci mbóot bi. Saytu.';
+
+  @override
+  String get recipeMatchFailed => 'Mënul jël njëg bi. Tànn jëf bu bees.';
+
+  @override
+  String get recipeDetailNotFound => 'Nañu déglu togg bi.';
+
+  @override
+  String get recipeDetailDescription => 'Ci xol ci togg bii';
+
+  @override
+  String get recipeDetailCuisine => 'Xeetu togg bi';
+
+  @override
+  String get recipeLoadFailed => 'Mënul yóbbu togg yi. Wëkk ci saytu.';
+
+  @override
+  String get actionRemove => 'Dëkkal';
+
+  @override
+  String get recipeOrderChildVendors => 'Jëkk ci jiital yii';
 }

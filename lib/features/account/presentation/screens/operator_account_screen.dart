@@ -93,6 +93,15 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
             settingsSub: null,
             settingsRoute: null,
           ),
+        AppRole.admin => const _RoleConfig(
+            badge: 'Dev',
+            payoutLabel: 'Dev Settings',
+            payoutSub: 'Feature flags & platform controls',
+            payoutRoute: AppRoutes.devSettings,
+            settingsLabel: null,
+            settingsSub: null,
+            settingsRoute: null,
+          ),
       };
 
   /// Resolve the display name from the loaded profile (role-specific business
@@ -223,6 +232,11 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
               ? _nairaK(int.tryParse(s!.walletBalanceNaira!) ?? 0)
               : dash),
           _Stat('Favorites', s?.favorites != null ? '${s!.favorites}' : dash),
+        ],
+      AppRole.admin => [
+          _Stat('Flags', dash),
+          _Stat('Users', dash),
+          _Stat('Build', dash),
         ],
     };
   }

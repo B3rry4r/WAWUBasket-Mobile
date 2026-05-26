@@ -13,6 +13,8 @@ import '../../../account/application/address_controller.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
+import '../../../recipes/application/recipes_controller.dart';
+import '../../../recipes/domain/models/recipe.dart';
 import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/application/wb_images.dart';
 import '../../application/category_controller.dart';
@@ -55,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ProfileController.instance.load();
     AddressController.instance.load();
     CategoryController.instance.load();
+    RecipesController.instance.load();
   }
 
   void _onCategoryTap(String id) {
@@ -343,6 +346,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 subcategoryId: _activeSubcategoryId,
               ),
               const SizedBox(height: 22),
+              _padded(_CookTonightHeader()),
+              const SizedBox(height: 12),
+              const _CookTonightCarousel(),
+              const SizedBox(height: 22),
               _padded(const _OffersBanner()),
             ],
           );
@@ -391,6 +398,160 @@ class _QuickAction extends StatelessWidget {
                 color: WBColors.fgHeader,
                 fontWeight: FontWeight.w500,
                 fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CookTonightHeader extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            context.l10n.homeCookTonight,
+            style: WBTypography.cardTitle.copyWith(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.2,
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () => context.push(AppRoutes.recipes),
+          behavior: HitTestBehavior.opaque,
+          child: Row(
+            children: [
+              Text(
+                context.l10n.homeCookTonightSeeAll,
+                style: WBTypography.caption.copyWith(
+                  color: WBColors.fgHeader,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const WBIcon(WBIconName.arrowRight, size: 14),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CookTonightCarousel extends StatelessWidget {
+  const _CookTonightCarousel();
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<List<Recipe>?>(
+      valueListenable: RecipesController.instance.recipes,
+      builder: (_, recipes, _) {
+        if (recipes == null) {
+          return SizedBox(
+            height: 220,
+            child: Shimmer.fromColors(
+              baseColor: WBColors.bgSoft,
+              highlightColor: WBColors.bgSecondary,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemCount: 3,
+                separatorBuilder: (_, _) => const SizedBox(width: 12),
+                itemBuilder: (_, _) => Container(
+                  width: 240,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(WBRadius.card),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+        if (recipes.isEmpty) return const SizedBox.shrink();
+        final shown = recipes.take(5).toList();
+        return SizedBox(
+          height: 220,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: shown.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
+            itemBuilder: (_, i) => _HomeRecipeCard(recipe: shown[i]),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _HomeRecipeCard extends StatelessWidget {
+  const _HomeRecipeCard({required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => context.push(AppRoutes.recipeDetail(recipe.slug)),
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        width: 240,
+        decoration: BoxDecoration(
+          color: WBColors.surfaceCard,
+          borderRadius: BorderRadius.circular(WBRadius.card),
+          boxShadow: WBShadows.card,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: WBNetworkImage(url: recipe.imageUrl),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    recipe.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: WBTypography.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const WBIcon(
+                        WBIconName.clock,
+                        size: 12,
+                        color: WBColors.fgPlaceholder,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        context.l10n
+                            .recipeDetailCookingTime(recipe.cookingTimeMins),
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

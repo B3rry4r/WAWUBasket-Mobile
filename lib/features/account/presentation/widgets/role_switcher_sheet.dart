@@ -73,7 +73,10 @@ class RoleSwitcherSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: WBSpacing.lg),
-          for (final r in AppRole.values) ...[
+          for (final r in AppRole.values.where((r) =>
+              r != AppRole.admin ||
+              RoleController.instance.statusOf(AppRole.admin) ==
+                  RoleStatus.approved)) ...[
             _RoleRow(
               role: r,
               isActive: r == active,
@@ -163,6 +166,7 @@ class _RoleRow extends StatelessWidget {
         AppRole.agent => WBIconName.card,
         AppRole.rider => WBIconName.bike,
         AppRole.driver => WBIconName.bike,
+        AppRole.admin => WBIconName.filter,
       };
 
   ({String label, _PillTone tone}) _pill(AppRole r) {

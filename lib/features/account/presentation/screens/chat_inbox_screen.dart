@@ -1,17 +1,23 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/websocket_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
+import '../../data/chat_local_store.dart';
+import '../../domain/models/chat_thread.dart';
 
 /// Surfaced chat section. WAWU Support is a universal entry point backed by
 /// the support-ticket thread; the order conversations below it come live
-/// from `/v1/chats`.
+/// from `/v1/chats`, persisted locally so the list opens instantly even
+/// before the API call completes (or while the device is offline).
 class ChatInboxScreen extends StatefulWidget {
   const ChatInboxScreen({super.key});
 
@@ -20,29 +26,69 @@ class ChatInboxScreen extends StatefulWidget {
 }
 
 class _ChatInboxScreenState extends State<ChatInboxScreen> {
-  List<_Conversation>? _chats;
-  String? _error;
+  List<ChatThread>? _chats;
   String? _supportPreview;
   String? _supportTime;
+
+  /// Set when the API call fails AND the local cache is empty — that's
+  /// the only state where we surface a hint. With a populated cache we
+  /// silently retry instead of taking the inbox offline.
+  bool _showSilentError = false;
+  String? _errorMessage;
+
+  StreamSubscription<WsFrame>? _wsSub;
 
   @override
   void initState() {
     super.initState();
-    _load();
+    _loadFromCache();
+    _refreshFromApi();
+    _loadSupport();
+    _wsSub = WebSocketService.instance.chatFrames.listen(_onChatFrame);
   }
 
-  Future<void> _load() async {
-    setState(() => _error = null);
-    _loadSupport();
+  @override
+  void dispose() {
+    _wsSub?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _loadFromCache() async {
     try {
-      final raw = await ChatApi.instance.inbox();
+      final cached = await ChatLocalStore.instance.listChats();
       if (!mounted) return;
-      setState(() => _chats = [
-            for (final e in raw)
-              _Conversation.fromJson((e as Map).cast<String, dynamic>()),
-          ]);
+      setState(() => _chats = cached);
+    } catch (_) {
+      // sqflite unavailable — fall through to the network path.
+    }
+  }
+
+  Future<void> _refreshFromApi() async {
+    try {
+      final fresh = await ChatApi.instance.listChats();
+      await ChatLocalStore.instance.replaceAllChats(fresh);
+      if (!mounted) return;
+      setState(() {
+        _chats = fresh;
+        _showSilentError = false;
+        _errorMessage = null;
+      });
     } on ApiException catch (e) {
-      if (mounted) setState(() => _error = e.message);
+      if (!mounted) return;
+      // Only surface the error when there's no cache to fall back on —
+      // otherwise the inbox stays usable and we just retry next time.
+      final hasCache = (_chats ?? const []).isNotEmpty;
+      setState(() {
+        _showSilentError = !hasCache;
+        _errorMessage = e.message;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      final hasCache = (_chats ?? const []).isNotEmpty;
+      setState(() {
+        _showSilentError = !hasCache;
+        _errorMessage = context.l10n.chatInboxEmpty;
+      });
     }
   }
 
@@ -67,28 +113,61 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
     }
   }
 
-  void _open(_Conversation c) {
-    final id = c.orderId;
-    if (id == null) {
+  void _onChatFrame(WsFrame frame) async {
+    if (frame.type != 'chat.message') return;
+    final orderId = frame.payload['orderId']?.toString();
+    if (orderId == null || orderId.isEmpty) return;
+    final msg = (frame.payload['message'] as Map?)?.cast<String, dynamic>();
+    if (msg == null) return;
+    final body = (msg['body'] ?? '').toString();
+    final createdAt = DateTime.tryParse('${msg['createdAt'] ?? ''}') ??
+        DateTime.now();
+
+    final existing =
+        await ChatLocalStore.instance.findChatByAnyId(orderId);
+    final updated = (existing ??
+            ChatThread(
+              id: orderId,
+              orderId: orderId,
+              title: 'Conversation',
+              lastMessage: '',
+              lastMessageAt: createdAt,
+              unreadCount: 0,
+              updatedAt: createdAt,
+            ))
+        .copyWith(
+      lastMessage: body,
+      lastMessageAt: createdAt,
+      unreadCount: (existing?.unreadCount ?? 0) + 1,
+      updatedAt: DateTime.now(),
+    );
+    await ChatLocalStore.instance.upsertChat(updated);
+    if (!mounted) return;
+    final list = await ChatLocalStore.instance.listChats();
+    if (!mounted) return;
+    setState(() => _chats = list);
+  }
+
+  void _open(ChatThread c) {
+    final id = c.orderId ?? c.id;
+    if (id.isEmpty) {
       context.push(AppRoutes.chatSupport);
       return;
     }
     context.push(
       Uri(
         path: AppRoutes.chatRider,
-        queryParameters: {'orderId': id, 'title': c.name},
+        queryParameters: {'orderId': id, 'title': c.title},
       ).toString(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final support = _Conversation(
-      name: 'WAWU Support',
+    final supportRow = _SupportRow(
       preview: _supportPreview ?? context.l10n.chatSupportPrompt,
       time: _supportTime ?? '',
-      unread: false,
-      orderId: null,
+      onTap: () => context.push(AppRoutes.chatSupport),
     );
     final chats = _chats;
 
@@ -129,12 +208,9 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
               padding: EdgeInsets.zero,
               child: Column(
                 children: [
-                  _ConversationRow(
-                    conversation: support,
-                    onTap: () => _open(support),
-                  ),
+                  supportRow,
                   const WBDivider(),
-                  if (chats == null && _error == null)
+                  if (chats == null)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 32),
                       child: Center(
@@ -149,14 +225,17 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
                         ),
                       ),
                     )
-                  else if (_error != null)
-                    _InboxHint(text: _error!)
-                  else if (chats!.isEmpty)
+                  else if (chats.isEmpty && _showSilentError)
+                    _RetryHint(
+                      message: _errorMessage ?? context.l10n.chatInboxEmpty,
+                      onRetry: _refreshFromApi,
+                    )
+                  else if (chats.isEmpty)
                     _InboxHint(text: context.l10n.chatInboxEmpty)
                   else
                     for (var i = 0; i < chats.length; i++) ...[
                       _ConversationRow(
-                        conversation: chats[i],
+                        thread: chats[i],
                         onTap: () => _open(chats[i]),
                       ),
                       if (i != chats.length - 1) const WBDivider(),
@@ -180,56 +259,14 @@ String _ago(DateTime? t) {
   return '${d.inDays}d';
 }
 
-class _Conversation {
-  const _Conversation({
-    required this.name,
+class _SupportRow extends StatelessWidget {
+  const _SupportRow({
     required this.preview,
     required this.time,
-    required this.unread,
-    required this.orderId,
+    required this.onTap,
   });
-
-  final String name;
   final String preview;
   final String time;
-  final bool unread;
-
-  /// The order this thread belongs to. Null for the support row.
-  final String? orderId;
-
-  factory _Conversation.fromJson(Map<String, dynamic> j) {
-    final cp = (j['counterpart'] as Map?)?.cast<String, dynamic>() ??
-        const <String, dynamic>{};
-    final at = DateTime.tryParse('${j['lastMessageAt'] ?? ''}');
-    return _Conversation(
-      name: (cp['name'] ?? 'Conversation').toString(),
-      preview: (j['lastMessage'] ?? '').toString(),
-      time: _ago(at),
-      unread: j['unread'] == true,
-      orderId: j['orderId']?.toString(),
-    );
-  }
-}
-
-class _InboxHint extends StatelessWidget {
-  const _InboxHint({required this.text});
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(14),
-      child: Text(
-        text,
-        style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
-      ),
-    );
-  }
-}
-
-class _ConversationRow extends StatelessWidget {
-  const _ConversationRow({required this.conversation, required this.onTap});
-  final _Conversation conversation;
   final VoidCallback onTap;
 
   @override
@@ -257,7 +294,7 @@ class _ConversationRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    conversation.name,
+                    'WAWU Support',
                     style: WBTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
@@ -265,7 +302,127 @@ class _ConversationRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    conversation.preview,
+                    preview,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            Text(
+              time,
+              style: WBTypography.caption.copyWith(
+                color: WBColors.fgPlaceholder,
+                fontSize: 11,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _InboxHint extends StatelessWidget {
+  const _InboxHint({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(14),
+      child: Text(
+        text,
+        style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+      ),
+    );
+  }
+}
+
+/// Subtle inline retry. Surfaces only when the local cache is empty AND
+/// the API request failed — otherwise the inbox is rendered from cache
+/// and the retry happens silently in the background.
+class _RetryHint extends StatelessWidget {
+  const _RetryHint({required this.message, required this.onRetry});
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              message,
+              style: WBTypography.caption.copyWith(
+                color: WBColors.fgSecondary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          GestureDetector(
+            onTap: onRetry,
+            behavior: HitTestBehavior.opaque,
+            child: Text(
+              context.l10n.actionRetry,
+              style: WBTypography.caption.copyWith(
+                color: WBColors.surfaceDark,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ConversationRow extends StatelessWidget {
+  const _ConversationRow({required this.thread, required this.onTap});
+  final ChatThread thread;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final unread = thread.unreadCount > 0;
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(WBIconName.message, size: 18),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    thread.title,
+                    style: WBTypography.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    thread.lastMessage,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: WBTypography.caption.copyWith(
@@ -280,20 +437,32 @@ class _ConversationRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  conversation.time,
+                  _ago(thread.lastMessageAt),
                   style: WBTypography.caption.copyWith(
                     color: WBColors.fgPlaceholder,
                     fontSize: 11,
                   ),
                 ),
                 const SizedBox(height: 6),
-                if (conversation.unread)
+                if (unread)
                   Container(
-                    width: 8,
-                    height: 8,
-                    decoration: const BoxDecoration(
+                    constraints: const BoxConstraints(minWidth: 18),
+                    height: 18,
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    decoration: BoxDecoration(
                       color: WBColors.statusError,
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      thread.unreadCount > 99
+                          ? '99+'
+                          : thread.unreadCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   )
                 else

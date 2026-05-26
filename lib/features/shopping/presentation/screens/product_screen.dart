@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -57,6 +58,11 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   Future<void> _toggleFavorite() async {
     final id = widget.productId;
     if (id == null || _togglingFavorite) return;
+    if (!GuestModeController.instance.requireAccount(context,
+        // TODO(i18n): key=guestActionFavorite
+        action: 'save favorites')) {
+      return;
+    }
     setState(() => _togglingFavorite = true);
     final wasF = _isFavorited;
     setState(() => _isFavorited = !wasF);
@@ -94,6 +100,11 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   Future<void> _addToBasket() async {
     final product = _product;
     if (product == null) return;
+    if (!GuestModeController.instance.requireAccount(context,
+        // TODO(i18n): key=guestActionAddToCart
+        action: 'add to your cart')) {
+      return;
+    }
     setState(() => _adding = true);
     await ref
         .read(cartControllerProvider.notifier)

@@ -1559,4 +1559,115 @@ class AppLocalizationsTw extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Yɛbɛhwɛ adansi mu na yɛwie wɔ 48 dɔɔso.';
+
+  @override
+  String get recipesTitle => 'Noa aduane anadwo yi';
+
+  @override
+  String get recipesSubtitle =>
+      'Aduane nneɛma ankasa. Adetɔnfoɔ ankasa. Kɛntɛn baako.';
+
+  @override
+  String get recipeDetailIngredients => 'Deɛ ɛwɔ kɛntɛn mu';
+
+  @override
+  String get recipeDetailServes => 'Ɛsom';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Simma $mins a wɔnoa';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Ketewa';
+
+  @override
+  String get recipeSizeMedium => 'Ntam';
+
+  @override
+  String get recipeSizeFamily => 'Abusua';
+
+  @override
+  String get recipeSizeParty => 'Apontoɔ';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Fa kɔ kɛntɛn mu — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Aduane nneɛma bi nni hɔ';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Yeinom nni wo mpɔtam ha seesei: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Aduane nsane biara nni hɔ. San bra ntɛm.';
+
+  @override
+  String get recipeCartSection => 'Aduane ahodoɔ';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Aduane nneɛma $count firi adetɔnfoɔ $vendors hɔ';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Yi aduane noaso yi?';
+
+  @override
+  String get recipeRemoveBody => 'Wo kɛntɛn bɛhwere ka yi.';
+
+  @override
+  String get homeCookTonight => 'Noa aduane anadwo yi';
+
+  @override
+  String get homeCookTonightSeeAll => 'Hwɛ ne nyinaa';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Ɛfiri ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Yɛrefa firi adetɔnfoɔ $count hɔ';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Hwɛ aduane nneɛma nyinaa';
+
+  @override
+  String get recipeIngredientsCollapse => 'Yi so';
+
+  @override
+  String get recipeAddedToBasket => 'Wɔde aka kɛntɛn ho.';
+
+  @override
+  String get recipeAddFailed => 'Yɛantumi amfa anka kɛntɛn ho. Sɔ hwɛ bio.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Yɛantumi annya boɔ no. Sɔ kɛseyɛ foforɔ hwɛ.';
+
+  @override
+  String get recipeDetailNotFound => 'Yɛanhu aduane noaso no.';
+
+  @override
+  String get recipeDetailDescription => 'Aduane yi ho asɛm';
+
+  @override
+  String get recipeDetailCuisine => 'Aduane suban';
+
+  @override
+  String get recipeLoadFailed =>
+      'Yɛantumi amfa aduane noaso no. Twe na sɔ hwɛ bio.';
+
+  @override
+  String get actionRemove => 'Yi';
+
+  @override
+  String get recipeOrderChildVendors => 'Ɛfiri adetɔnfoɔ yi nkyɛn';
 }

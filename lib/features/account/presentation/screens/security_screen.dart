@@ -19,7 +19,6 @@ class SecurityScreen extends StatefulWidget {
 
 class _SecurityScreenState extends State<SecurityScreen> {
   bool _biometric = true;
-  bool _twoFactor = false;
 
   void _changePassword() {
     final current = TextEditingController();
@@ -189,22 +188,11 @@ class _SecurityScreenState extends State<SecurityScreen> {
             const SizedBox(height: 10),
             WBCard(
               padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  _ToggleRow(
-                    label: context.l10n.securityBiometric,
-                    sub: context.l10n.securityBiometricSub,
-                    value: _biometric,
-                    onChanged: (v) => setState(() => _biometric = v),
-                  ),
-                  const WBDivider(),
-                  _ToggleRow(
-                    label: context.l10n.securityTwoFactor,
-                    sub: context.l10n.securityTwoFactorSub,
-                    value: _twoFactor,
-                    onChanged: (v) => setState(() => _twoFactor = v),
-                  ),
-                ],
+              child: _ToggleRow(
+                label: context.l10n.securityBiometric,
+                sub: context.l10n.securityBiometricSub,
+                value: _biometric,
+                onChanged: (v) => setState(() => _biometric = v),
               ),
             ),
           ],

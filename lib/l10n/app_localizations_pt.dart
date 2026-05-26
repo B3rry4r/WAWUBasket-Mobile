@@ -1567,4 +1567,116 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'Cozinhe esta noite';
+
+  @override
+  String get recipesSubtitle =>
+      'Ingredientes reais. Vendedores reais. Uma cesta.';
+
+  @override
+  String get recipeDetailIngredients => 'O que tem na cesta';
+
+  @override
+  String get recipeDetailServes => 'Serve';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return '$mins min de cozimento';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Pequeno';
+
+  @override
+  String get recipeSizeMedium => 'Médio';
+
+  @override
+  String get recipeSizeFamily => 'Família';
+
+  @override
+  String get recipeSizeParty => 'Festa';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Adicionar à cesta — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Faltam alguns ingredientes';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Estes não estão disponíveis na sua área agora: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Sem receitas ainda. Volte em breve.';
+
+  @override
+  String get recipeCartSection => 'Combos de receita';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return '$count ingredientes de $vendors vendedores';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Remover esta receita?';
+
+  @override
+  String get recipeRemoveBody => 'Sua cesta perderá este combo.';
+
+  @override
+  String get homeCookTonight => 'Cozinhe esta noite';
+
+  @override
+  String get homeCookTonightSeeAll => 'Ver tudo';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'A partir de ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Recolhendo de $count vendedores';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Ver todos os ingredientes';
+
+  @override
+  String get recipeIngredientsCollapse => 'Mostrar menos';
+
+  @override
+  String get recipeAddedToBasket => 'Adicionado à cesta.';
+
+  @override
+  String get recipeAddFailed =>
+      'Não foi possível adicionar à cesta. Tente novamente.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Não foi possível obter o preço. Tente um tamanho diferente.';
+
+  @override
+  String get recipeDetailNotFound => 'Não encontramos essa receita.';
+
+  @override
+  String get recipeDetailDescription => 'Sobre este prato';
+
+  @override
+  String get recipeDetailCuisine => 'Culinária';
+
+  @override
+  String get recipeLoadFailed =>
+      'Não foi possível carregar receitas. Puxe para tentar de novo.';
+
+  @override
+  String get actionRemove => 'Remover';
+
+  @override
+  String get recipeOrderChildVendors => 'Fornecido por estes vendedores';
 }

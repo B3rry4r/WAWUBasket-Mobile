@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -32,7 +33,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   void initState() {
     super.initState();
-    _load();
+    if (GuestModeController.instance.isGuest.value) {
+      _loading = false;
+    } else {
+      _load();
+    }
   }
 
   Future<void> _load() async {
@@ -80,6 +85,76 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: GuestModeController.instance.isGuest,
+      builder: (_, isGuest, _) {
+        if (isGuest) return _buildGuest(context);
+        return _buildSignedIn(context);
+      },
+    );
+  }
+
+  Widget _buildGuest(BuildContext context) {
+    // TODO(i18n): key=ordersGuestTitle / ordersGuestBody
+    final content = SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(
+          WBSpacing.screenPadding,
+          80 + MediaQuery.of(context).padding.top,
+          WBSpacing.screenPadding,
+          120,
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 96,
+              height: 96,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(28),
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(
+                WBIconName.basket,
+                size: 36,
+                color: WBColors.fgHeader,
+              ),
+            ),
+            const SizedBox(height: WBSpacing.lg),
+            Text(
+              'Your orders will live here',
+              textAlign: TextAlign.center,
+              style: WBTypography.hero.copyWith(fontSize: 22),
+            ),
+            const SizedBox(height: WBSpacing.sm),
+            Text(
+              'Sign in to place your first order and track it from the kitchen to your door.',
+              textAlign: TextAlign.center,
+              style: WBTypography.body.copyWith(
+                color: WBColors.fgSecondary,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: WBSpacing.xl),
+            WBButton(
+              label: 'Sign in',
+              size: WBButtonSize.lg,
+              fullWidth: true,
+              trailingIcon: WBIconName.arrowRight,
+              onPressed: () => context.push(AppRoutes.login),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (widget.standalone) {
+      return Scaffold(backgroundColor: WBColors.bgPrimary, body: content);
+    }
+    return content;
+  }
+
+  Widget _buildSignedIn(BuildContext context) {
     final tabLabels = _tabLabels(context);
     final body = SafeArea(
       bottom: false,

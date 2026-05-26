@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/data/location_data.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
@@ -23,6 +24,8 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
   String _type = 'restaurant';
   bool _busy = false;
   final Map<String, String> _docs = {};
+  String? _selectedCountry;
+  String? _selectedState;
 
   final _businessName = TextEditingController();
   final _ownerName = TextEditingController();
@@ -30,7 +33,7 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
   final _email = TextEditingController();
   final _addressLine = TextEditingController();
   final _city = TextEditingController();
-  final _state = TextEditingController();
+  final _stateText = TextEditingController();
   final _bankName = TextEditingController();
   final _accountNumber = TextEditingController();
   final _accountName = TextEditingController();
@@ -52,7 +55,7 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
       _email,
       _addressLine,
       _city,
-      _state,
+      _stateText,
       _bankName,
       _accountNumber,
       _accountName,
@@ -60,6 +63,69 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
       c.dispose();
     }
     super.dispose();
+  }
+
+  Future<void> _pickFromList(
+    BuildContext context,
+    List<String> items,
+    ValueChanged<String> onPicked,
+  ) async {
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.6,
+        maxChildSize: 0.9,
+        builder: (_, scrollCtrl) => Column(
+          children: [
+            const SizedBox(height: 12),
+            Container(
+              width: 40, height: 4,
+              decoration: BoxDecoration(
+                color: WBColors.bgDivider,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollCtrl,
+                itemCount: items.length,
+                itemBuilder: (_, i) => ListTile(
+                  title: Text(items[i], style: WBTypography.body),
+                  onTap: () => Navigator.of(context).pop(items[i]),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (picked != null) onPicked(picked);
+  }
+
+  Future<void> _pickCountry(BuildContext context) =>
+      _pickFromList(context, kCountries, (v) {
+        setState(() {
+          _selectedCountry = v;
+          _selectedState = null;
+        });
+      });
+
+  Future<void> _pickState(BuildContext context) {
+    final states = _selectedCountry != null
+        ? kCountryStates[_selectedCountry]
+        : null;
+    if (states != null) {
+      return _pickFromList(context, states,
+          (v) => setState(() => _selectedState = v));
+    }
+    return Future.value();
   }
 
   Future<void> _submit() async {
@@ -76,7 +142,8 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
           'email': _email.text.trim(),
           'addressLine': _addressLine.text.trim(),
           'city': _city.text.trim(),
-          'state': _state.text.trim(),
+          'state': _selectedState ?? _stateText.text.trim(),
+          'country': _selectedCountry ?? '',
           'bankName': _bankName.text.trim(),
           'accountNumber': _accountNumber.text.trim(),
           'accountName': _accountName.text.trim(),
@@ -201,6 +268,12 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   leadingIcon: WBIconName.pin,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
+                _PickerField(
+                  value: _selectedCountry,
+                  placeholder: 'Country',
+                  onTap: () => _pickCountry(context),
+                ),
+                const SizedBox(height: WBSpacing.md - 2),
                 Row(
                   children: [
                     Expanded(
@@ -211,11 +284,16 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                     ),
                     const SizedBox(width: 10),
                     Expanded(
-                      child: WBInput(
-                        label: 'State',
-                        controller: _state,
-                        trailing: const WBIcon(WBIconName.chevronDown, size: 14),
-                      ),
+                      child: kCountryStates.containsKey(_selectedCountry)
+                          ? _PickerField(
+                              value: _selectedState,
+                              placeholder: 'State / Region',
+                              onTap: () => _pickState(context),
+                            )
+                          : WBInput(
+                              label: 'State / Region',
+                              controller: _stateText,
+                            ),
                     ),
                   ],
                 ),
@@ -311,6 +389,51 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PickerField extends StatelessWidget {
+  const _PickerField({
+    required this.placeholder,
+    required this.onTap,
+    this.value,
+  });
+
+  final String placeholder;
+  final String? value;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: WBColors.surfaceInput,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                value ?? placeholder,
+                style: WBTypography.body.copyWith(
+                  color: value != null
+                      ? WBColors.fgHeader
+                      : WBColors.fgPlaceholder,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const WBIcon(WBIconName.chevronDown,
+                size: 14, color: WBColors.fgPlaceholder),
           ],
         ),
       ),

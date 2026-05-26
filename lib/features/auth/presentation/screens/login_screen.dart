@@ -5,6 +5,7 @@ import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -25,6 +26,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final _password = TextEditingController();
   bool _obscure = true;
   bool _busy = false;
+  String _bioLabel = 'Biometric';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBioLabel();
+  }
+
+  Future<void> _loadBioLabel() async {
+    final label = await BiometricService.instance.label();
+    if (!mounted) return;
+    setState(() => _bioLabel = label);
+  }
 
   @override
   void dispose() {
@@ -45,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
       // actual approved/pending roles on the role-select screen.
       await RoleController.instance.syncFromApi();
       RoleController.instance.setRole(AppRole.customer);
+      GuestModeController.instance.exit();
       // Register FCM token — fire-and-forget, non-critical.
       NotificationService.instance.registerToken();
       if (!mounted) return;
@@ -97,9 +112,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final refresh = TokenStore.instance.refreshToken;
     if (refresh == null || refresh.isEmpty || !await bio.isEnabled()) {
       if (mounted) {
+        // TODO(i18n): key=loginBiometricFirstSignInHint
         wbShowSnack(
           context,
-          'Sign in with your password once to turn on Face ID.',
+          'Sign in with your password once to turn on $_bioLabel.',
         );
       }
       return;
@@ -109,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (ok) {
       context.go(AppRoutes.home);
     } else {
+      // TODO(i18n): key=loginBiometricFailed
       wbShowSnack(context, "Couldn't verify it's you — try your password.");
     }
   }
@@ -206,8 +223,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: WBSpacing.md),
               _OutlineCta(
-                label: context.l10n.loginBiometric,
-                icon: WBIconName.user,
+                // TODO(i18n): key=loginBiometricDynamic — the localised
+                // string still hard-codes "Face ID"; surface the device
+                // label until the next i18n pass.
+                label: 'Use $_bioLabel',
+                icon: _bioLabel == 'Fingerprint'
+                    ? WBIconName.user
+                    : WBIconName.user,
                 onPressed: _biometricSignIn,
               ),
               const SizedBox(height: WBSpacing.md),

@@ -1,49 +1,57 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/upload_service.dart';
+import '../../../../core/services/websocket_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
-import '../../../../core/widgets/wb_widgets.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
+import '../../data/chat_local_store.dart';
+import '../../domain/models/chat_message.dart';
 
 enum ChatContextKind { rider, support }
 
-class _ChatMessage {
-  const _ChatMessage(
-    this.body, {
+/// View-model wrapper used by the message list. Order threads carry a real
+/// [ChatMessage] from the local store + WS; support threads are still
+/// hand-rolled because they live on the support-ticket endpoint and don't
+/// flow through the chat WS.
+class _DisplayMessage {
+  const _DisplayMessage({
+    required this.body,
     required this.fromMe,
     required this.time,
     this.attachUrl,
+    this.id,
+    this.isPending = false,
   });
+
   final String body;
   final bool fromMe;
   final String time;
   final String? attachUrl;
+  final String? id;
+  final bool isPending;
 
-  /// An order chat message. "From me" when the sender role matches the
-  /// active role — each order thread has one participant per role.
-  factory _ChatMessage.fromChat(Map<String, dynamic> j) {
-    final created = DateTime.tryParse('${j['createdAt'] ?? ''}');
-    final attach = (j['attachUrl'] ?? '').toString();
-    return _ChatMessage(
-      (j['body'] ?? '').toString(),
-      fromMe: (j['senderRole'] ?? '').toString() ==
-          RoleController.instance.role.name,
-      time: _fmtTime(created),
-      attachUrl: attach.isEmpty ? null : attach,
-    );
-  }
+  factory _DisplayMessage.fromOrderMessage(ChatMessage m) => _DisplayMessage(
+        id: m.id,
+        body: m.body,
+        attachUrl: m.attachmentUrl,
+        fromMe: m.senderRole == RoleController.instance.role.name,
+        time: _fmtTime(m.createdAt),
+        isPending: m.isPending,
+      );
 
-  /// A support-ticket message. "From me" unless it came from an admin.
-  factory _ChatMessage.fromTicket(Map<String, dynamic> j) {
+  factory _DisplayMessage.fromTicket(Map<String, dynamic> j) {
     final created = DateTime.tryParse('${j['createdAt'] ?? ''}');
-    return _ChatMessage(
-      (j['body'] ?? '').toString(),
+    return _DisplayMessage(
+      body: (j['body'] ?? '').toString(),
       fromMe: j['fromAdmin'] != true,
       time: _fmtTime(created),
     );
@@ -88,22 +96,42 @@ class _ChatScreenState extends State<ChatScreen> {
   bool get _isOrder =>
       widget.kind == ChatContextKind.rider && widget.orderId != null;
 
-  List<_ChatMessage>? _messages;
+  /// Order messages live in the local store. Support messages render
+  /// straight from the ticket endpoint (kept in memory).
+  List<ChatMessage> _orderMessages = const [];
+  List<_DisplayMessage>? _supportMessages;
+
+  /// True until the first paint of the message list has data (cache or
+  /// API). After that we never block on loading again.
+  bool _initialLoadDone = false;
+
   String? _error;
   bool _busy = false;
 
   /// The support ticket backing this thread, once one exists.
   String? _ticketId;
 
+  StreamSubscription<WsFrame>? _wsSub;
+
   @override
   void initState() {
     super.initState();
     _load();
+    if (_isOrder) {
+      // Subscribe to the order's chat channel so we receive both sides of
+      // the conversation in real time.
+      WebSocketService.instance.subscribe(['order:${widget.orderId}']);
+      _wsSub = WebSocketService.instance.chatFrames.listen(_onChatFrame);
+    }
   }
 
   @override
   void dispose() {
     _composer.dispose();
+    _wsSub?.cancel();
+    if (_isOrder) {
+      WebSocketService.instance.unsubscribe(['order:${widget.orderId}']);
+    }
     super.dispose();
   }
 
@@ -120,52 +148,143 @@ class _ChatScreenState extends State<ChatScreen> {
     return 'Order #${id.length > 8 ? id.substring(0, 8) : id}';
   }
 
+  // ── load ─────────────────────────────────────────────────────────────
+
   Future<void> _load() async {
-    setState(() => _error = null);
+    if (_isSupport) {
+      await _loadSupport();
+      return;
+    }
+    if (!_isOrder) {
+      setState(() => _initialLoadDone = true);
+      return;
+    }
+
+    // Local cache first — instant paint.
     try {
-      if (_isSupport) {
-        await _loadSupport();
-      } else if (_isOrder) {
-        final raw = await ChatApi.instance.messages(widget.orderId!);
-        // Mark messages as read — fire and forget, non-critical
-        ChatApi.instance.markRead(widget.orderId!).ignore();
-        if (!mounted) return;
-        setState(() => _messages = [
-              for (final e in raw)
-                _ChatMessage.fromChat((e as Map).cast<String, dynamic>()),
-            ]);
-      } else {
-        setState(() => _messages = []);
+      final cached = await ChatLocalStore.instance
+          .messagesForChat(widget.orderId!);
+      if (mounted) {
+        setState(() {
+          _orderMessages = cached;
+          _initialLoadDone = true;
+        });
       }
+    } catch (_) {/* sqflite unavailable — fall through */}
+
+    // Background reconcile.
+    try {
+      final fresh = await ChatApi.instance.messagesTyped(widget.orderId!);
+      await ChatLocalStore.instance.upsertMessages(fresh);
+      // Drop any local-pending messages that the server now knows about
+      // — they'll be back via the fresh list with a real id.
+      if (mounted) {
+        setState(() {
+          _orderMessages = fresh;
+          _initialLoadDone = true;
+          _error = null;
+        });
+      }
+      ChatApi.instance.markRead(widget.orderId!).ignore();
     } on ApiException catch (e) {
-      if (mounted) setState(() => _error = e.message);
+      if (!mounted) return;
+      if (_orderMessages.isEmpty) {
+        setState(() {
+          _error = e.message;
+          _initialLoadDone = true;
+        });
+      }
+      // Otherwise keep the cached view; the user can scroll/send fine.
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _initialLoadDone = true);
     }
   }
 
   /// Opens the user's most recent support ticket, if any.
   Future<void> _loadSupport() async {
-    final tickets = await AccountExtrasApi.instance.tickets();
-    if (tickets.isEmpty) {
-      if (mounted) setState(() => _messages = []);
-      return;
+    try {
+      final tickets = await AccountExtrasApi.instance.tickets();
+      if (tickets.isEmpty) {
+        if (mounted) {
+          setState(() {
+            _supportMessages = const [];
+            _initialLoadDone = true;
+          });
+        }
+        return;
+      }
+      final latest = (tickets.first as Map).cast<String, dynamic>();
+      final id = latest['id']?.toString();
+      if (id == null) {
+        if (mounted) {
+          setState(() {
+            _supportMessages = const [];
+            _initialLoadDone = true;
+          });
+        }
+        return;
+      }
+      final ticket = await AccountExtrasApi.instance.ticket(id);
+      final msgs = (ticket['messages'] as List?) ?? const [];
+      if (!mounted) return;
+      setState(() {
+        _ticketId = id;
+        _supportMessages = [
+          for (final e in msgs)
+            _DisplayMessage.fromTicket((e as Map).cast<String, dynamic>()),
+        ];
+        _initialLoadDone = true;
+      });
+    } on ApiException catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = e.message;
+          _initialLoadDone = true;
+        });
+      }
     }
-    final latest = (tickets.first as Map).cast<String, dynamic>();
-    final id = latest['id']?.toString();
-    if (id == null) {
-      if (mounted) setState(() => _messages = []);
-      return;
-    }
-    final ticket = await AccountExtrasApi.instance.ticket(id);
-    final msgs = (ticket['messages'] as List?) ?? const [];
-    if (!mounted) return;
-    setState(() {
-      _ticketId = id;
-      _messages = [
-        for (final e in msgs)
-          _ChatMessage.fromTicket((e as Map).cast<String, dynamic>()),
-      ];
-    });
   }
+
+  // ── real-time inbound ────────────────────────────────────────────────
+
+  Future<void> _onChatFrame(WsFrame frame) async {
+    if (!_isOrder) return;
+    if (frame.type != 'chat.message') return;
+    final orderId = frame.payload['orderId']?.toString();
+    if (orderId != widget.orderId) return;
+
+    final raw = (frame.payload['message'] as Map?)?.cast<String, dynamic>();
+    if (raw == null) return;
+    final incoming = ChatMessage.fromJson(raw, chatId: widget.orderId!);
+
+    await ChatLocalStore.instance.upsertMessage(incoming);
+    if (!mounted) return;
+
+    setState(() {
+      final next = [..._orderMessages];
+      // Reconcile against any optimistic placeholder: same body + sender
+      // and our pending flag set → replace with the server-confirmed row.
+      final pendingIx = next.indexWhere(
+        (m) =>
+            m.isPending &&
+            m.senderId == incoming.senderId &&
+            m.body == incoming.body,
+      );
+      if (pendingIx >= 0) {
+        next[pendingIx] = incoming;
+      } else if (!next.any((m) => m.id == incoming.id)) {
+        next.add(incoming);
+      }
+      next.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      _orderMessages = next;
+    });
+
+    // We're currently viewing this thread — server-side read receipt.
+    ChatApi.instance.markRead(widget.orderId!).ignore();
+  }
+
+  // ── outbound ─────────────────────────────────────────────────────────
 
   Future<void> _send() async {
     final text = _composer.text.trim();
@@ -175,15 +294,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_isSupport) {
         await _sendSupport(text);
       } else {
-        final m =
-            await ChatApi.instance.sendMessage(widget.orderId!, body: text);
-        if (!mounted) return;
-        setState(() {
-          _error = null;
-          (_messages ??= [])
-              .add(_ChatMessage.fromChat(m.cast<String, dynamic>()));
-          _composer.clear();
-        });
+        await _sendOrderMessage(text);
       }
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -192,8 +303,49 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  /// Sends on the support thread — opening a ticket on the first message,
-  /// replying to it afterwards.
+  Future<void> _sendOrderMessage(String text, {String? attachKey}) async {
+    // Optimistic insert with a temp id so the bubble appears immediately.
+    final tempId =
+        'pending-${DateTime.now().microsecondsSinceEpoch}';
+    final pending = ChatMessage(
+      id: tempId,
+      chatId: widget.orderId!,
+      senderId: 'me',
+      senderRole: RoleController.instance.role.name,
+      body: text,
+      createdAt: DateTime.now(),
+      isPending: true,
+    );
+    setState(() {
+      _orderMessages = [..._orderMessages, pending];
+      _composer.clear();
+      _error = null;
+    });
+    await ChatLocalStore.instance.upsertMessage(pending);
+
+    try {
+      final sent = await ChatApi.instance.sendTyped(
+        widget.orderId!,
+        body: text,
+        attachKey: attachKey,
+      );
+      // Swap the placeholder for the server-confirmed message.
+      await ChatLocalStore.instance.removeMessage(tempId);
+      await ChatLocalStore.instance.upsertMessage(sent);
+      if (!mounted) return;
+      setState(() {
+        final next = _orderMessages.where((m) => m.id != tempId).toList();
+        if (!next.any((m) => m.id == sent.id)) next.add(sent);
+        next.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+        _orderMessages = next;
+      });
+    } catch (_) {
+      // Leave the pending bubble in place so the user sees it didn't
+      // confirm — they can tap to retry later. (For now, just surface.)
+      rethrow;
+    }
+  }
+
   Future<void> _sendSupport(String text) async {
     if (_ticketId == null) {
       final ticket =
@@ -203,9 +355,9 @@ class _ChatScreenState extends State<ChatScreen> {
       setState(() {
         _error = null;
         _ticketId = ticket['id']?.toString();
-        _messages = [
+        _supportMessages = [
           for (final e in msgs)
-            _ChatMessage.fromTicket((e as Map).cast<String, dynamic>()),
+            _DisplayMessage.fromTicket((e as Map).cast<String, dynamic>()),
         ];
         _composer.clear();
       });
@@ -214,8 +366,8 @@ class _ChatScreenState extends State<ChatScreen> {
       if (!mounted) return;
       setState(() {
         _error = null;
-        (_messages ??= [])
-            .add(_ChatMessage.fromTicket(m.cast<String, dynamic>()));
+        (_supportMessages ??= [])
+            .add(_DisplayMessage.fromTicket(m.cast<String, dynamic>()));
         _composer.clear();
       });
     }
@@ -229,18 +381,8 @@ class _ChatScreenState extends State<ChatScreen> {
         folder: UploadFolder.chatAttachments,
       );
       if (up == null) return;
-      final m = await ChatApi.instance.sendMessage(
-        widget.orderId!,
-        body: _composer.text.trim(),
-        attachKey: up.key,
-      );
-      if (!mounted) return;
-      setState(() {
-        _error = null;
-        (_messages ??= [])
-            .add(_ChatMessage.fromChat(m.cast<String, dynamic>()));
-        _composer.clear();
-      });
+      // Body can be blank when the message is image-only.
+      await _sendOrderMessage(_composer.text.trim(), attachKey: up.key);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } catch (_) {
@@ -251,6 +393,8 @@ class _ChatScreenState extends State<ChatScreen> {
       if (mounted) setState(() => _busy = false);
     }
   }
+
+  // ── render ───────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -309,90 +453,95 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             const WBDivider(),
             Expanded(child: _buildBody()),
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                WBSpacing.screenPadding,
-                10,
-                WBSpacing.screenPadding,
-                10 + MediaQuery.of(context).padding.bottom,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 18),
-                      decoration: BoxDecoration(
-                        color: WBColors.surfaceInput,
-                        borderRadius: BorderRadius.circular(WBRadius.pill),
-                      ),
-                      child: TextField(
-                        controller: _composer,
-                        onSubmitted: (_) => _send(),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: context.l10n.chatMessageHint,
-                          isCollapsed: true,
-                          contentPadding:
-                              EdgeInsets.symmetric(vertical: 14),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_isOrder) ...[
-                    const SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: _attach,
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        decoration: const BoxDecoration(
-                          color: WBColors.bgSoft,
-                          shape: BoxShape.circle,
-                        ),
-                        alignment: Alignment.center,
-                        child: const WBIcon(WBIconName.plus, size: 18),
-                      ),
-                    ),
-                  ],
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: _send,
-                    child: Container(
-                      width: 48,
-                      height: 48,
-                      decoration: const BoxDecoration(
-                        color: WBColors.surfaceDark,
-                        shape: BoxShape.circle,
-                      ),
-                      alignment: Alignment.center,
-                      child: _busy
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.4,
-                                valueColor:
-                                    AlwaysStoppedAnimation(Colors.white),
-                              ),
-                            )
-                          : const WBIcon(
-                              WBIconName.arrowRight,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildComposer(context),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildComposer(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        WBSpacing.screenPadding,
+        10,
+        WBSpacing.screenPadding,
+        10 + MediaQuery.of(context).padding.bottom,
+      ),
+      child: Row(
+        children: [
+          if (_isOrder) ...[
+            // Attachment button sits leading the composer so it's obvious
+            // — the previous layout buried it past the send button.
+            GestureDetector(
+              onTap: _attach,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  color: WBColors.bgSoft,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: const WBIcon(WBIconName.plus, size: 18),
+              ),
+            ),
+            const SizedBox(width: 8),
+          ],
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              decoration: BoxDecoration(
+                color: WBColors.surfaceInput,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+              child: TextField(
+                controller: _composer,
+                onSubmitted: (_) => _send(),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: context.l10n.chatMessageHint,
+                  isCollapsed: true,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          GestureDetector(
+            onTap: _send,
+            child: Container(
+              width: 48,
+              height: 48,
+              decoration: const BoxDecoration(
+                color: WBColors.surfaceDark,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: _busy
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.4,
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                      ),
+                    )
+                  : const WBIcon(
+                      WBIconName.arrowRight,
+                      size: 18,
+                      color: Colors.white,
+                    ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildBody() {
-    if (_messages == null && _error == null) {
+    if (!_initialLoadDone) {
       return const Center(
         child: SizedBox(
           width: 26,
@@ -404,12 +553,16 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       );
     }
-    if (_error != null) return _stateHint(_error!);
-    final msgs = _messages!;
-    if (msgs.isEmpty) {
+    final view = _isSupport
+        ? (_supportMessages ?? const <_DisplayMessage>[])
+        : [
+            for (final m in _orderMessages) _DisplayMessage.fromOrderMessage(m),
+          ];
+    if (view.isEmpty) {
+      if (_error != null) return _stateHint(_error!);
       return _stateHint(context.l10n.chatEmpty);
     }
-    return _messageList(msgs);
+    return _messageList(view);
   }
 
   Widget _stateHint(String text) {
@@ -432,7 +585,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _messageList(List<_ChatMessage> messages) {
+  Widget _messageList(List<_DisplayMessage> messages) {
     return ListView.separated(
       reverse: true,
       padding: const EdgeInsets.fromLTRB(
@@ -447,58 +600,78 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget _bubble(_ChatMessage m) {
+  Widget _bubble(_DisplayMessage m) {
     return Align(
       alignment: m.fromMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.72,
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-          decoration: BoxDecoration(
-            color: m.fromMe ? WBColors.surfaceDark : WBColors.bgSoft,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(18),
-              topRight: const Radius.circular(18),
-              bottomLeft: Radius.circular(m.fromMe ? 18 : 4),
-              bottomRight: Radius.circular(m.fromMe ? 4 : 18),
-            ),
+      child: Opacity(
+        opacity: m.isPending ? 0.65 : 1.0,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.72,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (m.attachUrl != null) ...[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: WBNetworkImage(url: m.attachUrl!),
-                  ),
-                ),
-                if (m.body.isNotEmpty) const SizedBox(height: 8),
-              ],
-              if (m.body.isNotEmpty)
-                Text(
-                  m.body,
-                  style: WBTypography.body.copyWith(
-                    color: m.fromMe ? Colors.white : WBColors.fgHeader,
-                    fontSize: 14,
-                    height: 1.4,
-                  ),
-                ),
-              const SizedBox(height: 2),
-              Text(
-                m.time,
-                style: WBTypography.caption.copyWith(
-                  color: m.fromMe
-                      ? Colors.white.withValues(alpha: 0.6)
-                      : WBColors.fgPlaceholder,
-                  fontSize: 11,
-                ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            decoration: BoxDecoration(
+              color: m.fromMe ? WBColors.surfaceDark : WBColors.bgSoft,
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(18),
+                topRight: const Radius.circular(18),
+                bottomLeft: Radius.circular(m.fromMe ? 18 : 4),
+                bottomRight: Radius.circular(m.fromMe ? 4 : 18),
               ),
-            ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (m.attachUrl != null) ...[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxWidth: 240,
+                        maxHeight: 240,
+                      ),
+                      child: WBNetworkImage(url: m.attachUrl!),
+                    ),
+                  ),
+                  if (m.body.isNotEmpty) const SizedBox(height: 8),
+                ],
+                if (m.body.isNotEmpty)
+                  Text(
+                    m.body,
+                    style: WBTypography.body.copyWith(
+                      color: m.fromMe ? Colors.white : WBColors.fgHeader,
+                      fontSize: 14,
+                      height: 1.4,
+                    ),
+                  ),
+                const SizedBox(height: 2),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      m.time,
+                      style: WBTypography.caption.copyWith(
+                        color: m.fromMe
+                            ? Colors.white.withValues(alpha: 0.6)
+                            : WBColors.fgPlaceholder,
+                        fontSize: 11,
+                      ),
+                    ),
+                    if (m.isPending) ...[
+                      const SizedBox(width: 6),
+                      Icon(
+                        Icons.access_time,
+                        size: 11,
+                        color: m.fromMe
+                            ? Colors.white.withValues(alpha: 0.6)
+                            : WBColors.fgPlaceholder,
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

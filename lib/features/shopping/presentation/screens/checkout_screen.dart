@@ -11,6 +11,9 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/address_controller.dart';
 import '../../../account/data/account_extras_api.dart';
+import '../../../recipes/application/recipe_cart_controller.dart';
+import '../../../recipes/data/recipes_api.dart';
+import '../../../recipes/domain/models/recipe_cart_item.dart';
 import '../../application/cart_controller.dart';
 import '../../data/orders_api.dart';
 import '../widgets/sticky_action_bar.dart';
@@ -37,6 +40,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     super.initState();
     _loadWallet();
     AddressController.instance.load();
+    RecipeCartController.instance.load();
   }
 
   Future<void> _loadWallet() async {
@@ -66,15 +70,51 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Future<void> _placeOrder() async {
     setState(() => _placing = true);
     try {
-      final order = await OrdersApi.instance.placeOrder(
-        scheduledFor: _scheduledForIso(),
-      );
-      // The API empties the cart server-side on order creation.
-      await ref.read(cartControllerProvider.notifier).load();
-      if (!mounted) return;
+      final hasRecipes =
+          RecipeCartController.instance.items.value.isNotEmpty;
+      final hasProducts =
+          ref.read(cartControllerProvider).items.isNotEmpty;
 
-      final orderId = order['id'] as String? ?? '';
-      final checkoutUrl = order['checkoutUrl'] as String? ?? '';
+      String orderId = '';
+      String checkoutUrl = '';
+
+      if (hasRecipes) {
+        // Resolve the default address — required by the recipe checkout
+        // endpoint. We piggy-back on AddressController which is already
+        // loaded by initState.
+        final addr = AddressController.instance.addresses.value
+            .where((a) => a.isDefault)
+            .firstOrNull;
+        if (addr == null) {
+          if (mounted) {
+            wbShowSnack(context, context.l10n.checkoutNoAddress);
+            setState(() => _placing = false);
+          }
+          return;
+        }
+        final res = await RecipesApi.instance.checkout(
+          addressId: addr.id,
+          paymentMethod: _payment,
+        );
+        orderId = res['id'] as String? ?? '';
+        checkoutUrl = res['checkoutUrl'] as String? ?? '';
+        // Server already emptied the recipe cart.
+        RecipeCartController.instance.clearLocal();
+      }
+
+      if (hasProducts) {
+        final order = await OrdersApi.instance.placeOrder(
+          scheduledFor: _scheduledForIso(),
+        );
+        await ref.read(cartControllerProvider.notifier).load();
+        // The product order takes precedence as the order we follow on the
+        // tracking screen (riders/timelines/etc are wired to it).
+        orderId = order['id'] as String? ?? orderId;
+        final url = order['checkoutUrl'] as String? ?? '';
+        if (url.isNotEmpty) checkoutUrl = url;
+      }
+
+      if (!mounted) return;
 
       if (checkoutUrl.isNotEmpty) {
         // Open the Flutterwave hosted checkout page in the device browser.
@@ -92,7 +132,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         _pendingOrderId = orderId;
       });
 
-      _waitForPayment(orderId);
+      if (orderId.isNotEmpty) {
+        _waitForPayment(orderId);
+      }
       return; // skip the finally setState below — state already set
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -176,9 +218,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<List<RecipeCartItem>>(
+      valueListenable: RecipeCartController.instance.items,
+      builder: (context, recipeItems, _) =>
+          _buildBody(context, recipeItems),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, List<RecipeCartItem> recipeItems) {
     final cart = ref.watch(cartControllerProvider);
     final lines = cart.items;
-    final subtotal = lines.fold<int>(0, (s, l) => s + l.total);
+    final productSubtotal = lines.fold<int>(0, (s, l) => s + l.total);
+    final recipeSubtotal = recipeItems.fold<int>(
+      0,
+      (s, i) => s + (i.totalPriceKobo ~/ 100),
+    );
+    final subtotal = productSubtotal + recipeSubtotal;
     var delivery = 600;
     const serviceFee = 200;
     final total = subtotal + delivery + serviceFee;
@@ -409,6 +464,14 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   label: context.l10n.checkoutBasketSection,
                   child: Column(
                     children: [
+                      if (recipeItems.isNotEmpty) ...[
+                        _RecipeSubsection(items: recipeItems),
+                        const SizedBox(height: 10),
+                        if (lines.isNotEmpty) ...[
+                          const WBDivider(),
+                          const SizedBox(height: 12),
+                        ],
+                      ],
                       for (final l in lines) ...[
                         _Line(
                           label: '${l.product.name} × ${l.quantity}',
@@ -489,7 +552,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                onPressed: lines.isEmpty ? null : _placeOrder,
+                onPressed: (lines.isEmpty && recipeItems.isEmpty)
+                    ? null
+                    : _placeOrder,
               ),
             ),
           ),
@@ -685,6 +750,38 @@ class _PaymentTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _RecipeSubsection extends StatelessWidget {
+  const _RecipeSubsection({required this.items});
+
+  final List<RecipeCartItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.recipeCartSection.toUpperCase(),
+          style: WBTypography.label.copyWith(
+            fontWeight: FontWeight.w600,
+            color: WBColors.fgPlaceholder,
+            letterSpacing: 0.66,
+            fontSize: 11,
+          ),
+        ),
+        const SizedBox(height: 8),
+        for (final i in items) ...[
+          _Line(
+            label: i.recipe.name,
+            value: '₦${_n(i.totalPriceKobo ~/ 100)}',
+          ),
+          const SizedBox(height: 8),
+        ],
+      ],
     );
   }
 }

@@ -24,6 +24,29 @@ class BiometricService {
     }
   }
 
+  /// Returns the user-facing name of the most prominent biometric the OS
+  /// reports. Falls back to the generic "Biometric" so copy never claims
+  /// Face ID on a fingerprint-only Android phone.
+  ///
+  /// TODO(i18n): key=biometricLabelFace / biometricLabelFingerprint /
+  /// biometricLabelGeneric — these labels are not localised yet.
+  Future<String> label() async {
+    try {
+      if (!await _auth.isDeviceSupported()) return 'Biometric';
+      final types = await _auth.getAvailableBiometrics();
+      if (types.contains(BiometricType.face)) return 'Face ID';
+      if (types.contains(BiometricType.fingerprint)) return 'Fingerprint';
+      if (types.contains(BiometricType.iris)) return 'Iris';
+      if (types.contains(BiometricType.strong) ||
+          types.contains(BiometricType.weak)) {
+        return 'Biometric';
+      }
+    } catch (_) {
+      // Fall through to the generic label.
+    }
+    return 'Biometric';
+  }
+
   /// Whether the user opted into biometric unlock on this device.
   Future<bool> isEnabled() async =>
       (await _storage.read(key: _kEnabled)) == 'true';

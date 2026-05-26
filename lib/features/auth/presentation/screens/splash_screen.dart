@@ -2,14 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_logo.dart';
-import '../../application/role_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,38 +28,19 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(const Duration(milliseconds: 1400), _route);
   }
 
-  /// After the splash animation, drop the user into the right place:
-  /// signed-out users hit `/welcome`, signed-in users land in the home
-  /// of whatever role they were last using.
+  /// Cold-start routing: we deliberately do NOT auto-drop the user into
+  /// the role home, even when a valid access token is on disk. The user
+  /// wanted a "fresh login each launch" feel — tokens are preserved so
+  /// the login screen can offer a one-tap biometric unlock, but the
+  /// landing surface is always /welcome or /login. This matches the
+  /// perceived "sign out on close" behaviour without losing the
+  /// refresh-token-driven biometric path.
   Future<void> _route() async {
     if (!mounted) return;
-    final ctrl = RoleController.instance;
-    if (!ctrl.signedIn) {
-      context.go(AppRoutes.welcome);
-      return;
-    }
-    // Refresh FCM token on every app launch for returning users.
-    NotificationService.instance.registerToken();
-    final prefs = await SharedPreferences.getInstance();
-    final onboardingDone = prefs.getBool('onboardingDone') ?? false;
-    if (!mounted) return;
-    final role = ctrl.role;
-    final canResume = role == AppRole.customer ||
-        (role.shellReady && ctrl.statusOf(role) == RoleStatus.approved);
-    if (!canResume) {
-      // Saved role lost its approval or its shell isn't built yet, fall
-      // back to customer so we never strand the user on a dead route.
-      ctrl.setRole(AppRole.customer);
-      // Only skip onboarding if the user has already completed it.
-      context.go(onboardingDone ? AppRoutes.home : AppRoutes.onboarding);
-      return;
-    }
-    // For the customer role, check whether onboarding has been completed.
-    if (role == AppRole.customer && !onboardingDone) {
-      context.go(AppRoutes.onboarding);
-      return;
-    }
-    context.go(role.homeRoute);
+    // Always head to /welcome on cold start. Returning users see the
+    // "Sign in" CTA + biometric option there; new users see the marketing
+    // intro. The router treats /login as the real auth surface.
+    context.go(AppRoutes.welcome);
   }
 
   @override

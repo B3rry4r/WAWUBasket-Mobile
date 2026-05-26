@@ -1559,4 +1559,112 @@ class AppLocalizationsAm extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'ዛሬ ምሽት ምግብ ይስሩ';
+
+  @override
+  String get recipesSubtitle => 'እውነተኛ ግብአቶች። እውነተኛ ሻጮች። አንድ ቅርጫት።';
+
+  @override
+  String get recipeDetailIngredients => 'በቅርጫት ውስጥ ያለው';
+
+  @override
+  String get recipeDetailServes => 'ለ';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return '$mins ደቂቃ የሚበስል';
+  }
+
+  @override
+  String get recipeSizeSmall => 'ትንሽ';
+
+  @override
+  String get recipeSizeMedium => 'መካከለኛ';
+
+  @override
+  String get recipeSizeFamily => 'ቤተሰብ';
+
+  @override
+  String get recipeSizeParty => 'ድግስ';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'ወደ ቅርጫት ጨምር — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'አንዳንድ ግብአቶች የሉም';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'እነዚህ አሁን በአካባቢዎ የሉም: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'እስካሁን የምግብ አሰራር የለም። በቅርቡ ይመለሱ።';
+
+  @override
+  String get recipeCartSection => 'የምግብ ጥምር';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return '$count ግብአቶች ከ$vendors ሻጮች';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'ይህን የምግብ አሰራር ያስወግዱ?';
+
+  @override
+  String get recipeRemoveBody => 'ቅርጫትዎ ይህን ጥምር ያጣል።';
+
+  @override
+  String get homeCookTonight => 'ዛሬ ምሽት ምግብ ይስሩ';
+
+  @override
+  String get homeCookTonightSeeAll => 'ሁሉንም ይመልከቱ';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'ከ₦$amount ጀምሮ';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'ከ$count ሻጮች በማንሳት ላይ';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'ሁሉንም ግብአቶች ይመልከቱ';
+
+  @override
+  String get recipeIngredientsCollapse => 'ያነሰ አሳይ';
+
+  @override
+  String get recipeAddedToBasket => 'ወደ ቅርጫት ተጨምሯል።';
+
+  @override
+  String get recipeAddFailed => 'ወደ ቅርጫት መጨመር አልተቻለም። እንደገና ይሞክሩ።';
+
+  @override
+  String get recipeMatchFailed => 'ዋጋ ማግኘት አልተቻለም። የተለየ መጠን ይሞክሩ።';
+
+  @override
+  String get recipeDetailNotFound => 'ያንን የምግብ አሰራር ማግኘት አልቻልንም።';
+
+  @override
+  String get recipeDetailDescription => 'ስለዚህ ምግብ';
+
+  @override
+  String get recipeDetailCuisine => 'የምግብ አይነት';
+
+  @override
+  String get recipeLoadFailed => 'የምግብ አሰራሮችን መጫን አልተቻለም። ለመሞከር ይጎትቱ።';
+
+  @override
+  String get actionRemove => 'አስወግድ';
+
+  @override
+  String get recipeOrderChildVendors => 'ከእነዚህ ሻጮች የተገኘ';
 }

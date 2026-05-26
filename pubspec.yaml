@@ -66,6 +66,16 @@ dependencies:
   # Shimmer skeleton loaders for async content (categories, vendor lists).
   shimmer: ^3.0.0
 
+  # Real-time chat — Socket.IO client for the API's /ws gateway. Carries
+  # chat.message + chat.read frames; reconnects with exponential backoff.
+  socket_io_client: ^2.0.3+1
+
+  # Offline-first chat persistence. The inbox and individual conversations
+  # render from this local cache instantly, then reconcile against the API
+  # in the background — chats survive cold starts and offline sessions.
+  sqflite: ^2.3.3+1
+  path: ^1.9.0
+
   # Localization — African-language support via ARB files + gen-l10n.
   flutter_localizations:
     sdk: flutter
