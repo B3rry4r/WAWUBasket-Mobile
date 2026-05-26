@@ -7,8 +7,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/rider_api.dart';
 
 /// Rider earnings dashboard. Today / Week / Month toggle a different
-/// hero number + delivery list. Withdraw opens a bottom sheet to send
-/// to the rider's mobile-money wallet.
+/// hero number + delivery list. Payouts are automatic.
 class RiderEarningsScreen extends StatefulWidget {
   const RiderEarningsScreen({super.key});
 
@@ -194,21 +193,6 @@ class _RiderEarningsScreenState extends State<RiderEarningsScreen> {
                           color: Colors.white.withValues(alpha: 0.6),
                         ),
                       ),
-                      const SizedBox(height: WBSpacing.md),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(WBRadius.pill),
-                        ),
-                        child: WBButton(
-                          label: 'Withdraw to wallet',
-                          size: WBButtonSize.md,
-                          trailingIcon: WBIconName.arrowRight,
-                          variant: WBButtonVariant.ghost,
-                          onPressed: () =>
-                              _openWithdraw(context, _data?.totalNaira ?? 0),
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -337,68 +321,3 @@ class _RangeTab extends StatelessWidget {
   }
 }
 
-void _openWithdraw(BuildContext context, int balance) {
-  showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: WBColors.bgPrimary,
-    isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius:
-          BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
-    ),
-    builder: (sheetCtx) {
-      return Padding(
-        padding: EdgeInsets.only(
-          left: WBSpacing.screenPadding,
-          right: WBSpacing.screenPadding,
-          top: WBSpacing.lg,
-          bottom: MediaQuery.of(sheetCtx).viewInsets.bottom + WBSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-                decoration: BoxDecoration(
-                  color: WBColors.bgDivider,
-                  borderRadius: BorderRadius.circular(WBRadius.pill),
-                ),
-              ),
-            ),
-            Text(
-              'Withdraw to wallet',
-              style: WBTypography.cardTitle.copyWith(fontSize: 18),
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            WBInput(
-              label: 'Amount (₦)',
-              initialValue: '$balance',
-              keyboardType: TextInputType.number,
-            ),
-            const SizedBox(height: WBSpacing.md),
-            const WBInput(
-              label: 'Mobile money / wallet',
-              keyboardType: TextInputType.phone,
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            WBButton(
-              label: 'Send',
-              fullWidth: true,
-              size: WBButtonSize.lg,
-              onPressed: () {
-                Navigator.of(sheetCtx).pop();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${wbNaira(balance)} sent')),
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}

@@ -7,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/auth_api.dart';
 
@@ -40,6 +41,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
       await AuthApi.instance.switchRole('driver');
       RoleController.instance.setRole(AppRole.driver);
+      NotificationService.instance.registerToken();
       if (!mounted) return;
       context.go(AppRoutes.driverHome);
     } on ApiException catch (e) {

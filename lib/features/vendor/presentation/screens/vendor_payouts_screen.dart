@@ -4,9 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
-import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../account/application/profile_controller.dart';
 import '../../data/vendor_api.dart';
 
 /// One payout row mapped from the `/v1/vendor/payouts` payload.
@@ -70,29 +68,11 @@ class VendorPayoutsScreen extends StatefulWidget {
 class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
   List<_Payout>? _payouts;
   String? _error;
-  int? _balance;
-  int _escrow = 0;
 
   @override
   void initState() {
     super.initState();
     _load();
-    _loadWallet();
-  }
-
-  Future<void> _loadWallet() async {
-    try {
-      final w = await VendorApi.instance.wallet();
-      final bal = w['balanceNaira'];
-      final esc = w['escrowHeldNaira'];
-      if (!mounted) return;
-      setState(() {
-        _balance = bal is num ? bal.toInt() : int.tryParse('${bal ?? 0}') ?? 0;
-        _escrow = esc is num ? esc.toInt() : int.tryParse('${esc ?? 0}') ?? 0;
-      });
-    } on ApiException {
-      // Non-critical — the hero falls back to a dash.
-    }
   }
 
   Future<void> _load() async {
@@ -145,56 +125,6 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            Container(
-              padding: const EdgeInsets.all(WBSpacing.lg),
-              decoration: BoxDecoration(
-                color: WBColors.surfaceDark,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.walletAvailableBalance,
-                    style: WBTypography.label.copyWith(
-                      color: Colors.white.withValues(alpha: 0.55),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    _balance == null ? '₦—' : wbNaira(_balance!),
-                    style: WBTypography.hero.copyWith(
-                      color: Colors.white,
-                      fontSize: 36,
-                      letterSpacing: -1,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Held in escrow ${wbNaira(_escrow)} · WAWU fee 8%',
-                    style: WBTypography.caption.copyWith(
-                      color: Colors.white.withValues(alpha: 0.6),
-                    ),
-                  ),
-                  const SizedBox(height: WBSpacing.md),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(WBRadius.pill),
-                    ),
-                    child: WBButton(
-                      label: 'Request payout',
-                      size: WBButtonSize.md,
-                      trailingIcon: WBIconName.arrowRight,
-                      variant: WBButtonVariant.ghost,
-                      onPressed: () => _openPayoutSheet(context, _balance),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: WBSpacing.lg),
             Text(
               'Payout history',
               style: WBTypography.cardTitle.copyWith(fontSize: 16),
@@ -238,7 +168,7 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                   borderRadius: BorderRadius.circular(WBRadius.card),
                 ),
                 child: Text(
-                  'No payouts yet. Earnings land here once you request one.',
+                  'No payouts yet. Earnings are paid out automatically.',
                   style: WBTypography.caption
                       .copyWith(color: WBColors.fgSecondary),
                 ),
@@ -294,72 +224,3 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
   }
 }
 
-void _openPayoutSheet(BuildContext context, int? availableBalance) {
-  final profile = ProfileController.instance.profile.value;
-  final vendorName = profile?.vendorBusinessName ?? profile?.fullName ?? 'Vendor';
-  final balanceStr = availableBalance != null ? availableBalance.toString() : '';
-
-  showModalBottomSheet<void>(
-    context: context,
-    backgroundColor: Colors.transparent,
-    isScrollControlled: true,
-    builder: (_) => Container(
-      decoration: const BoxDecoration(
-        color: WBColors.surfaceCard,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-      ),
-      padding: EdgeInsets.fromLTRB(
-        20,
-        14,
-        20,
-        MediaQuery.of(context).padding.bottom + 22,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 44,
-              height: 4,
-              decoration: BoxDecoration(
-                color: WBColors.bgDivider,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-          Text(
-            'Request payout',
-            style: WBTypography.cardTitle.copyWith(fontSize: 18),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            vendorName,
-            style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
-          ),
-          const SizedBox(height: 14),
-          WBInput(
-            label: 'Amount (₦)',
-            initialValue: balanceStr,
-            keyboardType: TextInputType.number,
-          ),
-          const SizedBox(height: 14),
-          WBButton(
-            label: 'Request withdrawal',
-            fullWidth: true,
-            size: WBButtonSize.lg,
-            onPressed: () {
-              Navigator.of(context).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Payout requested · arrives in 1–2 days'),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    ),
-  );
-}

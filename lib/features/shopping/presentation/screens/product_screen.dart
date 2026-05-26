@@ -27,8 +27,8 @@ class ProductScreen extends ConsumerStatefulWidget {
 
 class _ProductScreenState extends ConsumerState<ProductScreen> {
   int _qty = 1;
-  String _protein = 'chicken';
   bool _adding = false;
+  final _notesCtrl = TextEditingController();
   bool _isFavorited = false;
   bool _togglingFavorite = false;
 
@@ -39,6 +39,12 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   void initState() {
     super.initState();
     _load();
+  }
+
+  @override
+  void dispose() {
+    _notesCtrl.dispose();
+    super.dispose();
   }
 
   Future<void> _loadFavoriteState(String itemId) async {
@@ -268,46 +274,17 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     ),
                     const SizedBox(height: WBSpacing.lg),
                     Text(
-                      'Protein',
-                      style: WBTypography.body.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: WBSpacing.sm + 4),
-                    for (final option in const [
-                      (id: 'chicken', label: 'Grilled chicken', sub: 'Included'),
-                      (id: 'beef', label: 'Beef', sub: '+₦500'),
-                      (id: 'fish', label: 'Fish', sub: '+₦800'),
-                    ]) ...[
-                      _OptionRow(
-                        label: option.label,
-                        sub: option.sub,
-                        selected: option.id == _protein,
-                        onTap: () => setState(() => _protein = option.id),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    const SizedBox(height: WBSpacing.sm),
-                    Text(
                       'Notes for the restaurant',
                       style: WBTypography.body.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     const SizedBox(height: WBSpacing.sm + 2),
-                    Container(
-                      padding: const EdgeInsets.all(WBSpacing.md),
-                      decoration: BoxDecoration(
-                        color: WBColors.surfaceInput,
-                        borderRadius: BorderRadius.circular(WBRadius.input),
-                      ),
-                      child: Text(
-                        'Less spicy please, and no onions on the side.',
-                        style: WBTypography.body.copyWith(
-                          fontSize: 14,
-                          color: WBColors.fgPlaceholder,
-                        ),
-                      ),
+                    WBInput(
+                      controller: _notesCtrl,
+                      label: 'Special instructions',
+                      placeholder: 'Less spicy, no onions…',
+                      keyboardType: TextInputType.text,
                     ),
                   ],
                 ),
@@ -350,80 +327,4 @@ String _format(int v) {
     buf.write(s[i]);
   }
   return buf.toString();
-}
-
-class _OptionRow extends StatelessWidget {
-  const _OptionRow({
-    required this.label,
-    required this.sub,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final String sub;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: WBMotion.base,
-        curve: WBMotion.easeSoft,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: selected ? WBColors.bgPrimary : WBColors.bgSoft,
-          border: Border.all(
-            color: selected ? WBColors.fgHeader : Colors.transparent,
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.circular(WBRadius.input),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: selected ? WBColors.surfaceDark : WBColors.bgPrimary,
-                border: Border.all(
-                  color: selected ? WBColors.surfaceDark : WBColors.bgDivider,
-                  width: 1.5,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: selected
-                  ? const WBIcon(
-                      WBIconName.check,
-                      size: 11,
-                      color: Colors.white,
-                      strokeWidth: 2.5,
-                    )
-                  : null,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-                style: WBTypography.body.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            Text(
-              sub,
-              style: WBTypography.caption.copyWith(
-                color: WBColors.fgSecondary,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

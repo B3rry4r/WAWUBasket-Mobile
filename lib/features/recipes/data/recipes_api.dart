@@ -88,11 +88,10 @@ class RecipesApi {
   /// payment polling pipeline.
   Future<Map<String, dynamic>> checkout({
     required String addressId,
-    required String paymentMethod,
   }) async {
     final res = await _api.post(
       '/recipes/cart/checkout',
-      body: {'addressId': addressId, 'paymentMethod': paymentMethod},
+      body: {'addressId': addressId},
     );
     final map = (res as Map).cast<String, dynamic>();
     // The endpoint shape is `{ order: {...} }`; surface a flat map that

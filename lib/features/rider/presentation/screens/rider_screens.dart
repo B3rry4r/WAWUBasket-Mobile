@@ -7,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/auth_api.dart';
 
@@ -45,6 +46,7 @@ class _RiderLoginScreenState extends State<RiderLoginScreen> {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
       await AuthApi.instance.switchRole('rider');
       RoleController.instance.setRole(AppRole.rider);
+      NotificationService.instance.registerToken();
       if (!mounted) return;
       context.go(AppRoutes.riderHome);
     } on ApiException catch (e) {

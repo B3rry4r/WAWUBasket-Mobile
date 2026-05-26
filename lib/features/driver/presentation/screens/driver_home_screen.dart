@@ -78,7 +78,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   const SizedBox(height: WBSpacing.lg),
                   ValueListenableBuilder(
                     valueListenable: ProfileController.instance.profile,
-                    builder: (_, profile, _) => _Hero(
+                    builder: (_, profile, _) => _Hero(profile: profile,
                       open: open.length,
                       pendingToday: pending,
                       displayName: profile?.driverDisplayName?.isNotEmpty == true
@@ -146,11 +146,13 @@ class _Hero extends StatelessWidget {
     required this.pendingToday,
     this.displayName,
     this.plateNumber,
+    this.profile,
   });
   final int open;
   final int pendingToday;
   final String? displayName;
   final String? plateNumber;
+  final dynamic profile;
 
   @override
   Widget build(BuildContext context) {
@@ -193,7 +195,7 @@ class _Hero extends StatelessWidget {
               const SizedBox(width: 10),
               _Stat(label: 'Today', value: '$pendingToday'),
               const SizedBox(width: 10),
-              _Stat(label: context.l10n.vendorAnalyticsRating, value: '★ 4.7'),
+              _Stat(label: context.l10n.vendorAnalyticsRating, value: '★ ${profile?.driverRating ?? "–"}'),
             ],
           ),
         ],

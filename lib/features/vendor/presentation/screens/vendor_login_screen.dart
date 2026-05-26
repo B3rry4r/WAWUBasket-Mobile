@@ -7,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/auth_api.dart';
 
@@ -38,7 +39,9 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
     setState(() => _busy = true);
     try {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      await AuthApi.instance.switchRole('vendor');
       RoleController.instance.setRole(AppRole.vendor);
+      NotificationService.instance.registerToken();
       if (!mounted) return;
       context.go(AppRoutes.vendorHome);
     } on ApiException catch (e) {

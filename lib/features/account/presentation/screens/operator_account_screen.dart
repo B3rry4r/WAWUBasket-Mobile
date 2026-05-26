@@ -59,8 +59,8 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
           ),
         AppRole.rider => const _RoleConfig(
             badge: 'Rider',
-            payoutLabel: 'Earnings & withdraw',
-            payoutSub: 'Mobile money & payout history',
+            payoutLabel: 'Earnings',
+            payoutSub: 'Trip earnings & payout history',
             payoutRoute: AppRoutes.riderEarnings,
             settingsLabel: null,
             settingsSub: null,
@@ -77,8 +77,8 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
           ),
         AppRole.driver => const _RoleConfig(
             badge: 'Driver',
-            payoutLabel: 'Earnings & withdraw',
-            payoutSub: 'Mobile money & payout history',
+            payoutLabel: 'Earnings',
+            payoutSub: 'Trip earnings & payout history',
             payoutRoute: AppRoutes.driverEarnings,
             settingsLabel: null,
             settingsSub: null,
@@ -264,6 +264,7 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
                 stat2: statTiles[1],
                 stat3: statTiles[2],
                 role: widget.role,
+                avatarUrl: profile?.avatarUrl,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(
@@ -412,6 +413,7 @@ class _Hero extends StatelessWidget {
     required this.stat2,
     required this.stat3,
     required this.role,
+    this.avatarUrl,
   });
   final String name;
   final String handle;
@@ -420,6 +422,7 @@ class _Hero extends StatelessWidget {
   final _Stat stat2;
   final _Stat stat3;
   final AppRole role;
+  final String? avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -457,8 +460,8 @@ class _Hero extends StatelessWidget {
                           width: 1.5,
                         ),
                       ),
-                      child: const ClipOval(
-                        child: WBNetworkImage(url: WBImages.avatar),
+                      child: ClipOval(
+                        child: WBNetworkImage(url: avatarUrl ?? WBImages.avatar),
                       ),
                     ),
                     Positioned(

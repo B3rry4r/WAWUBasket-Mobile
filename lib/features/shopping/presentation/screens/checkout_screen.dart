@@ -10,7 +10,6 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/address_controller.dart';
-import '../../../account/data/account_extras_api.dart';
 import '../../../recipes/application/recipe_cart_controller.dart';
 import '../../../recipes/data/recipes_api.dart';
 import '../../../recipes/domain/models/recipe_cart_item.dart';
@@ -26,35 +25,18 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 }
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
-  String _payment = 'card';
   bool _scheduled = false;
   bool _placing = false;
   bool _waitingForPayment = false;
   bool _paymentTimedOut = false;
   String? _pendingOrderId;
   _ScheduleSlot? _slot;
-  String? _walletBalance;
 
   @override
   void initState() {
     super.initState();
-    _loadWallet();
     AddressController.instance.load();
     RecipeCartController.instance.load();
-  }
-
-  Future<void> _loadWallet() async {
-    try {
-      final data = await AccountExtrasApi.instance.wallet();
-      if (mounted) {
-        setState(() {
-          _walletBalance = data['balance']?.toString() ??
-              data['balanceNaira']?.toString();
-        });
-      }
-    } catch (_) {
-      // Leave as null — the UI shows "Balance ₦--" while loading or on error.
-    }
   }
 
   /// Converts the picked slot into an ISO datetime for the API.
@@ -94,7 +76,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         }
         final res = await RecipesApi.instance.checkout(
           addressId: addr.id,
-          paymentMethod: _payment,
         );
         orderId = res['id'] as String? ?? '';
         checkoutUrl = res['checkoutUrl'] as String? ?? '';
@@ -177,36 +158,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     // 10-minute timeout reached.
     if (mounted) setState(() => _paymentTimedOut = true);
   }
-
-  List<({String id, WBIconName icon, String label, String sub})>
-      get _payOptions => [
-            (
-              id: 'card',
-              icon: WBIconName.card,
-              label: 'Debit card',
-              sub: '•••• 4218'
-            ),
-            (
-              id: 'wallet',
-              icon: WBIconName.star,
-              label: 'Wallet',
-              sub: _walletBalance != null
-                  ? 'Balance ₦$_walletBalance'
-                  : 'Balance ₦--'
-            ),
-            (
-              id: 'xfer',
-              icon: WBIconName.arrowRight,
-              label: 'Bank transfer',
-              sub: 'Pay directly from app'
-            ),
-            (
-              id: 'mobile',
-              icon: WBIconName.phone,
-              label: 'Mobile money',
-              sub: 'OPay, Palmpay, others'
-            ),
-          ];
 
   String get _scheduleSubtitle {
     if (_slot == null) return 'Pick a time slot';
@@ -455,23 +406,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 const SizedBox(height: WBSpacing.md),
                 _Section(
                   label: context.l10n.checkoutPaymentSection,
-                  child: Column(
-                    children: [
-                      for (final o in _payOptions) ...[
-                        _PaymentTile(
-                          id: o.id,
-                          icon: o.icon,
-                          label: o.label,
-                          sub: o.sub,
-                          selected: o.id == _payment,
-                          onTap: () => setState(() => _payment = o.id),
-                        ),
-                        if (o.id != _payOptions.last.id) const SizedBox(height: 10),
-                      ],
-                    ],
+                  child: Text(
+                    "You will be redirected to Flutterwave to complete your payment securely.",
+                    style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
                   ),
                 ),
-                const SizedBox(height: WBSpacing.md),
                 _Section(
                   label: context.l10n.checkoutBasketSection,
                   child: Column(
@@ -663,101 +602,6 @@ class _TimeOption extends StatelessWidget {
                     : WBColors.fgSecondary,
                 fontSize: 12,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _PaymentTile extends StatelessWidget {
-  const _PaymentTile({
-    required this.id,
-    required this.icon,
-    required this.label,
-    required this.sub,
-    required this.selected,
-    required this.onTap,
-  });
-  final String id;
-  final WBIconName icon;
-  final String label;
-  final String sub;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: WBMotion.base,
-        curve: WBMotion.easeSoft,
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
-          color: selected ? WBColors.bgPrimary : WBColors.bgSoft,
-          border: Border.all(
-            color: selected ? WBColors.borderFilled : Colors.transparent,
-            width: 1.5,
-          ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 38,
-              height: 38,
-              decoration: const BoxDecoration(
-                color: WBColors.bgSoft,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: WBIcon(icon, size: 16),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: WBTypography.body.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 1),
-                  Text(
-                    sub,
-                    style: WBTypography.caption.copyWith(
-                      color: WBColors.fgSecondary,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: selected ? WBColors.surfaceDark : Colors.transparent,
-                border: Border.all(
-                  color: selected ? WBColors.surfaceDark : WBColors.bgDivider,
-                  width: 1.5,
-                ),
-              ),
-              alignment: Alignment.center,
-              child: selected
-                  ? const WBIcon(
-                      WBIconName.check,
-                      size: 10,
-                      color: Colors.white,
-                      strokeWidth: 2.5,
-                    )
-                  : null,
             ),
           ],
         ),

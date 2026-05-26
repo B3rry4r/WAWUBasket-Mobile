@@ -122,21 +122,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
             ),
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: WBSpacing.screenPadding,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(WBRadius.card),
-                  child: AspectRatio(
-                    aspectRatio: 2.2,
-                    child: WBNetworkImage(url: category.imageUrl ?? ''),
-                  ),
-                ),
-              ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: WBSpacing.md)),
-            SliverToBoxAdapter(
               child: SubcategoryChipRow(
                 subcategories: category.subcategories,
                 activeId: _activeSubcategory,

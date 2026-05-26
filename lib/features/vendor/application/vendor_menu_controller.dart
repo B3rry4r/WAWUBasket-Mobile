@@ -268,12 +268,12 @@ class VendorMenuController {
     _bump();
     if (!_isLocal(id)) {
       _vendorApi.updateProduct(id, {
-        'title': ?name,
-        'description': ?description,
-        'price': ?priceNaira,
-        'category': ?category,
-        'prepMins': ?prepMins,
-        'images': ?(imageUrl != null ? [imageUrl] : null),
+        if (name != null) 'title': name,
+        if (description != null) 'description': description,
+        if (priceNaira != null) 'price': priceNaira,
+        if (category != null) 'category': category,
+        if (prepMins != null) 'prepMins': prepMins,
+        if (imageUrl != null) 'images': [imageUrl],
         if (available != null) 'status': available ? 'active' : 'draft',
       }).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
