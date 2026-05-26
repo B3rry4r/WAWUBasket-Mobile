@@ -17,7 +17,6 @@ import '../../../category/presentation/widgets/subcategory_chip_row.dart';
 import '../../../recipes/application/recipes_controller.dart';
 import '../../../recipes/domain/models/recipe.dart';
 import '../../../shopping/application/mock_data.dart';
-import '../../../shopping/application/wb_images.dart';
 import '../../application/category_controller.dart';
 import '../../domain/models/category.dart';
 import '../widgets/category_body.dart';
@@ -276,8 +275,6 @@ class _HomeScreenState extends State<HomeScreen> {
               _padded(_CookTonightHeader()),
               const SizedBox(height: 12),
               const _CookTonightCarousel(),
-              const SizedBox(height: 22),
-              _padded(const _OffersBanner()),
             ],
           );
         },
@@ -483,101 +480,6 @@ class _HomeRecipeCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _OffersBanner extends StatelessWidget {
-  const _OffersBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 180),
-      padding: const EdgeInsets.all(WBSpacing.lg),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: WBColors.surfaceDark,
-        borderRadius: BorderRadius.circular(WBRadius.card),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -36,
-            bottom: -36,
-            child: Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: WBColors.surfaceDark, width: 6),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: const WBNetworkImage(url: WBImages.jollof),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                context.l10n.homeOffersThisWeek,
-                style: WBTypography.label.copyWith(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Free delivery\non orders over ₦5,000',
-                style: WBTypography.page.copyWith(
-                  color: Colors.white,
-                  fontSize: 24,
-                  height: 1.15,
-                  letterSpacing: -0.48,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                context.l10n.homeOfferSubtitle,
-                style: WBTypography.caption.copyWith(
-                  color: Colors.white.withValues(alpha: 0.6),
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(WBRadius.pill),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      context.l10n.homeOfferButton,
-                      style: WBTypography.body.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: WBColors.fgHeader,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    const WBIcon(
-                      WBIconName.arrowRight,
-                      size: 14,
-                      strokeWidth: 1.6,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
