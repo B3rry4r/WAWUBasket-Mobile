@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
@@ -180,7 +181,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       _emptyHint(_error!),
                       const SizedBox(height: 10),
                       WBButton(
-                        label: 'Try again',
+                        label: context.l10n.actionRetry,
                         size: WBButtonSize.sm,
                         variant: WBButtonVariant.secondary,
                         onPressed: _load,

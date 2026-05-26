@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 
@@ -86,7 +87,7 @@ class _AgentTradersScreenState extends State<AgentTradersScreen> {
                     ),
                     child: Text(
                       _query.isEmpty
-                          ? 'No traders registered yet. Tap "Register" to add one.'
+                          ? context.l10n.agentTradersEmpty
                           : 'No traders match "$_query".',
                       style: WBTypography.body.copyWith(
                         color: WBColors.fgSecondary,

@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/trade_controller.dart';
 import '../../domain/models/corridor.dart';
@@ -35,7 +36,7 @@ class ExportListingDetailScreen extends StatelessWidget {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(height: WBSpacing.xl),
-                    Text("Can't find that listing", style: WBTypography.page),
+                    Text(context.l10n.exportListingNotFound, style: WBTypography.page),
                     const SizedBox(height: WBSpacing.sm),
                     Text(
                       'It may have sold or been pulled by the trader.',
@@ -61,7 +62,7 @@ class _Body extends StatelessWidget {
 
   void _enquire(BuildContext context) {
     TradeController.instance.recordEnquiry(listing.id);
-    wbShowSnack(context, "Enquiry sent, the trader will reach out.");
+    wbShowSnack(context, context.l10n.exportEnquirySent);
   }
 
   void _buyNow(BuildContext context) {

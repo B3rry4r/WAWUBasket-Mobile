@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/data/auth_api.dart';
 
@@ -57,34 +58,34 @@ class _SecurityScreenState extends State<SecurityScreen> {
                   ),
                 ),
               ),
-              Text('Change password',
+              Text(context.l10n.securityChangePassword,
                   style: WBTypography.cardTitle.copyWith(fontSize: 18)),
               const SizedBox(height: WBSpacing.lg),
-              WBInput(label: 'Current password', controller: current, obscureText: true),
+              WBInput(label: context.l10n.securityCurrentPassword, controller: current, obscureText: true),
               const SizedBox(height: WBSpacing.md),
-              WBInput(label: 'New password', controller: next, obscureText: true),
+              WBInput(label: context.l10n.securityNewPassword, controller: next, obscureText: true),
               const SizedBox(height: WBSpacing.md),
-              WBInput(label: 'Confirm new password', controller: confirm, obscureText: true),
+              WBInput(label: context.l10n.securityConfirmNewPassword, controller: confirm, obscureText: true),
               const SizedBox(height: WBSpacing.lg),
               WBButton(
-                label: 'Update password',
+                label: context.l10n.securityUpdatePassword,
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 loading: busy,
                 onPressed: () async {
                   if (next.text != confirm.text) {
-                    wbShowSnack(sheetCtx, 'Passwords do not match.');
+                    wbShowSnack(sheetCtx, sheetCtx.l10n.securityPasswordMismatch);
                     return;
                   }
                   if (next.text.length < 8) {
-                    wbShowSnack(sheetCtx, 'New password must be at least 8 characters.');
+                    wbShowSnack(sheetCtx, sheetCtx.l10n.securityPasswordShort);
                     return;
                   }
                   setSheet(() => busy = true);
                   try {
                     await AuthApi.instance.changePassword(current.text, next.text);
                     if (sheetCtx.mounted) Navigator.of(sheetCtx).pop();
-                    if (mounted) wbShowSnack(context, 'Password updated successfully.');
+                    if (mounted) wbShowSnack(context, context.l10n.securityPasswordUpdated);
                   } on ApiException catch (e) {
                     if (sheetCtx.mounted) wbShowSnack(sheetCtx, e.message);
                   } finally {
@@ -125,9 +126,9 @@ class _SecurityScreenState extends State<SecurityScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Security', style: WBTypography.page),
+                      Text(context.l10n.securityTitle, style: WBTypography.page),
                       Text(
-                        'Keep your account safe.',
+                        context.l10n.securitySubtitle,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                         ),
@@ -160,7 +161,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Change password',
+                            context.l10n.securityChangePassword,
                             style: WBTypography.body.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
@@ -168,7 +169,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Keep your account safe',
+                            context.l10n.securityChangePasswordSub,
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),
@@ -191,15 +192,15 @@ class _SecurityScreenState extends State<SecurityScreen> {
               child: Column(
                 children: [
                   _ToggleRow(
-                    label: 'Biometric login',
-                    sub: 'Use your face or fingerprint',
+                    label: context.l10n.securityBiometric,
+                    sub: context.l10n.securityBiometricSub,
                     value: _biometric,
                     onChanged: (v) => setState(() => _biometric = v),
                   ),
                   const WBDivider(),
                   _ToggleRow(
-                    label: 'Two-factor authentication',
-                    sub: 'Extra layer of protection',
+                    label: context.l10n.securityTwoFactor,
+                    sub: context.l10n.securityTwoFactorSub,
                     value: _twoFactor,
                     onChanged: (v) => setState(() => _twoFactor = v),
                   ),

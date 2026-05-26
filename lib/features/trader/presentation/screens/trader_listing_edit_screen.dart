@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/domain/models/corridor.dart';
@@ -61,7 +62,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     } catch (_) {
       if (mounted) {
         setState(() => _uploadingPhoto = false);
-        wbShowSnack(context, "Couldn't upload that photo.");
+        wbShowSnack(context, context.l10n.traderListingPhotoFailed);
       }
     }
   }

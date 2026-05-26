@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 /// Celebratory order confirmation screen shown immediately after payment.
@@ -43,13 +44,13 @@ class OrderConfirmationScreen extends StatelessWidget {
               ),
               const SizedBox(height: WBSpacing.xl),
               Text(
-                'Woohoo!',
+                context.l10n.confirmTitle,
                 textAlign: TextAlign.center,
                 style: WBTypography.hero.copyWith(fontSize: 36, height: 1.1),
               ),
               const SizedBox(height: WBSpacing.sm),
               Text(
-                'Your order is confirmed and the kitchen is on it.',
+                context.l10n.confirmSubtitle,
                 textAlign: TextAlign.center,
                 style: WBTypography.body.copyWith(
                   color: WBColors.fgSecondary,
@@ -81,19 +82,19 @@ class OrderConfirmationScreen extends StatelessWidget {
                   children: [
                     _ConfirmRow(
                       icon: WBIconName.bell,
-                      text: "We'll ping you when your basket moves.",
+                      text: context.l10n.confirmNotification,
                     ),
                     const SizedBox(height: 12),
                     _ConfirmRow(
                       icon: WBIconName.pin,
-                      text: 'Watch it travel to your door in real time.',
+                      text: context.l10n.confirmTracking,
                     ),
                   ],
                 ),
               ),
               const Spacer(),
               WBButton(
-                label: 'Track my order',
+                label: context.l10n.confirmTrackButton,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
@@ -107,7 +108,7 @@ class OrderConfirmationScreen extends StatelessWidget {
               GestureDetector(
                 onTap: () => context.go(AppRoutes.home),
                 child: Text(
-                  'Back to home',
+                  context.l10n.confirmBackHome,
                   style: WBTypography.secondary.copyWith(
                     color: WBColors.fgSecondary,
                     fontWeight: FontWeight.w500,

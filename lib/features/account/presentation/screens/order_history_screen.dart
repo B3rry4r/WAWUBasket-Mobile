@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/data/orders_api.dart';
 import '../../../shopping/domain/models/order.dart';
@@ -71,8 +72,15 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     }
   }
 
+  List<String> _tabLabels(BuildContext context) => [
+        context.l10n.orderHistoryTabAll,
+        context.l10n.orderHistoryTabActive,
+        context.l10n.orderHistoryTabPast,
+      ];
+
   @override
   Widget build(BuildContext context) {
+    final tabLabels = _tabLabels(context);
     final body = SafeArea(
       bottom: false,
       child: ListView(
@@ -89,12 +97,12 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
                 Expanded(
-                  child: Text('Your past baskets', style: WBTypography.page),
+                  child: Text(context.l10n.orderHistoryTitle, style: WBTypography.page),
                 ),
               ],
             )
           else
-            Text('Your past baskets', style: WBTypography.page),
+            Text(context.l10n.orderHistoryTitle, style: WBTypography.page),
           const SizedBox(height: WBSpacing.lg),
           SizedBox(
             height: 36,
@@ -103,7 +111,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               itemCount: _tabs.length,
               separatorBuilder: (_, _) => const SizedBox(width: 8),
               itemBuilder: (_, i) => WBTag(
-                label: _tabs[i],
+                label: tabLabels[i],
                 active: _tabs[i] == _activeTab,
                 onTap: () => setState(() => _activeTab = _tabs[i]),
               ),
@@ -128,11 +136,11 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
           else if (_error != null)
             _Hint(
               text: _error!,
-              actionLabel: 'Try again',
+              actionLabel: context.l10n.actionRetry,
               onAction: _load,
             )
           else if (_filtered.isEmpty)
-            const _Hint(text: 'No orders yet. Time to change that.')
+            _Hint(text: context.l10n.orderHistoryEmpty)
           else
             for (final order in _filtered) ...[
               _OrderCard(order: order, onChanged: _load),
@@ -200,7 +208,7 @@ class _OrderCard extends StatelessWidget {
     try {
       await OrdersApi.instance.reorder(order.id);
       if (!context.mounted) return;
-      wbShowSnack(context, 'Items added to your basket');
+      wbShowSnack(context, context.l10n.orderHistoryReordered);
       context.push(AppRoutes.cart);
     } on ApiException catch (e) {
       if (context.mounted) wbShowSnack(context, e.message);
@@ -271,7 +279,7 @@ class _OrderCard extends StatelessWidget {
               ),
               if (order.isActive)
                 WBButton(
-                  label: 'Track order',
+                  label: context.l10n.orderHistoryTrack,
                   size: WBButtonSize.sm,
                   onPressed: () => context.push(
                     '${AppRoutes.tracking}?orderId=${order.id}',
@@ -279,7 +287,7 @@ class _OrderCard extends StatelessWidget {
                 )
               else ...[
                 WBButton(
-                  label: 'Receipt',
+                  label: context.l10n.orderHistoryReceipt,
                   size: WBButtonSize.sm,
                   variant: WBButtonVariant.secondary,
                   onPressed: () => context.push(
@@ -289,7 +297,7 @@ class _OrderCard extends StatelessWidget {
                 if (order.isDelivered) ...[
                   const SizedBox(width: 8),
                   WBButton(
-                    label: 'Reorder',
+                    label: context.l10n.orderHistoryReorder,
                     size: WBButtonSize.sm,
                     onPressed: () => _reorder(context),
                   ),

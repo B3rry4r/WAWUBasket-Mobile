@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../application/agent_controller.dart';
 
 class AgentSyncScreen extends StatefulWidget {
@@ -201,7 +202,7 @@ class _AgentSyncScreenState extends State<AgentSyncScreen> {
                           context.go(AppRoutes.welcome);
                         },
                         child: Text(
-                          'Sign out',
+                          context.l10n.operatorSignOut,
                           style: WBTypography.caption.copyWith(
                             color: WBColors.statusError,
                             fontWeight: FontWeight.w600,

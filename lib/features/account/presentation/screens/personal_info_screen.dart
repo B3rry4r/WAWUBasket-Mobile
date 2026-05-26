@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/application/wb_images.dart';
 import '../../application/profile_controller.dart';
@@ -46,7 +47,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         _avatarUrl = res.publicUrl;
         _uploadingAvatar = false;
       });
-      wbShowSnack(context, 'Photo updated');
+      wbShowSnack(context, context.l10n.personalInfoPhotoUpdated);
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _uploadingAvatar = false);
@@ -55,7 +56,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     } catch (_) {
       if (mounted) {
         setState(() => _uploadingAvatar = false);
-        wbShowSnack(context, "Couldn't upload that photo.");
+        wbShowSnack(context, context.l10n.personalInfoPhotoFailed);
       }
     }
   }
@@ -94,7 +95,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   Future<void> _save() async {
     if (_name.text.trim().isEmpty) {
-      wbShowSnack(context, 'Enter your full name.');
+      wbShowSnack(context, context.l10n.personalInfoNameRequired);
       return;
     }
     setState(() => _busy = true);
@@ -104,7 +105,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         email: _email.text.trim(),
       );
       if (!mounted) return;
-      wbShowSnack(context, 'Changes saved');
+      wbShowSnack(context, context.l10n.personalInfoSaved);
       context.pop();
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -130,7 +131,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Personal information', style: WBTypography.page),
+                Text(context.l10n.personalInfoTitle, style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -205,7 +206,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             const SizedBox(height: 10),
             Center(
               child: Text(
-                'Tap to change photo',
+                context.l10n.personalInfoTapPhoto,
                 style: WBTypography.caption.copyWith(
                   color: WBColors.fgSecondary,
                   fontWeight: FontWeight.w500,
@@ -214,34 +215,34 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             ),
             const SizedBox(height: WBSpacing.lg),
             WBInput(
-              label: 'Full name',
+              label: context.l10n.personalInfoFullName,
               controller: _name,
               leadingIcon: WBIconName.user,
             ),
             const SizedBox(height: WBSpacing.md),
             WBInput(
-              label: 'Email',
+              label: context.l10n.personalInfoEmail,
               controller: _email,
               leadingIcon: WBIconName.message,
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: WBSpacing.md),
             WBInput(
-              label: 'Phone number',
+              label: context.l10n.personalInfoPhone,
               controller: _phone,
               leadingIcon: WBIconName.phone,
               enabled: false,
             ),
             const SizedBox(height: WBSpacing.md),
             WBInput(
-              label: 'Date of birth',
+              label: context.l10n.personalInfoDob,
               controller: _dob,
               leadingIcon: WBIconName.clock,
               enabled: false,
             ),
             const SizedBox(height: WBSpacing.xl),
             WBButton(
-              label: 'Save changes',
+              label: context.l10n.personalInfoSave,
               size: WBButtonSize.lg,
               fullWidth: true,
               loading: _busy,

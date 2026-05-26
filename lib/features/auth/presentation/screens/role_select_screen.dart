@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/role_controller.dart';
 import '../widgets/kyc_widgets.dart';
@@ -122,7 +123,7 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
                       );
                     },
                     child: Text(
-                      'Skip',
+                      context.l10n.onboardingSkip,
                       style: WBTypography.secondary.copyWith(
                         color: WBColors.fgSecondary,
                         fontWeight: FontWeight.w500,
@@ -142,13 +143,13 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
                 ),
                 children: [
                   Text(
-                    'How will you use\nWAWUBasket?',
+                    context.l10n.roleSelectTitle,
                     style: WBTypography.hero
                         .copyWith(fontSize: 30, height: 1.15),
                   ),
                   const SizedBox(height: WBSpacing.sm + 2),
                   Text(
-                    "Pick what you'll do most. You can switch roles anytime from your profile.",
+                    context.l10n.roleSelectSubtitle,
                     style: WBTypography.body.copyWith(
                       color: WBColors.fgSecondary,
                       fontSize: 14,

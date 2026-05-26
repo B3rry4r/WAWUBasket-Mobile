@@ -6,7 +6,7 @@ import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
@@ -107,14 +107,14 @@ class _ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-  String get _title {
-    if (_isSupport) return 'Live chat';
+  String _title(BuildContext context) {
+    if (_isSupport) return context.l10n.chatLiveChat;
     final t = widget.title?.trim() ?? '';
-    return t.isEmpty ? 'Conversation' : t;
+    return t.isEmpty ? context.l10n.chatTitle : t;
   }
 
-  String get _sub {
-    if (_isSupport) return 'Replies usually in under 2 min';
+  String _sub(BuildContext context) {
+    if (_isSupport) return context.l10n.chatRepliesIn;
     final id = widget.orderId;
     if (id == null) return '';
     return 'Order #${id.length > 8 ? id.substring(0, 8) : id}';
@@ -245,7 +245,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (mounted) wbShowSnack(context, e.message);
     } catch (_) {
       if (mounted) {
-        wbShowSnack(context, AppLocalizations.of(context).chatAttachmentFailed);
+        wbShowSnack(context, context.l10n.chatAttachmentFailed);
       }
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -290,13 +290,13 @@ class _ChatScreenState extends State<ChatScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _title,
+                          _title(context),
                           style: WBTypography.cardTitle.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          _sub,
+                          _sub(context),
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,
                           ),
@@ -328,9 +328,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: TextField(
                         controller: _composer,
                         onSubmitted: (_) => _send(),
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'Message',
+                          hintText: context.l10n.chatMessageHint,
                           isCollapsed: true,
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 14),
@@ -407,7 +407,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (_error != null) return _stateHint(_error!);
     final msgs = _messages!;
     if (msgs.isEmpty) {
-      return _stateHint(AppLocalizations.of(context).chatEmpty);
+      return _stateHint(context.l10n.chatEmpty);
     }
     return _messageList(msgs);
   }

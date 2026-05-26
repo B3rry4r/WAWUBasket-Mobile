@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
@@ -111,7 +112,7 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
                             ),
                             const SizedBox(height: 14),
                             WBButton(
-                              label: 'Try again',
+                              label: context.l10n.actionRetry,
                               size: WBButtonSize.sm,
                               variant: WBButtonVariant.secondary,
                               onPressed: _load,

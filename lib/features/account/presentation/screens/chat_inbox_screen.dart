@@ -5,7 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
 
@@ -83,10 +83,9 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
     final support = _Conversation(
       name: 'WAWU Support',
-      preview: _supportPreview ?? l10n.chatSupportPrompt,
+      preview: _supportPreview ?? context.l10n.chatSupportPrompt,
       time: _supportTime ?? '',
       unread: false,
       orderId: null,
@@ -113,9 +112,9 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Chats', style: WBTypography.page),
+                      Text(context.l10n.chatTitle, style: WBTypography.page),
                       Text(
-                        'Talk to support and anyone on your active orders.',
+                        context.l10n.chatSubtitle,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                         ),
@@ -153,7 +152,7 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
                   else if (_error != null)
                     _InboxHint(text: _error!)
                   else if (chats!.isEmpty)
-                    _InboxHint(text: l10n.chatInboxEmpty)
+                    _InboxHint(text: context.l10n.chatInboxEmpty)
                   else
                     for (var i = 0; i < chats.length; i++) ...[
                       _ConversationRow(

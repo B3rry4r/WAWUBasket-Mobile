@@ -7,7 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/kyc_api.dart';
 import '../../../auth/presentation/widgets/kyc_widgets.dart';
@@ -75,7 +75,7 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
       );
       if (!mounted) return;
       RoleController.instance.markPending(AppRole.agent);
-      wbShowSnack(context, AppLocalizations.of(context).kycSubmitted);
+      wbShowSnack(context, context.l10n.kycSubmitted);
       if (context.canPop()) {
         context.pop();
       } else {

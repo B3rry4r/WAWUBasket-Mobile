@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 
@@ -246,7 +247,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total',
+                  context.l10n.cartTotal,
                   style:
                       WBTypography.body.copyWith(fontWeight: FontWeight.w500),
                 ),

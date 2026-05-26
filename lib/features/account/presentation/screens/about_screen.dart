@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
 
-  static const _rows = [
-    (icon: WBIconName.message, label: 'Send feedback', sub: 'Help us improve'),
-    (icon: WBIconName.card, label: 'Terms of service', sub: 'The rules of the basket'),
-    (icon: WBIconName.user, label: 'Privacy policy', sub: 'How we handle your info'),
+  List<({WBIconName icon, String label, String sub})> _rows(BuildContext context) => [
+    (icon: WBIconName.message, label: context.l10n.aboutSendFeedback, sub: context.l10n.aboutSendFeedbackSub),
+    (icon: WBIconName.card, label: context.l10n.aboutTerms, sub: context.l10n.aboutTermsSub),
+    (icon: WBIconName.user, label: context.l10n.aboutPrivacy, sub: context.l10n.aboutPrivacySub),
   ];
 
-  static const _userSteps = [
-    ('Browse', 'Pick what you want from restaurants, produce, livestock, or essentials.'),
-    ('Checkout', 'Choose when you want it and how you\'ll pay.'),
-    ('Track', 'Watch your basket come to life, then enjoy.'),
+  List<(String, String)> _userSteps(BuildContext context) => [
+    (context.l10n.aboutStep1Title, context.l10n.aboutStep1Body),
+    (context.l10n.aboutStep2Title, context.l10n.aboutStep2Body),
+    (context.l10n.aboutStep3Title, context.l10n.aboutStep3Body),
   ];
 
-  static const _vendorSteps = [
-    ('Sign up', 'Tell us about your business. Let\'s have some documents sorted.'),
-    ('List your products', 'Add photos, prices, and descriptions.'),
-    ('Start selling', 'Get orders, prepare food, and grow.'),
+  List<(String, String)> _vendorSteps(BuildContext context) => [
+    (context.l10n.aboutVendorStep1Title, context.l10n.aboutVendorStep1Body),
+    (context.l10n.aboutVendorStep2Title, context.l10n.aboutVendorStep2Body),
+    (context.l10n.aboutVendorStep3Title, context.l10n.aboutVendorStep3Body),
   ];
 
   @override
@@ -42,7 +43,7 @@ class AboutScreen extends StatelessWidget {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('About WAWUBasket', style: WBTypography.page),
+                Text(context.l10n.aboutTitle, style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -56,7 +57,7 @@ class AboutScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "We're WAWUBasket — offspring of WAWAfrica.",
+                    'We\'re building the infrastructure for African commerce.',
                     style: WBTypography.hero.copyWith(
                       color: Colors.white,
                       fontSize: 22,
@@ -65,7 +66,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    'One basket. Everything.',
+                    context.l10n.aboutTagline,
                     style: WBTypography.body.copyWith(
                       color: Colors.white.withValues(alpha: 0.65),
                       fontSize: 14,
@@ -94,7 +95,7 @@ class AboutScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   Text(
-                    'Version 2.1.0 · Build 2046',
+                    'Version 1.0.0',
                     style: WBTypography.caption.copyWith(
                       color: Colors.white.withValues(alpha: 0.4),
                     ),
@@ -104,14 +105,14 @@ class AboutScreen extends StatelessWidget {
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'Three steps to a full basket',
+              context.l10n.aboutHowItWorks,
               style: WBTypography.cardTitle.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 10),
             WBCard(
               child: Column(
                 children: [
-                  for (var i = 0; i < _userSteps.length; i++) ...[
+                  for (var i = 0; i < _userSteps(context).length; i++) ...[
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -137,7 +138,7 @@ class AboutScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _userSteps[i].$1,
+                                _userSteps(context)[i].$1,
                                 style: WBTypography.body.copyWith(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -145,7 +146,7 @@ class AboutScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                _userSteps[i].$2,
+                                _userSteps(context)[i].$2,
                                 style: WBTypography.caption.copyWith(
                                   color: WBColors.fgSecondary,
                                 ),
@@ -155,21 +156,21 @@ class AboutScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (i != _userSteps.length - 1) const SizedBox(height: 14),
+                    if (i != _userSteps(context).length - 1) const SizedBox(height: 14),
                   ],
                 ],
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'Sell on WAWUBasket',
+              context.l10n.aboutSellOn,
               style: WBTypography.cardTitle.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 10),
             WBCard(
               child: Column(
                 children: [
-                  for (var i = 0; i < _vendorSteps.length; i++) ...[
+                  for (var i = 0; i < _vendorSteps(context).length; i++) ...[
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -195,7 +196,7 @@ class AboutScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _vendorSteps[i].$1,
+                                _vendorSteps(context)[i].$1,
                                 style: WBTypography.body.copyWith(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 14,
@@ -203,7 +204,7 @@ class AboutScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                _vendorSteps[i].$2,
+                                _vendorSteps(context)[i].$2,
                                 style: WBTypography.caption.copyWith(
                                   color: WBColors.fgSecondary,
                                 ),
@@ -213,7 +214,7 @@ class AboutScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    if (i != _vendorSteps.length - 1) const SizedBox(height: 14),
+                    if (i != _vendorSteps(context).length - 1) const SizedBox(height: 14),
                   ],
                 ],
               ),
@@ -228,7 +229,7 @@ class AboutScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: WBSpacing.md),
               child: Column(
                 children: [
-                  for (var i = 0; i < _rows.length; i++)
+                  for (var i = 0; i < _rows(context).length; i++)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 15),
                       child: Row(
@@ -241,7 +242,7 @@ class AboutScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             alignment: Alignment.center,
-                            child: WBIcon(_rows[i].icon, size: 17),
+                            child: WBIcon(_rows(context)[i].icon, size: 17),
                           ),
                           const SizedBox(width: 14),
                           Expanded(
@@ -249,7 +250,7 @@ class AboutScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _rows[i].label,
+                                  _rows(context)[i].label,
                                   style: WBTypography.body.copyWith(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w500,
@@ -257,7 +258,7 @@ class AboutScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 1),
                                 Text(
-                                  _rows[i].sub,
+                                  _rows(context)[i].sub,
                                   style: WBTypography.caption.copyWith(
                                     color: WBColors.fgSecondary,
                                   ),

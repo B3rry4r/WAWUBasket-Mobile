@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -96,8 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
               _padded(WBHomeAppBar(
                 title: greeting,
                 subtitle: defaultAddr != null
-                    ? 'Delivering to ${defaultAddr.line}'
-                    : 'Add a delivery address',
+                    ? context.l10n.homeDeliveringTo(defaultAddr.line)
+                    : context.l10n.homeAddAddress,
                 subtitleIcon: WBIconName.pin,
                 showChat: false,
                 trailingExtra: WBHomeAppBarButton(
@@ -125,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Search for jollof, tomatoes, chicken, pots…',
+                          context.l10n.homeSearchPlaceholder,
                           overflow: TextOverflow.ellipsis,
                           style: WBTypography.body.copyWith(
                             color: WBColors.fgPlaceholder,
@@ -190,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Bulk markets',
+                              context.l10n.homeBulkMarketsTitle,
                               style: WBTypography.body.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w700,
@@ -199,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              'Wholesale lots & corridor prices, direct from farms',
+                              context.l10n.homeBulkMarketsSubtitle,
                               style: WBTypography.caption.copyWith(
                                 color: Colors.white.withValues(alpha: 0.65),
                               ),
@@ -383,7 +384,7 @@ class _OffersBanner extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                'THIS WEEK',
+                context.l10n.homeOffersThisWeek,
                 style: WBTypography.label.copyWith(
                   color: Colors.white.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w500,
@@ -401,7 +402,7 @@ class _OffersBanner extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                'Until Sunday. No code needed.',
+                context.l10n.homeOfferSubtitle,
                 style: WBTypography.caption.copyWith(
                   color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 13,
@@ -420,7 +421,7 @@ class _OffersBanner extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Order now',
+                      context.l10n.homeOfferButton,
                       style: WBTypography.body.copyWith(
                         fontWeight: FontWeight.w500,
                         color: WBColors.fgHeader,

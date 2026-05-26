@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_orders_controller.dart';
 import '../widgets/vendor_status_pill.dart';
@@ -66,7 +67,7 @@ class _VendorOrdersScreenState extends State<VendorOrdersScreen> {
                     ),
                   ),
                   WBButton(
-                    label: 'Alerts',
+                    label: context.l10n.vendorAlertsTitle,
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
                     trailingIcon: WBIconName.bell,
@@ -198,7 +199,7 @@ class _OrderCard extends StatelessWidget {
                 const Spacer(),
                 if (order.stage == OrderStage.pending) ...[
                   WBButton(
-                    label: 'Decline',
+                    label: context.l10n.vendorHomeDecline,
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
                     onPressed: () {
@@ -208,7 +209,7 @@ class _OrderCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   WBButton(
-                    label: 'Accept',
+                    label: context.l10n.vendorHomeAccept,
                     size: WBButtonSize.sm,
                     onPressed: () {
                       VendorOrdersController.instance.advance(order.id);

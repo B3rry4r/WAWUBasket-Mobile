@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 /// Dietary preferences, things the customer would rather not eat. Drives
@@ -19,16 +20,16 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
   final Set<String> _selected = {};
   final _custom = TextEditingController();
 
-  static const _options = [
-    'No beef',
-    'No pork',
-    'No shellfish',
-    'Halal only',
-    'Vegetarian',
-    'Vegan',
-    'No dairy',
-    'No nuts',
-    'Low sugar',
+  List<String> _options(BuildContext context) => [
+    context.l10n.dietaryNoBeef,
+    context.l10n.dietaryNoPork,
+    context.l10n.dietaryNoShellfish,
+    context.l10n.dietaryHalal,
+    context.l10n.dietaryVegetarian,
+    context.l10n.dietaryVegan,
+    context.l10n.dietaryNoDairy,
+    context.l10n.dietaryNoNuts,
+    context.l10n.dietaryLowSugar,
   ];
 
   @override
@@ -61,10 +62,10 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Dietary preferences',
+                          Text(context.l10n.dietaryTitle,
                               style: WBTypography.page),
                           Text(
-                            "Things you'd rather not eat.",
+                            context.l10n.dietarySubtitle,
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),
@@ -79,7 +80,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (final o in _options)
+                    for (final o in _options(context))
                       WBTag(
                         label: o,
                         active: _selected.contains(o),
@@ -93,13 +94,13 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 Text(
-                  'Anything else?',
+                  context.l10n.dietaryAnythingElse,
                   style: WBTypography.cardTitle.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 10),
                 WBInput(
                   controller: _custom,
-                  placeholder: 'e.g. no MSG, no palm oil',
+                  placeholder: context.l10n.dietaryCustomPlaceholder,
                 ),
               ],
             ),
@@ -116,11 +117,11 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
                     20,
                   ),
                   child: WBButton(
-                    label: 'Save preferences',
+                    label: context.l10n.dietarySave,
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     onPressed: () {
-                      wbShowSnack(context, 'Dietary preferences saved');
+                      wbShowSnack(context, context.l10n.dietarySaved);
                       context.pop();
                     },
                   ),

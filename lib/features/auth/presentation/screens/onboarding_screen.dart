@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/data/profile_api.dart';
@@ -74,7 +75,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   GestureDetector(
                     onTap: _skipAll,
                     child: Text(
-                      'Skip',
+                      context.l10n.onboardingSkip,
                       style: WBTypography.secondary.copyWith(
                         color: WBColors.fgSecondary,
                         fontWeight: FontWeight.w500,
@@ -118,12 +119,12 @@ class _PermissionsStep extends StatelessWidget {
       ),
       children: [
         Text(
-          'A couple of quick\npermissions',
+          context.l10n.onboardingPermissionsTitle,
           style: WBTypography.hero.copyWith(fontSize: 30, height: 1.15),
         ),
         const SizedBox(height: WBSpacing.sm + 2),
         Text(
-          'They make the basket work better for you. You can change these anytime.',
+          context.l10n.onboardingPermissionsSubtitle,
           style: WBTypography.body.copyWith(
             color: WBColors.fgSecondary,
             fontSize: 14,
@@ -132,11 +133,11 @@ class _PermissionsStep extends StatelessWidget {
         const SizedBox(height: WBSpacing.xl),
         _PermissionCard(
           icon: WBIconName.pin,
-          title: 'Where are you cooking today?',
-          sub: 'We need your location to show restaurants and markets near you. We never share your exact location with anyone.',
-          primary: 'While using app',
-          secondary: 'Allow once',
-          tertiary: 'Not now',
+          title: context.l10n.onboardingLocationTitle,
+          sub: context.l10n.onboardingLocationBody,
+          primary: context.l10n.onboardingLocationPrimary,
+          secondary: context.l10n.onboardingLocationSecondary,
+          tertiary: context.l10n.onboardingLocationTertiary,
           onPrimary: WBPermissions.requestLocation,
           onSecondary: WBPermissions.requestLocation,
           onTertiary: onNext,
@@ -144,15 +145,15 @@ class _PermissionsStep extends StatelessWidget {
         const SizedBox(height: WBSpacing.md),
         _PermissionCard(
           icon: WBIconName.bell,
-          title: "Don't miss the good stuff",
-          sub: "We'll tell you when your order is on its way, when your meat is freshly cut, and when there's a surprise waiting.",
-          primary: 'Yes, tell me',
-          secondary: 'Maybe later',
+          title: context.l10n.onboardingNotificationsTitle,
+          sub: context.l10n.onboardingNotificationsBody,
+          primary: context.l10n.onboardingNotificationsPrimary,
+          secondary: context.l10n.onboardingNotificationsSecondary,
           onPrimary: WBPermissions.requestNotifications,
         ),
         const SizedBox(height: WBSpacing.xl),
         WBButton(
-          label: 'Continue',
+          label: context.l10n.actionContinue,
           size: WBButtonSize.lg,
           fullWidth: true,
           trailingIcon: WBIconName.arrowRight,
@@ -306,16 +307,16 @@ class _QuizStepState extends State<_QuizStep> {
   final _avoid = TextEditingController();
   bool _saving = false;
 
-  static const _wantOptions = [
-    'Cooked meals from restaurants',
-    'Fresh fruits and vegetables',
-    'Meat, chicken, and fish',
-    'Pots, pans, and pantry stuff',
+  List<String> _wantOptions(BuildContext context) => [
+    context.l10n.onboardingQuizWantOption1,
+    context.l10n.onboardingQuizWantOption2,
+    context.l10n.onboardingQuizWantOption3,
+    context.l10n.onboardingQuizWantOption4,
   ];
-  static const _speedOptions = [
-    "Right now, I'm hungry",
-    'Today sometime',
-    "I'm planning ahead",
+  List<String> _speedOptions(BuildContext context) => [
+    context.l10n.onboardingQuizSpeedOption1,
+    context.l10n.onboardingQuizSpeedOption2,
+    context.l10n.onboardingQuizSpeedOption3,
   ];
 
   @override
@@ -351,25 +352,25 @@ class _QuizStepState extends State<_QuizStep> {
       ),
       children: [
         Text(
-          "Let's build your basket",
+          context.l10n.onboardingQuizTitle,
           style: WBTypography.hero.copyWith(fontSize: 30, height: 1.15),
         ),
         const SizedBox(height: WBSpacing.sm + 2),
         Text(
-          "Tell us what you love, and we'll make sure you see it first.",
+          context.l10n.onboardingQuizSubtitle,
           style: WBTypography.body.copyWith(
             color: WBColors.fgSecondary,
             fontSize: 14,
           ),
         ),
         const SizedBox(height: WBSpacing.xl),
-        _QuizLabel('What do you usually want?'),
+        _QuizLabel(context.l10n.onboardingQuizWantsLabel),
         const SizedBox(height: 10),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (final o in _wantOptions)
+            for (final o in _wantOptions(context))
               WBTag(
                 label: o,
                 active: _wants.contains(o),
@@ -380,13 +381,13 @@ class _QuizStepState extends State<_QuizStep> {
           ],
         ),
         const SizedBox(height: WBSpacing.lg),
-        _QuizLabel('How fast do you need things?'),
+        _QuizLabel(context.l10n.onboardingQuizSpeedLabel),
         const SizedBox(height: 10),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (final o in _speedOptions)
+            for (final o in _speedOptions(context))
               WBTag(
                 label: o,
                 active: _speed == o,
@@ -395,15 +396,15 @@ class _QuizStepState extends State<_QuizStep> {
           ],
         ),
         const SizedBox(height: WBSpacing.lg),
-        _QuizLabel('Any foods we should avoid?'),
+        _QuizLabel(context.l10n.onboardingQuizAvoidLabel),
         const SizedBox(height: 10),
         WBInput(
           controller: _avoid,
-          placeholder: 'e.g. no shellfish, no beef',
+          placeholder: context.l10n.onboardingQuizAvoidPlaceholder,
         ),
         const SizedBox(height: WBSpacing.xl),
         WBButton(
-          label: 'Build my basket',
+          label: context.l10n.onboardingQuizBuildButton,
           size: WBButtonSize.lg,
           fullWidth: true,
           trailingIcon: WBIconName.arrowRight,
@@ -415,7 +416,7 @@ class _QuizStepState extends State<_QuizStep> {
           child: GestureDetector(
             onTap: _saving ? null : widget.onNext,
             child: Text(
-              "I'll figure it out later",
+              context.l10n.onboardingQuizSkipLink,
               style: WBTypography.secondary.copyWith(
                 color: WBColors.fgSecondary,
                 fontWeight: FontWeight.w500,
@@ -475,13 +476,13 @@ class _GiftStep extends StatelessWidget {
           ),
           const SizedBox(height: WBSpacing.xl),
           Text(
-            'A little welcome gift',
+            context.l10n.onboardingGiftTitle,
             textAlign: TextAlign.center,
             style: WBTypography.hero.copyWith(fontSize: 28),
           ),
           const SizedBox(height: WBSpacing.sm),
           Text(
-            'Your first order comes with something extra. Just because you deserve it.',
+            context.l10n.onboardingGiftBody,
             textAlign: TextAlign.center,
             style: WBTypography.body.copyWith(
               color: WBColors.fgSecondary,
@@ -513,7 +514,7 @@ class _GiftStep extends StatelessWidget {
           ),
           const Spacer(),
           WBButton(
-            label: "Let's see what's inside",
+            label: context.l10n.onboardingGiftButton,
             size: WBButtonSize.lg,
             fullWidth: true,
             trailingIcon: WBIconName.arrowRight,
@@ -521,7 +522,7 @@ class _GiftStep extends StatelessWidget {
           ),
           const SizedBox(height: WBSpacing.sm + 4),
           Text(
-            'Valid for first order only. Minimum order applies.',
+            context.l10n.onboardingGiftFootnote,
             textAlign: TextAlign.center,
             style: WBTypography.caption.copyWith(
               color: WBColors.fgPlaceholder,

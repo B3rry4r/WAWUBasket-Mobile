@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/i18n/locale_controller.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../../l10n/app_localizations.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -51,14 +51,14 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
                 Text(
-                  AppLocalizations.of(context).languageTitle,
+                  context.l10n.languageTitle,
                   style: WBTypography.page,
                 ),
               ],
             ),
             const SizedBox(height: WBSpacing.sm),
             Text(
-              AppLocalizations.of(context).languageSubtitle,
+              context.l10n.languageSubtitle,
               style: WBTypography.body.copyWith(
                 color: WBColors.fgSecondary,
                 fontSize: 14,

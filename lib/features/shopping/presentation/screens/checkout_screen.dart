@@ -7,6 +7,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/address_controller.dart';
 import '../../../account/data/account_extras_api.dart';
@@ -205,13 +206,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ),
                   const SizedBox(height: WBSpacing.lg),
                   Text(
-                    'Waiting for payment…',
+                    context.l10n.checkoutWaiting,
                     style: WBTypography.cardTitle.copyWith(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Complete payment in the browser. We\'ll move you to order tracking automatically.',
+                    context.l10n.checkoutWaitingBody,
                     style: WBTypography.caption.copyWith(
                       color: WBColors.fgSecondary,
                       height: 1.5,
@@ -222,13 +223,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   const WBIcon(WBIconName.bell, size: 40),
                   const SizedBox(height: WBSpacing.lg),
                   Text(
-                    'Payment not confirmed',
+                    context.l10n.checkoutTimeout,
                     style: WBTypography.cardTitle.copyWith(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'We didn\'t receive a payment confirmation. Tap below to check again, or go back.',
+                    context.l10n.checkoutTimeoutBody,
                     style: WBTypography.caption.copyWith(
                       color: WBColors.fgSecondary,
                       height: 1.5,
@@ -237,7 +238,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ),
                   const SizedBox(height: WBSpacing.lg),
                   WBButton(
-                    label: 'Check payment status',
+                    label: context.l10n.checkoutCheckStatus,
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     onPressed: () {
@@ -249,7 +250,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ),
                   const SizedBox(height: 12),
                   WBButton(
-                    label: 'Go back',
+                    label: context.l10n.checkoutGoBack,
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     onPressed: () => setState(() {
@@ -284,12 +285,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(width: 14),
-                    Text('Checkout', style: WBTypography.page),
+                    Text(context.l10n.checkoutTitle, style: WBTypography.page),
                   ],
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 _Section(
-                  label: 'Where are we sending this?',
+                  label: context.l10n.checkoutDeliverySection,
                   child: ValueListenableBuilder<List<Address>>(
                     valueListenable: AddressController.instance.addresses,
                     builder: (_, addresses, _) {
@@ -311,7 +312,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           Expanded(
                             child: defaultAddr == null
                                 ? Text(
-                                    'No address saved — add one',
+                                    context.l10n.checkoutNoAddress,
                                     style: WBTypography.body.copyWith(
                                       color: WBColors.fgSecondary,
                                       fontSize: 14,
@@ -343,7 +344,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                           GestureDetector(
                             onTap: () => context.push(AppRoutes.savedAddresses),
                             child: Text(
-                              'Change',
+                              context.l10n.checkoutChangeAddress,
                               style: WBTypography.caption.copyWith(
                                 color: WBColors.fgHeader,
                                 fontWeight: FontWeight.w500,
@@ -358,13 +359,13 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
                 const SizedBox(height: WBSpacing.md),
                 _Section(
-                  label: 'When do you want it?',
+                  label: context.l10n.checkoutTimingSection,
                   child: Row(
                     children: [
                       Expanded(
                         child: _TimeOption(
-                          label: 'Order now',
-                          sub: 'Arrives in 25–35 min',
+                          label: context.l10n.checkoutNow,
+                          sub: context.l10n.checkoutNowSubtitle,
                           active: !_scheduled,
                           onTap: () => setState(() {
                             _scheduled = false;
@@ -375,7 +376,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: _TimeOption(
-                          label: 'Schedule',
+                          label: context.l10n.checkoutSchedule,
                           sub: _scheduleSubtitle,
                           active: _scheduled,
                           onTap: _openScheduleSheet,
@@ -386,7 +387,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
                 const SizedBox(height: WBSpacing.md),
                 _Section(
-                  label: 'How will you pay?',
+                  label: context.l10n.checkoutPaymentSection,
                   child: Column(
                     children: [
                       for (final o in _payOptions) ...[
@@ -405,7 +406,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
                 const SizedBox(height: WBSpacing.md),
                 _Section(
-                  label: 'Your basket',
+                  label: context.l10n.checkoutBasketSection,
                   child: Column(
                     children: [
                       for (final l in lines) ...[
@@ -428,7 +429,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Total',
+                            context.l10n.cartTotal,
                             style: WBTypography.body.copyWith(
                               fontWeight: FontWeight.w600,
                             ),
@@ -476,7 +477,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             bottom: 0,
             child: StickyActionBar(
               child: WBButton(
-                label: 'Place order',
+                label: context.l10n.checkoutPlaceOrder,
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 loading: _placing,
@@ -859,7 +860,7 @@ class _ScheduleSheetState extends State<_ScheduleSheet> {
             ),
             const SizedBox(height: 22),
             WBButton(
-              label: 'Confirm time slot',
+              label: context.l10n.checkoutScheduleConfirm,
               fullWidth: true,
               size: WBButtonSize.lg,
               onPressed: _timeKey == null

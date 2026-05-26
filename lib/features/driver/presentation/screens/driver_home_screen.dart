@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
@@ -192,7 +193,7 @@ class _Hero extends StatelessWidget {
               const SizedBox(width: 10),
               _Stat(label: 'Today', value: '$pendingToday'),
               const SizedBox(width: 10),
-              const _Stat(label: 'Rating', value: '★ 4.7'),
+              _Stat(label: context.l10n.vendorAnalyticsRating, value: '★ 4.7'),
             ],
           ),
         ],

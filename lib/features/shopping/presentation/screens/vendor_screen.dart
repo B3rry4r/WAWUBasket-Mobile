@@ -6,6 +6,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/data/account_extras_api.dart';
 import '../../../home/domain/models/vendor.dart';
@@ -110,7 +111,7 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
                     .copyWith(color: WBColors.fgSecondary)),
             const SizedBox(height: 14),
             WBButton(
-              label: 'Try again',
+              label: context.l10n.actionRetry,
               size: WBButtonSize.sm,
               variant: WBButtonVariant.secondary,
               onPressed: _load,
