@@ -8,6 +8,8 @@ import 'core/config/secrets.dart';
 import 'core/i18n/locale_controller.dart';
 import 'core/network/token_store.dart';
 import 'core/services/notification_service.dart';
+import 'core/services/websocket_service.dart';
+import 'features/account/data/chat_local_store.dart';
 import 'features/auth/application/role_controller.dart';
 
 Future<void> main() async {
@@ -31,5 +33,16 @@ Future<void> main() async {
   if (kMapboxConfigured && !kIsWeb) {
     mb.MapboxOptions.setAccessToken(kMapboxPublicToken);
   }
+  // Real-time chat / order pushes. Auto-connects when a session is present
+  // and tears down on logout via TokenStore.tokenNotifier — no auth-screen
+  // wiring required.
+  WebSocketService.instance.init();
+  // On logout, wipe the offline chat cache so the next signed-in user
+  // never sees the previous user's threads.
+  TokenStore.instance.tokenNotifier.addListener(() {
+    if (TokenStore.instance.accessToken == null) {
+      ChatLocalStore.instance.clearAll().ignore();
+    }
+  });
   runApp(const ProviderScope(child: WAWUBasketApp()));
 }

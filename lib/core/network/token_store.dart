@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// Encrypted storage for the JWT access + refresh tokens.
@@ -22,6 +23,11 @@ class TokenStore {
   String? _access;
   String? _refresh;
 
+  /// Reactive view of [accessToken]. Auxiliary services (WebSocket,
+  /// background sync) listen here to wire themselves up on login and tear
+  /// down on logout without touching the auth screens.
+  final ValueNotifier<String?> tokenNotifier = ValueNotifier<String?>(null);
+
   String? get accessToken => _access;
   String? get refreshToken => _refresh;
   bool get hasSession => _access != null && _access!.isNotEmpty;
@@ -30,6 +36,7 @@ class TokenStore {
   Future<void> load() async {
     _access = await _storage.read(key: _kAccess);
     _refresh = await _storage.read(key: _kRefresh);
+    tokenNotifier.value = _access;
   }
 
   Future<void> save({
@@ -40,6 +47,7 @@ class TokenStore {
     _refresh = refreshToken;
     await _storage.write(key: _kAccess, value: accessToken);
     await _storage.write(key: _kRefresh, value: refreshToken);
+    tokenNotifier.value = accessToken;
   }
 
   Future<void> clear() async {
@@ -47,5 +55,6 @@ class TokenStore {
     _refresh = null;
     await _storage.delete(key: _kAccess);
     await _storage.delete(key: _kRefresh);
+    tokenNotifier.value = null;
   }
 }
