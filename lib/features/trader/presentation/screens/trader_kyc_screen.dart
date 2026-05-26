@@ -50,17 +50,16 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
     super.dispose();
   }
 
-  Future<void> _pickFromList(
-    BuildContext context,
-    List<String> items,
-    ValueChanged<String> onPicked,
-  ) async {
+  Future<void> _pickState(BuildContext context) async {
+    final states = kCountryStates[_selectedCountry];
+    if (states == null) return;
     final picked = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: WBColors.bgPrimary,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
       ),
       builder: (_) => DraggableScrollableSheet(
         expand: false,
@@ -70,7 +69,8 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
           children: [
             const SizedBox(height: 12),
             Container(
-              width: 40, height: 4,
+              width: 40,
+              height: 4,
               decoration: BoxDecoration(
                 color: WBColors.bgDivider,
                 borderRadius: BorderRadius.circular(WBRadius.pill),
@@ -80,10 +80,10 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
             Expanded(
               child: ListView.builder(
                 controller: scrollCtrl,
-                itemCount: items.length,
+                itemCount: states.length,
                 itemBuilder: (_, i) => ListTile(
-                  title: Text(items[i], style: WBTypography.body),
-                  onTap: () => Navigator.of(context).pop(items[i]),
+                  title: Text(states[i], style: WBTypography.body),
+                  onTap: () => Navigator.of(context).pop(states[i]),
                 ),
               ),
             ),
@@ -91,25 +91,7 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
         ),
       ),
     );
-    if (picked != null) onPicked(picked);
-  }
-
-  Future<void> _pickCountry(BuildContext context) =>
-      _pickFromList(context, kCountries, (v) {
-        setState(() {
-          _selectedCountry = v;
-          _selectedState = null;
-          _stateText.clear();
-        });
-      });
-
-  Future<void> _pickState(BuildContext context) {
-    final states = kCountryStates[_selectedCountry];
-    if (states != null) {
-      return _pickFromList(
-          context, states, (v) => setState(() => _selectedState = v));
-    }
-    return Future.value();
+    if (picked != null) setState(() => _selectedState = picked);
   }
 
   void _toggle(Corridor c) {
@@ -209,10 +191,13 @@ class _TraderKycScreenState extends State<TraderKycScreen> {
                   leadingIcon: WBIconName.home,
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
-                _PickerField(
+                WBCountryField(
                   value: _selectedCountry,
-                  placeholder: 'Country',
-                  onTap: () => _pickCountry(context),
+                  onChanged: (v) => setState(() {
+                    _selectedCountry = v;
+                    _selectedState = null;
+                    _stateText.clear();
+                  }),
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
                 kCountryStates.containsKey(_selectedCountry)

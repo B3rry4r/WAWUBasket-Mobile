@@ -437,3 +437,100 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
     );
   }
 }
+
+/// Address-country picker. Shows flag + name in a searchable bottom sheet
+/// backed by [CountryApi] (restcountries.com). Returns the country name.
+class WBCountryField extends StatefulWidget {
+  const WBCountryField({
+    super.key,
+    required this.onChanged,
+    this.value,
+    this.label = 'Country',
+  });
+
+  final ValueChanged<String> onChanged;
+  final String? value;
+  final String label;
+
+  @override
+  State<WBCountryField> createState() => _WBCountryFieldState();
+}
+
+class _WBCountryFieldState extends State<WBCountryField> {
+  List<Country> _countries = const [];
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final list = await CountryApi.instance.all();
+      if (mounted) setState(() { _countries = list; _loading = false; });
+    } catch (_) {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _open() async {
+    if (_countries.isEmpty) return;
+    final picked = await showModalBottomSheet<Country>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => _CountryPickerSheet(countries: _countries),
+    );
+    if (picked != null && mounted) widget.onChanged(picked.name);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _loading ? null : _open,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: WBColors.surfaceInput,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+        ),
+        child: Row(
+          children: [
+            if (_loading)
+              const SizedBox(
+                width: 14, height: 14,
+                child: CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                  valueColor: AlwaysStoppedAnimation(WBColors.fgPlaceholder),
+                ),
+              )
+            else
+              Expanded(
+                child: Text(
+                  widget.value ?? widget.label,
+                  style: WBTypography.body.copyWith(
+                    color: widget.value != null
+                        ? WBColors.fgHeader
+                        : WBColors.fgPlaceholder,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            if (!_loading) ...[
+              const SizedBox(width: 8),
+              const WBIcon(WBIconName.chevronDown, size: 14,
+                  color: WBColors.fgPlaceholder),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
