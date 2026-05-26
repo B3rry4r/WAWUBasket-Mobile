@@ -10,8 +10,9 @@ import 'wb_images.dart';
 /// Central mock content, categories, subcategories, vendors, products,
 /// suppliers, bulk lots. Mirrors the WAWUBasket brand taxonomy.
 abstract final class MockData {
-  // ─── 8 brand categories ──────────────────────────────────────
+  // ─── 9 brand categories — 4 primary verticals lead, then secondary ──
   static const categories = [
+    // Primary verticals (shown first in home pill row)
     Category(
       id: 'restaurants',
       label: 'Eat now',
@@ -27,24 +28,6 @@ abstract final class MockData {
         Subcategory(id: 'small-chops', label: 'Small chops', imageUrl: WBImages.puffPuff),
         Subcategory(id: 'bbq', label: 'BBQ', imageUrl: WBImages.suya),
         Subcategory(id: 'rice', label: 'Rice dishes', imageUrl: WBImages.jollof),
-      ],
-    ),
-    Category(
-      id: 'groceries',
-      label: 'Groceries',
-      imageUrl: WBImages.rice,
-      kind: CategoryKind.marketplace,
-      tagline: 'Pantry · Daily essentials',
-      subcategories: [
-        Subcategory(id: 'rice', label: 'Rice', imageUrl: WBImages.rice),
-        Subcategory(id: 'beans', label: 'Beans', imageUrl: WBImages.beans),
-        Subcategory(id: 'garri', label: 'Garri', imageUrl: WBImages.garri),
-        Subcategory(id: 'oil', label: 'Oil', imageUrl: WBImages.oil),
-        Subcategory(id: 'sugar', label: 'Sugar', imageUrl: WBImages.sugar),
-        Subcategory(id: 'milk', label: 'Milk', imageUrl: WBImages.milk),
-        Subcategory(id: 'bread', label: 'Bread', imageUrl: WBImages.bread),
-        Subcategory(id: 'eggs', label: 'Eggs', imageUrl: WBImages.eggs),
-        Subcategory(id: 'spices', label: 'Spices', imageUrl: WBImages.spices),
       ],
     ),
     Category(
@@ -66,23 +49,6 @@ abstract final class MockData {
       ],
     ),
     Category(
-      id: 'farm-produce',
-      label: 'Farm Produce',
-      imageUrl: WBImages.riceBag,
-      kind: CategoryKind.trade,
-      tagline: 'Bulk · Wholesale · Direct from farm',
-      subcategories: [
-        Subcategory(id: 'rice-bags', label: 'Bags of rice', imageUrl: WBImages.riceBag),
-        Subcategory(id: 'cassava', label: 'Cassava', imageUrl: WBImages.cassava),
-        Subcategory(id: 'palm-oil', label: 'Palm oil', imageUrl: WBImages.palmOil),
-        Subcategory(id: 'cocoa', label: 'Cocoa', imageUrl: WBImages.cocoa),
-        Subcategory(id: 'maize', label: 'Maize', imageUrl: WBImages.maize),
-        Subcategory(id: 'feed', label: 'Livestock feed', imageUrl: WBImages.livestockFeed),
-        Subcategory(id: 'fertilizer', label: 'Fertilizer', imageUrl: WBImages.fertilizer),
-        Subcategory(id: 'bulk-veg', label: 'Bulk vegetables', imageUrl: WBImages.vegetables),
-      ],
-    ),
-    Category(
       id: 'livestock',
       label: 'Chop',
       imageUrl: WBImages.chicken,
@@ -97,16 +63,53 @@ abstract final class MockData {
       ],
     ),
     Category(
-      id: 'household',
+      id: 'kitchen-essentials',
       label: 'Stock up',
-      imageUrl: WBImages.cleaning,
+      imageUrl: WBImages.kitchenSupplies,
       kind: CategoryKind.marketplace,
       tagline: 'Pots, pans, and everything else.',
       subcategories: [
-        Subcategory(id: 'cleaning', label: 'Cleaning supplies', imageUrl: WBImages.cleaning),
-        Subcategory(id: 'toiletries', label: 'Toiletries', imageUrl: WBImages.toiletries),
-        Subcategory(id: 'kitchen', label: 'Kitchen products', imageUrl: WBImages.kitchenSupplies),
-        Subcategory(id: 'home', label: 'Home supplies', imageUrl: WBImages.cleaning),
+        Subcategory(id: 'cookware', label: 'Cookware', imageUrl: WBImages.kitchenSupplies),
+        Subcategory(id: 'utensils', label: 'Utensils', imageUrl: WBImages.kitchenSupplies),
+        Subcategory(id: 'spices-oil', label: 'Spices & Oil', imageUrl: WBImages.spices),
+        Subcategory(id: 'pantry', label: 'Pantry', imageUrl: WBImages.rice),
+        Subcategory(id: 'cleaning', label: 'Cleaning', imageUrl: WBImages.cleaning),
+      ],
+    ),
+    // Secondary categories
+    Category(
+      id: 'groceries',
+      label: 'Groceries',
+      imageUrl: WBImages.rice,
+      kind: CategoryKind.marketplace,
+      tagline: 'Pantry · Daily essentials',
+      subcategories: [
+        Subcategory(id: 'rice', label: 'Rice', imageUrl: WBImages.rice),
+        Subcategory(id: 'beans', label: 'Beans', imageUrl: WBImages.beans),
+        Subcategory(id: 'garri', label: 'Garri', imageUrl: WBImages.garri),
+        Subcategory(id: 'oil', label: 'Oil', imageUrl: WBImages.oil),
+        Subcategory(id: 'sugar', label: 'Sugar', imageUrl: WBImages.sugar),
+        Subcategory(id: 'milk', label: 'Milk', imageUrl: WBImages.milk),
+        Subcategory(id: 'bread', label: 'Bread', imageUrl: WBImages.bread),
+        Subcategory(id: 'eggs', label: 'Eggs', imageUrl: WBImages.eggs),
+        Subcategory(id: 'spices', label: 'Spices', imageUrl: WBImages.spices),
+      ],
+    ),
+    Category(
+      id: 'farm-produce',
+      label: 'Farm Produce',
+      imageUrl: WBImages.riceBag,
+      kind: CategoryKind.trade,
+      tagline: 'Bulk · Wholesale · Direct from farm',
+      subcategories: [
+        Subcategory(id: 'rice-bags', label: 'Bags of rice', imageUrl: WBImages.riceBag),
+        Subcategory(id: 'cassava', label: 'Cassava', imageUrl: WBImages.cassava),
+        Subcategory(id: 'palm-oil', label: 'Palm oil', imageUrl: WBImages.palmOil),
+        Subcategory(id: 'cocoa', label: 'Cocoa', imageUrl: WBImages.cocoa),
+        Subcategory(id: 'maize', label: 'Maize', imageUrl: WBImages.maize),
+        Subcategory(id: 'feed', label: 'Livestock feed', imageUrl: WBImages.livestockFeed),
+        Subcategory(id: 'fertilizer', label: 'Fertilizer', imageUrl: WBImages.fertilizer),
+        Subcategory(id: 'bulk-veg', label: 'Bulk vegetables', imageUrl: WBImages.vegetables),
       ],
     ),
     Category(
@@ -507,18 +510,18 @@ abstract final class MockData {
       priceNaira: 1500,
       vendorName: 'HomeStock',
       imageUrl: WBImages.cleaning,
-      categoryId: 'household',
+      categoryId: 'kitchen-essentials',
       subcategoryId: 'cleaning',
     ),
     Product(
       id: 'hh2',
-      name: 'Bath soap bundle',
-      description: 'Pack of 6 family bars.',
-      priceNaira: 2500,
+      name: 'Wooden spoon set',
+      description: 'Pack of 5 — every pot needs one.',
+      priceNaira: 1800,
       vendorName: 'HomeStock',
-      imageUrl: WBImages.toiletries,
-      categoryId: 'household',
-      subcategoryId: 'toiletries',
+      imageUrl: WBImages.kitchenSupplies,
+      categoryId: 'kitchen-essentials',
+      subcategoryId: 'utensils',
     ),
     Product(
       id: 'hh3',
@@ -527,8 +530,8 @@ abstract final class MockData {
       priceNaira: 8900,
       vendorName: 'HomeStock',
       imageUrl: WBImages.kitchenSupplies,
-      categoryId: 'household',
-      subcategoryId: 'kitchen',
+      categoryId: 'kitchen-essentials',
+      subcategoryId: 'cookware',
     ),
 
     // Drinks

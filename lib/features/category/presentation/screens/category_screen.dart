@@ -310,7 +310,7 @@ class _ContextBand extends StatelessWidget {
       categoryId == 'fresh-market' || categoryId == 'farm-produce';
   bool get _isLivestock => categoryId == 'livestock';
   bool get _isEssentials =>
-      categoryId == 'household' || categoryId == 'groceries';
+      categoryId == 'kitchen-essentials' || categoryId == 'groceries';
 
   @override
   Widget build(BuildContext context) {
