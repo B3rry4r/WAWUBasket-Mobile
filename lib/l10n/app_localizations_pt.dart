@@ -24,40 +24,40 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navAccount => 'Conta';
 
   @override
-  String get navSearch => 'Search';
+  String get navSearch => 'Buscar';
 
   @override
-  String get actionContinue => 'Continue';
+  String get actionContinue => 'Continuar';
 
   @override
-  String get actionCancel => 'Cancel';
+  String get actionCancel => 'Cancelar';
 
   @override
-  String get actionSave => 'Save';
+  String get actionSave => 'Salvar';
 
   @override
-  String get actionDone => 'Done';
+  String get actionDone => 'Pronto';
 
   @override
-  String get actionRetry => 'Try again';
+  String get actionRetry => 'Tentar novamente';
 
   @override
-  String get actionNext => 'Next';
+  String get actionNext => 'Próximo';
 
   @override
-  String get actionConfirm => 'Confirm';
+  String get actionConfirm => 'Confirmar';
 
   @override
-  String get actionSeeAll => 'See all';
+  String get actionSeeAll => 'Ver tudo';
 
   @override
-  String get commonLoading => 'Loading…';
+  String get commonLoading => 'Carregando…';
 
   @override
-  String get commonError => 'Something went wrong.';
+  String get commonError => 'Algo deu errado.';
 
   @override
-  String get commonEmpty => 'Nothing here yet.';
+  String get commonEmpty => 'Nada aqui ainda.';
 
   @override
   String get languageTitle => 'Idioma';
@@ -66,13 +66,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get languageSubtitle => 'Escolha seu idioma preferido';
 
   @override
-  String get signIn => 'Sign in';
+  String get signIn => 'Entrar';
 
   @override
-  String get signUp => 'Create account';
+  String get signUp => 'Criar conta';
 
   @override
-  String get logOut => 'Log out';
+  String get logOut => 'Sair';
 
   @override
   String get chatEmpty => 'Inicie sua conversa';
@@ -89,258 +89,262 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get kycSubmitted =>
-      'Application submitted. We\'ll review it and let you know.';
+      'Solicitação enviada. Vamos analisar e te avisaremos.';
 
   @override
-  String get kycUploadFailed => 'Couldn\'t upload the document. Try again.';
+  String get kycUploadFailed =>
+      'Não foi possível enviar o documento. Tente novamente.';
 
   @override
   String get splashTagline => 'Uma cesta. Tudo.';
 
   @override
-  String get onboardingSkip => 'Skip';
+  String get onboardingSkip => 'Pular';
 
   @override
-  String get onboardingPermissionsTitle => 'A couple of quick permissions';
+  String get onboardingPermissionsTitle => 'Algumas permissões rápidas';
 
   @override
   String get onboardingPermissionsSubtitle =>
-      'They make the basket work better for you. You can change these anytime.';
+      'Elas melhoram a experiência. Você pode alterá-las a qualquer momento.';
 
   @override
-  String get onboardingLocationTitle => 'Where are you cooking today?';
+  String get onboardingLocationTitle => 'Onde você está cozinhando hoje?';
 
   @override
   String get onboardingLocationBody =>
-      'We need your location to show restaurants and markets near you. We never share your exact location with anyone.';
+      'Precisamos da sua localização para mostrar restaurantes e mercados perto de você.';
 
   @override
-  String get onboardingLocationPrimary => 'While using app';
+  String get onboardingLocationPrimary => 'Enquanto usa o app';
 
   @override
-  String get onboardingLocationSecondary => 'Allow once';
+  String get onboardingLocationSecondary => 'Permitir uma vez';
 
   @override
-  String get onboardingLocationTertiary => 'Not now';
+  String get onboardingLocationTertiary => 'Agora não';
 
   @override
-  String get onboardingNotificationsTitle => 'Don\'t miss the good stuff';
+  String get onboardingNotificationsTitle => 'Não perca as boas novidades';
 
   @override
   String get onboardingNotificationsBody =>
-      'We\'ll tell you when your order is on its way, when your meat is freshly cut, and when there\'s a surprise waiting.';
+      'Avisaremos quando seu pedido estiver a caminho e quando houver uma surpresa esperando.';
 
   @override
-  String get onboardingNotificationsPrimary => 'Yes, tell me';
+  String get onboardingNotificationsPrimary => 'Sim, me avise';
 
   @override
-  String get onboardingNotificationsSecondary => 'Maybe later';
+  String get onboardingNotificationsSecondary => 'Talvez depois';
 
   @override
-  String get onboardingQuizTitle => 'Let\'s build your basket';
+  String get onboardingQuizTitle => 'Vamos montar sua cesta';
 
   @override
   String get onboardingQuizSubtitle =>
-      'Tell us what you love, and we\'ll make sure you see it first.';
+      'Nos diga o que você ama e garantiremos que apareça primeiro.';
 
   @override
-  String get onboardingQuizWantsLabel => 'What do you usually want?';
+  String get onboardingQuizWantsLabel => 'O que você costuma querer?';
 
   @override
-  String get onboardingQuizWantOption1 => 'Cooked meals from restaurants';
+  String get onboardingQuizWantOption1 => 'Refeições de restaurantes';
 
   @override
-  String get onboardingQuizWantOption2 => 'Fresh fruits and vegetables';
+  String get onboardingQuizWantOption2 => 'Frutas e vegetais frescos';
 
   @override
-  String get onboardingQuizWantOption3 => 'Meat, chicken, and fish';
+  String get onboardingQuizWantOption3 => 'Carne, frango e peixe';
 
   @override
-  String get onboardingQuizWantOption4 => 'Pots, pans, and pantry stuff';
+  String get onboardingQuizWantOption4 => 'Panelas e itens de despensa';
 
   @override
-  String get onboardingQuizSpeedLabel => 'How fast do you need things?';
+  String get onboardingQuizSpeedLabel =>
+      'Com que rapidez você precisa das coisas?';
 
   @override
-  String get onboardingQuizSpeedOption1 => 'Right now, I\'m hungry';
+  String get onboardingQuizSpeedOption1 => 'Agora, estou com fome';
 
   @override
-  String get onboardingQuizSpeedOption2 => 'Today sometime';
+  String get onboardingQuizSpeedOption2 => 'Hoje, em algum momento';
 
   @override
-  String get onboardingQuizSpeedOption3 => 'I\'m planning ahead';
+  String get onboardingQuizSpeedOption3 => 'Estou planejando com antecedência';
 
   @override
-  String get onboardingQuizAvoidLabel => 'Any foods we should avoid?';
+  String get onboardingQuizAvoidLabel => 'Algum alimento que devemos evitar?';
 
   @override
-  String get onboardingQuizAvoidPlaceholder => 'e.g. no shellfish, no beef';
+  String get onboardingQuizAvoidPlaceholder =>
+      'Ex.: sem frutos do mar, sem carne bovina';
 
   @override
-  String get onboardingQuizBuildButton => 'Build my basket';
+  String get onboardingQuizBuildButton => 'Montar minha cesta';
 
   @override
-  String get onboardingQuizSkipLink => 'I\'ll figure it out later';
+  String get onboardingQuizSkipLink => 'Vou descobrir depois';
 
   @override
-  String get onboardingGiftTitle => 'A little welcome gift';
+  String get onboardingGiftTitle => 'Um pequeno presente de boas-vindas';
 
   @override
   String get onboardingGiftBody =>
-      'Your first order comes with something extra. Just because you deserve it.';
+      'Seu primeiro pedido vem com algo extra. Só porque você merece.';
 
   @override
-  String get onboardingGiftButton => 'Let\'s see what\'s inside';
+  String get onboardingGiftButton => 'Vamos ver o que tem dentro';
 
   @override
   String get onboardingGiftFootnote =>
-      'Valid for first order only. Minimum order applies.';
+      'Válido apenas para o primeiro pedido. Pedido mínimo aplicável.';
 
   @override
-  String get loginTitle => 'Sign in';
+  String get loginTitle => 'Entrar';
 
   @override
-  String get loginSubtitle => 'Welcome back. Pick up where you left off.';
+  String get loginSubtitle => 'Bem-vindo de volta. Continue de onde parou.';
 
   @override
-  String get loginPhoneLabel => 'Phone or email';
+  String get loginPhoneLabel => 'Telefone ou e-mail';
 
   @override
-  String get loginPasswordLabel => 'Password';
+  String get loginPasswordLabel => 'Senha';
 
   @override
-  String get loginForgotPassword => 'Forgot password?';
+  String get loginForgotPassword => 'Esqueceu a senha?';
 
   @override
-  String get loginBiometric => 'Use Face ID';
+  String get loginBiometric => 'Usar Face ID';
 
   @override
-  String get loginSignupLink => 'New to WAWUBasket?';
+  String get loginSignupLink => 'Novo no WAWUBasket?';
 
   @override
-  String get loginErrorEmpty => 'Enter your phone/email and password.';
+  String get loginErrorEmpty => 'Digite seu telefone/e-mail e senha.';
 
   @override
-  String get loginBiometricOfferTitle => 'Faster sign-in';
+  String get loginBiometricOfferTitle => 'Acesso mais rápido';
 
   @override
   String get loginBiometricOfferBody =>
-      'Use Face ID or your fingerprint to sign in next time?';
+      'Usar Face ID ou impressão digital da próxima vez?';
 
   @override
-  String get loginBiometricNotNow => 'Not now';
+  String get loginBiometricNotNow => 'Agora não';
 
   @override
-  String get loginBiometricEnable => 'Enable';
+  String get loginBiometricEnable => 'Ativar';
 
   @override
   String get loginBiometricNotAvailable =>
-      'Biometric unlock isn\'t set up on this device.';
+      'O desbloqueio biométrico não está configurado neste dispositivo.';
 
   @override
-  String get signupTitle => 'What\'s your WhatsApp number?';
+  String get signupTitle => 'Qual é o seu número de WhatsApp?';
 
   @override
   String get signupSubtitle =>
-      'We\'ll send a code to make sure it\'s really you.';
+      'Enviaremos um código para confirmar que é você.';
 
   @override
-  String get signupNameLabel => 'Full name';
+  String get signupNameLabel => 'Nome completo';
 
   @override
-  String get signupPhoneLabel => 'WhatsApp number';
+  String get signupPhoneLabel => 'Número de WhatsApp';
 
   @override
-  String get signupEmailLabel => 'Email';
+  String get signupEmailLabel => 'E-mail';
 
   @override
-  String get signupPasswordLabel => 'Password';
+  String get signupPasswordLabel => 'Senha';
 
   @override
-  String get signupPasswordPlaceholder => 'At least 8 characters';
+  String get signupPasswordPlaceholder => 'Pelo menos 8 caracteres';
 
   @override
-  String get signupSendCode => 'Send code';
+  String get signupSendCode => 'Enviar código';
 
   @override
-  String get signupDisclaimer => 'No spam. No calls. Just your basket updates.';
+  String get signupDisclaimer =>
+      'Sem spam. Sem ligações. Apenas atualizações da sua cesta.';
 
   @override
-  String get signupHaveAccount => 'Already have an account?';
+  String get signupHaveAccount => 'Já tem uma conta?';
 
   @override
-  String get signupErrorName => 'Fill in your name, number and email.';
+  String get signupErrorName => 'Preencha seu nome, número e e-mail.';
 
   @override
-  String get signupErrorPassword => 'Password must be at least 8 characters.';
+  String get signupErrorPassword => 'A senha deve ter pelo menos 8 caracteres.';
 
   @override
-  String get signupErrorTerms => 'Accept the Terms to continue.';
+  String get signupErrorTerms => 'Aceite os Termos para continuar.';
 
   @override
-  String get otpTitle => 'You\'ve got a code!';
+  String get otpTitle => 'Você tem um código!';
 
   @override
-  String get otpSubtitle => 'Check your WhatsApp. It\'s a short one.';
+  String get otpSubtitle => 'Verifique seu WhatsApp. É curto.';
 
   @override
-  String get otpEditNumber => 'Edit number';
+  String get otpEditNumber => 'Editar número';
 
   @override
-  String get otpResend => 'Resend code';
+  String get otpResend => 'Reenviar código';
 
   @override
-  String get otpVerifyButton => 'Verify and go in';
+  String get otpVerifyButton => 'Verificar e entrar';
 
   @override
-  String get otpNewCode => 'A new code is on its way.';
+  String get otpNewCode => 'Um novo código está a caminho.';
 
   @override
-  String get forgotTitle => 'Reset password';
+  String get forgotTitle => 'Redefinir senha';
 
   @override
   String get forgotSubtitle =>
-      'Tell us where to send a verification code and we\'ll help you back in.';
+      'Nos diga onde enviar o código de verificação e te ajudaremos a voltar.';
 
   @override
-  String get forgotSendCode => 'Send code';
+  String get forgotSendCode => 'Enviar código';
 
   @override
-  String get forgotErrorEmpty => 'Enter your phone number or email.';
+  String get forgotErrorEmpty => 'Digite seu número de telefone ou e-mail.';
 
   @override
-  String get resetTitle => 'Choose a new password';
+  String get resetTitle => 'Escolha uma nova senha';
 
   @override
-  String get resetSubtitle => 'Make it different from your last one.';
+  String get resetSubtitle => 'Faça diferente da sua anterior.';
 
   @override
-  String get resetPasswordLabel => 'New password';
+  String get resetPasswordLabel => 'Nova senha';
 
   @override
-  String get resetConfirmLabel => 'Confirm password';
+  String get resetConfirmLabel => 'Confirmar senha';
 
   @override
-  String get resetButton => 'Save password';
+  String get resetButton => 'Salvar senha';
 
   @override
-  String get resetErrorLength => 'Password must be at least 8 characters.';
+  String get resetErrorLength => 'A senha deve ter pelo menos 8 caracteres.';
 
   @override
-  String get resetErrorMismatch => 'Passwords don\'t match.';
+  String get resetErrorMismatch => 'As senhas não coincidem.';
 
   @override
-  String get welcomeGetStarted => 'Get started';
+  String get welcomeGetStarted => 'Começar';
 
   @override
-  String get welcomeSignIn => 'Sign in';
+  String get welcomeSignIn => 'Entrar';
 
   @override
-  String get roleSelectTitle => 'How will you use WAWUBasket?';
+  String get roleSelectTitle => 'Como você usará o WAWUBasket?';
 
   @override
   String get roleSelectSubtitle =>
-      'Pick what you\'ll do most. You can switch roles anytime from your profile.';
+      'Escolha o que fará mais. Você pode trocar de papel a qualquer momento.';
 
   @override
   String get cartTitle => 'Sua cesta';
@@ -349,28 +353,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cartEmpty => 'Sua cesta está vazia';
 
   @override
-  String get cartEmptySubtitle => 'Want to fill it? We have ideas.';
+  String get cartEmptySubtitle => 'Quer preencher? Temos ideias.';
 
   @override
-  String get cartStartShopping => 'Start shopping';
+  String get cartStartShopping => 'Começar a comprar';
 
   @override
-  String get cartEta => 'Arrives in 25–35 min';
+  String get cartEta => 'Chega em 25–35 min';
 
   @override
-  String get cartPromo => 'Promo code';
+  String get cartPromo => 'Código promocional';
 
   @override
-  String get cartPromoApply => 'Apply';
+  String get cartPromoApply => 'Aplicar';
 
   @override
   String get cartSubtotal => 'Subtotal';
 
   @override
-  String get cartDeliveryFee => 'Delivery fee';
+  String get cartDeliveryFee => 'Taxa de entrega';
 
   @override
-  String get cartServiceFee => 'Service fee';
+  String get cartServiceFee => 'Taxa de serviço';
 
   @override
   String get cartTotal => 'Total';
@@ -382,57 +386,57 @@ class AppLocalizationsPt extends AppLocalizations {
   String get checkoutTitle => 'Finalizar pedido';
 
   @override
-  String get checkoutDeliverySection => 'Where are we sending this?';
+  String get checkoutDeliverySection => 'Para onde enviamos?';
 
   @override
-  String get checkoutNoAddress => 'No address saved — add one';
+  String get checkoutNoAddress => 'Nenhum endereço salvo — adicione um';
 
   @override
-  String get checkoutChangeAddress => 'Change';
+  String get checkoutChangeAddress => 'Alterar';
 
   @override
-  String get checkoutTimingSection => 'When do you want it?';
+  String get checkoutTimingSection => 'Quando você quer?';
 
   @override
   String get checkoutNow => 'Agora';
 
   @override
-  String get checkoutNowSubtitle => 'Arrives in 25–35 min';
+  String get checkoutNowSubtitle => 'Chega em 25–35 min';
 
   @override
   String get checkoutSchedule => 'Agendar entrega';
 
   @override
-  String get checkoutPaymentSection => 'How will you pay?';
+  String get checkoutPaymentSection => 'Como vai pagar?';
 
   @override
-  String get checkoutBasketSection => 'Your basket';
+  String get checkoutBasketSection => 'Sua cesta';
 
   @override
   String get checkoutPlaceOrder => 'Fazer pedido';
 
   @override
-  String get checkoutWaiting => 'Waiting for payment…';
+  String get checkoutWaiting => 'Aguardando pagamento…';
 
   @override
   String get checkoutWaitingBody =>
-      'Complete payment in the browser. We\'ll move you to order tracking automatically.';
+      'Conclua o pagamento no navegador. Vamos te redirecionar para o rastreamento do pedido automaticamente.';
 
   @override
-  String get checkoutTimeout => 'Payment not confirmed';
+  String get checkoutTimeout => 'Pagamento não confirmado';
 
   @override
   String get checkoutTimeoutBody =>
-      'We didn\'t receive a payment confirmation. Tap below to check again, or go back.';
+      'Não recebemos confirmação de pagamento. Toque abaixo para verificar novamente ou volte.';
 
   @override
-  String get checkoutCheckStatus => 'Check payment status';
+  String get checkoutCheckStatus => 'Verificar status do pagamento';
 
   @override
-  String get checkoutGoBack => 'Go back';
+  String get checkoutGoBack => 'Voltar';
 
   @override
-  String get checkoutScheduleConfirm => 'Confirm time slot';
+  String get checkoutScheduleConfirm => 'Confirmar horário';
 
   @override
   String get confirmTitle => 'Ótimo!';
@@ -441,141 +445,140 @@ class AppLocalizationsPt extends AppLocalizations {
   String get confirmSubtitle => 'Seu pedido foi recebido';
 
   @override
-  String get confirmNotification => 'We\'ll ping you when your basket moves.';
+  String get confirmNotification => 'Avisaremos quando sua cesta se mover.';
 
   @override
-  String get confirmTracking => 'Watch it travel to your door in real time.';
+  String get confirmTracking => 'Acompanhe em tempo real até sua porta.';
 
   @override
-  String get confirmTrackButton => 'Track my order';
+  String get confirmTrackButton => 'Rastrear meu pedido';
 
   @override
-  String get confirmBackHome => 'Back to home';
+  String get confirmBackHome => 'Voltar ao início';
 
   @override
-  String get trackingNeedHelp => 'Need help?';
+  String get trackingNeedHelp => 'Precisa de ajuda?';
 
   @override
-  String get trackingDelivered => 'Delivered. Enjoy your basket!';
+  String get trackingDelivered => 'Entregue. Aproveite sua cesta!';
 
   @override
-  String get trackingDefaultMessage => 'We\'ll update you as your order moves.';
+  String get trackingDefaultMessage =>
+      'Vamos te atualizar conforme seu pedido avança.';
 
   @override
-  String get trackingJourney => 'Your order is on a journey';
+  String get trackingJourney => 'Seu pedido está em uma jornada';
 
   @override
-  String get trackingStep1 => 'Order confirmed';
+  String get trackingStep1 => 'Pedido confirmado';
 
   @override
-  String get trackingStep2 => 'Preparing';
+  String get trackingStep2 => 'Preparando';
 
   @override
-  String get trackingStep3 => 'Picked up';
+  String get trackingStep3 => 'Retirado';
 
   @override
-  String get trackingStep4 => 'En route';
+  String get trackingStep4 => 'A caminho';
 
   @override
-  String get trackingStep5 => 'Delivered';
+  String get trackingStep5 => 'Entregue';
 
   @override
-  String get trackingRate => 'Rate your order';
+  String get trackingRate => 'Avaliar pedido';
 
   @override
-  String get deliveryTitle => 'Delivered. Enjoy your basket!';
+  String get deliveryTitle => 'Entregue. Aproveite sua cesta!';
 
   @override
   String get deliverySubtitle =>
-      'How was your experience? Your feedback helps vendors and riders do better.';
+      'Como foi sua experiência? Seu feedback ajuda vendedores e entregadores.';
 
   @override
-  String get deliveryRateTitle => 'Rate this order';
+  String get deliveryRateTitle => 'Avaliar este pedido';
 
   @override
-  String get deliveryRatingBad => 'Not great';
+  String get deliveryRatingBad => 'Não foi bom';
 
   @override
-  String get deliveryRatingFair => 'Could be better';
+  String get deliveryRatingFair => 'Poderia melhorar';
 
   @override
-  String get deliveryRatingOkay => 'It was okay';
+  String get deliveryRatingOkay => 'Foi ok';
 
   @override
-  String get deliveryRatingGood => 'Pretty good!';
+  String get deliveryRatingGood => 'Bem bom!';
 
   @override
-  String get deliveryRatingLove => 'Loved it!';
+  String get deliveryRatingLove => 'Adorei!';
 
   @override
-  String get deliveryFeedbackTitle => 'Tell us more (optional)';
+  String get deliveryFeedbackTitle => 'Nos conte mais (opcional)';
 
   @override
-  String get deliveryFeedbackPlaceholder =>
-      'What made it great or not so great?';
+  String get deliveryFeedbackPlaceholder => 'O que o tornou ótimo ou não?';
 
   @override
-  String get deliverySubmit => 'Submit rating';
+  String get deliverySubmit => 'Enviar avaliação';
 
   @override
-  String get deliverySkip => 'Skip for now';
+  String get deliverySkip => 'Pular por agora';
 
   @override
-  String get deliveryThankYou => 'Thanks for the feedback!';
+  String get deliveryThankYou => 'Obrigado pelo feedback!';
 
   @override
   String get deliveryThankYouBody =>
-      'Your rating helps the whole basket get better. See you next time.';
+      'Sua avaliação ajuda toda a cesta a melhorar. Até a próxima.';
 
   @override
-  String get deliveryBackHome => 'Back to home';
+  String get deliveryBackHome => 'Voltar ao início';
 
   @override
-  String get deliveryRateError => 'Tap a star to rate your order.';
+  String get deliveryRateError => 'Toque uma estrela para avaliar seu pedido.';
 
   @override
-  String get searchPlaceholder => 'Search jollof, tomatoes, chicken…';
+  String get searchPlaceholder => 'Buscar jollof, tomate, frango…';
 
   @override
-  String get searchRecentTitle => 'Recent searches';
+  String get searchRecentTitle => 'Buscas recentes';
 
   @override
-  String get searchRecentClear => 'Clear';
+  String get searchRecentClear => 'Limpar';
 
   @override
-  String get searchRecentCleared => 'Recent searches cleared';
+  String get searchRecentCleared => 'Buscas recentes limpas';
 
   @override
-  String get productAddButton => 'Add to basket';
+  String get productAddButton => 'Adicionar à cesta';
 
   @override
-  String get productNotFound => 'Product not found.';
+  String get productNotFound => 'Produto não encontrado.';
 
   @override
-  String get homeSearchPlaceholder =>
-      'Search for jollof, tomatoes, chicken, pots…';
+  String get homeSearchPlaceholder => 'Buscar jollof, tomate, frango, panelas…';
 
   @override
-  String get homeBulkMarketsTitle => 'Bulk markets';
+  String get homeBulkMarketsTitle => 'Mercados por atacado';
 
   @override
   String get homeBulkMarketsSubtitle =>
-      'Wholesale lots & corridor prices, direct from farms';
+      'Lotes por atacado e preços de corredor, direto das fazendas';
 
   @override
-  String get homeOffersThisWeek => 'THIS WEEK';
+  String get homeOffersThisWeek => 'ESTA SEMANA';
 
   @override
-  String get homeOfferTitle => 'Free delivery on orders over ₦5,000';
+  String get homeOfferTitle => 'Entrega grátis em pedidos acima de ₦5.000';
 
   @override
-  String get homeOfferSubtitle => 'Until Sunday. No code needed.';
+  String get homeOfferSubtitle => 'Até domingo. Sem código necessário.';
 
   @override
-  String get homeOfferButton => 'Order now';
+  String get homeOfferButton => 'Pedir agora';
 
   @override
-  String get homeAddAddress => 'Add a delivery address';
+  String get homeAddAddress => 'Adicionar endereço de entrega';
 
   @override
   String homeDeliveringTo(String address) {
@@ -592,7 +595,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get aboutSendFeedback => 'Enviar feedback';
 
   @override
-  String get aboutSendFeedbackSub => 'Help us improve';
+  String get aboutSendFeedbackSub => 'Ajude-nos a melhorar';
 
   @override
   String get aboutTerms => 'Termos de serviço';
@@ -607,10 +610,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get aboutPrivacySub => 'Como tratamos suas informações';
 
   @override
-  String get aboutHowItWorks => 'Three steps to a full basket';
+  String get aboutHowItWorks => 'Três passos para uma cesta cheia';
 
   @override
-  String get aboutSellOn => 'Sell on WAWUBasket';
+  String get aboutSellOn => 'Venda no WAWUBasket';
 
   @override
   String get aboutStep1Title => 'Explorar';
@@ -655,71 +658,71 @@ class AppLocalizationsPt extends AppLocalizations {
   String get addAddressTitle => 'Adicionar endereço';
 
   @override
-  String get addAddressEditTitle => 'Edit address';
+  String get addAddressEditTitle => 'Editar endereço';
 
   @override
-  String get addAddressLabelSection => 'LABEL';
+  String get addAddressLabelSection => 'ETIQUETA';
 
   @override
-  String get addAddressLabelHome => 'Home';
+  String get addAddressLabelHome => 'Casa';
 
   @override
-  String get addAddressLabelOffice => 'Office';
+  String get addAddressLabelOffice => 'Escritório';
 
   @override
-  String get addAddressLabelOther => 'Other';
+  String get addAddressLabelOther => 'Outro';
 
   @override
-  String get addAddressLine => 'Address line';
+  String get addAddressLine => 'Linha do endereço';
 
   @override
-  String get addAddressLinePlaceholder => 'Street, area, city';
+  String get addAddressLinePlaceholder => 'Rua, bairro, cidade';
 
   @override
-  String get addAddressApartment => 'Apartment / unit';
+  String get addAddressApartment => 'Apartamento / unidade';
 
   @override
-  String get addAddressApartmentPlaceholder => 'Optional';
+  String get addAddressApartmentPlaceholder => 'Opcional';
 
   @override
-  String get addAddressNote => 'Note for the rider';
+  String get addAddressNote => 'Nota para o entregador';
 
   @override
-  String get addAddressNotePlaceholder => 'Use the gate on Akin Adesola';
+  String get addAddressNotePlaceholder => 'Use o portão na Akin Adesola';
 
   @override
-  String get addAddressDefault => 'Make this my default address';
+  String get addAddressDefault => 'Tornar este meu endereço padrão';
 
   @override
   String get addAddressSave => 'Salvar endereço';
 
   @override
-  String get addAddressSaveChanges => 'Save changes';
+  String get addAddressSaveChanges => 'Salvar alterações';
 
   @override
-  String get addAddressUpdated => 'Address updated';
+  String get addAddressUpdated => 'Endereço atualizado';
 
   @override
-  String get addAddressSaved => 'Address saved';
+  String get addAddressSaved => 'Endereço salvo';
 
   @override
-  String get addAddressEnterLine => 'Enter the address line.';
+  String get addAddressEnterLine => 'Digite a linha do endereço.';
 
   @override
   String get chatTitle => 'Chat';
 
   @override
   String get chatSubtitle =>
-      'Talk to support and anyone on your active orders.';
+      'Fale com o suporte e qualquer pessoa nos seus pedidos ativos.';
 
   @override
-  String get chatMessageHint => 'Message';
+  String get chatMessageHint => 'Mensagem';
 
   @override
-  String get chatLiveChat => 'Live chat';
+  String get chatLiveChat => 'Chat ao vivo';
 
   @override
-  String get chatRepliesIn => 'Replies usually in under 2 min';
+  String get chatRepliesIn => 'Geralmente responde em menos de 2 min';
 
   @override
   String get deleteAccountTitle => 'Excluir conta';
@@ -741,34 +744,34 @@ class AppLocalizationsPt extends AppLocalizations {
       'Você não poderá recuperar sua conta depois';
 
   @override
-  String get deleteAccountWhyLeaving => 'Why are you leaving? (optional)';
+  String get deleteAccountWhyLeaving => 'Por que está saindo? (opcional)';
 
   @override
-  String get deleteAccountReasonExpensive => 'Too expensive';
+  String get deleteAccountReasonExpensive => 'Muito caro';
 
   @override
-  String get deleteAccountReasonSlow => 'Delivery too slow';
+  String get deleteAccountReasonSlow => 'Entrega muito lenta';
 
   @override
-  String get deleteAccountReasonOptions => 'Not enough options';
+  String get deleteAccountReasonOptions => 'Poucas opções';
 
   @override
-  String get deleteAccountReasonTech => 'Technical issues';
+  String get deleteAccountReasonTech => 'Problemas técnicos';
 
   @override
-  String get deleteAccountReasonOther => 'Other';
+  String get deleteAccountReasonOther => 'Outro';
 
   @override
-  String get deleteAccountConfirmTitle => 'Delete your account permanently?';
+  String get deleteAccountConfirmTitle => 'Excluir sua conta permanentemente?';
 
   @override
-  String get deleteAccountConfirmBody => 'This cannot be undone.';
+  String get deleteAccountConfirmBody => 'Isso não pode ser desfeito.';
 
   @override
-  String get deleteAccountYes => 'Yes, delete my account';
+  String get deleteAccountYes => 'Sim, excluir minha conta';
 
   @override
-  String get deleteAccountNo => 'No, I want to stay';
+  String get deleteAccountNo => 'Não, quero ficar';
 
   @override
   String get dietaryTitle => 'Preferências alimentares';
@@ -787,7 +790,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietaryNoShellfish => 'Sem frutos do mar com casca';
 
   @override
-  String get dietaryHalal => 'Halal only';
+  String get dietaryHalal => 'Apenas halal';
 
   @override
   String get dietaryVegetarian => 'Vegetariano';
@@ -796,91 +799,91 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietaryVegan => 'Vegano';
 
   @override
-  String get dietaryNoDairy => 'No dairy';
+  String get dietaryNoDairy => 'Sem laticínios';
 
   @override
-  String get dietaryNoNuts => 'No nuts';
+  String get dietaryNoNuts => 'Sem nozes';
 
   @override
-  String get dietaryLowSugar => 'Low sugar';
+  String get dietaryLowSugar => 'Baixo açúcar';
 
   @override
-  String get dietaryAnythingElse => 'Anything else?';
+  String get dietaryAnythingElse => 'Mais alguma coisa?';
 
   @override
-  String get dietaryCustomPlaceholder => 'e.g. no MSG, no palm oil';
+  String get dietaryCustomPlaceholder => 'Ex.: sem MSG, sem óleo de palma';
 
   @override
   String get dietarySave => 'Salvar preferências';
 
   @override
-  String get dietarySaved => 'Dietary preferences saved';
+  String get dietarySaved => 'Preferências alimentares salvas';
 
   @override
   String get favoritesTitle => 'Favoritos';
 
   @override
-  String get favoritesVendorsTab => 'Vendors';
+  String get favoritesVendorsTab => 'Vendedores';
 
   @override
-  String get favoritesDishesTab => 'Dishes';
+  String get favoritesDishesTab => 'Pratos';
 
   @override
   String get favoritesNoVendors =>
-      'No favorite vendors yet. Tap the heart on a storefront.';
+      'Nenhum vendedor favorito ainda. Toque no coração de uma loja.';
 
   @override
   String get favoritesNoDishes =>
-      'No favorite dishes yet. Tap the heart on a dish.';
+      'Nenhum prato favorito ainda. Toque no coração de um prato.';
 
   @override
   String get notificationsTitle => 'Notificações';
 
   @override
-  String get notificationsMarkAllRead => 'Mark all read';
+  String get notificationsMarkAllRead => 'Marcar tudo como lido';
 
   @override
-  String get notificationsAllRead => 'All notifications marked read';
+  String get notificationsAllRead =>
+      'Todas as notificações marcadas como lidas';
 
   @override
-  String get notificationsEmpty =>
-      'You\'re all caught up — no notifications yet.';
+  String get notificationsEmpty => 'Você está em dia — sem notificações ainda.';
 
   @override
   String get orderHistoryTitle => 'Histórico de pedidos';
 
   @override
-  String get orderHistoryTabAll => 'All';
+  String get orderHistoryTabAll => 'Todos';
 
   @override
-  String get orderHistoryTabActive => 'Active';
+  String get orderHistoryTabActive => 'Ativo';
 
   @override
-  String get orderHistoryTabPast => 'Past';
+  String get orderHistoryTabPast => 'Passado';
 
   @override
   String get orderHistoryEmpty => 'Nenhum pedido ainda';
 
   @override
-  String get orderHistoryTrack => 'Track order';
+  String get orderHistoryTrack => 'Rastrear pedido';
 
   @override
-  String get orderHistoryReceipt => 'Receipt';
+  String get orderHistoryReceipt => 'Recibo';
 
   @override
   String get orderHistoryReorder => 'Pedir de novo';
 
   @override
-  String get orderHistoryReordered => 'Items added to your basket';
+  String get orderHistoryReordered => 'Itens adicionados à sua cesta';
 
   @override
   String get personalInfoTitle => 'Informações pessoais';
 
   @override
-  String get personalInfoTapPhoto => 'Tap to change photo';
+  String get personalInfoTapPhoto => 'Toque para alterar foto';
 
   @override
-  String get personalInfoFullName => 'Full name';
+  String get personalInfoFullName => 'Nome completo';
 
   @override
   String get personalInfoEmail => 'E-mail';
@@ -889,7 +892,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get personalInfoPhone => 'Telefone';
 
   @override
-  String get personalInfoDob => 'Date of birth';
+  String get personalInfoDob => 'Data de nascimento';
 
   @override
   String get personalInfoSave => 'Salvar alterações';
@@ -898,131 +901,132 @@ class AppLocalizationsPt extends AppLocalizations {
   String get personalInfoSaved => 'Informações salvas!';
 
   @override
-  String get personalInfoNameRequired => 'Enter your full name.';
+  String get personalInfoNameRequired => 'Digite seu nome completo.';
 
   @override
-  String get personalInfoPhotoUpdated => 'Photo updated';
+  String get personalInfoPhotoUpdated => 'Foto atualizada';
 
   @override
-  String get personalInfoPhotoFailed => 'Couldn\'t upload that photo.';
+  String get personalInfoPhotoFailed => 'Não foi possível enviar essa foto.';
 
   @override
-  String get profileWalletMenu => 'Wallet & payment methods';
+  String get profileWalletMenu => 'Carteira e métodos de pagamento';
 
   @override
-  String get profileWalletSub => 'Cards, bank, and mobile money';
+  String get profileWalletSub => 'Cartões, banco e dinheiro móvel';
 
   @override
-  String get profilePersonalInfo => 'Personal information';
+  String get profilePersonalInfo => 'Informações pessoais';
 
   @override
-  String get profilePersonalInfoSub => 'Name, email, phone, verified ✓';
+  String get profilePersonalInfoSub => 'Nome, e-mail, telefone, verificado ✓';
 
   @override
-  String get profileSavedAddresses => 'Saved addresses';
+  String get profileSavedAddresses => 'Endereços salvos';
 
   @override
-  String get profileSavedAddressesSub => 'Where you live, work, and hang out';
+  String get profileSavedAddressesSub =>
+      'Onde você mora, trabalha e passa o tempo';
 
   @override
-  String get profileNotifications => 'Notifications';
+  String get profileNotifications => 'Notificações';
 
   @override
-  String get profileNotificationsSub => 'What we tell you about';
+  String get profileNotificationsSub => 'O que te avisamos';
 
   @override
-  String get profileBulkOrders => 'Bulk orders';
+  String get profileBulkOrders => 'Pedidos por atacado';
 
   @override
-  String get profileBulkOrdersSub => 'Escrow-protected purchases from /trade';
+  String get profileBulkOrdersSub => 'Compras protegidas por escrow do /trade';
 
   @override
-  String get profileWawuPlus => 'WAWU+ membership';
+  String get profileWawuPlus => 'Associação WAWU+';
 
   @override
-  String get profileWawuPlusSub => 'Discounted delivery and more';
+  String get profileWawuPlusSub => 'Entrega com desconto e mais';
 
   @override
-  String get profileLanguage => 'Language';
+  String get profileLanguage => 'Idioma';
 
   @override
-  String get profileDietary => 'Dietary preferences';
+  String get profileDietary => 'Preferências alimentares';
 
   @override
-  String get profileDietarySub => 'Things you\'d rather not eat';
+  String get profileDietarySub => 'Coisas que prefere não comer';
 
   @override
-  String get profileRateApp => 'Rate the app';
+  String get profileRateApp => 'Avaliar o app';
 
   @override
-  String get profileAbout => 'About WAWUBasket';
+  String get profileAbout => 'Sobre o WAWUBasket';
 
   @override
-  String get profileChangePassword => 'Change password';
+  String get profileChangePassword => 'Alterar senha';
 
   @override
-  String get profileChangePasswordSub => 'Keep your account safe';
+  String get profileChangePasswordSub => 'Mantenha sua conta segura';
 
   @override
-  String get profileBiometricLogin => 'Biometric login';
+  String get profileBiometricLogin => 'Login biométrico';
 
   @override
-  String get profileBiometricLoginSub => 'Use your face or fingerprint';
+  String get profileBiometricLoginSub => 'Use seu rosto ou impressão digital';
 
   @override
-  String get profileTwoFactor => 'Two-factor authentication';
+  String get profileTwoFactor => 'Autenticação de dois fatores';
 
   @override
-  String get profileTwoFactorSub => 'Extra layer of protection';
+  String get profileTwoFactorSub => 'Camada extra de proteção';
 
   @override
-  String get profileHelpCenter => 'Help center';
+  String get profileHelpCenter => 'Central de ajuda';
 
   @override
-  String get profileHelpCenterSub => 'Answers to common questions';
+  String get profileHelpCenterSub => 'Respostas para perguntas comuns';
 
   @override
-  String get profileChatWithUs => 'Chat with us';
+  String get profileChatWithUs => 'Fale conosco';
 
   @override
-  String get profileChatWithUsSub => 'We\'re here to help';
+  String get profileChatWithUsSub => 'Estamos aqui para ajudar';
 
   @override
-  String get profileReportProblem => 'Report a problem';
+  String get profileReportProblem => 'Reportar um problema';
 
   @override
-  String get profileReportProblemSub => 'Tell us what went wrong';
+  String get profileReportProblemSub => 'Nos diga o que deu errado';
 
   @override
-  String get profileTerms => 'Terms of service';
+  String get profileTerms => 'Termos de serviço';
 
   @override
-  String get profileTermsSub => 'The rules of the basket';
+  String get profileTermsSub => 'As regras da cesta';
 
   @override
-  String get profilePrivacy => 'Privacy policy';
+  String get profilePrivacy => 'Política de privacidade';
 
   @override
-  String get profilePrivacySub => 'How we handle your info';
+  String get profilePrivacySub => 'Como tratamos suas informações';
 
   @override
-  String get profileSwitchRole => 'Switch role';
+  String get profileSwitchRole => 'Trocar papel';
 
   @override
-  String get profileDeleteAccount => 'Delete account';
+  String get profileDeleteAccount => 'Excluir conta';
 
   @override
-  String get profileDeleteAccountSub => 'We\'ll be sad to see you go';
+  String get profileDeleteAccountSub => 'Ficará triste com sua saída';
 
   @override
-  String get profileRateWawu => 'Rate WAWUBasket';
+  String get profileRateWawu => 'Avaliar WAWUBasket';
 
   @override
   String get profileRateFeedback =>
-      'How are we doing? Your feedback shapes the app.';
+      'Como estamos indo? Seu feedback molda o app.';
 
   @override
-  String get profileRateTapStar => 'Tap a star to rate';
+  String get profileRateTapStar => 'Toque uma estrela para avaliar';
 
   @override
   String get profileRateSubmit => 'Enviar';
@@ -1033,17 +1037,17 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get profileSignOutTitle => 'Sign out?';
+  String get profileSignOutTitle => 'Sair?';
 
   @override
   String get profileSignOutBody =>
-      'You\'ll need to sign in again to place new orders.';
+      'Você precisará entrar novamente para fazer novos pedidos.';
 
   @override
-  String get profileSignOut => 'Sign out';
+  String get profileSignOut => 'Sair';
 
   @override
-  String get profileChoosePhoto => 'Choose a profile photo';
+  String get profileChoosePhoto => 'Escolher foto de perfil';
 
   @override
   String get receiptTitle => 'Recibo';
@@ -1055,19 +1059,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get receiptDelivery => 'Entrega';
 
   @override
-  String get receiptServiceFee => 'Service fee';
+  String get receiptServiceFee => 'Taxa de serviço';
 
   @override
-  String get receiptTotalPaid => 'Total paid';
+  String get receiptTotalPaid => 'Total pago';
 
   @override
-  String get receiptReorder => 'Reorder';
+  String get receiptReorder => 'Repetir pedido';
 
   @override
-  String get receiptReportIssue => 'Report an issue';
+  String get receiptReportIssue => 'Reportar problema';
 
   @override
-  String get receiptNotFound => 'Receipt not found.';
+  String get receiptNotFound => 'Recibo não encontrado.';
 
   @override
   String get savedAddressesTitle => 'Endereços salvos';
@@ -1079,13 +1083,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get savedAddressesEmpty => 'Nenhum endereço salvo';
 
   @override
-  String get savedAddressesDefault => 'Default';
+  String get savedAddressesDefault => 'Padrão';
 
   @override
-  String get savedAddressesEdit => 'Edit';
+  String get savedAddressesEdit => 'Editar';
 
   @override
-  String get savedAddressesMakeDefault => 'Make default';
+  String get savedAddressesMakeDefault => 'Tornar padrão';
 
   @override
   String savedAddressesSetDefault(String label) {
@@ -1096,65 +1100,65 @@ class AppLocalizationsPt extends AppLocalizations {
   String get securityTitle => 'Segurança';
 
   @override
-  String get securitySubtitle => 'Keep your account safe.';
+  String get securitySubtitle => 'Mantenha sua conta segura.';
 
   @override
   String get securityChangePassword => 'Alterar senha';
 
   @override
-  String get securityChangePasswordSub => 'Keep your account safe';
+  String get securityChangePasswordSub => 'Mantenha sua conta segura';
 
   @override
   String get securityBiometric => 'Entrar com biometria';
 
   @override
-  String get securityBiometricSub => 'Use your face or fingerprint';
+  String get securityBiometricSub => 'Use seu rosto ou impressão digital';
 
   @override
   String get securityTwoFactor => 'Verificação em duas etapas';
 
   @override
-  String get securityTwoFactorSub => 'Extra layer of protection';
+  String get securityTwoFactorSub => 'Camada extra de proteção';
 
   @override
-  String get securityCurrentPassword => 'Current password';
+  String get securityCurrentPassword => 'Senha atual';
 
   @override
-  String get securityNewPassword => 'New password';
+  String get securityNewPassword => 'Nova senha';
 
   @override
-  String get securityConfirmNewPassword => 'Confirm new password';
+  String get securityConfirmNewPassword => 'Confirmar nova senha';
 
   @override
-  String get securityUpdatePassword => 'Update password';
+  String get securityUpdatePassword => 'Atualizar senha';
 
   @override
-  String get securityPasswordMismatch => 'Passwords do not match.';
+  String get securityPasswordMismatch => 'As senhas não coincidem.';
 
   @override
   String get securityPasswordShort =>
-      'New password must be at least 8 characters.';
+      'A nova senha deve ter pelo menos 8 caracteres.';
 
   @override
-  String get securityPasswordUpdated => 'Password updated successfully.';
+  String get securityPasswordUpdated => 'Senha atualizada com sucesso.';
 
   @override
   String get supportTitle => 'Suporte';
 
   @override
-  String get supportSearchPlaceholder => 'Search help articles';
+  String get supportSearchPlaceholder => 'Buscar artigos de ajuda';
 
   @override
-  String get supportContactUs => 'CONTACT US';
+  String get supportContactUs => 'FALE CONOSCO';
 
   @override
-  String get supportLiveChat => 'Live chat';
+  String get supportLiveChat => 'Chat ao vivo';
 
   @override
-  String get supportLiveChatSub => 'Usually replies in under 2 min';
+  String get supportLiveChatSub => 'Geralmente responde em menos de 2 min';
 
   @override
-  String get supportLiveChatCta => 'Start chat';
+  String get supportLiveChatCta => 'Iniciar chat';
 
   @override
   String get supportCall => 'Ligue para nós';
@@ -1163,7 +1167,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get supportCallSub => 'Fale com um representante';
 
   @override
-  String get supportCallCta => 'Call';
+  String get supportCallCta => 'Ligar';
 
   @override
   String get supportEmail => 'Envie um e-mail';
@@ -1172,22 +1176,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get supportEmailSub => 'Respondemos rapidamente';
 
   @override
-  String get supportEmailCta => 'Send email';
+  String get supportEmailCta => 'Enviar e-mail';
 
   @override
-  String get supportCommonQuestions => 'Common questions';
+  String get supportCommonQuestions => 'Perguntas comuns';
 
   @override
-  String get supportOpenTicket => 'OPEN TICKET';
+  String get supportOpenTicket => 'ABRIR TICKET';
 
   @override
-  String get supportViewTicket => 'View ticket';
+  String get supportViewTicket => 'Ver ticket';
 
   @override
   String get walletTitle => 'Carteira';
 
   @override
-  String get walletAvailableBalance => 'AVAILABLE BALANCE';
+  String get walletAvailableBalance => 'SALDO DISPONÍVEL';
 
   @override
   String walletEscrowHeld(String amount) {
@@ -1198,79 +1202,79 @@ class AppLocalizationsPt extends AppLocalizations {
   String get walletTopUp => 'Recarregar';
 
   @override
-  String get walletSend => 'Send';
+  String get walletSend => 'Enviar';
 
   @override
   String get walletWithdraw => 'Sacar';
 
   @override
-  String get walletCards => 'Cards';
+  String get walletCards => 'Cartões';
 
   @override
-  String get walletRecentTxns => 'Recent transactions';
+  String get walletRecentTxns => 'Transações recentes';
 
   @override
-  String get walletNoTxns => 'No transactions yet.';
+  String get walletNoTxns => 'Sem transações ainda.';
 
   @override
-  String get walletTopUpTitle => 'Top up wallet';
+  String get walletTopUpTitle => 'Recarregar carteira';
 
   @override
-  String get walletSendTitle => 'Send money';
+  String get walletSendTitle => 'Enviar dinheiro';
 
   @override
-  String get walletWithdrawTitle => 'Withdraw';
+  String get walletWithdrawTitle => 'Sacar';
 
   @override
-  String get walletPaymentMethodsTitle => 'Payment methods';
+  String get walletPaymentMethodsTitle => 'Métodos de pagamento';
 
   @override
-  String get walletAmountLabel => 'AMOUNT';
+  String get walletAmountLabel => 'VALOR';
 
   @override
-  String get walletEnterAmount => 'Enter amount';
+  String get walletEnterAmount => 'Digite o valor';
 
   @override
-  String get walletPayWith => 'PAY WITH';
+  String get walletPayWith => 'PAGAR COM';
 
   @override
-  String get walletWithdrawTo => 'WITHDRAW TO';
+  String get walletWithdrawTo => 'SACAR PARA';
 
   @override
-  String get walletDebitCard => 'Debit card';
+  String get walletDebitCard => 'Cartão de débito';
 
   @override
-  String get walletBankTransfer => 'Bank transfer';
+  String get walletBankTransfer => 'Transferência bancária';
 
   @override
-  String get walletMobileMoney => 'Mobile money';
+  String get walletMobileMoney => 'Dinheiro móvel';
 
   @override
-  String get walletEnterAmountHint => 'Enter an amount';
+  String get walletEnterAmountHint => 'Digite um valor';
 
   @override
-  String get walletTopUpHint => 'Top up';
+  String get walletTopUpHint => 'Recarregar';
 
   @override
-  String get walletAddNewMethod => 'Add new method';
+  String get walletAddNewMethod => 'Adicionar novo método';
 
   @override
-  String get walletMethodRemoved => 'Method removed';
+  String get walletMethodRemoved => 'Método removido';
 
   @override
   String get wawuPlusTitle => 'WAWU+';
 
   @override
-  String get wawuPlusHero => 'Go plus. Go more.';
+  String get wawuPlusHero => 'Seja plus. Faça mais.';
 
   @override
   String get wawuPlusSubtitle => 'Aproveite mais';
 
   @override
-  String get wawuPlusMembers => 'Join 12,400 other happy baskets';
+  String get wawuPlusMembers => 'Junte-se a outros 12.400 cestas felizes';
 
   @override
-  String get wawuPlusIncluded => 'What\'s included';
+  String get wawuPlusIncluded => 'O que está incluído';
 
   @override
   String get wawuPlusBenefit1 => 'Entrega grátis em todos os pedidos';
@@ -1285,81 +1289,82 @@ class AppLocalizationsPt extends AppLocalizations {
   String get wawuPlusBenefit4 => 'Ofertas exclusivas e acesso antecipado';
 
   @override
-  String get wawuPlusBenefit5 => 'Early access to new features';
+  String get wawuPlusBenefit5 => 'Acesso antecipado a novos recursos';
 
   @override
-  String get wawuPlusPickPlan => 'Pick a plan';
+  String get wawuPlusPickPlan => 'Escolha um plano';
 
   @override
   String get wawuPlusYearly => 'Anual (economize 20%)';
 
   @override
-  String get wawuPlusYearlyNote => 'Save 20% · billed once';
+  String get wawuPlusYearlyNote => 'Economize 20% · cobrado uma vez';
 
   @override
   String get wawuPlusMonthly => 'Mensal';
 
   @override
-  String get wawuPlusMonthlyNote => 'Cancel anytime';
+  String get wawuPlusMonthlyNote => 'Cancele a qualquer momento';
 
   @override
-  String get wawuPlusStartTrial => 'Start free trial, 7 days';
+  String get wawuPlusStartTrial => 'Começar teste grátis de 7 dias';
 
   @override
-  String get wawuPlusActiveMember => 'You\'re a WAWU+ member';
+  String get wawuPlusActiveMember => 'Você é membro WAWU+';
 
   @override
-  String get wawuPlusWebOnly => 'Open WAWUBasket on your phone to join WAWU+.';
+  String get wawuPlusWebOnly =>
+      'Abra o WAWUBasket no seu celular para entrar no WAWU+.';
 
   @override
-  String get wawuPlusWelcome => 'Welcome to WAWU+!';
+  String get wawuPlusWelcome => 'Bem-vindo ao WAWU+!';
 
   @override
-  String get operatorSignOutTitle => 'Sign out?';
+  String get operatorSignOutTitle => 'Sair?';
 
   @override
   String get operatorSignOutBody =>
-      'You\'ll need to sign in again to use this dashboard.';
+      'Você precisará entrar novamente para usar este painel.';
 
   @override
-  String get operatorSignOut => 'Sign out';
+  String get operatorSignOut => 'Sair';
 
   @override
-  String get operatorPersonalInfo => 'Personal information';
+  String get operatorPersonalInfo => 'Informações pessoais';
 
   @override
-  String get operatorPersonalInfoSub => 'Name, email, phone, verified ✓';
+  String get operatorPersonalInfoSub => 'Nome, e-mail, telefone, verificado ✓';
 
   @override
-  String get operatorSavedAddresses => 'Saved addresses';
+  String get operatorSavedAddresses => 'Endereços salvos';
 
   @override
   String get operatorSavedAddressesSub =>
-      'Where deliveries pick up and drop off';
+      'Onde as entregas são retiradas e entregues';
 
   @override
-  String get operatorNotifications => 'Notifications';
+  String get operatorNotifications => 'Notificações';
 
   @override
-  String get operatorNotificationsSub => 'New orders, payouts, alerts';
+  String get operatorNotificationsSub => 'Novos pedidos, pagamentos, alertas';
 
   @override
-  String get operatorLanguage => 'Language';
+  String get operatorLanguage => 'Idioma';
 
   @override
-  String get operatorAbout => 'About WAWUBasket';
+  String get operatorAbout => 'Sobre o WAWUBasket';
 
   @override
-  String get operatorHelpSupport => 'Help & support';
+  String get operatorHelpSupport => 'Ajuda e suporte';
 
   @override
-  String get operatorHelpSupportSub => 'Chat to a real human';
+  String get operatorHelpSupportSub => 'Fale com uma pessoa real';
 
   @override
-  String get operatorSwitchRole => 'Switch role';
+  String get operatorSwitchRole => 'Trocar papel';
 
   @override
-  String get operatorChoosePhoto => 'Choose a profile photo';
+  String get operatorChoosePhoto => 'Escolher foto de perfil';
 
   @override
   String get vendorAlertsTitle => 'Alertas';
@@ -1371,7 +1376,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get vendorAnalyticsTitle => 'Análises';
 
   @override
-  String get vendorAnalyticsSubtitle => 'The numbers don\'t lie.';
+  String get vendorAnalyticsSubtitle => 'Os números não mentem.';
 
   @override
   String get vendorAnalyticsOrders => 'Total de pedidos';
@@ -1383,190 +1388,193 @@ class AppLocalizationsPt extends AppLocalizations {
   String get vendorAnalyticsAvgOrder => 'Pedido médio';
 
   @override
-  String get vendorAnalyticsRating => 'Rating';
+  String get vendorAnalyticsRating => 'Avaliação';
 
   @override
-  String get vendorAnalyticsSalesTrend => 'Sales trend';
+  String get vendorAnalyticsSalesTrend => 'Tendência de vendas';
 
   @override
   String get vendorAnalyticsPeakHours => 'Horários de pico';
 
   @override
-  String get vendorAnalyticsCancellations => 'Cancellations';
+  String get vendorAnalyticsCancellations => 'Cancelamentos';
 
   @override
   String get vendorAnalyticsTopSellers => 'Mais vendidos';
 
   @override
-  String get vendorAnalyticsExport => 'Export';
+  String get vendorAnalyticsExport => 'Exportar';
 
   @override
-  String get vendorAnalyticsNoSales => 'No sales in this range yet.';
+  String get vendorAnalyticsNoSales => 'Sem vendas neste período ainda.';
 
   @override
-  String get vendorAnalyticsLast7 => 'Last 7 days';
+  String get vendorAnalyticsLast7 => 'Últimos 7 dias';
 
   @override
-  String get vendorAnalyticsLast30 => 'Last 30 days';
+  String get vendorAnalyticsLast30 => 'Últimos 30 dias';
 
   @override
-  String get vendorAnalyticsLast90 => 'Last 90 days';
+  String get vendorAnalyticsLast90 => 'Últimos 90 dias';
 
   @override
-  String get vendorHomeGoodMorning => 'Good morning,';
+  String get vendorHomeGoodMorning => 'Bom dia,';
 
   @override
-  String get vendorHomeOpen => 'Open';
+  String get vendorHomeOpen => 'Aberto';
 
   @override
-  String get vendorHomeClosed => 'Closed';
+  String get vendorHomeClosed => 'Fechado';
 
   @override
-  String get vendorHomeQuickActions => 'Quick actions';
+  String get vendorHomeQuickActions => 'Ações rápidas';
 
   @override
-  String get vendorHomeAddItem => 'Add item';
+  String get vendorHomeAddItem => 'Adicionar item';
 
   @override
-  String get vendorHomeAnalytics => 'Analytics';
+  String get vendorHomeAnalytics => 'Análises';
 
   @override
-  String get vendorHomePayouts => 'Payouts';
+  String get vendorHomePayouts => 'Pagamentos';
 
   @override
-  String get vendorHomeFreshOrders => 'Fresh orders';
+  String get vendorHomeFreshOrders => 'Pedidos novos';
 
   @override
-  String get vendorHomeInKitchen => 'In the kitchen';
+  String get vendorHomeInKitchen => 'Na cozinha';
 
   @override
-  String get vendorHomeMore => 'More';
+  String get vendorHomeMore => 'Mais';
 
   @override
-  String get vendorHomeInventory => 'Inventory';
+  String get vendorHomeInventory => 'Estoque';
 
   @override
-  String get vendorHomeInventorySub => 'Stock levels & batches';
+  String get vendorHomeInventorySub => 'Níveis de estoque e lotes';
 
   @override
-  String get vendorHomeReviews => 'Reviews';
+  String get vendorHomeReviews => 'Avaliações';
 
   @override
-  String get vendorHomeReviewsSub => 'What customers say';
+  String get vendorHomeReviewsSub => 'O que os clientes dizem';
 
   @override
-  String get vendorHomeAlerts => 'Alerts';
+  String get vendorHomeAlerts => 'Alertas';
 
   @override
-  String get vendorHomeAlertsSub => 'Low stock, late orders, replies waiting';
+  String get vendorHomeAlertsSub =>
+      'Estoque baixo, pedidos atrasados, respostas pendentes';
 
   @override
-  String get vendorHomeSettings => 'Store settings';
+  String get vendorHomeSettings => 'Configurações da loja';
 
   @override
-  String get vendorHomeSettingsSub => 'Hours, prep time, holiday mode, staff';
+  String get vendorHomeSettingsSub =>
+      'Horários, tempo de preparo, modo férias, equipe';
 
   @override
-  String get vendorHomeDecline => 'Decline';
+  String get vendorHomeDecline => 'Recusar';
 
   @override
-  String get vendorHomeAccept => 'Accept';
+  String get vendorHomeAccept => 'Aceitar';
 
   @override
   String get vendorHomeNoOrders =>
-      'No new orders. Drop a promo to bring them in.';
+      'Sem novos pedidos. Crie uma promoção para atrair clientes.';
 
   @override
   String get vendorInventoryTitle => 'Estoque';
 
   @override
   String get vendorKycReviewNote =>
-      'We\'ll review your documents and get you live.';
+      'Vamos analisar seus documentos e te colocar ao vivo.';
 
   @override
-  String get vendorOrderNotFound => 'Can\'t find that order';
+  String get vendorOrderNotFound => 'Pedido não encontrado';
 
   @override
   String get vendorReviewsTitle => 'Avaliações';
 
   @override
-  String get vendorMenuPhotoFailed => 'Couldn\'t upload that photo.';
+  String get vendorMenuPhotoFailed => 'Não foi possível enviar essa foto.';
 
   @override
   String get agentHomeOnline =>
-      'You\'re online, transactions sync as you record them.';
+      'Você está online, as transações são sincronizadas ao registrá-las.';
 
   @override
-  String get agentRegisterSetUp => 'Let\'s get them set up.';
+  String get agentRegisterSetUp => 'Vamos configurá-los.';
 
   @override
   String get agentRegisterOffline =>
-      'Offline-capable, we\'ll sync when you have connection.';
+      'Funciona offline, sincronizaremos quando você tiver conexão.';
 
   @override
-  String get agentTraderNotFound => 'Trader not found';
+  String get agentTraderNotFound => 'Comerciante não encontrado';
 
   @override
   String get agentTradersEmpty =>
-      'No traders registered yet. Tap \"Register\" to add one.';
+      'Nenhum comerciante registrado ainda. Toque em Registrar para adicionar um.';
 
   @override
-  String get riderHomeOffline => 'You\'re offline';
+  String get riderHomeOffline => 'Você está offline';
 
   @override
-  String get riderKycPhotoId => 'Photo of ID';
+  String get riderKycPhotoId => 'Foto do documento de identidade';
 
   @override
   String get driverKycVerifyNote =>
-      'We verify with your transport union before you bid.';
+      'Verificamos com sua cooperativa de transporte antes de você fazer um lance.';
 
   @override
-  String get driverKycLicenceName => 'Drivers\' licence name, please.';
+  String get driverKycLicenceName =>
+      'Nome na carteira de motorista, por favor.';
 
   @override
-  String get driverKycVehicleType => 'What you\'ll move loads with.';
+  String get driverKycVehicleType => 'Com o que você vai transportar cargas.';
 
   @override
   String get traderListingsEmpty =>
-      'No listings yet. Tap \"Post\" to add your first.';
+      'Nenhum anúncio ainda. Toque em Publicar para adicionar o primeiro.';
 
   @override
-  String get traderListingPhotoFailed => 'Couldn\'t upload that photo.';
+  String get traderListingPhotoFailed => 'Não foi possível enviar essa foto.';
 
   @override
-  String get exportListingNotFound => 'Can\'t find that listing';
+  String get exportListingNotFound => 'Anúncio não encontrado';
 
   @override
-  String get exportEnquirySent => 'Enquiry sent, the trader will reach out.';
+  String get exportEnquirySent =>
+      'Consulta enviada, o comerciante entrará em contato.';
 
   @override
-  String get bulkCheckoutListingNotFound => 'Listing not found';
+  String get bulkCheckoutListingNotFound => 'Anúncio não encontrado';
 
   @override
   String get bulkCheckoutEscrowNote =>
-      'We hold your funds until you confirm delivery. Dispute anytime if something\'s off.';
+      'Mantemos seus fundos até você confirmar a entrega. Dispute a qualquer momento se algo estiver errado.';
 
   @override
-  String get escrowDisputeOpened =>
-      'Dispute opened. We\'ll review within 48 hours.';
+  String get escrowDisputeOpened => 'Disputa aberta. Revisaremos em 48 horas.';
 
   @override
-  String get escrowDisputeOrderNotFound => 'Order not found';
+  String get escrowDisputeOrderNotFound => 'Pedido não encontrado';
 
   @override
   String get escrowDisputeDetailsHint =>
-      'Tell us specifics, what arrived vs what you expected?';
+      'Nos diga os detalhes, o que chegou vs o que era esperado?';
 
   @override
   String get escrowOrdersEmpty =>
-      'You haven\'t placed any bulk orders yet. Head to Trade to start.';
+      'Você ainda não fez pedidos por atacado. Vá para Trade para começar.';
 
   @override
-  String get escrowStatusNotFound => 'Can\'t find that order';
+  String get escrowStatusNotFound => 'Pedido não encontrado';
 
   @override
   String get escrowStatusReviewNote =>
-      'We\'ll review evidence and resolve within 48 hours.';
+      'Vamos revisar as evidências e resolver em 48 horas.';
 
   @override
   String get recipesTitle => 'Cozinhe esta noite';

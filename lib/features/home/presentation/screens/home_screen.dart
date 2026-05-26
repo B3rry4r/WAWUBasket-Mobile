@@ -176,16 +176,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ValueListenableBuilder<Map<String, bool>>(
                 valueListenable: FeatureFlagService.instance.flags,
                 builder: (_, flags, _) {
-                  final newUI = flags['new_categories_ui'] ?? true;
+                  final circleUI = flags['new_categories_ui'] ?? false;
                   return ValueListenableBuilder<List<Category>?>(
                     valueListenable: CategoryController.instance.categories,
-                    builder: (_, cats, _) => newUI
-                        ? _CategoryPillRow(
+                    builder: (_, cats, _) => circleUI
+                        ? _CategoryCircleRow(
                             cats: cats,
                             activeCategoryId: _activeCategoryId,
                             onTap: _onCategoryTap,
                           )
-                        : _CategoryGrid(
+                        : _CategoryPillRow(
                             cats: cats,
                             activeCategoryId: _activeCategoryId,
                             onTap: _onCategoryTap,
@@ -525,12 +525,12 @@ class _CategoryPillRow extends StatelessWidget {
   }
 }
 
-// ── Old UI: horizontal icon-card row ─────────────────────────────────────────
-// Each item is a rounded card with the SVG centred above the label.
-// Horizontal scroll keeps subcategory chips directly below — no hunting.
+// ── Feature-flag UI: Glovo-style horizontal circle row ───────────────────────
+// Horizontally scrollable row of large icon circles with label underneath.
+// The active circle gets a filled dark background; inactive stays subtle.
 
-class _CategoryGrid extends StatelessWidget {
-  const _CategoryGrid({
+class _CategoryCircleRow extends StatelessWidget {
+  const _CategoryCircleRow({
     required this.cats,
     required this.activeCategoryId,
     required this.onTap,
@@ -543,81 +543,92 @@ class _CategoryGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     if (cats == null) {
       return SizedBox(
-        height: 88,
+        height: 90,
         child: Shimmer.fromColors(
           baseColor: WBColors.bgSoft,
           highlightColor: WBColors.bgSecondary,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: 6,
-            separatorBuilder: (_, _) => const SizedBox(width: 10),
-            itemBuilder: (_, _) => Container(
-              width: 72,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
+            itemCount: 7,
+            separatorBuilder: (_, _) => const SizedBox(width: 16),
+            itemBuilder: (_, _) => Column(
+              children: [
+                Container(
+                  width: 58,
+                  height: 58,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Container(
+                  width: 48,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       );
     }
+
     return SizedBox(
-      height: 88,
+      height: 90,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: cats!.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 10),
+        separatorBuilder: (_, _) => const SizedBox(width: 16),
         itemBuilder: (_, i) {
           final c = cats![i];
           final active = c.id == activeCategoryId;
           return GestureDetector(
             onTap: () => onTap(c.id),
-            child: AnimatedContainer(
-              duration: WBMotion.base,
-              curve: WBMotion.easeSoft,
-              width: 72,
-              decoration: BoxDecoration(
-                color: active ? WBColors.surfaceTag : WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-                border: Border.all(
-                  color: active
-                      ? WBColors.surfaceDark
-                      : Colors.transparent,
-                  width: 1.5,
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+            child: SizedBox(
+              width: 66,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: const BoxDecoration(
+                  AnimatedContainer(
+                    duration: WBMotion.base,
+                    curve: WBMotion.easeSoft,
+                    width: 58,
+                    height: 58,
+                    decoration: BoxDecoration(
+                      color: active ? WBColors.surfaceDark : WBColors.surfaceCard,
                       shape: BoxShape.circle,
-                      color: Colors.white,
+                      boxShadow: active ? null : WBShadows.card,
                     ),
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(14),
                     child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
-                        ? SvgPicture.asset(c.svgAsset!, fit: BoxFit.contain)
+                        ? SvgPicture.asset(
+                            c.svgAsset!,
+                            fit: BoxFit.contain,
+                            colorFilter: active
+                                ? const ColorFilter.mode(
+                                    Colors.white, BlendMode.srcIn)
+                                : ColorFilter.mode(
+                                    WBColors.fgSecondary, BlendMode.srcIn),
+                          )
                         : const SizedBox.shrink(),
                   ),
                   const SizedBox(height: 6),
                   Text(
                     c.label,
                     textAlign: TextAlign.center,
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: WBTypography.caption.copyWith(
-                      color: active
-                          ? WBColors.fgHeader
-                          : WBColors.fgSecondary,
-                      fontWeight:
-                          active ? FontWeight.w600 : FontWeight.w400,
+                      color: active ? WBColors.fgPrimary : WBColors.fgSecondary,
+                      fontWeight: active ? FontWeight.w700 : FontWeight.w500,
                       fontSize: 11,
+                      height: 1.2,
                     ),
                   ),
                 ],
@@ -629,3 +640,5 @@ class _CategoryGrid extends StatelessWidget {
     );
   }
 }
+
+// ── Legacy UI: scrollable pill row (flag=false fallback) ──────────────────────
