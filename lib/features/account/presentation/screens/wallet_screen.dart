@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/presentation/widgets/search_field.dart';
 import '../../data/account_extras_api.dart';
@@ -72,11 +73,11 @@ class _Txn {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
-  static const _actions = [
-    (icon: WBIconName.plus, label: 'Top up', route: AppRoutes.walletTopUp),
-    (icon: WBIconName.arrowRight, label: 'Send', route: AppRoutes.walletSend),
-    (icon: WBIconName.arrowLeft, label: 'Withdraw', route: AppRoutes.walletWithdraw),
-    (icon: WBIconName.card, label: 'Cards', route: AppRoutes.walletCards),
+  List<({WBIconName icon, String label, String route})> _actions(BuildContext context) => [
+    (icon: WBIconName.plus, label: context.l10n.walletTopUp, route: AppRoutes.walletTopUp),
+    (icon: WBIconName.arrowRight, label: context.l10n.walletSend, route: AppRoutes.walletSend),
+    (icon: WBIconName.arrowLeft, label: context.l10n.walletWithdraw, route: AppRoutes.walletWithdraw),
+    (icon: WBIconName.card, label: context.l10n.walletCards, route: AppRoutes.walletCards),
   ];
 
   int _balance = 0;
@@ -139,7 +140,7 @@ class _WalletScreenState extends State<WalletScreen> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'Wallet',
+                      context.l10n.walletTitle,
                       style: WBTypography.cardTitle.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -150,7 +151,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 Text(
-                  'AVAILABLE BALANCE',
+                  context.l10n.walletAvailableBalance,
                   style: WBTypography.label.copyWith(
                     color: Colors.white.withValues(alpha: 0.5),
                     fontWeight: FontWeight.w500,
@@ -191,8 +192,7 @@ class _WalletScreenState extends State<WalletScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            '${wbNaira(_escrow)} held in escrow, '
-                            'releases on delivery',
+                            context.l10n.walletEscrowHeld(wbNaira(_escrow)),
                             style: WBTypography.caption.copyWith(
                               color: WBColors.statusWarning,
                               fontWeight: FontWeight.w500,
@@ -217,7 +217,7 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
             child: Row(
               children: [
-                for (final a in _actions) ...[
+                for (final a in _actions(context)) ...[
                   Expanded(
                     child: GestureDetector(
                       onTap: () => context.push(a.route),
@@ -263,9 +263,9 @@ class _WalletScreenState extends State<WalletScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SectionHeader(
-                  title: 'Recent transactions',
-                  action: 'See all',
+                SectionHeader(
+                  title: context.l10n.walletRecentTxns,
+                  action: context.l10n.actionSeeAll,
                 ),
                 const SizedBox(height: WBSpacing.md),
                 if (txns == null && _error == null)
@@ -286,7 +286,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 else if (_error != null)
                   _hint(_error!)
                 else if (txns!.isEmpty)
-                  _hint('No transactions yet.')
+                  _hint(context.l10n.walletNoTxns)
                 else
                   Container(
                     decoration: BoxDecoration(

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/orders_api.dart';
 import '../../domain/models/order.dart';
@@ -22,12 +23,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
   OrderModel? _order;
   String? _error;
 
-  static const _steps = [
-    'Order confirmed',
-    'Preparing',
-    'Picked up',
-    'En route',
-    'Delivered',
+  List<String> _steps(BuildContext context) => [
+    context.l10n.trackingStep1,
+    context.l10n.trackingStep2,
+    context.l10n.trackingStep3,
+    context.l10n.trackingStep4,
+    context.l10n.trackingStep5,
   ];
 
   @override
@@ -111,6 +112,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
     }
 
     final order = _order!;
+    final steps = _steps(context);
     final activeIndex = _activeStep(order.state);
 
     return Scaffold(
@@ -146,7 +148,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                       TextButton(
                         onPressed: () => context.push(AppRoutes.support),
                         child: Text(
-                          'Need help?',
+                          context.l10n.trackingNeedHelp,
                           style: WBTypography.secondary.copyWith(
                             color: Colors.white.withValues(alpha: 0.75),
                             fontWeight: FontWeight.w500,
@@ -175,10 +177,10 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   const SizedBox(height: 6),
                   Text(
                     order.isDelivered
-                        ? 'Delivered. Enjoy your basket!'
+                        ? context.l10n.trackingDelivered
                         : order.riderName != null
                             ? '${order.riderName} is bringing your basket.'
-                            : "We'll update you as your order moves.",
+                            : context.l10n.trackingDefaultMessage,
                     style: WBTypography.body.copyWith(
                       color: Colors.white.withValues(alpha: 0.65),
                       fontSize: 14,
@@ -188,7 +190,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(WBRadius.pill),
                     child: LinearProgressIndicator(
-                      value: (activeIndex + 1) / _steps.length,
+                      value: (activeIndex + 1) / steps.length,
                       minHeight: 4,
                       backgroundColor: Colors.white.withValues(alpha: 0.15),
                       valueColor:
@@ -262,24 +264,24 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your order is on a journey',
+                    context.l10n.trackingJourney,
                     style: WBTypography.cardTitle.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
                     ),
                   ),
                   const SizedBox(height: WBSpacing.md),
-                  for (var i = 0; i < _steps.length; i++)
+                  for (var i = 0; i < steps.length; i++)
                     _TimelineRow(
-                      label: _steps[i],
+                      label: steps[i],
                       done: i <= activeIndex,
                       active: i == activeIndex && !order.isDelivered,
-                      isLast: i == _steps.length - 1,
+                      isLast: i == steps.length - 1,
                     ),
                   if (order.isDelivered) ...[
                     const SizedBox(height: WBSpacing.lg),
                     WBButton(
-                      label: 'Rate your order',
+                      label: context.l10n.trackingRate,
                       fullWidth: true,
                       size: WBButtonSize.md,
                       trailingIcon: WBIconName.star,

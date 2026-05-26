@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 
@@ -35,7 +36,7 @@ class AgentTraderDetailScreen extends StatelessWidget {
                     children: [
                       WBBackChip(onPressed: () => context.pop()),
                       const SizedBox(height: WBSpacing.xl),
-                      Text("Trader not found", style: WBTypography.page),
+                      Text(context.l10n.agentTraderNotFound, style: WBTypography.page),
                     ],
                   ),
                 );

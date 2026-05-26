@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/domain/models/export_listing.dart';
@@ -195,7 +196,7 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
                   ),
                   child: Text(
                     _filter == null
-                        ? 'No listings yet. Tap "Post" to add your first.'
+                        ? context.l10n.traderListingsEmpty
                         : 'No ${_filter!.label.toLowerCase()} listings.',
                     style: WBTypography.body.copyWith(
                       color: WBColors.fgSecondary,

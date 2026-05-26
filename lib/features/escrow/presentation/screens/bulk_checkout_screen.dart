@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../../trade/application/trade_controller.dart';
@@ -112,7 +113,7 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(height: WBSpacing.xl),
-                Text("Listing not found", style: WBTypography.page),
+                Text(context.l10n.bulkCheckoutListingNotFound, style: WBTypography.page),
               ],
             ),
           ),
@@ -214,7 +215,7 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          "We hold your funds until you confirm delivery. Dispute anytime if something's off.",
+                          context.l10n.bulkCheckoutEscrowNote,
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgHeader,
                             fontWeight: FontWeight.w500,

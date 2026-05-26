@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_logo.dart';
 import '../../application/role_controller.dart';
 
@@ -83,10 +84,10 @@ class _SplashScreenState extends State<SplashScreen>
                 children: [
                   const WBWMark(size: 108),
                   const SizedBox(height: WBSpacing.lg),
-                  Text('WAWUBasket', style: WBTypography.hero),
+                  Text(context.l10n.appName, style: WBTypography.hero),
                   const SizedBox(height: WBSpacing.sm),
                   Text(
-                    'One basket. Everything.',
+                    context.l10n.splashTagline,
                     style: WBTypography.secondary
                         .copyWith(color: WBColors.fgPlaceholder),
                   ),

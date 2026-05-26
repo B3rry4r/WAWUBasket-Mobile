@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 enum WalletActionKind { topUp, send, withdraw, cards }
@@ -19,33 +20,33 @@ class _TopUpScreenState extends State<TopUpScreen> {
   String _amount = '';
   String _method = 'card';
 
-  String get _title {
+  String _title(BuildContext context) {
     switch (widget.kind) {
       case WalletActionKind.topUp:
-        return 'Top up wallet';
+        return context.l10n.walletTopUpTitle;
       case WalletActionKind.send:
-        return 'Send money';
+        return context.l10n.walletSendTitle;
       case WalletActionKind.withdraw:
-        return 'Withdraw';
+        return context.l10n.walletWithdrawTitle;
       case WalletActionKind.cards:
-        return 'Payment methods';
+        return context.l10n.walletPaymentMethodsTitle;
     }
   }
 
-  String get _ctaLabel {
+  String _ctaLabel(BuildContext context) {
     switch (widget.kind) {
       case WalletActionKind.topUp:
-        return 'Top up';
+        return context.l10n.walletTopUpHint;
       case WalletActionKind.send:
-        return 'Send';
+        return context.l10n.walletSend;
       case WalletActionKind.withdraw:
-        return 'Withdraw';
+        return context.l10n.walletWithdraw;
       case WalletActionKind.cards:
-        return 'Add new method';
+        return context.l10n.walletAddNewMethod;
     }
   }
 
-  String get _snackMessage {
+  String _snackMessage(BuildContext context) {
     switch (widget.kind) {
       case WalletActionKind.topUp:
         return 'Top-up of $_amount started';
@@ -81,12 +82,12 @@ class _TopUpScreenState extends State<TopUpScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text(_title, style: WBTypography.page),
+                Text(_title(context), style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'AMOUNT',
+              context.l10n.walletAmountLabel,
               style: WBTypography.label.copyWith(
                 color: WBColors.fgPlaceholder,
                 fontWeight: FontWeight.w600,
@@ -95,7 +96,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
             ),
             const SizedBox(height: 10),
             WBInput(
-              placeholder: 'Enter amount',
+              placeholder: context.l10n.walletEnterAmount,
               leadingIcon: WBIconName.card,
               keyboardType: TextInputType.number,
               onChanged: (v) => setState(() => _amount = v.isEmpty ? '' : '₦$v'),
@@ -116,8 +117,8 @@ class _TopUpScreenState extends State<TopUpScreen> {
             const SizedBox(height: WBSpacing.lg),
             Text(
               widget.kind == WalletActionKind.withdraw
-                  ? 'WITHDRAW TO'
-                  : 'PAY WITH',
+                  ? context.l10n.walletWithdrawTo
+                  : context.l10n.walletPayWith,
               style: WBTypography.label.copyWith(
                 color: WBColors.fgPlaceholder,
                 fontWeight: FontWeight.w600,
@@ -125,10 +126,10 @@ class _TopUpScreenState extends State<TopUpScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            for (final option in const [
-              (id: 'card', icon: WBIconName.card, label: 'Debit card', sub: '•••• 4218'),
-              (id: 'bank', icon: WBIconName.arrowRight, label: 'Bank transfer', sub: 'GTBank · ****0021'),
-              (id: 'mobile', icon: WBIconName.phone, label: 'Mobile money', sub: 'OPay, Palmpay'),
+            for (final option in [
+              (id: 'card', icon: WBIconName.card, label: context.l10n.walletDebitCard, sub: '•••• 4218'),
+              (id: 'bank', icon: WBIconName.arrowRight, label: context.l10n.walletBankTransfer, sub: 'GTBank · ****0021'),
+              (id: 'mobile', icon: WBIconName.phone, label: context.l10n.walletMobileMoney, sub: 'OPay, Palmpay'),
             ]) ...[
               _MethodTile(
                 icon: option.icon,
@@ -142,15 +143,15 @@ class _TopUpScreenState extends State<TopUpScreen> {
             const SizedBox(height: WBSpacing.lg),
             WBButton(
               label: _amount.isEmpty
-                  ? 'Enter an amount'
-                  : '$_ctaLabel $_amount',
+                  ? context.l10n.walletEnterAmountHint
+                  : '${_ctaLabel(context)} $_amount',
               size: WBButtonSize.lg,
               fullWidth: true,
               disabled: _amount.isEmpty,
               onPressed: _amount.isEmpty
                   ? null
                   : () {
-                      wbShowSnack(context, _snackMessage);
+                      wbShowSnack(context, _snackMessage(context));
                       context.pop();
                     },
             ),
@@ -176,7 +177,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Payment methods', style: WBTypography.page),
+                Text(context.l10n.walletPaymentMethodsTitle, style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -227,7 +228,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => wbShowSnack(context, 'Method removed'),
+                      onTap: () => wbShowSnack(context, context.l10n.walletMethodRemoved),
                       child: const WBIcon(
                         WBIconName.more,
                         size: 18,
@@ -241,7 +242,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
             ],
             const SizedBox(height: WBSpacing.md),
             WBButton(
-              label: 'Add new method',
+              label: context.l10n.walletAddNewMethod,
               icon: WBIconName.plus,
               size: WBButtonSize.lg,
               fullWidth: true,

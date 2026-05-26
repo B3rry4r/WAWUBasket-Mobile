@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/iap_service.dart';
@@ -39,7 +40,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
 
   Future<void> _subscribe() async {
     if (kIsWeb) {
-      wbShowSnack(context, 'Open WAWUBasket on your phone to join WAWU+.');
+      wbShowSnack(context, context.l10n.wawuPlusWebOnly);
       return;
     }
     setState(() => _busy = true);
@@ -48,7 +49,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
         _yearly ? WawuPlusIap.yearlyId : WawuPlusIap.monthlyId,
       );
       if (!mounted) return;
-      wbShowSnack(context, 'Welcome to WAWU+!');
+      wbShowSnack(context, context.l10n.wawuPlusWelcome);
       context.pop();
     } on IapException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -57,12 +58,12 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
     }
   }
 
-  static const _benefits = [
-    'Discounted delivery on every order',
-    'Member-only deals every week',
-    'Priority support, skip the line',
-    'Free returns on wrong items',
-    'Early access to new features',
+  List<String> _benefits(BuildContext context) => [
+    context.l10n.wawuPlusBenefit1,
+    context.l10n.wawuPlusBenefit2,
+    context.l10n.wawuPlusBenefit3,
+    context.l10n.wawuPlusBenefit4,
+    context.l10n.wawuPlusBenefit5,
   ];
 
   @override
@@ -85,7 +86,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(width: 14),
-                    Text('WAWU+', style: WBTypography.page),
+                    Text(context.l10n.wawuPlusTitle, style: WBTypography.page),
                   ],
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -99,7 +100,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Go plus. Go more.',
+                        context.l10n.wawuPlusHero,
                         style: WBTypography.hero.copyWith(
                           color: Colors.white,
                           fontSize: 26,
@@ -107,7 +108,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        'Discounted delivery. Exclusive treats. Priority support.',
+                        context.l10n.wawuPlusSubtitle,
                         style: WBTypography.body.copyWith(
                           color: Colors.white.withValues(alpha: 0.65),
                           fontSize: 14,
@@ -115,7 +116,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                       ),
                       const SizedBox(height: WBSpacing.md),
                       Text(
-                        'Join 12,400 other happy baskets',
+                        context.l10n.wawuPlusMembers,
                         style: WBTypography.caption.copyWith(
                           color: Colors.white.withValues(alpha: 0.5),
                         ),
@@ -125,14 +126,14 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 Text(
-                  "What's included",
+                  context.l10n.wawuPlusIncluded,
                   style: WBTypography.cardTitle.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 10),
                 WBCard(
                   child: Column(
                     children: [
-                      for (var i = 0; i < _benefits.length; i++) ...[
+                      for (var i = 0; i < _benefits(context).length; i++) ...[
                         Row(
                           children: [
                             Container(
@@ -151,7 +152,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                _benefits[i],
+                                _benefits(context)[i],
                                 style: WBTypography.body.copyWith(
                                   fontSize: 14,
                                 ),
@@ -159,7 +160,7 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                             ),
                           ],
                         ),
-                        if (i != _benefits.length - 1)
+                        if (i != _benefits(context).length - 1)
                           const SizedBox(height: 14),
                       ],
                     ],
@@ -167,22 +168,22 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 Text(
-                  'Pick a plan',
+                  context.l10n.wawuPlusPickPlan,
                   style: WBTypography.cardTitle.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 10),
                 _PlanCard(
-                  title: 'Yearly',
+                  title: context.l10n.wawuPlusYearly,
                   price: '₦18,000/year',
-                  note: 'Save 20% · billed once',
+                  note: context.l10n.wawuPlusYearlyNote,
                   selected: _yearly,
                   onTap: () => setState(() => _yearly = true),
                 ),
                 const SizedBox(height: 10),
                 _PlanCard(
-                  title: 'Monthly',
+                  title: context.l10n.wawuPlusMonthly,
                   price: '₦1,800/month',
-                  note: 'Cancel anytime',
+                  note: context.l10n.wawuPlusMonthlyNote,
                   selected: !_yearly,
                   onTap: () => setState(() => _yearly = false),
                 ),
@@ -202,8 +203,8 @@ class _WawuPlusScreenState extends State<WawuPlusScreen> {
                   ),
                   child: WBButton(
                     label: _active
-                        ? "You're a WAWU+ member"
-                        : 'Start free trial, 7 days',
+                        ? context.l10n.wawuPlusActiveMember
+                        : context.l10n.wawuPlusStartTrial,
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     trailingIcon:

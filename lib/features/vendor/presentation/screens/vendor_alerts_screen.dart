@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/vendor_api.dart';
 
@@ -69,7 +70,7 @@ class _VendorAlertsScreenState extends State<VendorAlertsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Alerts', style: WBTypography.page),
+                      Text(context.l10n.vendorAlertsTitle, style: WBTypography.page),
                       Text(
                         _subtitle,
                         style: WBTypography.caption.copyWith(
@@ -100,7 +101,7 @@ class _VendorAlertsScreenState extends State<VendorAlertsScreen> {
             else if (_error != null)
               _Hint(text: _error!)
             else if (alerts!.isEmpty)
-              const _Hint(text: 'No alerts right now. Enjoy the breather.')
+              _Hint(text: context.l10n.vendorAlertsEmpty)
             else
               for (final a in alerts)
                 _AlertRow(

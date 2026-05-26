@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/escrow_controller.dart';
 import '../../domain/models/bulk_order.dart';
@@ -60,7 +61,7 @@ class EscrowOrdersScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(WBRadius.card),
                     ),
                     child: Text(
-                      "You haven't placed any bulk orders yet. Head to Trade to start.",
+                      context.l10n.escrowOrdersEmpty,
                       style: WBTypography.body.copyWith(
                         color: WBColors.fgSecondary,
                         fontSize: 14,

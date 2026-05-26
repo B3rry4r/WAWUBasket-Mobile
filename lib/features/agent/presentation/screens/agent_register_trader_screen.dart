@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 
@@ -78,7 +79,7 @@ class _AgentRegisterTraderScreenState
                         children: [
                           Text('New trader', style: WBTypography.page),
                           Text(
-                            "Let's get them set up.",
+                            context.l10n.agentRegisterSetUp,
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),
@@ -161,7 +162,7 @@ class _AgentRegisterTraderScreenState
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          "Offline-capable, we'll sync when you have connection.",
+                          context.l10n.agentRegisterOffline,
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,
                           ),

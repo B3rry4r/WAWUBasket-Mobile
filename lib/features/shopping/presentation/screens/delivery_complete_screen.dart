@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/orders_api.dart';
 
@@ -33,7 +34,7 @@ class _DeliveryCompleteScreenState extends State<DeliveryCompleteScreen> {
 
   Future<void> _submit() async {
     if (_stars == 0) {
-      wbShowSnack(context, 'Tap a star to rate your order.');
+      wbShowSnack(context, context.l10n.deliveryRateError);
       return;
     }
     setState(() => _submitting = true);
@@ -100,12 +101,12 @@ class _RatingBody extends StatelessWidget {
       children: [
         const SizedBox(height: WBSpacing.lg),
         Text(
-          'Delivered. Enjoy your basket!',
+          context.l10n.deliveryTitle,
           style: WBTypography.hero.copyWith(fontSize: 28, height: 1.2),
         ),
         const SizedBox(height: WBSpacing.sm),
         Text(
-          'How was your experience? Your feedback helps vendors and riders do better.',
+          context.l10n.deliverySubtitle,
           style: WBTypography.body.copyWith(
             color: WBColors.fgSecondary,
             fontSize: 14,
@@ -114,7 +115,7 @@ class _RatingBody extends StatelessWidget {
         ),
         const SizedBox(height: WBSpacing.xl),
         Text(
-          'Rate this order',
+          context.l10n.deliveryRateTitle,
           style: WBTypography.cardTitle.copyWith(fontSize: 16),
         ),
         const SizedBox(height: 14),
@@ -157,7 +158,7 @@ class _RatingBody extends StatelessWidget {
           const SizedBox(height: WBSpacing.sm),
           Center(
             child: Text(
-              _ratingLabel(stars),
+              _ratingLabel(stars, context),
               style: WBTypography.caption.copyWith(
                 color: WBColors.fgSecondary,
                 fontWeight: FontWeight.w500,
@@ -167,7 +168,7 @@ class _RatingBody extends StatelessWidget {
         ],
         const SizedBox(height: WBSpacing.lg),
         Text(
-          'Tell us more (optional)',
+          context.l10n.deliveryFeedbackTitle,
           style: WBTypography.cardTitle.copyWith(fontSize: 16),
         ),
         const SizedBox(height: 10),
@@ -182,7 +183,7 @@ class _RatingBody extends StatelessWidget {
             maxLines: 3,
             style: WBTypography.body.copyWith(fontSize: 15),
             decoration: InputDecoration.collapsed(
-              hintText: 'What made it great or not so great?',
+              hintText: context.l10n.deliveryFeedbackPlaceholder,
               hintStyle: WBTypography.body.copyWith(
                 color: WBColors.fgPlaceholder,
                 fontSize: 15,
@@ -192,7 +193,7 @@ class _RatingBody extends StatelessWidget {
         ),
         const SizedBox(height: WBSpacing.xl),
         WBButton(
-          label: 'Submit rating',
+          label: context.l10n.deliverySubmit,
           size: WBButtonSize.lg,
           fullWidth: true,
           trailingIcon: WBIconName.arrowRight,
@@ -205,7 +206,7 @@ class _RatingBody extends StatelessWidget {
           child: GestureDetector(
             onTap: submitting ? null : onSkip,
             child: Text(
-              'Skip for now',
+              context.l10n.deliverySkip,
               style: WBTypography.secondary.copyWith(
                 color: WBColors.fgSecondary,
                 fontWeight: FontWeight.w500,
@@ -217,12 +218,12 @@ class _RatingBody extends StatelessWidget {
     );
   }
 
-  String _ratingLabel(int s) => switch (s) {
-        1 => 'Not great',
-        2 => 'Could be better',
-        3 => 'It was okay',
-        4 => 'Pretty good!',
-        _ => 'Loved it!',
+  String _ratingLabel(int s, BuildContext context) => switch (s) {
+        1 => context.l10n.deliveryRatingBad,
+        2 => context.l10n.deliveryRatingFair,
+        3 => context.l10n.deliveryRatingOkay,
+        4 => context.l10n.deliveryRatingGood,
+        _ => context.l10n.deliveryRatingLove,
       };
 }
 
@@ -254,13 +255,13 @@ class _ThankYouBody extends StatelessWidget {
           ),
           const SizedBox(height: WBSpacing.xl),
           Text(
-            'Thanks for the feedback!',
+            context.l10n.deliveryThankYou,
             textAlign: TextAlign.center,
             style: WBTypography.hero.copyWith(fontSize: 28),
           ),
           const SizedBox(height: WBSpacing.sm),
           Text(
-            'Your rating helps the whole basket get better. See you next time.',
+            context.l10n.deliveryThankYouBody,
             textAlign: TextAlign.center,
             style: WBTypography.body.copyWith(
               color: WBColors.fgSecondary,
@@ -270,7 +271,7 @@ class _ThankYouBody extends StatelessWidget {
           ),
           const Spacer(),
           WBButton(
-            label: 'Back to home',
+            label: context.l10n.deliveryBackHome,
             size: WBButtonSize.lg,
             fullWidth: true,
             trailingIcon: WBIconName.arrowRight,

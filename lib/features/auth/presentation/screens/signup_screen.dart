@@ -6,6 +6,7 @@ import '../../../../core/network/country_api.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/auth_api.dart';
 
@@ -46,15 +47,15 @@ class _SignupScreenState extends State<SignupScreen> {
     if (_name.text.trim().isEmpty ||
         _phone.text.trim().isEmpty ||
         _email.text.trim().isEmpty) {
-      wbShowSnack(context, 'Fill in your name, number and email.');
+      wbShowSnack(context, context.l10n.signupErrorName);
       return;
     }
     if (_password.text.length < 8) {
-      wbShowSnack(context, 'Password must be at least 8 characters.');
+      wbShowSnack(context, context.l10n.signupErrorPassword);
       return;
     }
     if (!_agreed) {
-      wbShowSnack(context, 'Accept the Terms to continue.');
+      wbShowSnack(context, context.l10n.signupErrorTerms);
       return;
     }
     setState(() => _busy = true);
@@ -89,36 +90,36 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: 12),
               const WBBackChip(),
               const SizedBox(height: WBSpacing.lg),
-              Text("What's your WhatsApp number?", style: WBTypography.hero),
+              Text(context.l10n.signupTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm),
               Text(
-                "We'll send a code to make sure it's really you.",
+                context.l10n.signupSubtitle,
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.lg),
               WBInput(
-                label: 'Full name',
+                label: context.l10n.signupNameLabel,
                 controller: _name,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
               WBPhoneField(
-                label: 'WhatsApp number',
+                label: context.l10n.signupPhoneLabel,
                 controller: _phone,
                 onCountryChanged: (c) => _country = c,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
               WBInput(
-                label: 'Email',
+                label: context.l10n.signupEmailLabel,
                 controller: _email,
                 keyboardType: TextInputType.emailAddress,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.sm + 6),
               WBInput(
-                label: 'Password',
+                label: context.l10n.signupPasswordLabel,
                 controller: _password,
-                placeholder: 'At least 8 characters',
+                placeholder: context.l10n.signupPasswordPlaceholder,
                 leadingIcon: WBIconName.card,
                 obscureText: true,
               ),
@@ -192,7 +193,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: WBSpacing.lg),
               WBButton(
-                label: 'Send code',
+                label: context.l10n.signupSendCode,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
@@ -202,7 +203,7 @@ class _SignupScreenState extends State<SignupScreen> {
               const SizedBox(height: WBSpacing.sm + 4),
               Center(
                 child: Text(
-                  'No spam. No calls. Just your basket updates.',
+                  context.l10n.signupDisclaimer,
                   style: WBTypography.caption.copyWith(
                     color: WBColors.fgPlaceholder,
                   ),
@@ -215,10 +216,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: RichText(
                     text: TextSpan(
                       style: WBTypography.secondary,
-                      children: const [
-                        TextSpan(text: 'Already have an account? '),
+                      children: [
+                        TextSpan(text: '${context.l10n.signupHaveAccount} '),
                         TextSpan(
-                          text: 'Sign in',
+                          text: context.l10n.signIn,
                           style: TextStyle(
                             color: WBColors.fgHeader,
                             fontWeight: FontWeight.w600,

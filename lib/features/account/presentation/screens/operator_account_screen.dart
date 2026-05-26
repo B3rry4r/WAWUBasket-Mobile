@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../shopping/application/wb_images.dart';
@@ -291,20 +292,20 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
           ),
           AccountMenuRow(
             icon: WBIconName.user,
-            label: 'Personal information',
-            sub: 'Name, email, phone, verified ✓',
+            label: context.l10n.operatorPersonalInfo,
+            sub: context.l10n.operatorPersonalInfoSub,
             onTap: () => context.push(AppRoutes.personalInfo),
           ),
           AccountMenuRow(
             icon: WBIconName.pin,
-            label: 'Saved addresses',
-            sub: 'Where deliveries pick up and drop off',
+            label: context.l10n.operatorSavedAddresses,
+            sub: context.l10n.operatorSavedAddressesSub,
             onTap: () => context.push(AppRoutes.savedAddresses),
           ),
           AccountMenuRow(
             icon: WBIconName.bell,
-            label: 'Notifications',
-            sub: 'New orders, payouts, alerts',
+            label: context.l10n.operatorNotifications,
+            sub: context.l10n.operatorNotificationsSub,
             onTap: () => context.push(AppRoutes.notifications),
           ),
         ],
@@ -326,13 +327,13 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
         rows: [
           AccountMenuRow(
             icon: WBIconName.message,
-            label: 'Language',
+            label: context.l10n.operatorLanguage,
             sub: 'English',
             onTap: () => context.push(AppRoutes.language),
           ),
           AccountMenuRow(
             icon: WBIconName.more,
-            label: 'About WAWUBasket',
+            label: context.l10n.operatorAbout,
             sub: 'v2.1.0',
             onTap: () => context.push(AppRoutes.about),
           ),
@@ -343,19 +344,19 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
         rows: [
           AccountMenuRow(
             icon: WBIconName.user,
-            label: 'Switch role',
+            label: context.l10n.operatorSwitchRole,
             sub: _switchSub(),
             onTap: () => RoleSwitcherSheet.show(context),
           ),
           AccountMenuRow(
             icon: WBIconName.phone,
-            label: 'Help & support',
-            sub: 'Chat to a real human',
+            label: context.l10n.operatorHelpSupport,
+            sub: context.l10n.operatorHelpSupportSub,
             onTap: () => context.push(AppRoutes.support),
           ),
           AccountMenuRow(
             icon: WBIconName.close,
-            label: 'Sign out',
+            label: context.l10n.operatorSignOut,
             danger: true,
             onTap: () => _showSignOutSheet(context),
           ),
@@ -429,7 +430,7 @@ class _Hero extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () =>
-                    wbShowSnack(context, 'Choose a profile photo'),
+                    wbShowSnack(context, context.l10n.operatorChoosePhoto),
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -634,19 +635,19 @@ void _showSignOutSheet(BuildContext context) {
             ),
           ),
           Text(
-            'Sign out?',
+            context.l10n.operatorSignOutTitle,
             style: WBTypography.page,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: WBSpacing.sm),
           Text(
-            "You'll need to sign in again to use this dashboard.",
+            context.l10n.operatorSignOutBody,
             textAlign: TextAlign.center,
             style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
           ),
           const SizedBox(height: WBSpacing.xl),
           WBButton(
-            label: 'Sign out',
+            label: context.l10n.operatorSignOut,
             size: WBButtonSize.lg,
             fullWidth: true,
             onPressed: () {
@@ -657,7 +658,7 @@ void _showSignOutSheet(BuildContext context) {
           ),
           const SizedBox(height: WBSpacing.sm + 4),
           WBButton(
-            label: 'Cancel',
+            label: context.l10n.actionCancel,
             size: WBButtonSize.lg,
             fullWidth: true,
             variant: WBButtonVariant.secondary,

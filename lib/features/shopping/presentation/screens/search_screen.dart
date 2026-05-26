@@ -7,6 +7,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/search_field.dart';
@@ -157,7 +158,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             decoration: InputDecoration(
                               isCollapsed: true,
                               border: InputBorder.none,
-                              hintText: 'Search jollof, tomatoes, chicken…',
+                              hintText: context.l10n.searchPlaceholder,
                               hintStyle: WBTypography.body.copyWith(
                                 color: WBColors.fgPlaceholder,
                               ),
@@ -204,17 +205,17 @@ class _SearchScreenState extends State<SearchScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Recent searches',
+                      context.l10n.searchRecentTitle,
                       style: WBTypography.cardTitle
                           .copyWith(fontWeight: FontWeight.w600),
                     ),
                     GestureDetector(
                       onTap: () {
                         setState(() => _recent = const []);
-                        wbShowSnack(context, 'Recent searches cleared');
+                        wbShowSnack(context, context.l10n.searchRecentCleared);
                       },
                       child: Text(
-                        'Clear',
+                        context.l10n.searchRecentClear,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                           fontSize: 13,

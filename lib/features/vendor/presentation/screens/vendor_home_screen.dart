@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -89,25 +90,25 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                 ),
               ),
               const SizedBox(height: WBSpacing.lg),
-              _SectionLabel('Quick actions'),
+              _SectionLabel(context.l10n.vendorHomeQuickActions),
               const SizedBox(height: 10),
               Row(
                 children: [
                   _Action(
                     icon: WBIconName.plus,
-                    label: 'Add item',
+                    label: context.l10n.vendorHomeAddItem,
                     onTap: () => context.push(AppRoutes.vendorMenuEdit),
                   ),
                   const SizedBox(width: 10),
                   _Action(
                     icon: WBIconName.more,
-                    label: 'Analytics',
+                    label: context.l10n.vendorHomeAnalytics,
                     onTap: () => context.push(AppRoutes.vendorAnalytics),
                   ),
                   const SizedBox(width: 10),
                   _Action(
                     icon: WBIconName.card,
-                    label: 'Payouts',
+                    label: context.l10n.vendorHomePayouts,
                     onTap: () => context.push(AppRoutes.vendorPayouts),
                   ),
                 ],
@@ -119,7 +120,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _SectionLabel('Fresh orders'),
+                        _SectionLabel(context.l10n.vendorHomeFreshOrders),
                         const SizedBox(height: 4),
                         Text(
                           pending.isEmpty
@@ -135,7 +136,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                   GestureDetector(
                     onTap: () => context.go(AppRoutes.vendorOrders),
                     child: Text(
-                      'See all',
+                      context.l10n.actionSeeAll,
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                         fontWeight: FontWeight.w600,
@@ -146,7 +147,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
               ),
               const SizedBox(height: 12),
               if (pending.isEmpty)
-                _EmptyTile(label: 'No new orders. Drop a promo to bring them in.')
+                _EmptyTile(label: context.l10n.vendorHomeNoOrders)
               else
                 for (final o in pending.take(3))
                   Padding(
@@ -156,7 +157,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
 
               if (inProgress.isNotEmpty) ...[
                 const SizedBox(height: WBSpacing.md),
-                _SectionLabel('In the kitchen'),
+                _SectionLabel(context.l10n.vendorHomeInKitchen),
                 const SizedBox(height: 10),
                 for (final o in inProgress.take(3))
                   Padding(
@@ -166,30 +167,30 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
               ],
 
               const SizedBox(height: WBSpacing.lg),
-              _SectionLabel('More'),
+              _SectionLabel(context.l10n.vendorHomeMore),
               const SizedBox(height: 10),
               _MoreRow(
                 icon: WBIconName.basket,
-                label: 'Inventory',
-                sub: 'Stock levels & batches',
+                label: context.l10n.vendorHomeInventory,
+                sub: context.l10n.vendorHomeInventorySub,
                 onTap: () => context.push(AppRoutes.vendorInventory),
               ),
               _MoreRow(
                 icon: WBIconName.star,
-                label: 'Reviews',
-                sub: 'What customers say',
+                label: context.l10n.vendorHomeReviews,
+                sub: context.l10n.vendorHomeReviewsSub,
                 onTap: () => context.push(AppRoutes.vendorReviews),
               ),
               _MoreRow(
                 icon: WBIconName.bell,
-                label: 'Alerts',
-                sub: 'Low stock, late orders, replies waiting',
+                label: context.l10n.vendorHomeAlerts,
+                sub: context.l10n.vendorHomeAlertsSub,
                 onTap: () => context.push(AppRoutes.vendorAlerts),
               ),
               _MoreRow(
                 icon: WBIconName.more,
-                label: 'Store settings',
-                sub: 'Hours, prep time, holiday mode, staff',
+                label: context.l10n.vendorHomeSettings,
+                sub: context.l10n.vendorHomeSettingsSub,
                 onTap: () => context.push(AppRoutes.vendorSettings),
               ),
             ],
@@ -232,7 +233,7 @@ class _Hero extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Good morning,',
+                      context.l10n.vendorHomeGoodMorning,
                       style: WBTypography.caption.copyWith(
                         color: Colors.white.withValues(alpha: 0.6),
                       ),
@@ -276,7 +277,7 @@ class _Hero extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        open ? 'Open' : 'Closed',
+                        open ? context.l10n.vendorHomeOpen : context.l10n.vendorHomeClosed,
                         style: WBTypography.caption.copyWith(
                           color: open ? WBColors.fgHeader : Colors.white,
                           fontWeight: FontWeight.w600,
@@ -292,11 +293,11 @@ class _Hero extends StatelessWidget {
           const SizedBox(height: WBSpacing.lg),
           Row(
             children: [
-              _DarkStat(label: 'Orders', value: '$ordersToday'),
+              _DarkStat(label: context.l10n.vendorAnalyticsOrders, value: '$ordersToday'),
               const SizedBox(width: 10),
               _DarkStat(label: 'Earned', value: wbNaira(revenue)),
               const SizedBox(width: 10),
-              const _DarkStat(label: 'Rating', value: '★ 4.8'),
+              _DarkStat(label: context.l10n.vendorAnalyticsRating, value: '★ 4.8'),
             ],
           ),
         ],
@@ -467,7 +468,7 @@ class _PendingCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: WBButton(
-                    label: 'Decline',
+                    label: context.l10n.vendorHomeDecline,
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
                     fullWidth: true,
@@ -480,7 +481,7 @@ class _PendingCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 Expanded(
                   child: WBButton(
-                    label: 'Accept',
+                    label: context.l10n.vendorHomeAccept,
                     size: WBButtonSize.sm,
                     fullWidth: true,
                     onPressed: () {

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../data/vendor_api.dart';
@@ -154,7 +155,7 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'AVAILABLE BALANCE',
+                    context.l10n.walletAvailableBalance,
                     style: WBTypography.label.copyWith(
                       color: Colors.white.withValues(alpha: 0.55),
                       fontWeight: FontWeight.w500,

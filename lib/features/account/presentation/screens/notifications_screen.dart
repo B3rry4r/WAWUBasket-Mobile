@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/account_extras_api.dart';
 
@@ -59,7 +60,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     setState(() => _items = [for (final n in items) n.copyRead()]);
     try {
       await AccountExtrasApi.instance.markAllNotificationsRead();
-      if (mounted) wbShowSnack(context, 'All notifications marked read');
+      if (mounted) wbShowSnack(context, context.l10n.notificationsAllRead);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     }
@@ -125,13 +126,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(width: 14),
-                    Text('Notifications', style: WBTypography.page),
+                    Text(context.l10n.notificationsTitle, style: WBTypography.page),
                   ],
                 ),
                 GestureDetector(
                   onTap: _markAll,
                   child: Text(
-                    'Mark all read',
+                    context.l10n.notificationsMarkAllRead,
                     style: WBTypography.caption.copyWith(
                       color: WBColors.fgHeader,
                       fontWeight: FontWeight.w500,
@@ -160,7 +161,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             else if (_error != null)
               _hint(_error!)
             else if (items!.isEmpty)
-              _hint("You're all caught up — no notifications yet.")
+              _hint(context.l10n.notificationsEmpty)
             else
               for (final group in _grouped) ...[
                 Text(

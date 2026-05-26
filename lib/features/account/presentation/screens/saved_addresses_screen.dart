@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/address_controller.dart';
 
@@ -25,7 +26,7 @@ class _SavedAddressesScreenState extends State<SavedAddressesScreen> {
   Future<void> _makeDefault(Address a) async {
     try {
       await AddressController.instance.setDefault(a.id);
-      if (mounted) wbShowSnack(context, '${a.label} set as default');
+      if (mounted) wbShowSnack(context, context.l10n.savedAddressesSetDefault(a.label));
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     }
@@ -48,12 +49,12 @@ class _SavedAddressesScreenState extends State<SavedAddressesScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Saved addresses', style: WBTypography.page),
+                Text(context.l10n.savedAddressesTitle, style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
             WBButton(
-              label: 'Add address',
+              label: context.l10n.savedAddressesAdd,
               icon: WBIconName.plus,
               size: WBButtonSize.lg,
               fullWidth: true,
@@ -93,7 +94,7 @@ class _SavedAddressesScreenState extends State<SavedAddressesScreen> {
                               BorderRadius.circular(WBRadius.card),
                         ),
                         child: Text(
-                          'No saved addresses yet. Add your first above.',
+                          context.l10n.savedAddressesEmpty,
                           style: WBTypography.caption
                               .copyWith(color: WBColors.fgSecondary),
                         ),
@@ -170,8 +171,8 @@ class _AddressCard extends StatelessWidget {
                 ),
               ),
               if (address.isDefault)
-                const WBStatusPill(
-                  label: 'Default',
+                WBStatusPill(
+                  label: context.l10n.savedAddressesDefault,
                   kind: WBStatusKind.success,
                 ),
             ],
@@ -197,7 +198,7 @@ class _AddressCard extends StatelessWidget {
           Row(
             children: [
               WBButton(
-                label: 'Edit',
+                label: context.l10n.savedAddressesEdit,
                 size: WBButtonSize.sm,
                 variant: WBButtonVariant.secondary,
                 onPressed: onEdit,
@@ -205,7 +206,7 @@ class _AddressCard extends StatelessWidget {
               const SizedBox(width: 8),
               if (!address.isDefault)
                 WBButton(
-                  label: 'Make default',
+                  label: context.l10n.savedAddressesMakeDefault,
                   size: WBButtonSize.sm,
                   variant: WBButtonVariant.ghost,
                   onPressed: onMakeDefault,

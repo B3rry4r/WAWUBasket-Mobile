@@ -8,6 +8,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/role_controller.dart';
 import '../../data/auth_api.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _submit() async {
     if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
-      wbShowSnack(context, 'Enter your phone/email and password.');
+      wbShowSnack(context, context.l10n.loginErrorEmpty);
       return;
     }
     setState(() => _busy = true);
@@ -66,18 +67,16 @@ class _LoginScreenState extends State<LoginScreen> {
     final enable = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Faster sign-in'),
-        content: const Text(
-          'Use Face ID or your fingerprint to sign in next time?',
-        ),
+        title: Text(context.l10n.loginBiometricOfferTitle),
+        content: Text(context.l10n.loginBiometricOfferBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Not now'),
+            child: Text(context.l10n.loginBiometricNotNow),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Enable'),
+            child: Text(context.l10n.loginBiometricEnable),
           ),
         ],
       ),
@@ -91,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final bio = BiometricService.instance;
     if (!await bio.isAvailable()) {
       if (mounted) {
-        wbShowSnack(context, "Biometric unlock isn't set up on this device.");
+        wbShowSnack(context, context.l10n.loginBiometricNotAvailable);
       }
       return;
     }
@@ -128,21 +127,21 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 12),
               const WBBackChip(),
               const SizedBox(height: WBSpacing.xl),
-              Text('Sign in', style: WBTypography.hero),
+              Text(context.l10n.loginTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm),
               Text(
-                'Welcome back. Pick up where you left off.',
+                context.l10n.loginSubtitle,
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.xl),
               WBInput(
-                label: 'Phone or email',
+                label: context.l10n.loginPhoneLabel,
                 controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.md),
               WBInput(
-                label: 'Password',
+                label: context.l10n.loginPasswordLabel,
                 controller: _password,
                 leadingIcon: WBIconName.card,
                 obscureText: _obscure,
@@ -170,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () => context.push(AppRoutes.forgotPassword),
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: Text(
-                    'Forgot password?',
+                    context.l10n.loginForgotPassword,
                     style: WBTypography.caption.copyWith(
                       color: WBColors.fgHeader,
                       fontWeight: FontWeight.w500,
@@ -181,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const Spacer(),
               WBButton(
-                label: 'Sign in',
+                label: context.l10n.signIn,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
@@ -207,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: WBSpacing.md),
               _OutlineCta(
-                label: 'Use Face ID',
+                label: context.l10n.loginBiometric,
                 icon: WBIconName.user,
                 onPressed: _biometricSignIn,
               ),
@@ -218,10 +217,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: RichText(
                     text: TextSpan(
                       style: WBTypography.secondary,
-                      children: const [
-                        TextSpan(text: 'New to WAWUBasket? '),
+                      children: [
+                        TextSpan(text: '${context.l10n.loginSignupLink} '),
                         TextSpan(
-                          text: 'Create account',
+                          text: context.l10n.signUp,
                           style: TextStyle(
                             color: WBColors.fgHeader,
                             fontWeight: FontWeight.w600,

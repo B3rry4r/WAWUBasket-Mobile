@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/auth_api.dart';
 
@@ -28,7 +29,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _submit() async {
     if (_identifier.text.trim().isEmpty) {
-      wbShowSnack(context, 'Enter your phone number or email.');
+      wbShowSnack(context, context.l10n.forgotErrorEmpty);
       return;
     }
     setState(() => _busy = true);
@@ -59,10 +60,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               const SizedBox(height: 12),
               const WBBackChip(),
               const SizedBox(height: WBSpacing.xl - 4),
-              Text('Reset password', style: WBTypography.hero),
+              Text(context.l10n.forgotTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm + 2),
               Text(
-                "Tell us where to send a verification code and we'll help you back in.",
+                context.l10n.forgotSubtitle,
                 style: WBTypography.body.copyWith(
                   color: WBColors.fgSecondary,
                   fontSize: 15,
@@ -70,7 +71,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               const SizedBox(height: WBSpacing.lg + 4),
               WBInput(
-                label: 'Phone or email',
+                label: context.l10n.loginPhoneLabel,
                 controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
@@ -107,7 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
               const Spacer(),
               WBButton(
-                label: 'Send code',
+                label: context.l10n.forgotSendCode,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,

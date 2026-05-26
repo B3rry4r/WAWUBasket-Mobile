@@ -9,6 +9,7 @@ import '../../../auth/application/role_controller.dart';
 import '../../../shopping/application/wb_images.dart';
 import '../../application/profile_controller.dart';
 import '../widgets/account_menu.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../widgets/role_switcher_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -50,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   GestureDetector(
                     onTap: () =>
-                        wbShowSnack(context, 'Choose a profile photo'),
+                        wbShowSnack(context, context.l10n.profileChoosePhoto),
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
@@ -202,42 +203,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<AccountMenuSection> _buildSections(BuildContext context) {
     return [
       AccountMenuSection(
-        title: 'Account',
+        title: context.l10n.navAccount,
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,
-            label: 'Wallet & payment methods',
-            sub: 'Cards, bank, and mobile money',
+            label: context.l10n.profileWalletMenu,
+            sub: context.l10n.profileWalletSub,
             onTap: () => context.push(AppRoutes.wallet),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
-            label: 'Personal information',
-            sub: 'Name, email, phone, verified ✓',
+            label: context.l10n.profilePersonalInfo,
+            sub: context.l10n.profilePersonalInfoSub,
             onTap: () => context.push(AppRoutes.personalInfo),
           ),
           AccountMenuRow(
             icon: WBIconName.pin,
-            label: 'Saved addresses',
-            sub: 'Where you live, work, and hang out',
+            label: context.l10n.profileSavedAddresses,
+            sub: context.l10n.profileSavedAddressesSub,
             onTap: () => context.push(AppRoutes.savedAddresses),
           ),
           AccountMenuRow(
             icon: WBIconName.bell,
-            label: 'Notifications',
-            sub: "What we tell you about",
+            label: context.l10n.profileNotifications,
+            sub: context.l10n.profileNotificationsSub,
             onTap: () => context.push(AppRoutes.notifications),
           ),
           AccountMenuRow(
             icon: WBIconName.basket,
-            label: 'Bulk orders',
-            sub: 'Escrow-protected purchases from /trade',
+            label: context.l10n.profileBulkOrders,
+            sub: context.l10n.profileBulkOrdersSub,
             onTap: () => context.push(AppRoutes.escrowOrders),
           ),
           AccountMenuRow(
             icon: WBIconName.star,
-            label: 'WAWU+ membership',
-            sub: 'Discounted delivery and more',
+            label: context.l10n.profileWawuPlus,
+            sub: context.l10n.profileWawuPlusSub,
             onTap: () => context.push(AppRoutes.wawuPlus),
           ),
         ],
@@ -247,71 +248,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
         rows: [
           AccountMenuRow(
             icon: WBIconName.message,
-            label: 'Language',
+            label: context.l10n.profileLanguage,
             sub: 'English · Français · Hausa · Yorùbá · Igbo',
             onTap: () => context.push(AppRoutes.language),
           ),
           AccountMenuRow(
             icon: WBIconName.basket,
-            label: 'Dietary preferences',
-            sub: "Things you'd rather not eat",
+            label: context.l10n.profileDietary,
+            sub: context.l10n.profileDietarySub,
             onTap: () => context.push(AppRoutes.dietary),
           ),
           AccountMenuRow(
             icon: WBIconName.star,
-            label: 'Rate the app',
+            label: context.l10n.profileRateApp,
             onTap: () => _showRateSheet(context),
           ),
           AccountMenuRow(
             icon: WBIconName.more,
-            label: 'About WAWUBasket',
+            label: context.l10n.profileAbout,
             sub: 'v2.1.0',
             onTap: () => context.push(AppRoutes.about),
           ),
         ],
       ),
       AccountMenuSection(
-        title: 'Security',
+        title: context.l10n.securityTitle,
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,
-            label: 'Change password',
-            sub: 'Keep your account safe',
+            label: context.l10n.profileChangePassword,
+            sub: context.l10n.profileChangePasswordSub,
             onTap: () => context.push(AppRoutes.security),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
-            label: 'Biometric login',
-            sub: 'Use your face or fingerprint',
+            label: context.l10n.profileBiometricLogin,
+            sub: context.l10n.profileBiometricLoginSub,
             onTap: () => context.push(AppRoutes.security),
           ),
           AccountMenuRow(
             icon: WBIconName.phone,
-            label: 'Two-factor authentication',
-            sub: 'Extra layer of protection',
+            label: context.l10n.profileTwoFactor,
+            sub: context.l10n.profileTwoFactorSub,
             onTap: () => context.push(AppRoutes.security),
           ),
         ],
       ),
       AccountMenuSection(
-        title: 'Support',
+        title: context.l10n.supportTitle,
         rows: [
           AccountMenuRow(
             icon: WBIconName.message,
-            label: 'Help center',
-            sub: 'Answers to common questions',
+            label: context.l10n.profileHelpCenter,
+            sub: context.l10n.profileHelpCenterSub,
             onTap: () => context.push(AppRoutes.support),
           ),
           AccountMenuRow(
             icon: WBIconName.phone,
-            label: 'Chat with us',
-            sub: "We're here to help",
+            label: context.l10n.profileChatWithUs,
+            sub: context.l10n.profileChatWithUsSub,
             onTap: () => context.push(AppRoutes.support),
           ),
           AccountMenuRow(
             icon: WBIconName.more,
-            label: 'Report a problem',
-            sub: 'Tell us what went wrong',
+            label: context.l10n.profileReportProblem,
+            sub: context.l10n.profileReportProblemSub,
             onTap: () => context.push(AppRoutes.support),
           ),
         ],
@@ -321,14 +322,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,
-            label: 'Terms of service',
-            sub: 'The rules of the basket',
+            label: context.l10n.profileTerms,
+            sub: context.l10n.profileTermsSub,
             onTap: () => context.push(AppRoutes.about),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
-            label: 'Privacy policy',
-            sub: 'How we handle your info',
+            label: context.l10n.profilePrivacy,
+            sub: context.l10n.profilePrivacySub,
             onTap: () => context.push(AppRoutes.about),
           ),
         ],
@@ -338,20 +339,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         rows: [
           AccountMenuRow(
             icon: WBIconName.user,
-            label: 'Switch role',
+            label: context.l10n.profileSwitchRole,
             sub: _switchSub(),
             onTap: () => RoleSwitcherSheet.show(context),
           ),
           AccountMenuRow(
             icon: WBIconName.close,
-            label: 'Delete account',
-            sub: "We'll be sad to see you go",
+            label: context.l10n.profileDeleteAccount,
+            sub: context.l10n.profileDeleteAccountSub,
             danger: true,
             onTap: () => context.push(AppRoutes.deleteAccount),
           ),
           AccountMenuRow(
             icon: WBIconName.close,
-            label: 'Sign out',
+            label: context.l10n.profileSignOut,
             danger: true,
             onTap: () => _showSignOutSheet(context),
           ),
@@ -425,10 +426,10 @@ class _RateSheetState extends State<_RateSheet> {
               borderRadius: BorderRadius.circular(WBRadius.pill),
             ),
           ),
-          Text('Rate WAWUBasket', style: WBTypography.page),
+          Text(context.l10n.profileRateWawu, style: WBTypography.page),
           const SizedBox(height: WBSpacing.sm),
           Text(
-            'How are we doing? Your feedback shapes the app.',
+            context.l10n.profileRateFeedback,
             textAlign: TextAlign.center,
             style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
           ),
@@ -452,7 +453,7 @@ class _RateSheetState extends State<_RateSheet> {
           ),
           const SizedBox(height: WBSpacing.xl),
           WBButton(
-            label: _rating == 0 ? 'Tap a star to rate' : 'Submit',
+            label: _rating == 0 ? context.l10n.profileRateTapStar : context.l10n.profileRateSubmit,
             size: WBButtonSize.lg,
             fullWidth: true,
             disabled: _rating == 0,
@@ -461,7 +462,7 @@ class _RateSheetState extends State<_RateSheet> {
                 : () {
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Thanks, you rated us $_rating stars')),
+                      SnackBar(content: Text(context.l10n.profileRateThanks('$_rating'))),
                     );
                   },
           ),
@@ -500,16 +501,16 @@ void _showSignOutSheet(BuildContext context) {
               ),
             ),
           ),
-          Text('Sign out?', style: WBTypography.page, textAlign: TextAlign.center),
+          Text(context.l10n.profileSignOutTitle, style: WBTypography.page, textAlign: TextAlign.center),
           const SizedBox(height: WBSpacing.sm),
           Text(
-            "You'll need to sign in again to place new orders.",
+            context.l10n.profileSignOutBody,
             textAlign: TextAlign.center,
             style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
           ),
           const SizedBox(height: WBSpacing.xl),
           WBButton(
-            label: 'Sign out',
+            label: context.l10n.profileSignOut,
             size: WBButtonSize.lg,
             fullWidth: true,
             onPressed: () {
@@ -520,7 +521,7 @@ void _showSignOutSheet(BuildContext context) {
           ),
           const SizedBox(height: WBSpacing.sm + 4),
           WBButton(
-            label: 'Cancel',
+            label: context.l10n.actionCancel,
             size: WBButtonSize.lg,
             fullWidth: true,
             variant: WBButtonVariant.secondary,

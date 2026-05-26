@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/escrow_controller.dart';
 import '../../domain/models/bulk_order.dart';
@@ -42,7 +43,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
     EscrowController.instance.dispute(order.id, body);
     wbShowSnack(
       context,
-      "Dispute opened. We'll review within 48 hours.",
+      context.l10n.escrowDisputeOpened,
     );
     context.pop();
   }
@@ -65,7 +66,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(height: WBSpacing.xl),
-                    Text("Order not found", style: WBTypography.page),
+                    Text(context.l10n.escrowDisputeOrderNotFound, style: WBTypography.page),
                   ],
                 ),
               );
@@ -125,8 +126,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
                     const SizedBox(height: WBSpacing.lg),
                     WBInput(
                       label: 'Notes (optional)',
-                      placeholder:
-                          "Tell us specifics, what arrived vs what you expected?",
+                      placeholder: context.l10n.escrowDisputeDetailsHint,
                       controller: _notes,
                     ),
                     const SizedBox(height: WBSpacing.lg),

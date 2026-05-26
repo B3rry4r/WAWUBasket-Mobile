@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_inventory_controller.dart';
 
@@ -69,7 +70,7 @@ class _VendorInventoryScreenState extends State<VendorInventoryScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("What's in stock?", style: WBTypography.page),
+                          Text(context.l10n.vendorInventoryTitle, style: WBTypography.page),
                           Text(
                             'Keep your shelves honest.',
                             style: WBTypography.caption.copyWith(
@@ -330,7 +331,7 @@ void _showUpdateSheet(BuildContext context, InventoryItem item) {
             ),
             const SizedBox(height: WBSpacing.lg),
             WBButton(
-              label: 'Save',
+              label: context.l10n.actionSave,
               size: WBButtonSize.lg,
               fullWidth: true,
               onPressed: () {

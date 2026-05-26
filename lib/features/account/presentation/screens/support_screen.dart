@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/presentation/widgets/search_field.dart';
 import '../../data/account_extras_api.dart';
@@ -35,24 +36,24 @@ class _Ticket {
 }
 
 class _SupportScreenState extends State<SupportScreen> {
-  static const _contacts = [
+  List<({WBIconName icon, String label, String sub, String cta})> _contacts(BuildContext context) => [
     (
       icon: WBIconName.message,
-      label: 'Live chat',
-      sub: 'Usually replies in under 2 min',
-      cta: 'Start chat',
+      label: context.l10n.supportLiveChat,
+      sub: context.l10n.supportLiveChatSub,
+      cta: context.l10n.supportLiveChatCta,
     ),
     (
       icon: WBIconName.phone,
-      label: 'Call us',
-      sub: '+234 800 WAWUBasket',
-      cta: 'Call',
+      label: context.l10n.supportCall,
+      sub: context.l10n.supportCallSub,
+      cta: context.l10n.supportCallCta,
     ),
     (
       icon: WBIconName.bell,
-      label: 'Email us',
-      sub: 'support@wawu.africa',
-      cta: 'Send email',
+      label: context.l10n.supportEmail,
+      sub: context.l10n.supportEmailSub,
+      cta: context.l10n.supportEmailCta,
     ),
   ];
 
@@ -117,7 +118,7 @@ class _SupportScreenState extends State<SupportScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Help & support', style: WBTypography.page),
+                Text(context.l10n.supportTitle, style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
@@ -139,7 +140,7 @@ class _SupportScreenState extends State<SupportScreen> {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'Search help articles',
+                    context.l10n.supportSearchPlaceholder,
                     style: WBTypography.body.copyWith(
                       color: WBColors.fgPlaceholder,
                       fontSize: 15,
@@ -150,7 +151,7 @@ class _SupportScreenState extends State<SupportScreen> {
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'CONTACT US',
+              context.l10n.supportContactUs,
               style: WBTypography.label.copyWith(
                 fontWeight: FontWeight.w600,
                 color: WBColors.fgPlaceholder,
@@ -158,7 +159,7 @@ class _SupportScreenState extends State<SupportScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            for (final c in _contacts) ...[
+            for (final c in _contacts(context)) ...[
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -222,7 +223,7 @@ class _SupportScreenState extends State<SupportScreen> {
               const SizedBox(height: 10),
             ],
             const SizedBox(height: WBSpacing.md),
-            const SectionHeader(title: 'Common questions', action: 'See all'),
+            SectionHeader(title: context.l10n.supportCommonQuestions, action: context.l10n.actionSeeAll),
             const SizedBox(height: WBSpacing.sm + 2),
             if (faqs == null)
               const Padding(
@@ -315,7 +316,7 @@ class _SupportScreenState extends State<SupportScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'OPEN TICKET',
+                          context.l10n.supportOpenTicket,
                           style: WBTypography.label.copyWith(
                             fontWeight: FontWeight.w600,
                             color: WBColors.fgPlaceholder,
@@ -349,7 +350,7 @@ class _SupportScreenState extends State<SupportScreen> {
                     ),
                     const SizedBox(height: 12),
                     WBButton(
-                      label: 'View ticket',
+                      label: context.l10n.supportViewTicket,
                       variant: WBButtonVariant.secondary,
                       size: WBButtonSize.sm,
                       onPressed: () => context.push(AppRoutes.chatSupport),

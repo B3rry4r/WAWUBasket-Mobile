@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/cart_controller.dart';
 import '../widgets/sticky_action_bar.dart';
@@ -41,7 +42,7 @@ class CartScreen extends ConsumerWidget {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(width: 14),
-                    Text('Your basket', style: WBTypography.page),
+                    Text(context.l10n.cartTitle, style: WBTypography.page),
                   ],
                 ),
               ),
@@ -72,14 +73,14 @@ class CartScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 14),
                                 WBButton(
-                                  label: 'Try again',
+                                  label: context.l10n.actionRetry,
                                   size: WBButtonSize.sm,
                                   variant: WBButtonVariant.secondary,
                                   onPressed: controller.load,
                                 ),
                               ] else ...[
                                 Text(
-                                  'Your basket is empty',
+                                  context.l10n.cartEmpty,
                                   textAlign: TextAlign.center,
                                   style: WBTypography.body.copyWith(
                                     fontWeight: FontWeight.w600,
@@ -88,14 +89,14 @@ class CartScreen extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
-                                  'Want to fill it? We have ideas.',
+                                  context.l10n.cartEmptySubtitle,
                                   textAlign: TextAlign.center,
                                   style: WBTypography.body.copyWith(
                                       color: WBColors.fgSecondary),
                                 ),
                                 const SizedBox(height: 18),
                                 WBButton(
-                                  label: 'Start shopping',
+                                  label: context.l10n.cartStartShopping,
                                   size: WBButtonSize.sm,
                                   trailingIcon: WBIconName.arrowRight,
                                   onPressed: () => context.go(AppRoutes.home),
@@ -136,7 +137,7 @@ class CartScreen extends ConsumerWidget {
                     const SizedBox(width: 14),
                     Expanded(
                       child: Text(
-                        'Your basket',
+                        context.l10n.cartTitle,
                         style: WBTypography.page,
                       ),
                     ),
@@ -172,7 +173,7 @@ class CartScreen extends ConsumerWidget {
                             Expanded(
                               child: _Heading(
                                 title: vendorName,
-                                subtitle: 'Arrives in 25–35 min',
+                                subtitle: context.l10n.cartEta,
                               ),
                             ),
                           ],
@@ -262,7 +263,7 @@ class CartScreen extends ConsumerWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Promo code',
+                          context.l10n.cartPromo,
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgPlaceholder,
                             fontSize: 14,
@@ -270,7 +271,7 @@ class CartScreen extends ConsumerWidget {
                         ),
                       ),
                       WBButton(
-                        label: 'Apply',
+                        label: context.l10n.cartPromoApply,
                         size: WBButtonSize.sm,
                         onPressed: () =>
                             wbShowSnack(context, 'Promo code applied'),
@@ -282,16 +283,16 @@ class CartScreen extends ConsumerWidget {
                 WBCard(
                   child: Column(
                     children: [
-                      _SummaryRow(label: 'Subtotal', value: '₦${_n(subtotal)}'),
+                      _SummaryRow(label: context.l10n.cartSubtotal, value: '₦${_n(subtotal)}'),
                       const SizedBox(height: 12),
-                      const _SummaryRow(label: 'Delivery fee', value: '₦600'),
+                      _SummaryRow(label: context.l10n.cartDeliveryFee, value: '₦600'),
                       const SizedBox(height: 12),
-                      const _SummaryRow(label: 'Service fee', value: '₦200'),
+                      _SummaryRow(label: context.l10n.cartServiceFee, value: '₦200'),
                       const SizedBox(height: 14),
                       const WBDivider(),
                       const SizedBox(height: 14),
                       _SummaryRow(
-                        label: 'Total',
+                        label: context.l10n.cartTotal,
                         value: '₦${_n(total)}',
                         emphasised: true,
                       ),
@@ -307,7 +308,7 @@ class CartScreen extends ConsumerWidget {
             bottom: 0,
             child: StickyActionBar(
               child: WBButton(
-                label: 'Proceed to checkout',
+                label: context.l10n.cartCheckout,
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 trailing: Text(

@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/role_controller.dart';
 import '../../data/auth_api.dart';
@@ -56,11 +57,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   Future<void> _save() async {
     if (_password.text.length < 8) {
-      wbShowSnack(context, 'Password must be at least 8 characters.');
+      wbShowSnack(context, context.l10n.resetErrorLength);
       return;
     }
     if (_password.text != _confirm.text) {
-      wbShowSnack(context, "Passwords don't match.");
+      wbShowSnack(context, context.l10n.resetErrorMismatch);
       return;
     }
     setState(() => _busy = true);
@@ -95,10 +96,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               const SizedBox(height: 12),
               const WBBackChip(),
               const SizedBox(height: WBSpacing.xl - 4),
-              Text('Choose a new\npassword', style: WBTypography.hero),
+              Text(context.l10n.resetTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm + 2),
               Text(
-                'Make it different from your last one.',
+                context.l10n.resetSubtitle,
                 style: WBTypography.body.copyWith(
                   color: WBColors.fgSecondary,
                   fontSize: 15,
@@ -106,7 +107,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
               const SizedBox(height: WBSpacing.lg + 4),
               WBInput(
-                label: 'New password',
+                label: context.l10n.resetPasswordLabel,
                 controller: _password,
                 obscureText: _obscure,
                 trailing: TextButton(
@@ -124,7 +125,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
               const SizedBox(height: WBSpacing.sm + 6),
               WBInput(
-                label: 'Confirm password',
+                label: context.l10n.resetConfirmLabel,
                 controller: _confirm,
                 obscureText: _obscure,
               ),
@@ -188,7 +189,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               ),
               const Spacer(),
               WBButton(
-                label: 'Save password',
+                label: context.l10n.resetButton,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,

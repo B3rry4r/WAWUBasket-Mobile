@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
@@ -334,7 +335,7 @@ class _OfferDrawer extends StatelessWidget {
                         child: Text(
                           online
                               ? '${offers.length} offer${offers.length == 1 ? '' : 's'} nearby'
-                              : "You're offline",
+                              : context.l10n.riderHomeOffline,
                           style: WBTypography.cardTitle.copyWith(fontSize: 17),
                         ),
                       ),

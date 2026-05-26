@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/auth_api.dart';
@@ -31,7 +32,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
 
   Future<void> _submit() async {
     if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
-      wbShowSnack(context, 'Enter your phone/email and password.');
+      wbShowSnack(context, context.l10n.loginErrorEmpty);
       return;
     }
     setState(() => _busy = true);
@@ -76,7 +77,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
               ),
               const SizedBox(height: WBSpacing.md),
               WBInput(
-                label: 'Password',
+                label: context.l10n.loginPasswordLabel,
                 controller: _password,
                 leadingIcon: WBIconName.card,
                 obscureText: _obscure,
@@ -104,7 +105,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
                   onPressed: () => context.push(AppRoutes.forgotPassword),
                   style: TextButton.styleFrom(padding: EdgeInsets.zero),
                   child: Text(
-                    'Forgot password?',
+                    context.l10n.loginForgotPassword,
                     style: WBTypography.caption.copyWith(
                       color: WBColors.fgHeader,
                       fontWeight: FontWeight.w500,
@@ -115,7 +116,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
               ),
               const Spacer(),
               WBButton(
-                label: 'Sign in to dashboard',
+                label: context.l10n.signIn,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,

@@ -18,13 +18,13 @@ class AppLocalizationsHa extends AppLocalizations {
   String get navTrade => 'Kasuwanci';
 
   @override
-  String get navOrders => 'Oda';
+  String get navOrders => 'Umarni';
 
   @override
-  String get navAccount => 'Asusu';
+  String get navAccount => 'Asusun';
 
   @override
-  String get navSearch => 'Bincike';
+  String get navSearch => 'Nema';
 
   @override
   String get actionContinue => 'Ci gaba';
@@ -36,40 +36,40 @@ class AppLocalizationsHa extends AppLocalizations {
   String get actionSave => 'Ajiye';
 
   @override
-  String get actionDone => 'An gama';
+  String get actionDone => 'Kammala';
 
   @override
   String get actionRetry => 'Sake gwadawa';
 
   @override
-  String get actionNext => 'Na gaba';
+  String get actionNext => 'Gaba';
 
   @override
-  String get actionConfirm => 'Tabbatar';
+  String get actionConfirm => 'Tabbata';
 
   @override
   String get actionSeeAll => 'Duba duka';
 
   @override
-  String get commonLoading => 'Ana ɗauka…';
+  String get commonLoading => 'Ana lodi…';
 
   @override
-  String get commonError => 'An sami matsala.';
+  String get commonError => 'Wani abu ya faru.';
 
   @override
-  String get commonEmpty => 'Babu kome a nan tukuna.';
+  String get commonEmpty => 'Babu komai a nan.';
 
   @override
   String get languageTitle => 'Harshe';
 
   @override
-  String get languageSubtitle => 'Zaɓi yadda WAWUBasket zai yi maka magana.';
+  String get languageSubtitle => 'Zabi yadda WAWUBasket ke magana da kai.';
 
   @override
   String get signIn => 'Shiga';
 
   @override
-  String get signUp => 'Ƙirƙiri asusu';
+  String get signUp => 'Ƙirƙiri asusun';
 
   @override
   String get logOut => 'Fita';
@@ -79,17 +79,1500 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get chatInboxEmpty =>
-      'Babu hirar oda tukuna. Suna bayyana nan idan kana da oda mai aiki.';
+      'Babu tattaunawar umarnin tukuna. Suna bayyana anan da zarar kana da umarni mai aiki.';
 
   @override
-  String get chatSupportPrompt => 'Kana da tambayoyi? Yi hira da ƙungiyarmu.';
+  String get chatSupportPrompt => 'Tambayoyi? Yi chat da ƙungiyarmu.';
 
   @override
-  String get chatAttachmentFailed => 'An kasa aika abin haɗawa.';
+  String get chatAttachmentFailed => 'Ba za a iya aika ƙari ba.';
 
   @override
-  String get kycSubmitted => 'An aika buƙatar. Za mu duba ta mu sanar da kai.';
+  String get kycSubmitted =>
+      'An tura aikace-aikace. Za mu duba shi kuma mu sanar da kai.';
 
   @override
-  String get kycUploadFailed => 'An kasa loda takardar. Sake gwadawa.';
+  String get kycUploadFailed => 'Ba za a iya loda takarda ba. Sake gwadawa.';
+
+  @override
+  String get splashTagline => 'Kwando ɗaya. Komai.';
+
+  @override
+  String get onboardingSkip => 'Tsallake';
+
+  @override
+  String get onboardingPermissionsTitle => 'Wasu izinni na gaggawa';
+
+  @override
+  String get onboardingPermissionsSubtitle =>
+      'Suna inganta kwando don kai. Zaka iya canza su kowane lokaci.';
+
+  @override
+  String get onboardingLocationTitle => 'Ina kuke dafa abinci yau?';
+
+  @override
+  String get onboardingLocationBody =>
+      'Muna buƙatar wurin ka don nuna gidajen abinci da kasuwanni masu kusa da kai. Ba mu raba wurin ka na ƙarshe da kowa ba.';
+
+  @override
+  String get onboardingLocationPrimary => 'Yayin amfani da app';
+
+  @override
+  String get onboardingLocationSecondary => 'Bari sau ɗaya';
+
+  @override
+  String get onboardingLocationTertiary => 'Ba yanzu ba';
+
+  @override
+  String get onboardingNotificationsTitle => 'Kada ka rasa abubuwan kyau';
+
+  @override
+  String get onboardingNotificationsBody =>
+      'Za mu sanar da kai lokacin da umarninka yake kan hanya, lokacin da nama ɗinka ya sabo yanke, kuma lokacin da akwai mamaki yana jiranka.';
+
+  @override
+  String get onboardingNotificationsPrimary => 'Ee, sanar da ni';
+
+  @override
+  String get onboardingNotificationsSecondary => 'Watakila daga baya';
+
+  @override
+  String get onboardingQuizTitle => 'Bari mu gina kwandanka';
+
+  @override
+  String get onboardingQuizSubtitle =>
+      'Gaya mana abin da kake son, kuma za mu tabbatar da cewa kana ganin sa farko.';
+
+  @override
+  String get onboardingQuizWantsLabel => 'Me kuke son galibi?';
+
+  @override
+  String get onboardingQuizWantOption1 => 'Abinci daga gidajen abinci';
+
+  @override
+  String get onboardingQuizWantOption2 =>
+      'Kayan marmari da kayan lambu na sabo';
+
+  @override
+  String get onboardingQuizWantOption3 => 'Nama, kaza, da kifi';
+
+  @override
+  String get onboardingQuizWantOption4 => 'Tukwane da kayan dakin girki';
+
+  @override
+  String get onboardingQuizSpeedLabel => 'Yaya sauri kuke buƙatar abubuwa?';
+
+  @override
+  String get onboardingQuizSpeedOption1 => 'Yanzu, ina yunwa';
+
+  @override
+  String get onboardingQuizSpeedOption2 => 'Yau a wani lokaci';
+
+  @override
+  String get onboardingQuizSpeedOption3 => 'Ina shirin gaba';
+
+  @override
+  String get onboardingQuizAvoidLabel => 'Wasu abinci da ya kamata mu guje wa?';
+
+  @override
+  String get onboardingQuizAvoidPlaceholder =>
+      'misali ba kifi mai shela ba, ba nama na shanu ba';
+
+  @override
+  String get onboardingQuizBuildButton => 'Gina kwandana';
+
+  @override
+  String get onboardingQuizSkipLink => 'Za a gano daga baya';
+
+  @override
+  String get onboardingGiftTitle => 'Ƙaramin kyauta na maraba';
+
+  @override
+  String get onboardingGiftBody =>
+      'Umarnin farko ɗinka yana zuwa da wani abu. Kawai saboda kun cancanta.';
+
+  @override
+  String get onboardingGiftButton => 'Bari mu ga abin da ke ciki';
+
+  @override
+  String get onboardingGiftFootnote =>
+      'Mai inganci don umarni na farko kawai. Ƙarancin umarni yana aiki.';
+
+  @override
+  String get loginTitle => 'Shiga';
+
+  @override
+  String get loginSubtitle => 'Barka da dawowa. Ci gaba daga inda ka tsaya.';
+
+  @override
+  String get loginPhoneLabel => 'Waya ko e-mail';
+
+  @override
+  String get loginPasswordLabel => 'Kalmar sirri';
+
+  @override
+  String get loginForgotPassword => 'Manta kalmar sirri?';
+
+  @override
+  String get loginBiometric => 'Yi amfani da Face ID';
+
+  @override
+  String get loginSignupLink => 'Sabon a WAWUBasket?';
+
+  @override
+  String get loginErrorEmpty => 'Shigar da wayar/e-mail da kalmar sirri.';
+
+  @override
+  String get loginBiometricOfferTitle => 'Shiga da sauri';
+
+  @override
+  String get loginBiometricOfferBody =>
+      'Yi amfani da Face ID ko yatsar ka don shiga karo na gaba?';
+
+  @override
+  String get loginBiometricNotNow => 'Ba yanzu ba';
+
+  @override
+  String get loginBiometricEnable => 'Kunna';
+
+  @override
+  String get loginBiometricNotAvailable =>
+      'Buɗewar biometric ba ta kafa a wannan na\'urar ba.';
+
+  @override
+  String get signupTitle => 'Menene lambar WhatsApp ɗinka?';
+
+  @override
+  String get signupSubtitle => 'Za mu aika lambar don tabbatar da cewa kai ne.';
+
+  @override
+  String get signupNameLabel => 'Cikakken suna';
+
+  @override
+  String get signupPhoneLabel => 'Lambar WhatsApp';
+
+  @override
+  String get signupEmailLabel => 'E-mail';
+
+  @override
+  String get signupPasswordLabel => 'Kalmar sirri';
+
+  @override
+  String get signupPasswordPlaceholder => 'Aƙalla haruffa 8';
+
+  @override
+  String get signupSendCode => 'Aika lambar';
+
+  @override
+  String get signupDisclaimer =>
+      'Babu spam. Babu kira. Kawai sabuntawar kwandanka.';
+
+  @override
+  String get signupHaveAccount => 'Kana da asusun tukuna?';
+
+  @override
+  String get signupErrorName => 'Cika sunan ka, lamba da e-mail.';
+
+  @override
+  String get signupErrorPassword =>
+      'Kalmar sirri dole ta kasance aƙalla haruffa 8.';
+
+  @override
+  String get signupErrorTerms => 'Yarda da Sharuɗɗa don ci gaba.';
+
+  @override
+  String get otpTitle => 'Kana da lambar!';
+
+  @override
+  String get otpSubtitle => 'Duba WhatsApp ɗinka. Gajeren ne.';
+
+  @override
+  String get otpEditNumber => 'Gyara lamba';
+
+  @override
+  String get otpResend => 'Sake aika lambar';
+
+  @override
+  String get otpVerifyButton => 'Tabbata kuma shiga';
+
+  @override
+  String get otpNewCode => 'Sabuwar lamba tana kan hanya.';
+
+  @override
+  String get forgotTitle => 'Sake saita kalmar sirri';
+
+  @override
+  String get forgotSubtitle =>
+      'Gaya mana inda za mu aika lambar tabbatarwa kuma za mu taimake ka dawo.';
+
+  @override
+  String get forgotSendCode => 'Aika lambar';
+
+  @override
+  String get forgotErrorEmpty => 'Shigar da lambar wayarka ko e-mail.';
+
+  @override
+  String get resetTitle => 'Zaɓi sabuwar kalmar sirri';
+
+  @override
+  String get resetSubtitle => 'Ka sa ta bambanta da ta ƙarshe.';
+
+  @override
+  String get resetPasswordLabel => 'Sabuwar kalmar sirri';
+
+  @override
+  String get resetConfirmLabel => 'Tabbatar da kalmar sirri';
+
+  @override
+  String get resetButton => 'Ajiye kalmar sirri';
+
+  @override
+  String get resetErrorLength =>
+      'Kalmar sirri dole ta kasance aƙalla haruffa 8.';
+
+  @override
+  String get resetErrorMismatch => 'Kalmomin sirri ba su dace ba.';
+
+  @override
+  String get welcomeGetStarted => 'Fara';
+
+  @override
+  String get welcomeSignIn => 'Shiga';
+
+  @override
+  String get roleSelectTitle => 'Yaya za ka yi amfani da WAWUBasket?';
+
+  @override
+  String get roleSelectSubtitle =>
+      'Zaɓi abin da za ka yi mafi yawa. Zaka iya canza matsayi kowane lokaci daga bayanin martaba ɗinka.';
+
+  @override
+  String get cartTitle => 'Kwandanka';
+
+  @override
+  String get cartEmpty => 'Kwandanka yana wofi';
+
+  @override
+  String get cartEmptySubtitle => 'Kana son cika shi? Muna da ra\'ayoyi.';
+
+  @override
+  String get cartStartShopping => 'Fara saye';
+
+  @override
+  String get cartEta => 'Yana isa a cikin minti 25–35';
+
+  @override
+  String get cartPromo => 'Lambar promo';
+
+  @override
+  String get cartPromoApply => 'Aiwatar';
+
+  @override
+  String get cartSubtotal => 'Ƙaramin jimillar';
+
+  @override
+  String get cartDeliveryFee => 'Kuɗin isar da';
+
+  @override
+  String get cartServiceFee => 'Kuɗin sabis';
+
+  @override
+  String get cartTotal => 'Jimillar';
+
+  @override
+  String get cartCheckout => 'Ci gaba zuwa biyan kuɗi';
+
+  @override
+  String get checkoutTitle => 'Biyan kuɗi';
+
+  @override
+  String get checkoutDeliverySection => 'Ina za mu aika wannan?';
+
+  @override
+  String get checkoutNoAddress => 'Babu adireshi da aka ajiye — ƙara ɗaya';
+
+  @override
+  String get checkoutChangeAddress => 'Canza';
+
+  @override
+  String get checkoutTimingSection => 'Yaushe kake son sa?';
+
+  @override
+  String get checkoutNow => 'Yi umarni yanzu';
+
+  @override
+  String get checkoutNowSubtitle => 'Yana isa a cikin minti 25–35';
+
+  @override
+  String get checkoutSchedule => 'Tsara lokaci';
+
+  @override
+  String get checkoutPaymentSection => 'Yaya za ka biya?';
+
+  @override
+  String get checkoutBasketSection => 'Kwandanka';
+
+  @override
+  String get checkoutPlaceOrder => 'Sanya umarni';
+
+  @override
+  String get checkoutWaiting => 'Ana jiran biyan kuɗi…';
+
+  @override
+  String get checkoutWaitingBody =>
+      'Kammala biyan kuɗi a mai bincike. Za mu ɗauke ka zuwa bin diddigin umarni ta atomatik.';
+
+  @override
+  String get checkoutTimeout => 'Biyan kuɗi ba a tabbatar ba';
+
+  @override
+  String get checkoutTimeoutBody =>
+      'Ba mu karɓi tabbacin biyan kuɗi ba. Taɓa a ƙasa don sake duba, ko komawa.';
+
+  @override
+  String get checkoutCheckStatus => 'Duba yanayin biyan kuɗi';
+
+  @override
+  String get checkoutGoBack => 'Koma baya';
+
+  @override
+  String get checkoutScheduleConfirm => 'Tabbatar da lokaci';
+
+  @override
+  String get confirmTitle => 'Sha\'awa!';
+
+  @override
+  String get confirmSubtitle =>
+      'An tabbatar da umarnin ka kuma dakin girki yana aiki akai.';
+
+  @override
+  String get confirmNotification =>
+      'Za mu faɗakar da kai lokacin da kwandanka ya motsa.';
+
+  @override
+  String get confirmTracking =>
+      'Kalle shi yana tafiya zuwa ƙofar ka a ainihin lokaci.';
+
+  @override
+  String get confirmTrackButton => 'Bi diddigin umarnina';
+
+  @override
+  String get confirmBackHome => 'Koma gida';
+
+  @override
+  String get trackingNeedHelp => 'Kuna buƙatar taimako?';
+
+  @override
+  String get trackingDelivered => 'An isar. Enjoy kwandanka!';
+
+  @override
+  String get trackingDefaultMessage =>
+      'Za mu sabunta ka yayin da umarnin ka ke motsa.';
+
+  @override
+  String get trackingJourney => 'Umarnin ka yana tafiya';
+
+  @override
+  String get trackingStep1 => 'An tabbatar da umarni';
+
+  @override
+  String get trackingStep2 => 'Ana shirya';
+
+  @override
+  String get trackingStep3 => 'An ɗauka';
+
+  @override
+  String get trackingStep4 => 'Kan hanya';
+
+  @override
+  String get trackingStep5 => 'An isar';
+
+  @override
+  String get trackingRate => 'Ƙimar umarnin ka';
+
+  @override
+  String get deliveryTitle => 'An isar. Enjoy kwandanka!';
+
+  @override
+  String get deliverySubtitle =>
+      'Yaya ƙwarewarku? Martanin ku yana taimaka wa masu siyarwa da masu isar da abubuwa su yi mafi kyau.';
+
+  @override
+  String get deliveryRateTitle => 'Ƙima wannan umarni';
+
+  @override
+  String get deliveryRatingBad => 'Ba kyau';
+
+  @override
+  String get deliveryRatingFair => 'Zai iya zama mafi kyau';
+
+  @override
+  String get deliveryRatingOkay => 'Ya kasance lafiya';
+
+  @override
+  String get deliveryRatingGood => 'Kyau sosai!';
+
+  @override
+  String get deliveryRatingLove => 'Na so shi!';
+
+  @override
+  String get deliveryFeedbackTitle => 'Gaya mana ƙari (zaɓi)';
+
+  @override
+  String get deliveryFeedbackPlaceholder =>
+      'Menene ya sa shi kyau ko ba kyau ba?';
+
+  @override
+  String get deliverySubmit => 'Aika ƙima';
+
+  @override
+  String get deliverySkip => 'Tsallake yanzu';
+
+  @override
+  String get deliveryThankYou => 'Na gode da martanin!';
+
+  @override
+  String get deliveryThankYouBody =>
+      'Ƙimar ka tana taimaka wa dukkan kwando ya zama mafi kyau. Sai mun haɗu karo na gaba.';
+
+  @override
+  String get deliveryBackHome => 'Koma gida';
+
+  @override
+  String get deliveryRateError => 'Taɓa tauraro don ƙimar umarnin ka.';
+
+  @override
+  String get searchPlaceholder => 'Nema jollof, tumatir, kaza…';
+
+  @override
+  String get searchRecentTitle => 'Bincike na baya-bayan nan';
+
+  @override
+  String get searchRecentClear => 'Share';
+
+  @override
+  String get searchRecentCleared => 'An share bincike na baya-bayan nan';
+
+  @override
+  String get productAddButton => 'Ƙara zuwa kwando';
+
+  @override
+  String get productNotFound => 'Ba a sami kayan ba.';
+
+  @override
+  String get homeSearchPlaceholder => 'Nema jollof, tumatir, kaza, tukwane…';
+
+  @override
+  String get homeBulkMarketsTitle => 'Kasuwannin doguwa';
+
+  @override
+  String get homeBulkMarketsSubtitle =>
+      'Dafukan doguwa da farashin hanya, kai tsaye daga gonaki';
+
+  @override
+  String get homeOffersThisWeek => 'WANNAN MAKO';
+
+  @override
+  String get homeOfferTitle => 'Isar da kyauta kan umarni sama da ₦5,000';
+
+  @override
+  String get homeOfferSubtitle => 'Har Lahadi. Babu lambar da ake buƙata.';
+
+  @override
+  String get homeOfferButton => 'Yi umarni yanzu';
+
+  @override
+  String get homeAddAddress => 'Ƙara adireshin isar da';
+
+  @override
+  String homeDeliveringTo(String address) {
+    return 'Ana isar da zuwa $address';
+  }
+
+  @override
+  String get aboutTitle => 'Game da WAWUBasket';
+
+  @override
+  String get aboutTagline => 'Mu ne WAWUBasket — zuriyar WAWAfrica.';
+
+  @override
+  String get aboutSendFeedback => 'Aika martani';
+
+  @override
+  String get aboutSendFeedbackSub => 'Taimaka mana mu inganta';
+
+  @override
+  String get aboutTerms => 'Sharuɗɗan sabis';
+
+  @override
+  String get aboutTermsSub => 'Dokokin kwando';
+
+  @override
+  String get aboutPrivacy => 'Manufar sirri';
+
+  @override
+  String get aboutPrivacySub => 'Yadda muke gudanar da bayanin ka';
+
+  @override
+  String get aboutHowItWorks => 'Mataki uku zuwa kwando cike';
+
+  @override
+  String get aboutSellOn => 'Siyar a WAWUBasket';
+
+  @override
+  String get aboutStep1Title => 'Bincika';
+
+  @override
+  String get aboutStep1Body =>
+      'Zaɓi abin da kake so daga gidajen abinci, kayan lambu, dabbobi, ko abubuwa masu mahimmanci.';
+
+  @override
+  String get aboutStep2Title => 'Biyan kuɗi';
+
+  @override
+  String get aboutStep2Body => 'Zaɓi lokacin da kake so da yadda za ka biya.';
+
+  @override
+  String get aboutStep3Title => 'Bi diddigin';
+
+  @override
+  String get aboutStep3Body => 'Kalle kwandanka ya rayuwa, sannan enjoy.';
+
+  @override
+  String get aboutVendorStep1Title => 'Yi rajista';
+
+  @override
+  String get aboutVendorStep1Body =>
+      'Gaya mana game da kasuwancin ka. Bari mu shirya wasu takaddun.';
+
+  @override
+  String get aboutVendorStep2Title => 'Jera kayan ka';
+
+  @override
+  String get aboutVendorStep2Body => 'Ƙara hotuna, farashi, da bayanai.';
+
+  @override
+  String get aboutVendorStep3Title => 'Fara siyarwa';
+
+  @override
+  String get aboutVendorStep3Body =>
+      'Karɓi umarni, shirya abinci, kuma ka girma.';
+
+  @override
+  String get addAddressTitle => 'Ƙara adireshi';
+
+  @override
+  String get addAddressEditTitle => 'Gyara adireshi';
+
+  @override
+  String get addAddressLabelSection => 'LAKABIN';
+
+  @override
+  String get addAddressLabelHome => 'Gida';
+
+  @override
+  String get addAddressLabelOffice => 'Ofis';
+
+  @override
+  String get addAddressLabelOther => 'Wani';
+
+  @override
+  String get addAddressLine => 'Layin adireshi';
+
+  @override
+  String get addAddressLinePlaceholder => 'Titin, yanki, birni';
+
+  @override
+  String get addAddressApartment => 'Gida / sashe';
+
+  @override
+  String get addAddressApartmentPlaceholder => 'Zaɓi';
+
+  @override
+  String get addAddressNote => 'Bayanin kula ga mai isar da';
+
+  @override
+  String get addAddressNotePlaceholder =>
+      'Yi amfani da ƙofar a kan Akin Adesola';
+
+  @override
+  String get addAddressDefault => 'Ka sa wannan a matsayin adireshin farko na';
+
+  @override
+  String get addAddressSave => 'Ajiye adireshi';
+
+  @override
+  String get addAddressSaveChanges => 'Ajiye canje-canje';
+
+  @override
+  String get addAddressUpdated => 'An sabunta adireshi';
+
+  @override
+  String get addAddressSaved => 'An ajiye adireshi';
+
+  @override
+  String get addAddressEnterLine => 'Shigar da layin adireshi.';
+
+  @override
+  String get chatTitle => 'Tattaunawa';
+
+  @override
+  String get chatSubtitle =>
+      'Yi magana da tallafi da kowa a kan umarninku na aiki.';
+
+  @override
+  String get chatMessageHint => 'Saƙo';
+
+  @override
+  String get chatLiveChat => 'Tattaunawa kai tsaye';
+
+  @override
+  String get chatRepliesIn => 'Amsa galibi a cikin minti 2 ƙasa da';
+
+  @override
+  String get deleteAccountTitle => 'Kana barin mu?';
+
+  @override
+  String get deleteAccountSubtitle =>
+      'Muna baƙin ciki don ganin ka tafi. Kafin ka tafi:';
+
+  @override
+  String get deleteAccountCheck1 =>
+      'Yi amfani da ma\'aunin walat ɗinka, za a rasa shi';
+
+  @override
+  String get deleteAccountCheck2 => 'Kammala duk umarni mai aiki';
+
+  @override
+  String get deleteAccountCheck3 =>
+      'Sauke rasitocin ka, ba za ka iya samun su bayan haka ba';
+
+  @override
+  String get deleteAccountWhyLeaving => 'Me ya sa kake barin? (zaɓi)';
+
+  @override
+  String get deleteAccountReasonExpensive => 'Tsada sosai';
+
+  @override
+  String get deleteAccountReasonSlow => 'Isar da jinkiri sosai';
+
+  @override
+  String get deleteAccountReasonOptions => 'Ba isassun zaɓuɓɓuka ba';
+
+  @override
+  String get deleteAccountReasonTech => 'Matsalolin fasaha';
+
+  @override
+  String get deleteAccountReasonOther => 'Wani';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Share asusun ka har abada?';
+
+  @override
+  String get deleteAccountConfirmBody => 'Ba za a iya mayar da wannan ba.';
+
+  @override
+  String get deleteAccountYes => 'Eh, share asusuna';
+
+  @override
+  String get deleteAccountNo => 'A\'a, ina son zauna';
+
+  @override
+  String get dietaryTitle => 'Abubuwan da kake son abinci';
+
+  @override
+  String get dietarySubtitle => 'Abubuwan da ba kwa son ci.';
+
+  @override
+  String get dietaryNoBeef => 'Babu nama na shanu';
+
+  @override
+  String get dietaryNoPork => 'Babu naman alade';
+
+  @override
+  String get dietaryNoShellfish => 'Babu kifi mai shela';
+
+  @override
+  String get dietaryHalal => 'Halal kawai';
+
+  @override
+  String get dietaryVegetarian => 'Vegetarian';
+
+  @override
+  String get dietaryVegan => 'Vegan';
+
+  @override
+  String get dietaryNoDairy => 'Babu kayan madara';
+
+  @override
+  String get dietaryNoNuts => 'Babu gyaɗa';
+
+  @override
+  String get dietaryLowSugar => 'Ƙarancin sukari';
+
+  @override
+  String get dietaryAnythingElse => 'Wani abu kuma?';
+
+  @override
+  String get dietaryCustomPlaceholder => 'misali babu MSG, babu mai dabino';
+
+  @override
+  String get dietarySave => 'Ajiye abubuwan da kake son';
+
+  @override
+  String get dietarySaved => 'An ajiye abubuwan da kake son abinci';
+
+  @override
+  String get favoritesTitle => 'Abubuwan da na fi so';
+
+  @override
+  String get favoritesVendorsTab => 'Masu siyarwa';
+
+  @override
+  String get favoritesDishesTab => 'Abinci';
+
+  @override
+  String get favoritesNoVendors =>
+      'Babu masu siyarwa da aka fi so tukuna. Taɓa zuciya a kan kasuwanci.';
+
+  @override
+  String get favoritesNoDishes =>
+      'Babu abinci da aka fi so tukuna. Taɓa zuciya a kan abinci.';
+
+  @override
+  String get notificationsTitle => 'Sanarwa';
+
+  @override
+  String get notificationsMarkAllRead => 'Nuna duka karantawa';
+
+  @override
+  String get notificationsAllRead => 'An nuna duk sanarwa karantawa';
+
+  @override
+  String get notificationsEmpty => 'An kama duk — babu sanarwa tukuna.';
+
+  @override
+  String get orderHistoryTitle => 'Kwandankun na baya';
+
+  @override
+  String get orderHistoryTabAll => 'Duka';
+
+  @override
+  String get orderHistoryTabActive => 'Mai aiki';
+
+  @override
+  String get orderHistoryTabPast => 'Na baya';
+
+  @override
+  String get orderHistoryEmpty =>
+      'Babu umarni tukuna. Lokaci don canza wannan.';
+
+  @override
+  String get orderHistoryTrack => 'Bi diddigin umarni';
+
+  @override
+  String get orderHistoryReceipt => 'Rasit';
+
+  @override
+  String get orderHistoryReorder => 'Yi umarni sake';
+
+  @override
+  String get orderHistoryReordered => 'An ƙara kayan zuwa kwandanka';
+
+  @override
+  String get personalInfoTitle => 'Bayanan sirri';
+
+  @override
+  String get personalInfoTapPhoto => 'Taɓa don canza hoto';
+
+  @override
+  String get personalInfoFullName => 'Cikakken suna';
+
+  @override
+  String get personalInfoEmail => 'E-mail';
+
+  @override
+  String get personalInfoPhone => 'Lambar waya';
+
+  @override
+  String get personalInfoDob => 'Ranar haihuwa';
+
+  @override
+  String get personalInfoSave => 'Ajiye canje-canje';
+
+  @override
+  String get personalInfoSaved => 'An ajiye canje-canje';
+
+  @override
+  String get personalInfoNameRequired => 'Shigar da cikakken sunan ka.';
+
+  @override
+  String get personalInfoPhotoUpdated => 'An sabunta hoto';
+
+  @override
+  String get personalInfoPhotoFailed => 'Ba za a iya loda wannan hoto ba.';
+
+  @override
+  String get profileWalletMenu => 'Walat da hanyoyin biyan kuɗi';
+
+  @override
+  String get profileWalletSub => 'Katunan, banki, da kuɗin waya';
+
+  @override
+  String get profilePersonalInfo => 'Bayanan sirri';
+
+  @override
+  String get profilePersonalInfoSub => 'Suna, e-mail, waya, tabbatar ✓';
+
+  @override
+  String get profileSavedAddresses => 'Adireshin da aka ajiye';
+
+  @override
+  String get profileSavedAddressesSub => 'Inda kake zaune, aiki, da shakatawa';
+
+  @override
+  String get profileNotifications => 'Sanarwa';
+
+  @override
+  String get profileNotificationsSub => 'Abin da muke faɗar ka';
+
+  @override
+  String get profileBulkOrders => 'Umarnin doguwa';
+
+  @override
+  String get profileBulkOrdersSub => 'Siyan da aka kiyaye daga /kasuwanci';
+
+  @override
+  String get profileWawuPlus => 'Zama ɗan WAWU+';
+
+  @override
+  String get profileWawuPlusSub => 'Isar da mai rahusa da ƙari';
+
+  @override
+  String get profileLanguage => 'Harshe';
+
+  @override
+  String get profileDietary => 'Abubuwan da kake son abinci';
+
+  @override
+  String get profileDietarySub => 'Abubuwan da ba kwa son ci';
+
+  @override
+  String get profileRateApp => 'Ƙima app';
+
+  @override
+  String get profileAbout => 'Game da WAWUBasket';
+
+  @override
+  String get profileChangePassword => 'Canza kalmar sirri';
+
+  @override
+  String get profileChangePasswordSub => 'Kiyaye asusun ka lafiya';
+
+  @override
+  String get profileBiometricLogin => 'Shiga da biometric';
+
+  @override
+  String get profileBiometricLoginSub => 'Yi amfani da fuskar ka ko yatsar ka';
+
+  @override
+  String get profileTwoFactor => 'Tabbatarwa ta biyu';
+
+  @override
+  String get profileTwoFactorSub => 'Wani layer na kariya';
+
+  @override
+  String get profileHelpCenter => 'Cibiyar taimako';
+
+  @override
+  String get profileHelpCenterSub => 'Amsa ga tambayoyin da suka zo';
+
+  @override
+  String get profileChatWithUs => 'Yi chat da mu';
+
+  @override
+  String get profileChatWithUsSub => 'Muna nan don taimaka maka';
+
+  @override
+  String get profileReportProblem => 'Rarraba matsala';
+
+  @override
+  String get profileReportProblemSub => 'Gaya mana abin da ya faru';
+
+  @override
+  String get profileTerms => 'Sharuɗɗan sabis';
+
+  @override
+  String get profileTermsSub => 'Dokokin kwando';
+
+  @override
+  String get profilePrivacy => 'Manufar sirri';
+
+  @override
+  String get profilePrivacySub => 'Yadda muke gudanar da bayanin ka';
+
+  @override
+  String get profileSwitchRole => 'Canza matsayi';
+
+  @override
+  String get profileDeleteAccount => 'Share asusun';
+
+  @override
+  String get profileDeleteAccountSub => 'Za mu baƙin ciki don ganin ka tafi';
+
+  @override
+  String get profileRateWawu => 'Ƙima WAWUBasket';
+
+  @override
+  String get profileRateFeedback => 'Yaya muke yi? Martanin ka yana tsara app.';
+
+  @override
+  String get profileRateTapStar => 'Taɓa tauraro don ƙima';
+
+  @override
+  String get profileRateSubmit => 'Aika';
+
+  @override
+  String profileRateThanks(String stars) {
+    return 'Na gode, ka ba mu tauraron $stars';
+  }
+
+  @override
+  String get profileSignOutTitle => 'Fita?';
+
+  @override
+  String get profileSignOutBody =>
+      'Za a buƙaci shiga sake don sanya sabon umarni.';
+
+  @override
+  String get profileSignOut => 'Fita';
+
+  @override
+  String get profileChoosePhoto => 'Zaɓi hoto na bayanan martaba';
+
+  @override
+  String get receiptTitle => 'Rasit';
+
+  @override
+  String get receiptSubtotal => 'Ƙaramin jimillar';
+
+  @override
+  String get receiptDelivery => 'Isar da';
+
+  @override
+  String get receiptServiceFee => 'Kuɗin sabis';
+
+  @override
+  String get receiptTotalPaid => 'Jimillar da aka biya';
+
+  @override
+  String get receiptReorder => 'Yi umarni sake';
+
+  @override
+  String get receiptReportIssue => 'Rarraba matsala';
+
+  @override
+  String get receiptNotFound => 'Ba a sami rasit ba.';
+
+  @override
+  String get savedAddressesTitle => 'Adireshin da aka ajiye';
+
+  @override
+  String get savedAddressesAdd => 'Ƙara adireshi';
+
+  @override
+  String get savedAddressesEmpty =>
+      'Babu adireshin da aka ajiye tukuna. Ƙara na farko a sama.';
+
+  @override
+  String get savedAddressesDefault => 'Farko';
+
+  @override
+  String get savedAddressesEdit => 'Gyara';
+
+  @override
+  String get savedAddressesMakeDefault => 'Sa a matsayin farko';
+
+  @override
+  String savedAddressesSetDefault(String label) {
+    return 'An saita $label a matsayin farko';
+  }
+
+  @override
+  String get securityTitle => 'Tsaro';
+
+  @override
+  String get securitySubtitle => 'Kiyaye asusun ka lafiya.';
+
+  @override
+  String get securityChangePassword => 'Canza kalmar sirri';
+
+  @override
+  String get securityChangePasswordSub => 'Kiyaye asusun ka lafiya';
+
+  @override
+  String get securityBiometric => 'Shiga da biometric';
+
+  @override
+  String get securityBiometricSub => 'Yi amfani da fuskar ka ko yatsar ka';
+
+  @override
+  String get securityTwoFactor => 'Tabbatarwa ta biyu';
+
+  @override
+  String get securityTwoFactorSub => 'Wani layer na kariya';
+
+  @override
+  String get securityCurrentPassword => 'Kalmar sirri ta yanzu';
+
+  @override
+  String get securityNewPassword => 'Sabuwar kalmar sirri';
+
+  @override
+  String get securityConfirmNewPassword => 'Tabbatar da sabuwar kalmar sirri';
+
+  @override
+  String get securityUpdatePassword => 'Sabunta kalmar sirri';
+
+  @override
+  String get securityPasswordMismatch => 'Kalmomin sirri ba su dace ba.';
+
+  @override
+  String get securityPasswordShort =>
+      'Sabuwar kalmar sirri dole ta kasance aƙalla haruffa 8.';
+
+  @override
+  String get securityPasswordUpdated => 'An sabunta kalmar sirri cikin nasara.';
+
+  @override
+  String get supportTitle => 'Taimako da tallafi';
+
+  @override
+  String get supportSearchPlaceholder => 'Nema labaran taimako';
+
+  @override
+  String get supportContactUs => 'TUNTUƁE MU';
+
+  @override
+  String get supportLiveChat => 'Tattaunawa kai tsaye';
+
+  @override
+  String get supportLiveChatSub => 'Galibi yana amsa a ƙarƙashin minti 2';
+
+  @override
+  String get supportLiveChatCta => 'Fara tattaunawa';
+
+  @override
+  String get supportCall => 'Kira mu';
+
+  @override
+  String get supportCallSub => '+234 800 WAWUBasket';
+
+  @override
+  String get supportCallCta => 'Kira';
+
+  @override
+  String get supportEmail => 'Aika mu e-mail';
+
+  @override
+  String get supportEmailSub => 'support@wawu.africa';
+
+  @override
+  String get supportEmailCta => 'Aika e-mail';
+
+  @override
+  String get supportCommonQuestions => 'Tambayoyin da suka zo';
+
+  @override
+  String get supportOpenTicket => 'TIKITI BUƊEWA';
+
+  @override
+  String get supportViewTicket => 'Duba tikiti';
+
+  @override
+  String get walletTitle => 'Walat';
+
+  @override
+  String get walletAvailableBalance => 'MA\'AUNIN DA AKE DA SHI';
+
+  @override
+  String walletEscrowHeld(String amount) {
+    return '$amount da aka riƙe a escrow, yana fitowa bayan isar da';
+  }
+
+  @override
+  String get walletTopUp => 'Cika';
+
+  @override
+  String get walletSend => 'Aika';
+
+  @override
+  String get walletWithdraw => 'Cire';
+
+  @override
+  String get walletCards => 'Katunan';
+
+  @override
+  String get walletRecentTxns => 'Ma\'amalolin kwanan nan';
+
+  @override
+  String get walletNoTxns => 'Babu ma\'amala tukuna.';
+
+  @override
+  String get walletTopUpTitle => 'Cika walat';
+
+  @override
+  String get walletSendTitle => 'Aika kuɗi';
+
+  @override
+  String get walletWithdrawTitle => 'Cire';
+
+  @override
+  String get walletPaymentMethodsTitle => 'Hanyoyin biyan kuɗi';
+
+  @override
+  String get walletAmountLabel => 'ADADI';
+
+  @override
+  String get walletEnterAmount => 'Shigar da adadi';
+
+  @override
+  String get walletPayWith => 'BIYA TARE DA';
+
+  @override
+  String get walletWithdrawTo => 'CIRE ZUWA';
+
+  @override
+  String get walletDebitCard => 'Katin Debit';
+
+  @override
+  String get walletBankTransfer => 'Canja wurin banki';
+
+  @override
+  String get walletMobileMoney => 'Kuɗin waya';
+
+  @override
+  String get walletEnterAmountHint => 'Shigar da adadi';
+
+  @override
+  String get walletTopUpHint => 'Cika';
+
+  @override
+  String get walletAddNewMethod => 'Ƙara sabuwar hanya';
+
+  @override
+  String get walletMethodRemoved => 'An cire hanya';
+
+  @override
+  String get wawuPlusTitle => 'WAWU+';
+
+  @override
+  String get wawuPlusHero => 'Tafi ga ƙari. Samu ƙari.';
+
+  @override
+  String get wawuPlusSubtitle =>
+      'Isar da mai rahusa. Kyaututtuka na musamman. Tallafi na farko.';
+
+  @override
+  String get wawuPlusMembers =>
+      'Shiga tare da sauran kwanduna masu farin ciki 12,400';
+
+  @override
+  String get wawuPlusIncluded => 'Abin da aka haɗa';
+
+  @override
+  String get wawuPlusBenefit1 => 'Isar da mai rahusa kan kowane umarni';
+
+  @override
+  String get wawuPlusBenefit2 => 'Yarjejeniyoyi ga mambobi kawai kowace mako';
+
+  @override
+  String get wawuPlusBenefit3 => 'Tallafi na farko, tsallake layi';
+
+  @override
+  String get wawuPlusBenefit4 => 'Mayar da kyauta kan kayan da ba daidai ba';
+
+  @override
+  String get wawuPlusBenefit5 => 'Farkon shiga zuwa sabbin fasalulluka';
+
+  @override
+  String get wawuPlusPickPlan => 'Zaɓi shiri';
+
+  @override
+  String get wawuPlusYearly => 'Shekara-shekara';
+
+  @override
+  String get wawuPlusYearlyNote => 'Adana 20% · biyan kuɗi sau ɗaya';
+
+  @override
+  String get wawuPlusMonthly => 'Wata-wata';
+
+  @override
+  String get wawuPlusMonthlyNote => 'Soke kowane lokaci';
+
+  @override
+  String get wawuPlusStartTrial => 'Fara gwajin kyauta, kwanaki 7';
+
+  @override
+  String get wawuPlusActiveMember => 'Kai memba ne na WAWU+';
+
+  @override
+  String get wawuPlusWebOnly => 'Bude WAWUBasket a wayarka don shiga WAWU+.';
+
+  @override
+  String get wawuPlusWelcome => 'Barka da zuwa WAWU+!';
+
+  @override
+  String get operatorSignOutTitle => 'Fita?';
+
+  @override
+  String get operatorSignOutBody =>
+      'Za a buƙaci shiga sake don amfani da wannan dashboard.';
+
+  @override
+  String get operatorSignOut => 'Fita';
+
+  @override
+  String get operatorPersonalInfo => 'Bayanan sirri';
+
+  @override
+  String get operatorPersonalInfoSub => 'Suna, e-mail, waya, tabbatar ✓';
+
+  @override
+  String get operatorSavedAddresses => 'Adireshin da aka ajiye';
+
+  @override
+  String get operatorSavedAddressesSub => 'Inda isar da ake ɗaukawa da sauka';
+
+  @override
+  String get operatorNotifications => 'Sanarwa';
+
+  @override
+  String get operatorNotificationsSub => 'Sabon umarni, biyan kuɗi, faɗakarwa';
+
+  @override
+  String get operatorLanguage => 'Harshe';
+
+  @override
+  String get operatorAbout => 'Game da WAWUBasket';
+
+  @override
+  String get operatorHelpSupport => 'Taimako da tallafi';
+
+  @override
+  String get operatorHelpSupportSub => 'Yi chat da mutum na gaske';
+
+  @override
+  String get operatorSwitchRole => 'Canza matsayi';
+
+  @override
+  String get operatorChoosePhoto => 'Zaɓi hoto na bayanan martaba';
+
+  @override
+  String get vendorAlertsTitle => 'Faɗakarwa';
+
+  @override
+  String get vendorAlertsEmpty => 'Babu faɗakarwa yanzu. Enjoy hutu.';
+
+  @override
+  String get vendorAnalyticsTitle => 'Yadda kake yi';
+
+  @override
+  String get vendorAnalyticsSubtitle => 'Lambobi ba sa ƙarya.';
+
+  @override
+  String get vendorAnalyticsOrders => 'Umarni';
+
+  @override
+  String get vendorAnalyticsRevenue => 'Kuɗin shiga';
+
+  @override
+  String get vendorAnalyticsAvgOrder => 'Avg umarni';
+
+  @override
+  String get vendorAnalyticsRating => 'Ƙima';
+
+  @override
+  String get vendorAnalyticsSalesTrend => 'Yanayin siyarwa';
+
+  @override
+  String get vendorAnalyticsPeakHours => 'Sa\'o\'in kololuwa';
+
+  @override
+  String get vendorAnalyticsCancellations => 'Sokewa';
+
+  @override
+  String get vendorAnalyticsTopSellers => 'Mafi kyau masu siyarwa';
+
+  @override
+  String get vendorAnalyticsExport => 'Fitar da';
+
+  @override
+  String get vendorAnalyticsNoSales => 'Babu siyarwa a wannan lokaci tukuna.';
+
+  @override
+  String get vendorAnalyticsLast7 => 'Kwanaki 7 da suka gabata';
+
+  @override
+  String get vendorAnalyticsLast30 => 'Kwanaki 30 da suka gabata';
+
+  @override
+  String get vendorAnalyticsLast90 => 'Kwanaki 90 da suka gabata';
+
+  @override
+  String get vendorHomeGoodMorning => 'Ina kwana,';
+
+  @override
+  String get vendorHomeOpen => 'Buɗe';
+
+  @override
+  String get vendorHomeClosed => 'Rufe';
+
+  @override
+  String get vendorHomeQuickActions => 'Ayyukan gaggawa';
+
+  @override
+  String get vendorHomeAddItem => 'Ƙara abu';
+
+  @override
+  String get vendorHomeAnalytics => 'Bincike';
+
+  @override
+  String get vendorHomePayouts => 'Biyan kuɗi';
+
+  @override
+  String get vendorHomeFreshOrders => 'Sabon umarni';
+
+  @override
+  String get vendorHomeInKitchen => 'A cikin dakin girki';
+
+  @override
+  String get vendorHomeMore => 'Ƙari';
+
+  @override
+  String get vendorHomeInventory => 'Kaya';
+
+  @override
+  String get vendorHomeInventorySub => 'Matakan kaya da dafuka';
+
+  @override
+  String get vendorHomeReviews => 'Bita';
+
+  @override
+  String get vendorHomeReviewsSub => 'Abin da abokan ciniki ke faɗa';
+
+  @override
+  String get vendorHomeAlerts => 'Faɗakarwa';
+
+  @override
+  String get vendorHomeAlertsSub =>
+      'Ƙarancin kaya, umarni na ƙarshe, amsa suna jira';
+
+  @override
+  String get vendorHomeSettings => 'Saitunan shago';
+
+  @override
+  String get vendorHomeSettingsSub =>
+      'Lokaci, lokacin shirya, yanayin hutu, ma\'aikata';
+
+  @override
+  String get vendorHomeDecline => 'Ƙi';
+
+  @override
+  String get vendorHomeAccept => 'Karɓi';
+
+  @override
+  String get vendorHomeNoOrders => 'Babu sabon umarni. Jefa promo don kawo su.';
+
+  @override
+  String get vendorInventoryTitle => 'Menene akwai a hannun jari?';
+
+  @override
+  String get vendorKycReviewNote =>
+      'Za mu duba takaddun ka kuma mu sa ka a layi.';
+
+  @override
+  String get vendorOrderNotFound => 'Ba a sami wannan umarni ba';
+
+  @override
+  String get vendorReviewsTitle => 'Abin da suke faɗa';
+
+  @override
+  String get vendorMenuPhotoFailed => 'Ba za a iya loda wannan hoto ba.';
+
+  @override
+  String get agentHomeOnline =>
+      'Kana kan layi, ma\'amalar suna sync yayin da ka yi rikodin su.';
+
+  @override
+  String get agentRegisterSetUp => 'Bari mu saita su.';
+
+  @override
+  String get agentRegisterOffline =>
+      'Yana aiki ba tare da intanet ba, za mu sync lokacin da kana da haɗi.';
+
+  @override
+  String get agentTraderNotFound => 'Ba a sami ɗan kasuwa ba';
+
+  @override
+  String get agentTradersEmpty =>
+      'Babu ɗan kasuwa da aka yi rajista tukuna. Taɓa \"Rajista\" don ƙara ɗaya.';
+
+  @override
+  String get riderHomeOffline => 'Kana wajen layi';
+
+  @override
+  String get riderKycPhotoId => 'Hoto na ID';
+
+  @override
+  String get driverKycVerifyNote =>
+      'Muna tabbatarwa tare da ƙungiyar sufurin ka kafin ka yi taƙama.';
+
+  @override
+  String get driverKycLicenceName => 'Sunan a kan lasisi na tuƙi, don Allah.';
+
+  @override
+  String get driverKycVehicleType => 'Abin da za ka ɗauka da shi.';
+
+  @override
+  String get traderListingsEmpty =>
+      'Babu jeri tukuna. Taɓa \"Buga\" don ƙara na farko.';
+
+  @override
+  String get traderListingPhotoFailed => 'Ba za a iya loda wannan hoto ba.';
+
+  @override
+  String get exportListingNotFound => 'Ba a sami wannan jeri ba';
+
+  @override
+  String get exportEnquirySent => 'An aika tambaya, ɗan kasuwa zai tuntuɓe ka.';
+
+  @override
+  String get bulkCheckoutListingNotFound => 'Ba a sami jeri ba';
+
+  @override
+  String get bulkCheckoutEscrowNote =>
+      'Muna riƙe kuɗin ka har sai ka tabbatar da isar da. Jayayya kowane lokaci idan wani abu ya faru.';
+
+  @override
+  String get escrowDisputeOpened =>
+      'An buɗe jayayya. Za mu duba cikin sa\'o\'i 48.';
+
+  @override
+  String get escrowDisputeOrderNotFound => 'Ba a sami umarni ba';
+
+  @override
+  String get escrowDisputeDetailsHint =>
+      'Gaya mana abubuwan cikakkun bayanai, abin da ya isa vs abin da kake tsammani?';
+
+  @override
+  String get escrowOrdersEmpty =>
+      'Ba ka sanya wani umarni mai yawa tukuna. Tafi Kasuwanci don fara.';
+
+  @override
+  String get escrowStatusNotFound => 'Ba a sami wannan umarni ba';
+
+  @override
+  String get escrowStatusReviewNote =>
+      'Za mu duba shaidar kuma mu warware cikin sa\'o\'i 48.';
 }

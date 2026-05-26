@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shopping/data/orders_api.dart';
 import '../../../shopping/domain/models/order.dart';
@@ -34,7 +35,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     setState(() => _error = null);
     final id = widget.orderId;
     if (id == null || id.isEmpty) {
-      setState(() => _error = 'Receipt not found.');
+      setState(() => _error = context.l10n.receiptNotFound);
       return;
     }
     try {
@@ -53,7 +54,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
     try {
       await OrdersApi.instance.reorder(order.id);
       if (!mounted) return;
-      wbShowSnack(context, 'Items added to your basket');
+      wbShowSnack(context, context.l10n.orderHistoryReordered);
       context.go(AppRoutes.cart);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -78,7 +79,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
                             .copyWith(color: WBColors.fgSecondary)),
                     const SizedBox(height: 14),
                     WBButton(
-                      label: 'Try again',
+                      label: context.l10n.actionRetry,
                       size: WBButtonSize.sm,
                       variant: WBButtonVariant.secondary,
                       onPressed: _load,
@@ -135,7 +136,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Receipt', style: WBTypography.page),
+                  Text(context.l10n.receiptTitle, style: WBTypography.page),
                   Text(
                     'Order ${order.shortId}',
                     style: WBTypography.caption
@@ -187,18 +188,18 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
               ],
               const WBDivider(),
               const SizedBox(height: 14),
-              _Line(label: 'Subtotal', value: '₦${_n(order.subtotal)}'),
+              _Line(label: context.l10n.receiptSubtotal, value: '₦${_n(order.subtotal)}'),
               const SizedBox(height: 8),
-              _Line(label: 'Delivery', value: '₦${_n(order.deliveryFee)}'),
+              _Line(label: context.l10n.receiptDelivery, value: '₦${_n(order.deliveryFee)}'),
               const SizedBox(height: 8),
-              _Line(label: 'Service fee', value: '₦${_n(order.serviceFee)}'),
+              _Line(label: context.l10n.receiptServiceFee, value: '₦${_n(order.serviceFee)}'),
               const SizedBox(height: 14),
               const WBDivider(),
               const SizedBox(height: 14),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Total paid',
+                  Text(context.l10n.receiptTotalPaid,
                       style: WBTypography.body
                           .copyWith(fontWeight: FontWeight.w600)),
                   Text(
@@ -215,7 +216,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
         ),
         const SizedBox(height: WBSpacing.lg),
         WBButton(
-          label: 'Reorder',
+          label: context.l10n.receiptReorder,
           size: WBButtonSize.lg,
           fullWidth: true,
           trailingIcon: WBIconName.arrowRight,
@@ -224,7 +225,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
         ),
         const SizedBox(height: 10),
         WBButton(
-          label: 'Report an issue',
+          label: context.l10n.receiptReportIssue,
           size: WBButtonSize.lg,
           fullWidth: true,
           variant: WBButtonVariant.secondary,

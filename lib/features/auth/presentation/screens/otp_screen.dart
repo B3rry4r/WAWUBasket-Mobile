@@ -9,6 +9,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/role_controller.dart';
 import '../../data/auth_api.dart';
@@ -116,7 +117,7 @@ class _OtpScreenState extends State<OtpScreen>
       await AuthApi.instance.startOtp(widget.phone);
       if (mounted) {
         _startCountdown();
-        wbShowSnack(context, 'A new code is on its way.');
+        wbShowSnack(context, context.l10n.otpNewCode);
       }
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -142,7 +143,7 @@ class _OtpScreenState extends State<OtpScreen>
               const SizedBox(height: 12),
               const WBBackChip(),
               const SizedBox(height: WBSpacing.xl),
-              Text("You've got a code!", style: WBTypography.hero),
+              Text(context.l10n.otpTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm + 2),
               RichText(
                 text: TextSpan(
@@ -151,8 +152,8 @@ class _OtpScreenState extends State<OtpScreen>
                     fontSize: 15,
                   ),
                   children: [
-                    const TextSpan(
-                        text: 'Check your WhatsApp. We sent a short one to '),
+                    TextSpan(
+                        text: '${context.l10n.otpSubtitle} '),
                     TextSpan(
                       text: _masked,
                       style: const TextStyle(
@@ -177,7 +178,7 @@ class _OtpScreenState extends State<OtpScreen>
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'Edit number',
+                      context.l10n.otpEditNumber,
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgHeader,
                         fontWeight: FontWeight.w500,
@@ -233,7 +234,7 @@ class _OtpScreenState extends State<OtpScreen>
                               fontSize: 13,
                             ),
                             children: [
-                              const TextSpan(text: 'Resend code in '),
+                              TextSpan(text: '${context.l10n.otpResend} in '),
                               TextSpan(
                                 text:
                                     '${_secondsLeft ~/ 60}:${two(_secondsLeft % 60)}',
@@ -249,7 +250,7 @@ class _OtpScreenState extends State<OtpScreen>
                           ),
                         )
                       : Text(
-                          'Resend code',
+                          context.l10n.otpResend,
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgHeader,
                             fontWeight: FontWeight.w600,
@@ -260,7 +261,7 @@ class _OtpScreenState extends State<OtpScreen>
               ),
               const Spacer(),
               WBButton(
-                label: 'Verify and go in',
+                label: context.l10n.otpVerifyButton,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 loading: _busy,

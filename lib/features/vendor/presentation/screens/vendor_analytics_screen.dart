@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/vendor_api.dart';
 
@@ -29,7 +30,11 @@ String _compactNaira(int v) {
 
 class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
   String _range = '7d';
-  static const _ranges = [('7d', 'Last 7 days'), ('30d', 'Last 30 days'), ('90d', 'Last 90 days')];
+  List<(String, String)> _ranges(BuildContext context) => [
+        ('7d', context.l10n.vendorAnalyticsLast7),
+        ('30d', context.l10n.vendorAnalyticsLast30),
+        ('90d', context.l10n.vendorAnalyticsLast90),
+      ];
 
   Map<String, dynamic>? _data;
   bool _loading = true;
@@ -138,9 +143,9 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("How you're doing", style: WBTypography.page),
+                      Text(context.l10n.vendorAnalyticsTitle, style: WBTypography.page),
                       Text(
-                        "The numbers don't lie.",
+                        context.l10n.vendorAnalyticsSubtitle,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                         ),
@@ -151,41 +156,46 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            SizedBox(
-              height: 36,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _ranges.length,
-                separatorBuilder: (_, _) => const SizedBox(width: 8),
-                itemBuilder: (_, i) => WBTag(
-                  label: _ranges[i].$2,
-                  active: _ranges[i].$1 == _range,
-                  onTap: () {
-                    setState(() => _range = _ranges[i].$1);
-                    _load();
-                  },
-                ),
-              ),
+            Builder(
+              builder: (ctx) {
+                final ranges = _ranges(ctx);
+                return SizedBox(
+                  height: 36,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: ranges.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
+                    itemBuilder: (_, i) => WBTag(
+                      label: ranges[i].$2,
+                      active: ranges[i].$1 == _range,
+                      onTap: () {
+                        setState(() => _range = ranges[i].$1);
+                        _load();
+                      },
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(height: WBSpacing.lg),
             Row(
               children: [
-                _Metric(label: 'Orders', value: orders),
+                _Metric(label: context.l10n.vendorAnalyticsOrders, value: orders),
                 const SizedBox(width: 10),
-                _Metric(label: 'Revenue', value: revenue),
+                _Metric(label: context.l10n.vendorAnalyticsRevenue, value: revenue),
               ],
             ),
             const SizedBox(height: 10),
             Row(
               children: [
-                _Metric(label: 'Avg order', value: avgOrder),
+                _Metric(label: context.l10n.vendorAnalyticsAvgOrder, value: avgOrder),
                 const SizedBox(width: 10),
-                _Metric(label: 'Rating', value: rating),
+                _Metric(label: context.l10n.vendorAnalyticsRating, value: rating),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'Sales trend',
+              context.l10n.vendorAnalyticsSalesTrend,
               style: WBTypography.cardTitle.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 10),
@@ -200,7 +210,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    'Peak hours',
+                    context.l10n.vendorAnalyticsPeakHours,
                     style: WBTypography.cardTitle.copyWith(fontSize: 16),
                   ),
                 ),
@@ -223,7 +233,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'Cancellations',
+              context.l10n.vendorAnalyticsCancellations,
               style: WBTypography.cardTitle.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 10),
@@ -275,7 +285,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    'Top sellers',
+                    context.l10n.vendorAnalyticsTopSellers,
                     style: WBTypography.cardTitle.copyWith(fontSize: 16),
                   ),
                 ),
@@ -286,7 +296,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                       const WBIcon(WBIconName.more, size: 14),
                       const SizedBox(width: 4),
                       Text(
-                        'Export',
+                        context.l10n.vendorAnalyticsExport,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgSecondary,
                           fontWeight: FontWeight.w600,
@@ -304,7 +314,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                   final sellers = _topSellers;
                   if (sellers.isEmpty) {
                     return Text(
-                      'No sales in this range yet.',
+                      context.l10n.vendorAnalyticsNoSales,
                       style: WBTypography.caption
                           .copyWith(color: WBColors.fgSecondary),
                     );

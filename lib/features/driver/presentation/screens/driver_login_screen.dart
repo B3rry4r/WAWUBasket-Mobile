@@ -5,6 +5,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/auth_api.dart';
@@ -31,7 +32,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
 
   Future<void> _submit() async {
     if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
-      wbShowSnack(context, 'Enter your phone/email and password.');
+      wbShowSnack(context, context.l10n.loginErrorEmpty);
       return;
     }
     setState(() => _busy = true);
@@ -69,13 +70,13 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
               ),
               const SizedBox(height: WBSpacing.xl),
               WBInput(
-                label: 'Phone or email',
+                label: context.l10n.loginPhoneLabel,
                 controller: _identifier,
                 leadingIcon: WBIconName.user,
               ),
               const SizedBox(height: WBSpacing.md),
               WBInput(
-                label: 'Password',
+                label: context.l10n.loginPasswordLabel,
                 controller: _password,
                 leadingIcon: WBIconName.card,
                 obscureText: _obscure,
@@ -98,7 +99,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
               ),
               const Spacer(),
               WBButton(
-                label: 'Sign in',
+                label: context.l10n.signIn,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,

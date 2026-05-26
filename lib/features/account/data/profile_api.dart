@@ -16,6 +16,10 @@ class ProfileApi {
       _api.patch('/profile', body: dto);
 
   /// Persists a freshly-uploaded avatar key to the active role profile.
+  ///
+  /// **Cache note:** after calling this, evict the old URL from the
+  /// CachedNetworkImage disk cache so the new avatar is fetched immediately:
+  ///   `await CachedNetworkImage.evictFromCache(oldAvatarUrl);`
   Future<void> updateAvatar(String avatarKey) =>
       _api.patch('/profile/avatar', body: {'avatarKey': avatarKey});
 

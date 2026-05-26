@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/address_controller.dart';
 
@@ -60,7 +61,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   Future<void> _save() async {
     if (_line.text.trim().isEmpty) {
-      wbShowSnack(context, 'Enter the address line.');
+      wbShowSnack(context, context.l10n.addAddressEnterLine);
       return;
     }
     setState(() => _busy = true);
@@ -85,7 +86,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         );
       }
       if (!mounted) return;
-      wbShowSnack(context, _editing ? 'Address updated' : 'Address saved');
+      wbShowSnack(context, _editing ? context.l10n.addAddressUpdated : context.l10n.addAddressSaved);
       context.pop();
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
@@ -112,14 +113,14 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
                 Text(
-                  _editing ? 'Edit address' : 'Add address',
+                  _editing ? context.l10n.addAddressEditTitle : context.l10n.addAddressTitle,
                   style: WBTypography.page,
                 ),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
             Text(
-              'LABEL',
+              context.l10n.addAddressLabelSection,
               style: WBTypography.label.copyWith(
                 color: WBColors.fgPlaceholder,
                 fontWeight: FontWeight.w600,
@@ -129,10 +130,10 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             const SizedBox(height: 10),
             Row(
               children: [
-                for (final option in const [
-                  (id: 'home', label: 'Home'),
-                  (id: 'office', label: 'Office'),
-                  (id: 'other', label: 'Other'),
+                for (final option in [
+                  (id: 'home', label: context.l10n.addAddressLabelHome),
+                  (id: 'office', label: context.l10n.addAddressLabelOffice),
+                  (id: 'other', label: context.l10n.addAddressLabelOther),
                 ]) ...[
                   WBTag(
                     label: option.label,
@@ -145,22 +146,22 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             ),
             const SizedBox(height: WBSpacing.lg),
             WBInput(
-              label: 'Address line',
-              placeholder: 'Street, area, city',
+              label: context.l10n.addAddressLine,
+              placeholder: context.l10n.addAddressLinePlaceholder,
               leadingIcon: WBIconName.pin,
               controller: _line,
             ),
             const SizedBox(height: WBSpacing.md),
             WBInput(
-              label: 'Apartment / unit',
-              placeholder: 'Optional',
+              label: context.l10n.addAddressApartment,
+              placeholder: context.l10n.addAddressApartmentPlaceholder,
               leadingIcon: WBIconName.home,
               controller: _apartment,
             ),
             const SizedBox(height: WBSpacing.md),
             WBInput(
-              label: 'Note for the rider',
-              placeholder: 'Use the gate on Akin Adesola',
+              label: context.l10n.addAddressNote,
+              placeholder: context.l10n.addAddressNotePlaceholder,
               leadingIcon: WBIconName.message,
               controller: _note,
             ),
@@ -197,7 +198,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    'Make this my default address',
+                    context.l10n.addAddressDefault,
                     style: WBTypography.body.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -208,7 +209,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
             ),
             const SizedBox(height: WBSpacing.xl),
             WBButton(
-              label: _editing ? 'Save changes' : 'Save address',
+              label: _editing ? context.l10n.addAddressSaveChanges : context.l10n.addAddressSave,
               size: WBButtonSize.lg,
               fullWidth: true,
               loading: _busy,

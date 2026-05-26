@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../application/escrow_controller.dart';
@@ -35,7 +36,7 @@ class EscrowStatusScreen extends StatelessWidget {
                   children: [
                     WBBackChip(onPressed: () => context.pop()),
                     const SizedBox(height: WBSpacing.xl),
-                    Text("Can't find that order", style: WBTypography.page),
+                    Text(context.l10n.escrowStatusNotFound, style: WBTypography.page),
                     const SizedBox(height: WBSpacing.sm),
                     Text(
                       'It may have been refunded and cleared.',
@@ -216,7 +217,7 @@ class _Body extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  "We'll review evidence and resolve within 48 hours.",
+                  context.l10n.escrowStatusReviewNote,
                   style: WBTypography.caption.copyWith(
                     color: WBColors.fgSecondary,
                   ),
@@ -267,7 +268,7 @@ class _Body extends StatelessWidget {
           ],
         ] else if (order.status == EscrowStatus.released) ...[
           WBButton(
-            label: 'Done',
+            label: context.l10n.actionDone,
             fullWidth: true,
             size: WBButtonSize.lg,
             onPressed: () => context.go(

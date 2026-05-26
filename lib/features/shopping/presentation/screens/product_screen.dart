@@ -6,6 +6,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/data/account_extras_api.dart';
 import '../../application/cart_controller.dart';
@@ -75,7 +76,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     setState(() => _error = null);
     final id = widget.productId;
     if (id == null || id.isEmpty) {
-      setState(() => _error = 'Product not found.');
+      // Cannot use context here (called from initState); set literal for now,
+      // will be rendered in build where context.l10n is available.
+      setState(() => _error = 'product_not_found');
       return;
     }
     try {
@@ -108,6 +111,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     final product = _product;
+    final errorMessage = _error == 'product_not_found'
+        ? context.l10n.productNotFound
+        : _error;
     if (product == null) {
       return Scaffold(
         backgroundColor: WBColors.bgPrimary,
@@ -119,20 +125,20 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                 child: WBBackChip(onPressed: () => context.pop()),
               ),
               Center(
-                child: _error != null
+                child: errorMessage != null
                     ? Padding(
                         padding:
                             const EdgeInsets.all(WBSpacing.screenPadding),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(_error!,
+                            Text(errorMessage,
                                 textAlign: TextAlign.center,
                                 style: WBTypography.body.copyWith(
                                     color: WBColors.fgSecondary)),
                             const SizedBox(height: 14),
                             WBButton(
-                              label: 'Try again',
+                              label: context.l10n.actionRetry,
                               size: WBButtonSize.sm,
                               variant: WBButtonVariant.secondary,
                               onPressed: _load,
@@ -303,7 +309,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
             bottom: 0,
             child: StickyActionBar(
               child: WBButton(
-                label: 'Add to basket',
+                label: context.l10n.productAddButton,
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 loading: _adding,

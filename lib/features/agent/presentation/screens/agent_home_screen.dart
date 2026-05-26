@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
@@ -116,7 +117,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                       GestureDetector(
                         onTap: () => context.push(AppRoutes.agentEarnings),
                         child: Text(
-                          'See all',
+                          context.l10n.actionSeeAll,
                           style: WBTypography.caption.copyWith(
                             color: WBColors.fgSecondary,
                             fontWeight: FontWeight.w600,
@@ -377,7 +378,7 @@ class _SyncBanner extends StatelessWidget {
               child: Text(
                 dirty
                     ? '$pending item${pending == 1 ? '' : 's'} waiting to sync, tap to sync now.'
-                    : "You're online, transactions sync as you record them.",
+                    : context.l10n.agentHomeOnline,
                 style: WBTypography.caption.copyWith(
                   color: WBColors.fgHeader,
                   fontWeight: FontWeight.w500,

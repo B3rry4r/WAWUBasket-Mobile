@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -137,7 +138,7 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
                   GestureDetector(
                     onTap: () => context.go(AppRoutes.traderListings),
                     child: Text(
-                      'See all',
+                      context.l10n.actionSeeAll,
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                         fontWeight: FontWeight.w600,

@@ -5,6 +5,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_orders_controller.dart';
 import '../widgets/vendor_status_pill.dart';
@@ -52,7 +53,7 @@ class _NotFound extends StatelessWidget {
           children: [
             WBBackChip(onPressed: onBack),
             const SizedBox(height: WBSpacing.xl),
-            Text("Can't find that order", style: WBTypography.page),
+            Text(context.l10n.vendorOrderNotFound, style: WBTypography.page),
             const SizedBox(height: WBSpacing.sm),
             Text(
               'It may have been cancelled or archived.',
@@ -422,7 +423,7 @@ class _Body extends StatelessWidget {
                         if (order.stage == OrderStage.pending) ...[
                           Expanded(
                             child: WBButton(
-                              label: 'Decline',
+                              label: context.l10n.vendorHomeDecline,
                               size: WBButtonSize.lg,
                               variant: WBButtonVariant.secondary,
                               onPressed: () => _decline(context),

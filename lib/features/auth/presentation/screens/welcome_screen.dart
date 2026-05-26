@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -58,14 +59,14 @@ class WelcomeScreen extends StatelessWidget {
               ],
               const SizedBox(height: WBSpacing.lg),
               WBButton(
-                label: 'Get started',
+                label: context.l10n.welcomeGetStarted,
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 onPressed: () => context.push(AppRoutes.signup),
               ),
               const SizedBox(height: WBSpacing.sm + 4),
               _SecondaryCta(
-                label: 'Sign in',
+                label: context.l10n.welcomeSignIn,
                 onPressed: () => context.push(AppRoutes.login),
               ),
               const SizedBox(height: WBSpacing.sm),

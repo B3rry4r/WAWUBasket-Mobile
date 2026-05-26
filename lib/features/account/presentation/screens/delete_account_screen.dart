@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../data/profile_api.dart';
 
@@ -22,17 +23,18 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   String _reason = '';
   bool _deleting = false;
 
-  static const _checklist = [
-    'Use your wallet balance, it will be lost',
-    'Complete any active orders',
-    "Download your receipts, you won't access them after",
+  List<String> _checklist(BuildContext context) => [
+    context.l10n.deleteAccountCheck1,
+    context.l10n.deleteAccountCheck2,
+    context.l10n.deleteAccountCheck3,
   ];
-  static const _reasons = [
-    'Too expensive',
-    'Delivery too slow',
-    'Not enough options',
-    'Technical issues',
-    'Other',
+
+  List<String> _reasons(BuildContext context) => [
+    context.l10n.deleteAccountReasonExpensive,
+    context.l10n.deleteAccountReasonSlow,
+    context.l10n.deleteAccountReasonOptions,
+    context.l10n.deleteAccountReasonTech,
+    context.l10n.deleteAccountReasonOther,
   ];
 
   void _confirm() {
@@ -159,7 +161,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 WBCard(
                   child: Column(
                     children: [
-                      for (var i = 0; i < _checklist.length; i++) ...[
+                      for (var i = 0; i < _checklist(context).length; i++) ...[
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -170,7 +172,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                _checklist[i],
+                                _checklist(context)[i],
                                 style: WBTypography.body.copyWith(
                                   fontSize: 14,
                                   height: 1.4,
@@ -179,7 +181,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                             ),
                           ],
                         ),
-                        if (i != _checklist.length - 1)
+                        if (i != _checklist(context).length - 1)
                           const SizedBox(height: 14),
                       ],
                     ],
@@ -195,7 +197,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (final r in _reasons)
+                    for (final r in _reasons(context))
                       WBTag(
                         label: r,
                         active: _reason == r,

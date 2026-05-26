@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/vendor_api.dart';
 
@@ -376,7 +377,7 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
               ),
             const SizedBox(height: WBSpacing.lg),
             WBButton(
-              label: 'Save changes',
+              label: context.l10n.actionSave,
               size: WBButtonSize.lg,
               fullWidth: true,
               loading: _saving,

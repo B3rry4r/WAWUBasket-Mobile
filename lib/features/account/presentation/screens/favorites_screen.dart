@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
@@ -72,7 +73,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Favorites', style: WBTypography.page),
+              Text(context.l10n.favoritesTitle, style: WBTypography.page),
               Text(
                 count,
                 style: WBTypography.caption.copyWith(
@@ -94,12 +95,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             child: Row(
               children: [
                 _SegmentTab(
-                  label: 'Vendors',
+                  label: context.l10n.favoritesVendorsTab,
                   active: _tab == 'vendors',
                   onTap: () => setState(() => _tab = 'vendors'),
                 ),
                 _SegmentTab(
-                  label: 'Dishes',
+                  label: context.l10n.favoritesDishesTab,
                   active: _tab == 'dishes',
                   onTap: () => setState(() => _tab = 'dishes'),
                 ),
@@ -126,7 +127,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             _hint(_error!)
           else if (_tab == 'vendors') ...[
             if (vendors!.isEmpty)
-              _hint('No favorite vendors yet. Tap the heart on a storefront.')
+              _hint(context.l10n.favoritesNoVendors)
             else
               for (var i = 0; i < vendors.length; i++) ...[
                 DSVendorCard(
@@ -140,7 +141,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               ],
           ] else ...[
             if (_items.isEmpty)
-              _hint('No favorite dishes yet. Tap the heart on a dish.')
+              _hint(context.l10n.favoritesNoDishes)
             else
               for (var i = 0; i < _items.length; i++) ...[
                 WBProductCard(

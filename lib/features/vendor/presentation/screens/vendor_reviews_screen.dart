@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/vendor_api.dart';
 
@@ -110,7 +111,7 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("What they're saying", style: WBTypography.page),
+                      Text(context.l10n.vendorReviewsTitle, style: WBTypography.page),
                       Text(
                         'The good, the bad, and the delicious.',
                         style: WBTypography.caption.copyWith(
