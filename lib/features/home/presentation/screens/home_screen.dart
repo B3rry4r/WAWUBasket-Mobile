@@ -17,7 +17,6 @@ import '../../../category/presentation/widgets/subcategory_chip_row.dart';
 import '../../../recipes/application/recipes_controller.dart';
 import '../../../recipes/domain/models/recipe.dart';
 import '../../../shopping/application/mock_data.dart';
-import '../../../shopping/application/wb_images.dart';
 import '../../application/category_controller.dart';
 import '../../domain/models/category.dart';
 import '../widgets/category_body.dart';
@@ -152,9 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _QuickAction(
-                    icon: WBIconName.basket,
-                    label: 'Reorder',
-                    onTap: () => context.push(AppRoutes.ordersHistory),
+                    icon: WBIconName.star,
+                    label: 'Cook Tonight',
+                    onTap: () => context.push(AppRoutes.recipes),
                   ),
                   _QuickAction(
                     icon: WBIconName.pin,
@@ -166,118 +165,69 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: 'Chat',
                     onTap: () => context.push(AppRoutes.chatInbox),
                   ),
+                  _QuickAction(
+                    icon: WBIconName.basket,
+                    label: 'Reorder',
+                    onTap: () => context.push(AppRoutes.ordersHistory),
+                  ),
                 ],
-              )),
-              const SizedBox(height: 18),
-              _padded(GestureDetector(
-                onTap: () => context.push(AppRoutes.trade),
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: WBColors.surfaceDark,
-                    borderRadius: BorderRadius.circular(WBRadius.card),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        alignment: Alignment.center,
-                        child: const WBIcon(
-                          WBIconName.basket,
-                          size: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              context.l10n.homeBulkMarketsTitle,
-                              style: WBTypography.body.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              context.l10n.homeBulkMarketsSubtitle,
-                              style: WBTypography.caption.copyWith(
-                                color: Colors.white.withValues(alpha: 0.65),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const WBIcon(
-                        WBIconName.arrowRight,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
               )),
               const SizedBox(height: 22),
               ValueListenableBuilder<Map<String, bool>>(
                 valueListenable: FeatureFlagService.instance.flags,
                 builder: (_, flags, _) {
-                  final newUI = flags['new_categories_ui'] ?? true;
+                  final circleUI = flags['new_categories_ui'] ?? false;
                   return ValueListenableBuilder<List<Category>?>(
                     valueListenable: CategoryController.instance.categories,
-                    builder: (_, cats, _) => newUI
-                        ? _CategoryPillRow(
-                            cats: cats,
-                            activeCategoryId: _activeCategoryId,
-                            onTap: _onCategoryTap,
-                          )
-                        : _CategoryGrid(
+                    builder: (_, cats, _) {
+                      if (circleUI) {
+                        return _CategoryCircleRow(cats: cats);
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _CategoryPillRow(
                             cats: cats,
                             activeCategoryId: _activeCategoryId,
                             onTap: _onCategoryTap,
                           ),
+                          // Subcategory chips — animated reveal below pills
+                          AnimatedSize(
+                            duration: WBMotion.base,
+                            curve: WBMotion.easeSoft,
+                            alignment: Alignment.topCenter,
+                            child: activeCategory == null
+                                ? const SizedBox(width: double.infinity)
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: WBSpacing.md),
+                                    child: SubcategoryChipRow(
+                                      subcategories:
+                                          activeCategory.subcategories,
+                                      activeId: _activeSubcategoryId,
+                                      onTap: _onSubcategoryTap,
+                                      visible: true,
+                                      horizontalPadding: 20,
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(height: 22),
+                          CategoryBody(
+                            kind: kind,
+                            categoryId: _activeCategoryId,
+                            subcategoryId: _activeSubcategoryId,
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
-              ),
-              // Subcategory chips (animated reveal, full-bleed)
-              AnimatedSize(
-                duration: WBMotion.base,
-                curve: WBMotion.easeSoft,
-                alignment: Alignment.topCenter,
-                child: activeCategory == null
-                    ? const SizedBox(width: double.infinity)
-                    : Padding(
-                        padding: const EdgeInsets.only(top: WBSpacing.md),
-                        child: SubcategoryChipRow(
-                          subcategories: activeCategory.subcategories,
-                          activeId: _activeSubcategoryId,
-                          onTap: _onSubcategoryTap,
-                          visible: true,
-                          horizontalPadding: 20,
-                        ),
-                      ),
-              ),
-              const SizedBox(height: 22),
-              CategoryBody(
-                kind: kind,
-                categoryId: _activeCategoryId,
-                subcategoryId: _activeSubcategoryId,
               ),
               const SizedBox(height: 22),
               _padded(_CookTonightHeader()),
               const SizedBox(height: 12),
               const _CookTonightCarousel(),
-              const SizedBox(height: 22),
-              _padded(const _OffersBanner()),
             ],
           );
         },
@@ -488,101 +438,6 @@ class _HomeRecipeCard extends StatelessWidget {
   }
 }
 
-class _OffersBanner extends StatelessWidget {
-  const _OffersBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(minHeight: 180),
-      padding: const EdgeInsets.all(WBSpacing.lg),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: WBColors.surfaceDark,
-        borderRadius: BorderRadius.circular(WBRadius.card),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -36,
-            bottom: -36,
-            child: Container(
-              width: 180,
-              height: 180,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: WBColors.surfaceDark, width: 6),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: const WBNetworkImage(url: WBImages.jollof),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Text(
-                context.l10n.homeOffersThisWeek,
-                style: WBTypography.label.copyWith(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Free delivery\non orders over ₦5,000',
-                style: WBTypography.page.copyWith(
-                  color: Colors.white,
-                  fontSize: 24,
-                  height: 1.15,
-                  letterSpacing: -0.48,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                context.l10n.homeOfferSubtitle,
-                style: WBTypography.caption.copyWith(
-                  color: Colors.white.withValues(alpha: 0.6),
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                height: 40,
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(WBRadius.pill),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      context.l10n.homeOfferButton,
-                      style: WBTypography.body.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: WBColors.fgHeader,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    const WBIcon(
-                      WBIconName.arrowRight,
-                      size: 14,
-                      strokeWidth: 1.6,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // ── New UI: scrollable pill row ───────────────────────────────────────────────
 
 class _CategoryPillRow extends StatelessWidget {
@@ -677,97 +532,152 @@ class _CategoryPillRow extends StatelessWidget {
   }
 }
 
-// ── Old UI: 3-column icon grid ────────────────────────────────────────────────
+// ── Feature-flag UI: Glovo-style animated circle carousel ────────────────────
+// Horizontally scrollable row. Each circle scales up as it nears the viewport
+// centre — the same parallax-magnify feel Glovo uses. Tapping navigates to
+// the dedicated CategoryScreen rather than dropping chips inline.
 
-class _CategoryGrid extends StatelessWidget {
-  const _CategoryGrid({
-    required this.cats,
-    required this.activeCategoryId,
-    required this.onTap,
-  });
+class _CategoryCircleRow extends StatefulWidget {
+  const _CategoryCircleRow({required this.cats});
   final List<Category>? cats;
-  final String? activeCategoryId;
-  final ValueChanged<String> onTap;
+
+  @override
+  State<_CategoryCircleRow> createState() => _CategoryCircleRowState();
+}
+
+class _CategoryCircleRowState extends State<_CategoryCircleRow> {
+  final _scroll = ScrollController();
+
+  // Item width + gap used to compute each tile's distance from viewport centre.
+  static const _tileW = 72.0;
+  static const _gap = 14.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scroll.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  double _scale(int i) {
+    if (!_scroll.hasClients) return i == 0 ? 1.0 : 0.85;
+    final viewW = _scroll.position.viewportDimension;
+    final offset = _scroll.offset;
+    final itemCenter = 20.0 + i * (_tileW + _gap) + _tileW / 2;
+    final viewCenter = offset + viewW / 2;
+    final dist = (itemCenter - viewCenter).abs();
+    // Scale 1.0 at centre, 0.82 at >half a tile away
+    return (1.0 - (dist / (viewW * 0.6)).clamp(0.0, 1.0) * 0.18)
+        .clamp(0.82, 1.0);
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (cats == null) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+    if (widget.cats == null) {
+      return SizedBox(
+        height: 100,
         child: Shimmer.fromColors(
           baseColor: WBColors.bgSoft,
           highlightColor: WBColors.bgSecondary,
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1,
-            ),
-            itemCount: 9,
-            itemBuilder: (_, _) => Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(WBRadius.card),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: 7,
+            separatorBuilder: (_, _) => const SizedBox(width: _gap),
+            itemBuilder: (_, _) => SizedBox(
+              width: _tileW,
+              child: Column(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Container(
+                    width: 44,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
       );
     }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 1.1,
-        ),
-        itemCount: cats!.length,
+
+    return SizedBox(
+      height: 100,
+      child: ListView.separated(
+        controller: _scroll,
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        itemCount: widget.cats!.length,
+        separatorBuilder: (_, _) => const SizedBox(width: _gap),
         itemBuilder: (_, i) {
-          final c = cats![i];
-          final active = c.id == activeCategoryId;
+          final c = widget.cats![i];
+          final scale = _scale(i);
           return GestureDetector(
-            onTap: () => onTap(c.id),
-            child: AnimatedContainer(
-              duration: WBMotion.base,
-              curve: WBMotion.easeSoft,
-              decoration: BoxDecoration(
-                color: active ? WBColors.surfaceDark : WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (c.svgAsset != null && c.svgAsset!.isNotEmpty)
-                    SvgPicture.asset(
-                      c.svgAsset!,
-                      width: 28,
-                      height: 28,
-                      colorFilter: active
-                          ? const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn)
-                          : null,
+            onTap: () =>
+                context.push('${AppRoutes.categoryDetail}/${c.id}'),
+            child: Transform.scale(
+              scale: scale,
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: _tileW,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: WBColors.surfaceCard,
+                        shape: BoxShape.circle,
+                        boxShadow: WBShadows.card,
+                      ),
+                      padding: const EdgeInsets.all(14),
+                      child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
+                          ? SvgPicture.asset(
+                              c.svgAsset!,
+                              fit: BoxFit.contain,
+                              colorFilter: ColorFilter.mode(
+                                WBColors.fgPrimary, BlendMode.srcIn),
+                            )
+                          : const SizedBox.shrink(),
                     ),
-                  const SizedBox(height: 6),
-                  Text(
-                    c.label,
-                    textAlign: TextAlign.center,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: WBTypography.caption.copyWith(
-                      color: active ? Colors.white : WBColors.fgHeader,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 11,
+                    const SizedBox(height: 6),
+                    Text(
+                      c.label,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: WBTypography.caption.copyWith(
+                        color: scale > 0.94
+                            ? WBColors.fgPrimary
+                            : WBColors.fgSecondary,
+                        fontWeight: scale > 0.94
+                            ? FontWeight.w700
+                            : FontWeight.w500,
+                        fontSize: 11,
+                        height: 1.2,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );
@@ -776,3 +686,5 @@ class _CategoryGrid extends StatelessWidget {
     );
   }
 }
+
+// ── Legacy UI: scrollable pill row (flag=false fallback) ──────────────────────

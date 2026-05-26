@@ -24,40 +24,40 @@ class AppLocalizationsAr extends AppLocalizations {
   String get navAccount => 'الحساب';
 
   @override
-  String get navSearch => 'Search';
+  String get navSearch => 'بحث';
 
   @override
-  String get actionContinue => 'Continue';
+  String get actionContinue => 'متابعة';
 
   @override
-  String get actionCancel => 'Cancel';
+  String get actionCancel => 'إلغاء';
 
   @override
-  String get actionSave => 'Save';
+  String get actionSave => 'حفظ';
 
   @override
-  String get actionDone => 'Done';
+  String get actionDone => 'تم';
 
   @override
-  String get actionRetry => 'Try again';
+  String get actionRetry => 'حاول مجدداً';
 
   @override
-  String get actionNext => 'Next';
+  String get actionNext => 'التالي';
 
   @override
-  String get actionConfirm => 'Confirm';
+  String get actionConfirm => 'تأكيد';
 
   @override
-  String get actionSeeAll => 'See all';
+  String get actionSeeAll => 'عرض الكل';
 
   @override
-  String get commonLoading => 'Loading…';
+  String get commonLoading => 'جارٍ التحميل…';
 
   @override
-  String get commonError => 'Something went wrong.';
+  String get commonError => 'حدث خطأ ما.';
 
   @override
-  String get commonEmpty => 'Nothing here yet.';
+  String get commonEmpty => 'لا يوجد شيء هنا بعد.';
 
   @override
   String get languageTitle => 'اللغة';
@@ -66,13 +66,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get languageSubtitle => 'اختر لغتك المفضلة';
 
   @override
-  String get signIn => 'Sign in';
+  String get signIn => 'تسجيل الدخول';
 
   @override
-  String get signUp => 'Create account';
+  String get signUp => 'إنشاء حساب';
 
   @override
-  String get logOut => 'Log out';
+  String get logOut => 'تسجيل الخروج';
 
   @override
   String get chatEmpty => 'ابدأ محادثتك';
@@ -87,259 +87,259 @@ class AppLocalizationsAr extends AppLocalizations {
   String get chatAttachmentFailed => 'فشل إرسال الملف. حاول مجدداً.';
 
   @override
-  String get kycSubmitted =>
-      'Application submitted. We\'ll review it and let you know.';
+  String get kycSubmitted => 'تم إرسال الطلب. سنراجعه ونُعلمك.';
 
   @override
-  String get kycUploadFailed => 'Couldn\'t upload the document. Try again.';
+  String get kycUploadFailed => 'تعذّر رفع المستند. حاول مجدداً.';
 
   @override
   String get splashTagline => 'سلة واحدة. كل شيء.';
 
   @override
-  String get onboardingSkip => 'Skip';
+  String get onboardingSkip => 'تخطي';
 
   @override
-  String get onboardingPermissionsTitle => 'A couple of quick permissions';
+  String get onboardingPermissionsTitle => 'أذونات سريعة';
 
   @override
   String get onboardingPermissionsSubtitle =>
-      'They make the basket work better for you. You can change these anytime.';
+      'تُحسّن عمل السلة. يمكنك تغييرها في أي وقت.';
 
   @override
-  String get onboardingLocationTitle => 'Where are you cooking today?';
+  String get onboardingLocationTitle => 'أين أنت اليوم؟';
 
   @override
   String get onboardingLocationBody =>
-      'We need your location to show restaurants and markets near you. We never share your exact location with anyone.';
+      'نحتاج موقعك لعرض المطاعم والأسواق القريبة. لا نشارك موقعك الدقيق مع أحد.';
 
   @override
-  String get onboardingLocationPrimary => 'While using app';
+  String get onboardingLocationPrimary => 'أثناء استخدام التطبيق';
 
   @override
-  String get onboardingLocationSecondary => 'Allow once';
+  String get onboardingLocationSecondary => 'السماح مرة واحدة';
 
   @override
-  String get onboardingLocationTertiary => 'Not now';
+  String get onboardingLocationTertiary => 'ليس الآن';
 
   @override
-  String get onboardingNotificationsTitle => 'Don\'t miss the good stuff';
+  String get onboardingNotificationsTitle => 'لا تفوّت الجيد';
 
   @override
   String get onboardingNotificationsBody =>
-      'We\'ll tell you when your order is on its way, when your meat is freshly cut, and when there\'s a surprise waiting.';
+      'سنخبرك حين يكون طلبك في الطريق، وحين يُقطع اللحم طازجاً، وحين تنتظرك مفاجأة.';
 
   @override
-  String get onboardingNotificationsPrimary => 'Yes, tell me';
+  String get onboardingNotificationsPrimary => 'نعم، أخبرني';
 
   @override
-  String get onboardingNotificationsSecondary => 'Maybe later';
+  String get onboardingNotificationsSecondary => 'ربما لاحقاً';
 
   @override
-  String get onboardingQuizTitle => 'Let\'s build your basket';
+  String get onboardingQuizTitle => 'لنبني سلّتك';
 
   @override
-  String get onboardingQuizSubtitle =>
-      'Tell us what you love, and we\'ll make sure you see it first.';
+  String get onboardingQuizSubtitle => 'أخبرنا بما تحب وسنجعله يظهر أولاً.';
 
   @override
-  String get onboardingQuizWantsLabel => 'What do you usually want?';
+  String get onboardingQuizWantsLabel => 'ماذا تريد عادةً؟';
 
   @override
-  String get onboardingQuizWantOption1 => 'Cooked meals from restaurants';
+  String get onboardingQuizWantOption1 => 'وجبات مطبوخة من المطاعم';
 
   @override
-  String get onboardingQuizWantOption2 => 'Fresh fruits and vegetables';
+  String get onboardingQuizWantOption2 => 'فواكه وخضروات طازجة';
 
   @override
-  String get onboardingQuizWantOption3 => 'Meat, chicken, and fish';
+  String get onboardingQuizWantOption3 => 'لحم ودجاج وسمك';
 
   @override
-  String get onboardingQuizWantOption4 => 'Pots, pans, and pantry stuff';
+  String get onboardingQuizWantOption4 => 'أواني ومؤن المطبخ';
 
   @override
-  String get onboardingQuizSpeedLabel => 'How fast do you need things?';
+  String get onboardingQuizSpeedLabel => 'كم تحتاج الأمور بسرعة؟';
 
   @override
-  String get onboardingQuizSpeedOption1 => 'Right now, I\'m hungry';
+  String get onboardingQuizSpeedOption1 => 'الآن، أنا جائع';
 
   @override
-  String get onboardingQuizSpeedOption2 => 'Today sometime';
+  String get onboardingQuizSpeedOption2 => 'في أي وقت اليوم';
 
   @override
-  String get onboardingQuizSpeedOption3 => 'I\'m planning ahead';
+  String get onboardingQuizSpeedOption3 => 'أخطط مسبقاً';
 
   @override
-  String get onboardingQuizAvoidLabel => 'Any foods we should avoid?';
+  String get onboardingQuizAvoidLabel => 'هل هناك أطعمة يجب تجنبها؟';
 
   @override
-  String get onboardingQuizAvoidPlaceholder => 'e.g. no shellfish, no beef';
+  String get onboardingQuizAvoidPlaceholder => 'مثال: بدون محار، بدون لحم بقر';
 
   @override
-  String get onboardingQuizBuildButton => 'Build my basket';
+  String get onboardingQuizBuildButton => 'ابنِ سلّتي';
 
   @override
-  String get onboardingQuizSkipLink => 'I\'ll figure it out later';
+  String get onboardingQuizSkipLink => 'سأعرف لاحقاً';
 
   @override
-  String get onboardingGiftTitle => 'A little welcome gift';
+  String get onboardingGiftTitle => 'هدية ترحيب صغيرة';
 
   @override
   String get onboardingGiftBody =>
-      'Your first order comes with something extra. Just because you deserve it.';
+      'طلبك الأول يأتي بشيء إضافي. لأنك تستحق ذلك.';
 
   @override
-  String get onboardingGiftButton => 'Let\'s see what\'s inside';
+  String get onboardingGiftButton => 'لنرَ ما بالداخل';
 
   @override
   String get onboardingGiftFootnote =>
-      'Valid for first order only. Minimum order applies.';
+      'صالح للطلب الأول فقط. يُطبّق الحد الأدنى.';
 
   @override
-  String get loginTitle => 'Sign in';
+  String get loginTitle => 'تسجيل الدخول';
 
   @override
-  String get loginSubtitle => 'Welcome back. Pick up where you left off.';
+  String get loginSubtitle => 'أهلاً بعودتك. أكمل من حيث توقفت.';
 
   @override
-  String get loginPhoneLabel => 'Phone or email';
+  String get loginPhoneLabel => 'الهاتف أو البريد الإلكتروني';
 
   @override
-  String get loginPasswordLabel => 'Password';
+  String get loginPasswordLabel => 'كلمة المرور';
 
   @override
-  String get loginForgotPassword => 'Forgot password?';
+  String get loginForgotPassword => 'نسيت كلمة المرور؟';
 
   @override
-  String get loginBiometric => 'Use Face ID';
+  String get loginBiometric => 'استخدام معرّف الوجه';
 
   @override
-  String get loginSignupLink => 'New to WAWUBasket?';
+  String get loginSignupLink => 'جديد على WAWUBasket؟';
 
   @override
-  String get loginErrorEmpty => 'Enter your phone/email and password.';
+  String get loginErrorEmpty => 'أدخل هاتفك/بريدك وكلمة المرور.';
 
   @override
-  String get loginBiometricOfferTitle => 'Faster sign-in';
+  String get loginBiometricOfferTitle => 'تسجيل دخول أسرع';
 
   @override
   String get loginBiometricOfferBody =>
-      'Use Face ID or your fingerprint to sign in next time?';
+      'استخدم معرّف الوجه أو بصمتك في المرة القادمة؟';
 
   @override
-  String get loginBiometricNotNow => 'Not now';
+  String get loginBiometricNotNow => 'ليس الآن';
 
   @override
-  String get loginBiometricEnable => 'Enable';
+  String get loginBiometricEnable => 'تفعيل';
 
   @override
   String get loginBiometricNotAvailable =>
-      'Biometric unlock isn\'t set up on this device.';
+      'لم يُهيَّأ فتح القفل البيومتري على هذا الجهاز.';
 
   @override
-  String get signupTitle => 'What\'s your WhatsApp number?';
+  String get signupTitle => 'ما رقم واتساب الخاص بك؟';
 
   @override
-  String get signupSubtitle =>
-      'We\'ll send a code to make sure it\'s really you.';
+  String get signupSubtitle => 'سنرسل رمزاً للتحقق أنك أنت.';
 
   @override
-  String get signupNameLabel => 'Full name';
+  String get signupNameLabel => 'الاسم الكامل';
 
   @override
-  String get signupPhoneLabel => 'WhatsApp number';
+  String get signupPhoneLabel => 'رقم واتساب';
 
   @override
-  String get signupEmailLabel => 'Email';
+  String get signupEmailLabel => 'البريد الإلكتروني';
 
   @override
-  String get signupPasswordLabel => 'Password';
+  String get signupPasswordLabel => 'كلمة المرور';
 
   @override
-  String get signupPasswordPlaceholder => 'At least 8 characters';
+  String get signupPasswordPlaceholder => '8 أحرف على الأقل';
 
   @override
-  String get signupSendCode => 'Send code';
+  String get signupSendCode => 'إرسال الرمز';
 
   @override
-  String get signupDisclaimer => 'No spam. No calls. Just your basket updates.';
+  String get signupDisclaimer =>
+      'لا رسائل مزعجة. لا مكالمات. فقط تحديثات سلّتك.';
 
   @override
-  String get signupHaveAccount => 'Already have an account?';
+  String get signupHaveAccount => 'هل لديك حساب بالفعل؟';
 
   @override
-  String get signupErrorName => 'Fill in your name, number and email.';
+  String get signupErrorName => 'أدخل اسمك ورقمك وبريدك.';
 
   @override
-  String get signupErrorPassword => 'Password must be at least 8 characters.';
+  String get signupErrorPassword =>
+      'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.';
 
   @override
-  String get signupErrorTerms => 'Accept the Terms to continue.';
+  String get signupErrorTerms => 'اقبل الشروط للمتابعة.';
 
   @override
-  String get otpTitle => 'You\'ve got a code!';
+  String get otpTitle => 'وصلك رمز!';
 
   @override
-  String get otpSubtitle => 'Check your WhatsApp. It\'s a short one.';
+  String get otpSubtitle => 'تحقق من واتساب. إنه قصير.';
 
   @override
-  String get otpEditNumber => 'Edit number';
+  String get otpEditNumber => 'تعديل الرقم';
 
   @override
-  String get otpResend => 'Resend code';
+  String get otpResend => 'إعادة إرسال الرمز';
 
   @override
-  String get otpVerifyButton => 'Verify and go in';
+  String get otpVerifyButton => 'تحقق وادخل';
 
   @override
-  String get otpNewCode => 'A new code is on its way.';
+  String get otpNewCode => 'رمز جديد في الطريق.';
 
   @override
-  String get forgotTitle => 'Reset password';
+  String get forgotTitle => 'إعادة تعيين كلمة المرور';
 
   @override
   String get forgotSubtitle =>
-      'Tell us where to send a verification code and we\'ll help you back in.';
+      'أخبرنا أين نرسل رمز التحقق وسنساعدك على العودة.';
 
   @override
-  String get forgotSendCode => 'Send code';
+  String get forgotSendCode => 'إرسال الرمز';
 
   @override
-  String get forgotErrorEmpty => 'Enter your phone number or email.';
+  String get forgotErrorEmpty => 'أدخل رقم هاتفك أو بريدك الإلكتروني.';
 
   @override
-  String get resetTitle => 'Choose a new password';
+  String get resetTitle => 'اختر كلمة مرور جديدة';
 
   @override
-  String get resetSubtitle => 'Make it different from your last one.';
+  String get resetSubtitle => 'اجعلها مختلفة عن كلمتك السابقة.';
 
   @override
-  String get resetPasswordLabel => 'New password';
+  String get resetPasswordLabel => 'كلمة المرور الجديدة';
 
   @override
-  String get resetConfirmLabel => 'Confirm password';
+  String get resetConfirmLabel => 'تأكيد كلمة المرور';
 
   @override
-  String get resetButton => 'Save password';
+  String get resetButton => 'حفظ كلمة المرور';
 
   @override
-  String get resetErrorLength => 'Password must be at least 8 characters.';
+  String get resetErrorLength =>
+      'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.';
 
   @override
-  String get resetErrorMismatch => 'Passwords don\'t match.';
+  String get resetErrorMismatch => 'كلمتا المرور غير متطابقتين.';
 
   @override
-  String get welcomeGetStarted => 'Get started';
+  String get welcomeGetStarted => 'ابدأ';
 
   @override
-  String get welcomeSignIn => 'Sign in';
+  String get welcomeSignIn => 'تسجيل الدخول';
 
   @override
-  String get roleSelectTitle => 'How will you use WAWUBasket?';
+  String get roleSelectTitle => 'كيف ستستخدم WAWUBasket؟';
 
   @override
   String get roleSelectSubtitle =>
-      'Pick what you\'ll do most. You can switch roles anytime from your profile.';
+      'اختر ما تفعله أكثر. يمكنك تغيير الأدوار في أي وقت.';
 
   @override
   String get cartTitle => 'سلتك';
@@ -348,28 +348,28 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cartEmpty => 'سلتك فارغة';
 
   @override
-  String get cartEmptySubtitle => 'Want to fill it? We have ideas.';
+  String get cartEmptySubtitle => 'تريد ملأها؟ لدينا أفكار.';
 
   @override
-  String get cartStartShopping => 'Start shopping';
+  String get cartStartShopping => 'ابدأ التسوق';
 
   @override
-  String get cartEta => 'Arrives in 25–35 min';
+  String get cartEta => 'يصل خلال 25–35 دقيقة';
 
   @override
-  String get cartPromo => 'Promo code';
+  String get cartPromo => 'رمز ترويجي';
 
   @override
-  String get cartPromoApply => 'Apply';
+  String get cartPromoApply => 'تطبيق';
 
   @override
   String get cartSubtotal => 'المجموع الجزئي';
 
   @override
-  String get cartDeliveryFee => 'Delivery fee';
+  String get cartDeliveryFee => 'رسوم التوصيل';
 
   @override
-  String get cartServiceFee => 'Service fee';
+  String get cartServiceFee => 'رسوم الخدمة';
 
   @override
   String get cartTotal => 'الإجمالي';
@@ -381,57 +381,57 @@ class AppLocalizationsAr extends AppLocalizations {
   String get checkoutTitle => 'الدفع';
 
   @override
-  String get checkoutDeliverySection => 'Where are we sending this?';
+  String get checkoutDeliverySection => 'أين نرسل هذا؟';
 
   @override
-  String get checkoutNoAddress => 'No address saved — add one';
+  String get checkoutNoAddress => 'لم يُحفظ عنوان — أضف واحداً';
 
   @override
-  String get checkoutChangeAddress => 'Change';
+  String get checkoutChangeAddress => 'تغيير';
 
   @override
-  String get checkoutTimingSection => 'When do you want it?';
+  String get checkoutTimingSection => 'متى تريده؟';
 
   @override
   String get checkoutNow => 'الآن';
 
   @override
-  String get checkoutNowSubtitle => 'Arrives in 25–35 min';
+  String get checkoutNowSubtitle => 'يصل خلال 25–35 دقيقة';
 
   @override
   String get checkoutSchedule => 'جدولة التوصيل';
 
   @override
-  String get checkoutPaymentSection => 'How will you pay?';
+  String get checkoutPaymentSection => 'كيف ستدفع؟';
 
   @override
-  String get checkoutBasketSection => 'Your basket';
+  String get checkoutBasketSection => 'سلّتك';
 
   @override
   String get checkoutPlaceOrder => 'تأكيد الطلب';
 
   @override
-  String get checkoutWaiting => 'Waiting for payment…';
+  String get checkoutWaiting => 'في انتظار الدفع…';
 
   @override
   String get checkoutWaitingBody =>
-      'Complete payment in the browser. We\'ll move you to order tracking automatically.';
+      'أكمل الدفع في المتصفح. سننقلك إلى تتبع الطلب تلقائياً.';
 
   @override
-  String get checkoutTimeout => 'Payment not confirmed';
+  String get checkoutTimeout => 'لم يُؤكَّد الدفع';
 
   @override
   String get checkoutTimeoutBody =>
-      'We didn\'t receive a payment confirmation. Tap below to check again, or go back.';
+      'لم نتلقَّ تأكيد دفع. اضغط أدناه للتحقق أو ارجع.';
 
   @override
-  String get checkoutCheckStatus => 'Check payment status';
+  String get checkoutCheckStatus => 'التحقق من حالة الدفع';
 
   @override
-  String get checkoutGoBack => 'Go back';
+  String get checkoutGoBack => 'رجوع';
 
   @override
-  String get checkoutScheduleConfirm => 'Confirm time slot';
+  String get checkoutScheduleConfirm => 'تأكيد الموعد';
 
   @override
   String get confirmTitle => 'رائع!';
@@ -440,141 +440,139 @@ class AppLocalizationsAr extends AppLocalizations {
   String get confirmSubtitle => 'تم استلام طلبك';
 
   @override
-  String get confirmNotification => 'We\'ll ping you when your basket moves.';
+  String get confirmNotification => 'سنُنبّهك حين تتحرك سلّتك.';
 
   @override
-  String get confirmTracking => 'Watch it travel to your door in real time.';
+  String get confirmTracking => 'تابع رحلتها إلى بابك في الوقت الحقيقي.';
 
   @override
-  String get confirmTrackButton => 'Track my order';
+  String get confirmTrackButton => 'تتبع طلبي';
 
   @override
-  String get confirmBackHome => 'Back to home';
+  String get confirmBackHome => 'العودة للرئيسية';
 
   @override
-  String get trackingNeedHelp => 'Need help?';
+  String get trackingNeedHelp => 'هل تحتاج مساعدة؟';
 
   @override
-  String get trackingDelivered => 'Delivered. Enjoy your basket!';
+  String get trackingDelivered => 'تم التسليم. استمتع بسلّتك!';
 
   @override
-  String get trackingDefaultMessage => 'We\'ll update you as your order moves.';
+  String get trackingDefaultMessage => 'سنُحدّثك حين يتحرك طلبك.';
 
   @override
-  String get trackingJourney => 'Your order is on a journey';
+  String get trackingJourney => 'طلبك في رحلة';
 
   @override
-  String get trackingStep1 => 'Order confirmed';
+  String get trackingStep1 => 'تم تأكيد الطلب';
 
   @override
-  String get trackingStep2 => 'Preparing';
+  String get trackingStep2 => 'قيد التحضير';
 
   @override
-  String get trackingStep3 => 'Picked up';
+  String get trackingStep3 => 'تم الاستلام';
 
   @override
-  String get trackingStep4 => 'En route';
+  String get trackingStep4 => 'في الطريق';
 
   @override
-  String get trackingStep5 => 'Delivered';
+  String get trackingStep5 => 'تم التسليم';
 
   @override
-  String get trackingRate => 'Rate your order';
+  String get trackingRate => 'قيّم طلبك';
 
   @override
-  String get deliveryTitle => 'Delivered. Enjoy your basket!';
+  String get deliveryTitle => 'تم التسليم. استمتع بسلّتك!';
 
   @override
   String get deliverySubtitle =>
-      'How was your experience? Your feedback helps vendors and riders do better.';
+      'كيف كانت تجربتك؟ ملاحظاتك تساعد البائعين والسائقين.';
 
   @override
-  String get deliveryRateTitle => 'Rate this order';
+  String get deliveryRateTitle => 'قيّم هذا الطلب';
 
   @override
-  String get deliveryRatingBad => 'Not great';
+  String get deliveryRatingBad => 'لم يكن جيداً';
 
   @override
-  String get deliveryRatingFair => 'Could be better';
+  String get deliveryRatingFair => 'يمكن أن يتحسن';
 
   @override
-  String get deliveryRatingOkay => 'It was okay';
+  String get deliveryRatingOkay => 'كان مقبولاً';
 
   @override
-  String get deliveryRatingGood => 'Pretty good!';
+  String get deliveryRatingGood => 'جيد جداً!';
 
   @override
-  String get deliveryRatingLove => 'Loved it!';
+  String get deliveryRatingLove => 'أحببته!';
 
   @override
-  String get deliveryFeedbackTitle => 'Tell us more (optional)';
+  String get deliveryFeedbackTitle => 'أخبرنا أكثر (اختياري)';
 
   @override
-  String get deliveryFeedbackPlaceholder =>
-      'What made it great or not so great?';
+  String get deliveryFeedbackPlaceholder => 'ما الذي جعله رائعاً أو غير ذلك؟';
 
   @override
-  String get deliverySubmit => 'Submit rating';
+  String get deliverySubmit => 'إرسال التقييم';
 
   @override
-  String get deliverySkip => 'Skip for now';
+  String get deliverySkip => 'تخطي الآن';
 
   @override
-  String get deliveryThankYou => 'Thanks for the feedback!';
+  String get deliveryThankYou => 'شكراً على ملاحظاتك!';
 
   @override
   String get deliveryThankYouBody =>
-      'Your rating helps the whole basket get better. See you next time.';
+      'تقييمك يساعد السلة كلها على التحسن. إلى اللقاء.';
 
   @override
-  String get deliveryBackHome => 'Back to home';
+  String get deliveryBackHome => 'العودة للرئيسية';
 
   @override
-  String get deliveryRateError => 'Tap a star to rate your order.';
+  String get deliveryRateError => 'اضغط على نجمة لتقييم طلبك.';
 
   @override
-  String get searchPlaceholder => 'Search jollof, tomatoes, chicken…';
+  String get searchPlaceholder => 'ابحث عن جولوف، طماطم، دجاج…';
 
   @override
-  String get searchRecentTitle => 'Recent searches';
+  String get searchRecentTitle => 'عمليات البحث الأخيرة';
 
   @override
-  String get searchRecentClear => 'Clear';
+  String get searchRecentClear => 'مسح';
 
   @override
-  String get searchRecentCleared => 'Recent searches cleared';
+  String get searchRecentCleared => 'تم مسح عمليات البحث الأخيرة';
 
   @override
-  String get productAddButton => 'Add to basket';
+  String get productAddButton => 'أضف إلى السلة';
 
   @override
-  String get productNotFound => 'Product not found.';
+  String get productNotFound => 'المنتج غير موجود.';
 
   @override
-  String get homeSearchPlaceholder =>
-      'Search for jollof, tomatoes, chicken, pots…';
+  String get homeSearchPlaceholder => 'ابحث عن جولوف، طماطم، دجاج، أواني…';
 
   @override
-  String get homeBulkMarketsTitle => 'Bulk markets';
+  String get homeBulkMarketsTitle => 'أسواق الجملة';
 
   @override
   String get homeBulkMarketsSubtitle =>
-      'Wholesale lots & corridor prices, direct from farms';
+      'كميات الجملة وأسعار الممرات، مباشرة من المزارع';
 
   @override
-  String get homeOffersThisWeek => 'THIS WEEK';
+  String get homeOffersThisWeek => 'هذا الأسبوع';
 
   @override
-  String get homeOfferTitle => 'Free delivery on orders over ₦5,000';
+  String get homeOfferTitle => 'توصيل مجاني للطلبات فوق ₦5,000';
 
   @override
-  String get homeOfferSubtitle => 'Until Sunday. No code needed.';
+  String get homeOfferSubtitle => 'حتى الأحد. لا يلزم رمز.';
 
   @override
-  String get homeOfferButton => 'Order now';
+  String get homeOfferButton => 'اطلب الآن';
 
   @override
-  String get homeAddAddress => 'Add a delivery address';
+  String get homeAddAddress => 'أضف عنوان توصيل';
 
   @override
   String homeDeliveringTo(String address) {
@@ -591,7 +589,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutSendFeedback => 'أرسل ملاحظاتك';
 
   @override
-  String get aboutSendFeedbackSub => 'Help us improve';
+  String get aboutSendFeedbackSub => 'ساعدنا على التحسين';
 
   @override
   String get aboutTerms => 'شروط الخدمة';
@@ -606,10 +604,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutPrivacySub => 'كيف نتعامل مع معلوماتك';
 
   @override
-  String get aboutHowItWorks => 'Three steps to a full basket';
+  String get aboutHowItWorks => 'ثلاث خطوات لسلة ممتلئة';
 
   @override
-  String get aboutSellOn => 'Sell on WAWUBasket';
+  String get aboutSellOn => 'بِع على WAWUBasket';
 
   @override
   String get aboutStep1Title => 'تصفح';
@@ -652,71 +650,70 @@ class AppLocalizationsAr extends AppLocalizations {
   String get addAddressTitle => 'إضافة عنوان';
 
   @override
-  String get addAddressEditTitle => 'Edit address';
+  String get addAddressEditTitle => 'تعديل العنوان';
 
   @override
-  String get addAddressLabelSection => 'LABEL';
+  String get addAddressLabelSection => 'التصنيف';
 
   @override
-  String get addAddressLabelHome => 'Home';
+  String get addAddressLabelHome => 'المنزل';
 
   @override
-  String get addAddressLabelOffice => 'Office';
+  String get addAddressLabelOffice => 'المكتب';
 
   @override
-  String get addAddressLabelOther => 'Other';
+  String get addAddressLabelOther => 'أخرى';
 
   @override
-  String get addAddressLine => 'Address line';
+  String get addAddressLine => 'سطر العنوان';
 
   @override
-  String get addAddressLinePlaceholder => 'Street, area, city';
+  String get addAddressLinePlaceholder => 'الشارع، المنطقة، المدينة';
 
   @override
-  String get addAddressApartment => 'Apartment / unit';
+  String get addAddressApartment => 'شقة / وحدة';
 
   @override
-  String get addAddressApartmentPlaceholder => 'Optional';
+  String get addAddressApartmentPlaceholder => 'اختياري';
 
   @override
-  String get addAddressNote => 'Note for the rider';
+  String get addAddressNote => 'ملاحظة للسائق';
 
   @override
-  String get addAddressNotePlaceholder => 'Use the gate on Akin Adesola';
+  String get addAddressNotePlaceholder => 'استخدم البوابة الجانبية';
 
   @override
-  String get addAddressDefault => 'Make this my default address';
+  String get addAddressDefault => 'اجعل هذا عنواني الافتراضي';
 
   @override
   String get addAddressSave => 'حفظ العنوان';
 
   @override
-  String get addAddressSaveChanges => 'Save changes';
+  String get addAddressSaveChanges => 'حفظ التغييرات';
 
   @override
-  String get addAddressUpdated => 'Address updated';
+  String get addAddressUpdated => 'تم تحديث العنوان';
 
   @override
-  String get addAddressSaved => 'Address saved';
+  String get addAddressSaved => 'تم حفظ العنوان';
 
   @override
-  String get addAddressEnterLine => 'Enter the address line.';
+  String get addAddressEnterLine => 'أدخل سطر العنوان.';
 
   @override
   String get chatTitle => 'الدردشة';
 
   @override
-  String get chatSubtitle =>
-      'Talk to support and anyone on your active orders.';
+  String get chatSubtitle => 'تحدث إلى الدعم وأي شخص في طلباتك النشطة.';
 
   @override
-  String get chatMessageHint => 'Message';
+  String get chatMessageHint => 'رسالة';
 
   @override
-  String get chatLiveChat => 'Live chat';
+  String get chatLiveChat => 'دردشة مباشرة';
 
   @override
-  String get chatRepliesIn => 'Replies usually in under 2 min';
+  String get chatRepliesIn => 'يرد عادةً في أقل من دقيقتين';
 
   @override
   String get deleteAccountTitle => 'حذف الحساب';
@@ -734,34 +731,34 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deleteAccountCheck3 => 'لن تتمكن من استعادة حسابك لاحقاً';
 
   @override
-  String get deleteAccountWhyLeaving => 'Why are you leaving? (optional)';
+  String get deleteAccountWhyLeaving => 'لماذا تغادر؟ (اختياري)';
 
   @override
-  String get deleteAccountReasonExpensive => 'Too expensive';
+  String get deleteAccountReasonExpensive => 'مكلف جداً';
 
   @override
-  String get deleteAccountReasonSlow => 'Delivery too slow';
+  String get deleteAccountReasonSlow => 'التوصيل بطيء';
 
   @override
-  String get deleteAccountReasonOptions => 'Not enough options';
+  String get deleteAccountReasonOptions => 'خيارات غير كافية';
 
   @override
-  String get deleteAccountReasonTech => 'Technical issues';
+  String get deleteAccountReasonTech => 'مشاكل تقنية';
 
   @override
-  String get deleteAccountReasonOther => 'Other';
+  String get deleteAccountReasonOther => 'أخرى';
 
   @override
-  String get deleteAccountConfirmTitle => 'Delete your account permanently?';
+  String get deleteAccountConfirmTitle => 'حذف حسابك نهائياً؟';
 
   @override
-  String get deleteAccountConfirmBody => 'This cannot be undone.';
+  String get deleteAccountConfirmBody => 'لا يمكن التراجع عن هذا.';
 
   @override
-  String get deleteAccountYes => 'Yes, delete my account';
+  String get deleteAccountYes => 'نعم، احذف حسابي';
 
   @override
-  String get deleteAccountNo => 'No, I want to stay';
+  String get deleteAccountNo => 'لا، أريد البقاء';
 
   @override
   String get dietaryTitle => 'التفضيلات الغذائية';
@@ -779,7 +776,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dietaryNoShellfish => 'بدون مأكولات بحرية قشرية';
 
   @override
-  String get dietaryHalal => 'Halal only';
+  String get dietaryHalal => 'حلال فقط';
 
   @override
   String get dietaryVegetarian => 'نباتي';
@@ -788,91 +785,89 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dietaryVegan => 'نباتي صرف';
 
   @override
-  String get dietaryNoDairy => 'No dairy';
+  String get dietaryNoDairy => 'بدون ألبان';
 
   @override
-  String get dietaryNoNuts => 'No nuts';
+  String get dietaryNoNuts => 'بدون مكسرات';
 
   @override
-  String get dietaryLowSugar => 'Low sugar';
+  String get dietaryLowSugar => 'سكر منخفض';
 
   @override
-  String get dietaryAnythingElse => 'Anything else?';
+  String get dietaryAnythingElse => 'أي شيء آخر؟';
 
   @override
-  String get dietaryCustomPlaceholder => 'e.g. no MSG, no palm oil';
+  String get dietaryCustomPlaceholder => 'مثال: بدون غلوتامات، بدون زيت نخيل';
 
   @override
   String get dietarySave => 'حفظ التفضيلات';
 
   @override
-  String get dietarySaved => 'Dietary preferences saved';
+  String get dietarySaved => 'تم حفظ التفضيلات الغذائية';
 
   @override
   String get favoritesTitle => 'المفضلة';
 
   @override
-  String get favoritesVendorsTab => 'Vendors';
+  String get favoritesVendorsTab => 'البائعون';
 
   @override
-  String get favoritesDishesTab => 'Dishes';
+  String get favoritesDishesTab => 'الأطباق';
 
   @override
   String get favoritesNoVendors =>
-      'No favorite vendors yet. Tap the heart on a storefront.';
+      'لا بائعون مفضلون بعد. اضغط القلب على أي متجر.';
 
   @override
-  String get favoritesNoDishes =>
-      'No favorite dishes yet. Tap the heart on a dish.';
+  String get favoritesNoDishes => 'لا أطباق مفضلة بعد. اضغط القلب على طبق.';
 
   @override
   String get notificationsTitle => 'الإشعارات';
 
   @override
-  String get notificationsMarkAllRead => 'Mark all read';
+  String get notificationsMarkAllRead => 'وضع علامة مقروء للكل';
 
   @override
-  String get notificationsAllRead => 'All notifications marked read';
+  String get notificationsAllRead => 'تم تحديد جميع الإشعارات كمقروءة';
 
   @override
-  String get notificationsEmpty =>
-      'You\'re all caught up — no notifications yet.';
+  String get notificationsEmpty => 'أنت محدّث — لا إشعارات بعد.';
 
   @override
   String get orderHistoryTitle => 'سجل الطلبات';
 
   @override
-  String get orderHistoryTabAll => 'All';
+  String get orderHistoryTabAll => 'الكل';
 
   @override
-  String get orderHistoryTabActive => 'Active';
+  String get orderHistoryTabActive => 'نشط';
 
   @override
-  String get orderHistoryTabPast => 'Past';
+  String get orderHistoryTabPast => 'السابق';
 
   @override
   String get orderHistoryEmpty => 'لا توجد طلبات بعد';
 
   @override
-  String get orderHistoryTrack => 'Track order';
+  String get orderHistoryTrack => 'تتبع الطلب';
 
   @override
-  String get orderHistoryReceipt => 'Receipt';
+  String get orderHistoryReceipt => 'الإيصال';
 
   @override
   String get orderHistoryReorder => 'إعادة الطلب';
 
   @override
-  String get orderHistoryReordered => 'Items added to your basket';
+  String get orderHistoryReordered => 'تمت إضافة العناصر إلى سلّتك';
 
   @override
   String get personalInfoTitle => 'المعلومات الشخصية';
 
   @override
-  String get personalInfoTapPhoto => 'Tap to change photo';
+  String get personalInfoTapPhoto => 'اضغط لتغيير الصورة';
 
   @override
-  String get personalInfoFullName => 'Full name';
+  String get personalInfoFullName => 'الاسم الكامل';
 
   @override
   String get personalInfoEmail => 'البريد الإلكتروني';
@@ -881,7 +876,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get personalInfoPhone => 'الهاتف';
 
   @override
-  String get personalInfoDob => 'Date of birth';
+  String get personalInfoDob => 'تاريخ الميلاد';
 
   @override
   String get personalInfoSave => 'حفظ التغييرات';
@@ -890,131 +885,130 @@ class AppLocalizationsAr extends AppLocalizations {
   String get personalInfoSaved => 'تم حفظ المعلومات!';
 
   @override
-  String get personalInfoNameRequired => 'Enter your full name.';
+  String get personalInfoNameRequired => 'أدخل اسمك الكامل.';
 
   @override
-  String get personalInfoPhotoUpdated => 'Photo updated';
+  String get personalInfoPhotoUpdated => 'تم تحديث الصورة';
 
   @override
-  String get personalInfoPhotoFailed => 'Couldn\'t upload that photo.';
+  String get personalInfoPhotoFailed => 'تعذّر رفع تلك الصورة.';
 
   @override
-  String get profileWalletMenu => 'Wallet & payment methods';
+  String get profileWalletMenu => 'المحفظة وطرق الدفع';
 
   @override
-  String get profileWalletSub => 'Cards, bank, and mobile money';
+  String get profileWalletSub => 'البطاقات والبنك والمحمول';
 
   @override
-  String get profilePersonalInfo => 'Personal information';
+  String get profilePersonalInfo => 'المعلومات الشخصية';
 
   @override
-  String get profilePersonalInfoSub => 'Name, email, phone, verified ✓';
+  String get profilePersonalInfoSub => 'الاسم، البريد، الهاتف، موثّق ✓';
 
   @override
-  String get profileSavedAddresses => 'Saved addresses';
+  String get profileSavedAddresses => 'العناوين المحفوظة';
 
   @override
-  String get profileSavedAddressesSub => 'Where you live, work, and hang out';
+  String get profileSavedAddressesSub => 'أين تسكن وتعمل وتقضي وقتك';
 
   @override
-  String get profileNotifications => 'Notifications';
+  String get profileNotifications => 'الإشعارات';
 
   @override
-  String get profileNotificationsSub => 'What we tell you about';
+  String get profileNotificationsSub => 'ما نخبرك به';
 
   @override
-  String get profileBulkOrders => 'Bulk orders';
+  String get profileBulkOrders => 'طلبات الجملة';
 
   @override
-  String get profileBulkOrdersSub => 'Escrow-protected purchases from /trade';
+  String get profileBulkOrdersSub => 'مشتريات محمية بالضمان من /trade';
 
   @override
-  String get profileWawuPlus => 'WAWU+ membership';
+  String get profileWawuPlus => 'عضوية WAWU+';
 
   @override
-  String get profileWawuPlusSub => 'Discounted delivery and more';
+  String get profileWawuPlusSub => 'توصيل مخفّض والمزيد';
 
   @override
-  String get profileLanguage => 'Language';
+  String get profileLanguage => 'اللغة';
 
   @override
-  String get profileDietary => 'Dietary preferences';
+  String get profileDietary => 'التفضيلات الغذائية';
 
   @override
-  String get profileDietarySub => 'Things you\'d rather not eat';
+  String get profileDietarySub => 'ما تفضّل عدم أكله';
 
   @override
-  String get profileRateApp => 'Rate the app';
+  String get profileRateApp => 'قيّم التطبيق';
 
   @override
-  String get profileAbout => 'About WAWUBasket';
+  String get profileAbout => 'حول WAWUBasket';
 
   @override
-  String get profileChangePassword => 'Change password';
+  String get profileChangePassword => 'تغيير كلمة المرور';
 
   @override
-  String get profileChangePasswordSub => 'Keep your account safe';
+  String get profileChangePasswordSub => 'احتفظ بأمان حسابك';
 
   @override
-  String get profileBiometricLogin => 'Biometric login';
+  String get profileBiometricLogin => 'تسجيل الدخول البيومتري';
 
   @override
-  String get profileBiometricLoginSub => 'Use your face or fingerprint';
+  String get profileBiometricLoginSub => 'استخدم وجهك أو بصمتك';
 
   @override
-  String get profileTwoFactor => 'Two-factor authentication';
+  String get profileTwoFactor => 'المصادقة الثنائية';
 
   @override
-  String get profileTwoFactorSub => 'Extra layer of protection';
+  String get profileTwoFactorSub => 'طبقة حماية إضافية';
 
   @override
-  String get profileHelpCenter => 'Help center';
+  String get profileHelpCenter => 'مركز المساعدة';
 
   @override
-  String get profileHelpCenterSub => 'Answers to common questions';
+  String get profileHelpCenterSub => 'إجابات للأسئلة الشائعة';
 
   @override
-  String get profileChatWithUs => 'Chat with us';
+  String get profileChatWithUs => 'تحدث معنا';
 
   @override
-  String get profileChatWithUsSub => 'We\'re here to help';
+  String get profileChatWithUsSub => 'نحن هنا للمساعدة';
 
   @override
-  String get profileReportProblem => 'Report a problem';
+  String get profileReportProblem => 'الإبلاغ عن مشكلة';
 
   @override
-  String get profileReportProblemSub => 'Tell us what went wrong';
+  String get profileReportProblemSub => 'أخبرنا بما حدث';
 
   @override
-  String get profileTerms => 'Terms of service';
+  String get profileTerms => 'شروط الخدمة';
 
   @override
-  String get profileTermsSub => 'The rules of the basket';
+  String get profileTermsSub => 'قواعد السلة';
 
   @override
-  String get profilePrivacy => 'Privacy policy';
+  String get profilePrivacy => 'سياسة الخصوصية';
 
   @override
-  String get profilePrivacySub => 'How we handle your info';
+  String get profilePrivacySub => 'كيف نتعامل مع معلوماتك';
 
   @override
-  String get profileSwitchRole => 'Switch role';
+  String get profileSwitchRole => 'تبديل الدور';
 
   @override
-  String get profileDeleteAccount => 'Delete account';
+  String get profileDeleteAccount => 'حذف الحساب';
 
   @override
-  String get profileDeleteAccountSub => 'We\'ll be sad to see you go';
+  String get profileDeleteAccountSub => 'سنفتقدك';
 
   @override
-  String get profileRateWawu => 'Rate WAWUBasket';
+  String get profileRateWawu => 'قيّم WAWUBasket';
 
   @override
-  String get profileRateFeedback =>
-      'How are we doing? Your feedback shapes the app.';
+  String get profileRateFeedback => 'كيف نؤدي؟ ملاحظاتك تُشكّل التطبيق.';
 
   @override
-  String get profileRateTapStar => 'Tap a star to rate';
+  String get profileRateTapStar => 'اضغط نجمة للتقييم';
 
   @override
   String get profileRateSubmit => 'إرسال';
@@ -1025,17 +1019,17 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get profileSignOutTitle => 'Sign out?';
+  String get profileSignOutTitle => 'هل تريد الخروج؟';
 
   @override
   String get profileSignOutBody =>
-      'You\'ll need to sign in again to place new orders.';
+      'ستحتاج إلى تسجيل الدخول مجدداً لإنشاء طلبات جديدة.';
 
   @override
-  String get profileSignOut => 'Sign out';
+  String get profileSignOut => 'تسجيل الخروج';
 
   @override
-  String get profileChoosePhoto => 'Choose a profile photo';
+  String get profileChoosePhoto => 'اختر صورة الملف الشخصي';
 
   @override
   String get receiptTitle => 'الإيصال';
@@ -1047,19 +1041,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get receiptDelivery => 'رسوم التوصيل';
 
   @override
-  String get receiptServiceFee => 'Service fee';
+  String get receiptServiceFee => 'رسوم الخدمة';
 
   @override
-  String get receiptTotalPaid => 'Total paid';
+  String get receiptTotalPaid => 'إجمالي المدفوع';
 
   @override
-  String get receiptReorder => 'Reorder';
+  String get receiptReorder => 'إعادة الطلب';
 
   @override
-  String get receiptReportIssue => 'Report an issue';
+  String get receiptReportIssue => 'الإبلاغ عن مشكلة';
 
   @override
-  String get receiptNotFound => 'Receipt not found.';
+  String get receiptNotFound => 'الإيصال غير موجود.';
 
   @override
   String get savedAddressesTitle => 'العناوين المحفوظة';
@@ -1071,13 +1065,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get savedAddressesEmpty => 'لا توجد عناوين محفوظة';
 
   @override
-  String get savedAddressesDefault => 'Default';
+  String get savedAddressesDefault => 'افتراضي';
 
   @override
-  String get savedAddressesEdit => 'Edit';
+  String get savedAddressesEdit => 'تعديل';
 
   @override
-  String get savedAddressesMakeDefault => 'Make default';
+  String get savedAddressesMakeDefault => 'جعله افتراضياً';
 
   @override
   String savedAddressesSetDefault(String label) {
@@ -1088,65 +1082,65 @@ class AppLocalizationsAr extends AppLocalizations {
   String get securityTitle => 'الأمان';
 
   @override
-  String get securitySubtitle => 'Keep your account safe.';
+  String get securitySubtitle => 'احتفظ بأمان حسابك.';
 
   @override
   String get securityChangePassword => 'تغيير كلمة المرور';
 
   @override
-  String get securityChangePasswordSub => 'Keep your account safe';
+  String get securityChangePasswordSub => 'احتفظ بأمان حسابك';
 
   @override
   String get securityBiometric => 'تسجيل الدخول بالبصمة';
 
   @override
-  String get securityBiometricSub => 'Use your face or fingerprint';
+  String get securityBiometricSub => 'استخدم وجهك أو بصمتك';
 
   @override
   String get securityTwoFactor => 'التحقق الثنائي';
 
   @override
-  String get securityTwoFactorSub => 'Extra layer of protection';
+  String get securityTwoFactorSub => 'طبقة حماية إضافية';
 
   @override
-  String get securityCurrentPassword => 'Current password';
+  String get securityCurrentPassword => 'كلمة المرور الحالية';
 
   @override
-  String get securityNewPassword => 'New password';
+  String get securityNewPassword => 'كلمة المرور الجديدة';
 
   @override
-  String get securityConfirmNewPassword => 'Confirm new password';
+  String get securityConfirmNewPassword => 'تأكيد كلمة المرور الجديدة';
 
   @override
-  String get securityUpdatePassword => 'Update password';
+  String get securityUpdatePassword => 'تحديث كلمة المرور';
 
   @override
-  String get securityPasswordMismatch => 'Passwords do not match.';
+  String get securityPasswordMismatch => 'كلمتا المرور غير متطابقتين.';
 
   @override
   String get securityPasswordShort =>
-      'New password must be at least 8 characters.';
+      'يجب أن تتكون كلمة المرور الجديدة من 8 أحرف على الأقل.';
 
   @override
-  String get securityPasswordUpdated => 'Password updated successfully.';
+  String get securityPasswordUpdated => 'تم تحديث كلمة المرور بنجاح.';
 
   @override
   String get supportTitle => 'الدعم';
 
   @override
-  String get supportSearchPlaceholder => 'Search help articles';
+  String get supportSearchPlaceholder => 'ابحث في مقالات المساعدة';
 
   @override
-  String get supportContactUs => 'CONTACT US';
+  String get supportContactUs => 'اتصل بنا';
 
   @override
-  String get supportLiveChat => 'Live chat';
+  String get supportLiveChat => 'دردشة مباشرة';
 
   @override
-  String get supportLiveChatSub => 'Usually replies in under 2 min';
+  String get supportLiveChatSub => 'يرد عادةً في أقل من دقيقتين';
 
   @override
-  String get supportLiveChatCta => 'Start chat';
+  String get supportLiveChatCta => 'ابدأ الدردشة';
 
   @override
   String get supportCall => 'اتصل بنا';
@@ -1155,7 +1149,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get supportCallSub => 'تحدث مع أحد ممثلينا';
 
   @override
-  String get supportCallCta => 'Call';
+  String get supportCallCta => 'اتصل';
 
   @override
   String get supportEmail => 'أرسل إيميلاً';
@@ -1164,22 +1158,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get supportEmailSub => 'سنرد في أقرب وقت';
 
   @override
-  String get supportEmailCta => 'Send email';
+  String get supportEmailCta => 'إرسال بريد';
 
   @override
-  String get supportCommonQuestions => 'Common questions';
+  String get supportCommonQuestions => 'أسئلة شائعة';
 
   @override
-  String get supportOpenTicket => 'OPEN TICKET';
+  String get supportOpenTicket => 'فتح تذكرة';
 
   @override
-  String get supportViewTicket => 'View ticket';
+  String get supportViewTicket => 'عرض التذكرة';
 
   @override
   String get walletTitle => 'المحفظة';
 
   @override
-  String get walletAvailableBalance => 'AVAILABLE BALANCE';
+  String get walletAvailableBalance => 'الرصيد المتاح';
 
   @override
   String walletEscrowHeld(String amount) {
@@ -1190,79 +1184,79 @@ class AppLocalizationsAr extends AppLocalizations {
   String get walletTopUp => 'شحن الرصيد';
 
   @override
-  String get walletSend => 'Send';
+  String get walletSend => 'إرسال';
 
   @override
   String get walletWithdraw => 'السحب';
 
   @override
-  String get walletCards => 'Cards';
+  String get walletCards => 'البطاقات';
 
   @override
-  String get walletRecentTxns => 'Recent transactions';
+  String get walletRecentTxns => 'المعاملات الأخيرة';
 
   @override
-  String get walletNoTxns => 'No transactions yet.';
+  String get walletNoTxns => 'لا معاملات بعد.';
 
   @override
-  String get walletTopUpTitle => 'Top up wallet';
+  String get walletTopUpTitle => 'شحن المحفظة';
 
   @override
-  String get walletSendTitle => 'Send money';
+  String get walletSendTitle => 'إرسال أموال';
 
   @override
-  String get walletWithdrawTitle => 'Withdraw';
+  String get walletWithdrawTitle => 'سحب';
 
   @override
-  String get walletPaymentMethodsTitle => 'Payment methods';
+  String get walletPaymentMethodsTitle => 'طرق الدفع';
 
   @override
-  String get walletAmountLabel => 'AMOUNT';
+  String get walletAmountLabel => 'المبلغ';
 
   @override
-  String get walletEnterAmount => 'Enter amount';
+  String get walletEnterAmount => 'أدخل المبلغ';
 
   @override
-  String get walletPayWith => 'PAY WITH';
+  String get walletPayWith => 'ادفع بـ';
 
   @override
-  String get walletWithdrawTo => 'WITHDRAW TO';
+  String get walletWithdrawTo => 'سحب إلى';
 
   @override
-  String get walletDebitCard => 'Debit card';
+  String get walletDebitCard => 'بطاقة خصم';
 
   @override
-  String get walletBankTransfer => 'Bank transfer';
+  String get walletBankTransfer => 'تحويل بنكي';
 
   @override
-  String get walletMobileMoney => 'Mobile money';
+  String get walletMobileMoney => 'المحمول ماني';
 
   @override
-  String get walletEnterAmountHint => 'Enter an amount';
+  String get walletEnterAmountHint => 'أدخل مبلغاً';
 
   @override
-  String get walletTopUpHint => 'Top up';
+  String get walletTopUpHint => 'شحن';
 
   @override
-  String get walletAddNewMethod => 'Add new method';
+  String get walletAddNewMethod => 'إضافة طريقة جديدة';
 
   @override
-  String get walletMethodRemoved => 'Method removed';
+  String get walletMethodRemoved => 'تم حذف الطريقة';
 
   @override
   String get wawuPlusTitle => 'WAWU+';
 
   @override
-  String get wawuPlusHero => 'Go plus. Go more.';
+  String get wawuPlusHero => 'كن بلاس. افعل أكثر.';
 
   @override
   String get wawuPlusSubtitle => 'احصل على المزيد';
 
   @override
-  String get wawuPlusMembers => 'Join 12,400 other happy baskets';
+  String get wawuPlusMembers => 'انضم إلى 12,400 سلة سعيدة أخرى';
 
   @override
-  String get wawuPlusIncluded => 'What\'s included';
+  String get wawuPlusIncluded => 'ما هو مشمول';
 
   @override
   String get wawuPlusBenefit1 => 'توصيل مجاني على جميع الطلبات';
@@ -1277,81 +1271,80 @@ class AppLocalizationsAr extends AppLocalizations {
   String get wawuPlusBenefit4 => 'عروض حصرية وأولوية الوصول';
 
   @override
-  String get wawuPlusBenefit5 => 'Early access to new features';
+  String get wawuPlusBenefit5 => 'الوصول المبكر للميزات الجديدة';
 
   @override
-  String get wawuPlusPickPlan => 'Pick a plan';
+  String get wawuPlusPickPlan => 'اختر خطة';
 
   @override
   String get wawuPlusYearly => 'سنوي (وفّر 20%)';
 
   @override
-  String get wawuPlusYearlyNote => 'Save 20% · billed once';
+  String get wawuPlusYearlyNote => 'وفّر 20٪ · يُدفع مرة واحدة';
 
   @override
   String get wawuPlusMonthly => 'شهري';
 
   @override
-  String get wawuPlusMonthlyNote => 'Cancel anytime';
+  String get wawuPlusMonthlyNote => 'إلغاء في أي وقت';
 
   @override
-  String get wawuPlusStartTrial => 'Start free trial, 7 days';
+  String get wawuPlusStartTrial => 'ابدأ تجربة مجانية 7 أيام';
 
   @override
-  String get wawuPlusActiveMember => 'You\'re a WAWU+ member';
+  String get wawuPlusActiveMember => 'أنت عضو WAWU+';
 
   @override
-  String get wawuPlusWebOnly => 'Open WAWUBasket on your phone to join WAWU+.';
+  String get wawuPlusWebOnly => 'افتح WAWUBasket على هاتفك للانضمام إلى WAWU+.';
 
   @override
-  String get wawuPlusWelcome => 'Welcome to WAWU+!';
+  String get wawuPlusWelcome => 'مرحباً بك في WAWU+!';
 
   @override
-  String get operatorSignOutTitle => 'Sign out?';
+  String get operatorSignOutTitle => 'هل تريد الخروج؟';
 
   @override
   String get operatorSignOutBody =>
-      'You\'ll need to sign in again to use this dashboard.';
+      'ستحتاج إلى تسجيل الدخول مجدداً لاستخدام لوحة التحكم.';
 
   @override
-  String get operatorSignOut => 'Sign out';
+  String get operatorSignOut => 'تسجيل الخروج';
 
   @override
-  String get operatorPersonalInfo => 'Personal information';
+  String get operatorPersonalInfo => 'المعلومات الشخصية';
 
   @override
-  String get operatorPersonalInfoSub => 'Name, email, phone, verified ✓';
+  String get operatorPersonalInfoSub => 'الاسم، البريد، الهاتف، موثّق ✓';
 
   @override
-  String get operatorSavedAddresses => 'Saved addresses';
+  String get operatorSavedAddresses => 'العناوين المحفوظة';
 
   @override
-  String get operatorSavedAddressesSub =>
-      'Where deliveries pick up and drop off';
+  String get operatorSavedAddressesSub => 'أماكن استلام وتسليم الشحنات';
 
   @override
-  String get operatorNotifications => 'Notifications';
+  String get operatorNotifications => 'الإشعارات';
 
   @override
-  String get operatorNotificationsSub => 'New orders, payouts, alerts';
+  String get operatorNotificationsSub => 'طلبات جديدة، مدفوعات، تنبيهات';
 
   @override
-  String get operatorLanguage => 'Language';
+  String get operatorLanguage => 'اللغة';
 
   @override
-  String get operatorAbout => 'About WAWUBasket';
+  String get operatorAbout => 'حول WAWUBasket';
 
   @override
-  String get operatorHelpSupport => 'Help & support';
+  String get operatorHelpSupport => 'المساعدة والدعم';
 
   @override
-  String get operatorHelpSupportSub => 'Chat to a real human';
+  String get operatorHelpSupportSub => 'تحدث إلى إنسان حقيقي';
 
   @override
-  String get operatorSwitchRole => 'Switch role';
+  String get operatorSwitchRole => 'تبديل الدور';
 
   @override
-  String get operatorChoosePhoto => 'Choose a profile photo';
+  String get operatorChoosePhoto => 'اختر صورة الملف الشخصي';
 
   @override
   String get vendorAlertsTitle => 'التنبيهات';
@@ -1363,7 +1356,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get vendorAnalyticsTitle => 'التحليلات';
 
   @override
-  String get vendorAnalyticsSubtitle => 'The numbers don\'t lie.';
+  String get vendorAnalyticsSubtitle => 'الأرقام لا تكذب.';
 
   @override
   String get vendorAnalyticsOrders => 'إجمالي الطلبات';
@@ -1375,190 +1368,184 @@ class AppLocalizationsAr extends AppLocalizations {
   String get vendorAnalyticsAvgOrder => 'متوسط الطلب';
 
   @override
-  String get vendorAnalyticsRating => 'Rating';
+  String get vendorAnalyticsRating => 'التقييم';
 
   @override
-  String get vendorAnalyticsSalesTrend => 'Sales trend';
+  String get vendorAnalyticsSalesTrend => 'اتجاه المبيعات';
 
   @override
   String get vendorAnalyticsPeakHours => 'أوقات الذروة';
 
   @override
-  String get vendorAnalyticsCancellations => 'Cancellations';
+  String get vendorAnalyticsCancellations => 'الإلغاءات';
 
   @override
   String get vendorAnalyticsTopSellers => 'الأكثر مبيعاً';
 
   @override
-  String get vendorAnalyticsExport => 'Export';
+  String get vendorAnalyticsExport => 'تصدير';
 
   @override
-  String get vendorAnalyticsNoSales => 'No sales in this range yet.';
+  String get vendorAnalyticsNoSales => 'لا مبيعات في هذه الفترة بعد.';
 
   @override
-  String get vendorAnalyticsLast7 => 'Last 7 days';
+  String get vendorAnalyticsLast7 => 'آخر 7 أيام';
 
   @override
-  String get vendorAnalyticsLast30 => 'Last 30 days';
+  String get vendorAnalyticsLast30 => 'آخر 30 يوماً';
 
   @override
-  String get vendorAnalyticsLast90 => 'Last 90 days';
+  String get vendorAnalyticsLast90 => 'آخر 90 يوماً';
 
   @override
-  String get vendorHomeGoodMorning => 'Good morning,';
+  String get vendorHomeGoodMorning => 'صباح الخير،';
 
   @override
-  String get vendorHomeOpen => 'Open';
+  String get vendorHomeOpen => 'مفتوح';
 
   @override
-  String get vendorHomeClosed => 'Closed';
+  String get vendorHomeClosed => 'مغلق';
 
   @override
-  String get vendorHomeQuickActions => 'Quick actions';
+  String get vendorHomeQuickActions => 'إجراءات سريعة';
 
   @override
-  String get vendorHomeAddItem => 'Add item';
+  String get vendorHomeAddItem => 'إضافة منتج';
 
   @override
-  String get vendorHomeAnalytics => 'Analytics';
+  String get vendorHomeAnalytics => 'التحليلات';
 
   @override
-  String get vendorHomePayouts => 'Payouts';
+  String get vendorHomePayouts => 'المدفوعات';
 
   @override
-  String get vendorHomeFreshOrders => 'Fresh orders';
+  String get vendorHomeFreshOrders => 'طلبات جديدة';
 
   @override
-  String get vendorHomeInKitchen => 'In the kitchen';
+  String get vendorHomeInKitchen => 'في المطبخ';
 
   @override
-  String get vendorHomeMore => 'More';
+  String get vendorHomeMore => 'المزيد';
 
   @override
-  String get vendorHomeInventory => 'Inventory';
+  String get vendorHomeInventory => 'المخزون';
 
   @override
-  String get vendorHomeInventorySub => 'Stock levels & batches';
+  String get vendorHomeInventorySub => 'مستويات المخزون والدفعات';
 
   @override
-  String get vendorHomeReviews => 'Reviews';
+  String get vendorHomeReviews => 'التقييمات';
 
   @override
-  String get vendorHomeReviewsSub => 'What customers say';
+  String get vendorHomeReviewsSub => 'ما يقوله العملاء';
 
   @override
-  String get vendorHomeAlerts => 'Alerts';
+  String get vendorHomeAlerts => 'التنبيهات';
 
   @override
-  String get vendorHomeAlertsSub => 'Low stock, late orders, replies waiting';
+  String get vendorHomeAlertsSub => 'مخزون منخفض، طلبات متأخرة، ردود معلّقة';
 
   @override
-  String get vendorHomeSettings => 'Store settings';
+  String get vendorHomeSettings => 'إعدادات المتجر';
 
   @override
-  String get vendorHomeSettingsSub => 'Hours, prep time, holiday mode, staff';
+  String get vendorHomeSettingsSub =>
+      'الأوقات، وقت التحضير، وضع الإجازة، الموظفون';
 
   @override
-  String get vendorHomeDecline => 'Decline';
+  String get vendorHomeDecline => 'رفض';
 
   @override
-  String get vendorHomeAccept => 'Accept';
+  String get vendorHomeAccept => 'قبول';
 
   @override
-  String get vendorHomeNoOrders =>
-      'No new orders. Drop a promo to bring them in.';
+  String get vendorHomeNoOrders => 'لا طلبات جديدة. أضف عرضاً لجلبها.';
 
   @override
   String get vendorInventoryTitle => 'المخزون';
 
   @override
-  String get vendorKycReviewNote =>
-      'We\'ll review your documents and get you live.';
+  String get vendorKycReviewNote => 'سنراجع مستنداتك وسنجعلك مباشراً.';
 
   @override
-  String get vendorOrderNotFound => 'Can\'t find that order';
+  String get vendorOrderNotFound => 'لا يمكن إيجاد هذا الطلب';
 
   @override
   String get vendorReviewsTitle => 'التقييمات';
 
   @override
-  String get vendorMenuPhotoFailed => 'Couldn\'t upload that photo.';
+  String get vendorMenuPhotoFailed => 'تعذّر رفع تلك الصورة.';
 
   @override
-  String get agentHomeOnline =>
-      'You\'re online, transactions sync as you record them.';
+  String get agentHomeOnline => 'أنت متصل، المعاملات تتزامن عند تسجيلها.';
 
   @override
-  String get agentRegisterSetUp => 'Let\'s get them set up.';
+  String get agentRegisterSetUp => 'لنجهّزهم.';
 
   @override
-  String get agentRegisterOffline =>
-      'Offline-capable, we\'ll sync when you have connection.';
+  String get agentRegisterOffline => 'يعمل بدون إنترنت، سيتزامن عند الاتصال.';
 
   @override
-  String get agentTraderNotFound => 'Trader not found';
+  String get agentTraderNotFound => 'التاجر غير موجود';
 
   @override
   String get agentTradersEmpty =>
-      'No traders registered yet. Tap \"Register\" to add one.';
+      'لم يُسجَّل أي تاجر بعد. اضغط «تسجيل» لإضافة واحد.';
 
   @override
-  String get riderHomeOffline => 'You\'re offline';
+  String get riderHomeOffline => 'أنت غير متصل';
 
   @override
-  String get riderKycPhotoId => 'Photo of ID';
+  String get riderKycPhotoId => 'صورة الهوية';
 
   @override
-  String get driverKycVerifyNote =>
-      'We verify with your transport union before you bid.';
+  String get driverKycVerifyNote => 'سنتحقق مع نقابتك قبل تقديم عرض.';
 
   @override
-  String get driverKycLicenceName => 'Drivers\' licence name, please.';
+  String get driverKycLicenceName => 'اسم رخصة القيادة من فضلك.';
 
   @override
-  String get driverKycVehicleType => 'What you\'ll move loads with.';
+  String get driverKycVehicleType => 'ما ستنقل به الأحمال.';
 
   @override
-  String get traderListingsEmpty =>
-      'No listings yet. Tap \"Post\" to add your first.';
+  String get traderListingsEmpty => 'لا قوائم بعد. اضغط «نشر» لإضافة أولى.';
 
   @override
-  String get traderListingPhotoFailed => 'Couldn\'t upload that photo.';
+  String get traderListingPhotoFailed => 'تعذّر رفع تلك الصورة.';
 
   @override
-  String get exportListingNotFound => 'Can\'t find that listing';
+  String get exportListingNotFound => 'لا يمكن إيجاد هذا الإعلان';
 
   @override
-  String get exportEnquirySent => 'Enquiry sent, the trader will reach out.';
+  String get exportEnquirySent => 'تم إرسال الاستفسار، التاجر سيتواصل معك.';
 
   @override
-  String get bulkCheckoutListingNotFound => 'Listing not found';
+  String get bulkCheckoutListingNotFound => 'الإعلان غير موجود';
 
   @override
   String get bulkCheckoutEscrowNote =>
-      'We hold your funds until you confirm delivery. Dispute anytime if something\'s off.';
+      'نحتفظ بأموالك حتى تؤكد الاستلام. يمكنك الاعتراض في أي وقت.';
 
   @override
-  String get escrowDisputeOpened =>
-      'Dispute opened. We\'ll review within 48 hours.';
+  String get escrowDisputeOpened => 'تم فتح نزاع. سنراجع خلال 48 ساعة.';
 
   @override
-  String get escrowDisputeOrderNotFound => 'Order not found';
+  String get escrowDisputeOrderNotFound => 'الطلب غير موجود';
 
   @override
   String get escrowDisputeDetailsHint =>
-      'Tell us specifics, what arrived vs what you expected?';
+      'أخبرنا بالتفاصيل، ما وصل مقابل ما كان متوقعاً؟';
 
   @override
   String get escrowOrdersEmpty =>
-      'You haven\'t placed any bulk orders yet. Head to Trade to start.';
+      'لم تضع أي طلبات جملة بعد. اذهب إلى التجارة للبدء.';
 
   @override
-  String get escrowStatusNotFound => 'Can\'t find that order';
+  String get escrowStatusNotFound => 'لا يمكن إيجاد هذا الطلب';
 
   @override
   String get escrowStatusReviewNote =>
-      'We\'ll review evidence and resolve within 48 hours.';
+      'سنراجع الأدلة ونحل النزاع خلال 48 ساعة.';
 
   @override
   String get recipesTitle => 'اطبخ الليلة';

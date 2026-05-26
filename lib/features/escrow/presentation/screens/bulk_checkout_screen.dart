@@ -39,6 +39,10 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
     super.initState();
     final l = TradeController.instance.byId(widget.listingId);
     _quantityKg = l?.quantityKg ?? 100;
+    // Load public listings if none are cached yet (e.g. direct deep-link nav).
+    if (l == null) {
+      TradeController.instance.loadPublicListings();
+    }
   }
 
   @override
@@ -87,6 +91,13 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: TradeController.instance.listings,
+      builder: (_, _, _) => _buildContent(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     final l = TradeController.instance.byId(widget.listingId);
     if (l == null) {
       return Scaffold(
@@ -99,7 +110,7 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(height: WBSpacing.xl),
-                Text(context.l10n.bulkCheckoutListingNotFound, style: WBTypography.page),
+                const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),

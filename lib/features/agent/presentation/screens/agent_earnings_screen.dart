@@ -20,6 +20,12 @@ class _AgentEarningsScreenState extends State<AgentEarningsScreen> {
   int _tab = 0;
   static const _tabs = ['Today', 'Week', 'Month'];
 
+  @override
+  void initState() {
+    super.initState();
+    AgentController.instance.loadTransactions();
+  }
+
   Duration _windowFor(int tab) => switch (tab) {
         0 => const Duration(hours: 24),
         1 => const Duration(days: 7),

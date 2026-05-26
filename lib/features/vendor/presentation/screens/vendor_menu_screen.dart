@@ -15,17 +15,53 @@ class VendorMenuScreen extends StatefulWidget {
 }
 
 class _VendorMenuScreenState extends State<VendorMenuScreen> {
-  String _category = 'All';
+  /// The selected filter — either "All" or a subcategory **id** so we can
+  /// match against [VendorMenuItem.category] (which stores the subcategory id).
+  String _filter = 'All';
   String _query = '';
 
-  static const _categories = ['All', ...VendorMenuController.categories];
+  /// Tabs displayed in the horizontal pill strip. The first is always "All";
+  /// subsequent entries show subcategory labels. When tapped we map back to
+  /// the subcategory id via [VendorMenuController.categoryOptions].
+  List<String> get _filterTabLabels {
+    final opts = VendorMenuController.instance.categoryOptions.value;
+    return ['All', ...opts.map((o) => o.label)];
+  }
 
+  /// The currently-selected filter as a display label for the WBTag active
+  /// highlight.
+  String get _currentFilterLabel {
+    if (_filter == 'All') return 'All';
+    final opts = VendorMenuController.instance.categoryOptions.value;
+    return opts.firstWhere(
+      (o) => o.id == _filter,
+      orElse: () => VendorCategoryOption(id: _filter, label: _filter, parentLabel: ''),
+    ).label;
+  }
+
+  /// True when [it] passes the current filter + search query.
   bool _matches(VendorMenuItem it) {
-    if (_category != 'All' && it.category != _category) return false;
+    if (_filter != 'All' && it.category != _filter) return false;
     if (_query.isEmpty) return true;
     final q = _query.toLowerCase();
     return it.name.toLowerCase().contains(q) ||
         it.description.toLowerCase().contains(q);
+  }
+
+  /// Converts a tapped tab label back to its subcategory id and sets
+  /// [_filter]. For "All" the filter stays "All".
+  void _onFilterTap(String label) {
+    if (label == 'All') {
+      _filter = 'All';
+    } else {
+      final opts = VendorMenuController.instance.categoryOptions.value;
+      final found = opts.firstWhere(
+        (o) => o.label == label,
+        orElse: () => VendorCategoryOption(id: label, label: label, parentLabel: ''),
+      );
+      _filter = found.id;
+    }
+    setState(() {});
   }
 
   @override
@@ -84,13 +120,16 @@ class _VendorMenuScreenState extends State<VendorMenuScreen> {
                 height: 36,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _categories.length,
+                  itemCount: _filterTabLabels.length,
                   separatorBuilder: (_, _) => const SizedBox(width: 8),
-                  itemBuilder: (_, i) => WBTag(
-                    label: _categories[i],
-                    active: _categories[i] == _category,
-                    onTap: () => setState(() => _category = _categories[i]),
-                  ),
+                  itemBuilder: (_, i) {
+                    final label = _filterTabLabels[i];
+                    return WBTag(
+                      label: label,
+                      active: label == _currentFilterLabel,
+                      onTap: () => _onFilterTap(label),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: WBSpacing.lg),
@@ -104,7 +143,7 @@ class _VendorMenuScreenState extends State<VendorMenuScreen> {
                   child: Text(
                     _query.isNotEmpty
                         ? 'Nothing matches "$_query".'
-                        : 'No dishes in $_category yet.',
+                        : 'No dishes in this category yet.',
                     style: WBTypography.body.copyWith(
                       color: WBColors.fgSecondary,
                     ),

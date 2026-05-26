@@ -42,12 +42,14 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
   @override
   void initState() {
     super.initState();
+    final ctrl = VendorMenuController.instance;
     final src =
-        widget.itemId == null ? null : VendorMenuController.instance.byId(widget.itemId!);
+        widget.itemId == null ? null : ctrl.byId(widget.itemId!);
     _name.text = src?.name ?? '';
     _desc.text = src?.description ?? '';
     _price.text = src == null ? '' : '${src.priceNaira}';
-    _category = src?.category ?? VendorMenuController.categories.first;
+    final cats = ctrl.categoryOptions.value;
+    _category = src?.category ?? (cats.isNotEmpty ? cats.first.id : '');
     _available = src?.available ?? true;
     _prep = (src?.prepMins ?? 15).toDouble();
     _imageUrl = (src?.imageUrl.isNotEmpty ?? false) ? src!.imageUrl : null;
@@ -152,6 +154,13 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
   }
 
   void _pickCategory() {
+    final cats = VendorMenuController.instance.categoryOptions.value;
+    if (cats.isEmpty) return;
+    // Group by parent label.
+    final grouped = <String, List<VendorCategoryOption>>{};
+    for (final c in cats) {
+      grouped.putIfAbsent(c.parentLabel, () => []).add(c);
+    }
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: WBColors.bgPrimary,
@@ -159,61 +168,93 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
         borderRadius:
             BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
       ),
+      isScrollControlled: true,
       builder: (sheetCtx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: WBSpacing.screenPadding,
-            right: WBSpacing.screenPadding,
-            top: WBSpacing.lg,
-            bottom: MediaQuery.of(sheetCtx).padding.bottom + WBSpacing.lg,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-                  decoration: BoxDecoration(
-                    color: WBColors.bgDivider,
-                    borderRadius: BorderRadius.circular(WBRadius.pill),
-                  ),
-                ),
-              ),
-              Text(
-                'Category',
-                style: WBTypography.cardTitle.copyWith(fontSize: 18),
-              ),
-              const SizedBox(height: WBSpacing.md),
-              for (final c in VendorMenuController.categories)
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    setState(() => _category = c);
-                    Navigator.of(sheetCtx).pop();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            c,
-                            style: WBTypography.body.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                        if (c == _category)
-                          const WBIcon(WBIconName.check, size: 16),
-                      ],
+        return DraggableScrollableSheet(
+          initialChildSize: 0.65,
+          minChildSize: 0.4,
+          maxChildSize: 0.85,
+          expand: false,
+          builder: (_, scrollCtrl) => Padding(
+            padding: EdgeInsets.only(
+              left: WBSpacing.screenPadding,
+              right: WBSpacing.screenPadding,
+              top: WBSpacing.lg,
+              bottom: MediaQuery.of(sheetCtx).padding.bottom + WBSpacing.lg,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+                    decoration: BoxDecoration(
+                      color: WBColors.bgDivider,
+                      borderRadius: BorderRadius.circular(WBRadius.pill),
                     ),
                   ),
                 ),
-            ],
+                Text(
+                  'Category',
+                  style: WBTypography.cardTitle.copyWith(fontSize: 18),
+                ),
+                const SizedBox(height: WBSpacing.sm),
+                Text(
+                  'Choose the best category for this item so customers can find it.',
+                  style: WBTypography.caption.copyWith(
+                    color: WBColors.fgSecondary,
+                  ),
+                ),
+                const SizedBox(height: WBSpacing.md),
+                Expanded(
+                  child: ListView(
+                    controller: scrollCtrl,
+                    children: [
+                      for (final entry in grouped.entries) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 4),
+                          child: Text(
+                            entry.key,
+                            style: WBTypography.label.copyWith(
+                              color: WBColors.fgPlaceholder,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        for (final sub in entry.value)
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              setState(() => _category = sub.id);
+                              Navigator.of(sheetCtx).pop();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      sub.label,
+                                      style: WBTypography.body.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  if (sub.id == _category)
+                                    const WBIcon(WBIconName.check, size: 16),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -361,17 +402,29 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                         onTap: _pickCategory,
                         behavior: HitTestBehavior.opaque,
                         child: AbsorbPointer(
-                          // re-read on every rebuild, `key` forces the
-                          // child WBInput to discard its stale text state
-                          // when the user picks a new category.
-                          child: WBInput(
-                            key: ValueKey('cat-$_category'),
-                            label: 'Category',
-                            initialValue: _category,
-                            trailing: const WBIcon(
-                              WBIconName.chevronDown,
-                              size: 14,
-                            ),
+                          child: ValueListenableBuilder<List<VendorCategoryOption>>(
+                            valueListenable: VendorMenuController.instance.categoryOptions,
+                            builder: (_, catOpts, _) {
+                              final label = catOpts.isEmpty
+                                  ? _category
+                                  : (catOpts.firstWhere(
+                                      (o) => o.id == _category,
+                                      orElse: () => VendorCategoryOption(
+                                        id: _category,
+                                        label: _category,
+                                        parentLabel: '',
+                                      ),
+                                    ).label);
+                              return WBInput(
+                                key: ValueKey('cat-$_category'),
+                                label: 'Category',
+                                initialValue: label,
+                                trailing: const WBIcon(
+                                  WBIconName.chevronDown,
+                                  size: 14,
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),

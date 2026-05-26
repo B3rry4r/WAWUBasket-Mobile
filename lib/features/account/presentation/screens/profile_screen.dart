@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
-import '../../../shopping/application/wb_images.dart';
 import '../../application/profile_controller.dart';
+import '../../data/profile_api.dart';
 import '../widgets/account_menu.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../widgets/role_switcher_sheet.dart';
@@ -21,12 +22,31 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _uploadingAvatar = false;
+
   @override
   void initState() {
     super.initState();
     if (!GuestModeController.instance.isGuest.value) {
       ProfileController.instance.load();
       ProfileController.instance.loadStats();
+    }
+  }
+
+  Future<void> _uploadAvatar() async {
+    if (_uploadingAvatar) return;
+    setState(() => _uploadingAvatar = true);
+    try {
+      final result = await UploadService.instance.pickAndUpload(
+        folder: UploadFolder.avatars,
+      );
+      if (result == null) return;
+      await ProfileApi.instance.updateAvatar(result.key);
+      await ProfileController.instance.load();
+    } catch (_) {
+      if (mounted) wbShowSnack(context, 'Could not update photo. Try again.');
+    } finally {
+      if (mounted) setState(() => _uploadingAvatar = false);
     }
   }
 
@@ -123,52 +143,79 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               Row(
                 children: [
-                  GestureDetector(
-                    onTap: () =>
-                        wbShowSnack(context, context.l10n.profileChoosePhoto),
-                    child: Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          width: 64,
-                          height: 64,
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: WBColors.bgDivider,
-                              width: 1.5,
-                            ),
-                          ),
-                          child: const ClipOval(
-                            child: WBNetworkImage(url: WBImages.avatar),
-                          ),
-                        ),
-                        Positioned(
-                          right: -2,
-                          bottom: -2,
-                          child: Container(
-                            width: 22,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              color: WBColors.surfaceDark,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: WBColors.bgPrimary,
-                                width: 2,
+                  ValueListenableBuilder<UserProfile?>(
+                    valueListenable: ProfileController.instance.profile,
+                    builder: (_, profile, _) {
+                      final url = profile?.avatarUrl;
+                      final initials = _initials(profile?.fullName);
+                      return GestureDetector(
+                        onTap: _uploadAvatar,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              width: 64,
+                              height: 64,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: WBColors.bgDivider,
+                                  width: 1.5,
+                                ),
+                              ),
+                              child: ClipOval(
+                                child: url != null
+                                    ? WBNetworkImage(url: url)
+                                    : Container(
+                                        color: WBColors.surfaceDark,
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          initials,
+                                          style: WBTypography.hero.copyWith(
+                                            fontSize: 22,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
                               ),
                             ),
-                            alignment: Alignment.center,
-                            child: const WBIcon(
-                              WBIconName.plus,
-                              size: 11,
-                              color: Colors.white,
-                              strokeWidth: 2.5,
+                            Positioned(
+                              right: -2,
+                              bottom: -2,
+                              child: Container(
+                                width: 22,
+                                height: 22,
+                                decoration: BoxDecoration(
+                                  color: WBColors.surfaceDark,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: WBColors.bgPrimary,
+                                    width: 2,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: _uploadingAvatar
+                                    ? const SizedBox(
+                                        width: 10,
+                                        height: 10,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 1.5,
+                                          valueColor: AlwaysStoppedAnimation(Colors.white),
+                                        ),
+                                      )
+                                    : const WBIcon(
+                                        WBIconName.plus,
+                                        size: 11,
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                              ),
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -281,7 +328,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: WBIconName.card,
             label: context.l10n.profileWalletMenu,
             sub: context.l10n.profileWalletSub,
-            onTap: () => context.push(AppRoutes.escrowOrders),
+            onTap: () => context.push(AppRoutes.wallet),
           ),
           AccountMenuRow(
             icon: WBIconName.user,
@@ -429,6 +476,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return 'Apply to be a vendor, trader, agent, rider or driver';
     }
     return 'Active: ${switchable.map((r) => r.title).join(' · ')}';
+  }
+
+  static String _initials(String? name) {
+    if (name == null || name.trim().isEmpty) return '?';
+    final parts = name.trim().split(RegExp(r'\s+'));
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
   }
 }
 

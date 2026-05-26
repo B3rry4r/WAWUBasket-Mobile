@@ -9,6 +9,7 @@ class UserProfile {
     this.fullName = '',
     this.email = '',
     this.phone = '',
+    this.avatarUrl,
     this.dateOfBirth,
     // Role-specific display names (populated from the nested role profile
     // objects that `/v1/profile` returns alongside the base user record).
@@ -24,6 +25,7 @@ class UserProfile {
   final String fullName;
   final String email;
   final String phone;
+  final String? avatarUrl;
   final DateTime? dateOfBirth;
 
   // Operator display names — null when the user hasn't registered that role.
@@ -45,6 +47,7 @@ class UserProfile {
       fullName: (j['fullName'] ?? '').toString(),
       email: (j['email'] ?? '').toString(),
       phone: (j['phone'] ?? '').toString(),
+      avatarUrl: j['avatarUrl']?.toString(),
       dateOfBirth: DateTime.tryParse('${j['dateOfBirth'] ?? ''}'),
       vendorBusinessName: pv != null ? '${pv['businessName'] ?? ''}' : null,
       traderBusinessName: pt != null ? '${pt['businessName'] ?? ''}' : null,
@@ -64,7 +67,6 @@ class ProfileStats {
     // Customer
     this.orders,
     this.favorites,
-    this.walletBalanceNaira,
     // Vendor
     this.vendorRating,
     this.vendorEarnedNaira,
@@ -89,7 +91,6 @@ class ProfileStats {
   // Customer
   final int? orders;
   final int? favorites;
-  final String? walletBalanceNaira;
 
   // Vendor — orders comes from the customer field above; rating & earned below
   final String? vendorRating;
@@ -119,7 +120,6 @@ class ProfileStats {
         // Customer
         orders: _toInt(j['orders']),
         favorites: _toInt(j['favorites']),
-        walletBalanceNaira: j['walletBalanceNaira']?.toString(),
         // Vendor
         vendorRating: j['rating']?.toString(),
         vendorEarnedNaira: j['earnedNaira']?.toString(),

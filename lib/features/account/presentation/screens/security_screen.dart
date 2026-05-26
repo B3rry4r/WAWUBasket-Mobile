@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -8,8 +9,7 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/data/auth_api.dart';
 
-/// Account security, change password, biometric login, 2FA. UI-only:
-/// toggles flip local state and snack; password opens a sheet.
+/// Account security, change password, biometric login toggle.
 class SecurityScreen extends StatefulWidget {
   const SecurityScreen({super.key});
 
@@ -18,7 +18,29 @@ class SecurityScreen extends StatefulWidget {
 }
 
 class _SecurityScreenState extends State<SecurityScreen> {
-  bool _biometric = true;
+  bool _biometric = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBiometricState();
+  }
+
+  Future<void> _loadBiometricState() async {
+    final enabled = await BiometricService.instance.isEnabled();
+    if (!mounted) return;
+    setState(() => _biometric = enabled);
+  }
+
+  Future<void> _toggleBiometric(bool value) async {
+    await BiometricService.instance.setEnabled(value);
+    if (!mounted) return;
+    setState(() => _biometric = value);
+    wbShowSnack(
+      context,
+      value ? 'Biometric unlock enabled' : 'Biometric unlock disabled',
+    );
+  }
 
   void _changePassword() {
     final current = TextEditingController();
@@ -192,7 +214,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
                 label: context.l10n.securityBiometric,
                 sub: context.l10n.securityBiometricSub,
                 value: _biometric,
-                onChanged: (v) => setState(() => _biometric = v),
+                onChanged: _toggleBiometric,
               ),
             ),
           ],

@@ -44,4 +44,14 @@ class AgentApi {
     final res = await _api.get('/agent/sync-status');
     return (res as Map).cast<String, dynamic>();
   }
+
+  Future<Map<String, dynamic>> placeOrder(Map<String, dynamic> dto) async {
+    final res = await _api.post('/agent/orders', body: dto);
+    return (res as Map).cast<String, dynamic>();
+  }
+
+  Future<List<dynamic>> listPayouts() async {
+    final res = await _api.get('/agent/payouts');
+    return (res as List?) ?? const [];
+  }
 }

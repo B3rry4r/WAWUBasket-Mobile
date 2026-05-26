@@ -135,8 +135,14 @@ class TradeController {
     listings.value = [for (final cur in listings.value) if (cur.id == l.id) l else cur];
     if (!_isLocal(l.id)) {
       _api.updateExportListing(l.id, {
+        'produce': l.produce,
         'quantityKg': l.quantityKg,
         'pricePerKgNaira': l.pricePerKgNaira,
+        'harvestDate': l.harvestDate.toUtc().toIso8601String(),
+        'originCorridor': l.originCorridor.name,
+        'destinationCorridor': l.destinationCorridor.name,
+        'farmName': l.farmName,
+        'farmRegion': l.farmRegion,
         'status': l.status.name,
       }).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
@@ -176,7 +182,10 @@ class TradeController {
         'farmName': l.farmName,
         'farmRegion': l.farmRegion,
         if (l.imageUrl.isNotEmpty) 'imageKey': l.imageUrl,
+        if (l.category != null) 'category': l.category,
       });
+      // Replace the optimistic EXP-<timestamp> row with the real server record.
+      await loadMyListings();
     } on ApiException {
       // Keep the optimistic row; the trader can retry the save.
     }

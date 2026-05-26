@@ -79,7 +79,7 @@ class _Body extends StatelessWidget {
         'Trip delivered · ${wbNaira(trip.offerNaira)} settled to your wallet',
       );
     } else {
-      final next = trip.checkpointNames[trip.reachedCheckpoints.length + 1];
+      final next = trip.checkpointNames[trip.reachedCheckpoints.length];
       wbShowSnack(context, 'Heading to $next');
     }
   }

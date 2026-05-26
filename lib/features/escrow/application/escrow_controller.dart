@@ -74,13 +74,8 @@ class EscrowController {
   }
 
   Future<void> release(String id) async {
-    try {
-      await _api.release(id);
-      _setStatus(id, EscrowStatus.released);
-    } on ApiException {
-      // Optimistic update already applied — revert on error.
-      rethrow;
-    }
+    await _api.release(id);
+    _setStatus(id, EscrowStatus.released);
   }
 
   Future<void> dispute(String id, String reason) async {

@@ -32,6 +32,20 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _loadBioLabel();
+    _maybeAutoTriggerBiometric();
+  }
+
+  /// On app resume, auto-prompt biometrics if the user has it enabled and a
+  /// refresh token is on disk (returning signed-in user).
+  Future<void> _maybeAutoTriggerBiometric() async {
+    await Future.delayed(const Duration(milliseconds: 350));
+    if (!mounted) return;
+    final bio = BiometricService.instance;
+    final hasRefresh = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
+    if (!hasRefresh) return;
+    if (!await bio.isAvailable() || !await bio.isEnabled()) return;
+    if (!mounted) return;
+    _biometricSignIn();
   }
 
   Future<void> _loadBioLabel() async {
@@ -123,7 +137,12 @@ class _LoginScreenState extends State<LoginScreen> {
     final ok = await bio.authenticate(reason: 'Sign in to WAWUBasket');
     if (!mounted) return;
     if (ok) {
-      context.go(AppRoutes.home);
+      await RoleController.instance.syncFromApi();
+      RoleController.instance.setRole(AppRole.customer);
+      GuestModeController.instance.exit();
+      NotificationService.instance.registerToken();
+      if (!mounted) return;
+      context.go(AppRoutes.roleSelect);
     } else {
       // TODO(i18n): key=loginBiometricFailed
       wbShowSnack(context, "Couldn't verify it's you — try your password.");

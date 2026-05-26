@@ -37,6 +37,8 @@ class VendorApi {
 
   Future<List<dynamic>> listProducts() async {
     final res = await _api.get('/vendor/products');
+    // API returns {items:[...], nextCursor} — unwrap the items list.
+    if (res is Map) return (res['items'] as List?) ?? const [];
     return (res as List?) ?? const [];
   }
 

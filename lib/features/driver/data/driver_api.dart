@@ -22,8 +22,11 @@ class DriverApi {
       _api.post('/driver/loads/$loadId/bid', body: {
         'priceNaira': priceNaira,
         'etaHours': etaHours,
-        'notes': ?(notes.isEmpty ? null : notes),
+        if (notes.isNotEmpty) 'notes': notes,
       });
+
+  Future<void> acceptLoad(String loadId) =>
+      _api.post('/driver/loads/$loadId/accept');
 
   Future<void> logCheckpoint(String loadId) =>
       _api.post('/driver/loads/$loadId/checkpoint');

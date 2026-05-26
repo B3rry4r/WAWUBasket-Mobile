@@ -24,40 +24,40 @@ class AppLocalizationsIg extends AppLocalizations {
   String get navAccount => 'Akaụntụ';
 
   @override
-  String get navSearch => 'Search';
+  String get navSearch => 'Chọọ';
 
   @override
-  String get actionContinue => 'Continue';
+  String get actionContinue => 'Gaa n\'ihu';
 
   @override
-  String get actionCancel => 'Cancel';
+  String get actionCancel => 'Kagbuo';
 
   @override
-  String get actionSave => 'Save';
+  String get actionSave => 'Chekwaa';
 
   @override
-  String get actionDone => 'Done';
+  String get actionDone => 'Emechara';
 
   @override
-  String get actionRetry => 'Try again';
+  String get actionRetry => 'Nwaa ọzọ';
 
   @override
-  String get actionNext => 'Next';
+  String get actionNext => 'Ọzọ';
 
   @override
-  String get actionConfirm => 'Confirm';
+  String get actionConfirm => 'Kwenye';
 
   @override
-  String get actionSeeAll => 'See all';
+  String get actionSeeAll => 'Hụ ihe niile';
 
   @override
-  String get commonLoading => 'Loading…';
+  String get commonLoading => 'Na-ebu…';
 
   @override
-  String get commonError => 'Something went wrong.';
+  String get commonError => 'Ihe ọjọọ mere.';
 
   @override
-  String get commonEmpty => 'Nothing here yet.';
+  String get commonEmpty => 'Ọ dịghị ihe ebe a.';
 
   @override
   String get languageTitle => 'Asụsụ';
@@ -66,13 +66,13 @@ class AppLocalizationsIg extends AppLocalizations {
   String get languageSubtitle => 'Họrọ asụsụ gị kacha mma';
 
   @override
-  String get signIn => 'Sign in';
+  String get signIn => 'Banye';
 
   @override
-  String get signUp => 'Create account';
+  String get signUp => 'Mepụta akaụntụ';
 
   @override
-  String get logOut => 'Log out';
+  String get logOut => 'Pụọ';
 
   @override
   String get chatEmpty => 'Bido mkparịta ụka gị';
@@ -87,259 +87,262 @@ class AppLocalizationsIg extends AppLocalizations {
   String get chatAttachmentFailed => 'Ọ dịghị ike isite faịlụ. Nwalee ọzọ.';
 
   @override
-  String get kycSubmitted =>
-      'Application submitted. We\'ll review it and let you know.';
+  String get kycSubmitted => 'Akwụkwọ ahụ ezigara. Anyị ga-enyocha wee gwa gị.';
 
   @override
-  String get kycUploadFailed => 'Couldn\'t upload the document. Try again.';
+  String get kycUploadFailed => 'Enweghị ike ibugo akwụkwọ ahụ. Nwaa ọzọ.';
 
   @override
   String get splashTagline => 'Ọdụ otu. Ihe niile.';
 
   @override
-  String get onboardingSkip => 'Skip';
+  String get onboardingSkip => 'Wụfuo';
 
   @override
-  String get onboardingPermissionsTitle => 'A couple of quick permissions';
+  String get onboardingPermissionsTitle => 'Ikike ole na ole ngwa ngwa';
 
   @override
   String get onboardingPermissionsSubtitle =>
-      'They make the basket work better for you. You can change these anytime.';
+      'Ha na-eme ka ihe ọkpọ ahụ ọzọ mma. Ị nwere ike ịgbanwe ha mgbe ọ bụla.';
 
   @override
-  String get onboardingLocationTitle => 'Where are you cooking today?';
+  String get onboardingLocationTitle => 'Ebe i nọ taa?';
 
   @override
   String get onboardingLocationBody =>
-      'We need your location to show restaurants and markets near you. We never share your exact location with anyone.';
+      'Anyị chọọ ọnọdụ gị iji gosipụta ndị ọchịta nri na ahịa dị nso gị.';
 
   @override
-  String get onboardingLocationPrimary => 'While using app';
+  String get onboardingLocationPrimary => 'Mgbe ị na-eji ngwa';
 
   @override
-  String get onboardingLocationSecondary => 'Allow once';
+  String get onboardingLocationSecondary => 'Kwe otu ugboro';
 
   @override
-  String get onboardingLocationTertiary => 'Not now';
+  String get onboardingLocationTertiary => 'Ọ dịghị ugbu a';
 
   @override
-  String get onboardingNotificationsTitle => 'Don\'t miss the good stuff';
+  String get onboardingNotificationsTitle => 'Ọ dịghị ihe ọma ị gaghị ahụ';
 
   @override
   String get onboardingNotificationsBody =>
-      'We\'ll tell you when your order is on its way, when your meat is freshly cut, and when there\'s a surprise waiting.';
+      'Anyị ga-agwa gị mgbe iwu gị na-abịa, mgbe anụ ahụ gị adịcha ọhụrụ, nakwa mgbe ọ dị ihe ị ga-ata.';
 
   @override
-  String get onboardingNotificationsPrimary => 'Yes, tell me';
+  String get onboardingNotificationsPrimary => 'Ee, gwa m';
 
   @override
-  String get onboardingNotificationsSecondary => 'Maybe later';
+  String get onboardingNotificationsSecondary => 'Eleghị anya mgbe ọzọ';
 
   @override
-  String get onboardingQuizTitle => 'Let\'s build your basket';
+  String get onboardingQuizTitle => 'Ka anyị wuo ihe ọkpọ gị';
 
   @override
   String get onboardingQuizSubtitle =>
-      'Tell us what you love, and we\'ll make sure you see it first.';
+      'Gwa anyị ihe ị hụrụ n\'anya, anyị ga-eme ka ị hụ ya izizi.';
 
   @override
-  String get onboardingQuizWantsLabel => 'What do you usually want?';
+  String get onboardingQuizWantsLabel => 'Gịnị ka i na-achọ ọtụtụ oge?';
 
   @override
-  String get onboardingQuizWantOption1 => 'Cooked meals from restaurants';
+  String get onboardingQuizWantOption1 => 'Nri esiri n\'ụlọ oriri na ọṅụṅụ';
 
   @override
-  String get onboardingQuizWantOption2 => 'Fresh fruits and vegetables';
+  String get onboardingQuizWantOption2 => 'Mkpụrụ osisi na akwụkwọ nri ọhụrụ';
 
   @override
-  String get onboardingQuizWantOption3 => 'Meat, chicken, and fish';
+  String get onboardingQuizWantOption3 => 'Anụ, ọkukọ, na azụ';
 
   @override
-  String get onboardingQuizWantOption4 => 'Pots, pans, and pantry stuff';
+  String get onboardingQuizWantOption4 => 'Ite, chảảnyị, na ihe ndị ọzọ';
 
   @override
-  String get onboardingQuizSpeedLabel => 'How fast do you need things?';
+  String get onboardingQuizSpeedLabel => 'Osooso ole ka ị chọọ ihe?';
 
   @override
-  String get onboardingQuizSpeedOption1 => 'Right now, I\'m hungry';
+  String get onboardingQuizSpeedOption1 => 'Ugbu a, agụụ na-agụ m';
 
   @override
-  String get onboardingQuizSpeedOption2 => 'Today sometime';
+  String get onboardingQuizSpeedOption2 => 'Taa mgbe ọ bụla';
 
   @override
-  String get onboardingQuizSpeedOption3 => 'I\'m planning ahead';
+  String get onboardingQuizSpeedOption3 => 'Ana m eme atụmatụ';
 
   @override
-  String get onboardingQuizAvoidLabel => 'Any foods we should avoid?';
+  String get onboardingQuizAvoidLabel => 'Nri ọ dị ị ga-ezere?';
 
   @override
-  String get onboardingQuizAvoidPlaceholder => 'e.g. no shellfish, no beef';
+  String get onboardingQuizAvoidPlaceholder =>
+      'Dị ka: enweghị mgbị, enweghị anụ efi';
 
   @override
-  String get onboardingQuizBuildButton => 'Build my basket';
+  String get onboardingQuizBuildButton => 'Wuo ihe ọkpọ m';
 
   @override
-  String get onboardingQuizSkipLink => 'I\'ll figure it out later';
+  String get onboardingQuizSkipLink => 'Ga-achọpụta ya n\'oge ọzọ';
 
   @override
-  String get onboardingGiftTitle => 'A little welcome gift';
+  String get onboardingGiftTitle => 'Ngọzi obere nnabata';
 
   @override
   String get onboardingGiftBody =>
-      'Your first order comes with something extra. Just because you deserve it.';
+      'Iwu izizi gị na-abịa na ihe ọzọ. N\'ihi na i kwesịrị ya.';
 
   @override
-  String get onboardingGiftButton => 'Let\'s see what\'s inside';
+  String get onboardingGiftButton => 'Ka anyị hụ ihe dị n\'ime';
 
   @override
   String get onboardingGiftFootnote =>
-      'Valid for first order only. Minimum order applies.';
+      'Bara uru maka iwu izizi naanị. Ọ dị n\'okpuru.';
 
   @override
-  String get loginTitle => 'Sign in';
+  String get loginTitle => 'Banye';
 
   @override
-  String get loginSubtitle => 'Welcome back. Pick up where you left off.';
+  String get loginSubtitle => 'Nnabata ọzọ. Bido ebe i kwụsịrị.';
 
   @override
-  String get loginPhoneLabel => 'Phone or email';
+  String get loginPhoneLabel => 'Ekwentị ma ọ bụ email';
 
   @override
-  String get loginPasswordLabel => 'Password';
+  String get loginPasswordLabel => 'Paswọọdụ';
 
   @override
-  String get loginForgotPassword => 'Forgot password?';
+  String get loginForgotPassword => 'Chefuo paswọọdụ?';
 
   @override
-  String get loginBiometric => 'Use Face ID';
+  String get loginBiometric => 'Jiri ihu nchọpụta';
 
   @override
-  String get loginSignupLink => 'New to WAWUBasket?';
+  String get loginSignupLink => 'Ọhụrụ na WAWUBasket?';
 
   @override
-  String get loginErrorEmpty => 'Enter your phone/email and password.';
+  String get loginErrorEmpty => 'Tinye ekwentị/email na paswọọdụ gị.';
 
   @override
-  String get loginBiometricOfferTitle => 'Faster sign-in';
+  String get loginBiometricOfferTitle => 'Ịbanye ngwa ngwa';
 
   @override
   String get loginBiometricOfferBody =>
-      'Use Face ID or your fingerprint to sign in next time?';
+      'Jiri ihu nchọpụta ma ọ bụ mkpisi aka gị ịbanye n\'oge ọzọ?';
 
   @override
-  String get loginBiometricNotNow => 'Not now';
+  String get loginBiometricNotNow => 'Ọ dịghị ugbu a';
 
   @override
-  String get loginBiometricEnable => 'Enable';
+  String get loginBiometricEnable => 'Mezie';
 
   @override
   String get loginBiometricNotAvailable =>
-      'Biometric unlock isn\'t set up on this device.';
+      'Ihe nchọpụta biometric adịghị n\'ngwa ngwa a.';
 
   @override
-  String get signupTitle => 'What\'s your WhatsApp number?';
+  String get signupTitle => 'Ọnụọgụ WhatsApp gị bụ gịnị?';
 
   @override
   String get signupSubtitle =>
-      'We\'ll send a code to make sure it\'s really you.';
+      'Anyị ga-eziga koodu iji nwayọọ chekwaa na ọ bụ gị.';
 
   @override
-  String get signupNameLabel => 'Full name';
+  String get signupNameLabel => 'Aha zuru oke';
 
   @override
-  String get signupPhoneLabel => 'WhatsApp number';
+  String get signupPhoneLabel => 'Ọnụọgụ WhatsApp';
 
   @override
   String get signupEmailLabel => 'Email';
 
   @override
-  String get signupPasswordLabel => 'Password';
+  String get signupPasswordLabel => 'Paswọọdụ';
 
   @override
-  String get signupPasswordPlaceholder => 'At least 8 characters';
+  String get signupPasswordPlaceholder => 'Ma ọ dịkarịa ala mkpụrụedemede 8';
 
   @override
-  String get signupSendCode => 'Send code';
+  String get signupSendCode => 'Ziga koodu';
 
   @override
-  String get signupDisclaimer => 'No spam. No calls. Just your basket updates.';
+  String get signupDisclaimer =>
+      'Spam ọ dịghị. Oku ọ dịghị. Naanị mmelite ihe ọkpọ gị.';
 
   @override
-  String get signupHaveAccount => 'Already have an account?';
+  String get signupHaveAccount => 'I nwere akaụntụ?';
 
   @override
-  String get signupErrorName => 'Fill in your name, number and email.';
+  String get signupErrorName => 'Tinye aha gị, ọnụọgụ, na email.';
 
   @override
-  String get signupErrorPassword => 'Password must be at least 8 characters.';
+  String get signupErrorPassword =>
+      'Paswọọdụ kwesịrị inwe ma ọ dịkarịa ala mkpụrụedemede 8.';
 
   @override
-  String get signupErrorTerms => 'Accept the Terms to continue.';
+  String get signupErrorTerms => 'Nkwenye ụkpụrụ iji gaa n\'ihu.';
 
   @override
-  String get otpTitle => 'You\'ve got a code!';
+  String get otpTitle => 'I nwere koodu!';
 
   @override
-  String get otpSubtitle => 'Check your WhatsApp. It\'s a short one.';
+  String get otpSubtitle => 'Lelee WhatsApp gị. Ọ dị mkpụmkpụ.';
 
   @override
-  String get otpEditNumber => 'Edit number';
+  String get otpEditNumber => 'Dezie ọnụọgụ';
 
   @override
-  String get otpResend => 'Resend code';
+  String get otpResend => 'Zigazịa koodu';
 
   @override
-  String get otpVerifyButton => 'Verify and go in';
+  String get otpVerifyButton => 'Nwayọọ wee banye';
 
   @override
-  String get otpNewCode => 'A new code is on its way.';
+  String get otpNewCode => 'Koodu ọhụrụ na-abịa.';
 
   @override
-  String get forgotTitle => 'Reset password';
+  String get forgotTitle => 'Tọgharia paswọọdụ';
 
   @override
   String get forgotSubtitle =>
-      'Tell us where to send a verification code and we\'ll help you back in.';
+      'Gwa anyị ebe ị ga-ezigara koodu nwayọọ anyị ga-enyere gị aka ịlọ.';
 
   @override
-  String get forgotSendCode => 'Send code';
+  String get forgotSendCode => 'Ziga koodu';
 
   @override
-  String get forgotErrorEmpty => 'Enter your phone number or email.';
+  String get forgotErrorEmpty => 'Tinye ọnụọgụ ekwentị gị ma ọ bụ email.';
 
   @override
-  String get resetTitle => 'Choose a new password';
+  String get resetTitle => 'Họrọ paswọọdụ ọhụrụ';
 
   @override
-  String get resetSubtitle => 'Make it different from your last one.';
+  String get resetSubtitle => 'Mee ya dị iche n\'nke ọ gara.';
 
   @override
-  String get resetPasswordLabel => 'New password';
+  String get resetPasswordLabel => 'Paswọọdụ ọhụrụ';
 
   @override
-  String get resetConfirmLabel => 'Confirm password';
+  String get resetConfirmLabel => 'Kwenye paswọọdụ';
 
   @override
-  String get resetButton => 'Save password';
+  String get resetButton => 'Chekwaa paswọọdụ';
 
   @override
-  String get resetErrorLength => 'Password must be at least 8 characters.';
+  String get resetErrorLength =>
+      'Paswọọdụ kwesịrị inwe ma ọ dịkarịa ala mkpụrụedemede 8.';
 
   @override
-  String get resetErrorMismatch => 'Passwords don\'t match.';
+  String get resetErrorMismatch => 'Paswọọdụ abụọ ahụ adịghị jikọọ.';
 
   @override
-  String get welcomeGetStarted => 'Get started';
+  String get welcomeGetStarted => 'Bido';
 
   @override
-  String get welcomeSignIn => 'Sign in';
+  String get welcomeSignIn => 'Banye';
 
   @override
-  String get roleSelectTitle => 'How will you use WAWUBasket?';
+  String get roleSelectTitle => 'Kedụ ka ị ga-eji WAWUBasket?';
 
   @override
   String get roleSelectSubtitle =>
-      'Pick what you\'ll do most. You can switch roles anytime from your profile.';
+      'Họrọ ihe i na-eme kachasị. Ị nwere ike ịgbanwe ọrụ mgbe ọ bụla.';
 
   @override
   String get cartTitle => 'Ọdụ gị';
@@ -348,28 +351,28 @@ class AppLocalizationsIg extends AppLocalizations {
   String get cartEmpty => 'Ọdụ gị dị efu';
 
   @override
-  String get cartEmptySubtitle => 'Want to fill it? We have ideas.';
+  String get cartEmptySubtitle => 'Chọọ ịjupụta ya? Anyị nwere echiche.';
 
   @override
-  String get cartStartShopping => 'Start shopping';
+  String get cartStartShopping => 'Bido ịzụ ahịa';
 
   @override
-  String get cartEta => 'Arrives in 25–35 min';
+  String get cartEta => 'Na-abịa n\'ime nkeji 25-35';
 
   @override
-  String get cartPromo => 'Promo code';
+  String get cartPromo => 'Koodu mmalite';
 
   @override
-  String get cartPromoApply => 'Apply';
+  String get cartPromoApply => 'Tinye';
 
   @override
   String get cartSubtotal => 'Nchịkọta ngwaahịa';
 
   @override
-  String get cartDeliveryFee => 'Delivery fee';
+  String get cartDeliveryFee => 'Ụgwọ nnyefe';
 
   @override
-  String get cartServiceFee => 'Service fee';
+  String get cartServiceFee => 'Ụgwọ ọrụ';
 
   @override
   String get cartTotal => 'Ngụkọta';
@@ -381,57 +384,57 @@ class AppLocalizationsIg extends AppLocalizations {
   String get checkoutTitle => 'Ịzụ ahịa';
 
   @override
-  String get checkoutDeliverySection => 'Where are we sending this?';
+  String get checkoutDeliverySection => 'Ebe anyị ga-eziga ya?';
 
   @override
-  String get checkoutNoAddress => 'No address saved — add one';
+  String get checkoutNoAddress => 'Adreesi ezighịghị — tinye otu';
 
   @override
-  String get checkoutChangeAddress => 'Change';
+  String get checkoutChangeAddress => 'Gbanwee';
 
   @override
-  String get checkoutTimingSection => 'When do you want it?';
+  String get checkoutTimingSection => 'Mgbe ị chọọ ya?';
 
   @override
   String get checkoutNow => 'Ugbu a';
 
   @override
-  String get checkoutNowSubtitle => 'Arrives in 25–35 min';
+  String get checkoutNowSubtitle => 'Na-abịa n\'ime nkeji 25-35';
 
   @override
   String get checkoutSchedule => 'Nhọrọ njem';
 
   @override
-  String get checkoutPaymentSection => 'How will you pay?';
+  String get checkoutPaymentSection => 'Kedụ ka ị ga-akwụ ụgwọ?';
 
   @override
-  String get checkoutBasketSection => 'Your basket';
+  String get checkoutBasketSection => 'Ihe ọkpọ gị';
 
   @override
   String get checkoutPlaceOrder => 'Nyefee iwu';
 
   @override
-  String get checkoutWaiting => 'Waiting for payment…';
+  String get checkoutWaiting => 'Na-echere ịkwụ ụgwọ…';
 
   @override
   String get checkoutWaitingBody =>
-      'Complete payment in the browser. We\'ll move you to order tracking automatically.';
+      'Mechee ịkwụ ụgwọ n\'browser. Anyị ga-ebufe gị na nchụ iwu ozugbo.';
 
   @override
-  String get checkoutTimeout => 'Payment not confirmed';
+  String get checkoutTimeout => 'Akwụghị ụgwọ akwụkwọ nkwenye';
 
   @override
   String get checkoutTimeoutBody =>
-      'We didn\'t receive a payment confirmation. Tap below to check again, or go back.';
+      'Anyị enweghị nkwenye ịkwụ ụgwọ. Pịa n\'okpuru iji lelee ọzọ ma ọ bụ laghachi.';
 
   @override
-  String get checkoutCheckStatus => 'Check payment status';
+  String get checkoutCheckStatus => 'Lelee ọnọdụ ịkwụ ụgwọ';
 
   @override
-  String get checkoutGoBack => 'Go back';
+  String get checkoutGoBack => 'Laghachi';
 
   @override
-  String get checkoutScheduleConfirm => 'Confirm time slot';
+  String get checkoutScheduleConfirm => 'Kwenye oge';
 
   @override
   String get confirmTitle => 'Ọ dị mma!';
@@ -440,141 +443,141 @@ class AppLocalizationsIg extends AppLocalizations {
   String get confirmSubtitle => 'A natara iwu gị';
 
   @override
-  String get confirmNotification => 'We\'ll ping you when your basket moves.';
+  String get confirmNotification => 'Anyị ga-eti gị mgbe ihe ọkpọ gị kwaga.';
 
   @override
-  String get confirmTracking => 'Watch it travel to your door in real time.';
+  String get confirmTracking => 'Lelee ya na-aga n\'ọnụ ụzọ gị n\'oge ezigbo.';
 
   @override
-  String get confirmTrackButton => 'Track my order';
+  String get confirmTrackButton => 'Chụọ iwu m';
 
   @override
-  String get confirmBackHome => 'Back to home';
+  String get confirmBackHome => 'Laghachi n\'ulo';
 
   @override
-  String get trackingNeedHelp => 'Need help?';
+  String get trackingNeedHelp => 'Chọọ enyemaka?';
 
   @override
-  String get trackingDelivered => 'Delivered. Enjoy your basket!';
+  String get trackingDelivered => 'Ereforo. Nata ihe ọkpọ gị!';
 
   @override
-  String get trackingDefaultMessage => 'We\'ll update you as your order moves.';
+  String get trackingDefaultMessage =>
+      'Anyị ga-emelite gị mgbe iwu gị kwagara.';
 
   @override
-  String get trackingJourney => 'Your order is on a journey';
+  String get trackingJourney => 'Iwu gị na-aga n\'ụzọ';
 
   @override
-  String get trackingStep1 => 'Order confirmed';
+  String get trackingStep1 => 'Akwụkwọ nkwenye iwu';
 
   @override
-  String get trackingStep2 => 'Preparing';
+  String get trackingStep2 => 'Na-achịkọta';
 
   @override
-  String get trackingStep3 => 'Picked up';
+  String get trackingStep3 => 'Ewepụtara';
 
   @override
-  String get trackingStep4 => 'En route';
+  String get trackingStep4 => 'Na-aga';
 
   @override
-  String get trackingStep5 => 'Delivered';
+  String get trackingStep5 => 'Ewetara';
 
   @override
-  String get trackingRate => 'Rate your order';
+  String get trackingRate => 'Tụlee iwu gị';
 
   @override
-  String get deliveryTitle => 'Delivered. Enjoy your basket!';
+  String get deliveryTitle => 'Ereforo. Nata ihe ọkpọ gị!';
 
   @override
   String get deliverySubtitle =>
-      'How was your experience? Your feedback helps vendors and riders do better.';
+      'Kedụ ka ahụmahụ gị dị? Echiche gị na-enyere ndị ahịa na ndị ọrụ aka.';
 
   @override
-  String get deliveryRateTitle => 'Rate this order';
+  String get deliveryRateTitle => 'Tụlee iwu a';
 
   @override
-  String get deliveryRatingBad => 'Not great';
+  String get deliveryRatingBad => 'Adịghị mma';
 
   @override
-  String get deliveryRatingFair => 'Could be better';
+  String get deliveryRatingFair => 'Nwere ike ịdị mma karịa';
 
   @override
-  String get deliveryRatingOkay => 'It was okay';
+  String get deliveryRatingOkay => 'Ọ dị mma';
 
   @override
-  String get deliveryRatingGood => 'Pretty good!';
+  String get deliveryRatingGood => 'Ọ dị mma!';
 
   @override
-  String get deliveryRatingLove => 'Loved it!';
+  String get deliveryRatingLove => 'Hụrụ n\'anya!';
 
   @override
-  String get deliveryFeedbackTitle => 'Tell us more (optional)';
+  String get deliveryFeedbackTitle => 'Gwa anyị ọzọ (nhọrọ)';
 
   @override
   String get deliveryFeedbackPlaceholder =>
-      'What made it great or not so great?';
+      'Gịnị mere ya dị mma ma ọ bụ na-adị mma?';
 
   @override
-  String get deliverySubmit => 'Submit rating';
+  String get deliverySubmit => 'Ziga ntuli aka';
 
   @override
-  String get deliverySkip => 'Skip for now';
+  String get deliverySkip => 'Wụfuo ugbu a';
 
   @override
-  String get deliveryThankYou => 'Thanks for the feedback!';
+  String get deliveryThankYou => 'Daalụ maka echiche gị!';
 
   @override
   String get deliveryThankYouBody =>
-      'Your rating helps the whole basket get better. See you next time.';
+      'Ntuli aka gị na-enyere ihe ọkpọ niile aka ịdị mma. Ka anyị hụ n\'oge ọzọ.';
 
   @override
-  String get deliveryBackHome => 'Back to home';
+  String get deliveryBackHome => 'Laghachi n\'ulo';
 
   @override
-  String get deliveryRateError => 'Tap a star to rate your order.';
+  String get deliveryRateError => 'Pịa kpakpando iji tụlee iwu gị.';
 
   @override
-  String get searchPlaceholder => 'Search jollof, tomatoes, chicken…';
+  String get searchPlaceholder => 'Chọọ jollof, tomato, ọkụkọ…';
 
   @override
-  String get searchRecentTitle => 'Recent searches';
+  String get searchRecentTitle => 'Nchọcha ndị ọ gara';
 
   @override
-  String get searchRecentClear => 'Clear';
+  String get searchRecentClear => 'Kpuchie';
 
   @override
-  String get searchRecentCleared => 'Recent searches cleared';
+  String get searchRecentCleared => 'Ehichapụ nchọcha ndị ọ gara';
 
   @override
-  String get productAddButton => 'Add to basket';
+  String get productAddButton => 'Tinye na ihe ọkpọ';
 
   @override
-  String get productNotFound => 'Product not found.';
+  String get productNotFound => 'Ahụghị ngwaahịa.';
 
   @override
-  String get homeSearchPlaceholder =>
-      'Search for jollof, tomatoes, chicken, pots…';
+  String get homeSearchPlaceholder => 'Chọọ jollof, tomato, ọkụkọ, ite…';
 
   @override
-  String get homeBulkMarketsTitle => 'Bulk markets';
+  String get homeBulkMarketsTitle => 'Ahịa oke';
 
   @override
   String get homeBulkMarketsSubtitle =>
-      'Wholesale lots & corridor prices, direct from farms';
+      'Nnukwu ihe na ọnụahịa ụzọ, ozugbo sitere n\'ubi';
 
   @override
-  String get homeOffersThisWeek => 'THIS WEEK';
+  String get homeOffersThisWeek => 'IKE A';
 
   @override
-  String get homeOfferTitle => 'Free delivery on orders over ₦5,000';
+  String get homeOfferTitle => 'Nnyefe n\'efu maka iwu karịa N5,000';
 
   @override
-  String get homeOfferSubtitle => 'Until Sunday. No code needed.';
+  String get homeOfferSubtitle => 'Ruo Sọndee. Koodu aghachighị.';
 
   @override
-  String get homeOfferButton => 'Order now';
+  String get homeOfferButton => 'Iwu ugbu a';
 
   @override
-  String get homeAddAddress => 'Add a delivery address';
+  String get homeAddAddress => 'Tinye adreesi nnyefe';
 
   @override
   String homeDeliveringTo(String address) {
@@ -591,7 +594,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get aboutSendFeedback => 'Zipu echiche gị';
 
   @override
-  String get aboutSendFeedbackSub => 'Help us improve';
+  String get aboutSendFeedbackSub => 'Nyere anyị aka imelite';
 
   @override
   String get aboutTerms => 'Ụgha ọrụ';
@@ -606,10 +609,10 @@ class AppLocalizationsIg extends AppLocalizations {
   String get aboutPrivacySub => 'Otu anyị si elekọta ozi gị';
 
   @override
-  String get aboutHowItWorks => 'Three steps to a full basket';
+  String get aboutHowItWorks => 'Nzọụkwụ atọ maka ihe ọkpọ jupụtara';
 
   @override
-  String get aboutSellOn => 'Sell on WAWUBasket';
+  String get aboutSellOn => 'Ree na WAWUBasket';
 
   @override
   String get aboutStep1Title => 'Chọọ ahịa';
@@ -653,71 +656,71 @@ class AppLocalizationsIg extends AppLocalizations {
   String get addAddressTitle => 'Tinye adreesị';
 
   @override
-  String get addAddressEditTitle => 'Edit address';
+  String get addAddressEditTitle => 'Dezie adreesi';
 
   @override
-  String get addAddressLabelSection => 'LABEL';
+  String get addAddressLabelSection => 'AKARA';
 
   @override
-  String get addAddressLabelHome => 'Home';
+  String get addAddressLabelHome => 'Ụlọ';
 
   @override
-  String get addAddressLabelOffice => 'Office';
+  String get addAddressLabelOffice => 'Ọfịs';
 
   @override
-  String get addAddressLabelOther => 'Other';
+  String get addAddressLabelOther => 'Nke ọzọ';
 
   @override
-  String get addAddressLine => 'Address line';
+  String get addAddressLine => 'Ahịrịokwu adreesi';
 
   @override
-  String get addAddressLinePlaceholder => 'Street, area, city';
+  String get addAddressLinePlaceholder => 'Okporo ụzọ, mpaghara, obodo';
 
   @override
-  String get addAddressApartment => 'Apartment / unit';
+  String get addAddressApartment => 'Nzụlọ / ụlọ';
 
   @override
-  String get addAddressApartmentPlaceholder => 'Optional';
+  String get addAddressApartmentPlaceholder => 'Nhọrọ';
 
   @override
-  String get addAddressNote => 'Note for the rider';
+  String get addAddressNote => 'Ndetu maka onye ọrụ';
 
   @override
-  String get addAddressNotePlaceholder => 'Use the gate on Akin Adesola';
+  String get addAddressNotePlaceholder => 'Jiri ọnụ ụzọ n\'akụkụ Akin Adesola';
 
   @override
-  String get addAddressDefault => 'Make this my default address';
+  String get addAddressDefault => 'Mee nke a adreesi m ndabara';
 
   @override
   String get addAddressSave => 'Chekwa adreesị';
 
   @override
-  String get addAddressSaveChanges => 'Save changes';
+  String get addAddressSaveChanges => 'Chekwaa mgbanwe';
 
   @override
-  String get addAddressUpdated => 'Address updated';
+  String get addAddressUpdated => 'Emelitere adreesi';
 
   @override
-  String get addAddressSaved => 'Address saved';
+  String get addAddressSaved => 'Echekwara adreesi';
 
   @override
-  String get addAddressEnterLine => 'Enter the address line.';
+  String get addAddressEnterLine => 'Tinye ahịrịokwu adreesi.';
 
   @override
   String get chatTitle => 'Ọgbakọ';
 
   @override
   String get chatSubtitle =>
-      'Talk to support and anyone on your active orders.';
+      'Kwuo n\'ihe nkuzi na onye ọ bụla n\'iwu gị na-arụ ọrụ.';
 
   @override
-  String get chatMessageHint => 'Message';
+  String get chatMessageHint => 'Ozi';
 
   @override
-  String get chatLiveChat => 'Live chat';
+  String get chatLiveChat => 'Mkparịta ụka dị ndụ';
 
   @override
-  String get chatRepliesIn => 'Replies usually in under 2 min';
+  String get chatRepliesIn => 'Na-azaghachi n\'ime nkeji abụọ';
 
   @override
   String get deleteAccountTitle => 'Hichapụ akaụntụ';
@@ -736,34 +739,35 @@ class AppLocalizationsIg extends AppLocalizations {
   String get deleteAccountCheck3 => 'A gaghị enwe ike ịghọta akaụntụ gị n\'ihu';
 
   @override
-  String get deleteAccountWhyLeaving => 'Why are you leaving? (optional)';
+  String get deleteAccountWhyLeaving => 'Gịnị mere ị na-aga? (nhọrọ)';
 
   @override
-  String get deleteAccountReasonExpensive => 'Too expensive';
+  String get deleteAccountReasonExpensive => 'Ọnụahịa dị ọkọ';
 
   @override
-  String get deleteAccountReasonSlow => 'Delivery too slow';
+  String get deleteAccountReasonSlow => 'Nnyefe na-ewe oge';
 
   @override
-  String get deleteAccountReasonOptions => 'Not enough options';
+  String get deleteAccountReasonOptions => 'Nhọrọ adịghị zuru oke';
 
   @override
-  String get deleteAccountReasonTech => 'Technical issues';
+  String get deleteAccountReasonTech => 'Nsogbu teknụzụ';
 
   @override
-  String get deleteAccountReasonOther => 'Other';
+  String get deleteAccountReasonOther => 'Nke ọzọ';
 
   @override
-  String get deleteAccountConfirmTitle => 'Delete your account permanently?';
+  String get deleteAccountConfirmTitle =>
+      'Hichapụ akaụntụ gị ruo mgbe ebighị ebi?';
 
   @override
-  String get deleteAccountConfirmBody => 'This cannot be undone.';
+  String get deleteAccountConfirmBody => 'Enweghị ike ịgbanwe nke a.';
 
   @override
-  String get deleteAccountYes => 'Yes, delete my account';
+  String get deleteAccountYes => 'Ee, hichapụ akaụntụ m';
 
   @override
-  String get deleteAccountNo => 'No, I want to stay';
+  String get deleteAccountNo => 'Mba, achọrọ m ikwụsị';
 
   @override
   String get dietaryTitle => 'Mmasị nri';
@@ -782,7 +786,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get dietaryNoShellfish => 'Azụ nwere ogwe apụtaghị';
 
   @override
-  String get dietaryHalal => 'Halal only';
+  String get dietaryHalal => 'Halal naanị';
 
   @override
   String get dietaryVegetarian => 'Onye na-eri akwụkwọ nri';
@@ -791,91 +795,90 @@ class AppLocalizationsIg extends AppLocalizations {
   String get dietaryVegan => 'Vegan';
 
   @override
-  String get dietaryNoDairy => 'No dairy';
+  String get dietaryNoDairy => 'Ọ dịghị mmiri ara';
 
   @override
-  String get dietaryNoNuts => 'No nuts';
+  String get dietaryNoNuts => 'Ọ dịghị nkatọ';
 
   @override
-  String get dietaryLowSugar => 'Low sugar';
+  String get dietaryLowSugar => 'Shuga dị ala';
 
   @override
-  String get dietaryAnythingElse => 'Anything else?';
+  String get dietaryAnythingElse => 'Ihe ọzọ?';
 
   @override
-  String get dietaryCustomPlaceholder => 'e.g. no MSG, no palm oil';
+  String get dietaryCustomPlaceholder =>
+      'Dị ka: ọ dịghị MSG, ọ dịghị manu nkwụ';
 
   @override
   String get dietarySave => 'Chekwa mmasị';
 
   @override
-  String get dietarySaved => 'Dietary preferences saved';
+  String get dietarySaved => 'Echekwara nhọrọ nri';
 
   @override
   String get favoritesTitle => 'Ihe ndị ị hụrụ n\'anya';
 
   @override
-  String get favoritesVendorsTab => 'Vendors';
+  String get favoritesVendorsTab => 'Ndị ahịa';
 
   @override
-  String get favoritesDishesTab => 'Dishes';
+  String get favoritesDishesTab => 'Nri';
 
   @override
   String get favoritesNoVendors =>
-      'No favorite vendors yet. Tap the heart on a storefront.';
+      'Ọ dịghị ndị ahịa ama n\'anya. Pịa obi n\'ụlọ ahịa.';
 
   @override
-  String get favoritesNoDishes =>
-      'No favorite dishes yet. Tap the heart on a dish.';
+  String get favoritesNoDishes => 'Ọ dịghị nri ama n\'anya. Pịa obi n\'nri.';
 
   @override
   String get notificationsTitle => 'Ọkwa';
 
   @override
-  String get notificationsMarkAllRead => 'Mark all read';
+  String get notificationsMarkAllRead => 'Tinye akara nke niile dị ka ọ gụrụ';
 
   @override
-  String get notificationsAllRead => 'All notifications marked read';
+  String get notificationsAllRead => 'Akọwaara mkọtọ niile dị ka e gụrụ ha';
 
   @override
-  String get notificationsEmpty =>
-      'You\'re all caught up — no notifications yet.';
+  String get notificationsEmpty => 'Idere niile — ọ dịghị mkọtọ.';
 
   @override
   String get orderHistoryTitle => 'Akụkọ iwu';
 
   @override
-  String get orderHistoryTabAll => 'All';
+  String get orderHistoryTabAll => 'Nke niile';
 
   @override
-  String get orderHistoryTabActive => 'Active';
+  String get orderHistoryTabActive => 'Na-arụ ọrụ';
 
   @override
-  String get orderHistoryTabPast => 'Past';
+  String get orderHistoryTabPast => 'Ndị gara';
 
   @override
   String get orderHistoryEmpty => 'Ọ dịghị iwu ọ bụla';
 
   @override
-  String get orderHistoryTrack => 'Track order';
+  String get orderHistoryTrack => 'Chụọ iwu';
 
   @override
-  String get orderHistoryReceipt => 'Receipt';
+  String get orderHistoryReceipt => 'Ọsụ ụgwọ';
 
   @override
   String get orderHistoryReorder => 'Mee iwu ọzọ';
 
   @override
-  String get orderHistoryReordered => 'Items added to your basket';
+  String get orderHistoryReordered => 'Etinyela ihe n\'ihe ọkpọ gị';
 
   @override
   String get personalInfoTitle => 'Ozi onwe gị';
 
   @override
-  String get personalInfoTapPhoto => 'Tap to change photo';
+  String get personalInfoTapPhoto => 'Pịa iji gbanwee foto';
 
   @override
-  String get personalInfoFullName => 'Full name';
+  String get personalInfoFullName => 'Aha zuru oke';
 
   @override
   String get personalInfoEmail => 'Email';
@@ -884,7 +887,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get personalInfoPhone => 'Ekwentị';
 
   @override
-  String get personalInfoDob => 'Date of birth';
+  String get personalInfoDob => 'Ụbọchị ọmụmụ';
 
   @override
   String get personalInfoSave => 'Chekwa mgbanwe';
@@ -893,131 +896,130 @@ class AppLocalizationsIg extends AppLocalizations {
   String get personalInfoSaved => 'Ezochikwara ozi!';
 
   @override
-  String get personalInfoNameRequired => 'Enter your full name.';
+  String get personalInfoNameRequired => 'Tinye aha zuru oke gị.';
 
   @override
-  String get personalInfoPhotoUpdated => 'Photo updated';
+  String get personalInfoPhotoUpdated => 'Emelitere foto';
 
   @override
-  String get personalInfoPhotoFailed => 'Couldn\'t upload that photo.';
+  String get personalInfoPhotoFailed => 'Enweghị ike ibugo foto ahụ.';
 
   @override
-  String get profileWalletMenu => 'Wallet & payment methods';
+  String get profileWalletMenu => 'Akpa ego na ụzọ ịkwụ ụgwọ';
 
   @override
-  String get profileWalletSub => 'Cards, bank, and mobile money';
+  String get profileWalletSub => 'Kaadị, ụlọ akụ, na nnachicha';
 
   @override
-  String get profilePersonalInfo => 'Personal information';
+  String get profilePersonalInfo => 'Ozi onwe';
 
   @override
-  String get profilePersonalInfoSub => 'Name, email, phone, verified ✓';
+  String get profilePersonalInfoSub => 'Aha, email, ekwentị, achọpụtara ✓';
 
   @override
-  String get profileSavedAddresses => 'Saved addresses';
+  String get profileSavedAddresses => 'Adreesi echekwara';
 
   @override
-  String get profileSavedAddressesSub => 'Where you live, work, and hang out';
+  String get profileSavedAddressesSub => 'Ebe i bi, na-arụ ọrụ, na i nọchiri';
 
   @override
-  String get profileNotifications => 'Notifications';
+  String get profileNotifications => 'Mkọtọ';
 
   @override
-  String get profileNotificationsSub => 'What we tell you about';
+  String get profileNotificationsSub => 'Ihe anyị na-agwa gị maka ya';
 
   @override
-  String get profileBulkOrders => 'Bulk orders';
+  String get profileBulkOrders => 'Iwu oke';
 
   @override
-  String get profileBulkOrdersSub => 'Escrow-protected purchases from /trade';
+  String get profileBulkOrdersSub => 'Ngwa ngwa nchedo site n\'ụzọ /trade';
 
   @override
-  String get profileWawuPlus => 'WAWU+ membership';
+  String get profileWawuPlus => 'Ọdịdị WAWU+';
 
   @override
-  String get profileWawuPlusSub => 'Discounted delivery and more';
+  String get profileWawuPlusSub => 'Nnyefe ntọhapụ na karịa';
 
   @override
-  String get profileLanguage => 'Language';
+  String get profileLanguage => 'Asụsụ';
 
   @override
-  String get profileDietary => 'Dietary preferences';
+  String get profileDietary => 'Nhọrọ nri';
 
   @override
-  String get profileDietarySub => 'Things you\'d rather not eat';
+  String get profileDietarySub => 'Ihe ị chọghị iri';
 
   @override
-  String get profileRateApp => 'Rate the app';
+  String get profileRateApp => 'Tụlee ngwa';
 
   @override
-  String get profileAbout => 'About WAWUBasket';
+  String get profileAbout => 'Maka WAWUBasket';
 
   @override
-  String get profileChangePassword => 'Change password';
+  String get profileChangePassword => 'Gbanwee paswọọdụ';
 
   @override
-  String get profileChangePasswordSub => 'Keep your account safe';
+  String get profileChangePasswordSub => 'Jide akaụntụ gị n\'oge';
 
   @override
-  String get profileBiometricLogin => 'Biometric login';
+  String get profileBiometricLogin => 'Ịbanye biometric';
 
   @override
-  String get profileBiometricLoginSub => 'Use your face or fingerprint';
+  String get profileBiometricLoginSub => 'Jiri ihu gị ma ọ bụ mkpisi aka gị';
 
   @override
-  String get profileTwoFactor => 'Two-factor authentication';
+  String get profileTwoFactor => 'Nchọpụta abụọ';
 
   @override
-  String get profileTwoFactorSub => 'Extra layer of protection';
+  String get profileTwoFactorSub => 'Layer nchedo ọzọ';
 
   @override
-  String get profileHelpCenter => 'Help center';
+  String get profileHelpCenter => 'Ebe nkuzi';
 
   @override
-  String get profileHelpCenterSub => 'Answers to common questions';
+  String get profileHelpCenterSub => 'Azịza maka ajụjụ ndị a na-ajụkarị';
 
   @override
-  String get profileChatWithUs => 'Chat with us';
+  String get profileChatWithUs => 'Kwuo n\'anyị';
 
   @override
-  String get profileChatWithUsSub => 'We\'re here to help';
+  String get profileChatWithUsSub => 'Anyị dị ebe a iji nyere aka';
 
   @override
-  String get profileReportProblem => 'Report a problem';
+  String get profileReportProblem => 'Kọọ nsogbu';
 
   @override
-  String get profileReportProblemSub => 'Tell us what went wrong';
+  String get profileReportProblemSub => 'Gwa anyị ihe mere';
 
   @override
-  String get profileTerms => 'Terms of service';
+  String get profileTerms => 'Usoro ọrụ';
 
   @override
-  String get profileTermsSub => 'The rules of the basket';
+  String get profileTermsSub => 'Iwu ihe ọkpọ';
 
   @override
-  String get profilePrivacy => 'Privacy policy';
+  String get profilePrivacy => 'Iwu nzuzo';
 
   @override
-  String get profilePrivacySub => 'How we handle your info';
+  String get profilePrivacySub => 'Otu anyị si elekọta ozi gị';
 
   @override
-  String get profileSwitchRole => 'Switch role';
+  String get profileSwitchRole => 'Gbanwee ọrụ';
 
   @override
-  String get profileDeleteAccount => 'Delete account';
+  String get profileDeleteAccount => 'Hichapụ akaụntụ';
 
   @override
-  String get profileDeleteAccountSub => 'We\'ll be sad to see you go';
+  String get profileDeleteAccountSub => 'Anyị ga-achọ gị';
 
   @override
-  String get profileRateWawu => 'Rate WAWUBasket';
+  String get profileRateWawu => 'Tụlee WAWUBasket';
 
   @override
-  String get profileRateFeedback =>
-      'How are we doing? Your feedback shapes the app.';
+  String get profileRateFeedback => 'Anyị dị otu? Echiche gị na-emezi ngwa.';
 
   @override
-  String get profileRateTapStar => 'Tap a star to rate';
+  String get profileRateTapStar => 'Pịa kpakpando iji tụlee';
 
   @override
   String get profileRateSubmit => 'Nyefee';
@@ -1028,17 +1030,16 @@ class AppLocalizationsIg extends AppLocalizations {
   }
 
   @override
-  String get profileSignOutTitle => 'Sign out?';
+  String get profileSignOutTitle => 'Ị ga-apụ?';
 
   @override
-  String get profileSignOutBody =>
-      'You\'ll need to sign in again to place new orders.';
+  String get profileSignOutBody => 'Ị ga-achọ ịbanye ọzọ iji tinye iwu ọhụrụ.';
 
   @override
-  String get profileSignOut => 'Sign out';
+  String get profileSignOut => 'Pụọ';
 
   @override
-  String get profileChoosePhoto => 'Choose a profile photo';
+  String get profileChoosePhoto => 'Họrọ foto profaịlụ';
 
   @override
   String get receiptTitle => 'Risiti';
@@ -1050,19 +1051,19 @@ class AppLocalizationsIg extends AppLocalizations {
   String get receiptDelivery => 'Ụgwọ njem';
 
   @override
-  String get receiptServiceFee => 'Service fee';
+  String get receiptServiceFee => 'Ụgwọ ọrụ';
 
   @override
-  String get receiptTotalPaid => 'Total paid';
+  String get receiptTotalPaid => 'Ngụkọta akwụrụ';
 
   @override
-  String get receiptReorder => 'Reorder';
+  String get receiptReorder => 'Chụkwuo iwu ọzọ';
 
   @override
-  String get receiptReportIssue => 'Report an issue';
+  String get receiptReportIssue => 'Kọọ nsogbu';
 
   @override
-  String get receiptNotFound => 'Receipt not found.';
+  String get receiptNotFound => 'Ahụghị ọsụ ụgwọ.';
 
   @override
   String get savedAddressesTitle => 'Adreesị echekwara';
@@ -1074,13 +1075,13 @@ class AppLocalizationsIg extends AppLocalizations {
   String get savedAddressesEmpty => 'Enweghị adreesị echekwara';
 
   @override
-  String get savedAddressesDefault => 'Default';
+  String get savedAddressesDefault => 'Ndabara';
 
   @override
-  String get savedAddressesEdit => 'Edit';
+  String get savedAddressesEdit => 'Dezie';
 
   @override
-  String get savedAddressesMakeDefault => 'Make default';
+  String get savedAddressesMakeDefault => 'Mee ndabara';
 
   @override
   String savedAddressesSetDefault(String label) {
@@ -1091,65 +1092,65 @@ class AppLocalizationsIg extends AppLocalizations {
   String get securityTitle => 'Nchekwa';
 
   @override
-  String get securitySubtitle => 'Keep your account safe.';
+  String get securitySubtitle => 'Jide akaụntụ gị n\'oge.';
 
   @override
   String get securityChangePassword => 'Gbanwee okwuntughe';
 
   @override
-  String get securityChangePasswordSub => 'Keep your account safe';
+  String get securityChangePasswordSub => 'Jide akaụntụ gị n\'oge';
 
   @override
   String get securityBiometric => 'Banye site na ihe ahụ gị';
 
   @override
-  String get securityBiometricSub => 'Use your face or fingerprint';
+  String get securityBiometricSub => 'Jiri ihu gị ma ọ bụ mkpisi aka gị';
 
   @override
   String get securityTwoFactor => 'Nchekwa nke abụọ';
 
   @override
-  String get securityTwoFactorSub => 'Extra layer of protection';
+  String get securityTwoFactorSub => 'Layer nchedo ọzọ';
 
   @override
-  String get securityCurrentPassword => 'Current password';
+  String get securityCurrentPassword => 'Paswọọdụ ugbu a';
 
   @override
-  String get securityNewPassword => 'New password';
+  String get securityNewPassword => 'Paswọọdụ ọhụrụ';
 
   @override
-  String get securityConfirmNewPassword => 'Confirm new password';
+  String get securityConfirmNewPassword => 'Kwenye paswọọdụ ọhụrụ';
 
   @override
-  String get securityUpdatePassword => 'Update password';
+  String get securityUpdatePassword => 'Melite paswọọdụ';
 
   @override
-  String get securityPasswordMismatch => 'Passwords do not match.';
+  String get securityPasswordMismatch => 'Paswọọdụ abụọ ahụ adịghị jikọọ.';
 
   @override
   String get securityPasswordShort =>
-      'New password must be at least 8 characters.';
+      'Paswọọdụ ọhụrụ kwesịrị inwe ma ọ dịkarịa ala mkpụrụedemede 8.';
 
   @override
-  String get securityPasswordUpdated => 'Password updated successfully.';
+  String get securityPasswordUpdated => 'Emelitere paswọọdụ nke ọma.';
 
   @override
   String get supportTitle => 'Enyemaka';
 
   @override
-  String get supportSearchPlaceholder => 'Search help articles';
+  String get supportSearchPlaceholder => 'Chọọ edemede nkuzi';
 
   @override
-  String get supportContactUs => 'CONTACT US';
+  String get supportContactUs => 'Kpọtụrụ anyị';
 
   @override
-  String get supportLiveChat => 'Live chat';
+  String get supportLiveChat => 'Mkparịta ụka dị ndụ';
 
   @override
-  String get supportLiveChatSub => 'Usually replies in under 2 min';
+  String get supportLiveChatSub => 'Na-azaghachi n\'ime nkeji abụọ';
 
   @override
-  String get supportLiveChatCta => 'Start chat';
+  String get supportLiveChatCta => 'Bido mkparịta ụka';
 
   @override
   String get supportCall => 'Kpọọ anyị';
@@ -1158,7 +1159,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get supportCallSub => 'Sọrọ na onye ọrụ anyị';
 
   @override
-  String get supportCallCta => 'Call';
+  String get supportCallCta => 'Kpọọ';
 
   @override
   String get supportEmail => 'Zipu anyị email';
@@ -1167,22 +1168,22 @@ class AppLocalizationsIg extends AppLocalizations {
   String get supportEmailSub => 'anyị ga-aza n\'oge dị mkpirikpi';
 
   @override
-  String get supportEmailCta => 'Send email';
+  String get supportEmailCta => 'Ziga email';
 
   @override
-  String get supportCommonQuestions => 'Common questions';
+  String get supportCommonQuestions => 'Ajụjụ ndị a na-ajụkarị';
 
   @override
-  String get supportOpenTicket => 'OPEN TICKET';
+  String get supportOpenTicket => 'Mepee tiketi';
 
   @override
-  String get supportViewTicket => 'View ticket';
+  String get supportViewTicket => 'Lelee tiketi';
 
   @override
   String get walletTitle => 'Akpa ego';
 
   @override
-  String get walletAvailableBalance => 'AVAILABLE BALANCE';
+  String get walletAvailableBalance => 'ỤGWỌ DỊ';
 
   @override
   String walletEscrowHeld(String amount) {
@@ -1193,79 +1194,79 @@ class AppLocalizationsIg extends AppLocalizations {
   String get walletTopUp => 'Tinye ego';
 
   @override
-  String get walletSend => 'Send';
+  String get walletSend => 'Zipu';
 
   @override
   String get walletWithdraw => 'Wepụ ego';
 
   @override
-  String get walletCards => 'Cards';
+  String get walletCards => 'Kaadị';
 
   @override
-  String get walletRecentTxns => 'Recent transactions';
+  String get walletRecentTxns => 'Azụmahịa ndị ọ gara';
 
   @override
-  String get walletNoTxns => 'No transactions yet.';
+  String get walletNoTxns => 'Ọ dịghị azụmahịa.';
 
   @override
-  String get walletTopUpTitle => 'Top up wallet';
+  String get walletTopUpTitle => 'Jupụta akpa ego';
 
   @override
-  String get walletSendTitle => 'Send money';
+  String get walletSendTitle => 'Zipu ego';
 
   @override
-  String get walletWithdrawTitle => 'Withdraw';
+  String get walletWithdrawTitle => 'Wepụ';
 
   @override
-  String get walletPaymentMethodsTitle => 'Payment methods';
+  String get walletPaymentMethodsTitle => 'Ụzọ ịkwụ ụgwọ';
 
   @override
-  String get walletAmountLabel => 'AMOUNT';
+  String get walletAmountLabel => 'ỌNỤỌGỤ';
 
   @override
-  String get walletEnterAmount => 'Enter amount';
+  String get walletEnterAmount => 'Tinye ọnụọgụ';
 
   @override
-  String get walletPayWith => 'PAY WITH';
+  String get walletPayWith => 'KWỤỌ NA';
 
   @override
-  String get walletWithdrawTo => 'WITHDRAW TO';
+  String get walletWithdrawTo => 'WEPỤ NA';
 
   @override
-  String get walletDebitCard => 'Debit card';
+  String get walletDebitCard => 'Kaadị debit';
 
   @override
-  String get walletBankTransfer => 'Bank transfer';
+  String get walletBankTransfer => 'Ụlọ akụ ntụgharị';
 
   @override
-  String get walletMobileMoney => 'Mobile money';
+  String get walletMobileMoney => 'Ego ekwentị';
 
   @override
-  String get walletEnterAmountHint => 'Enter an amount';
+  String get walletEnterAmountHint => 'Tinye ọnụọgụ';
 
   @override
-  String get walletTopUpHint => 'Top up';
+  String get walletTopUpHint => 'Jupụta';
 
   @override
-  String get walletAddNewMethod => 'Add new method';
+  String get walletAddNewMethod => 'Tinye ụzọ ọhụrụ';
 
   @override
-  String get walletMethodRemoved => 'Method removed';
+  String get walletMethodRemoved => 'Ewepụrụ ụzọ';
 
   @override
   String get wawuPlusTitle => 'WAWU+';
 
   @override
-  String get wawuPlusHero => 'Go plus. Go more.';
+  String get wawuPlusHero => 'Bụrụ ọzọ. Mee karịa.';
 
   @override
   String get wawuPlusSubtitle => 'Nweta ihe karịa';
 
   @override
-  String get wawuPlusMembers => 'Join 12,400 other happy baskets';
+  String get wawuPlusMembers => 'Sonyere na ihe ọkpọ 12,400 na-atọ ụtọ ọzọ';
 
   @override
-  String get wawuPlusIncluded => 'What\'s included';
+  String get wawuPlusIncluded => 'Ihe gụnyere';
 
   @override
   String get wawuPlusBenefit1 => 'Njem n\'efu n\'iwu niile';
@@ -1280,81 +1281,81 @@ class AppLocalizationsIg extends AppLocalizations {
   String get wawuPlusBenefit4 => 'Ntinye pụrụ iche na ihe ọhụrụ mbụ';
 
   @override
-  String get wawuPlusBenefit5 => 'Early access to new features';
+  String get wawuPlusBenefit5 => 'Ohere mbụ ịhụ atụmatụ ọhụrụ';
 
   @override
-  String get wawuPlusPickPlan => 'Pick a plan';
+  String get wawuPlusPickPlan => 'Họrọ atụmatụ';
 
   @override
   String get wawuPlusYearly => 'Ọnwa iri na abụọ (Chekwa 20%)';
 
   @override
-  String get wawuPlusYearlyNote => 'Save 20% · billed once';
+  String get wawuPlusYearlyNote => 'Chekwaa 20% · akwụrụ otu ugboro';
 
   @override
   String get wawuPlusMonthly => 'Ọnwa nke otu';
 
   @override
-  String get wawuPlusMonthlyNote => 'Cancel anytime';
+  String get wawuPlusMonthlyNote => 'Kagbuo mgbe ọ bụla';
 
   @override
-  String get wawuPlusStartTrial => 'Start free trial, 7 days';
+  String get wawuPlusStartTrial => 'Bido nnwale n\'efu ụbọchị 7';
 
   @override
-  String get wawuPlusActiveMember => 'You\'re a WAWU+ member';
+  String get wawuPlusActiveMember => 'Ị bụ ọdịdị WAWU+';
 
   @override
-  String get wawuPlusWebOnly => 'Open WAWUBasket on your phone to join WAWU+.';
+  String get wawuPlusWebOnly =>
+      'Mepee WAWUBasket n\'ekwentị gị iji sonyere WAWU+.';
 
   @override
-  String get wawuPlusWelcome => 'Welcome to WAWU+!';
+  String get wawuPlusWelcome => 'Nnabata na WAWU+!';
 
   @override
-  String get operatorSignOutTitle => 'Sign out?';
+  String get operatorSignOutTitle => 'Ị ga-apụ?';
 
   @override
   String get operatorSignOutBody =>
-      'You\'ll need to sign in again to use this dashboard.';
+      'Ị ga-achọ ịbanye ọzọ iji jiri dashboard a.';
 
   @override
-  String get operatorSignOut => 'Sign out';
+  String get operatorSignOut => 'Pụọ';
 
   @override
-  String get operatorPersonalInfo => 'Personal information';
+  String get operatorPersonalInfo => 'Ozi onwe';
 
   @override
-  String get operatorPersonalInfoSub => 'Name, email, phone, verified ✓';
+  String get operatorPersonalInfoSub => 'Aha, email, ekwentị, achọpụtara ✓';
 
   @override
-  String get operatorSavedAddresses => 'Saved addresses';
+  String get operatorSavedAddresses => 'Adreesi echekwara';
 
   @override
-  String get operatorSavedAddressesSub =>
-      'Where deliveries pick up and drop off';
+  String get operatorSavedAddressesSub => 'Ebe nnyefe si na ya na ebe ọ bụ';
 
   @override
-  String get operatorNotifications => 'Notifications';
+  String get operatorNotifications => 'Mkọtọ';
 
   @override
-  String get operatorNotificationsSub => 'New orders, payouts, alerts';
+  String get operatorNotificationsSub => 'Iwu ọhụrụ, ụgwọ, ọchụchọ';
 
   @override
-  String get operatorLanguage => 'Language';
+  String get operatorLanguage => 'Asụsụ';
 
   @override
-  String get operatorAbout => 'About WAWUBasket';
+  String get operatorAbout => 'Maka WAWUBasket';
 
   @override
-  String get operatorHelpSupport => 'Help & support';
+  String get operatorHelpSupport => 'Enyemaka na nkuzi';
 
   @override
-  String get operatorHelpSupportSub => 'Chat to a real human';
+  String get operatorHelpSupportSub => 'Kwuo n\'mmadụ n\'ezie';
 
   @override
-  String get operatorSwitchRole => 'Switch role';
+  String get operatorSwitchRole => 'Gbanwee ọrụ';
 
   @override
-  String get operatorChoosePhoto => 'Choose a profile photo';
+  String get operatorChoosePhoto => 'Họrọ foto profaịlụ';
 
   @override
   String get vendorAlertsTitle => 'Ọkwa';
@@ -1366,7 +1367,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get vendorAnalyticsTitle => 'Nyocha';
 
   @override
-  String get vendorAnalyticsSubtitle => 'The numbers don\'t lie.';
+  String get vendorAnalyticsSubtitle => 'Ọnụọgụ adịghị ụgha.';
 
   @override
   String get vendorAnalyticsOrders => 'Iwu niile';
@@ -1378,190 +1379,191 @@ class AppLocalizationsIg extends AppLocalizations {
   String get vendorAnalyticsAvgOrder => 'Nkezi iwu';
 
   @override
-  String get vendorAnalyticsRating => 'Rating';
+  String get vendorAnalyticsRating => 'Ntuli aka';
 
   @override
-  String get vendorAnalyticsSalesTrend => 'Sales trend';
+  String get vendorAnalyticsSalesTrend => 'Ọkwa ọrịre';
 
   @override
   String get vendorAnalyticsPeakHours => 'Oge dị ọkụ';
 
   @override
-  String get vendorAnalyticsCancellations => 'Cancellations';
+  String get vendorAnalyticsCancellations => 'Ikagbuo';
 
   @override
   String get vendorAnalyticsTopSellers => 'Ndị na-ere karịa';
 
   @override
-  String get vendorAnalyticsExport => 'Export';
+  String get vendorAnalyticsExport => 'Mepụta';
 
   @override
-  String get vendorAnalyticsNoSales => 'No sales in this range yet.';
+  String get vendorAnalyticsNoSales => 'Ọ dịghị ọrịre n\'ime oge a.';
 
   @override
-  String get vendorAnalyticsLast7 => 'Last 7 days';
+  String get vendorAnalyticsLast7 => 'Ụbọchị 7 gara aga';
 
   @override
-  String get vendorAnalyticsLast30 => 'Last 30 days';
+  String get vendorAnalyticsLast30 => 'Ụbọchị 30 gara aga';
 
   @override
-  String get vendorAnalyticsLast90 => 'Last 90 days';
+  String get vendorAnalyticsLast90 => 'Ụbọchị 90 gara aga';
 
   @override
-  String get vendorHomeGoodMorning => 'Good morning,';
+  String get vendorHomeGoodMorning => 'Ụtụtụ ọma,';
 
   @override
-  String get vendorHomeOpen => 'Open';
+  String get vendorHomeOpen => 'Mepee';
 
   @override
-  String get vendorHomeClosed => 'Closed';
+  String get vendorHomeClosed => 'Mechie';
 
   @override
-  String get vendorHomeQuickActions => 'Quick actions';
+  String get vendorHomeQuickActions => 'Omume ngwa ngwa';
 
   @override
-  String get vendorHomeAddItem => 'Add item';
+  String get vendorHomeAddItem => 'Tinye ihe';
 
   @override
-  String get vendorHomeAnalytics => 'Analytics';
+  String get vendorHomeAnalytics => 'Nyocha';
 
   @override
-  String get vendorHomePayouts => 'Payouts';
+  String get vendorHomePayouts => 'Ụgwọ';
 
   @override
-  String get vendorHomeFreshOrders => 'Fresh orders';
+  String get vendorHomeFreshOrders => 'Iwu ọhụrụ';
 
   @override
-  String get vendorHomeInKitchen => 'In the kitchen';
+  String get vendorHomeInKitchen => 'N\'ụlọ oriri';
 
   @override
-  String get vendorHomeMore => 'More';
+  String get vendorHomeMore => 'Karịa';
 
   @override
-  String get vendorHomeInventory => 'Inventory';
+  String get vendorHomeInventory => 'Ihe ndị dị';
 
   @override
-  String get vendorHomeInventorySub => 'Stock levels & batches';
+  String get vendorHomeInventorySub => 'Ọkwa ihe na ọgbọ';
 
   @override
-  String get vendorHomeReviews => 'Reviews';
+  String get vendorHomeReviews => 'Nyocha';
 
   @override
-  String get vendorHomeReviewsSub => 'What customers say';
+  String get vendorHomeReviewsSub => 'Ihe ndị ahịa na-ekwu';
 
   @override
-  String get vendorHomeAlerts => 'Alerts';
+  String get vendorHomeAlerts => 'Ọchụchọ';
 
   @override
-  String get vendorHomeAlertsSub => 'Low stock, late orders, replies waiting';
+  String get vendorHomeAlertsSub =>
+      'Ihe dị ala, iwu nwayọ, azịza dị n\'ntọhapụ';
 
   @override
-  String get vendorHomeSettings => 'Store settings';
+  String get vendorHomeSettings => 'Ntọala ụlọ ahịa';
 
   @override
-  String get vendorHomeSettingsSub => 'Hours, prep time, holiday mode, staff';
+  String get vendorHomeSettingsSub => 'Oge, oge nkwado, ọnọdụ ezumike, ndị ọrụ';
 
   @override
-  String get vendorHomeDecline => 'Decline';
+  String get vendorHomeDecline => 'Jụ';
 
   @override
-  String get vendorHomeAccept => 'Accept';
+  String get vendorHomeAccept => 'Nakee';
 
   @override
   String get vendorHomeNoOrders =>
-      'No new orders. Drop a promo to bring them in.';
+      'Ọ dịghị iwu ọhụrụ. Tọbuo mmalite iji weta ha.';
 
   @override
   String get vendorInventoryTitle => 'Akụrụngwa';
 
   @override
   String get vendorKycReviewNote =>
-      'We\'ll review your documents and get you live.';
+      'Anyị ga-enyocha akwụkwọ gị wee weghara gị.';
 
   @override
-  String get vendorOrderNotFound => 'Can\'t find that order';
+  String get vendorOrderNotFound => 'Enweghị ike ịchọta iwu ahụ';
 
   @override
   String get vendorReviewsTitle => 'Ntuliaka';
 
   @override
-  String get vendorMenuPhotoFailed => 'Couldn\'t upload that photo.';
+  String get vendorMenuPhotoFailed => 'Enweghị ike ibugo foto ahụ.';
 
   @override
   String get agentHomeOnline =>
-      'You\'re online, transactions sync as you record them.';
+      'I nọ na-arụ ọrụ, azụmahịa na-eme dịka i na-edeta ha.';
 
   @override
-  String get agentRegisterSetUp => 'Let\'s get them set up.';
+  String get agentRegisterSetUp => 'Ka anyị tọọ ha.';
 
   @override
   String get agentRegisterOffline =>
-      'Offline-capable, we\'ll sync when you have connection.';
+      'Na-arụ ọrụ n\'enweghị ịntanetị, anyị ga-emekọrịta mgbe i nwere njikọ.';
 
   @override
-  String get agentTraderNotFound => 'Trader not found';
+  String get agentTraderNotFound => 'Ahụghị ọchịta ahịa';
 
   @override
   String get agentTradersEmpty =>
-      'No traders registered yet. Tap \"Register\" to add one.';
+      'Ọ dịghị ndị ọchịta ahịa edere aha ha. Pịa Debanye iji tinye otu.';
 
   @override
-  String get riderHomeOffline => 'You\'re offline';
+  String get riderHomeOffline => 'I nọghị na ịntanetị';
 
   @override
-  String get riderKycPhotoId => 'Photo of ID';
+  String get riderKycPhotoId => 'Foto nke ID';
 
   @override
   String get driverKycVerifyNote =>
-      'We verify with your transport union before you bid.';
+      'Anyị na-achọpụta site n\'ụlọ ọrụ ụgbọ ala gị tupu ị tinye ụgwọ.';
 
   @override
-  String get driverKycLicenceName => 'Drivers\' licence name, please.';
+  String get driverKycLicenceName => 'Aha ikike njem, biko.';
 
   @override
-  String get driverKycVehicleType => 'What you\'ll move loads with.';
+  String get driverKycVehicleType => 'Ihe ị ga-eji ebugharị ibu.';
 
   @override
   String get traderListingsEmpty =>
-      'No listings yet. Tap \"Post\" to add your first.';
+      'Ọ dịghị ndepụta. Pịa Tinye iji tinye nke mbụ gị.';
 
   @override
-  String get traderListingPhotoFailed => 'Couldn\'t upload that photo.';
+  String get traderListingPhotoFailed => 'Enweghị ike ibugo foto ahụ.';
 
   @override
-  String get exportListingNotFound => 'Can\'t find that listing';
+  String get exportListingNotFound => 'Enweghị ike ịchọta ndepụta ahụ';
 
   @override
-  String get exportEnquirySent => 'Enquiry sent, the trader will reach out.';
+  String get exportEnquirySent => 'Ezigara ajụjụ, ọchịta ahịa ga-akpọtụrụ gị.';
 
   @override
-  String get bulkCheckoutListingNotFound => 'Listing not found';
+  String get bulkCheckoutListingNotFound => 'Ahụghị ndepụta';
 
   @override
   String get bulkCheckoutEscrowNote =>
-      'We hold your funds until you confirm delivery. Dispute anytime if something\'s off.';
+      'Anyị na-ejide ego gị ruo mgbe i kwenye nnata. Kụọ akụ mgbe ọ bụla ọ bụ ihe.';
 
   @override
   String get escrowDisputeOpened =>
-      'Dispute opened. We\'ll review within 48 hours.';
+      'Emepee esemokwu. Anyị ga-enyocha n\'ime awa 48.';
 
   @override
-  String get escrowDisputeOrderNotFound => 'Order not found';
+  String get escrowDisputeOrderNotFound => 'Ahụghị iwu';
 
   @override
   String get escrowDisputeDetailsHint =>
-      'Tell us specifics, what arrived vs what you expected?';
+      'Gwa anyị nkọwa, ihe bịara vs ihe a tọrọ n\'anya?';
 
   @override
   String get escrowOrdersEmpty =>
-      'You haven\'t placed any bulk orders yet. Head to Trade to start.';
+      'I etinyeghị iwu oke ọ bụla. Gaa na Azụmahịa iji bido.';
 
   @override
-  String get escrowStatusNotFound => 'Can\'t find that order';
+  String get escrowStatusNotFound => 'Enweghị ike ịchọta iwu ahụ';
 
   @override
   String get escrowStatusReviewNote =>
-      'We\'ll review evidence and resolve within 48 hours.';
+      'Anyị ga-enyocha ihe akaebe wee dozie ya n\'ime awa 48.';
 
   @override
   String get recipesTitle => 'Sie nri n\'abalị a';
