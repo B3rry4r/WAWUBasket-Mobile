@@ -67,7 +67,6 @@ class ProfileStats {
     // Customer
     this.orders,
     this.favorites,
-    this.walletBalanceNaira,
     // Vendor
     this.vendorRating,
     this.vendorEarnedNaira,
@@ -92,7 +91,6 @@ class ProfileStats {
   // Customer
   final int? orders;
   final int? favorites;
-  final String? walletBalanceNaira;
 
   // Vendor — orders comes from the customer field above; rating & earned below
   final String? vendorRating;
@@ -122,7 +120,6 @@ class ProfileStats {
         // Customer
         orders: _toInt(j['orders']),
         favorites: _toInt(j['favorites']),
-        walletBalanceNaira: j['walletBalanceNaira']?.toString(),
         // Vendor
         vendorRating: j['rating']?.toString(),
         vendorEarnedNaira: j['earnedNaira']?.toString(),

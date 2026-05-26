@@ -228,9 +228,6 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
         ],
       AppRole.customer => [
           _Stat('Orders', s?.orders != null ? '${s!.orders}' : dash),
-          _Stat('Wallet', s?.walletBalanceNaira != null
-              ? _nairaK(int.tryParse(s!.walletBalanceNaira!) ?? 0)
-              : dash),
           _Stat('Favorites', s?.favorites != null ? '${s!.favorites}' : dash),
         ],
       AppRole.admin => [
