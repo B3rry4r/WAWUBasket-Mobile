@@ -38,6 +38,8 @@ import '../../features/agent/presentation/screens/agent_trader_detail_screen.dar
 import '../../features/agent/presentation/screens/agent_traders_screen.dart';
 import '../../features/category/presentation/screens/category_screen.dart';
 import '../../features/livestock/presentation/screens/meat_cut_screen.dart';
+import '../../features/recipes/presentation/screens/recipe_detail_screen.dart';
+import '../../features/recipes/presentation/screens/recipes_screen.dart';
 import '../../features/rider/presentation/rider_shell.dart';
 import '../../features/rider/presentation/screens/rider_delivery_complete_screen.dart';
 import '../../features/rider/presentation/screens/rider_delivery_screen.dart';
@@ -377,6 +379,17 @@ GoRouter buildRouter() {
         path: '${AppRoutes.meatCut}/:id',
         builder: (_, state) =>
             MeatCutScreen(productId: state.pathParameters['id']!),
+      ),
+
+      // Recipe combos
+      GoRoute(
+        path: AppRoutes.recipes,
+        builder: (_, _) => const RecipesScreen(),
+      ),
+      GoRoute(
+        path: '${AppRoutes.recipes}/:slug',
+        builder: (_, state) =>
+            RecipeDetailScreen(slug: state.pathParameters['slug']!),
       ),
 
       // ───────── Vendor (RBAC) ─────────

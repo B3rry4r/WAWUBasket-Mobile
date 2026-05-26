@@ -1567,4 +1567,114 @@ class AppLocalizationsYo extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'A ó ṣàyẹ̀wò ẹ̀rí kí a sì yanjú ní wakati 48.';
+
+  @override
+  String get recipesTitle => 'Sè oúnjẹ lálẹ́ yìí';
+
+  @override
+  String get recipesSubtitle => 'Ohun èlò gidi. Olùtà gidi. Apò kan ṣoṣo.';
+
+  @override
+  String get recipeDetailIngredients => 'Ohun tó wà nínú apò';
+
+  @override
+  String get recipeDetailServes => 'Ó tó';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Iṣẹ́jú $mins sísè';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Kékeré';
+
+  @override
+  String get recipeSizeMedium => 'Aárín';
+
+  @override
+  String get recipeSizeFamily => 'Ìdílé';
+
+  @override
+  String get recipeSizeParty => 'Àjọyọ̀';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Fi sí apò — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Àwọn ohun èlò kan kò sí';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Àwọn wọ̀nyí kò sí ní agbègbè rẹ báyìí: $items';
+  }
+
+  @override
+  String get recipeEmptyState =>
+      'Kò sí àwọn oúnjẹ síbẹ̀. Pa dà bá wa lẹ́yìn-ọ̀-rẹyìn.';
+
+  @override
+  String get recipeCartSection => 'Àpapọ̀ oúnjẹ';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Ohun èlò $count láti ọ̀dọ̀ olùtà $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Yọ oúnjẹ yìí kúrò?';
+
+  @override
+  String get recipeRemoveBody => 'Apò rẹ yóò pàdánù àpapọ̀ yìí.';
+
+  @override
+  String get homeCookTonight => 'Sè oúnjẹ lálẹ́ yìí';
+
+  @override
+  String get homeCookTonightSeeAll => 'Wo gbogbo rẹ̀';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Láti ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'À ń gbé láti ọ̀dọ̀ olùtà $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Wo gbogbo ohun èlò';
+
+  @override
+  String get recipeIngredientsCollapse => 'Mú kéré';
+
+  @override
+  String get recipeAddedToBasket => 'A fi kun apò.';
+
+  @override
+  String get recipeAddFailed => 'Kò lè fi kun apò. Gbìyànjú lẹ́ẹ̀kan sí.';
+
+  @override
+  String get recipeMatchFailed => 'Kò lè gba iye. Gbìyànjú ìwọ̀n míràn.';
+
+  @override
+  String get recipeDetailNotFound => 'A kò lè rí oúnjẹ yìí.';
+
+  @override
+  String get recipeDetailDescription => 'Nípa oúnjẹ yìí';
+
+  @override
+  String get recipeDetailCuisine => 'Onírúurú oúnjẹ';
+
+  @override
+  String get recipeLoadFailed =>
+      'Kò lè rí oúnjẹ. Fa láti gbìyànjú lẹ́ẹ̀kan sí.';
+
+  @override
+  String get actionRemove => 'Yọ kúrò';
+
+  @override
+  String get recipeOrderChildVendors => 'Láti ọ̀dọ̀ àwọn olùtà wọ̀nyí';
 }

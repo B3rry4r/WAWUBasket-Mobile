@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart' show openAppSettings;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/router/app_routes.dart';
@@ -164,7 +165,12 @@ class _PermissionsStep extends StatelessWidget {
   }
 }
 
-class _PermissionCard extends StatelessWidget {
+/// Tri-state result of a single permission prompt. Drives whether the
+/// card shows the original Allow/Deny buttons, a "Granted" success pill,
+/// or a "Denied — enable in settings" link.
+enum _PermissionState { unknown, granted, denied }
+
+class _PermissionCard extends StatefulWidget {
   const _PermissionCard({
     required this.icon,
     required this.title,
@@ -192,6 +198,50 @@ class _PermissionCard extends StatelessWidget {
   final VoidCallback? onTertiary;
 
   @override
+  State<_PermissionCard> createState() => _PermissionCardState();
+}
+
+class _PermissionCardState extends State<_PermissionCard> {
+  _PermissionState _state = _PermissionState.unknown;
+  bool _busy = false;
+
+  Future<void> _runPrimary() async {
+    if (widget.onPrimary == null || _busy) return;
+    setState(() => _busy = true);
+    final granted = await widget.onPrimary!.call();
+    if (!mounted) return;
+    setState(() {
+      _state = granted ? _PermissionState.granted : _PermissionState.denied;
+      _busy = false;
+    });
+    // TODO(i18n): key=onboardingPermissionGranted / onboardingPermissionDenied
+    wbShowSnack(
+      context,
+      granted
+          ? '${widget.primary}, thanks!'
+          : 'Permission denied. You can enable it later in settings.',
+    );
+  }
+
+  Future<void> _runSecondary() async {
+    if (widget.onSecondary == null || _busy) return;
+    setState(() => _busy = true);
+    final granted = await widget.onSecondary!.call();
+    if (!mounted) return;
+    setState(() {
+      _state = granted ? _PermissionState.granted : _PermissionState.denied;
+      _busy = false;
+    });
+    // TODO(i18n): key=onboardingPermissionAskLater
+    wbShowSnack(
+      context,
+      granted
+          ? '${widget.secondary}, thanks!'
+          : 'No problem, ask me later.',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WBCard(
       child: Column(
@@ -207,76 +257,39 @@ class _PermissionCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
-                child: WBIcon(icon, size: 18),
+                child: WBIcon(widget.icon, size: 18),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  title,
+                  widget.title,
                   style: WBTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     fontSize: 15,
                   ),
                 ),
               ),
+              if (_state == _PermissionState.granted) _GrantedPill(),
             ],
           ),
           const SizedBox(height: 10),
           Text(
-            sub,
+            widget.sub,
             style: WBTypography.caption.copyWith(
               color: WBColors.fgSecondary,
               height: 1.45,
             ),
           ),
           const SizedBox(height: 14),
-          Row(
-            children: [
-              Expanded(
-                child: WBButton(
-                  label: primary,
-                  size: WBButtonSize.sm,
-                  fullWidth: true,
-                  onPressed: () async {
-                    final granted = await onPrimary?.call() ?? true;
-                    if (!context.mounted) return;
-                    wbShowSnack(
-                      context,
-                      granted
-                          ? '$primary, thanks!'
-                          : 'Permission denied. You can enable it later in settings.',
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: WBButton(
-                  label: secondary,
-                  size: WBButtonSize.sm,
-                  fullWidth: true,
-                  variant: WBButtonVariant.secondary,
-                  onPressed: () async {
-                    final granted = await onSecondary?.call() ?? true;
-                    if (!context.mounted || onSecondary == null) return;
-                    wbShowSnack(
-                      context,
-                      granted
-                          ? '$secondary, thanks!'
-                          : 'No problem, ask me later.',
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          if (tertiary != null) ...[
+          _actionRow(),
+          if (widget.tertiary != null &&
+              _state != _PermissionState.granted) ...[
             const SizedBox(height: 6),
             Center(
               child: GestureDetector(
-                onTap: onTertiary,
+                onTap: widget.onTertiary,
                 child: Text(
-                  tertiary!,
+                  widget.tertiary!,
                   style: WBTypography.caption.copyWith(
                     color: WBColors.fgPlaceholder,
                     fontWeight: FontWeight.w500,
@@ -285,6 +298,150 @@ class _PermissionCard extends StatelessWidget {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+
+  Widget _actionRow() {
+    if (_state == _PermissionState.granted) {
+      // TODO(i18n): key=onboardingPermissionEnabled
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0x1410B981),
+          borderRadius: BorderRadius.circular(WBRadius.input),
+          border: Border.all(color: const Color(0x3310B981)),
+        ),
+        child: Row(
+          children: [
+            const WBIcon(
+              WBIconName.check,
+              size: 14,
+              color: Color(0xFF065F46),
+              strokeWidth: 2.4,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Enabled — you’re all set.',
+              style: WBTypography.caption.copyWith(
+                color: const Color(0xFF065F46),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    if (_state == _PermissionState.denied) {
+      // TODO(i18n): key=onboardingPermissionDeniedSettings
+      return Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: openAppSettings,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: WBColors.bgSoft,
+                  borderRadius: BorderRadius.circular(WBRadius.input),
+                ),
+                child: Row(
+                  children: [
+                    const WBIcon(
+                      WBIconName.close,
+                      size: 13,
+                      color: WBColors.fgSecondary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Denied — enable in settings',
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    const WBIcon(
+                      WBIconName.chevronRight,
+                      size: 13,
+                      color: WBColors.fgPlaceholder,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          WBButton(
+            label: widget.primary,
+            size: WBButtonSize.sm,
+            variant: WBButtonVariant.secondary,
+            onPressed: _busy ? null : _runPrimary,
+          ),
+        ],
+      );
+    }
+    return Row(
+      children: [
+        Expanded(
+          child: WBButton(
+            label: widget.primary,
+            size: WBButtonSize.sm,
+            fullWidth: true,
+            loading: _busy,
+            onPressed: _runPrimary,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: WBButton(
+            label: widget.secondary,
+            size: WBButtonSize.sm,
+            fullWidth: true,
+            variant: WBButtonVariant.secondary,
+            onPressed: widget.onSecondary == null ? null : _runSecondary,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _GrantedPill extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // TODO(i18n): key=onboardingPermissionGrantedPill
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color(0x1410B981),
+        borderRadius: BorderRadius.circular(WBRadius.pill),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const WBIcon(
+            WBIconName.check,
+            size: 11,
+            color: Color(0xFF065F46),
+            strokeWidth: 2.5,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            'Granted',
+            style: WBTypography.caption.copyWith(
+              color: const Color(0xFF065F46),
+              fontWeight: FontWeight.w600,
+              fontSize: 11,
+              letterSpacing: 0.2,
+            ),
+          ),
         ],
       ),
     );

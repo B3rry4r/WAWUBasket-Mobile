@@ -1562,4 +1562,116 @@ class AppLocalizationsIg extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'Sie nri n\'abalị a';
+
+  @override
+  String get recipesSubtitle =>
+      'Ihe ndị eji esi nri n\'ezie. Ndị na-ere ezigbo. Otu nkata.';
+
+  @override
+  String get recipeDetailIngredients => 'Ihe dị n\'ime nkata';
+
+  @override
+  String get recipeDetailServes => 'Erufere';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Nkeji $mins maka isi';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Obere';
+
+  @override
+  String get recipeSizeMedium => 'Etiti';
+
+  @override
+  String get recipeSizeFamily => 'Ezinụlọ';
+
+  @override
+  String get recipeSizeParty => 'Oriri';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Tinye na nkata — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Ụfọdụ ihe nri adịghị';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Ndị a anọghị na mpaghara gị ugbu a: $items';
+  }
+
+  @override
+  String get recipeEmptyState =>
+      'Enwebeghị uzo isi nri. Lọghachi n\'oge na-adịghị anya.';
+
+  @override
+  String get recipeCartSection => 'Mkpokọta nri';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Ihe nri $count site n\'aka ndị na-ere $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Wepụ uzo isi nri a?';
+
+  @override
+  String get recipeRemoveBody => 'Nkata gị ga-atụfu mkpokọta a.';
+
+  @override
+  String get homeCookTonight => 'Sie nri n\'abalị a';
+
+  @override
+  String get homeCookTonightSeeAll => 'Hụ niile';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Site na ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Ana-eburu site n\'aka ndị na-ere $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Hụ ihe niile';
+
+  @override
+  String get recipeIngredientsCollapse => 'Mechie';
+
+  @override
+  String get recipeAddedToBasket => 'Etinyere na nkata.';
+
+  @override
+  String get recipeAddFailed => 'Enweghị ike ịtinye na nkata. Nwaa ọzọ.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Enweghị ike inweta ọnụahịa. Nwaa nha dị iche.';
+
+  @override
+  String get recipeDetailNotFound => 'Anyị achọtaghị uzo isi nri ahụ.';
+
+  @override
+  String get recipeDetailDescription => 'Banyere nri a';
+
+  @override
+  String get recipeDetailCuisine => 'Ụdị nri';
+
+  @override
+  String get recipeLoadFailed =>
+      'Enweghị ike ibudata uzo isi nri. Dọkpụrụ ka ịnwaa ọzọ.';
+
+  @override
+  String get actionRemove => 'Wepu';
+
+  @override
+  String get recipeOrderChildVendors => 'Sitere n\'aka ndị a na-ere';
 }

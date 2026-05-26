@@ -470,5 +470,69 @@
   "escrowDispute": "رفع نزاع",
   "escrowPending": "قيد المعالجة",
   "escrowCompleted": "مكتمل",
-  "escrowFunded": "تم التمويل"
+  "escrowFunded": "تم التمويل",
+
+  "recipesTitle": "اطبخ الليلة",
+  "recipesSubtitle": "مكونات حقيقية. باعة حقيقيون. سلة واحدة.",
+  "recipeDetailIngredients": "ما يوجد في السلة",
+  "recipeDetailServes": "يكفي لـ",
+  "recipeDetailCookingTime": "{mins} دقيقة طهي",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "صغير",
+  "recipeSizeMedium": "متوسط",
+  "recipeSizeFamily": "عائلي",
+  "recipeSizeParty": "حفلة",
+  "recipeAddToBasket": "أضف إلى السلة — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "بعض المكونات مفقودة",
+  "recipeUnavailableBody": "هذه غير متوفرة في منطقتك الآن: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "لا توجد وصفات حتى الآن. عد قريبًا.",
+  "recipeCartSection": "وصفات الطبخ",
+  "recipeCartFromVendors": "{count} مكونات من {vendors} باعة",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "إزالة هذه الوصفة؟",
+  "recipeRemoveBody": "ستفقد سلتك هذه المجموعة.",
+  "homeCookTonight": "اطبخ الليلة",
+  "homeCookTonightSeeAll": "عرض الكل",
+  "recipeFromPrice": "ابتداءً من ₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "الاستلام من {count} باعة",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "عرض جميع المكونات",
+  "recipeIngredientsCollapse": "إظهار أقل",
+  "recipeAddedToBasket": "أُضيفت إلى السلة.",
+  "recipeAddFailed": "تعذرت الإضافة إلى السلة. حاول مرة أخرى.",
+  "recipeMatchFailed": "تعذر جلب السعر. جرب حجمًا مختلفًا.",
+  "recipeDetailNotFound": "لم نتمكن من العثور على هذه الوصفة.",
+  "recipeDetailDescription": "عن هذا الطبق",
+  "recipeDetailCuisine": "المطبخ",
+  "recipeLoadFailed": "تعذر تحميل الوصفات. اسحب لإعادة المحاولة.",
+  "actionRemove": "إزالة",
+  "recipeOrderChildVendors": "من هؤلاء الباعة"
 }

@@ -470,5 +470,69 @@
   "escrowDispute": "ቅሬታ",
   "escrowPending": "በሂደት ላይ",
   "escrowCompleted": "ተጠናቋል",
-  "escrowFunded": "ተሞልቷል"
+  "escrowFunded": "ተሞልቷል",
+
+  "recipesTitle": "ዛሬ ምሽት ምግብ ይስሩ",
+  "recipesSubtitle": "እውነተኛ ግብአቶች። እውነተኛ ሻጮች። አንድ ቅርጫት።",
+  "recipeDetailIngredients": "በቅርጫት ውስጥ ያለው",
+  "recipeDetailServes": "ለ",
+  "recipeDetailCookingTime": "{mins} ደቂቃ የሚበስል",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "ትንሽ",
+  "recipeSizeMedium": "መካከለኛ",
+  "recipeSizeFamily": "ቤተሰብ",
+  "recipeSizeParty": "ድግስ",
+  "recipeAddToBasket": "ወደ ቅርጫት ጨምር — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "አንዳንድ ግብአቶች የሉም",
+  "recipeUnavailableBody": "እነዚህ አሁን በአካባቢዎ የሉም: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "እስካሁን የምግብ አሰራር የለም። በቅርቡ ይመለሱ።",
+  "recipeCartSection": "የምግብ ጥምር",
+  "recipeCartFromVendors": "{count} ግብአቶች ከ{vendors} ሻጮች",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "ይህን የምግብ አሰራር ያስወግዱ?",
+  "recipeRemoveBody": "ቅርጫትዎ ይህን ጥምር ያጣል።",
+  "homeCookTonight": "ዛሬ ምሽት ምግብ ይስሩ",
+  "homeCookTonightSeeAll": "ሁሉንም ይመልከቱ",
+  "recipeFromPrice": "ከ₦{amount} ጀምሮ",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "ከ{count} ሻጮች በማንሳት ላይ",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "ሁሉንም ግብአቶች ይመልከቱ",
+  "recipeIngredientsCollapse": "ያነሰ አሳይ",
+  "recipeAddedToBasket": "ወደ ቅርጫት ተጨምሯል።",
+  "recipeAddFailed": "ወደ ቅርጫት መጨመር አልተቻለም። እንደገና ይሞክሩ።",
+  "recipeMatchFailed": "ዋጋ ማግኘት አልተቻለም። የተለየ መጠን ይሞክሩ።",
+  "recipeDetailNotFound": "ያንን የምግብ አሰራር ማግኘት አልቻልንም።",
+  "recipeDetailDescription": "ስለዚህ ምግብ",
+  "recipeDetailCuisine": "የምግብ አይነት",
+  "recipeLoadFailed": "የምግብ አሰራሮችን መጫን አልተቻለም። ለመሞከር ይጎትቱ።",
+  "actionRemove": "አስወግድ",
+  "recipeOrderChildVendors": "ከእነዚህ ሻጮች የተገኘ"
 }

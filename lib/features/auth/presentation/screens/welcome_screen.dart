@@ -1,15 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/auth/biometric_service.dart';
+import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/role_controller.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
-  static const _features = [
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  bool _bioReady = false;
+  String _bioLabel = 'Biometric';
+  bool _unlocking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometric();
+  }
+
+  Future<void> _checkBiometric() async {
+    final hasRefresh = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
+    if (!hasRefresh) return;
+    final bio = BiometricService.instance;
+    if (!await bio.isAvailable() || !await bio.isEnabled()) return;
+    final label = await bio.label();
+    if (!mounted) return;
+    setState(() {
+      _bioReady = true;
+      _bioLabel = label;
+    });
+  }
+
+  Future<void> _biometricResume() async {
+    if (_unlocking) return;
+    setState(() => _unlocking = true);
+    final ok = await BiometricService.instance.authenticate(
+      reason: 'Sign in to WAWUBasket',
+    );
+    if (!mounted) {
+      return;
+    }
+    if (!ok) {
+      setState(() => _unlocking = false);
+      return;
+    }
+    // Restore the customer session and hand off to home. The interceptor
+    // will refresh the access token from the stored refresh token on the
+    // first request.
+    RoleController.instance.setRole(AppRole.customer);
+    GuestModeController.instance.exit();
+    NotificationService.instance.registerToken();
+    if (!mounted) return;
+    context.go(AppRoutes.home);
+  }
+
+  static const _features = <_Feature>[
     _Feature(WBIconName.basket, 'Eat now, gather fresh, stock up, one basket.'),
     _Feature(WBIconName.bike, 'Watch your basket come to life in real time.'),
     _Feature(WBIconName.card, 'Pay your way, card, transfer, or wallet.'),
@@ -58,18 +114,55 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: WBSpacing.sm + 4),
               ],
               const SizedBox(height: WBSpacing.lg),
-              WBButton(
-                label: context.l10n.welcomeGetStarted,
-                fullWidth: true,
-                size: WBButtonSize.lg,
-                onPressed: () => context.push(AppRoutes.signup),
-              ),
-              const SizedBox(height: WBSpacing.sm + 4),
-              _SecondaryCta(
-                label: context.l10n.welcomeSignIn,
-                onPressed: () => context.push(AppRoutes.login),
-              ),
+              if (_bioReady) ...[
+                WBButton(
+                  // TODO(i18n): key=welcomeContinueWithBiometric
+                  label: 'Continue with $_bioLabel',
+                  fullWidth: true,
+                  size: WBButtonSize.lg,
+                  trailingIcon: WBIconName.arrowRight,
+                  loading: _unlocking,
+                  onPressed: _biometricResume,
+                ),
+                const SizedBox(height: WBSpacing.sm + 4),
+                _SecondaryCta(
+                  label: context.l10n.welcomeSignIn,
+                  onPressed: () => context.push(AppRoutes.login),
+                ),
+              ] else ...[
+                WBButton(
+                  label: context.l10n.welcomeGetStarted,
+                  fullWidth: true,
+                  size: WBButtonSize.lg,
+                  onPressed: () => context.push(AppRoutes.signup),
+                ),
+                const SizedBox(height: WBSpacing.sm + 4),
+                _SecondaryCta(
+                  label: context.l10n.welcomeSignIn,
+                  onPressed: () => context.push(AppRoutes.login),
+                ),
+              ],
               const SizedBox(height: WBSpacing.sm),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    GuestModeController.instance.enter();
+                    context.go(AppRoutes.home);
+                  },
+                  style: TextButton.styleFrom(
+                    foregroundColor: WBColors.fgHeader,
+                  ),
+                  // TODO(i18n): key=welcomeBrowseAsGuest
+                  child: Text(
+                    'Browse as guest',
+                    style: WBTypography.secondary.copyWith(
+                      color: WBColors.fgHeader,
+                      fontWeight: FontWeight.w600,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+              ),
               Center(
                 child: TextButton(
                   onPressed: () => _showOperatorSheet(context),

@@ -146,6 +146,16 @@ class RoleController {
     _persistRole();
   }
 
+  /// Drops the user into the customer shell without claiming a session.
+  /// Used by guest mode for App Store reviewers — the customer role is
+  /// active so the shell renders, but [signedIn] stays false so the
+  /// splash never auto-routes to home on the next cold start.
+  void setGuest() {
+    notifier.value = AppRole.customer;
+    _signedIn = false;
+    _persistRole();
+  }
+
   /// Resets the active role to customer and clears the signed-in flag.
   /// KYC progress is preserved so the user can switch back into an
   /// approved role without redoing it.

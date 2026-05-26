@@ -155,7 +155,8 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
                 const SizedBox(height: WBSpacing.lg),
                 const KycSectionLabel(
                   label: 'Identity',
-                  sub: 'For Face ID match at every payout.',
+                  // TODO(i18n): key=agentKycIdentitySub
+                  sub: 'For identity match at every payout.',
                 ),
                 const SizedBox(height: 12),
                 KycUploadTile(

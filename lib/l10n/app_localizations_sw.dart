@@ -1562,4 +1562,114 @@ class AppLocalizationsSw extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'We\'ll review evidence and resolve within 48 hours.';
+
+  @override
+  String get recipesTitle => 'Pika usiku huu';
+
+  @override
+  String get recipesSubtitle => 'Viungo halisi. Wauzaji halisi. Kikapu kimoja.';
+
+  @override
+  String get recipeDetailIngredients => 'Vilivyo ndani ya kikapu';
+
+  @override
+  String get recipeDetailServes => 'Inahudumia';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Dakika $mins za kupika';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Ndogo';
+
+  @override
+  String get recipeSizeMedium => 'Wastani';
+
+  @override
+  String get recipeSizeFamily => 'Familia';
+
+  @override
+  String get recipeSizeParty => 'Sherehe';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Ongeza kikapuni — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Baadhi ya viungo havipatikani';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Hivi havipatikani katika eneo lako sasa: $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Hakuna mapishi bado. Rudi hivi karibuni.';
+
+  @override
+  String get recipeCartSection => 'Mapishi mchanganyiko';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Viungo $count kutoka kwa wauzaji $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Ondoa mapishi haya?';
+
+  @override
+  String get recipeRemoveBody => 'Kikapu chako kitapoteza mchanganyiko huu.';
+
+  @override
+  String get homeCookTonight => 'Pika usiku huu';
+
+  @override
+  String get homeCookTonightSeeAll => 'Tazama yote';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Kuanzia ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Yanachukuliwa kutoka kwa wauzaji $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Tazama viungo vyote';
+
+  @override
+  String get recipeIngredientsCollapse => 'Onyesha kidogo';
+
+  @override
+  String get recipeAddedToBasket => 'Imeongezwa kikapuni.';
+
+  @override
+  String get recipeAddFailed => 'Imeshindikana kuongeza kikapuni. Jaribu tena.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Imeshindikana kupata bei. Jaribu ukubwa tofauti.';
+
+  @override
+  String get recipeDetailNotFound => 'Hatukupata mapishi hayo.';
+
+  @override
+  String get recipeDetailDescription => 'Kuhusu chakula hiki';
+
+  @override
+  String get recipeDetailCuisine => 'Aina ya chakula';
+
+  @override
+  String get recipeLoadFailed =>
+      'Imeshindikana kupakia mapishi. Vuta kujaribu tena.';
+
+  @override
+  String get actionRemove => 'Ondoa';
+
+  @override
+  String get recipeOrderChildVendors => 'Kutoka kwa wauzaji hawa';
 }

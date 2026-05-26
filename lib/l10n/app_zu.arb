@@ -470,5 +470,69 @@
   "escrowDispute": "Impikiswano",
   "escrowPending": "Ilindile",
   "escrowCompleted": "Igqitiwe",
-  "escrowFunded": "Ikhokhelwe"
+  "escrowFunded": "Ikhokhelwe",
+
+  "recipesTitle": "Pheka kusihlwa",
+  "recipesSubtitle": "Izithako zangempela. Abathengisi bangempela. Ubhasikidi owodwa.",
+  "recipeDetailIngredients": "Okukubhasikidi",
+  "recipeDetailServes": "Kufaka",
+  "recipeDetailCookingTime": "Imizuzu engu-{mins} yokupheka",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "Encane",
+  "recipeSizeMedium": "Maphakathi",
+  "recipeSizeFamily": "Umndeni",
+  "recipeSizeParty": "Iphathi",
+  "recipeAddToBasket": "Faka ebhasikidini — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "Ezinye izithako azitholakali",
+  "recipeUnavailableBody": "Lezi azitholakali endaweni yakho manje: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "Awekho amaresiphi okwamanje. Buya maduze.",
+  "recipeCartSection": "Amaresiphi ahlanganisiwe",
+  "recipeCartFromVendors": "Izithako ezingu-{count} kubathengisi abangu-{vendors}",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "Khipha le resiphi?",
+  "recipeRemoveBody": "Ubhasikidi wakho uzolahlekelwa yilokhu okuhlangene.",
+  "homeCookTonight": "Pheka kusihlwa",
+  "homeCookTonightSeeAll": "Buka konke",
+  "recipeFromPrice": "Kusukela ku-₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "Kuthathwa kubathengisi abangu-{count}",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "Buka zonke izithako",
+  "recipeIngredientsCollapse": "Bonisa okuncane",
+  "recipeAddedToBasket": "Kufakwe ebhasikidini.",
+  "recipeAddFailed": "Akukwazanga ukufakwa ebhasikidini. Zama futhi.",
+  "recipeMatchFailed": "Akukwazanga ukuthola intengo. Zama usayizi ohlukile.",
+  "recipeDetailNotFound": "Asikwazanga ukuthola iresiphi.",
+  "recipeDetailDescription": "Mayelana nalokhu okuphekiwe",
+  "recipeDetailCuisine": "Uhlobo lokudla",
+  "recipeLoadFailed": "Akukwazanga ukulayisha amaresiphi. Donsa ukuze uzame futhi.",
+  "actionRemove": "Khipha",
+  "recipeOrderChildVendors": "Kuvelele kubathengisi laba"
 }

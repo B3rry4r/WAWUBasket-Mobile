@@ -76,6 +76,11 @@ abstract final class AppRoutes {
   // Livestock
   static const meatCut = '/livestock/cut'; // append `/:id`
 
+  // Recipe combos — `/recipes` lists every cookable combo, and the detail
+  // route quotes pricing for the picked size + zone before checkout.
+  static const recipes = '/recipes';
+  static String recipeDetail(String slug) => '/recipes/$slug';
+
   // Vendor (mobile, gated by KYC). Home / Orders / Menu / Account are the
   // four shell tabs; the rest are pushed routes reached from Home or Account.
   static const vendorLogin = '/vendor/login';

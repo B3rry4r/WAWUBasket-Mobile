@@ -1609,4 +1609,115 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Nous examinerons les preuves et résoudrons dans les 48 heures.';
+
+  @override
+  String get recipesTitle => 'Cuisinez ce soir';
+
+  @override
+  String get recipesSubtitle =>
+      'De vrais ingrédients. De vrais vendeurs. Un seul panier.';
+
+  @override
+  String get recipeDetailIngredients => 'Ce qu\'il y a dans le panier';
+
+  @override
+  String get recipeDetailServes => 'Pour';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return '$mins min de cuisson';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Petit';
+
+  @override
+  String get recipeSizeMedium => 'Moyen';
+
+  @override
+  String get recipeSizeFamily => 'Famille';
+
+  @override
+  String get recipeSizeParty => 'Fête';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Ajouter au panier — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Quelques ingrédients manquent';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Ceux-ci ne sont pas disponibles chez vous : $items';
+  }
+
+  @override
+  String get recipeEmptyState => 'Pas encore de recettes. Revenez bientôt.';
+
+  @override
+  String get recipeCartSection => 'Combos recettes';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return '$count ingrédients de $vendors vendeurs';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Retirer cette recette ?';
+
+  @override
+  String get recipeRemoveBody => 'Votre panier perdra ce combo.';
+
+  @override
+  String get homeCookTonight => 'Cuisinez ce soir';
+
+  @override
+  String get homeCookTonightSeeAll => 'Tout voir';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'À partir de ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Récupération chez $count vendeurs';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Voir tous les ingrédients';
+
+  @override
+  String get recipeIngredientsCollapse => 'Réduire';
+
+  @override
+  String get recipeAddedToBasket => 'Ajouté au panier.';
+
+  @override
+  String get recipeAddFailed => 'Impossible d\'ajouter au panier. Réessayez.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Impossible d\'obtenir le prix. Essayez une autre taille.';
+
+  @override
+  String get recipeDetailNotFound => 'Impossible de trouver cette recette.';
+
+  @override
+  String get recipeDetailDescription => 'À propos de ce plat';
+
+  @override
+  String get recipeDetailCuisine => 'Cuisine';
+
+  @override
+  String get recipeLoadFailed =>
+      'Impossible de charger les recettes. Tirez pour réessayer.';
+
+  @override
+  String get actionRemove => 'Retirer';
+
+  @override
+  String get recipeOrderChildVendors => 'Provenant de ces vendeurs';
 }

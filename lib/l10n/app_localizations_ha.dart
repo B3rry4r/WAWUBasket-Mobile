@@ -1575,4 +1575,117 @@ class AppLocalizationsHa extends AppLocalizations {
   @override
   String get escrowStatusReviewNote =>
       'Za mu duba shaidar kuma mu warware cikin sa\'o\'i 48.';
+
+  @override
+  String get recipesTitle => 'Dafa abinci a daren yau';
+
+  @override
+  String get recipesSubtitle =>
+      'Kayan abinci na gaske. Masu sayarwa na gaske. Kwando guda.';
+
+  @override
+  String get recipeDetailIngredients => 'Abin da ke cikin kwandon';
+
+  @override
+  String get recipeDetailServes => 'Yana isa';
+
+  @override
+  String recipeDetailCookingTime(int mins) {
+    return 'Mintuna $mins na dafa';
+  }
+
+  @override
+  String get recipeSizeSmall => 'Karami';
+
+  @override
+  String get recipeSizeMedium => 'Matsakaici';
+
+  @override
+  String get recipeSizeFamily => 'Iyali';
+
+  @override
+  String get recipeSizeParty => 'Biki';
+
+  @override
+  String recipeAddToBasket(String price) {
+    return 'Sa cikin kwando — ₦$price';
+  }
+
+  @override
+  String get recipeUnavailableTitle => 'Wasu kayan abinci ba sa nan';
+
+  @override
+  String recipeUnavailableBody(String items) {
+    return 'Wadannan ba sa samuwa a yankinka yanzu: $items';
+  }
+
+  @override
+  String get recipeEmptyState =>
+      'Babu girke-girke har yanzu. Ka dawo nan ba da dadewa ba.';
+
+  @override
+  String get recipeCartSection => 'Hada-hadan girke-girke';
+
+  @override
+  String recipeCartFromVendors(int count, int vendors) {
+    return 'Kayan abinci $count daga masu sayarwa $vendors';
+  }
+
+  @override
+  String get recipeRemoveTitle => 'Cire wannan girke-girke?';
+
+  @override
+  String get recipeRemoveBody => 'Kwandonka zai rasa wannan hadi.';
+
+  @override
+  String get homeCookTonight => 'Dafa abinci a daren yau';
+
+  @override
+  String get homeCookTonightSeeAll => 'Duba duka';
+
+  @override
+  String recipeFromPrice(String amount) {
+    return 'Daga ₦$amount';
+  }
+
+  @override
+  String trackingRecipeMultiPickup(int count) {
+    return 'Daukar nauyi daga masu sayarwa $count';
+  }
+
+  @override
+  String get recipeIngredientsSeeAll => 'Duba dukan kayan abinci';
+
+  @override
+  String get recipeIngredientsCollapse => 'Karya';
+
+  @override
+  String get recipeAddedToBasket => 'An saka cikin kwando.';
+
+  @override
+  String get recipeAddFailed =>
+      'Bai yiwu a saka cikin kwando ba. Sake gwadawa.';
+
+  @override
+  String get recipeMatchFailed =>
+      'Bai yiwu a sami farashin ba. Gwada wani girma.';
+
+  @override
+  String get recipeDetailNotFound => 'Ba mu sami wannan girke-girke ba.';
+
+  @override
+  String get recipeDetailDescription => 'Game da wannan abinci';
+
+  @override
+  String get recipeDetailCuisine => 'Nau\'in abinci';
+
+  @override
+  String get recipeLoadFailed =>
+      'Bai yiwu a loda girke-girke ba. Ja don sake gwadawa.';
+
+  @override
+  String get actionRemove => 'Cire';
+
+  @override
+  String get recipeOrderChildVendors => 'An samo daga wadannan masu sayarwa';
 }

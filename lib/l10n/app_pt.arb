@@ -470,5 +470,69 @@
   "escrowDispute": "Abrir disputa",
   "escrowPending": "Pendente",
   "escrowCompleted": "Concluído",
-  "escrowFunded": "Financiado"
+  "escrowFunded": "Financiado",
+
+  "recipesTitle": "Cozinhe esta noite",
+  "recipesSubtitle": "Ingredientes reais. Vendedores reais. Uma cesta.",
+  "recipeDetailIngredients": "O que tem na cesta",
+  "recipeDetailServes": "Serve",
+  "recipeDetailCookingTime": "{mins} min de cozimento",
+  "@recipeDetailCookingTime": {
+    "placeholders": {
+      "mins": { "type": "int" }
+    }
+  },
+  "recipeSizeSmall": "Pequeno",
+  "recipeSizeMedium": "Médio",
+  "recipeSizeFamily": "Família",
+  "recipeSizeParty": "Festa",
+  "recipeAddToBasket": "Adicionar à cesta — ₦{price}",
+  "@recipeAddToBasket": {
+    "placeholders": {
+      "price": { "type": "String" }
+    }
+  },
+  "recipeUnavailableTitle": "Faltam alguns ingredientes",
+  "recipeUnavailableBody": "Estes não estão disponíveis na sua área agora: {items}",
+  "@recipeUnavailableBody": {
+    "placeholders": {
+      "items": { "type": "String" }
+    }
+  },
+  "recipeEmptyState": "Sem receitas ainda. Volte em breve.",
+  "recipeCartSection": "Combos de receita",
+  "recipeCartFromVendors": "{count} ingredientes de {vendors} vendedores",
+  "@recipeCartFromVendors": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "vendors": { "type": "int" }
+    }
+  },
+  "recipeRemoveTitle": "Remover esta receita?",
+  "recipeRemoveBody": "Sua cesta perderá este combo.",
+  "homeCookTonight": "Cozinhe esta noite",
+  "homeCookTonightSeeAll": "Ver tudo",
+  "recipeFromPrice": "A partir de ₦{amount}",
+  "@recipeFromPrice": {
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "trackingRecipeMultiPickup": "Recolhendo de {count} vendedores",
+  "@trackingRecipeMultiPickup": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "recipeIngredientsSeeAll": "Ver todos os ingredientes",
+  "recipeIngredientsCollapse": "Mostrar menos",
+  "recipeAddedToBasket": "Adicionado à cesta.",
+  "recipeAddFailed": "Não foi possível adicionar à cesta. Tente novamente.",
+  "recipeMatchFailed": "Não foi possível obter o preço. Tente um tamanho diferente.",
+  "recipeDetailNotFound": "Não encontramos essa receita.",
+  "recipeDetailDescription": "Sobre este prato",
+  "recipeDetailCuisine": "Culinária",
+  "recipeLoadFailed": "Não foi possível carregar receitas. Puxe para tentar de novo.",
+  "actionRemove": "Remover",
+  "recipeOrderChildVendors": "Fornecido por estes vendedores"
 }

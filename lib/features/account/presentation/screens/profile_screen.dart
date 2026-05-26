@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -23,12 +25,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    ProfileController.instance.load();
-    ProfileController.instance.loadStats();
+    if (!GuestModeController.instance.isGuest.value) {
+      ProfileController.instance.load();
+      ProfileController.instance.loadStats();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: GuestModeController.instance.isGuest,
+      builder: (_, isGuest, _) {
+        if (isGuest) return _buildGuest(context);
+        return _buildSignedIn(context);
+      },
+    );
+  }
+
+  Widget _buildGuest(BuildContext context) {
+    // TODO(i18n): key=profileGuestTitle / profileGuestBody / profileGuestCta
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(
+        WBSpacing.screenPadding,
+        80,
+        WBSpacing.screenPadding,
+        180,
+      ),
+      children: [
+        Center(
+          child: Container(
+            width: 96,
+            height: 96,
+            decoration: BoxDecoration(
+              color: WBColors.bgSoft,
+              borderRadius: BorderRadius.circular(28),
+            ),
+            alignment: Alignment.center,
+            child: const WBIcon(
+              WBIconName.user,
+              size: 36,
+              color: WBColors.fgHeader,
+            ),
+          ),
+        ),
+        const SizedBox(height: WBSpacing.lg),
+        Text(
+          "You're browsing as a guest",
+          textAlign: TextAlign.center,
+          style: WBTypography.hero.copyWith(fontSize: 24),
+        ),
+        const SizedBox(height: WBSpacing.sm),
+        Text(
+          'Sign in to manage your profile, orders, wallet and favorites.',
+          textAlign: TextAlign.center,
+          style: WBTypography.body.copyWith(
+            color: WBColors.fgSecondary,
+            fontSize: 14,
+          ),
+        ),
+        const SizedBox(height: WBSpacing.xl),
+        WBButton(
+          label: 'Sign in',
+          size: WBButtonSize.lg,
+          fullWidth: true,
+          trailingIcon: WBIconName.arrowRight,
+          onPressed: () => context.push(AppRoutes.login),
+        ),
+        const SizedBox(height: WBSpacing.sm + 4),
+        WBButton(
+          label: 'Create an account',
+          size: WBButtonSize.lg,
+          fullWidth: true,
+          variant: WBButtonVariant.secondary,
+          onPressed: () => context.push(AppRoutes.signup),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignedIn(BuildContext context) {
     final sections = _buildSections(context);
 
     return ListView(
@@ -286,12 +361,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             sub: context.l10n.profileBiometricLoginSub,
             onTap: () => context.push(AppRoutes.security),
           ),
-          AccountMenuRow(
-            icon: WBIconName.phone,
-            label: context.l10n.profileTwoFactor,
-            sub: context.l10n.profileTwoFactorSub,
-            onTap: () => context.push(AppRoutes.security),
-          ),
         ],
       ),
       AccountMenuSection(
@@ -404,6 +473,26 @@ class _RateSheet extends StatefulWidget {
 
 class _RateSheetState extends State<_RateSheet> {
   int _rating = 0;
+  bool _submitting = false;
+
+  Future<void> _openStore() async {
+    setState(() => _submitting = true);
+    try {
+      // TODO: real store ids — replace with the production Apple App Store ID
+      // and Play Store package once the listings are live.
+      final uri = Uri.parse(
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? 'https://apps.apple.com/app/idXXXXXXXXX'
+            : 'https://play.google.com/store/apps/details?id=africa.wawu.basket',
+      );
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      // Snackbar shown by the caller — keep the sheet open so they can
+      // retry without redoing the rating.
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -412,7 +501,11 @@ class _RateSheetState extends State<_RateSheet> {
         left: WBSpacing.screenPadding,
         right: WBSpacing.screenPadding,
         top: WBSpacing.lg,
-        bottom: MediaQuery.of(context).viewInsets.bottom + WBSpacing.xl,
+        // Combine bottom safe-area inset + keyboard inset so the CTA never
+        // hides behind the system nav bar or the floating tab pill.
+        bottom: MediaQuery.of(context).padding.bottom +
+            MediaQuery.of(context).viewInsets.bottom +
+            WBSpacing.xl,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -453,17 +546,25 @@ class _RateSheetState extends State<_RateSheet> {
           ),
           const SizedBox(height: WBSpacing.xl),
           WBButton(
-            label: _rating == 0 ? context.l10n.profileRateTapStar : context.l10n.profileRateSubmit,
+            label: _rating == 0
+                ? context.l10n.profileRateTapStar
+                : context.l10n.profileRateSubmit,
             size: WBButtonSize.lg,
             fullWidth: true,
             disabled: _rating == 0,
+            loading: _submitting,
             onPressed: _rating == 0
                 ? null
-                : () {
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(context.l10n.profileRateThanks('$_rating'))),
-                    );
+                : () async {
+                    final messenger = ScaffoldMessenger.of(context);
+                    final nav = Navigator.of(context);
+                    final thanks = context.l10n.profileRateThanks('$_rating');
+                    if (_rating >= 4) {
+                      await _openStore();
+                    }
+                    if (!mounted) return;
+                    nav.pop();
+                    messenger.showSnackBar(SnackBar(content: Text(thanks)));
                   },
           ),
         ],
