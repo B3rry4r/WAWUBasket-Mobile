@@ -176,6 +176,7 @@ class TradeController {
         'farmName': l.farmName,
         'farmRegion': l.farmRegion,
         if (l.imageUrl.isNotEmpty) 'imageKey': l.imageUrl,
+        if (l.category != null) 'category': l.category,
       });
     } on ApiException {
       // Keep the optimistic row; the trader can retry the save.

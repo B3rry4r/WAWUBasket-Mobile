@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/network/api_exception.dart';
 import '../../../core/utils/wb_format.dart';
+import '../../shopping/data/catalog_api.dart';
 import '../data/vendor_api.dart';
 
 /// One configurable modifier on a menu item (size, spice, extras). Cleanly
@@ -22,6 +23,18 @@ class ModifierGroup {
   final String name;
   final List<ModifierOption> options;
   final bool required;
+}
+
+/// A subcategory option shown in the vendor category picker.
+class VendorCategoryOption {
+  const VendorCategoryOption({
+    required this.id,
+    required this.label,
+    required this.parentLabel,
+  });
+  final String id;
+  final String label;
+  final String parentLabel;
 }
 
 /// Money fields cross the wire as BigInt strings; coerce to a plain int.
@@ -87,7 +100,7 @@ class VendorMenuItem {
       name: (j['title'] ?? j['name'] ?? '').toString(),
       description: (j['description'] ?? '').toString(),
       priceNaira: _money(j['price']),
-      category: (j['category'] ?? 'Mains').toString(),
+      category: (j['category'] ?? '').toString(),
       imageUrl: images.isNotEmpty ? images.first.toString() : '',
       available: '${j['status'] ?? 'active'}' == 'active',
       prepMins: (j['prepMins'] as num?)?.toInt() ?? 15,
@@ -101,23 +114,26 @@ class VendorMenuItem {
 class VendorMenuController {
   VendorMenuController._()
       : items = ValueNotifier<List<VendorMenuItem>>([]),
+        categoryOptions = ValueNotifier<List<VendorCategoryOption>>([]),
         mutationError = ValueNotifier<String?>(null) {
     load();
+    _loadCategories();
   }
   static final VendorMenuController instance = VendorMenuController._();
 
-  /// Fixed category set the menu screen uses for its tab strip. Mirrors
-  /// the customer-facing food categories so a vendor's tabs match what
-  /// the customer sees on the restaurant detail screen.
-  static const categories = ['Popular', 'Mains', 'Sides', 'Drinks'];
-
   final ValueNotifier<List<VendorMenuItem>> items;
+
+  /// Flattened list of subcategories from the real category tree, each
+  /// annotated with its parent category label. Used by the menu edit
+  /// screen's category picker and the menu screen's filter tabs.
+  final ValueNotifier<List<VendorCategoryOption>> categoryOptions;
 
   /// Non-null when a delete or update call fails. Screens can listen and
   /// show a snackbar, then reset to null.
   final ValueNotifier<String?> mutationError;
 
-  final _api = VendorApi.instance;
+  final _vendorApi = VendorApi.instance;
+  final _catalogApi = CatalogApi.instance;
 
   /// True for an item that exists only in this session's optimistic state
   /// (its create call may still be in flight or have failed).
@@ -141,13 +157,38 @@ class VendorMenuController {
   /// Pulls the vendor's products from the API.
   Future<void> load() async {
     try {
-      final raw = await _api.listProducts();
+      final raw = await _vendorApi.listProducts();
       items.value = [
         for (final e in raw)
           VendorMenuItem.fromJson((e as Map).cast<String, dynamic>()),
       ];
     } on ApiException {
       // Leave the current list in place — a later refresh will retry.
+    }
+  }
+
+  /// Loads the real category tree from the API and flattens it into
+  /// subcategory options for the picker and filter tabs.
+  Future<void> _loadCategories() async {
+    try {
+      final raw = await _catalogApi.categories();
+      final options = <VendorCategoryOption>[];
+      for (final cat in raw) {
+        if (cat is! Map) continue;
+        final parentLabel = (cat['label'] ?? '').toString();
+        final subs = (cat['subcategories'] as List?) ?? const [];
+        for (final sub in subs) {
+          if (sub is! Map) continue;
+          options.add(VendorCategoryOption(
+            id: (sub['id'] ?? '').toString(),
+            label: (sub['label'] ?? '').toString(),
+            parentLabel: parentLabel,
+          ));
+        }
+      }
+      categoryOptions.value = options;
+    } on ApiException {
+      // Leave current list in place.
     }
   }
 
@@ -184,7 +225,7 @@ class VendorMenuController {
     final removed = byId(id);
     items.value = [for (final it in items.value) if (it.id != id) it];
     if (!_isLocal(id)) {
-      _api.deleteProduct(id).catchError((Object e) {
+      _vendorApi.deleteProduct(id).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
         if (removed != null) items.value = [...items.value, removed];
       });
@@ -216,13 +257,13 @@ class VendorMenuController {
     if (modifierGroups != null) it.modifierGroups = modifierGroups;
     _bump();
     if (!_isLocal(id)) {
-      _api.updateProduct(id, {
+      _vendorApi.updateProduct(id, {
         'title': ?name,
         'description': ?description,
         'price': ?priceNaira,
         'category': ?category,
         'prepMins': ?prepMins,
-        'images': ?(imageUrl == null ? null : [imageUrl]),
+        'images': ?(imageUrl != null ? [imageUrl] : null),
       }).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
       });
@@ -262,7 +303,7 @@ class VendorMenuController {
   /// local id for the session; the next [load] reconciles to the real one.
   Future<void> _create(VendorMenuItem item) async {
     try {
-      await _api.createProduct({
+      await _vendorApi.createProduct({
         'title': item.name,
         'description': item.description,
         'price': item.priceNaira,

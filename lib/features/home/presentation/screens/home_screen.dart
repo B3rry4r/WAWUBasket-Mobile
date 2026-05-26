@@ -151,9 +151,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _QuickAction(
-                    icon: WBIconName.basket,
-                    label: 'Reorder',
-                    onTap: () => context.push(AppRoutes.ordersHistory),
+                    icon: WBIconName.star,
+                    label: 'Cook Tonight',
+                    onTap: () => context.push(AppRoutes.recipes),
                   ),
                   _QuickAction(
                     icon: WBIconName.pin,
@@ -165,66 +165,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: 'Chat',
                     onTap: () => context.push(AppRoutes.chatInbox),
                   ),
+                  _QuickAction(
+                    icon: WBIconName.basket,
+                    label: 'Reorder',
+                    onTap: () => context.push(AppRoutes.ordersHistory),
+                  ),
                 ],
-              )),
-              const SizedBox(height: 18),
-              _padded(GestureDetector(
-                onTap: () => context.push(AppRoutes.trade),
-                behavior: HitTestBehavior.opaque,
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: WBColors.surfaceDark,
-                    borderRadius: BorderRadius.circular(WBRadius.card),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        alignment: Alignment.center,
-                        child: const WBIcon(
-                          WBIconName.basket,
-                          size: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              context.l10n.homeBulkMarketsTitle,
-                              style: WBTypography.body.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              context.l10n.homeBulkMarketsSubtitle,
-                              style: WBTypography.caption.copyWith(
-                                color: Colors.white.withValues(alpha: 0.65),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const WBIcon(
-                        WBIconName.arrowRight,
-                        size: 16,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
               )),
               const SizedBox(height: 22),
               ValueListenableBuilder<Map<String, bool>>(
@@ -579,7 +525,9 @@ class _CategoryPillRow extends StatelessWidget {
   }
 }
 
-// ── Old UI: 3-column icon grid ────────────────────────────────────────────────
+// ── Old UI: horizontal icon-card row ─────────────────────────────────────────
+// Each item is a rounded card with the SVG centred above the label.
+// Horizontal scroll keeps subcategory chips directly below — no hunting.
 
 class _CategoryGrid extends StatelessWidget {
   const _CategoryGrid({
@@ -594,22 +542,18 @@ class _CategoryGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (cats == null) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+      return SizedBox(
+        height: 88,
         child: Shimmer.fromColors(
           baseColor: WBColors.bgSoft,
           highlightColor: WBColors.bgSecondary,
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 1,
-            ),
-            itemCount: 9,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: 6,
+            separatorBuilder: (_, _) => const SizedBox(width: 10),
             itemBuilder: (_, _) => Container(
+              width: 72,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(WBRadius.card),
@@ -619,18 +563,13 @@ class _CategoryGrid extends StatelessWidget {
         ),
       );
     }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-          childAspectRatio: 1.1,
-        ),
+    return SizedBox(
+      height: 88,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: cats!.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (_, i) {
           final c = cats![i];
           final active = c.id == activeCategoryId;
@@ -639,33 +578,45 @@ class _CategoryGrid extends StatelessWidget {
             child: AnimatedContainer(
               duration: WBMotion.base,
               curve: WBMotion.easeSoft,
+              width: 72,
               decoration: BoxDecoration(
-                color: active ? WBColors.surfaceDark : WBColors.bgSoft,
+                color: active ? WBColors.surfaceTag : WBColors.bgSoft,
                 borderRadius: BorderRadius.circular(WBRadius.card),
+                border: Border.all(
+                  color: active
+                      ? WBColors.surfaceDark
+                      : Colors.transparent,
+                  width: 1.5,
+                ),
               ),
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (c.svgAsset != null && c.svgAsset!.isNotEmpty)
-                    SvgPicture.asset(
-                      c.svgAsset!,
-                      width: 28,
-                      height: 28,
-                      colorFilter: active
-                          ? const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn)
-                          : null,
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
                     ),
+                    padding: const EdgeInsets.all(6),
+                    child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
+                        ? SvgPicture.asset(c.svgAsset!, fit: BoxFit.contain)
+                        : const SizedBox.shrink(),
+                  ),
                   const SizedBox(height: 6),
                   Text(
                     c.label,
                     textAlign: TextAlign.center,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: WBTypography.caption.copyWith(
-                      color: active ? Colors.white : WBColors.fgHeader,
-                      fontWeight: FontWeight.w500,
+                      color: active
+                          ? WBColors.fgHeader
+                          : WBColors.fgSecondary,
+                      fontWeight:
+                          active ? FontWeight.w600 : FontWeight.w400,
                       fontSize: 11,
                     ),
                   ),

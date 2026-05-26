@@ -16,6 +16,7 @@ class ExportListing {
     required this.imageUrl,
     this.enquiries = 0,
     this.status = ExportListingStatus.active,
+    this.category,
   });
 
   final String id;
@@ -30,6 +31,11 @@ class ExportListing {
   String imageUrl;
   int enquiries;
   ExportListingStatus status;
+
+  /// Optional subcategory id from the marketplace category tree. When set,
+  /// the API also creates a wholesale CatalogItem so the listing appears in
+  /// the customer marketplace under the right category.
+  String? category;
 
   int get lotValueNaira => quantityKg * pricePerKgNaira;
 
@@ -54,6 +60,9 @@ class ExportListing {
       imageUrl: (j['imageKey'] ?? j['imageUrl'] ?? '').toString(),
       enquiries: (j['enquiries'] as num?)?.toInt() ?? 0,
       status: exportStatusFromName(j['status']?.toString()),
+      category: (j['category'] as String?)?.isNotEmpty == true
+          ? j['category'].toString()
+          : null,
     );
   }
 }

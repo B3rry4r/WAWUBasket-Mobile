@@ -2,14 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../shopping/data/catalog_api.dart';
 import '../../../trade/application/trade_controller.dart';
 import '../../../trade/domain/models/corridor.dart';
 import '../../../trade/domain/models/export_listing.dart';
+
+class _CategoryOption {
+  const _CategoryOption({
+    required this.id,
+    required this.label,
+    required this.parentLabel,
+  });
+  final String id;
+  final String label;
+  final String parentLabel;
+}
 
 /// Add-or-edit form for one export listing. With a `listingId` it loads
 /// that listing; without one it stages a new active listing.
@@ -31,6 +44,9 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
   late DateTime _harvest;
   String? _imageUrl;
   bool _uploadingPhoto = false;
+  String _category = '';
+  List<_CategoryOption> _catOptions = [];
+  bool _loadingCats = true;
 
   bool get _isEdit => widget.listingId != null;
   ExportListing? get _source =>
@@ -47,6 +63,31 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     _destination = s?.destinationCorridor ?? Corridor.benin;
     _harvest = s?.harvestDate ?? DateTime.now();
     _imageUrl = (s?.imageUrl.isNotEmpty ?? false) ? s!.imageUrl : null;
+    _category = s?.category ?? '';
+    _loadCategories();
+  }
+
+  Future<void> _loadCategories() async {
+    try {
+      final raw = await CatalogApi.instance.categories();
+      final opts = <_CategoryOption>[];
+      for (final cat in raw) {
+        if (cat is! Map) continue;
+        final parentLabel = (cat['label'] ?? '').toString();
+        final subs = (cat['subcategories'] as List?) ?? const [];
+        for (final sub in subs) {
+          if (sub is! Map) continue;
+          opts.add(_CategoryOption(
+            id: (sub['id'] ?? '').toString(),
+            label: (sub['label'] ?? '').toString(),
+            parentLabel: parentLabel,
+          ));
+        }
+      }
+      if (mounted) setState(() { _catOptions = opts; _loadingCats = false; });
+    } on ApiException {
+      if (mounted) setState(() => _loadingCats = false);
+    }
   }
 
   Future<void> _pickPhoto() async {
@@ -98,6 +139,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
           'https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=600&q=80&auto=format&fit=crop',
       enquiries: s?.enquiries ?? 0,
       status: s?.status ?? ExportListingStatus.active,
+      category: _category.isNotEmpty ? _category : null,
     );
     if (_isEdit) {
       TradeController.instance.update(updated);
@@ -191,6 +233,122 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _pickCategory() {
+    if (_catOptions.isEmpty) return;
+    final grouped = <String, List<_CategoryOption>>{};
+    for (final c in _catOptions) {
+      grouped.putIfAbsent(c.parentLabel, () => []).add(c);
+    }
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      isScrollControlled: true,
+      builder: (sheetCtx) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.65,
+          minChildSize: 0.4,
+          maxChildSize: 0.85,
+          expand: false,
+          builder: (_, scrollCtrl) => Padding(
+            padding: EdgeInsets.only(
+              left: WBSpacing.screenPadding,
+              right: WBSpacing.screenPadding,
+              top: WBSpacing.lg,
+              bottom: MediaQuery.of(sheetCtx).padding.bottom + WBSpacing.lg,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+                    decoration: BoxDecoration(
+                      color: WBColors.bgDivider,
+                      borderRadius: BorderRadius.circular(WBRadius.pill),
+                    ),
+                  ),
+                ),
+                Text(
+                  'Marketplace category',
+                  style: WBTypography.cardTitle.copyWith(fontSize: 18),
+                ),
+                const SizedBox(height: WBSpacing.sm),
+                Text(
+                  'Optional — pick a category so this listing appears in the customer marketplace.',
+                  style: WBTypography.caption.copyWith(
+                    color: WBColors.fgSecondary,
+                  ),
+                ),
+                const SizedBox(height: WBSpacing.md),
+                Expanded(
+                  child: ListView(
+                    controller: scrollCtrl,
+                    children: [
+                      for (final entry in grouped.entries) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, bottom: 4),
+                          child: Text(
+                            entry.key,
+                            style: WBTypography.label.copyWith(
+                              color: WBColors.fgPlaceholder,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        for (final sub in entry.value)
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () {
+                              setState(() => _category = sub.id);
+                              Navigator.of(sheetCtx).pop();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      sub.label,
+                                      style: WBTypography.body.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  if (sub.id == _category)
+                                    const WBIcon(WBIconName.check, size: 16),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                      const SizedBox(height: 12),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() => _category = '');
+                            Navigator.of(sheetCtx).pop();
+                          },
+                          child: const Text('Clear category'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -370,6 +528,23 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                   label: 'Harvest date',
                   value: _formatDate(_harvest),
                   onTap: _pickHarvest,
+                ),
+                const SizedBox(height: WBSpacing.md),
+                _PickerField(
+                  label: 'Marketplace category (optional)',
+                  value: _loadingCats
+                      ? 'Loading…'
+                      : _catOptions.isEmpty
+                          ? 'No categories'
+                          : (_catOptions.firstWhere(
+                              (o) => o.id == _category,
+                              orElse: () => _CategoryOption(
+                                id: '',
+                                label: 'None',
+                                parentLabel: '',
+                              ),
+                            ).label),
+                  onTap: _pickCategory,
                 ),
               ],
             ),
