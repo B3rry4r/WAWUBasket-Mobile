@@ -294,6 +294,7 @@ class _StatusHero extends StatelessWidget {
   final BulkOrder order;
 
   Color get _accent => switch (order.status) {
+        EscrowStatus.pending => const Color(0xFF6B7280),
         EscrowStatus.held => const Color(0xFF10B981),
         EscrowStatus.released => const Color(0xFF10B981),
         EscrowStatus.refunded => const Color(0xFF6B7280),
@@ -301,6 +302,7 @@ class _StatusHero extends StatelessWidget {
       };
 
   WBIconName get _icon => switch (order.status) {
+        EscrowStatus.pending => WBIconName.card,
         EscrowStatus.held => WBIconName.card,
         EscrowStatus.released => WBIconName.check,
         EscrowStatus.refunded => WBIconName.arrowLeft,

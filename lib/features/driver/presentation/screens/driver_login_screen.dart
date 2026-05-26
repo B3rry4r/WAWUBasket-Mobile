@@ -38,6 +38,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
     setState(() => _busy = true);
     try {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      await AuthApi.instance.switchRole('driver');
       RoleController.instance.setRole(AppRole.driver);
       if (!mounted) return;
       context.go(AppRoutes.driverHome);

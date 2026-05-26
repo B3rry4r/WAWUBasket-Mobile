@@ -82,7 +82,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       AccountExtrasApi.instance.markNotificationRead(n.id).catchError((_) {});
     }
     if (n.icon == WBIconName.bike || n.icon == WBIconName.check) {
-      context.push(AppRoutes.tracking);
+      final path = n.orderId != null
+          ? '${AppRoutes.tracking}?orderId=${n.orderId}'
+          : AppRoutes.tracking;
+      context.push(path);
     } else {
       wbShowSnack(context, n.title);
     }
@@ -230,6 +233,7 @@ class _Notif {
     required this.body,
     required this.at,
     required this.unread,
+    this.orderId,
   });
 
   final String id;
@@ -238,6 +242,7 @@ class _Notif {
   final String body;
   final DateTime at;
   final bool unread;
+  final String? orderId;
 
   String get time =>
       '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}';
@@ -249,6 +254,7 @@ class _Notif {
         body: body,
         at: at,
         unread: false,
+        orderId: orderId,
       );
 
   factory _Notif.fromJson(Map<String, dynamic> j) => _Notif(
@@ -259,6 +265,7 @@ class _Notif {
         at: DateTime.tryParse('${j['createdAt'] ?? ''}')?.toLocal() ??
             DateTime.now(),
         unread: j['read'] != true,
+        orderId: j['orderId']?.toString(),
       );
 }
 

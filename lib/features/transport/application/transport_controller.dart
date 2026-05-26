@@ -152,7 +152,13 @@ class TransportController {
   /// Driver closes the trip post-delivery, freeing them up for the next
   /// load. The completed trip stays in [loads] for earnings history.
   void completeTrip() {
+    final l = activeTrip.value;
     activeTrip.value = null;
+    if (l != null) {
+      _driverApi.completeTrip(l.id).catchError((Object e) {
+        if (e is ApiException) mutationError.value = e.message;
+      });
+    }
   }
 
   void _bump() => loads.value = List.of(loads.value);

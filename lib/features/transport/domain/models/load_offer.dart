@@ -94,6 +94,14 @@ class LoadOffer {
         for (final b in (j['bids'] as List? ?? const []))
           LoadBid.fromJson((b as Map).cast<String, dynamic>()),
       ],
+      reachedCheckpoints: [
+        for (final c in (j['checkpointLogs'] as List? ?? const []))
+          Checkpoint(
+            name: (c['checkpoint'] ?? '').toString(),
+            reachedAt: DateTime.tryParse('${c['reachedAt'] ?? ''}') ??
+                DateTime.now(),
+          ),
+      ],
     );
   }
 }

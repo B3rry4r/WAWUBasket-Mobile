@@ -1,9 +1,10 @@
-/// State an escrow-backed bulk order can be in. Mirrors the build-guide
-/// escrow service: hold → release / refund / dispute.
-enum EscrowStatus { held, released, refunded, disputed }
+/// State an escrow-backed bulk order can be in. Mirrors the API EscrowStatus
+/// enum: pending → held → released / refunded / disputed.
+enum EscrowStatus { pending, held, released, refunded, disputed }
 
 extension EscrowStatusX on EscrowStatus {
   String get label => switch (this) {
+        EscrowStatus.pending => 'Payment pending',
         EscrowStatus.held => 'Held in escrow',
         EscrowStatus.released => 'Released to seller',
         EscrowStatus.refunded => 'Refunded to buyer',

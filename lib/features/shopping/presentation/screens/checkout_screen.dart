@@ -103,7 +103,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       }
 
       if (hasProducts) {
+        // Resolve default address for product delivery.
+        final productAddr = AddressController.instance.addresses.value
+            .where((a) => a.isDefault)
+            .firstOrNull;
+        if (productAddr == null && !hasRecipes) {
+          if (mounted) {
+            wbShowSnack(context, context.l10n.checkoutNoAddress);
+            setState(() => _placing = false);
+          }
+          return;
+        }
         final order = await OrdersApi.instance.placeOrder(
+          addressId: productAddr?.id,
           scheduledFor: _scheduledForIso(),
         );
         await ref.read(cartControllerProvider.notifier).load();

@@ -102,6 +102,7 @@ class AgentPayout {
     required this.traderName,
     required this.amountNaira,
     required this.recordedAt,
+    this.note,
     this.signatureBytes,
     this.synced = true,
   });
@@ -111,6 +112,7 @@ class AgentPayout {
   final String traderName;
   final int amountNaira;
   final DateTime recordedAt;
+  final String? note;
 
   /// Raw bytes of a serialized signature stroke list. Optional, only
   /// captured when the agent uses the signature pad.
@@ -340,6 +342,7 @@ class AgentController {
         traderName: traderName,
         amountNaira: amountNaira,
         recordedAt: DateTime.now(),
+        note: note,
         signatureBytes: signatureBytes,
         synced: false,
       ),
@@ -408,15 +411,15 @@ class AgentController {
         await _syncTrader(t.name, t.phone, t.location, t.type);
       }
     }
-    for (final t in transactions.value) {
+    for (final t in List.of(transactions.value)) {
       if (!t.synced) {
         await _syncTransaction(
             t.id, t.traderId, t.product, t.quantityKg, t.pricePerKgNaira);
       }
     }
-    for (final p in payouts.value) {
+    for (final p in List.of(payouts.value)) {
       if (!p.synced) {
-        await _syncPayout(p.id, p.traderId, p.amountNaira);
+        await _syncPayout(p.id, p.traderId, p.amountNaira, note: p.note);
       }
     }
     _bump();

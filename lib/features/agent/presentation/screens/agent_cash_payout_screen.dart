@@ -138,6 +138,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
       traderId: trader.id,
       traderName: trader.name,
       amountNaira: amt,
+      note: _note.text.trim().isEmpty ? null : _note.text.trim(),
       signatureBytes: _sig.strokes,
     );
     wbShowSnack(context, 'Payout recorded · reimbursement queued');

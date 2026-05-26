@@ -79,9 +79,11 @@ class VendorApi {
     return (res as Map).cast<String, dynamic>();
   }
 
-  Future<List<dynamic>> reviews() async {
+  Future<Map<String, dynamic>> reviews() async {
     final res = await _api.get('/vendor/reviews');
-    return (res as List?) ?? const [];
+    if (res is Map) return res.cast<String, dynamic>();
+    // Legacy: if the API ever returns a bare list, wrap it.
+    return {'reviews': res ?? const [], 'avgRating': 0, 'distribution': {}};
   }
 
   Future<void> replyReview(String id, String reply) =>
@@ -97,6 +99,8 @@ class VendorApi {
 
   Future<List<dynamic>> alerts() async {
     final res = await _api.get('/vendor/alerts');
+    // API returns { alerts: [...] }
+    if (res is Map) return (res['alerts'] as List?) ?? const [];
     return (res as List?) ?? const [];
   }
 
@@ -105,9 +109,13 @@ class VendorApi {
     return (res as List?) ?? const [];
   }
 
-  /// The vendor's wallet — available balance + escrow held.
+  /// Vendor payout summary including available balance.
+  /// Falls back to an empty map when the endpoint is unavailable.
   Future<Map<String, dynamic>> wallet() async {
-    final res = await _api.get('/wallet');
-    return (res as Map).cast<String, dynamic>();
+    try {
+      final res = await _api.get('/payouts');
+      if (res is Map) return res.cast<String, dynamic>();
+    } catch (_) {}
+    return const {};
   }
 }

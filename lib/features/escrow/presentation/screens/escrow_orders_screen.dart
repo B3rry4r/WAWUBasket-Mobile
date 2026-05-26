@@ -100,6 +100,8 @@ class _OrderRow extends StatelessWidget {
 
   (String, WBStatusKind) get _pill {
     switch (order.status) {
+      case EscrowStatus.pending:
+        return ('Payment pending', WBStatusKind.info);
       case EscrowStatus.held:
         return (order.markedDeliveredBySeller
             ? 'Awaiting confirmation'

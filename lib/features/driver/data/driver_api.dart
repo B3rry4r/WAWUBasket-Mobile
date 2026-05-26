@@ -31,6 +31,9 @@ class DriverApi {
   Future<void> logCheckpoint(String loadId) =>
       _api.post('/driver/loads/$loadId/checkpoint');
 
+  Future<void> completeTrip(String loadId) =>
+      _api.post('/driver/loads/$loadId/complete');
+
   /// The driver's currently assigned load, or null when idle.
   Future<Map<String, dynamic>?> activeTrip() async {
     final res = await _api.get('/driver/active-trip');

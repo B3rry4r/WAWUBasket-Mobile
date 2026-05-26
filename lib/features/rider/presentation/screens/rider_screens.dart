@@ -43,6 +43,7 @@ class _RiderLoginScreenState extends State<RiderLoginScreen> {
     setState(() => _busy = true);
     try {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      await AuthApi.instance.switchRole('rider');
       RoleController.instance.setRole(AppRole.rider);
       if (!mounted) return;
       context.go(AppRoutes.riderHome);

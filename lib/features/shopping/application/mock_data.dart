@@ -743,11 +743,14 @@ abstract final class MockData {
   ];
 
   // ─── Helpers ─────────────────────────────────────────────────
-  static Category categoryById(String id) {
+  static Category? categoryById(String id) {
     // Prefer the live API list when available, fall back to static mock.
     final live = liveCategories();
-    if (live != null) return live.firstWhere((c) => c.id == id);
-    return categories.firstWhere((c) => c.id == id);
+    if (live != null) {
+      return live.firstWhere((c) => c.id == id, orElse: () => categories.first);
+    }
+    return categories.firstWhere((c) => c.id == id,
+        orElse: () => categories.first);
   }
 
   // Resolved lazily via a function reference to avoid a circular import

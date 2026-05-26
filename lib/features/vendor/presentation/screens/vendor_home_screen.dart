@@ -11,6 +11,7 @@ import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../application/vendor_orders_controller.dart';
+import '../../data/vendor_api.dart';
 import '../widgets/vendor_status_pill.dart';
 
 class VendorHomeScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
   void initState() {
     super.initState();
     ProfileController.instance.load();
+    VendorOrdersController.instance.load();
   }
 
   @override
@@ -79,7 +81,14 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                 valueListenable: ProfileController.instance.profile,
                 builder: (_, profile, _) => _Hero(
                   open: _open,
-                  onToggle: () => setState(() => _open = !_open),
+                  onToggle: () {
+                    final newVal = !_open;
+                    setState(() => _open = newVal);
+                    VendorApi.instance
+                        .updateSettings({'isOpen': newVal}).catchError((_) {
+                      if (mounted) setState(() => _open = !newVal);
+                    });
+                  },
                   ordersToday: orders.length,
                   revenue: todayRevenue,
                   businessName: profile?.vendorBusinessName?.isNotEmpty == true

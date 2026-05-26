@@ -229,6 +229,7 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
       AppRole.customer => [
           _Stat('Orders', s?.orders != null ? '${s!.orders}' : dash),
           _Stat('Favorites', s?.favorites != null ? '${s!.favorites}' : dash),
+          _Stat('Member', '—'),
         ],
       AppRole.admin => [
           _Stat('Flags', dash),

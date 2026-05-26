@@ -242,6 +242,8 @@ class RiderController {
     try {
       if (a.stage == DeliveryStage.pickedUp) {
         await _api.markPickedUp(a.offer.deliveryId);
+      } else if (a.stage == DeliveryStage.enRoute) {
+        await _api.markInTransit(a.offer.deliveryId);
       } else if (a.stage == DeliveryStage.delivered) {
         await _api.markDelivered(a.offer.deliveryId);
       }

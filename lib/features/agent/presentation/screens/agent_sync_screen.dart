@@ -33,7 +33,8 @@ class _AgentSyncScreenState extends State<AgentSyncScreen> {
       setState(() => _progress = i / 10);
     }
     if (!mounted) return;
-    AgentController.instance.runSync();
+    await AgentController.instance.runSync();
+    if (!mounted) return;
     setState(() {
       _syncing = false;
       _done = true;

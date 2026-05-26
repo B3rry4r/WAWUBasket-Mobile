@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/network/token_store.dart';
 import '../../../core/router/app_routes.dart';
 import '../data/auth_api.dart';
 
@@ -160,13 +161,13 @@ class RoleController {
     _persistRole();
   }
 
-  /// Resets the active role to customer and clears the signed-in flag.
-  /// KYC progress is preserved so the user can switch back into an
-  /// approved role without redoing it.
+  /// Resets the active role to customer, clears the signed-in flag, and
+  /// wipes stored JWT tokens so no further authenticated API calls are made.
   void signOut() {
     notifier.value = AppRole.customer;
     _signedIn = false;
     _persistRole();
+    TokenStore.instance.clear();
   }
 
   // ─── Persistence ─────────────────────────────────────────────────────

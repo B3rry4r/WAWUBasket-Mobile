@@ -24,6 +24,9 @@ class RiderApi {
   Future<void> markPickedUp(String deliveryId) =>
       _api.post('/rider/deliveries/$deliveryId/picked-up');
 
+  Future<void> markInTransit(String deliveryId) =>
+      _api.post('/rider/deliveries/$deliveryId/mark-in-transit');
+
   Future<void> markDelivered(String deliveryId) =>
       _api.post('/rider/deliveries/$deliveryId/delivered');
 
