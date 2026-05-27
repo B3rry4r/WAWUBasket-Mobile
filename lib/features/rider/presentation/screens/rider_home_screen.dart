@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -30,28 +32,57 @@ class RiderHomeScreen extends StatefulWidget {
 }
 
 class _RiderHomeScreenState extends State<RiderHomeScreen> {
+  StreamSubscription<Position>? _locationSub;
+
   @override
   void initState() {
     super.initState();
     RiderController.instance.loadOffers();
     ProfileController.instance.load();
     ProfileController.instance.loadStats();
-    // Ask for location once the first build settles. Granting lets the
-    // map render the user puck + we recompute every offer's distance +
-    // ETA against the rider's real GPS reading.
+    RiderController.instance.online.addListener(_onOnlineChanged);
+    // Ask for location (always-on for background delivery tracking) once the
+    // first build settles, then start the position stream if online.
     WidgetsBinding.instance.addPostFrameCallback((_) => _ensureLocation());
   }
 
-  Future<void> _ensureLocation() async {
-    final granted = await WBPermissions.requestLocation();
-    if (!granted || !mounted) return;
-    try {
-      final pos = await Geolocator.getCurrentPosition();
-      RiderController.instance.updatePosition(pos.latitude, pos.longitude);
-    } catch (_) {
-      // Service off or fix unavailable; offer cards fall back to the
-      // hardcoded distances on each offer.
+  @override
+  void dispose() {
+    RiderController.instance.online.removeListener(_onOnlineChanged);
+    _locationSub?.cancel();
+    super.dispose();
+  }
+
+  void _onOnlineChanged() {
+    if (RiderController.instance.online.value) {
+      _startTracking();
+    } else {
+      _stopTracking();
     }
+  }
+
+  Future<void> _ensureLocation() async {
+    final granted = await WBPermissions.requestLocationAlways();
+    if (!granted || !mounted) return;
+    if (RiderController.instance.online.value) _startTracking();
+  }
+
+  void _startTracking() {
+    if (_locationSub != null) return;
+    _locationSub = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 20, // metres — skip micro-jitter, update on real movement
+      ),
+    ).listen(
+      (pos) => RiderController.instance.updatePosition(pos.latitude, pos.longitude),
+      onError: (_) {},
+    );
+  }
+
+  void _stopTracking() {
+    _locationSub?.cancel();
+    _locationSub = null;
   }
 
   Future<void> _open(DeliveryOffer offer) async {

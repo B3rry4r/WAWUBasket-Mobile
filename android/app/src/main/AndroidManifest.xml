@@ -2,6 +2,9 @@
     <!-- Location: nearby vendors + live rider/driver tracking on Mapbox. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Required on Android 10+ for riders to keep streaming GPS while the
+         app is backgrounded during an active delivery. -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- Push notifications (order status, payouts, alerts). Android 13+. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
