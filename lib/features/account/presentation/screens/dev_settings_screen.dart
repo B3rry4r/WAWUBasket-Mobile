@@ -24,12 +24,13 @@ class _DevSettingsScreenState extends State<DevSettingsScreen> {
   bool _loading = true;
   final Set<String> _saving = {};
 
+  // Only home UI flags belong here. App-level features (cross_border_trading,
+  // wawu_plus, live_tracking) are always on and not togglable from this screen.
+  static const _uiFlags = {'new_categories_ui', 'recipe_combos'};
+
   static const _descriptions = <String, String>{
     'new_categories_ui': 'Redesigned home categories grid (toggle off = old 3×3 layout)',
     'recipe_combos': 'Cook Tonight / Recipe Combo Intelligence rail on home',
-    'cross_border_trading': 'ECOWAS cross-border trader and driver flows',
-    'wawu_plus': 'WAWU+ premium subscription',
-    'live_tracking': 'Real-time rider location on map',
   };
 
   @override
@@ -143,14 +144,19 @@ class _DevSettingsScreenState extends State<DevSettingsScreen> {
                         padding: EdgeInsets.zero,
                         child: Column(
                           children: [
-                            for (var i = 0; i < _flags.entries.length; i++) ...[
-                              if (i > 0) const WBDivider(indent: 16, endIndent: 16),
+                            for (final entry in _flags.entries
+                                .where((e) => _uiFlags.contains(e.key))
+                                .toList()
+                                .asMap()
+                                .entries) ...[
+                              if (entry.key > 0)
+                                const WBDivider(indent: 16, endIndent: 16),
                               _FlagRow(
-                                flagKey: _flags.keys.elementAt(i),
-                                enabled: _flags.values.elementAt(i),
-                                description: _descriptions[_flags.keys.elementAt(i)],
-                                saving: _saving.contains(_flags.keys.elementAt(i)),
-                                onToggle: (v) => _toggle(_flags.keys.elementAt(i), v),
+                                flagKey: entry.value.key,
+                                enabled: entry.value.value,
+                                description: _descriptions[entry.value.key],
+                                saving: _saving.contains(entry.value.key),
+                                onToggle: (v) => _toggle(entry.value.key, v),
                               ),
                             ],
                           ],

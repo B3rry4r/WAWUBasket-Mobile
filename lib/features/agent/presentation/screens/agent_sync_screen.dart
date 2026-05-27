@@ -9,6 +9,14 @@ import '../../../auth/application/role_controller.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../application/agent_controller.dart';
 
+String _fmtAgo(DateTime t) {
+  final diff = DateTime.now().difference(t);
+  if (diff.inSeconds < 60) return 'Just now';
+  if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+  if (diff.inHours < 24) return '${diff.inHours} hr ago';
+  return '${diff.inDays}d ago';
+}
+
 class AgentSyncScreen extends StatefulWidget {
   const AgentSyncScreen({super.key});
 
@@ -133,7 +141,11 @@ class _AgentSyncScreenState extends State<AgentSyncScreen> {
                           const SizedBox(height: 12),
                           _SyncRow(
                             label: 'Last sync',
-                            value: _done ? 'Just now' : '2 hr ago',
+                            value: _done
+                                ? 'Just now'
+                                : AgentController.instance.lastSyncAt != null
+                                    ? _fmtAgo(AgentController.instance.lastSyncAt!)
+                                    : 'Never',
                             valueColor: WBColors.fgSecondary,
                           ),
                         ],

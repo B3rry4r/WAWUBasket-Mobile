@@ -160,6 +160,8 @@ class AgentController {
   final ValueNotifier<List<SyncConflict>> conflicts;
   final _api = AgentApi.instance;
 
+  DateTime? lastSyncAt;
+
   /// Total items waiting on sync, drives the badge on the home hero
   /// and the sync screen's pending counts.
   int get pendingSyncCount {
@@ -422,6 +424,7 @@ class AgentController {
         await _syncPayout(p.id, p.traderId, p.amountNaira, note: p.note);
       }
     }
+    lastSyncAt = DateTime.now();
     _bump();
   }
 

@@ -27,6 +27,7 @@ class VendorHomeScreen extends StatefulWidget {
 
 class _VendorHomeScreenState extends State<VendorHomeScreen> {
   bool _open = true;
+  String _rating = '–';
   StreamSubscription<WsFrame>? _wsSub;
 
   @override
@@ -34,6 +35,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
     super.initState();
     ProfileController.instance.load();
     VendorOrdersController.instance.load();
+    _loadRating();
     // Reload orders and bump badge whenever a new order arrives in real time.
     _wsSub = WebSocketService.instance.frames
         .where((f) => f.type == 'notification.new' || f.type == 'order.paid')
@@ -41,6 +43,16 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
       VendorOrdersController.instance.load();
       NotificationsController.instance.refresh();
     });
+  }
+
+  Future<void> _loadRating() async {
+    try {
+      final data = await VendorApi.instance.analytics();
+      final r = data['rating']?.toString() ?? '';
+      if (mounted && r.isNotEmpty && r != '0.0') {
+        setState(() => _rating = '★ $r');
+      }
+    } catch (_) {}
   }
 
   @override
@@ -109,6 +121,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                   },
                   ordersToday: orders.length,
                   revenue: todayRevenue,
+                  rating: _rating,
                   businessName: profile?.vendorBusinessName?.isNotEmpty == true
                       ? profile!.vendorBusinessName!
                       : profile?.fullName.isNotEmpty == true
@@ -234,12 +247,14 @@ class _Hero extends StatelessWidget {
     required this.onToggle,
     required this.ordersToday,
     required this.revenue,
+    required this.rating,
     required this.businessName,
   });
   final bool open;
   final VoidCallback onToggle;
   final int ordersToday;
   final int revenue;
+  final String rating;
   final String businessName;
 
   @override
@@ -324,7 +339,7 @@ class _Hero extends StatelessWidget {
               const SizedBox(width: 10),
               _DarkStat(label: 'Earned', value: wbNaira(revenue)),
               const SizedBox(width: 10),
-              _DarkStat(label: context.l10n.vendorAnalyticsRating, value: '★ 4.8'),
+              _DarkStat(label: context.l10n.vendorAnalyticsRating, value: rating.isEmpty ? '–' : rating),
             ],
           ),
         ],

@@ -104,7 +104,7 @@ class BulkOrder {
       feeNaira: fee,
       imageUrl: '',
       buyerName: (m['buyerName'] ?? '').toString(),
-      buyerPhone: '',
+      buyerPhone: (m['buyerPhone'] ?? '').toString(),
       dropoffAddress: (m['dropoffAddress'] ?? '').toString(),
       sellerName: (listing['farmName'] ?? '').toString(),
       sellerRegion: (listing['farmRegion'] ?? '').toString(),

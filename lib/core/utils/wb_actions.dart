@@ -23,6 +23,26 @@ Future<void> wbLaunchNavigation(
   }
 }
 
+/// Opens the device phone dialer pre-filled with [phone]. Strips spaces and
+/// hyphens before building the URI so `+234 802 000 0000` works fine.
+Future<void> wbCallPhone(BuildContext context, String phone) async {
+  final digits = phone.replaceAll(RegExp(r'[\s\-()]'), '');
+  final uri = Uri(scheme: 'tel', path: digits);
+  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!ok && context.mounted) {
+    wbShowSnack(context, "Couldn't open the phone app");
+  }
+}
+
+/// Opens the default mail client with [email] pre-filled in the To field.
+Future<void> wbLaunchEmail(BuildContext context, String email) async {
+  final uri = Uri(scheme: 'mailto', path: email);
+  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  if (!ok && context.mounted) {
+    wbShowSnack(context, "Couldn't open email app — write to $email");
+  }
+}
+
 /// Shows a soft snackbar at the bottom of the screen — used for placeholder
 /// actions while the underlying flow isn't wired to a backend yet.
 void wbShowSnack(BuildContext context, String message) {

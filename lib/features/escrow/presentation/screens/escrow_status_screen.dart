@@ -121,7 +121,8 @@ class _Body extends StatelessWidget {
           tag: _isSeller ? 'BUYER' : 'SELLER',
           title: _isSeller ? order.buyerName : order.sellerName,
           sub: _isSeller ? order.buyerPhone : order.sellerRegion,
-          callable: true,
+          phone: _isSeller ? order.buyerPhone : null,
+          callable: _isSeller && order.buyerPhone.isNotEmpty,
           icon: WBIconName.user,
         ),
         const SizedBox(height: WBSpacing.md),
@@ -547,12 +548,14 @@ class _PartyCard extends StatelessWidget {
     required this.sub,
     required this.callable,
     required this.icon,
+    this.phone,
   });
   final String tag;
   final String title;
   final String sub;
   final bool callable;
   final WBIconName icon;
+  final String? phone;
 
   @override
   Widget build(BuildContext context) {
@@ -597,13 +600,13 @@ class _PartyCard extends StatelessWidget {
               ],
             ),
           ),
-          if (callable)
+          if (callable && phone != null && phone!.isNotEmpty)
             WBButton(
               label: 'Call',
               size: WBButtonSize.sm,
               variant: WBButtonVariant.secondary,
               trailingIcon: WBIconName.phone,
-              onPressed: () => wbShowSnack(context, 'Calling $title…'),
+              onPressed: () => wbCallPhone(context, phone!),
             ),
         ],
       ),

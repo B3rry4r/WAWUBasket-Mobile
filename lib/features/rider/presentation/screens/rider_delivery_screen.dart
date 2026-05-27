@@ -186,8 +186,8 @@ class _Body extends StatelessWidget {
               tag: 'PICKUP',
               title: offer.vendorName,
               sub: offer.vendorAddress,
-              phone: '+234 802 800 4400',
-              callable: _prePickup,
+              phone: offer.vendorPhone,
+              callable: _prePickup && offer.vendorPhone.isNotEmpty,
               icon: WBIconName.home,
             ),
             const SizedBox(height: 10),
@@ -196,7 +196,7 @@ class _Body extends StatelessWidget {
               title: offer.customerName,
               sub: offer.dropAddress,
               phone: offer.customerPhone,
-              callable: !_prePickup,
+              callable: !_prePickup && offer.customerPhone.isNotEmpty,
               icon: WBIconName.user,
             ),
 
@@ -448,7 +448,7 @@ class _PartyCard extends StatelessWidget {
                 callable ? WBButtonVariant.primary : WBButtonVariant.secondary,
             disabled: !callable,
             onPressed: callable
-                ? () => wbShowSnack(context, 'Calling $title…')
+                ? () => wbCallPhone(context, phone)
                 : null,
           ),
         ],

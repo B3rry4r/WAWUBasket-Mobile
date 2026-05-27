@@ -198,7 +198,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     );
     final subtotal = productSubtotal + recipeSubtotal;
     var delivery = 600;
-    const serviceFee = 200;
+    // Mirror server-side fee logic: 1.5% service fee, min ₦50, max ₦5000.
+    final serviceFee = (subtotal * 150 / 10000).ceil().clamp(50, 5000);
     final total = subtotal + delivery + serviceFee;
 
     // Show waiting-for-payment screen while polling.
@@ -433,9 +434,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       const SizedBox(height: 4),
                       const WBDivider(),
                       const SizedBox(height: 14),
-                      const _Line(label: 'Delivery', value: '₦600'),
+                      _Line(label: 'Delivery', value: '₦${_n(delivery)}'),
                       const SizedBox(height: 8),
-                      const _Line(label: 'Service fee', value: '₦200'),
+                      _Line(label: 'Service fee', value: '₦${_n(serviceFee)}'),
                       const SizedBox(height: 14),
                       const WBDivider(),
                       const SizedBox(height: 14),

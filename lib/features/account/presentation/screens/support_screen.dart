@@ -211,9 +211,9 @@ class _SupportScreenState extends State<SupportScreen> {
                         if (c.icon == WBIconName.message) {
                           context.push(AppRoutes.chatSupport);
                         } else if (c.icon == WBIconName.phone) {
-                          wbShowSnack(context, 'Calling +234 800 WAWUBasket…');
+                          wbCallPhone(context, '+2348009292822');
                         } else {
-                          wbShowSnack(context, 'Email to support@wawu.africa');
+                          wbLaunchEmail(context, 'support@wawu.africa');
                         }
                       },
                     ),

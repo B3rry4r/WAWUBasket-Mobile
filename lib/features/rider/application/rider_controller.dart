@@ -55,6 +55,7 @@ class DeliveryOffer {
     required this.vendorAddress,
     required this.vendorLat,
     required this.vendorLng,
+    required this.vendorPhone,
     required this.customerName,
     required this.customerPhone,
     required this.dropAddress,
@@ -78,6 +79,7 @@ class DeliveryOffer {
   final String vendorAddress;
   final double vendorLat;
   final double vendorLng;
+  final String vendorPhone;
   final String customerName;
   final String customerPhone;
   final String dropAddress;
@@ -119,6 +121,7 @@ class DeliveryOffer {
           (vendor['lat'] as num?)?.toDouble() ?? RiderController.riderLat,
       vendorLng:
           (vendor['lng'] as num?)?.toDouble() ?? RiderController.riderLng,
+      vendorPhone: ((vendor['user'] as Map?)?.cast<String, dynamic>()?['phone'] ?? '').toString(),
       customerName: (order['customerName'] ?? 'Customer').toString(),
       customerPhone: (order['customerPhone'] ?? '').toString(),
       dropAddress:

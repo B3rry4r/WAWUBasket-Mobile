@@ -88,8 +88,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             final recipeSubtotalNaira =
                 recipeItems.fold<int>(0, (s, i) => s + (i.totalPriceKobo ~/ 100));
             final subtotal = productSubtotal + recipeSubtotalNaira;
+            // Mirror server-side fee logic: 1.5% service fee, ₦600 base delivery.
+            final serviceFee = (subtotal * 150 / 10000).ceil().clamp(50, 5000);
             const delivery = 600;
-            const serviceFee = 200;
             final total = subtotal + delivery + serviceFee;
             final loading = state.loading || recipeLoading;
             final cartIsEmpty =
@@ -293,12 +294,12 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               const SizedBox(height: 12),
                               _SummaryRow(
                                 label: context.l10n.cartDeliveryFee,
-                                value: '₦600',
+                                value: wbNaira(delivery),
                               ),
                               const SizedBox(height: 12),
                               _SummaryRow(
                                 label: context.l10n.cartServiceFee,
-                                value: '₦200',
+                                value: wbNaira(serviceFee),
                               ),
                               const SizedBox(height: 14),
                               const WBDivider(),
