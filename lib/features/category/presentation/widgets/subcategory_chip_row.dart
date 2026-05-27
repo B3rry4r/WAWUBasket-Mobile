@@ -96,6 +96,8 @@ class SubcategoryChipRow extends StatelessWidget {
                                 ? SvgPicture.asset(
                                     sub.svgAsset!,
                                     fit: BoxFit.contain,
+                                    errorBuilder: (_, _, _) =>
+                                        const SizedBox.shrink(),
                                   )
                                 : const SizedBox.shrink(),
                           ),

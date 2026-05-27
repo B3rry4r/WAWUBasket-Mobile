@@ -40,21 +40,37 @@ class _CategoryScreenState extends State<CategoryScreen> {
     _load();
   }
 
-  Future<void> _load() async {
+  Future<void> _load({String? subcategoryId}) async {
     setState(() {
       _loading = true;
       _error = null;
+      _products = const [];
+      _vendors = const [];
     });
     try {
-      final products =
-          await CatalogApi.instance.items(category: widget.categoryId);
-      final vendors = await CatalogApi.instance.vendors();
-      if (!mounted) return;
-      setState(() {
-        _products = products;
-        _vendors = vendors;
-        _loading = false;
-      });
+      final category = MockData.categoryById(widget.categoryId);
+      final effectiveCategory = subcategoryId ?? widget.categoryId;
+      final isRestaurant = category?.kind == CategoryKind.restaurant;
+
+      if (isRestaurant) {
+        final vendors = await CatalogApi.instance.vendors(
+          category: subcategoryId,
+        );
+        if (!mounted) return;
+        setState(() {
+          _vendors = vendors;
+          _loading = false;
+        });
+      } else {
+        final products = await CatalogApi.instance.items(
+          category: effectiveCategory,
+        );
+        if (!mounted) return;
+        setState(() {
+          _products = products;
+          _loading = false;
+        });
+      }
     } on ApiException catch (e) {
       if (mounted) {
         setState(() {
@@ -125,7 +141,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
               child: SubcategoryChipRow(
                 subcategories: category.subcategories,
                 activeId: _activeSubcategory,
-                onTap: (id) => setState(() => _activeSubcategory = id),
+                onTap: (id) {
+                  setState(() => _activeSubcategory = id);
+                  _load(subcategoryId: id);
+                },
                 visible: true,
               ),
             ),

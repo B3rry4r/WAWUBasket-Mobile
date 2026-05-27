@@ -10,10 +10,11 @@ class CatalogApi {
 
   final _api = ApiClient.instance;
 
-  /// Open vendors, optionally filtered by service zone / search query.
-  Future<List<Vendor>> vendors({String? zoneId, String? query}) async {
+  /// Open vendors, optionally filtered by service zone / cuisine category / search query.
+  Future<List<Vendor>> vendors({String? zoneId, String? category, String? query}) async {
     final q = <String, dynamic>{};
     if (zoneId != null) q['zoneId'] = zoneId;
+    if (category != null && category.isNotEmpty) q['category'] = category;
     if (query != null && query.isNotEmpty) q['q'] = query;
     final res = await _api.get('/vendors', query: q);
     final list = (res['vendors'] as List?) ?? const [];

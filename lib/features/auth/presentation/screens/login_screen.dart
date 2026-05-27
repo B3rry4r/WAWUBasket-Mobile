@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,12 +28,25 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscure = true;
   bool _busy = false;
   String _bioLabel = 'Biometric';
+  bool _showBioButton = false;
 
   @override
   void initState() {
     super.initState();
     _loadBioLabel();
+    _resolveBioButtonVisibility();
     _maybeAutoTriggerBiometric();
+  }
+
+  /// Show the biometric button only when: not web, device supports it, AND
+  /// a refresh token is already stored (returning user — never on first sign-in).
+  Future<void> _resolveBioButtonVisibility() async {
+    if (kIsWeb) return;
+    final hasSession = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
+    if (!hasSession) return;
+    final available = await BiometricService.instance.isAvailable();
+    if (!mounted) return;
+    setState(() => _showBioButton = available);
   }
 
   /// On app resume, auto-prompt biometrics if the user has it enabled and a
@@ -67,19 +81,50 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     setState(() => _busy = true);
+    debugPrint('[LOGIN] submit started — identifier: ${_identifier.text.trim()}');
     try {
+      debugPrint('[LOGIN] calling AuthApi.login...');
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
+      debugPrint('[LOGIN] login OK — access token present: ${TokenStore.instance.accessToken?.isNotEmpty}');
+
+      debugPrint('[LOGIN] syncing roles from API...');
       await RoleController.instance.syncFromApi();
+      debugPrint('[LOGIN] syncFromApi done — role: ${RoleController.instance.role}, hasEverSignedIn: ${RoleController.instance.hasEverSignedIn}');
+
       GuestModeController.instance.exit();
+      debugPrint('[LOGIN] guest mode exited');
+
       NotificationService.instance.registerToken();
-      if (!mounted) return;
+      debugPrint('[LOGIN] registerToken called (no-op on web)');
+
+      if (!mounted) {
+        debugPrint('[LOGIN] widget unmounted after registerToken — aborting');
+        return;
+      }
       await _offerBiometric();
-      if (!mounted) return;
+      if (!mounted) {
+        debugPrint('[LOGIN] widget unmounted after offerBiometric — aborting');
+        return;
+      }
+      await _resolveBioButtonVisibility();
+      if (!mounted) {
+        debugPrint('[LOGIN] widget unmounted after resolveBioVisibility — aborting');
+        return;
+      }
+      debugPrint('[LOGIN] calling _navigateAfterAuth...');
       _navigateAfterAuth();
     } on ApiException catch (e) {
+      debugPrint('[LOGIN] ApiException: ${e.message}');
       if (mounted) wbShowSnack(context, e.message);
+    } catch (e, st) {
+      debugPrint('[LOGIN] UNEXPECTED ERROR: $e');
+      debugPrint('[LOGIN] stack trace: $st');
+      if (mounted) {
+        wbShowSnack(context, 'Login error: $e');
+      }
     } finally {
       if (mounted) setState(() => _busy = false);
+      debugPrint('[LOGIN] submit finished');
     }
   }
 
@@ -90,20 +135,25 @@ class _LoginScreenState extends State<LoginScreen> {
     final ctrl = RoleController.instance;
     final lastRole = ctrl.role;
     final isReturning = ctrl.hasEverSignedIn;
-    // hasEverSignedIn was set by a previous setRole call that was already
-    // persisted; after syncFromApi() _status reflects backend truth.
-    if (isReturning && ctrl.statusOf(lastRole) == RoleStatus.approved) {
+    final status = ctrl.statusOf(lastRole);
+    debugPrint('[LOGIN] _navigateAfterAuth — role: $lastRole, isReturning: $isReturning, status: $status, mounted: $mounted');
+    if (isReturning && status == RoleStatus.approved) {
+      final route = lastRole.homeRoute;
+      debugPrint('[LOGIN] navigating to role home: $route');
       ctrl.setRole(lastRole);
-      context.go(lastRole.homeRoute);
+      context.go(route);
     } else {
+      debugPrint('[LOGIN] navigating to role select');
       ctrl.setRole(AppRole.customer);
       context.go(AppRoutes.roleSelect);
     }
+    debugPrint('[LOGIN] context.go called — navigation dispatched');
   }
 
   /// After a password sign-in, offers to turn on biometric unlock so the
-  /// next launch can skip the password.
+  /// next launch can skip the password. Never shown on web.
   Future<void> _offerBiometric() async {
+    if (kIsWeb) return;
     final bio = BiometricService.instance;
     if (!await bio.isAvailable() || await bio.isEnabled()) return;
     if (!mounted) return;
@@ -286,35 +336,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 loading: _busy,
                 onPressed: _submit,
               ),
-              const SizedBox(height: WBSpacing.md),
-              Row(
-                children: [
-                  const Expanded(child: WBDivider()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Text(
-                      'or',
-                      style: WBTypography.caption.copyWith(
-                        color: WBColors.fgPlaceholder,
-                        fontWeight: FontWeight.w500,
+              if (_showBioButton) ...[
+                const SizedBox(height: WBSpacing.md),
+                Row(
+                  children: [
+                    const Expanded(child: WBDivider()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text(
+                        'or',
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgPlaceholder,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  const Expanded(child: WBDivider()),
-                ],
-              ),
-              const SizedBox(height: WBSpacing.md),
-              _OutlineCta(
-                // TODO(i18n): key=loginBiometricDynamic — the localised
-                // string still hard-codes "Face ID"; surface the device
-                // label until the next i18n pass.
-                label: 'Use $_bioLabel',
-                icon: _bioLabel == 'Fingerprint'
-                    ? WBIconName.user
-                    : WBIconName.user,
-                onPressed: _biometricSignIn,
-              ),
-              const SizedBox(height: WBSpacing.md),
+                    const Expanded(child: WBDivider()),
+                  ],
+                ),
+                const SizedBox(height: WBSpacing.md),
+                _OutlineCta(
+                  label: 'Use $_bioLabel',
+                  icon: WBIconName.user,
+                  onPressed: _biometricSignIn,
+                ),
+                const SizedBox(height: WBSpacing.md),
+              ],
               Center(
                 child: GestureDetector(
                   onTap: () => context.push(AppRoutes.signup),

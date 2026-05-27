@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../network/api_client.dart';
 
@@ -16,6 +17,7 @@ class NotificationService {
   bool _initialized = false;
 
   Future<void> init() async {
+    if (kIsWeb) return;
     if (_initialized) return;
     _initialized = true;
 
@@ -51,6 +53,7 @@ class NotificationService {
   }
 
   Future<void> registerToken() async {
+    if (kIsWeb) return;
     try {
       final settings = await FirebaseMessaging.instance.requestPermission();
       if (settings.authorizationStatus == AuthorizationStatus.denied) return;

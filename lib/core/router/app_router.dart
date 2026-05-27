@@ -105,9 +105,43 @@ import '../../features/shopping/presentation/screens/vendor_screen.dart';
 import '../theme/wb_theme_exports.dart';
 import 'app_routes.dart';
 
+/// Handles URIs that GoRouter cannot match — primarily payment deep links
+/// (`wawubasket://payment/success` and `wawubasket://payment/cancelled`) that
+/// the Flutter platform routing layer delivers before app_links can intercept.
+void _onRouterException(
+  BuildContext context,
+  GoRouterState state,
+  GoRouter router,
+) {
+  final uri = state.uri;
+  if (uri.scheme == 'wawubasket' && uri.host == 'payment') {
+    final orderId = uri.queryParameters['orderId'] ?? '';
+    final segment =
+        uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
+    if (segment == 'success' && orderId.isNotEmpty) {
+      router.go(
+        '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=success',
+      );
+    } else if (orderId.isNotEmpty) {
+      // cancelled/failed redirect but the order was created — show the
+      // order confirmation screen so the user sees the actual API status
+      // (the webhook may have already confirmed it successfully).
+      router.go(
+        '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=pending',
+      );
+    } else {
+      router.go(AppRoutes.checkout);
+    }
+  } else {
+    // Unknown location — go to splash so the router re-evaluates auth state.
+    router.go(AppRoutes.splash);
+  }
+}
+
 GoRouter buildRouter() {
   return GoRouter(
     initialLocation: AppRoutes.splash,
+    onException: _onRouterException,
     routes: [
       // Onboarding & Auth (no shell)
       GoRoute(

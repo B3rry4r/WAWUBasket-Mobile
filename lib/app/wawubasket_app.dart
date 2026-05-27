@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -41,7 +42,7 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
       ),
     );
 
-    _initDeepLinks();
+    if (!kIsWeb) _initDeepLinks();
   }
 
   Future<void> _initDeepLinks() async {
@@ -67,15 +68,20 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
     final orderId = uri.queryParameters['orderId'] ?? '';
 
     if (host == 'payment') {
-      if (path == 'success') {
-        // Payment confirmed — navigate to order confirmation / tracking.
-        if (orderId.isNotEmpty) {
-          _router.go('${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=success');
-        } else {
-          _router.go(AppRoutes.orders);
-        }
-      } else if (path == 'cancelled') {
-        // Payment cancelled or failed — go back to checkout so user can retry.
+      if (path == 'success' && orderId.isNotEmpty) {
+        _router.go(
+          '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=success',
+        );
+      } else if (path == 'success') {
+        _router.go(AppRoutes.orders);
+      } else if (orderId.isNotEmpty) {
+        // cancelled/failed redirect but the order was created — show order
+        // confirmation and let the app fetch the real status from the API.
+        // The Flutterwave webhook may have already confirmed the payment.
+        _router.go(
+          '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=pending',
+        );
+      } else {
         _router.go(AppRoutes.checkout);
       }
     }
