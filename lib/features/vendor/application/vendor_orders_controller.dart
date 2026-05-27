@@ -265,6 +265,14 @@ class VendorOrdersController {
           await _api.acceptOrder(o.id);
           await load();
         case OrderStage.preparing:
+          // The API state might be accepted_by_vendor (needs start_preparing)
+          // or already preparing (skip straight to mark_ready). Attempt the
+          // intermediate step and ignore the error if already past it.
+          try {
+            await _api.markPreparing(o.id);
+          } on ApiException {
+            // already in preparing state — proceed
+          }
           await _api.markReady(o.id);
           await load();
         case OrderStage.ready:

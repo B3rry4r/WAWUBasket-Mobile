@@ -36,6 +36,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
     ProfileController.instance.load();
     VendorOrdersController.instance.load();
     _loadRating();
+    _loadOpenState();
     // Reload orders and bump badge whenever a new order arrives in real time.
     _wsSub = WebSocketService.instance.frames
         .where((f) => f.type == 'notification.new' || f.type == 'order.paid')
@@ -51,6 +52,16 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
       final r = data['rating']?.toString() ?? '';
       if (mounted && r.isNotEmpty && r != '0.0') {
         setState(() => _rating = '★ $r');
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _loadOpenState() async {
+    try {
+      final data = await VendorApi.instance.settings();
+      if (!mounted) return;
+      if (data['isOpen'] is bool) {
+        setState(() => _open = data['isOpen'] as bool);
       }
     } catch (_) {}
   }
