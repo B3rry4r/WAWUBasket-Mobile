@@ -376,6 +376,13 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
           ),
           AccountMenuRow(
             icon: WBIconName.close,
+            label: context.l10n.profileDeleteAccount,
+            sub: context.l10n.profileDeleteAccountSub,
+            danger: true,
+            onTap: () => context.push(AppRoutes.deleteAccount),
+          ),
+          AccountMenuRow(
+            icon: WBIconName.close,
             label: context.l10n.operatorSignOut,
             danger: true,
             onTap: () => _showSignOutSheet(context),
