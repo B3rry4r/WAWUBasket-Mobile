@@ -501,7 +501,6 @@
   "escrowOrdersEmpty": "O kò tíì fi àṣẹ tókùtókù síbẹ̀. Lọ sí Òwò láti bẹ̀rẹ̀.",
   "escrowStatusNotFound": "A kò rí àṣẹ náà",
   "escrowStatusReviewNote": "A ó ṣàyẹ̀wò ẹ̀rí kí a sì yanjú ní wakati 48.",
-
   "recipesTitle": "Sè oúnjẹ lálẹ́ yìí",
   "recipesSubtitle": "Ohun èlò gidi. Olùtà gidi. Apò kan ṣoṣo.",
   "recipeDetailIngredients": "Ohun tó wà nínú apò",
@@ -534,21 +533,42 @@
   "recipeLoadFailed": "Kò lè rí oúnjẹ. Fa láti gbìyànjú lẹ́ẹ̀kan sí.",
   "actionRemove": "Yọ kúrò",
   "recipeOrderChildVendors": "Láti ọ̀dọ̀ àwọn olùtà wọ̀nyí",
-
   "homeGreetingMorning": "Ẹ káàárọ̀{name}. Kíni a máa jẹ?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Ẹ káàárọ̀{name}. Àárọ̀ oúnjẹ?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Ẹ kàálẹ̀{name}. Ìmọ̀ fún alẹ?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Ebi alẹ{name}? A rí ẹ.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Kits Oúnjẹ",
   "homeQuickTrack": "Tọpinpin",
   "homeQuickChat": "Ìjọrọ",
   "homeQuickReorder": "Tún Paṣẹ",
-
   "catRestaurants": "Ilé Oúnjẹ",
   "catFreshMarket": "Ọjà Tuntun",
   "catLivestock": "Ẹran Àgbé",
@@ -558,7 +578,6 @@
   "catDrinks": "Mímu",
   "catSnacks": "Oúnjẹ Kékeré",
   "catPharmacy": "Ilé Ìtọ́jú",
-
   "catTagRestaurants": "Oúnjẹ gbígbóná. Kíákíá.",
   "catTagFreshMarket": "Tààrà láti oko.",
   "catTagLivestock": "Gé gẹ́gẹ́ bí o ṣe fẹ́.",
@@ -568,7 +587,6 @@
   "catTagDrinks": "Omi àmùpè · Omi · Oje",
   "catTagSnacks": "Àkàrà · Adídùn",
   "catTagPharmacy": "Ìlera · Oogun",
-
   "subcatAll": "Gbogbo",
   "subcatFastFood": "Oúnjẹ Kíákíá",
   "subcatLocalCuisine": "Oúnjẹ Ìbílẹ̀",
@@ -627,5 +645,24 @@
   "subcatSnacks": "Oúnjẹ Kékeré",
   "subcatOtcMeds": "Oogun Laisi Àṣẹ Dókítà",
   "subcatWellness": "Ìlera",
-  "subcatVitamins": "Vitamin"
+  "subcatVitamins": "Vitamin",
+  "navFavorites": "Ayanfẹ",
+  "navProfile": "Profaili",
+  "navMap": "Maapu",
+  "navActive": "Ṣiṣẹ",
+  "navEarnings": "Ère",
+  "navMenu": "Akojọ",
+  "navRecord": "Ìtàn",
+  "navPayout": "Isanpade",
+  "navListings": "Atokọ",
+  "navPrices": "Iye",
+  "navLoads": "Ẹrù",
+  "navTrip": "Ìrìn",
+  "roleSwitcherTitle": "Yípò ipa",
+  "roleSwitcherSub": "Awọn ipa ti a fọwọsi gba ọ laaye lati yipada. Tẹ ọkan ti a ko fọwọsi lati bẹrẹ ijẹrisi.",
+  "roleStatusAlwaysOn": "Nigbagbogbo",
+  "roleStatusApproved": "Ti fọwọsi",
+  "roleStatusPending": "Ní àtúnyẹ̀wò",
+  "roleStatusGetVerified": "Jẹ́ríisi",
+  "roleStatusActive": "Lọwọlọwọ"
 }

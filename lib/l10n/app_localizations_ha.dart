@@ -1951,4 +1951,62 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'Bitamin';
+
+  @override
+  String get navFavorites => 'Abinda Nake So';
+
+  @override
+  String get navProfile => 'Bayani';
+
+  @override
+  String get navMap => 'Taswirar';
+
+  @override
+  String get navActive => 'Aiki';
+
+  @override
+  String get navEarnings => 'Kudin Shiga';
+
+  @override
+  String get navMenu => 'Menu';
+
+  @override
+  String get navRecord => 'Tarihi';
+
+  @override
+  String get navPayout => 'Biyan Kuɗi';
+
+  @override
+  String get navListings => 'Jerin';
+
+  @override
+  String get navPrices => 'Farashi';
+
+  @override
+  String get navLoads => 'Kaya';
+
+  @override
+  String get navTrip => 'Tafiya';
+
+  @override
+  String get roleSwitcherTitle => 'Canza matsayi';
+
+  @override
+  String get roleSwitcherSub =>
+      'Matsayin da aka amince zai ba ku damar shiga. Taɓa wanda ba a tabbatar da shi ba don fara tabbatarwa.';
+
+  @override
+  String get roleStatusAlwaysOn => 'Koyaushe';
+
+  @override
+  String get roleStatusApproved => 'An amince';
+
+  @override
+  String get roleStatusPending => 'Ana duba';
+
+  @override
+  String get roleStatusGetVerified => 'Tabbatar';
+
+  @override
+  String get roleStatusActive => 'Aiki';
 }

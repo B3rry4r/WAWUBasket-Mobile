@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
+import '../../../core/utils/wb_l10n.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
 /// Food-courier shell. Four tabs, Map, Active, Earnings, Account. Map is
@@ -14,32 +15,19 @@ class RiderShell extends StatelessWidget {
   final Widget child;
   final String location;
 
-  static const _items = [
-    WBNavItem(
-      id: AppRoutes.riderHome,
-      icon: WBIconName.pin,
-      label: 'Map',
-    ),
-    WBNavItem(
-      id: AppRoutes.riderDelivery,
-      icon: WBIconName.bike,
-      label: 'Active',
-    ),
-    WBNavItem(
-      id: AppRoutes.riderEarnings,
-      icon: WBIconName.card,
-      label: 'Earnings',
-    ),
-    WBNavItem(
-      id: AppRoutes.riderAccount,
-      icon: WBIconName.user,
-      label: 'Account',
-    ),
-  ];
+  List<WBNavItem> _navItems(BuildContext context) {
+    final l = context.l10n;
+    return [
+      WBNavItem(id: AppRoutes.riderHome, icon: WBIconName.pin, label: l.navMap),
+      WBNavItem(id: AppRoutes.riderDelivery, icon: WBIconName.bike, label: l.navActive),
+      WBNavItem(id: AppRoutes.riderEarnings, icon: WBIconName.card, label: l.navEarnings),
+      WBNavItem(id: AppRoutes.riderAccount, icon: WBIconName.user, label: l.navAccount),
+    ];
+  }
 
-  String get _activeId {
+  String _activeId(List<WBNavItem> items) {
     String? best;
-    for (final item in _items) {
+    for (final item in items) {
       if (location == item.id || location.startsWith('${item.id}/')) {
         if (best == null || item.id.length > best.length) {
           best = item.id;
@@ -51,15 +39,17 @@ class RiderShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = _navItems(context);
+    final activeId = _activeId(items);
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       extendBody: true,
       body: child,
       bottomNavigationBar: WBBottomNav(
-        items: _items,
-        activeId: _activeId,
+        items: items,
+        activeId: activeId,
         onChanged: (id) {
-          if (id != _activeId) context.go(id);
+          if (id != activeId) context.go(id);
         },
       ),
     );

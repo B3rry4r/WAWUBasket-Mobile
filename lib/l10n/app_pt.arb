@@ -533,15 +533,38 @@
   "recipeLoadFailed": "Não foi possível carregar receitas. Puxe para tentar de novo.",
   "actionRemove": "Remover",
   "recipeOrderChildVendors": "Fornecido por estes vendedores",
-
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
@@ -622,5 +645,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Ativo"
 }

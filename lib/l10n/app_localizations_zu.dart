@@ -1969,4 +1969,62 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'Vitamins';
+
+  @override
+  String get navFavorites => 'Favorites';
+
+  @override
+  String get navProfile => 'Profile';
+
+  @override
+  String get navMap => 'Map';
+
+  @override
+  String get navActive => 'Active';
+
+  @override
+  String get navEarnings => 'Earnings';
+
+  @override
+  String get navMenu => 'Menu';
+
+  @override
+  String get navRecord => 'Record';
+
+  @override
+  String get navPayout => 'Payout';
+
+  @override
+  String get navListings => 'Listings';
+
+  @override
+  String get navPrices => 'Prices';
+
+  @override
+  String get navLoads => 'Loads';
+
+  @override
+  String get navTrip => 'Trip';
+
+  @override
+  String get roleSwitcherTitle => 'Switch role';
+
+  @override
+  String get roleSwitcherSub =>
+      'Approved roles let you jump in. Tap an unverified one to start verification.';
+
+  @override
+  String get roleStatusAlwaysOn => 'Always on';
+
+  @override
+  String get roleStatusApproved => 'Approved';
+
+  @override
+  String get roleStatusPending => 'In review';
+
+  @override
+  String get roleStatusGetVerified => 'Get verified';
+
+  @override
+  String get roleStatusActive => 'Active';
 }

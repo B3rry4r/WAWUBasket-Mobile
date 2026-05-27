@@ -533,21 +533,42 @@
   "recipeLoadFailed": "Enweghị ike ibudata uzo isi nri. Dọkpụrụ ka ịnwaa ọzọ.",
   "actionRemove": "Wepu",
   "recipeOrderChildVendors": "Sitere n'aka ndị a na-ere",
-
   "homeGreetingMorning": "Ụtụtụ ọma{name}. Gịnị ka ị ga-eri?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Ndewo{name}. Njedebe nri ehihie?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Ọ bọọlọ{name}. Atụmatụ nri abalị?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Aguu abalị{name}? Anyị nọ ebe a.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Kits Nri",
   "homeQuickTrack": "Śo",
   "homeQuickChat": "Mkparịta Ụka",
   "homeQuickReorder": "Tọọ Ọzọ",
-
   "catRestaurants": "Ụlọ Oriri",
   "catFreshMarket": "Ahịa Ọhụrụ",
   "catLivestock": "Ụlọ Ọ Chị",
@@ -557,7 +578,6 @@
   "catDrinks": "Mmanya",
   "catSnacks": "Nri Nta",
   "catPharmacy": "Ụlọ Ọgwụ",
-
   "catTagRestaurants": "Nri dị ọkụ. Ngwa ngwa.",
   "catTagFreshMarket": "Ozugbo n'ubi.",
   "catTagLivestock": "Ebere dị ka ị chọrọ.",
@@ -567,7 +587,6 @@
   "catTagDrinks": "Mmanya na-atọ ụto · Mmiri · Juisi",
   "catTagSnacks": "Achịcha · Ihe ụtọ",
   "catTagPharmacy": "Ahụ ike · Ọgwụ",
-
   "subcatAll": "Nile",
   "subcatFastFood": "Nri Ngwa Ngwa",
   "subcatLocalCuisine": "Nri Mba",
@@ -626,5 +645,24 @@
   "subcatSnacks": "Nri Nta",
   "subcatOtcMeds": "Ọgwụ Na-Achọghị Akwụkwọ",
   "subcatWellness": "Ahụ Ike",
-  "subcatVitamins": "Vitamin"
+  "subcatVitamins": "Vitamin",
+  "navFavorites": "Ihe A Hụrụ N'anya",
+  "navProfile": "Profaịlụ",
+  "navMap": "Maapụ",
+  "navActive": "Na-arụ Ọrụ",
+  "navEarnings": "Ụgwọ",
+  "navMenu": "Menyu",
+  "navRecord": "Ndekọ",
+  "navPayout": "Ụgwọ Ọrụ",
+  "navListings": "Ndepụta",
+  "navPrices": "Ọnụ Ahịa",
+  "navLoads": "Ibu",
+  "navTrip": "Njem",
+  "roleSwitcherTitle": "Gbanwee ọrụ",
+  "roleSwitcherSub": "Ọrụ emere nkwado na-enye gị ohere ịbanye. Pịa nke a dịghị enyere nkwado ka ịbido nyochaa.",
+  "roleStatusAlwaysOn": "Mgbe niile",
+  "roleStatusApproved": "Anabatara",
+  "roleStatusPending": "Na-atụle",
+  "roleStatusGetVerified": "Nọchitere",
+  "roleStatusActive": "Ọrụ ugbu a"
 }

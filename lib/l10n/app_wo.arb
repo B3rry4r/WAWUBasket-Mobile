@@ -186,7 +186,9 @@
   "homeDeliveringTo": "Yónne ci {address}",
   "@homeDeliveringTo": {
     "placeholders": {
-      "address": { "type": "String" }
+      "address": {
+        "type": "String"
+      }
     }
   },
   "aboutTitle": "Ci mbirum WAWUBasket",
@@ -336,7 +338,9 @@
   "profileRateThanks": "Jërëjëf, jox nga nu {stars} biddiiw",
   "@profileRateThanks": {
     "placeholders": {
-      "stars": { "type": "String" }
+      "stars": {
+        "type": "String"
+      }
     }
   },
   "profileSignOutTitle": "Génn?",
@@ -360,7 +364,9 @@
   "savedAddressesSetDefault": "{label} dafa nekk bu njëkk",
   "@savedAddressesSetDefault": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
   "securityTitle": "Aar",
@@ -398,7 +404,9 @@
   "walletEscrowHeld": "{amount} ngi tegu ci escrow, dina jële ci yónnent",
   "@walletEscrowHeld": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "walletTopUp": "Yokk",
@@ -522,46 +530,69 @@
   "escrowStatusNotFound": "Komaand gisuñu ko",
   "escrowStatusReviewNote": "Dinañu xool firnde te jeexal ci diir 48 waxtu.",
   "recipesTitle": "Togg ci guddi bi",
-  "recipesSubtitle": "Xam-xam yu d\u00ebkk yu fi. Jiital yi yu d\u00ebkk yu fi. Mb\u00f3ot benn.",
-  "recipeDetailIngredients": "Luy am ci mb\u00f3ot bi",
-  "recipeDetailServes": "D\u00ebkk",
+  "recipesSubtitle": "Xam-xam yu dëkk yu fi. Jiital yi yu dëkk yu fi. Mbóot benn.",
+  "recipeDetailIngredients": "Luy am ci mbóot bi",
+  "recipeDetailServes": "Dëkk",
   "recipeDetailCookingTime": "Simili {mins} ci togg",
   "recipeSizeSmall": "Ndaw",
   "recipeSizeMedium": "Ci biir",
-  "recipeSizeFamily": "K\u00ebr gi",
-  "recipeSizeParty": "Fe\u014b bi",
-  "recipeAddToBasket": "Yor ci mb\u00f3ot bi \u2014 \u20a6{price}",
-  "recipeUnavailableTitle": "\u00d1aari xam-xam \u00f1u m\u00ebn a bokk",
-  "recipeUnavailableBody": "Lii m\u00ebnga d\u00ebkk ci biir waa yagg bi: {items}",
-  "recipeEmptyState": "Da\u00f1u b\u00ebri togg amul foofu. Dellu yagg bi.",
-  "recipeCartSection": "Togg yi \u00f1u bokk",
+  "recipeSizeFamily": "Kër gi",
+  "recipeSizeParty": "Feŋ bi",
+  "recipeAddToBasket": "Yor ci mbóot bi — ₦{price}",
+  "recipeUnavailableTitle": "Ñaari xam-xam ñu mën a bokk",
+  "recipeUnavailableBody": "Lii mënga dëkk ci biir waa yagg bi: {items}",
+  "recipeEmptyState": "Dañu bëri togg amul foofu. Dellu yagg bi.",
+  "recipeCartSection": "Togg yi ñu bokk",
   "recipeCartFromVendors": "Xam-xam {count} ci jiital yi {vendors}",
-  "recipeRemoveTitle": "D\u00ebkkal togg bi?",
-  "recipeRemoveBody": "Mb\u00f3ot bi dina f\u00e0ttal mbootaay bi.",
+  "recipeRemoveTitle": "Dëkkal togg bi?",
+  "recipeRemoveBody": "Mbóot bi dina fàttal mbootaay bi.",
   "homeCookTonight": "Togg ci guddi bi",
-  "homeCookTonightSeeAll": "Xool l\u00e9pp",
-  "recipeFromPrice": "Cantik \u20a6{amount}",
-  "trackingRecipeMultiPickup": "J\u00ebl ci jiital yi {count}",
-  "recipeIngredientsSeeAll": "Xool xam-xam y\u00e9pp",
+  "homeCookTonightSeeAll": "Xool lépp",
+  "recipeFromPrice": "Cantik ₦{amount}",
+  "trackingRecipeMultiPickup": "Jël ci jiital yi {count}",
+  "recipeIngredientsSeeAll": "Xool xam-xam yépp",
   "recipeIngredientsCollapse": "Wone ndaw",
-  "recipeAddedToBasket": "Yor na ci mb\u00f3ot bi.",
-  "recipeAddFailed": "M\u00ebnul yor ci mb\u00f3ot bi. Saytu.",
-  "recipeMatchFailed": "M\u00ebnul j\u00ebl nj\u00ebg bi. T\u00e0nn j\u00ebf bu bees.",
-  "recipeDetailNotFound": "Na\u00f1u d\u00e9glu togg bi.",
+  "recipeAddedToBasket": "Yor na ci mbóot bi.",
+  "recipeAddFailed": "Mënul yor ci mbóot bi. Saytu.",
+  "recipeMatchFailed": "Mënul jël njëg bi. Tànn jëf bu bees.",
+  "recipeDetailNotFound": "Nañu déglu togg bi.",
   "recipeDetailDescription": "Ci xol ci togg bii",
   "recipeDetailCuisine": "Xeetu togg bi",
-  "recipeLoadFailed": "M\u00ebnul y\u00f3bbu togg yi. W\u00ebkk ci saytu.",
-  "actionRemove": "D\u00ebkkal",
-  "recipeOrderChildVendors": "J\u00ebkk ci jiital yii",
-
+  "recipeLoadFailed": "Mënul yóbbu togg yi. Wëkk ci saytu.",
+  "actionRemove": "Dëkkal",
+  "recipeOrderChildVendors": "Jëkk ci jiital yii",
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
@@ -642,5 +673,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Active"
 }

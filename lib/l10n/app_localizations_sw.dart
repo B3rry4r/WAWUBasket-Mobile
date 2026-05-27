@@ -1942,4 +1942,62 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'Vitamini';
+
+  @override
+  String get navFavorites => 'Vipendwa';
+
+  @override
+  String get navProfile => 'Wasifu';
+
+  @override
+  String get navMap => 'Ramani';
+
+  @override
+  String get navActive => 'Hai';
+
+  @override
+  String get navEarnings => 'Mapato';
+
+  @override
+  String get navMenu => 'Menyu';
+
+  @override
+  String get navRecord => 'Rekodi';
+
+  @override
+  String get navPayout => 'Malipo';
+
+  @override
+  String get navListings => 'Orodha';
+
+  @override
+  String get navPrices => 'Bei';
+
+  @override
+  String get navLoads => 'Mizigo';
+
+  @override
+  String get navTrip => 'Safari';
+
+  @override
+  String get roleSwitcherTitle => 'Badilisha jukumu';
+
+  @override
+  String get roleSwitcherSub =>
+      'Majukumu yaliyoidhinishwa yanakuruhusu kubadilisha. Bonyeza isiyothibitishwa kuanza uthibitishaji.';
+
+  @override
+  String get roleStatusAlwaysOn => 'Daima';
+
+  @override
+  String get roleStatusApproved => 'Imeidhinishwa';
+
+  @override
+  String get roleStatusPending => 'Inapitiwa';
+
+  @override
+  String get roleStatusGetVerified => 'Thibitisha';
+
+  @override
+  String get roleStatusActive => 'Hai';
 }

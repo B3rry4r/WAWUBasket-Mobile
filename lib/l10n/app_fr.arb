@@ -501,7 +501,6 @@
   "escrowOrdersEmpty": "Vous n'avez pas encore passé de commandes en gros. Rendez-vous sur Commerce pour commencer.",
   "escrowStatusNotFound": "Impossible de trouver cette commande",
   "escrowStatusReviewNote": "Nous examinerons les preuves et résoudrons dans les 48 heures.",
-
   "recipesTitle": "Cuisinez ce soir",
   "recipesSubtitle": "De vrais ingrédients. De vrais vendeurs. Un seul panier.",
   "recipeDetailIngredients": "Ce qu'il y a dans le panier",
@@ -534,21 +533,42 @@
   "recipeLoadFailed": "Impossible de charger les recettes. Tirez pour réessayer.",
   "actionRemove": "Retirer",
   "recipeOrderChildVendors": "Provenant de ces vendeurs",
-
   "homeGreetingMorning": "Bonjour{name}. Qu'est-ce qu'on mange ?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hé{name}. Pause déjeuner ?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Bonsoir{name}. Des plans pour le dîner ?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Fringale nocturne{name} ? On est là.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Kits de repas",
   "homeQuickTrack": "Suivre",
   "homeQuickChat": "Chat",
   "homeQuickReorder": "Recommander",
-
   "catRestaurants": "Restaurants",
   "catFreshMarket": "Marché Frais",
   "catLivestock": "Bétail",
@@ -558,7 +578,6 @@
   "catDrinks": "Boissons",
   "catSnacks": "En-cas",
   "catPharmacy": "Pharmacie",
-
   "catTagRestaurants": "Repas chauds. Vite.",
   "catTagFreshMarket": "Directement de la ferme.",
   "catTagLivestock": "Coupé exactement comme vous voulez.",
@@ -568,7 +587,6 @@
   "catTagDrinks": "Sodas · Eau · Jus",
   "catTagSnacks": "Boulangerie · Douceurs",
   "catTagPharmacy": "Bien-être · Sans ordonnance",
-
   "subcatAll": "Tout",
   "subcatFastFood": "Restauration rapide",
   "subcatLocalCuisine": "Cuisine locale",
@@ -627,5 +645,24 @@
   "subcatSnacks": "En-cas",
   "subcatOtcMeds": "Médicaments sans ordonnance",
   "subcatWellness": "Bien-être",
-  "subcatVitamins": "Vitamines"
+  "subcatVitamins": "Vitamines",
+  "navFavorites": "Favoris",
+  "navProfile": "Profil",
+  "navMap": "Carte",
+  "navActive": "En cours",
+  "navEarnings": "Gains",
+  "navMenu": "Menu",
+  "navRecord": "Historique",
+  "navPayout": "Paiement",
+  "navListings": "Annonces",
+  "navPrices": "Prix",
+  "navLoads": "Chargements",
+  "navTrip": "Trajet",
+  "roleSwitcherTitle": "Changer de rôle",
+  "roleSwitcherSub": "Les rôles approuvés vous permettent de basculer. Appuyez sur un rôle non vérifié pour commencer la vérification.",
+  "roleStatusAlwaysOn": "Toujours actif",
+  "roleStatusApproved": "Approuvé",
+  "roleStatusPending": "En cours",
+  "roleStatusGetVerified": "Se vérifier",
+  "roleStatusActive": "Actif"
 }

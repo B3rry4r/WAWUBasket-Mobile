@@ -1940,4 +1940,62 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'Vitamin';
+
+  @override
+  String get navFavorites => 'Ayanfẹ';
+
+  @override
+  String get navProfile => 'Profaili';
+
+  @override
+  String get navMap => 'Maapu';
+
+  @override
+  String get navActive => 'Ṣiṣẹ';
+
+  @override
+  String get navEarnings => 'Ère';
+
+  @override
+  String get navMenu => 'Akojọ';
+
+  @override
+  String get navRecord => 'Ìtàn';
+
+  @override
+  String get navPayout => 'Isanpade';
+
+  @override
+  String get navListings => 'Atokọ';
+
+  @override
+  String get navPrices => 'Iye';
+
+  @override
+  String get navLoads => 'Ẹrù';
+
+  @override
+  String get navTrip => 'Ìrìn';
+
+  @override
+  String get roleSwitcherTitle => 'Yípò ipa';
+
+  @override
+  String get roleSwitcherSub =>
+      'Awọn ipa ti a fọwọsi gba ọ laaye lati yipada. Tẹ ọkan ti a ko fọwọsi lati bẹrẹ ijẹrisi.';
+
+  @override
+  String get roleStatusAlwaysOn => 'Nigbagbogbo';
+
+  @override
+  String get roleStatusApproved => 'Ti fọwọsi';
+
+  @override
+  String get roleStatusPending => 'Ní àtúnyẹ̀wò';
+
+  @override
+  String get roleStatusGetVerified => 'Jẹ́ríisi';
+
+  @override
+  String get roleStatusActive => 'Lọwọlọwọ';
 }

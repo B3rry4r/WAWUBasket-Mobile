@@ -186,7 +186,9 @@
   "homeDeliveringTo": "Ɖoa ɖa na {address}",
   "@homeDeliveringTo": {
     "placeholders": {
-      "address": { "type": "String" }
+      "address": {
+        "type": "String"
+      }
     }
   },
   "aboutTitle": "Tso WAWUBasket ŋu",
@@ -336,7 +338,9 @@
   "profileRateThanks": "Akpe, èna mí ɣletivi {stars}",
   "@profileRateThanks": {
     "placeholders": {
-      "stars": { "type": "String" }
+      "stars": {
+        "type": "String"
+      }
     }
   },
   "profileSignOutTitle": "Do go?",
@@ -360,7 +364,9 @@
   "savedAddressesSetDefault": "Wowɔ {label} nye tsɛ",
   "@savedAddressesSetDefault": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
   "securityTitle": "Dedienɔnɔ",
@@ -398,7 +404,9 @@
   "walletEscrowHeld": "Wolé {amount} ɖe escrow me, agaɖe asi le eŋu ne wotsɔe vɛ",
   "@walletEscrowHeld": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "walletTopUp": "Da kpe ɖe eŋu",
@@ -521,47 +529,70 @@
   "escrowOrdersEmpty": "Mèdɔ bulk nudɔdɔ aɖeke haɖe o. Yi Trade nàdze egɔme.",
   "escrowStatusNotFound": "Womekpɔ nudɔdɔ la o",
   "escrowStatusReviewNote": "Míakpɔ kpeɖodzi me eye míakpɔ egbɔ le gaƒoƒo 48 me.",
-  "recipesTitle": "W\u0254 nu nyuie fiafi",
-  "recipesSubtitle": "D\u0254w\u0254w\u0254lawo si le e\u014bu. Miawo si le e\u014bu. Ado \u0256eka.",
+  "recipesTitle": "Wɔ nu nyuie fiafi",
+  "recipesSubtitle": "Dɔwɔwɔlawo si le eŋu. Miawo si le eŋu. Ado ɖeka.",
   "recipeDetailIngredients": "Nu siwo le ado me",
   "recipeDetailServes": "Na",
-  "recipeDetailCookingTime": "{mins} minit w\u0254w\u0254",
+  "recipeDetailCookingTime": "{mins} minit wɔwɔ",
   "recipeSizeSmall": "Lolo",
-  "recipeSizeMedium": "Kat\u00e3",
-  "recipeSizeFamily": "Fome\u0256eke",
-  "recipeSizeParty": "X\u0254me",
-  "recipeAddToBasket": "Ts\u0254 kp\u0254 ado me \u2014 \u20a6{price}",
-  "recipeUnavailableTitle": "D\u0254w\u0254w\u0254la bubuwo me le o",
-  "recipeUnavailableBody": "Mewoem \u0256e w\u00f2 g\u00e3me fifia: {items}",
-  "recipeEmptyState": "W\u0254 nu nyuie a\u0256eke meli o. Xl\u1ebd be matso.",
-  "recipeCartSection": "Nu w\u0254w\u0254 \u014butil\u00e3",
-  "recipeCartFromVendors": "D\u0254w\u0254w\u0254lawo {count} le miawo {vendors} si me",
-  "recipeRemoveTitle": "B\u0254 nu w\u0254w\u0254 sia?",
-  "recipeRemoveBody": "Ado tso nu w\u0254w\u0254 sia.",
-  "homeCookTonight": "W\u0254 nu nyuie fiafi",
-  "homeCookTonightSeeAll": "Kp\u0254 bubuwo kat\u00e3",
-  "recipeFromPrice": "S\u0254 \u20a6{amount} dzi",
-  "trackingRecipeMultiPickup": "\u0189o nu le miawo {count} si",
-  "recipeIngredientsSeeAll": "Kp\u0254 d\u0254w\u0254w\u0254lawo kat\u00e3",
-  "recipeIngredientsCollapse": "Kp\u0254 susu",
-  "recipeAddedToBasket": "Wots\u0254 kp\u0254 ado me.",
-  "recipeAddFailed": "Mewoem \u0256o ado me o. L\u00e9 vui.",
-  "recipeMatchFailed": "Mede nu fa\u0256e o. Taflatse gbl\u0254 susu bubu.",
-  "recipeDetailNotFound": "Mekp\u0254 nu w\u0254w\u0254 sia o.",
-  "recipeDetailDescription": "Kp\u0254dzedze nu w\u0254w\u0254 sia \u014buti",
-  "recipeDetailCuisine": "Nu w\u0254w\u0254 \u0263eyi\u0263i",
-  "recipeLoadFailed": "Mede nu w\u0254w\u0254 la \u014bu o. \u0189o asi \u0256e \u014bkeke.",
-  "actionRemove": "B\u0254",
-  "recipeOrderChildVendors": "Met\u0254 le miawo siwo si",
-
+  "recipeSizeMedium": "Katã",
+  "recipeSizeFamily": "Fomeɖeke",
+  "recipeSizeParty": "Xɔme",
+  "recipeAddToBasket": "Tsɔ kpɔ ado me — ₦{price}",
+  "recipeUnavailableTitle": "Dɔwɔwɔla bubuwo me le o",
+  "recipeUnavailableBody": "Mewoem ɖe wò gãme fifia: {items}",
+  "recipeEmptyState": "Wɔ nu nyuie aɖeke meli o. Xlẽ be matso.",
+  "recipeCartSection": "Nu wɔwɔ ŋutilã",
+  "recipeCartFromVendors": "Dɔwɔwɔlawo {count} le miawo {vendors} si me",
+  "recipeRemoveTitle": "Bɔ nu wɔwɔ sia?",
+  "recipeRemoveBody": "Ado tso nu wɔwɔ sia.",
+  "homeCookTonight": "Wɔ nu nyuie fiafi",
+  "homeCookTonightSeeAll": "Kpɔ bubuwo katã",
+  "recipeFromPrice": "Sɔ ₦{amount} dzi",
+  "trackingRecipeMultiPickup": "Ɖo nu le miawo {count} si",
+  "recipeIngredientsSeeAll": "Kpɔ dɔwɔwɔlawo katã",
+  "recipeIngredientsCollapse": "Kpɔ susu",
+  "recipeAddedToBasket": "Wotsɔ kpɔ ado me.",
+  "recipeAddFailed": "Mewoem ɖo ado me o. Lé vui.",
+  "recipeMatchFailed": "Mede nu faɖe o. Taflatse gblɔ susu bubu.",
+  "recipeDetailNotFound": "Mekpɔ nu wɔwɔ sia o.",
+  "recipeDetailDescription": "Kpɔdzedze nu wɔwɔ sia ŋuti",
+  "recipeDetailCuisine": "Nu wɔwɔ ɣeyiɣi",
+  "recipeLoadFailed": "Mede nu wɔwɔ la ŋu o. Ɖo asi ɖe ŋkeke.",
+  "actionRemove": "Bɔ",
+  "recipeOrderChildVendors": "Metɔ le miawo siwo si",
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
@@ -642,5 +673,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Active"
 }

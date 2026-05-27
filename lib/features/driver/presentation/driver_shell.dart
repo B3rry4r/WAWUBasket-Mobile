@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
+import '../../../core/utils/wb_l10n.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
 /// Long-haul driver's shell. Four tabs, Loads · Trip · Earnings · Account.
@@ -13,32 +14,19 @@ class DriverShell extends StatelessWidget {
   final Widget child;
   final String location;
 
-  static const _items = [
-    WBNavItem(
-      id: AppRoutes.driverHome,
-      icon: WBIconName.basket,
-      label: 'Loads',
-    ),
-    WBNavItem(
-      id: AppRoutes.driverActiveTrip,
-      icon: WBIconName.bike,
-      label: 'Trip',
-    ),
-    WBNavItem(
-      id: AppRoutes.driverEarnings,
-      icon: WBIconName.card,
-      label: 'Earnings',
-    ),
-    WBNavItem(
-      id: AppRoutes.driverAccount,
-      icon: WBIconName.user,
-      label: 'Account',
-    ),
-  ];
+  List<WBNavItem> _navItems(BuildContext context) {
+    final l = context.l10n;
+    return [
+      WBNavItem(id: AppRoutes.driverHome, icon: WBIconName.basket, label: l.navLoads),
+      WBNavItem(id: AppRoutes.driverActiveTrip, icon: WBIconName.bike, label: l.navTrip),
+      WBNavItem(id: AppRoutes.driverEarnings, icon: WBIconName.card, label: l.navEarnings),
+      WBNavItem(id: AppRoutes.driverAccount, icon: WBIconName.user, label: l.navAccount),
+    ];
+  }
 
-  String get _activeId {
+  String _activeId(List<WBNavItem> items) {
     String? best;
-    for (final item in _items) {
+    for (final item in items) {
       if (location == item.id || location.startsWith('${item.id}/')) {
         if (best == null || item.id.length > best.length) {
           best = item.id;
@@ -50,15 +38,17 @@ class DriverShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = _navItems(context);
+    final activeId = _activeId(items);
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       extendBody: true,
       body: child,
       bottomNavigationBar: WBBottomNav(
-        items: _items,
-        activeId: _activeId,
+        items: items,
+        activeId: activeId,
         onChanged: (id) {
-          if (id != _activeId) context.go(id);
+          if (id != activeId) context.go(id);
         },
       ),
     );

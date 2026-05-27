@@ -1939,4 +1939,62 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'Vitamin';
+
+  @override
+  String get navFavorites => 'Ihe A Hụrụ N\'anya';
+
+  @override
+  String get navProfile => 'Profaịlụ';
+
+  @override
+  String get navMap => 'Maapụ';
+
+  @override
+  String get navActive => 'Na-arụ Ọrụ';
+
+  @override
+  String get navEarnings => 'Ụgwọ';
+
+  @override
+  String get navMenu => 'Menyu';
+
+  @override
+  String get navRecord => 'Ndekọ';
+
+  @override
+  String get navPayout => 'Ụgwọ Ọrụ';
+
+  @override
+  String get navListings => 'Ndepụta';
+
+  @override
+  String get navPrices => 'Ọnụ Ahịa';
+
+  @override
+  String get navLoads => 'Ibu';
+
+  @override
+  String get navTrip => 'Njem';
+
+  @override
+  String get roleSwitcherTitle => 'Gbanwee ọrụ';
+
+  @override
+  String get roleSwitcherSub =>
+      'Ọrụ emere nkwado na-enye gị ohere ịbanye. Pịa nke a dịghị enyere nkwado ka ịbido nyochaa.';
+
+  @override
+  String get roleStatusAlwaysOn => 'Mgbe niile';
+
+  @override
+  String get roleStatusApproved => 'Anabatara';
+
+  @override
+  String get roleStatusPending => 'Na-atụle';
+
+  @override
+  String get roleStatusGetVerified => 'Nọchitere';
+
+  @override
+  String get roleStatusActive => 'Ọrụ ugbu a';
 }

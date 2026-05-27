@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
+import '../../../core/utils/wb_l10n.dart';
 import '../../../core/widgets/wb_widgets.dart';
 
 /// The persistent shell wrapping the 4 customer tabs. The floating dark-pill
@@ -13,20 +14,19 @@ class CustomerShell extends StatelessWidget {
   final Widget child;
   final String location;
 
-  static const _items = [
-    WBNavItem(id: AppRoutes.home, icon: WBIconName.home, label: 'Home'),
-    WBNavItem(
-      id: AppRoutes.favorites,
-      icon: WBIconName.heart,
-      label: 'Favorites',
-    ),
-    WBNavItem(id: AppRoutes.orders, icon: WBIconName.basket, label: 'Orders'),
-    WBNavItem(id: AppRoutes.profile, icon: WBIconName.user, label: 'Profile'),
-  ];
+  List<WBNavItem> _navItems(BuildContext context) {
+    final l = context.l10n;
+    return [
+      WBNavItem(id: AppRoutes.home, icon: WBIconName.home, label: l.navHome),
+      WBNavItem(id: AppRoutes.favorites, icon: WBIconName.heart, label: l.navFavorites),
+      WBNavItem(id: AppRoutes.orders, icon: WBIconName.basket, label: l.navOrders),
+      WBNavItem(id: AppRoutes.profile, icon: WBIconName.user, label: l.navProfile),
+    ];
+  }
 
-  String get _activeId {
+  String _activeId(List<WBNavItem> items) {
     String? best;
-    for (final item in _items) {
+    for (final item in items) {
       if (location == item.id || location.startsWith('${item.id}/')) {
         if (best == null || item.id.length > best.length) {
           best = item.id;
@@ -38,15 +38,17 @@ class CustomerShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final items = _navItems(context);
+    final activeId = _activeId(items);
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       extendBody: true,
       body: child,
       bottomNavigationBar: WBBottomNav(
-        items: _items,
-        activeId: _activeId,
+        items: items,
+        activeId: activeId,
         onChanged: (id) {
-          if (id != _activeId) context.go(id);
+          if (id != activeId) context.go(id);
         },
       ),
     );

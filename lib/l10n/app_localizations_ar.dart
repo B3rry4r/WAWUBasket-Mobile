@@ -1917,4 +1917,62 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'فيتامينات';
+
+  @override
+  String get navFavorites => 'المفضلة';
+
+  @override
+  String get navProfile => 'الملف الشخصي';
+
+  @override
+  String get navMap => 'الخريطة';
+
+  @override
+  String get navActive => 'نشط';
+
+  @override
+  String get navEarnings => 'الأرباح';
+
+  @override
+  String get navMenu => 'القائمة';
+
+  @override
+  String get navRecord => 'السجل';
+
+  @override
+  String get navPayout => 'الدفع';
+
+  @override
+  String get navListings => 'القوائم';
+
+  @override
+  String get navPrices => 'الأسعار';
+
+  @override
+  String get navLoads => 'الأحمال';
+
+  @override
+  String get navTrip => 'الرحلة';
+
+  @override
+  String get roleSwitcherTitle => 'تبديل الدور';
+
+  @override
+  String get roleSwitcherSub =>
+      'الأدوار المعتمدة تتيح لك التبديل. اضغط على دور غير محقق للبدء في التحقق.';
+
+  @override
+  String get roleStatusAlwaysOn => 'دائماً مفعّل';
+
+  @override
+  String get roleStatusApproved => 'معتمد';
+
+  @override
+  String get roleStatusPending => 'قيد المراجعة';
+
+  @override
+  String get roleStatusGetVerified => 'احصل على التحقق';
+
+  @override
+  String get roleStatusActive => 'نشط';
 }

@@ -1984,4 +1984,62 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get subcatVitamins => 'Vitamines';
+
+  @override
+  String get navFavorites => 'Favoris';
+
+  @override
+  String get navProfile => 'Profil';
+
+  @override
+  String get navMap => 'Carte';
+
+  @override
+  String get navActive => 'En cours';
+
+  @override
+  String get navEarnings => 'Gains';
+
+  @override
+  String get navMenu => 'Menu';
+
+  @override
+  String get navRecord => 'Historique';
+
+  @override
+  String get navPayout => 'Paiement';
+
+  @override
+  String get navListings => 'Annonces';
+
+  @override
+  String get navPrices => 'Prix';
+
+  @override
+  String get navLoads => 'Chargements';
+
+  @override
+  String get navTrip => 'Trajet';
+
+  @override
+  String get roleSwitcherTitle => 'Changer de rôle';
+
+  @override
+  String get roleSwitcherSub =>
+      'Les rôles approuvés vous permettent de basculer. Appuyez sur un rôle non vérifié pour commencer la vérification.';
+
+  @override
+  String get roleStatusAlwaysOn => 'Toujours actif';
+
+  @override
+  String get roleStatusApproved => 'Approuvé';
+
+  @override
+  String get roleStatusPending => 'En cours';
+
+  @override
+  String get roleStatusGetVerified => 'Se vérifier';
+
+  @override
+  String get roleStatusActive => 'Actif';
 }

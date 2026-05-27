@@ -501,7 +501,6 @@
   "escrowOrdersEmpty": "Ba ka sanya wani umarni mai yawa tukuna. Tafi Kasuwanci don fara.",
   "escrowStatusNotFound": "Ba a sami wannan umarni ba",
   "escrowStatusReviewNote": "Za mu duba shaidar kuma mu warware cikin sa'o'i 48.",
-
   "recipesTitle": "Dafa abinci a daren yau",
   "recipesSubtitle": "Kayan abinci na gaske. Masu sayarwa na gaske. Kwando guda.",
   "recipeDetailIngredients": "Abin da ke cikin kwandon",
@@ -509,7 +508,9 @@
   "recipeDetailCookingTime": "Mintuna {mins} na dafa",
   "@recipeDetailCookingTime": {
     "placeholders": {
-      "mins": { "type": "int" }
+      "mins": {
+        "type": "int"
+      }
     }
   },
   "recipeSizeSmall": "Karami",
@@ -519,14 +520,18 @@
   "recipeAddToBasket": "Sa cikin kwando — ₦{price}",
   "@recipeAddToBasket": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
   "recipeUnavailableTitle": "Wasu kayan abinci ba sa nan",
   "recipeUnavailableBody": "Wadannan ba sa samuwa a yankinka yanzu: {items}",
   "@recipeUnavailableBody": {
     "placeholders": {
-      "items": { "type": "String" }
+      "items": {
+        "type": "String"
+      }
     }
   },
   "recipeEmptyState": "Babu girke-girke har yanzu. Ka dawo nan ba da dadewa ba.",
@@ -534,8 +539,12 @@
   "recipeCartFromVendors": "Kayan abinci {count} daga masu sayarwa {vendors}",
   "@recipeCartFromVendors": {
     "placeholders": {
-      "count": { "type": "int" },
-      "vendors": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "vendors": {
+        "type": "int"
+      }
     }
   },
   "recipeRemoveTitle": "Cire wannan girke-girke?",
@@ -545,13 +554,17 @@
   "recipeFromPrice": "Daga ₦{amount}",
   "@recipeFromPrice": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "trackingRecipeMultiPickup": "Daukar nauyi daga masu sayarwa {count}",
   "@trackingRecipeMultiPickup": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "recipeIngredientsSeeAll": "Duba dukan kayan abinci",
@@ -565,21 +578,42 @@
   "recipeLoadFailed": "Bai yiwu a loda girke-girke ba. Ja don sake gwadawa.",
   "actionRemove": "Cire",
   "recipeOrderChildVendors": "An samo daga wadannan masu sayarwa",
-
   "homeGreetingMorning": "Ina kwana{name}. Me za a ci?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Sannu{name}. Lokacin cin abinci?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Barka da yamma{name}. Abincin dare?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Yunwa da dare{name}? Muna nan.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Kayan Abinci",
   "homeQuickTrack": "Bin diddigin oda",
   "homeQuickChat": "Tattaunawa",
   "homeQuickReorder": "Sake Oda",
-
   "catRestaurants": "Gidajen Abinci",
   "catFreshMarket": "Kasuwar Kayan Lambu",
   "catLivestock": "Dabbobi",
@@ -589,7 +623,6 @@
   "catDrinks": "Abubuwan Sha",
   "catSnacks": "Abincin Marmari",
   "catPharmacy": "Kantin Magani",
-
   "catTagRestaurants": "Abinci mai zafi. Da sauri.",
   "catTagFreshMarket": "Kai tsaye daga gona.",
   "catTagLivestock": "An yanke yadda kake so.",
@@ -599,7 +632,6 @@
   "catTagDrinks": "Abubuwan sha · Ruwa · Juisi",
   "catTagSnacks": "Burodi · Zaƙi",
   "catTagPharmacy": "Lafiya · Magunguna",
-
   "subcatAll": "Duka",
   "subcatFastFood": "Abinci Mai Sauri",
   "subcatLocalCuisine": "Abincin Gida",
@@ -658,5 +690,24 @@
   "subcatSnacks": "Abincin Marmari",
   "subcatOtcMeds": "Magunguna Ba Tare da Takarda Ba",
   "subcatWellness": "Lafiya",
-  "subcatVitamins": "Bitamin"
+  "subcatVitamins": "Bitamin",
+  "navFavorites": "Abinda Nake So",
+  "navProfile": "Bayani",
+  "navMap": "Taswirar",
+  "navActive": "Aiki",
+  "navEarnings": "Kudin Shiga",
+  "navMenu": "Menu",
+  "navRecord": "Tarihi",
+  "navPayout": "Biyan Kuɗi",
+  "navListings": "Jerin",
+  "navPrices": "Farashi",
+  "navLoads": "Kaya",
+  "navTrip": "Tafiya",
+  "roleSwitcherTitle": "Canza matsayi",
+  "roleSwitcherSub": "Matsayin da aka amince zai ba ku damar shiga. Taɓa wanda ba a tabbatar da shi ba don fara tabbatarwa.",
+  "roleStatusAlwaysOn": "Koyaushe",
+  "roleStatusApproved": "An amince",
+  "roleStatusPending": "Ana duba",
+  "roleStatusGetVerified": "Tabbatar",
+  "roleStatusActive": "Aiki"
 }

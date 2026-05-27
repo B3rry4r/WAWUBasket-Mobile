@@ -533,21 +533,42 @@
   "recipeLoadFailed": "Imeshindikana kupakia mapishi. Vuta kujaribu tena.",
   "actionRemove": "Ondoa",
   "recipeOrderChildVendors": "Kutoka kwa wauzaji hawa",
-
   "homeGreetingMorning": "Habari za asubuhi{name}. Utakula nini?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Habari{name}. Mapumziko ya chakula?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Habari za jioni{name}. Mipango ya chakula?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Njaa ya usiku{name}? Tuko hapa.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Vifurushi vya Chakula",
   "homeQuickTrack": "Fuatilia",
   "homeQuickChat": "Gumza",
   "homeQuickReorder": "Agiza Tena",
-
   "catRestaurants": "Migahawa",
   "catFreshMarket": "Soko Safi",
   "catLivestock": "Mifugo",
@@ -557,7 +578,6 @@
   "catDrinks": "Vinywaji",
   "catSnacks": "Vitafunio",
   "catPharmacy": "Duka la Dawa",
-
   "catTagRestaurants": "Chakula moto. Haraka.",
   "catTagFreshMarket": "Moja kwa moja kutoka shambani.",
   "catTagLivestock": "Katwa unavyotaka.",
@@ -567,7 +587,6 @@
   "catTagDrinks": "Vinywaji baridi · Maji · Juisi",
   "catTagSnacks": "Mikate · Vitamu",
   "catTagPharmacy": "Afya · Dawa",
-
   "subcatAll": "Zote",
   "subcatFastFood": "Chakula cha Haraka",
   "subcatLocalCuisine": "Vyakula vya Kienyeji",
@@ -626,5 +645,24 @@
   "subcatSnacks": "Vitafunio",
   "subcatOtcMeds": "Dawa Bila Cheti",
   "subcatWellness": "Afya",
-  "subcatVitamins": "Vitamini"
+  "subcatVitamins": "Vitamini",
+  "navFavorites": "Vipendwa",
+  "navProfile": "Wasifu",
+  "navMap": "Ramani",
+  "navActive": "Hai",
+  "navEarnings": "Mapato",
+  "navMenu": "Menyu",
+  "navRecord": "Rekodi",
+  "navPayout": "Malipo",
+  "navListings": "Orodha",
+  "navPrices": "Bei",
+  "navLoads": "Mizigo",
+  "navTrip": "Safari",
+  "roleSwitcherTitle": "Badilisha jukumu",
+  "roleSwitcherSub": "Majukumu yaliyoidhinishwa yanakuruhusu kubadilisha. Bonyeza isiyothibitishwa kuanza uthibitishaji.",
+  "roleStatusAlwaysOn": "Daima",
+  "roleStatusApproved": "Imeidhinishwa",
+  "roleStatusPending": "Inapitiwa",
+  "roleStatusGetVerified": "Thibitisha",
+  "roleStatusActive": "Hai"
 }

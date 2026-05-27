@@ -6,6 +6,7 @@ import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../../auth/data/auth_api.dart';
@@ -59,13 +60,13 @@ class RoleSwitcherSheet extends StatelessWidget {
             ),
           ),
           Text(
-            'Switch role',
+            context.l10n.roleSwitcherTitle,
             style: WBTypography.page,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: WBSpacing.sm),
           Text(
-            "Approved roles let you jump in. Tap an unverified one to start verification.",
+            context.l10n.roleSwitcherSub,
             textAlign: TextAlign.center,
             style: WBTypography.body.copyWith(
               color: WBColors.fgSecondary,
@@ -169,24 +170,22 @@ class _RoleRow extends StatelessWidget {
         AppRole.admin => WBIconName.filter,
       };
 
-  ({String label, _PillTone tone}) _pill(AppRole r) {
-    if (r == AppRole.customer) {
-      return (label: 'Always on', tone: _PillTone.success);
+  ({String label, _PillTone tone}) _pill(BuildContext context) {
+    final l = context.l10n;
+    if (role == AppRole.customer) {
+      return (label: l.roleStatusAlwaysOn, tone: _PillTone.success);
     }
-    final status = RoleController.instance.statusOf(r);
+    final status = RoleController.instance.statusOf(role);
     return switch (status) {
-      RoleStatus.approved => (label: 'Approved', tone: _PillTone.success),
-      RoleStatus.pending => (label: 'In review', tone: _PillTone.warning),
-      RoleStatus.unregistered => (
-          label: 'Get verified',
-          tone: _PillTone.muted,
-        ),
+      RoleStatus.approved => (label: l.roleStatusApproved, tone: _PillTone.success),
+      RoleStatus.pending => (label: l.roleStatusPending, tone: _PillTone.warning),
+      RoleStatus.unregistered => (label: l.roleStatusGetVerified, tone: _PillTone.muted),
     };
   }
 
   @override
   Widget build(BuildContext context) {
-    final pill = _pill(role);
+    final pill = _pill(context);
 
     return GestureDetector(
       onTap: onTap,
@@ -250,7 +249,7 @@ class _RoleRow extends StatelessWidget {
                                 BorderRadius.circular(WBRadius.pill),
                           ),
                           child: Text(
-                            'Active',
+                            context.l10n.roleStatusActive,
                             style: WBTypography.caption.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,

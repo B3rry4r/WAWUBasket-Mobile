@@ -1,6 +1,5 @@
 {
   "@@locale": "en",
-
   "appName": "WAWUBasket",
   "navHome": "Home",
   "navTrade": "Trade",
@@ -29,9 +28,7 @@
   "chatAttachmentFailed": "Couldn't send the attachment.",
   "kycSubmitted": "Application submitted. We'll review it and let you know.",
   "kycUploadFailed": "Couldn't upload the document. Try again.",
-
   "splashTagline": "One basket. Everything.",
-
   "onboardingSkip": "Skip",
   "onboardingPermissionsTitle": "A couple of quick permissions",
   "onboardingPermissionsSubtitle": "They make the basket work better for you. You can change these anytime.",
@@ -63,7 +60,6 @@
   "onboardingGiftBody": "Your first order comes with something extra. Just because you deserve it.",
   "onboardingGiftButton": "Let's see what's inside",
   "onboardingGiftFootnote": "Valid for first order only. Minimum order applies.",
-
   "loginTitle": "Sign in",
   "loginSubtitle": "Welcome back. Pick up where you left off.",
   "loginPhoneLabel": "Phone or email",
@@ -77,7 +73,6 @@
   "loginBiometricNotNow": "Not now",
   "loginBiometricEnable": "Enable",
   "loginBiometricNotAvailable": "Biometric unlock isn't set up on this device.",
-
   "signupTitle": "What's your WhatsApp number?",
   "signupSubtitle": "We'll send a code to make sure it's really you.",
   "signupNameLabel": "Full name",
@@ -91,19 +86,16 @@
   "signupErrorName": "Fill in your name, number and email.",
   "signupErrorPassword": "Password must be at least 8 characters.",
   "signupErrorTerms": "Accept the Terms to continue.",
-
   "otpTitle": "You've got a code!",
   "otpSubtitle": "Check your WhatsApp. It's a short one.",
   "otpEditNumber": "Edit number",
   "otpResend": "Resend code",
   "otpVerifyButton": "Verify and go in",
   "otpNewCode": "A new code is on its way.",
-
   "forgotTitle": "Reset password",
   "forgotSubtitle": "Tell us where to send a verification code and we'll help you back in.",
   "forgotSendCode": "Send code",
   "forgotErrorEmpty": "Enter your phone number or email.",
-
   "resetTitle": "Choose a new password",
   "resetSubtitle": "Make it different from your last one.",
   "resetPasswordLabel": "New password",
@@ -111,13 +103,10 @@
   "resetButton": "Save password",
   "resetErrorLength": "Password must be at least 8 characters.",
   "resetErrorMismatch": "Passwords don't match.",
-
   "welcomeGetStarted": "Get started",
   "welcomeSignIn": "Sign in",
-
   "roleSelectTitle": "How will you use WAWUBasket?",
   "roleSelectSubtitle": "Pick what you'll do most. You can switch roles anytime from your profile.",
-
   "cartTitle": "Your basket",
   "cartEmpty": "Your basket is empty",
   "cartEmptySubtitle": "Want to fill it? We have ideas.",
@@ -130,7 +119,6 @@
   "cartServiceFee": "Service fee",
   "cartTotal": "Total",
   "cartCheckout": "Proceed to checkout",
-
   "checkoutTitle": "Checkout",
   "checkoutDeliverySection": "Where are we sending this?",
   "checkoutNoAddress": "No address saved — add one",
@@ -149,14 +137,12 @@
   "checkoutCheckStatus": "Check payment status",
   "checkoutGoBack": "Go back",
   "checkoutScheduleConfirm": "Confirm time slot",
-
   "confirmTitle": "Woohoo!",
   "confirmSubtitle": "Your order is confirmed and the kitchen is on it.",
   "confirmNotification": "We'll ping you when your basket moves.",
   "confirmTracking": "Watch it travel to your door in real time.",
   "confirmTrackButton": "Track my order",
   "confirmBackHome": "Back to home",
-
   "trackingNeedHelp": "Need help?",
   "trackingDelivered": "Delivered. Enjoy your basket!",
   "trackingDefaultMessage": "We'll update you as your order moves.",
@@ -167,7 +153,6 @@
   "trackingStep4": "En route",
   "trackingStep5": "Delivered",
   "trackingRate": "Rate your order",
-
   "deliveryTitle": "Delivered. Enjoy your basket!",
   "deliverySubtitle": "How was your experience? Your feedback helps vendors and riders do better.",
   "deliveryRateTitle": "Rate this order",
@@ -184,15 +169,12 @@
   "deliveryThankYouBody": "Your rating helps the whole basket get better. See you next time.",
   "deliveryBackHome": "Back to home",
   "deliveryRateError": "Tap a star to rate your order.",
-
   "searchPlaceholder": "Search jollof, tomatoes, chicken…",
   "searchRecentTitle": "Recent searches",
   "searchRecentClear": "Clear",
   "searchRecentCleared": "Recent searches cleared",
-
   "productAddButton": "Add to basket",
   "productNotFound": "Product not found.",
-
   "homeSearchPlaceholder": "Search for jollof, tomatoes, chicken, pots…",
   "homeBulkMarketsTitle": "Bulk markets",
   "homeBulkMarketsSubtitle": "Wholesale lots & corridor prices, direct from farms",
@@ -204,10 +186,11 @@
   "homeDeliveringTo": "Delivering to {address}",
   "@homeDeliveringTo": {
     "placeholders": {
-      "address": { "type": "String" }
+      "address": {
+        "type": "String"
+      }
     }
   },
-
   "aboutTitle": "About WAWUBasket",
   "aboutTagline": "We're WAWUBasket — offspring of WAWAfrica.",
   "aboutSendFeedback": "Send feedback",
@@ -230,7 +213,6 @@
   "aboutVendorStep2Body": "Add photos, prices, and descriptions.",
   "aboutVendorStep3Title": "Start selling",
   "aboutVendorStep3Body": "Get orders, prepare food, and grow.",
-
   "addAddressTitle": "Add address",
   "addAddressEditTitle": "Edit address",
   "addAddressLabelSection": "LABEL",
@@ -249,13 +231,11 @@
   "addAddressUpdated": "Address updated",
   "addAddressSaved": "Address saved",
   "addAddressEnterLine": "Enter the address line.",
-
   "chatTitle": "Chats",
   "chatSubtitle": "Talk to support and anyone on your active orders.",
   "chatMessageHint": "Message",
   "chatLiveChat": "Live chat",
   "chatRepliesIn": "Replies usually in under 2 min",
-
   "deleteAccountTitle": "Leaving us?",
   "deleteAccountSubtitle": "We're sad to see you go. Before you leave:",
   "deleteAccountCheck1": "Use your wallet balance, it will be lost",
@@ -271,7 +251,6 @@
   "deleteAccountConfirmBody": "This cannot be undone.",
   "deleteAccountYes": "Yes, delete my account",
   "deleteAccountNo": "No, I want to stay",
-
   "dietaryTitle": "Dietary preferences",
   "dietarySubtitle": "Things you'd rather not eat.",
   "dietaryNoBeef": "No beef",
@@ -287,18 +266,15 @@
   "dietaryCustomPlaceholder": "e.g. no MSG, no palm oil",
   "dietarySave": "Save preferences",
   "dietarySaved": "Dietary preferences saved",
-
   "favoritesTitle": "Favorites",
   "favoritesVendorsTab": "Vendors",
   "favoritesDishesTab": "Dishes",
   "favoritesNoVendors": "No favorite vendors yet. Tap the heart on a storefront.",
   "favoritesNoDishes": "No favorite dishes yet. Tap the heart on a dish.",
-
   "notificationsTitle": "Notifications",
   "notificationsMarkAllRead": "Mark all read",
   "notificationsAllRead": "All notifications marked read",
   "notificationsEmpty": "You're all caught up — no notifications yet.",
-
   "orderHistoryTitle": "Your past baskets",
   "orderHistoryTabAll": "All",
   "orderHistoryTabActive": "Active",
@@ -308,7 +284,6 @@
   "orderHistoryReceipt": "Receipt",
   "orderHistoryReorder": "Reorder",
   "orderHistoryReordered": "Items added to your basket",
-
   "personalInfoTitle": "Personal information",
   "personalInfoTapPhoto": "Tap to change photo",
   "personalInfoFullName": "Full name",
@@ -320,7 +295,6 @@
   "personalInfoNameRequired": "Enter your full name.",
   "personalInfoPhotoUpdated": "Photo updated",
   "personalInfoPhotoFailed": "Couldn't upload that photo.",
-
   "profileWalletMenu": "Wallet & payment methods",
   "profileWalletSub": "Cards, bank, and mobile money",
   "profilePersonalInfo": "Personal information",
@@ -364,14 +338,15 @@
   "profileRateThanks": "Thanks, you rated us {stars} stars",
   "@profileRateThanks": {
     "placeholders": {
-      "stars": { "type": "String" }
+      "stars": {
+        "type": "String"
+      }
     }
   },
   "profileSignOutTitle": "Sign out?",
   "profileSignOutBody": "You'll need to sign in again to place new orders.",
   "profileSignOut": "Sign out",
   "profileChoosePhoto": "Choose a profile photo",
-
   "receiptTitle": "Receipt",
   "receiptSubtotal": "Subtotal",
   "receiptDelivery": "Delivery",
@@ -380,7 +355,6 @@
   "receiptReorder": "Reorder",
   "receiptReportIssue": "Report an issue",
   "receiptNotFound": "Receipt not found.",
-
   "savedAddressesTitle": "Saved addresses",
   "savedAddressesAdd": "Add address",
   "savedAddressesEmpty": "No saved addresses yet. Add your first above.",
@@ -390,10 +364,11 @@
   "savedAddressesSetDefault": "{label} set as default",
   "@savedAddressesSetDefault": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
-
   "securityTitle": "Security",
   "securitySubtitle": "Keep your account safe.",
   "securityChangePassword": "Change password",
@@ -409,7 +384,6 @@
   "securityPasswordMismatch": "Passwords do not match.",
   "securityPasswordShort": "New password must be at least 8 characters.",
   "securityPasswordUpdated": "Password updated successfully.",
-
   "supportTitle": "Help & support",
   "supportSearchPlaceholder": "Search help articles",
   "supportContactUs": "CONTACT US",
@@ -425,13 +399,14 @@
   "supportCommonQuestions": "Common questions",
   "supportOpenTicket": "OPEN TICKET",
   "supportViewTicket": "View ticket",
-
   "walletTitle": "Wallet",
   "walletAvailableBalance": "AVAILABLE BALANCE",
   "walletEscrowHeld": "{amount} held in escrow, releases on delivery",
   "@walletEscrowHeld": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "walletTopUp": "Top up",
@@ -455,7 +430,6 @@
   "walletTopUpHint": "Top up",
   "walletAddNewMethod": "Add new method",
   "walletMethodRemoved": "Method removed",
-
   "wawuPlusTitle": "WAWU+",
   "wawuPlusHero": "Go plus. Go more.",
   "wawuPlusSubtitle": "Discounted delivery. Exclusive treats. Priority support.",
@@ -475,7 +449,6 @@
   "wawuPlusActiveMember": "You're a WAWU+ member",
   "wawuPlusWebOnly": "Open WAWUBasket on your phone to join WAWU+.",
   "wawuPlusWelcome": "Welcome to WAWU+!",
-
   "operatorSignOutTitle": "Sign out?",
   "operatorSignOutBody": "You'll need to sign in again to use this dashboard.",
   "operatorSignOut": "Sign out",
@@ -491,7 +464,6 @@
   "operatorHelpSupportSub": "Chat to a real human",
   "operatorSwitchRole": "Switch role",
   "operatorChoosePhoto": "Choose a profile photo",
-
   "vendorAlertsTitle": "Alerts",
   "vendorAlertsEmpty": "No alerts right now. Enjoy the breather.",
   "vendorAnalyticsTitle": "How you're doing",
@@ -535,23 +507,18 @@
   "vendorOrderNotFound": "Can't find that order",
   "vendorReviewsTitle": "What they're saying",
   "vendorMenuPhotoFailed": "Couldn't upload that photo.",
-
   "agentHomeOnline": "You're online, transactions sync as you record them.",
   "agentRegisterSetUp": "Let's get them set up.",
   "agentRegisterOffline": "Offline-capable, we'll sync when you have connection.",
   "agentTraderNotFound": "Trader not found",
   "agentTradersEmpty": "No traders registered yet. Tap \"Register\" to add one.",
-
   "riderHomeOffline": "You're offline",
   "riderKycPhotoId": "Photo of ID",
-
   "driverKycVerifyNote": "We verify with your transport union before you bid.",
   "driverKycLicenceName": "Drivers' licence name, please.",
   "driverKycVehicleType": "What you'll move loads with.",
-
   "traderListingsEmpty": "No listings yet. Tap \"Post\" to add your first.",
   "traderListingPhotoFailed": "Couldn't upload that photo.",
-
   "exportListingNotFound": "Can't find that listing",
   "exportEnquirySent": "Enquiry sent, the trader will reach out.",
   "bulkCheckoutListingNotFound": "Listing not found",
@@ -562,7 +529,6 @@
   "escrowOrdersEmpty": "You haven't placed any bulk orders yet. Head to Trade to start.",
   "escrowStatusNotFound": "Can't find that order",
   "escrowStatusReviewNote": "We'll review evidence and resolve within 48 hours.",
-
   "recipesTitle": "Cook tonight",
   "recipesSubtitle": "Real ingredients. Real vendors. One basket.",
   "recipeDetailIngredients": "What's in the basket",
@@ -570,7 +536,9 @@
   "recipeDetailCookingTime": "{mins} min cook",
   "@recipeDetailCookingTime": {
     "placeholders": {
-      "mins": { "type": "int" }
+      "mins": {
+        "type": "int"
+      }
     }
   },
   "recipeSizeSmall": "Small",
@@ -580,14 +548,18 @@
   "recipeAddToBasket": "Add to basket — ₦{price}",
   "@recipeAddToBasket": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
   "recipeUnavailableTitle": "Some ingredients are missing",
   "recipeUnavailableBody": "These aren't available in your area right now: {items}",
   "@recipeUnavailableBody": {
     "placeholders": {
-      "items": { "type": "String" }
+      "items": {
+        "type": "String"
+      }
     }
   },
   "recipeEmptyState": "No recipes yet. Check back soon.",
@@ -595,8 +567,12 @@
   "recipeCartFromVendors": "{count} ingredients from {vendors} vendors",
   "@recipeCartFromVendors": {
     "placeholders": {
-      "count": { "type": "int" },
-      "vendors": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "vendors": {
+        "type": "int"
+      }
     }
   },
   "recipeRemoveTitle": "Remove this recipe?",
@@ -606,13 +582,17 @@
   "recipeFromPrice": "From ₦{amount}",
   "@recipeFromPrice": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "trackingRecipeMultiPickup": "Picking up from {count} vendors",
   "@trackingRecipeMultiPickup": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "recipeIngredientsSeeAll": "See all ingredients",
@@ -626,21 +606,42 @@
   "recipeLoadFailed": "Couldn't load recipes. Pull to retry.",
   "actionRemove": "Remove",
   "recipeOrderChildVendors": "Sourced from these vendors",
-
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
   "homeQuickReorder": "Reorder",
-
   "catRestaurants": "Restaurants",
   "catFreshMarket": "Fresh Market",
   "catLivestock": "Livestock",
@@ -650,7 +651,6 @@
   "catDrinks": "Drinks",
   "catSnacks": "Snacks",
   "catPharmacy": "Pharmacy",
-
   "catTagRestaurants": "Hot meals. Fast.",
   "catTagFreshMarket": "Straight from the farm.",
   "catTagLivestock": "Cut exactly how you want.",
@@ -660,7 +660,6 @@
   "catTagDrinks": "Soft drinks · Water · Juice",
   "catTagSnacks": "Bakery · Treats",
   "catTagPharmacy": "Wellness · OTC",
-
   "subcatAll": "All",
   "subcatFastFood": "Fast Food",
   "subcatLocalCuisine": "Local Cuisine",
@@ -719,5 +718,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Active"
 }

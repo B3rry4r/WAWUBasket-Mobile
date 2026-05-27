@@ -186,7 +186,9 @@
   "homeDeliveringTo": "Itanga kuri {address}",
   "@homeDeliveringTo": {
     "placeholders": {
-      "address": { "type": "String" }
+      "address": {
+        "type": "String"
+      }
     }
   },
   "aboutTitle": "Kuri WAWUBasket",
@@ -336,7 +338,9 @@
   "profileRateThanks": "Murakoze, watanze amanota {stars}",
   "@profileRateThanks": {
     "placeholders": {
-      "stars": { "type": "String" }
+      "stars": {
+        "type": "String"
+      }
     }
   },
   "profileSignOutTitle": "Sohoka?",
@@ -360,7 +364,9 @@
   "savedAddressesSetDefault": "{label} igizwe iyibanze",
   "@savedAddressesSetDefault": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
   "securityTitle": "Umutekano",
@@ -398,7 +404,9 @@
   "walletEscrowHeld": "{amount} aafashwe muri escrow, azarekurwa mu gihe cyo gutanga",
   "@walletEscrowHeld": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "walletTopUp": "Ongeraho",
@@ -530,7 +538,7 @@
   "recipeSizeMedium": "Hagati",
   "recipeSizeFamily": "Umuryango",
   "recipeSizeParty": "Ibirori",
-  "recipeAddToBasket": "Ongereza muri agaseke \u2014 \u20a6{price}",
+  "recipeAddToBasket": "Ongereza muri agaseke — ₦{price}",
   "recipeUnavailableTitle": "Ibikoresho bimwe ntibihari",
   "recipeUnavailableBody": "Ibi ntibiboneka mu karere kawe ubu: {items}",
   "recipeEmptyState": "Nta mbahuka irahari. Garuka vuba.",
@@ -540,7 +548,7 @@
   "recipeRemoveBody": "Agaseke kawe kazatakaza iri fatabuguzi.",
   "homeCookTonight": "Teka iri joro",
   "homeCookTonightSeeAll": "Reba byose",
-  "recipeFromPrice": "Kuva \u20a6{amount}",
+  "recipeFromPrice": "Kuva ₦{amount}",
   "trackingRecipeMultiPickup": "Gufata mu bacuruzi {count}",
   "recipeIngredientsSeeAll": "Reba ibikoresho byose",
   "recipeIngredientsCollapse": "Erekana bike",
@@ -553,15 +561,38 @@
   "recipeLoadFailed": "Ntishobotse gupakurura imbahuka. Shyira hasi ugerageze.",
   "actionRemove": "Kura",
   "recipeOrderChildVendors": "Ivuye kuri aba bacuruzi",
-
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
@@ -642,5 +673,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Active"
 }

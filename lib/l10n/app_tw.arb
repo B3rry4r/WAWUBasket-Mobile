@@ -28,9 +28,7 @@
   "chatAttachmentFailed": "Ensi sɛ wɔde attachment no kɔɔ.",
   "kycSubmitted": "Application de ato. Yɛbɛhwɛ mu na yɛatete wo aso.",
   "kycUploadFailed": "Ensi sɛ wɔde krataa no kɔɔ. Sesa bio.",
-
   "splashTagline": "Kete baako. Biribiara.",
-
   "onboardingSkip": "Twa kwan",
   "onboardingPermissionsTitle": "Mpatasoɛ mmerɛ kakra",
   "onboardingPermissionsSubtitle": "Wɔde ma kete no yɛ adwuma apa ma wo. Wobetumi sesa ɛberɛ biara.",
@@ -62,7 +60,6 @@
   "onboardingGiftBody": "Wo nkɔso a edi kan no bɛba nneɛma afoforɔ de. Ɛfiri sɛ wofata.",
   "onboardingGiftButton": "Ma yɛnhwɛ deɛ wowɔ mu",
   "onboardingGiftFootnote": "Ɛfata nkɔso a edi kan nko ara. Nkɔso ɔkwan so amount a ɛdɔɔso ka ho.",
-
   "loginTitle": "Wo kɔ mu",
   "loginSubtitle": "Akwaaba bio. San kɔ berɛ a wogye no.",
   "loginPhoneLabel": "Fɔn anaa email",
@@ -76,7 +73,6 @@
   "loginBiometricNotNow": "Ɛnnɛ deɛ daakye",
   "loginBiometricEnable": "Ma nkwa",
   "loginBiometricNotAvailable": "Biometric unlock nni siesie wɔ fam no so.",
-
   "signupTitle": "Wo WhatsApp nɔma bɛn?",
   "signupSubtitle": "Yɛbɛsoma koodu sɛ yɛahwɛ sɛ wo ne wo ara.",
   "signupNameLabel": "Din a ɛto so nyinaa",
@@ -90,19 +86,16 @@
   "signupErrorName": "Hyɛ wo din, nɔma, ne email.",
   "signupErrorPassword": "Password fata sɛ ɛwɔ characters 8 anaa soro.",
   "signupErrorTerms": "Tua Ɔkwan so Nsɛm no sɛ wotoa so.",
-
   "otpTitle": "Koodu wɔ wo ho!",
   "otpSubtitle": "Hwɛ wo WhatsApp. Ɛteɛ no ketewa.",
   "otpEditNumber": "Sesa nɔma",
   "otpResend": "Soma koodu bio",
   "otpVerifyButton": "Sɔ mu na kɔ mu",
   "otpNewCode": "Koodu foforo reba.",
-
   "forgotTitle": "San password",
   "forgotSubtitle": "Ka kyerɛ yɛn ɛhe a yɛsoma verification koodu yɛbɛboa wo san kɔ mu.",
   "forgotSendCode": "Soma koodu",
   "forgotErrorEmpty": "Hyɛ wo fɔn nɔma anaa email.",
-
   "resetTitle": "Yi password foforo",
   "resetSubtitle": "Ma ɛntɔ ɛkwan a edi kan no so.",
   "resetPasswordLabel": "Password foforo",
@@ -110,13 +103,10 @@
   "resetButton": "Sie password",
   "resetErrorLength": "Password fata sɛ ɛwɔ characters 8 anaa soro.",
   "resetErrorMismatch": "Passwords nntɔ.",
-
   "welcomeGetStarted": "Hyɛ ase",
   "welcomeSignIn": "Wo kɔ mu",
-
   "roleSelectTitle": "Ɛde bɛn na wobɛfa WAWUBasket?",
   "roleSelectSubtitle": "Yi deɛ wobɛyɛ paa no. Wobetumi sesa ɔkwan so berɛ biara fi wo profile.",
-
   "cartTitle": "Wo kete",
   "cartEmpty": "Wo kete huu",
   "cartEmptySubtitle": "Pɛ sɛ wohyɛ mu? Yɛwɔ adwene.",
@@ -129,7 +119,6 @@
   "cartServiceFee": "Service ka",
   "cartTotal": "Nyinaa",
   "cartCheckout": "Kɔ checkout",
-
   "checkoutTitle": "Checkout",
   "checkoutDeliverySection": "Ɛhe na yɛde kɔ?",
   "checkoutNoAddress": "Address biara nni hɔ — fa bi ka ho",
@@ -148,14 +137,12 @@
   "checkoutCheckStatus": "Hwɛ payment status",
   "checkoutGoBack": "San kɔ",
   "checkoutScheduleConfirm": "Sɔ berɛ no mu",
-
   "confirmTitle": "Ayekoo!",
   "confirmSubtitle": "Wɔasɔ wo nkɔso mu na asɔkɔwanom no reyɛ adwuma.",
   "confirmNotification": "Yɛbɛtete wo aso berɛ a wo kete bɛsesa.",
   "confirmTracking": "Hwɛ sɛ ɛrekɔ wo fiedeɛ kwan so wɔ real time.",
   "confirmTrackButton": "Track me nkɔso",
   "confirmBackHome": "San kɔ fie",
-
   "trackingNeedHelp": "Hia mmoa?",
   "trackingDelivered": "Wɔade baeɛ. Di wo kete no!",
   "trackingDefaultMessage": "Yɛbɛka wo aso sɛ wo nkɔso no resesa.",
@@ -166,7 +153,6 @@
   "trackingStep4": "Wɔ ɛkwan so",
   "trackingStep5": "Wɔade baeɛ",
   "trackingRate": "Hwɛ wo nkɔso",
-
   "deliveryTitle": "Wɔade baeɛ. Di wo kete no!",
   "deliverySubtitle": "Wo nyinaa dɛn? Wo nimdeɛ de mma dealers ne riders sɛ wɔyɛ apa.",
   "deliveryRateTitle": "Hwɛ nkɔso yi",
@@ -183,15 +169,12 @@
   "deliveryThankYouBody": "Wo rating de mma kete nyinaa sɛ ɛyɛ apa. Yɛhyia bio.",
   "deliveryBackHome": "San kɔ fie",
   "deliveryRateError": "Keka sɛantera bi sɛ wo hwɛ wo nkɔso.",
-
   "searchPlaceholder": "Hwehwɛ jollof, tomatoes, akoko…",
   "searchRecentTitle": "Nsɛm a wohwehwɛeɛ",
   "searchRecentClear": "Popa",
   "searchRecentCleared": "Nsɛm a wohwehwɛeɛ apopa",
-
   "productAddButton": "De kɔ kete mu",
   "productNotFound": "Wɔanhu deɛ wotɔn no.",
-
   "homeSearchPlaceholder": "Hwehwɛ jollof, tomatoes, akoko, amena…",
   "homeBulkMarketsTitle": "Bulk adwam",
   "homeBulkMarketsSubtitle": "Wholesale wura ne ɛkwan so bea, tɔtrɔ fi afuo",
@@ -203,10 +186,11 @@
   "homeDeliveringTo": "Rede kɔ {address}",
   "@homeDeliveringTo": {
     "placeholders": {
-      "address": { "type": "String" }
+      "address": {
+        "type": "String"
+      }
     }
   },
-
   "aboutTitle": "Fa WAWUBasket ho",
   "aboutTagline": "Yɛyɛ WAWUBasket — WAWAfrica ba.",
   "aboutSendFeedback": "Soma nimdeɛ",
@@ -229,7 +213,6 @@
   "aboutVendorStep2Body": "Ka photos, bea, ne nkyerɛaseɛ ho.",
   "aboutVendorStep3Title": "Hyɛ ase tɔn",
   "aboutVendorStep3Body": "Gye nkɔso, siesie aduane, na soro.",
-
   "addAddressTitle": "Ka address ho",
   "addAddressEditTitle": "Sesa address",
   "addAddressLabelSection": "ABƆDEƐ",
@@ -248,13 +231,11 @@
   "addAddressUpdated": "Wɔasesa address",
   "addAddressSaved": "Wɔasie address",
   "addAddressEnterLine": "Hyɛ address kwan no mu.",
-
   "chatTitle": "Nkɔmmɔ",
   "chatSubtitle": "Kɔmmɔ support ne obiara wɔ wo nkɔso a ɛreba.",
   "chatMessageHint": "Nkrataa",
   "chatLiveChat": "Live chat",
   "chatRepliesIn": "Answers ma sɛ simma 2 mu",
-
   "deleteAccountTitle": "Rekɔ?",
   "deleteAccountSubtitle": "Yɛhunu awerɛhow sɛ wokɔ. Ansa na wokɔ:",
   "deleteAccountCheck1": "De wo wallet mu sika, ɛbɛkɔ",
@@ -270,7 +251,6 @@
   "deleteAccountConfirmBody": "Ɛrentumi nsesa.",
   "deleteAccountYes": "Aane, popa me akaunti",
   "deleteAccountNo": "Daabi, mepɛ sɛ medidi",
-
   "dietaryTitle": "Aduane nhyiamu",
   "dietarySubtitle": "Nneɛma a ompɛ sɛ wodi.",
   "dietaryNoBeef": "Mma anantwi ɛnam",
@@ -286,18 +266,15 @@
   "dietaryCustomPlaceholder": "hw. mma MSG, mma ngo",
   "dietarySave": "Sie nhyiamu",
   "dietarySaved": "Wɔasie aduane nhyiamu",
-
   "favoritesTitle": "Nneɛma a wo pɛ",
   "favoritesVendorsTab": "Dealers",
   "favoritesDishesTab": "Aduane",
   "favoritesNoVendors": "Dealer a wo pɛ biara nni hɔ. Keka obi kuma wɔ storefront so.",
   "favoritesNoDishes": "Aduane a wo pɛ biara nni hɔ. Keka obi kuma wɔ aduane so.",
-
   "notificationsTitle": "Nsɛm a wɔde ba",
   "notificationsMarkAllRead": "Twa nyinaa sɛ wɔaka",
   "notificationsAllRead": "Nsɛm a wɔde ba nyinaa ayɛ kɔtɔase",
   "notificationsEmpty": "Woasi nyinaa — nsɛm a wɔde ba biara nni hɔ.",
-
   "orderHistoryTitle": "Wo kete twene",
   "orderHistoryTabAll": "Nyinaa",
   "orderHistoryTabActive": "A ɛreba",
@@ -307,7 +284,6 @@
   "orderHistoryReceipt": "Receipt",
   "orderHistoryReorder": "To bio",
   "orderHistoryReordered": "Wɔde nneɛma aka wo kete ho",
-
   "personalInfoTitle": "Wo ho nsɛm",
   "personalInfoTapPhoto": "Keka sɛ wo sesa photo",
   "personalInfoFullName": "Din a ɛto so nyinaa",
@@ -319,7 +295,6 @@
   "personalInfoNameRequired": "Hyɛ wo din a ɛto so nyinaa.",
   "personalInfoPhotoUpdated": "Photo asesa",
   "personalInfoPhotoFailed": "Ensi sɛ wɔde photo no kɔɔ.",
-
   "profileWalletMenu": "Wallet ne payment nhyiamu",
   "profileWalletSub": "Kaad, bank, ne mobile money",
   "profilePersonalInfo": "Wo ho nsɛm",
@@ -363,14 +338,15 @@
   "profileRateThanks": "Meda wo ase, woama yɛn sɛantera {stars}",
   "@profileRateThanks": {
     "placeholders": {
-      "stars": { "type": "String" }
+      "stars": {
+        "type": "String"
+      }
     }
   },
   "profileSignOutTitle": "Pue?",
   "profileSignOutBody": "Wo hia kɔ mu bio sɛ wo to nkɔso foforo.",
   "profileSignOut": "Pue",
   "profileChoosePhoto": "Yi profile photo",
-
   "receiptTitle": "Receipt",
   "receiptSubtotal": "Subtotal",
   "receiptDelivery": "Delivery",
@@ -379,7 +355,6 @@
   "receiptReorder": "To bio",
   "receiptReportIssue": "Ka amane",
   "receiptNotFound": "Wɔanhu receipt no.",
-
   "savedAddressesTitle": "Addresses a wɔasie",
   "savedAddressesAdd": "Ka address ho",
   "savedAddressesEmpty": "Addresses a wɔasie biara nni hɔ. Ka a edi kan no ho soro.",
@@ -389,10 +364,11 @@
   "savedAddressesSetDefault": "Wɔde {label} asi default ase",
   "@savedAddressesSetDefault": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
-
   "securityTitle": "Ahobanbo",
   "securitySubtitle": "Ma wo akaunti hye.",
   "securityChangePassword": "Sesa password",
@@ -408,7 +384,6 @@
   "securityPasswordMismatch": "Passwords ntɔ.",
   "securityPasswordShort": "Password foforo fata sɛ ɛwɔ characters 8 anaa soro.",
   "securityPasswordUpdated": "Wɔasesa password yie.",
-
   "supportTitle": "Mmoa ne support",
   "supportSearchPlaceholder": "Hwehwɛ mmoa krataa",
   "supportContactUs": "KYƐ YƐN",
@@ -424,13 +399,14 @@
   "supportCommonQuestions": "Nsɛmmisa a ɛba paa",
   "supportOpenTicket": "BƆ TICKET",
   "supportViewTicket": "Hwɛ ticket",
-
   "walletTitle": "Wallet",
   "walletAvailableBalance": "SIKA A WOWƆ",
   "walletEscrowHeld": "Wɔde {amount} sie wɔ escrow, bɛsree wɔ delivery akyi",
   "@walletEscrowHeld": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "walletTopUp": "Ka sika ho",
@@ -454,7 +430,6 @@
   "walletTopUpHint": "Ka sika ho",
   "walletAddNewMethod": "Ka nhyiam foforo ho",
   "walletMethodRemoved": "Wɔayi nhyiam no",
-
   "wawuPlusTitle": "WAWU+",
   "wawuPlusHero": "Kɔ soro. Gye paa.",
   "wawuPlusSubtitle": "Delivery ketewa. Nneɛma a wɔhintaw. Support a ɛdi kan.",
@@ -474,7 +449,6 @@
   "wawuPlusActiveMember": "Wo yɛ WAWU+ member",
   "wawuPlusWebOnly": "Bue WAWUBasket wɔ wo fɔn so sɛ wo ka WAWU+ ho.",
   "wawuPlusWelcome": "Akwaaba wɔ WAWU+!",
-
   "operatorSignOutTitle": "Pue?",
   "operatorSignOutBody": "Wo hia kɔ mu bio sɛ wo de dashboard yi.",
   "operatorSignOut": "Pue",
@@ -490,7 +464,6 @@
   "operatorHelpSupportSub": "Kɔmmɔ onipa foforo ho",
   "operatorSwitchRole": "Sesa ɔkwan",
   "operatorChoosePhoto": "Yi profile photo",
-
   "vendorAlertsTitle": "Nsɛm kɔkɔɔ",
   "vendorAlertsEmpty": "Nsɛm kɔkɔɔ biara nni hɔ ɛnnɛ. Di ahomegyeɛ.",
   "vendorAnalyticsTitle": "Ɛde bɛn na woyɛ",
@@ -534,23 +507,18 @@
   "vendorOrderNotFound": "Wɔanhu nkɔso no",
   "vendorReviewsTitle": "Dɛn na wɔka",
   "vendorMenuPhotoFailed": "Ensi sɛ wɔde photo no kɔɔ.",
-
   "agentHomeOnline": "Wowɔ online, transactions sync sɛ wo ka wɔn.",
   "agentRegisterSetUp": "Ma yɛnsiesie wɔn.",
   "agentRegisterOffline": "Betumi yɛ adwuma offline, yɛbɛsync sɛ wo wɔ connection.",
   "agentTraderNotFound": "Wɔanhu trader no",
   "agentTradersEmpty": "Traders biara nkyeme ho. Keka \"Kyeme\" sɛ wo ka bi ho.",
-
   "riderHomeOffline": "Wowɔ offline",
   "riderKycPhotoId": "ID photo",
-
   "driverKycVerifyNote": "Yɛsɔ mu ne wo transport union ansa na wo bid.",
   "driverKycLicenceName": "Din wɔ wo drivers licence so, mɛpawokyɛw.",
   "driverKycVehicleType": "Deɛ wobɛfa ɛde nneɛma kɔ.",
-
   "traderListingsEmpty": "Listings biara nni hɔ. Keka \"Post\" sɛ wo ka a edi kan ho.",
   "traderListingPhotoFailed": "Ensi sɛ wɔde photo no kɔɔ.",
-
   "exportListingNotFound": "Wɔanhu listing no",
   "exportEnquirySent": "Nhyiamu kɔɔ, trader no bɛkyerɛ wo.",
   "bulkCheckoutListingNotFound": "Wɔanhu listing no",
@@ -561,7 +529,6 @@
   "escrowOrdersEmpty": "Wonto bulk nkɔso biara. Kɔ Trade sɛ wo hyɛ ase.",
   "escrowStatusNotFound": "Wɔanhu nkɔso no",
   "escrowStatusReviewNote": "Yɛbɛhwɛ adansi mu na yɛwie wɔ 48 dɔɔso.",
-
   "recipesTitle": "Noa aduane anadwo yi",
   "recipesSubtitle": "Aduane nneɛma ankasa. Adetɔnfoɔ ankasa. Kɛntɛn baako.",
   "recipeDetailIngredients": "Deɛ ɛwɔ kɛntɛn mu",
@@ -569,7 +536,9 @@
   "recipeDetailCookingTime": "Simma {mins} a wɔnoa",
   "@recipeDetailCookingTime": {
     "placeholders": {
-      "mins": { "type": "int" }
+      "mins": {
+        "type": "int"
+      }
     }
   },
   "recipeSizeSmall": "Ketewa",
@@ -579,14 +548,18 @@
   "recipeAddToBasket": "Fa kɔ kɛntɛn mu — ₦{price}",
   "@recipeAddToBasket": {
     "placeholders": {
-      "price": { "type": "String" }
+      "price": {
+        "type": "String"
+      }
     }
   },
   "recipeUnavailableTitle": "Aduane nneɛma bi nni hɔ",
   "recipeUnavailableBody": "Yeinom nni wo mpɔtam ha seesei: {items}",
   "@recipeUnavailableBody": {
     "placeholders": {
-      "items": { "type": "String" }
+      "items": {
+        "type": "String"
+      }
     }
   },
   "recipeEmptyState": "Aduane nsane biara nni hɔ. San bra ntɛm.",
@@ -594,8 +567,12 @@
   "recipeCartFromVendors": "Aduane nneɛma {count} firi adetɔnfoɔ {vendors} hɔ",
   "@recipeCartFromVendors": {
     "placeholders": {
-      "count": { "type": "int" },
-      "vendors": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "vendors": {
+        "type": "int"
+      }
     }
   },
   "recipeRemoveTitle": "Yi aduane noaso yi?",
@@ -605,13 +582,17 @@
   "recipeFromPrice": "Ɛfiri ₦{amount}",
   "@recipeFromPrice": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "trackingRecipeMultiPickup": "Yɛrefa firi adetɔnfoɔ {count} hɔ",
   "@trackingRecipeMultiPickup": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "recipeIngredientsSeeAll": "Hwɛ aduane nneɛma nyinaa",
@@ -625,15 +606,38 @@
   "recipeLoadFailed": "Yɛantumi amfa aduane noaso no. Twe na sɔ hwɛ bio.",
   "actionRemove": "Yi",
   "recipeOrderChildVendors": "Ɛfiri adetɔnfoɔ yi nkyɛn",
-
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
@@ -714,5 +718,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Active"
 }

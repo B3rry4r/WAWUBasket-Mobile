@@ -186,7 +186,9 @@
   "homeDeliveringTo": "Kotinda na {address}",
   "@homeDeliveringTo": {
     "placeholders": {
-      "address": { "type": "String" }
+      "address": {
+        "type": "String"
+      }
     }
   },
   "aboutTitle": "Mpo na WAWUBasket",
@@ -336,7 +338,9 @@
   "profileRateThanks": "Mersi, opesi biso {stars} minzɔto",
   "@profileRateThanks": {
     "placeholders": {
-      "stars": { "type": "String" }
+      "stars": {
+        "type": "String"
+      }
     }
   },
   "profileSignOutTitle": "Bimá?",
@@ -360,7 +364,9 @@
   "savedAddressesSetDefault": "{label} esili kosala ya yambo",
   "@savedAddressesSetDefault": {
     "placeholders": {
-      "label": { "type": "String" }
+      "label": {
+        "type": "String"
+      }
     }
   },
   "securityTitle": "Libateli",
@@ -398,7 +404,9 @@
   "walletEscrowHeld": "{amount} ezali na escrow, ekobimba na bopesi",
   "@walletEscrowHeld": {
     "placeholders": {
-      "amount": { "type": "String" }
+      "amount": {
+        "type": "String"
+      }
     }
   },
   "walletTopUp": "Bakisá",
@@ -529,8 +537,8 @@
   "recipeSizeSmall": "Moke",
   "recipeSizeMedium": "Katikati",
   "recipeSizeFamily": "Libota",
-  "recipeSizeParty": "F\u025bti",
-  "recipeAddToBasket": "Tia na kofuta \u2014 \u20a6{price}",
+  "recipeSizeParty": "Fɛti",
+  "recipeAddToBasket": "Tia na kofuta — ₦{price}",
   "recipeUnavailableTitle": "Biloko mosusu ezali te",
   "recipeUnavailableBody": "Oyo ezali te na esika na yo sikoyo: {items}",
   "recipeEmptyState": "Bilanga ezali naino te. Zonga sikoyo.",
@@ -540,28 +548,51 @@
   "recipeRemoveBody": "Kofuta na yo ekobeba kobundisa oyo.",
   "homeCookTonight": "Pamba lelo butu",
   "homeCookTonightSeeAll": "Tala nyonso",
-  "recipeFromPrice": "Banda \u20a6{amount}",
+  "recipeFromPrice": "Banda ₦{amount}",
   "trackingRecipeMultiPickup": "Kozwa epai ya batekisi {count}",
   "recipeIngredientsSeeAll": "Tala biloko nyonso",
   "recipeIngredientsCollapse": "Monisa moke",
   "recipeAddedToBasket": "Esiimami na kofuta.",
   "recipeAddFailed": "Ekoki te kotia na kofuta. Luka lisusu.",
   "recipeMatchFailed": "Ekoki te kozwa motuya. Luka bonene mosusu.",
-  "recipeDetailNotFound": "T\u00f3yaki bilanga yango te.",
+  "recipeDetailNotFound": "Tóyaki bilanga yango te.",
   "recipeDetailDescription": "Mpo na bilanga oyo",
   "recipeDetailCuisine": "Ndenge ya bilanga",
-  "recipeLoadFailed": "Ekoki te kocharger bilanga. K\u0254t\u0254 lisusu.",
+  "recipeLoadFailed": "Ekoki te kocharger bilanga. Kɔtɔ lisusu.",
   "actionRemove": "Longola",
   "recipeOrderChildVendors": "Euti na batekisi oyo",
-
   "homeGreetingMorning": "Good morning{name}. What's cooking?",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "Hey{name}. Lunch break?",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "Evening{name}. Dinner plans?",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "Late night craving{name}? We see you.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "Meal Kits",
   "homeQuickTrack": "Track",
   "homeQuickChat": "Chat",
@@ -642,5 +673,24 @@
   "subcatSnacks": "Snacks",
   "subcatOtcMeds": "OTC medication",
   "subcatWellness": "Wellness",
-  "subcatVitamins": "Vitamins"
+  "subcatVitamins": "Vitamins",
+  "navFavorites": "Favorites",
+  "navProfile": "Profile",
+  "navMap": "Map",
+  "navActive": "Active",
+  "navEarnings": "Earnings",
+  "navMenu": "Menu",
+  "navRecord": "Record",
+  "navPayout": "Payout",
+  "navListings": "Listings",
+  "navPrices": "Prices",
+  "navLoads": "Loads",
+  "navTrip": "Trip",
+  "roleSwitcherTitle": "Switch role",
+  "roleSwitcherSub": "Approved roles let you jump in. Tap an unverified one to start verification.",
+  "roleStatusAlwaysOn": "Always on",
+  "roleStatusApproved": "Approved",
+  "roleStatusPending": "In review",
+  "roleStatusGetVerified": "Get verified",
+  "roleStatusActive": "Active"
 }

@@ -533,21 +533,42 @@
   "recipeLoadFailed": "تعذر تحميل الوصفات. اسحب لإعادة المحاولة.",
   "actionRemove": "إزالة",
   "recipeOrderChildVendors": "من هؤلاء الباعة",
-
   "homeGreetingMorning": "صباح الخير{name}. ماذا ستتناول؟",
-  "@homeGreetingMorning": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingMorning": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingAfternoon": "أهلاً{name}. وقت الغداء؟",
-  "@homeGreetingAfternoon": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingAfternoon": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingEvening": "مساء الخير{name}. خطط للعشاء؟",
-  "@homeGreetingEvening": { "placeholders": { "name": { "type": "String" } } },
+  "@homeGreetingEvening": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeGreetingNight": "شهية ليلية{name}؟ نحن هنا.",
-  "@homeGreetingNight": { "placeholders": { "name": { "type": "String" } } },
-
+  "@homeGreetingNight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "homeQuickMealKits": "طقم الوجبات",
   "homeQuickTrack": "تتبع",
   "homeQuickChat": "محادثة",
   "homeQuickReorder": "إعادة الطلب",
-
   "catRestaurants": "مطاعم",
   "catFreshMarket": "السوق الطازج",
   "catLivestock": "المواشي",
@@ -557,7 +578,6 @@
   "catDrinks": "المشروبات",
   "catSnacks": "الوجبات الخفيفة",
   "catPharmacy": "صيدلية",
-
   "catTagRestaurants": "وجبات ساخنة. سريعة.",
   "catTagFreshMarket": "مباشرة من المزرعة.",
   "catTagLivestock": "مقطّع كما تريد.",
@@ -567,7 +587,6 @@
   "catTagDrinks": "مشروبات غازية · مياه · عصير",
   "catTagSnacks": "مخبوزات · حلوى",
   "catTagPharmacy": "صحة · أدوية بدون وصفة",
-
   "subcatAll": "الكل",
   "subcatFastFood": "وجبات سريعة",
   "subcatLocalCuisine": "المطبخ المحلي",
@@ -626,5 +645,24 @@
   "subcatSnacks": "وجبات خفيفة",
   "subcatOtcMeds": "أدوية بدون وصفة",
   "subcatWellness": "العافية",
-  "subcatVitamins": "فيتامينات"
+  "subcatVitamins": "فيتامينات",
+  "navFavorites": "المفضلة",
+  "navProfile": "الملف الشخصي",
+  "navMap": "الخريطة",
+  "navActive": "نشط",
+  "navEarnings": "الأرباح",
+  "navMenu": "القائمة",
+  "navRecord": "السجل",
+  "navPayout": "الدفع",
+  "navListings": "القوائم",
+  "navPrices": "الأسعار",
+  "navLoads": "الأحمال",
+  "navTrip": "الرحلة",
+  "roleSwitcherTitle": "تبديل الدور",
+  "roleSwitcherSub": "الأدوار المعتمدة تتيح لك التبديل. اضغط على دور غير محقق للبدء في التحقق.",
+  "roleStatusAlwaysOn": "دائماً مفعّل",
+  "roleStatusApproved": "معتمد",
+  "roleStatusPending": "قيد المراجعة",
+  "roleStatusGetVerified": "احصل على التحقق",
+  "roleStatusActive": "نشط"
 }

@@ -3831,6 +3831,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vitamins'**
   String get subcatVitamins;
+
+  /// No description provided for @navFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get navFavorites;
+
+  /// No description provided for @navProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get navProfile;
+
+  /// No description provided for @navMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Map'**
+  String get navMap;
+
+  /// No description provided for @navActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get navActive;
+
+  /// No description provided for @navEarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Earnings'**
+  String get navEarnings;
+
+  /// No description provided for @navMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get navMenu;
+
+  /// No description provided for @navRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Record'**
+  String get navRecord;
+
+  /// No description provided for @navPayout.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout'**
+  String get navPayout;
+
+  /// No description provided for @navListings.
+  ///
+  /// In en, this message translates to:
+  /// **'Listings'**
+  String get navListings;
+
+  /// No description provided for @navPrices.
+  ///
+  /// In en, this message translates to:
+  /// **'Prices'**
+  String get navPrices;
+
+  /// No description provided for @navLoads.
+  ///
+  /// In en, this message translates to:
+  /// **'Loads'**
+  String get navLoads;
+
+  /// No description provided for @navTrip.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip'**
+  String get navTrip;
+
+  /// No description provided for @roleSwitcherTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch role'**
+  String get roleSwitcherTitle;
+
+  /// No description provided for @roleSwitcherSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved roles let you jump in. Tap an unverified one to start verification.'**
+  String get roleSwitcherSub;
+
+  /// No description provided for @roleStatusAlwaysOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Always on'**
+  String get roleStatusAlwaysOn;
+
+  /// No description provided for @roleStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get roleStatusApproved;
+
+  /// No description provided for @roleStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'In review'**
+  String get roleStatusPending;
+
+  /// No description provided for @roleStatusGetVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Get verified'**
+  String get roleStatusGetVerified;
+
+  /// No description provided for @roleStatusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get roleStatusActive;
 }
 
 class _AppLocalizationsDelegate
