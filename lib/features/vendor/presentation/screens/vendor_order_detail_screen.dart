@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -66,27 +67,40 @@ class _NotFound extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends StatefulWidget {
   const _Body({required this.order});
   final VendorOrder order;
 
-  Future<void> _advance(BuildContext context) async {
+  @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  bool _advancing = false;
+  bool _declining = false;
+
+  Future<void> _advance() async {
+    final order = widget.order;
     final next = order.stage.advance;
     if (next == null) return;
-    // Handover (ready → handover) is the moment we request a rider.
-    // Show the picker so the vendor selects the vehicle category that
-    // suits this basket before the dispatcher matches a rider.
     if (next.next == OrderStage.handover && order.riderType == null) {
-      final picked = await _showRiderTypeSheet(context);
+      final picked = await _showRiderTypeSheet();
       if (picked == null) return;
       order.riderType = picked;
     }
-    VendorOrdersController.instance.advance(order.id);
-    if (!context.mounted) return;
-    wbShowSnack(context, '${order.id} · ${next.next.label}');
+    setState(() => _advancing = true);
+    try {
+      await VendorOrdersController.instance.advance(order.id);
+      if (mounted) wbShowSnack(context, '${order.id} · ${next.next.label}');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _advancing = false);
+    }
   }
 
-  Future<RiderType?> _showRiderTypeSheet(BuildContext context) {
+  Future<RiderType?> _showRiderTypeSheet() {
+    final order = widget.order;
     final suggestion = _suggestRiderType(order);
     return showModalBottomSheet<RiderType>(
       context: context,
@@ -103,22 +117,29 @@ class _Body extends StatelessWidget {
     );
   }
 
-  /// Heuristic: many items or pricey baskets → car; short addresses
-  /// or single-item orders → motorbike; tiny single item → bicycle.
   RiderType _suggestRiderType(VendorOrder o) {
     if (o.items.length >= 4 || o.subtotal >= 15000) return RiderType.car;
     if (o.items.length == 1 && o.subtotal < 3000) return RiderType.bicycle;
     return RiderType.motorbike;
   }
 
-  void _decline(BuildContext context) {
-    VendorOrdersController.instance.decline(order.id);
-    wbShowSnack(context, '${order.id} declined');
+  Future<void> _decline() async {
+    setState(() => _declining = true);
+    try {
+      await VendorOrdersController.instance.decline(widget.order.id);
+      if (mounted) wbShowSnack(context, '${widget.order.id} declined');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _declining = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final order = widget.order;
     final next = order.stage.advance;
+    final busy = _advancing || _declining;
 
     return Stack(
       children: [
@@ -426,7 +447,8 @@ class _Body extends StatelessWidget {
                               label: context.l10n.vendorHomeDecline,
                               size: WBButtonSize.lg,
                               variant: WBButtonVariant.secondary,
-                              onPressed: () => _decline(context),
+                              loading: _declining,
+                              onPressed: busy ? null : _decline,
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -438,7 +460,8 @@ class _Body extends StatelessWidget {
                             fullWidth: true,
                             size: WBButtonSize.lg,
                             trailingIcon: WBIconName.arrowRight,
-                            onPressed: () => _advance(context),
+                            loading: _advancing,
+                            onPressed: busy ? null : _advance,
                           ),
                         ),
                       ],

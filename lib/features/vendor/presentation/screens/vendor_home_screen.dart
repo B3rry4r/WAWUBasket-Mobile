@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import 'dart:async';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/websocket_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -471,12 +472,46 @@ class _Action extends StatelessWidget {
   }
 }
 
-class _PendingCard extends StatelessWidget {
+class _PendingCard extends StatefulWidget {
   const _PendingCard({required this.order});
   final VendorOrder order;
 
   @override
+  State<_PendingCard> createState() => _PendingCardState();
+}
+
+class _PendingCardState extends State<_PendingCard> {
+  bool _accepting = false;
+  bool _declining = false;
+
+  Future<void> _accept() async {
+    setState(() => _accepting = true);
+    try {
+      await VendorOrdersController.instance.advance(widget.order.id);
+      if (mounted) wbShowSnack(context, 'Order accepted');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _accepting = false);
+    }
+  }
+
+  Future<void> _decline() async {
+    setState(() => _declining = true);
+    try {
+      await VendorOrdersController.instance.decline(widget.order.id);
+      if (mounted) wbShowSnack(context, 'Order declined');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _declining = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final order = widget.order;
+    final busy = _accepting || _declining;
     return GestureDetector(
       onTap: () => context.push('${AppRoutes.vendorOrderDetail}/${order.id}'),
       behavior: HitTestBehavior.opaque,
@@ -525,10 +560,8 @@ class _PendingCard extends StatelessWidget {
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
                     fullWidth: true,
-                    onPressed: () {
-                      VendorOrdersController.instance.decline(order.id);
-                      wbShowSnack(context, '${order.id} declined');
-                    },
+                    loading: _declining,
+                    onPressed: busy ? null : _decline,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -537,10 +570,8 @@ class _PendingCard extends StatelessWidget {
                     label: context.l10n.vendorHomeAccept,
                     size: WBButtonSize.sm,
                     fullWidth: true,
-                    onPressed: () {
-                      VendorOrdersController.instance.advance(order.id);
-                      wbShowSnack(context, '${order.id} accepted');
-                    },
+                    loading: _accepting,
+                    onPressed: busy ? null : _accept,
                   ),
                 ),
               ],
@@ -552,12 +583,35 @@ class _PendingCard extends StatelessWidget {
   }
 }
 
-class _InProgressCard extends StatelessWidget {
+class _InProgressCard extends StatefulWidget {
   const _InProgressCard({required this.order});
   final VendorOrder order;
 
   @override
+  State<_InProgressCard> createState() => _InProgressCardState();
+}
+
+class _InProgressCardState extends State<_InProgressCard> {
+  bool _advancing = false;
+
+  Future<void> _advance() async {
+    setState(() => _advancing = true);
+    try {
+      await VendorOrdersController.instance.advance(widget.order.id);
+      final next = widget.order.stage.advance;
+      if (mounted && next != null) {
+        wbShowSnack(context, '${widget.order.id} · ${next.next.label}');
+      }
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _advancing = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final order = widget.order;
     final next = order.stage.advance;
     return GestureDetector(
       onTap: () => context.push('${AppRoutes.vendorOrderDetail}/${order.id}'),
@@ -618,10 +672,8 @@ class _InProgressCard extends StatelessWidget {
                 size: WBButtonSize.sm,
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
-                onPressed: () {
-                  VendorOrdersController.instance.advance(order.id);
-                  wbShowSnack(context, '${order.id} · ${next.next.label}');
-                },
+                loading: _advancing,
+                onPressed: _advancing ? null : _advance,
               ),
             ],
           ],

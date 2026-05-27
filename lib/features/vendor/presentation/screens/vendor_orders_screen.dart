@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -133,22 +134,74 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-class _OrderCard extends StatelessWidget {
+class _OrderCard extends StatefulWidget {
   const _OrderCard({required this.order, required this.onOpen});
   final VendorOrder order;
   final VoidCallback onOpen;
 
+  @override
+  State<_OrderCard> createState() => _OrderCardState();
+}
+
+class _OrderCardState extends State<_OrderCard> {
+  bool _accepting = false;
+  bool _declining = false;
+  bool _advancing = false;
+
   String get _itemSummary {
-    final parts = [for (final i in order.items) '${i.name} × ${i.qty}'];
+    final parts = [
+      for (final i in widget.order.items) '${i.name} × ${i.qty}'
+    ];
     return parts.join(' · ');
+  }
+
+  Future<void> _accept() async {
+    setState(() => _accepting = true);
+    try {
+      await VendorOrdersController.instance.advance(widget.order.id);
+      if (mounted) wbShowSnack(context, 'Order accepted');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _accepting = false);
+    }
+  }
+
+  Future<void> _decline() async {
+    setState(() => _declining = true);
+    try {
+      await VendorOrdersController.instance.decline(widget.order.id);
+      if (mounted) wbShowSnack(context, 'Order declined');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _declining = false);
+    }
+  }
+
+  Future<void> _advance() async {
+    setState(() => _advancing = true);
+    try {
+      await VendorOrdersController.instance.advance(widget.order.id);
+      final next = widget.order.stage.advance;
+      if (mounted && next != null) {
+        wbShowSnack(context, '${widget.order.id} · ${next.next.label}');
+      }
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } finally {
+      if (mounted) setState(() => _advancing = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final order = widget.order;
     final next = order.stage.advance;
+    final busy = _accepting || _declining || _advancing;
 
     return GestureDetector(
-      onTap: onOpen,
+      onTap: widget.onOpen,
       behavior: HitTestBehavior.opaque,
       child: WBCard(
         child: Column(
@@ -202,35 +255,29 @@ class _OrderCard extends StatelessWidget {
                     label: context.l10n.vendorHomeDecline,
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
-                    onPressed: () {
-                      VendorOrdersController.instance.decline(order.id);
-                      wbShowSnack(context, '${order.id} declined');
-                    },
+                    loading: _declining,
+                    onPressed: busy ? null : _decline,
                   ),
                   const SizedBox(width: 8),
                   WBButton(
                     label: context.l10n.vendorHomeAccept,
                     size: WBButtonSize.sm,
-                    onPressed: () {
-                      VendorOrdersController.instance.advance(order.id);
-                      wbShowSnack(context, '${order.id} accepted · preparing');
-                    },
+                    loading: _accepting,
+                    onPressed: busy ? null : _accept,
                   ),
                 ] else if (next != null)
                   WBButton(
                     label: next.label,
                     size: WBButtonSize.sm,
-                    onPressed: () {
-                      VendorOrdersController.instance.advance(order.id);
-                      wbShowSnack(context, '${order.id} · ${next.next.label}');
-                    },
+                    loading: _advancing,
+                    onPressed: busy ? null : _advance,
                   )
                 else
                   WBButton(
                     label: 'Receipt',
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
-                    onPressed: onOpen,
+                    onPressed: widget.onOpen,
                   ),
               ],
             ),

@@ -244,8 +244,10 @@ class VendorOrdersController {
     }
   }
 
-  /// Advance an order to the next stage. No-op if it's already terminal.
-  void advance(String id) {
+  /// Advance an order to the next stage (optimistic). Throws [ApiException]
+  /// on API failure so the caller can surface an error and the load() revert
+  /// corrects the optimistic state.
+  Future<void> advance(String id) async {
     final o = byId(id);
     final next = o?.stage.advance;
     if (o == null || next == null) return;
@@ -255,57 +257,53 @@ class VendorOrdersController {
       o.riderEta = 'Finding a rider…';
     }
     _bump();
-    _syncAdvance(o, from);
+    try {
+      await _doAdvanceApi(o, from);
+    } on ApiException {
+      await load(); // reload reverts the optimistic stage
+      rethrow;
+    }
+    await load();
   }
 
-  Future<void> _syncAdvance(VendorOrder o, OrderStage from) async {
-    try {
-      switch (from) {
-        case OrderStage.pending:
-          await _api.acceptOrder(o.id);
-          await load();
-        case OrderStage.preparing:
-          // The API state might be accepted_by_vendor (needs start_preparing)
-          // or already preparing (skip straight to mark_ready). Attempt the
-          // intermediate step and ignore the error if already past it.
-          try {
-            await _api.markPreparing(o.id);
-          } on ApiException {
-            // already in preparing state — proceed
-          }
-          await _api.markReady(o.id);
-          await load();
-        case OrderStage.ready:
-          await _api.requestRider(
-            o.id,
-            (o.riderType ?? RiderType.motorbike).apiValue,
-          );
-          await load();
-        case OrderStage.handover:
-        case OrderStage.done:
-        case OrderStage.declined:
-          break;
-      }
-    } on ApiException {
-      // Keep the optimistic stage; the next refresh reconciles it.
+  Future<void> _doAdvanceApi(VendorOrder o, OrderStage from) async {
+    switch (from) {
+      case OrderStage.pending:
+        await _api.acceptOrder(o.id);
+      case OrderStage.preparing:
+        // The API state might be accepted_by_vendor (needs start_preparing)
+        // or already preparing. Attempt the intermediate step; ignore if already past.
+        try {
+          await _api.markPreparing(o.id);
+        } on ApiException {
+          // already in preparing state — proceed
+        }
+        await _api.markReady(o.id);
+      case OrderStage.ready:
+        await _api.requestRider(
+          o.id,
+          (o.riderType ?? RiderType.motorbike).apiValue,
+        );
+      case OrderStage.handover:
+      case OrderStage.done:
+      case OrderStage.declined:
+        break;
     }
   }
 
-  void decline(String id) {
+  /// Reject an order (optimistic). Throws [ApiException] on failure.
+  Future<void> decline(String id) async {
     final o = byId(id);
     if (o == null) return;
     o.stage = OrderStage.declined;
     _bump();
-    _syncDecline(id);
-  }
-
-  Future<void> _syncDecline(String id) async {
     try {
       await _api.rejectOrder(id);
-      await load();
     } on ApiException {
-      // Keep the optimistic decline.
+      await load();
+      rethrow;
     }
+    await load();
   }
 
   void _bump() => orders.value = List.of(orders.value);
