@@ -27,7 +27,7 @@ class VendorHomeScreen extends StatefulWidget {
 
 class _VendorHomeScreenState extends State<VendorHomeScreen> {
   bool _open = true;
-  String _rating = '–';
+  String _rating = '';
   StreamSubscription<WsFrame>? _wsSub;
 
   @override
@@ -339,7 +339,7 @@ class _Hero extends StatelessWidget {
               const SizedBox(width: 10),
               _DarkStat(label: 'Earned', value: wbNaira(revenue)),
               const SizedBox(width: 10),
-              _DarkStat(label: context.l10n.vendorAnalyticsRating, value: rating.isEmpty ? '–' : rating),
+              _DarkStat(label: context.l10n.vendorAnalyticsRating, value: rating.isEmpty || rating == '0' || rating == '0.0' ? 'New' : rating),
             ],
           ),
         ],

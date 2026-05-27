@@ -201,7 +201,7 @@ class _Hero extends StatelessWidget {
               const SizedBox(width: 10),
               _Stat(label: 'Today', value: '$pendingToday'),
               const SizedBox(width: 10),
-              _Stat(label: context.l10n.vendorAnalyticsRating, value: '★ ${driverRating ?? "–"}'),
+              _Stat(label: context.l10n.vendorAnalyticsRating, value: driverRating != null && (double.tryParse(driverRating!) ?? 0) > 0 ? '★ $driverRating' : 'New'),
             ],
           ),
         ],

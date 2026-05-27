@@ -306,15 +306,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   builder: (_, stats, _) => Row(
                     children: [
                       _Stat(
-                        value: stats?.orders != null ? '${stats!.orders}' : '–',
+                        value: '${stats?.orders ?? 0}',
                         label: 'Orders',
                       ),
                       _Stat(
-                        value: stats?.orders != null ? '${stats!.orders}' : '–',
+                        value: '${stats?.orders ?? 0}',
                         label: 'Bulk',
                       ),
                       _Stat(
-                        value: stats?.favorites != null ? '${stats!.favorites}' : '–',
+                        value: '${stats?.favorites ?? 0}',
                         label: 'Favorites',
                         last: true,
                       ),

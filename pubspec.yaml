@@ -45,6 +45,10 @@ dependencies:
   # the vendor pickup and the customer drop-off).
   url_launcher: ^6.3.1
 
+  # Receives incoming deep links / app links (e.g. wawubasket://payment/success).
+  # Used to return users into the app after Flutterwave hosted checkout completes.
+  app_links: ^6.3.2
+
   # Picks images for avatar, product photos, listing images, KYC
   # documents and chat attachments; uploaded to R2 via a presigned PUT.
   image_picker: ^1.1.2

@@ -30,7 +30,7 @@ class _DevSettingsScreenState extends State<DevSettingsScreen> {
 
   static const _descriptions = <String, String>{
     'new_categories_ui': 'Redesigned home categories grid (toggle off = old 3×3 layout)',
-    'recipe_combos': 'Cook Tonight / Recipe Combo Intelligence rail on home',
+    'recipe_combos': 'Meal Kits / Recipe Combo Intelligence rail on home',
   };
 
   @override

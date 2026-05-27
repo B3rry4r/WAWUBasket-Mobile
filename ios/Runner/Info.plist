@@ -81,5 +81,20 @@
 		<string>fetch</string>
 		<string>remote-notification</string>
 	</array>
+	<!-- Custom URL scheme for payment deep links: wawubasket://payment/success?orderId=...
+	     Fired by GET /v1/webhooks/payments/flutterwave/redirect after checkout. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>wawubasket</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wawubasket</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

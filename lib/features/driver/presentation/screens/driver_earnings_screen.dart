@@ -176,7 +176,7 @@ class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        _data != null ? wbNaira(_data!.totalNaira) : '–',
+                        wbNaira(_data?.totalNaira ?? 0),
                         style: WBTypography.hero.copyWith(
                           color: Colors.white,
                           fontSize: 36,
@@ -185,9 +185,7 @@ class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        _data != null
-                            ? '${_data!.count} ${_data!.count == 1 ? 'trip' : 'trips'}'
-                            : '–',
+                        '${_data?.count ?? 0} ${(_data?.count ?? 0) == 1 ? 'trip' : 'trips'}',
                         style: WBTypography.caption.copyWith(
                           color: Colors.white.withValues(alpha: 0.6),
                         ),

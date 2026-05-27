@@ -174,7 +174,7 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
   /// Build the three stat tiles from API stats. Falls back to '–' when stats
   /// haven't loaded yet or the field is absent for the active role.
   List<_Stat> _resolveStats(ProfileStats? s) {
-    String dash = '–';
+    String dash = '0';
     return switch (widget.role) {
       AppRole.vendor => [
           _Stat('Orders', s?.orders != null ? '${s!.orders}' : dash),
@@ -182,8 +182,10 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
               ? _nairaK(int.tryParse(s!.vendorEarnedNaira!) ?? 0)
               : dash),
           _Stat('Rating', s?.vendorRating != null
-              ? '★ ${s!.vendorRating}'
-              : dash),
+              ? (double.tryParse(s!.vendorRating!) ?? 0) > 0
+                  ? '★ ${s.vendorRating}'
+                  : 'New'
+              : '—'),
         ],
       AppRole.agent => [
           _Stat('Today', s?.agentTodayTransactions != null
@@ -202,8 +204,10 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
               ? _nairaK(int.tryParse(s!.riderEarnedNaira!) ?? 0)
               : dash),
           _Stat('Rating', s?.riderRating != null
-              ? '★ ${s!.riderRating}'
-              : dash),
+              ? (double.tryParse(s!.riderRating!) ?? 0) > 0
+                  ? '★ ${s.riderRating}'
+                  : 'New'
+              : '—'),
         ],
       AppRole.trader => [
           _Stat('Listings', s?.traderListings != null
@@ -224,8 +228,10 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
               ? _nairaK(int.tryParse(s!.driverEarnedNaira!) ?? 0)
               : dash),
           _Stat('Rating', s?.driverRating != null
-              ? '★ ${s!.driverRating}'
-              : dash),
+              ? (double.tryParse(s!.driverRating!) ?? 0) > 0
+                  ? '★ ${s.driverRating}'
+                  : 'New'
+              : '—'),
         ],
       AppRole.customer => [
           _Stat('Orders', s?.orders != null ? '${s!.orders}' : dash),
@@ -233,9 +239,9 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
           _Stat('Member', '—'),
         ],
       AppRole.admin => [
-          _Stat('Flags', dash),
-          _Stat('Users', dash),
-          _Stat('Build', dash),
+          _Stat('Flags', '—'),
+          _Stat('Users', '—'),
+          _Stat('Build', 'v2.1'),
         ],
     };
   }

@@ -195,24 +195,44 @@ class DSVendorCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 Row(
                   children: [
-                    const WBIcon(WBIconName.star, size: 13),
-                    const SizedBox(width: 4),
-                    Text(
-                      vendor.rating.toString(),
-                      style: WBTypography.caption.copyWith(
-                        color: WBColors.fgHeader,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
+                    if (vendor.rating > 0) ...[
+                      const WBIcon(WBIconName.star, size: 13),
+                      const SizedBox(width: 4),
+                      Text(
+                        vendor.rating.toStringAsFixed(1),
+                        style: WBTypography.caption.copyWith(
+                          color: WBColors.fgHeader,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      '(${vendor.reviews})',
-                      style: WBTypography.caption.copyWith(
-                        color: WBColors.fgPlaceholder,
-                        fontSize: 13,
+                      if (vendor.reviews.isNotEmpty) ...[
+                        const SizedBox(width: 6),
+                        Text(
+                          '(${vendor.reviews})',
+                          style: WBTypography.caption.copyWith(
+                            color: WBColors.fgPlaceholder,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ] else
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF0F7F0),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          'New',
+                          style: WBTypography.caption.copyWith(
+                            color: const Color(0xFF2E7D32),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                          ),
+                        ),
                       ),
-                    ),
                     const SizedBox(width: 10),
                     Container(
                       width: 3,

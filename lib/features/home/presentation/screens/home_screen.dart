@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
@@ -29,14 +33,9 @@ String _greeting(String? firstName) {
   return 'Late night craving$name? We see you.';
 }
 
-/// Padding helper, wraps a non-carousel section in the standard 20 px safe
-/// area so carousels can stay full-bleed.
 Widget _padded(Widget child) =>
     Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: child);
 
-/// Home tab. Outer ListView has zero horizontal padding so horizontal
-/// carousels can scroll edge-to-edge; static sections opt-in to the 20 px
-/// padding via [_padded].
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -94,6 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
           final defaultAddr =
               addresses.where((a) => a.isDefault).firstOrNull;
           return ListView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             padding: EdgeInsets.fromLTRB(
               0,
               12 + MediaQuery.of(context).padding.top,
@@ -116,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 22),
               _padded(const WBRandomTagline(pairs: WBTaglines.customer)),
               const SizedBox(height: 22),
-              // Search bar
               _padded(GestureDetector(
                 onTap: () => context.push(AppRoutes.search),
                 behavior: HitTestBehavior.opaque,
@@ -151,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _QuickAction(
                     icon: WBIconName.star,
-                    label: 'Cook Tonight',
+                    label: 'Meal Kits',
                     onTap: () => context.push(AppRoutes.recipes),
                   ),
                   _QuickAction(
@@ -175,12 +176,38 @@ class _HomeScreenState extends State<HomeScreen> {
               ValueListenableBuilder<Map<String, bool>>(
                 valueListenable: FeatureFlagService.instance.flags,
                 builder: (_, flags, _) {
-                  final circleUI = flags['new_categories_ui'] ?? false;
+                  final orbitalUI = flags['new_categories_ui'] ?? false;
                   return ValueListenableBuilder<List<Category>?>(
                     valueListenable: CategoryController.instance.categories,
                     builder: (_, cats, _) {
-                      if (circleUI) {
-                        return _CategoryCircleRow(cats: cats);
+                      if (orbitalUI) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _OrbitalCategorySelector(
+                              cats: cats,
+                              activeId: _activeCategoryId,
+                              onSelect: _onCategoryTap,
+                            ),
+                            AnimatedSize(
+                              duration: WBMotion.slow,
+                              curve: WBMotion.easeSoft,
+                              alignment: Alignment.topCenter,
+                              child: _activeCategoryId == null
+                                  ? const SizedBox(width: double.infinity)
+                                  : Padding(
+                                      padding:
+                                          const EdgeInsets.only(top: WBSpacing.md),
+                                      child: CategoryBody(
+                                        kind: kind,
+                                        categoryId: _activeCategoryId,
+                                        subcategoryId: _activeSubcategoryId,
+                                      ),
+                                    ),
+                            ),
+                          ],
+                        );
                       }
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,7 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             activeCategoryId: _activeCategoryId,
                             onTap: _onCategoryTap,
                           ),
-                          // Subcategory chips — animated reveal below pills
                           AnimatedSize(
                             duration: WBMotion.base,
                             curve: WBMotion.easeSoft,
@@ -230,6 +256,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+// ── Quick action tile ─────────────────────────────────────────────────────────
 
 class _QuickAction extends StatelessWidget {
   const _QuickAction({
@@ -279,7 +307,7 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
-// ── New UI: scrollable pill row ───────────────────────────────────────────────
+// ── Standard pill row (feature flag OFF) ─────────────────────────────────────
 
 class _CategoryPillRow extends StatelessWidget {
   const _CategoryPillRow({
@@ -319,6 +347,7 @@ class _CategoryPillRow extends StatelessWidget {
       height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         itemCount: cats!.length,
         separatorBuilder: (_, _) => const SizedBox(width: 8),
@@ -373,159 +402,375 @@ class _CategoryPillRow extends StatelessWidget {
   }
 }
 
-// ── Feature-flag UI: Glovo-style animated circle carousel ────────────────────
-// Horizontally scrollable row. Each circle scales up as it nears the viewport
-// centre — the same parallax-magnify feel Glovo uses. Tapping navigates to
-// the dedicated CategoryScreen rather than dropping chips inline.
+// ── Orbital category selector (feature flag ON) ───────────────────────────────
+//
+// A circular ring of category icons orbits a center "active" slot.
+// Drag horizontally to spin the ring; it decelerates with friction and snaps
+// to the nearest category. The active category is whichever item sits closest
+// to the 12 o'clock position. Tapping a ring item snaps it to active position.
 
-class _CategoryCircleRow extends StatefulWidget {
-  const _CategoryCircleRow({required this.cats});
+class _OrbitalCategorySelector extends StatefulWidget {
+  const _OrbitalCategorySelector({
+    required this.cats,
+    required this.activeId,
+    required this.onSelect,
+  });
   final List<Category>? cats;
+  final String? activeId;
+  final ValueChanged<String> onSelect;
 
   @override
-  State<_CategoryCircleRow> createState() => _CategoryCircleRowState();
+  State<_OrbitalCategorySelector> createState() =>
+      _OrbitalCategorySelectorState();
 }
 
-class _CategoryCircleRowState extends State<_CategoryCircleRow> {
-  final _scroll = ScrollController();
+class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
+    with TickerProviderStateMixin {
+  // Ring rotation in radians. 0 = first category at 12 o'clock.
+  double _rotation = 0.0;
+  double _angularVelocity = 0.0;
+  Ticker? _ticker;
+  int _activeIndex = 0;
 
-  // Item width + gap used to compute each tile's distance from viewport centre.
-  static const _tileW = 72.0;
-  static const _gap = 14.0;
+  // Snapping spring animation
+  late final AnimationController _snapCtrl;
+  Animation<double>? _snapAnim;
+
+  // Drag → rotation scale. Controls how fast the ring spins relative to drag.
+  static const _dragSensitivity = 0.0055; // rad / screen-pixel
+  // Friction coefficient applied every frame during fling (0=instant stop, 1=no friction).
+  static const _friction = 0.88;
+  // Below this angular speed (rad/frame), friction loop ends and we snap.
+  static const _stopThreshold = 0.003;
+
+  // Geometry
+  static const _orbitR = 108.0;  // center → orbit-item center
+  static const _centerD = 82.0;  // active bubble diameter
+  static const _orbitD = 52.0;   // orbit item diameter
+  static const _totalH = 290.0;  // fixed widget height
 
   @override
   void initState() {
     super.initState();
-    _scroll.addListener(() => setState(() {}));
+    _snapCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 420),
+    );
+    _syncActiveFromParent();
+  }
+
+  @override
+  void didUpdateWidget(_OrbitalCategorySelector old) {
+    super.didUpdateWidget(old);
+    if (old.activeId != widget.activeId) _syncActiveFromParent();
+    if (old.cats != widget.cats) _syncActiveFromParent();
+  }
+
+  void _syncActiveFromParent() {
+    final cats = widget.cats;
+    if (cats == null || cats.isEmpty) return;
+    final id = widget.activeId;
+    if (id == null) {
+      _activeIndex = 0;
+      _rotation = 0;
+      return;
+    }
+    final idx = cats.indexWhere((c) => c.id == id);
+    if (idx >= 0 && idx != _activeIndex) {
+      _activeIndex = idx;
+      _rotation = -_angleForIndex(idx, cats.length);
+    }
   }
 
   @override
   void dispose() {
-    _scroll.dispose();
+    _ticker?.dispose();
+    _snapCtrl.dispose();
     super.dispose();
   }
 
-  double _scale(int i) {
-    if (!_scroll.hasClients) return i == 0 ? 1.0 : 0.85;
-    final viewW = _scroll.position.viewportDimension;
-    final offset = _scroll.offset;
-    final itemCenter = 20.0 + i * (_tileW + _gap) + _tileW / 2;
-    final viewCenter = offset + viewW / 2;
-    final dist = (itemCenter - viewCenter).abs();
-    // Scale 1.0 at centre, 0.82 at >half a tile away
-    return (1.0 - (dist / (viewW * 0.6)).clamp(0.0, 1.0) * 0.18)
-        .clamp(0.82, 1.0);
+  double _angleForIndex(int i, int n) => 2 * pi * i / n;
+
+  // Which index is currently closest to 12 o'clock (angle 0 after rotation).
+  int _nearestIndex(int n) {
+    if (n == 0) return 0;
+    final step = 2 * pi / n;
+    final norm = ((-_rotation) % (2 * pi) + 2 * pi) % (2 * pi);
+    return ((norm + step / 2) / step).floor() % n;
+  }
+
+  void _onPanUpdate(DragUpdateDetails d) {
+    _ticker?.stop();
+    _snapCtrl.stop();
+    setState(() {
+      _rotation += d.delta.dx * _dragSensitivity;
+    });
+    _maybeUpdateActive();
+  }
+
+  void _onPanEnd(DragEndDetails d) {
+    final vx = d.velocity.pixelsPerSecond.dx;
+    _angularVelocity = vx * _dragSensitivity;
+    // Cap max fling speed so the ring never whips uncontrollably.
+    _angularVelocity = _angularVelocity.clamp(-0.18, 0.18);
+    _ticker ??= createTicker(_onTick);
+    _ticker!.start();
+  }
+
+  void _onTick(Duration _) {
+    _angularVelocity *= _friction;
+    setState(() => _rotation += _angularVelocity);
+    _maybeUpdateActive();
+    if (_angularVelocity.abs() < _stopThreshold) {
+      _ticker!.stop();
+      _snapToIndex(_nearestIndex(widget.cats?.length ?? 1));
+    }
+  }
+
+  void _maybeUpdateActive() {
+    final n = widget.cats?.length ?? 0;
+    if (n == 0) return;
+    final idx = _nearestIndex(n);
+    if (idx != _activeIndex) {
+      setState(() => _activeIndex = idx);
+      HapticFeedback.selectionClick();
+      widget.onSelect(widget.cats![idx].id);
+    }
+  }
+
+  void _snapToIndex(int idx) {
+    final n = widget.cats?.length ?? 1;
+    if (n == 0) return;
+    final target = -_angleForIndex(idx, n);
+    // Find shortest arc to target (handles wrap-around).
+    var diff = (target - _rotation + pi) % (2 * pi) - pi;
+    final dest = _rotation + diff;
+
+    _snapCtrl.stop();
+    _snapCtrl.reset();
+    final begin = _rotation;
+    _snapAnim = Tween<double>(begin: begin, end: dest).animate(
+      CurvedAnimation(parent: _snapCtrl, curve: Curves.easeOutCubic),
+    )..addListener(() {
+        if (mounted) setState(() => _rotation = _snapAnim!.value);
+      });
+    _snapCtrl.forward();
+    setState(() => _activeIndex = idx);
+    if (widget.cats != null && widget.cats!.isNotEmpty) {
+      widget.onSelect(widget.cats![idx].id);
+    }
+  }
+
+  // Returns the x,y offset from the selector center for orbit item i.
+  Offset _orbitOffset(int i, int n) {
+    final angle = _angleForIndex(i, n) + _rotation;
+    return Offset(_orbitR * sin(angle), -_orbitR * cos(angle));
+  }
+
+  // Depth factor 0..1: 0 = front (top of ring), 1 = back (bottom of ring).
+  double _depth(int i, int n) {
+    final angle = (_angleForIndex(i, n) + _rotation) % (2 * pi);
+    // cos(angle): 1 at top (front), -1 at bottom (back)
+    final cosA = cos(angle);
+    return (1.0 - cosA) / 2.0;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.cats == null) {
-      return SizedBox(
-        height: 100,
-        child: Shimmer.fromColors(
-          baseColor: WBColors.bgSoft,
-          highlightColor: WBColors.bgSecondary,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: 7,
-            separatorBuilder: (_, _) => const SizedBox(width: _gap),
-            itemBuilder: (_, _) => SizedBox(
-              width: _tileW,
-              child: Column(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Container(
-                    width: 44,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ],
+    final cats = widget.cats;
+    if (cats == null) return _buildShimmer();
+
+    final n = cats.length;
+    // Sort orbit items by depth so back items are drawn first (behind center).
+    final indices = List.generate(n, (i) => i)
+      ..sort((a, b) => _depth(a, n).compareTo(_depth(b, n)));
+
+    final active = n > 0 ? cats[_activeIndex] : null;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanUpdate: _onPanUpdate,
+      onPanEnd: _onPanEnd,
+      child: SizedBox(
+        height: _totalH,
+        child: Stack(
+          alignment: Alignment.center,
+          clipBehavior: Clip.none,
+          children: [
+            // Faint orbit track
+            Positioned.fill(
+              child: CustomPaint(painter: _OrbitTrackPainter(radius: _orbitR)),
+            ),
+            // Orbit items (back-to-front)
+            for (final i in indices)
+              if (i != _activeIndex)
+                _buildOrbitItem(cats[i], i, n),
+            // Active center bubble
+            AnimatedSwitcher(
+              duration: WBMotion.base,
+              transitionBuilder: (child, anim) => ScaleTransition(
+                scale: Tween<double>(begin: 0.82, end: 1.0).animate(
+                  CurvedAnimation(parent: anim, curve: WBMotion.easeSoft),
+                ),
+                child: FadeTransition(opacity: anim, child: child),
+              ),
+              child: active == null
+                  ? const SizedBox.shrink()
+                  : _buildCenter(active),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCenter(Category cat) {
+    return Container(
+      key: ValueKey(cat.id),
+      width: _centerD,
+      height: _centerD,
+      decoration: BoxDecoration(
+        color: WBColors.surfaceDark,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.18),
+            blurRadius: 20,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (cat.svgAsset != null && cat.svgAsset!.isNotEmpty)
+            SizedBox(
+              width: 28,
+              height: 28,
+              child: SvgPicture.asset(
+                cat.svgAsset!,
+                fit: BoxFit.contain,
+                colorFilter: const ColorFilter.mode(
+                  Colors.white, BlendMode.srcIn),
+              ),
+            )
+          else
+            const SizedBox(width: 28, height: 28),
+          const SizedBox(height: 4),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            child: Text(
+              cat.label,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: WBTypography.caption.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 10,
               ),
             ),
           ),
-        ),
-      );
-    }
+        ],
+      ),
+    );
+  }
 
+  Widget _buildOrbitItem(Category cat, int i, int n) {
+    final offset = _orbitOffset(i, n);
+    final depth = _depth(i, n);
+    // Items at the back are smaller and more transparent — creates depth illusion.
+    final scale = 1.0 - depth * 0.2;
+    final opacity = 1.0 - depth * 0.45;
+
+    return Transform.translate(
+      offset: offset,
+      child: GestureDetector(
+        onTap: () => _snapToIndex(i),
+        child: Opacity(
+          opacity: opacity.clamp(0.35, 1.0),
+          child: Transform.scale(
+            scale: scale,
+            child: Container(
+              width: _orbitD,
+              height: _orbitD,
+              decoration: BoxDecoration(
+                color: WBColors.surfaceCard,
+                shape: BoxShape.circle,
+                boxShadow: WBShadows.card,
+              ),
+              padding: const EdgeInsets.all(11),
+              child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
+                  ? SvgPicture.asset(
+                      cat.svgAsset!,
+                      fit: BoxFit.contain,
+                      colorFilter: ColorFilter.mode(
+                        WBColors.fgSecondary, BlendMode.srcIn),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmer() {
     return SizedBox(
-      height: 100,
-      child: ListView.separated(
-        controller: _scroll,
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: widget.cats!.length,
-        separatorBuilder: (_, _) => const SizedBox(width: _gap),
-        itemBuilder: (_, i) {
-          final c = widget.cats![i];
-          final scale = _scale(i);
-          return GestureDetector(
-            onTap: () =>
-                context.push('${AppRoutes.categoryDetail}/${c.id}'),
-            child: Transform.scale(
-              scale: scale,
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                width: _tileW,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: WBColors.surfaceCard,
-                        shape: BoxShape.circle,
-                        boxShadow: WBShadows.card,
-                      ),
-                      padding: const EdgeInsets.all(14),
-                      child: (c.svgAsset != null && c.svgAsset!.isNotEmpty)
-                          ? SvgPicture.asset(
-                              c.svgAsset!,
-                              fit: BoxFit.contain,
-                              colorFilter: ColorFilter.mode(
-                                WBColors.fgPrimary, BlendMode.srcIn),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      c.label,
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: WBTypography.caption.copyWith(
-                        color: scale > 0.94
-                            ? WBColors.fgPrimary
-                            : WBColors.fgSecondary,
-                        fontWeight: scale > 0.94
-                            ? FontWeight.w700
-                            : FontWeight.w500,
-                        fontSize: 11,
-                        height: 1.2,
-                      ),
-                    ),
-                  ],
-                ),
+      height: _totalH,
+      child: Shimmer.fromColors(
+        baseColor: WBColors.bgSoft,
+        highlightColor: WBColors.bgSecondary,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            // Center
+            Container(
+              width: _centerD,
+              height: _centerD,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
               ),
             ),
-          );
-        },
+            // A few orbit placeholders
+            for (var i = 0; i < 6; i++)
+              Transform.translate(
+                offset: Offset(
+                  _orbitR * sin(2 * pi * i / 6),
+                  -_orbitR * cos(2 * pi * i / 6),
+                ),
+                child: Container(
+                  width: _orbitD,
+                  height: _orbitD,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
 }
 
-// ── Legacy UI: scrollable pill row (flag=false fallback) ──────────────────────
+// Paints the subtle circular orbit track behind the items.
+class _OrbitTrackPainter extends CustomPainter {
+  const _OrbitTrackPainter({required this.radius});
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final paint = Paint()
+      ..color = const Color(0xFFE8E8E8)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0;
+    canvas.drawCircle(center, radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(_OrbitTrackPainter old) => old.radius != radius;
+}

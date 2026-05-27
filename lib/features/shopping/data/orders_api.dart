@@ -14,12 +14,14 @@ class OrdersApi {
     String? notes,
     String? promoCode,
     String? scheduledFor,
+    String? paymentMethod,
   }) async {
     final body = <String, dynamic>{};
     if (addressId != null) body['addressId'] = addressId;
     if (notes != null && notes.isNotEmpty) body['notes'] = notes;
     if (promoCode != null && promoCode.isNotEmpty) body['promoCode'] = promoCode;
     if (scheduledFor != null) body['scheduledFor'] = scheduledFor;
+    if (paymentMethod != null) body['paymentMethod'] = paymentMethod;
     final res = await _api.post('/orders', body: body);
     return (res as Map).cast<String, dynamic>();
   }

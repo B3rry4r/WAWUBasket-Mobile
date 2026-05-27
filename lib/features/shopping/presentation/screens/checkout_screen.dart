@@ -17,6 +17,31 @@ import '../../application/cart_controller.dart';
 import '../../data/orders_api.dart';
 import '../widgets/sticky_action_bar.dart';
 
+enum _PayMethod { card, bankTransfer, mobileMoney }
+
+extension _PayMethodX on _PayMethod {
+  String get label => switch (this) {
+        _PayMethod.card => 'Card',
+        _PayMethod.bankTransfer => 'Bank Transfer',
+        _PayMethod.mobileMoney => 'Mobile Money',
+      };
+  String get sub => switch (this) {
+        _PayMethod.card => 'Visa, Mastercard, Verve',
+        _PayMethod.bankTransfer => 'Direct bank transfer',
+        _PayMethod.mobileMoney => 'MTN, Airtel, M-Pesa',
+      };
+  WBIconName get icon => switch (this) {
+        _PayMethod.card => WBIconName.card,
+        _PayMethod.bankTransfer => WBIconName.basket,
+        _PayMethod.mobileMoney => WBIconName.phone,
+      };
+  String get apiValue => switch (this) {
+        _PayMethod.card => 'card',
+        _PayMethod.bankTransfer => 'bank_transfer',
+        _PayMethod.mobileMoney => 'mobile_money',
+      };
+}
+
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
@@ -31,6 +56,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   bool _paymentTimedOut = false;
   String? _pendingOrderId;
   _ScheduleSlot? _slot;
+  _PayMethod _payMethod = _PayMethod.card;
 
   @override
   void initState() {
@@ -98,6 +124,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         final order = await OrdersApi.instance.placeOrder(
           addressId: productAddr?.id,
           scheduledFor: _scheduledForIso(),
+          paymentMethod: _payMethod.apiValue,
         );
         await ref.read(cartControllerProvider.notifier).load();
         // The product order takes precedence as the order we follow on the
@@ -407,9 +434,34 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 const SizedBox(height: WBSpacing.md),
                 _Section(
                   label: context.l10n.checkoutPaymentSection,
-                  child: Text(
-                    "You will be redirected to Flutterwave to complete your payment securely.",
-                    style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+                  child: Column(
+                    children: [
+                      for (final method in _PayMethod.values) ...[
+                        _PayMethodRow(
+                          method: method,
+                          selected: _payMethod == method,
+                          onTap: () => setState(() => _payMethod = method),
+                        ),
+                        if (method != _PayMethod.values.last)
+                          const SizedBox(height: 8),
+                      ],
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const WBIcon(WBIconName.close, size: 12),
+                          const SizedBox(width: 6),
+                          Expanded(
+                            child: Text(
+                              'Secured by Flutterwave. Apple Pay & Google Pay available on checkout.',
+                              style: WBTypography.caption.copyWith(
+                                color: WBColors.fgPlaceholder,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 _Section(
@@ -836,6 +888,96 @@ class _ScheduleSheetState extends State<_ScheduleSheet> {
                       );
                     },
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PayMethodRow extends StatelessWidget {
+  const _PayMethodRow({
+    required this.method,
+    required this.selected,
+    required this.onTap,
+  });
+  final _PayMethod method;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: WBMotion.base,
+        curve: WBMotion.easeSoft,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: selected ? WBColors.surfaceDark : WBColors.bgSoft,
+          borderRadius: BorderRadius.circular(14),
+          border: selected
+              ? null
+              : Border.all(color: WBColors.bgDivider, width: 1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: selected
+                    ? Colors.white.withValues(alpha: 0.15)
+                    : WBColors.bgPrimary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
+              child: WBIcon(
+                method.icon,
+                size: 17,
+                color: selected ? Colors.white : WBColors.fgHeader,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    method.label,
+                    style: WBTypography.body.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: selected ? Colors.white : WBColors.fgHeader,
+                    ),
+                  ),
+                  Text(
+                    method.sub,
+                    style: WBTypography.caption.copyWith(
+                      fontSize: 12,
+                      color: selected
+                          ? Colors.white.withValues(alpha: 0.6)
+                          : WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (selected)
+              Container(
+                width: 20,
+                height: 20,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: const WBIcon(
+                  WBIconName.star,
+                  size: 9,
+                  color: WBColors.surfaceDark,
+                ),
+              ),
           ],
         ),
       ),

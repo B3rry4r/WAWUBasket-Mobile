@@ -49,7 +49,7 @@ class Vendor extends Equatable {
       name: name,
       shortName: (j['shortName'] ?? name).toString(),
       cuisine: (j['cuisine'] ?? j['description'] ?? '').toString(),
-      rating: double.tryParse('${j['rating'] ?? ''}') ?? 4.6,
+      rating: double.tryParse('${j['rating'] ?? ''}') ?? 0.0,
       reviews: (j['reviews'] ?? '').toString(),
       etaMin: (j['etaMin'] as num?)?.toInt() ?? 20,
       etaMax: (j['etaMax'] as num?)?.toInt() ?? 35,
