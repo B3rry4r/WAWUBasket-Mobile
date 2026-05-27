@@ -267,7 +267,7 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
                   itemCount: _tabs.length,
                   separatorBuilder: (_, _) => const SizedBox(width: 8),
                   itemBuilder: (_, i) => WBTag(
-                    label: _tabLabel(_tabs[i]),
+                    label: context.subcategoryLabel(_tabs[i] == 'All' ? 'all' : _tabs[i], fallback: _tabLabel(_tabs[i])),
                     active: _tabs[i] == _activeTab,
                     onTap: () => setState(() => _activeTab = _tabs[i]),
                   ),

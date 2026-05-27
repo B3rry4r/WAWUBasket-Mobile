@@ -1654,4 +1654,267 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get recipeOrderChildVendors => 'من هؤلاء الباعة';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return 'صباح الخير$name. ماذا ستتناول؟';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return 'أهلاً$name. وقت الغداء؟';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return 'مساء الخير$name. خطط للعشاء؟';
+  }
+
+  @override
+  String homeGreetingNight(String name) {
+    return 'شهية ليلية$name؟ نحن هنا.';
+  }
+
+  @override
+  String get homeQuickMealKits => 'طقم الوجبات';
+
+  @override
+  String get homeQuickTrack => 'تتبع';
+
+  @override
+  String get homeQuickChat => 'محادثة';
+
+  @override
+  String get homeQuickReorder => 'إعادة الطلب';
+
+  @override
+  String get catRestaurants => 'مطاعم';
+
+  @override
+  String get catFreshMarket => 'السوق الطازج';
+
+  @override
+  String get catLivestock => 'المواشي';
+
+  @override
+  String get catKitchenEssentials => 'مستلزمات المطبخ';
+
+  @override
+  String get catGroceries => 'البقالة';
+
+  @override
+  String get catFarmProduce => 'منتجات المزرعة';
+
+  @override
+  String get catDrinks => 'المشروبات';
+
+  @override
+  String get catSnacks => 'الوجبات الخفيفة';
+
+  @override
+  String get catPharmacy => 'صيدلية';
+
+  @override
+  String get catTagRestaurants => 'وجبات ساخنة. سريعة.';
+
+  @override
+  String get catTagFreshMarket => 'مباشرة من المزرعة.';
+
+  @override
+  String get catTagLivestock => 'مقطّع كما تريد.';
+
+  @override
+  String get catTagKitchenEssentials => 'قدور، مقالي، وكل شيء آخر.';
+
+  @override
+  String get catTagGroceries => 'المؤونة · الاحتياجات اليومية';
+
+  @override
+  String get catTagFarmProduce => 'كميات كبيرة · مباشرة من المزرعة';
+
+  @override
+  String get catTagDrinks => 'مشروبات غازية · مياه · عصير';
+
+  @override
+  String get catTagSnacks => 'مخبوزات · حلوى';
+
+  @override
+  String get catTagPharmacy => 'صحة · أدوية بدون وصفة';
+
+  @override
+  String get subcatAll => 'الكل';
+
+  @override
+  String get subcatFastFood => 'وجبات سريعة';
+
+  @override
+  String get subcatLocalCuisine => 'المطبخ المحلي';
+
+  @override
+  String get subcatFineDining => 'مطعم فاخر';
+
+  @override
+  String get subcatGrillsBbq => 'مشويات وبرباكيو';
+
+  @override
+  String get subcatSeafood => 'المأكولات البحرية';
+
+  @override
+  String get subcatBreakfastBrunch => 'فطور وبرانش';
+
+  @override
+  String get subcatCafes => 'كافيهات';
+
+  @override
+  String get subcatShawarma => 'شاورما';
+
+  @override
+  String get subcatPizza => 'بيتزا';
+
+  @override
+  String get subcatBurgers => 'برجر';
+
+  @override
+  String get subcatSmallChops => 'مقبلات';
+
+  @override
+  String get subcatRiceDishes => 'أطباق الأرز';
+
+  @override
+  String get subcatTomatoes => 'طماطم';
+
+  @override
+  String get subcatPepper => 'فلفل';
+
+  @override
+  String get subcatOnion => 'بصل';
+
+  @override
+  String get subcatYam => 'يام';
+
+  @override
+  String get subcatPlantain => 'موز للطبخ';
+
+  @override
+  String get subcatVegetables => 'خضروات';
+
+  @override
+  String get subcatFreshFish => 'سمك طازج';
+
+  @override
+  String get subcatFreshMeat => 'لحم طازج';
+
+  @override
+  String get subcatFruits => 'فواكه';
+
+  @override
+  String get subcatChicken => 'دجاج';
+
+  @override
+  String get subcatBeef => 'لحم بقر';
+
+  @override
+  String get subcatGoat => 'لحم ماعز';
+
+  @override
+  String get subcatFish => 'سمك';
+
+  @override
+  String get subcatCookware => 'أدوات الطبخ';
+
+  @override
+  String get subcatUtensils => 'أواني المطبخ';
+
+  @override
+  String get subcatSpicesOil => 'التوابل والزيت';
+
+  @override
+  String get subcatPantry => 'مؤونة المطبخ';
+
+  @override
+  String get subcatCleaning => 'تنظيف';
+
+  @override
+  String get subcatRice => 'أرز';
+
+  @override
+  String get subcatBeans => 'فاصوليا';
+
+  @override
+  String get subcatGarri => 'غاري';
+
+  @override
+  String get subcatOil => 'زيت';
+
+  @override
+  String get subcatSugar => 'سكر';
+
+  @override
+  String get subcatMilk => 'حليب';
+
+  @override
+  String get subcatBread => 'خبز';
+
+  @override
+  String get subcatEggs => 'بيض';
+
+  @override
+  String get subcatSpices => 'توابل';
+
+  @override
+  String get subcatRiceBags => 'أكياس الأرز';
+
+  @override
+  String get subcatCassava => 'كسافا';
+
+  @override
+  String get subcatPalmOil => 'زيت النخيل';
+
+  @override
+  String get subcatCocoa => 'كاكاو';
+
+  @override
+  String get subcatMaize => 'ذرة';
+
+  @override
+  String get subcatFeed => 'علف الماشية';
+
+  @override
+  String get subcatFertilizer => 'سماد';
+
+  @override
+  String get subcatBulkVeg => 'خضروات بالجملة';
+
+  @override
+  String get subcatSoftDrinks => 'مشروبات غازية';
+
+  @override
+  String get subcatWater => 'مياه';
+
+  @override
+  String get subcatJuice => 'عصير';
+
+  @override
+  String get subcatEnergyDrinks => 'مشروبات طاقة';
+
+  @override
+  String get subcatCakes => 'كيك';
+
+  @override
+  String get subcatPastries => 'معجنات';
+
+  @override
+  String get subcatCookies => 'كوكيز';
+
+  @override
+  String get subcatSnacks => 'وجبات خفيفة';
+
+  @override
+  String get subcatOtcMeds => 'أدوية بدون وصفة';
+
+  @override
+  String get subcatWellness => 'العافية';
+
+  @override
+  String get subcatVitamins => 'فيتامينات';
 }

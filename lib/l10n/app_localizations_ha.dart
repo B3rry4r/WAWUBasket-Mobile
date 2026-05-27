@@ -1688,4 +1688,267 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get recipeOrderChildVendors => 'An samo daga wadannan masu sayarwa';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return 'Ina kwana$name. Me za a ci?';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return 'Sannu$name. Lokacin cin abinci?';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return 'Barka da yamma$name. Abincin dare?';
+  }
+
+  @override
+  String homeGreetingNight(String name) {
+    return 'Yunwa da dare$name? Muna nan.';
+  }
+
+  @override
+  String get homeQuickMealKits => 'Kayan Abinci';
+
+  @override
+  String get homeQuickTrack => 'Bin diddigin oda';
+
+  @override
+  String get homeQuickChat => 'Tattaunawa';
+
+  @override
+  String get homeQuickReorder => 'Sake Oda';
+
+  @override
+  String get catRestaurants => 'Gidajen Abinci';
+
+  @override
+  String get catFreshMarket => 'Kasuwar Kayan Lambu';
+
+  @override
+  String get catLivestock => 'Dabbobi';
+
+  @override
+  String get catKitchenEssentials => 'Kayan Dafa Abinci';
+
+  @override
+  String get catGroceries => 'Kayan Abinci';
+
+  @override
+  String get catFarmProduce => 'Kayan Gona';
+
+  @override
+  String get catDrinks => 'Abubuwan Sha';
+
+  @override
+  String get catSnacks => 'Abincin Marmari';
+
+  @override
+  String get catPharmacy => 'Kantin Magani';
+
+  @override
+  String get catTagRestaurants => 'Abinci mai zafi. Da sauri.';
+
+  @override
+  String get catTagFreshMarket => 'Kai tsaye daga gona.';
+
+  @override
+  String get catTagLivestock => 'An yanke yadda kake so.';
+
+  @override
+  String get catTagKitchenEssentials => 'Tukwane, panuna, da sauransu.';
+
+  @override
+  String get catTagGroceries => 'Kayan abinci na yau da kullum';
+
+  @override
+  String get catTagFarmProduce => 'Babban siyayya · Kai tsaye daga gona';
+
+  @override
+  String get catTagDrinks => 'Abubuwan sha · Ruwa · Juisi';
+
+  @override
+  String get catTagSnacks => 'Burodi · Zaƙi';
+
+  @override
+  String get catTagPharmacy => 'Lafiya · Magunguna';
+
+  @override
+  String get subcatAll => 'Duka';
+
+  @override
+  String get subcatFastFood => 'Abinci Mai Sauri';
+
+  @override
+  String get subcatLocalCuisine => 'Abincin Gida';
+
+  @override
+  String get subcatFineDining => 'Cin Abinci na Musamman';
+
+  @override
+  String get subcatGrillsBbq => 'Gasasshen Nama';
+
+  @override
+  String get subcatSeafood => 'Kifi da Sauran Kayan Ruwa';
+
+  @override
+  String get subcatBreakfastBrunch => 'Karin Kumallo';
+
+  @override
+  String get subcatCafes => 'Kyafetiya';
+
+  @override
+  String get subcatShawarma => 'Shawarma';
+
+  @override
+  String get subcatPizza => 'Pizza';
+
+  @override
+  String get subcatBurgers => 'Burgogi';
+
+  @override
+  String get subcatSmallChops => 'Kananan Abinci';
+
+  @override
+  String get subcatRiceDishes => 'Abincin Shinkafa';
+
+  @override
+  String get subcatTomatoes => 'Tumatur';
+
+  @override
+  String get subcatPepper => 'Barkono';
+
+  @override
+  String get subcatOnion => 'Albasa';
+
+  @override
+  String get subcatYam => 'Doya';
+
+  @override
+  String get subcatPlantain => 'Ayaba Plantain';
+
+  @override
+  String get subcatVegetables => 'Kayan Lambu';
+
+  @override
+  String get subcatFreshFish => 'Kifi Sabo';
+
+  @override
+  String get subcatFreshMeat => 'Nama Sabo';
+
+  @override
+  String get subcatFruits => 'Frut';
+
+  @override
+  String get subcatChicken => 'Kaza';
+
+  @override
+  String get subcatBeef => 'Naman Sa';
+
+  @override
+  String get subcatGoat => 'Naman Akuya';
+
+  @override
+  String get subcatFish => 'Kifi';
+
+  @override
+  String get subcatCookware => 'Tukwane';
+
+  @override
+  String get subcatUtensils => 'Kayan Dafawa';
+
+  @override
+  String get subcatSpicesOil => 'Kayan Yaji da Man Ci';
+
+  @override
+  String get subcatPantry => 'Kayan Abinci na Ajiya';
+
+  @override
+  String get subcatCleaning => 'Tsaftace';
+
+  @override
+  String get subcatRice => 'Shinkafa';
+
+  @override
+  String get subcatBeans => 'Wake';
+
+  @override
+  String get subcatGarri => 'Garri';
+
+  @override
+  String get subcatOil => 'Mai';
+
+  @override
+  String get subcatSugar => 'Sukari';
+
+  @override
+  String get subcatMilk => 'Madara';
+
+  @override
+  String get subcatBread => 'Burodi';
+
+  @override
+  String get subcatEggs => 'Kwai';
+
+  @override
+  String get subcatSpices => 'Kayan Yaji';
+
+  @override
+  String get subcatRiceBags => 'Jakunkunan Shinkafa';
+
+  @override
+  String get subcatCassava => 'Rogo';
+
+  @override
+  String get subcatPalmOil => 'Ja Man Dabino';
+
+  @override
+  String get subcatCocoa => 'Cacao';
+
+  @override
+  String get subcatMaize => 'Masara';
+
+  @override
+  String get subcatFeed => 'Abincin Dabbobi';
+
+  @override
+  String get subcatFertilizer => 'Taki';
+
+  @override
+  String get subcatBulkVeg => 'Kayan Lambu Mai Yawa';
+
+  @override
+  String get subcatSoftDrinks => 'Lemo';
+
+  @override
+  String get subcatWater => 'Ruwa';
+
+  @override
+  String get subcatJuice => 'Juisi';
+
+  @override
+  String get subcatEnergyDrinks => 'Abubuwan Sha na Kuzari';
+
+  @override
+  String get subcatCakes => 'Kek';
+
+  @override
+  String get subcatPastries => 'Burodi na Musamman';
+
+  @override
+  String get subcatCookies => 'Kukis';
+
+  @override
+  String get subcatSnacks => 'Abincin Marmari';
+
+  @override
+  String get subcatOtcMeds => 'Magunguna Ba Tare da Takarda Ba';
+
+  @override
+  String get subcatWellness => 'Lafiya';
+
+  @override
+  String get subcatVitamins => 'Bitamin';
 }

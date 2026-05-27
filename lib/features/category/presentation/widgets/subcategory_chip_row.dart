@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../domain/models/subcategory.dart';
 
@@ -57,7 +58,7 @@ class SubcategoryChipRow extends StatelessWidget {
                 itemBuilder: (_, i) {
                   if (i == 0) {
                     return WBTag(
-                      label: 'All',
+                      label: context.l10n.subcatAll,
                       active: activeId == null,
                       onTap: () => onTap(null),
                     );
@@ -103,7 +104,7 @@ class SubcategoryChipRow extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            sub.label,
+                            context.subcategoryLabel(sub.id, fallback: sub.label),
                             style: WBTypography.caption.copyWith(
                               color: active
                                   ? Colors.white

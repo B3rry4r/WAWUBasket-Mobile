@@ -3321,6 +3321,516 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sourced from these vendors'**
   String get recipeOrderChildVendors;
+
+  /// No description provided for @homeGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Good morning{name}. What\'s cooking?'**
+  String homeGreetingMorning(String name);
+
+  /// No description provided for @homeGreetingAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Hey{name}. Lunch break?'**
+  String homeGreetingAfternoon(String name);
+
+  /// No description provided for @homeGreetingEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening{name}. Dinner plans?'**
+  String homeGreetingEvening(String name);
+
+  /// No description provided for @homeGreetingNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Late night craving{name}? We see you.'**
+  String homeGreetingNight(String name);
+
+  /// No description provided for @homeQuickMealKits.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal Kits'**
+  String get homeQuickMealKits;
+
+  /// No description provided for @homeQuickTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get homeQuickTrack;
+
+  /// No description provided for @homeQuickChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get homeQuickChat;
+
+  /// No description provided for @homeQuickReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get homeQuickReorder;
+
+  /// No description provided for @catRestaurants.
+  ///
+  /// In en, this message translates to:
+  /// **'Restaurants'**
+  String get catRestaurants;
+
+  /// No description provided for @catFreshMarket.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh Market'**
+  String get catFreshMarket;
+
+  /// No description provided for @catLivestock.
+  ///
+  /// In en, this message translates to:
+  /// **'Livestock'**
+  String get catLivestock;
+
+  /// No description provided for @catKitchenEssentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Kitchen Essentials'**
+  String get catKitchenEssentials;
+
+  /// No description provided for @catGroceries.
+  ///
+  /// In en, this message translates to:
+  /// **'Groceries'**
+  String get catGroceries;
+
+  /// No description provided for @catFarmProduce.
+  ///
+  /// In en, this message translates to:
+  /// **'Farm Produce'**
+  String get catFarmProduce;
+
+  /// No description provided for @catDrinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Drinks'**
+  String get catDrinks;
+
+  /// No description provided for @catSnacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Snacks'**
+  String get catSnacks;
+
+  /// No description provided for @catPharmacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Pharmacy'**
+  String get catPharmacy;
+
+  /// No description provided for @catTagRestaurants.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot meals. Fast.'**
+  String get catTagRestaurants;
+
+  /// No description provided for @catTagFreshMarket.
+  ///
+  /// In en, this message translates to:
+  /// **'Straight from the farm.'**
+  String get catTagFreshMarket;
+
+  /// No description provided for @catTagLivestock.
+  ///
+  /// In en, this message translates to:
+  /// **'Cut exactly how you want.'**
+  String get catTagLivestock;
+
+  /// No description provided for @catTagKitchenEssentials.
+  ///
+  /// In en, this message translates to:
+  /// **'Pots, pans, and everything else.'**
+  String get catTagKitchenEssentials;
+
+  /// No description provided for @catTagGroceries.
+  ///
+  /// In en, this message translates to:
+  /// **'Pantry · Daily essentials'**
+  String get catTagGroceries;
+
+  /// No description provided for @catTagFarmProduce.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulk · Wholesale · Direct from farm'**
+  String get catTagFarmProduce;
+
+  /// No description provided for @catTagDrinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft drinks · Water · Juice'**
+  String get catTagDrinks;
+
+  /// No description provided for @catTagSnacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Bakery · Treats'**
+  String get catTagSnacks;
+
+  /// No description provided for @catTagPharmacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness · OTC'**
+  String get catTagPharmacy;
+
+  /// No description provided for @subcatAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get subcatAll;
+
+  /// No description provided for @subcatFastFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast Food'**
+  String get subcatFastFood;
+
+  /// No description provided for @subcatLocalCuisine.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Cuisine'**
+  String get subcatLocalCuisine;
+
+  /// No description provided for @subcatFineDining.
+  ///
+  /// In en, this message translates to:
+  /// **'Fine Dining'**
+  String get subcatFineDining;
+
+  /// No description provided for @subcatGrillsBbq.
+  ///
+  /// In en, this message translates to:
+  /// **'Grills & BBQ'**
+  String get subcatGrillsBbq;
+
+  /// No description provided for @subcatSeafood.
+  ///
+  /// In en, this message translates to:
+  /// **'Seafood'**
+  String get subcatSeafood;
+
+  /// No description provided for @subcatBreakfastBrunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast & Brunch'**
+  String get subcatBreakfastBrunch;
+
+  /// No description provided for @subcatCafes.
+  ///
+  /// In en, this message translates to:
+  /// **'Cafés'**
+  String get subcatCafes;
+
+  /// No description provided for @subcatShawarma.
+  ///
+  /// In en, this message translates to:
+  /// **'Shawarma'**
+  String get subcatShawarma;
+
+  /// No description provided for @subcatPizza.
+  ///
+  /// In en, this message translates to:
+  /// **'Pizza'**
+  String get subcatPizza;
+
+  /// No description provided for @subcatBurgers.
+  ///
+  /// In en, this message translates to:
+  /// **'Burgers'**
+  String get subcatBurgers;
+
+  /// No description provided for @subcatSmallChops.
+  ///
+  /// In en, this message translates to:
+  /// **'Small Chops'**
+  String get subcatSmallChops;
+
+  /// No description provided for @subcatRiceDishes.
+  ///
+  /// In en, this message translates to:
+  /// **'Rice Dishes'**
+  String get subcatRiceDishes;
+
+  /// No description provided for @subcatTomatoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomatoes'**
+  String get subcatTomatoes;
+
+  /// No description provided for @subcatPepper.
+  ///
+  /// In en, this message translates to:
+  /// **'Pepper'**
+  String get subcatPepper;
+
+  /// No description provided for @subcatOnion.
+  ///
+  /// In en, this message translates to:
+  /// **'Onion'**
+  String get subcatOnion;
+
+  /// No description provided for @subcatYam.
+  ///
+  /// In en, this message translates to:
+  /// **'Yam'**
+  String get subcatYam;
+
+  /// No description provided for @subcatPlantain.
+  ///
+  /// In en, this message translates to:
+  /// **'Plantain'**
+  String get subcatPlantain;
+
+  /// No description provided for @subcatVegetables.
+  ///
+  /// In en, this message translates to:
+  /// **'Vegetables'**
+  String get subcatVegetables;
+
+  /// No description provided for @subcatFreshFish.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh fish'**
+  String get subcatFreshFish;
+
+  /// No description provided for @subcatFreshMeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh meat'**
+  String get subcatFreshMeat;
+
+  /// No description provided for @subcatFruits.
+  ///
+  /// In en, this message translates to:
+  /// **'Fruits'**
+  String get subcatFruits;
+
+  /// No description provided for @subcatChicken.
+  ///
+  /// In en, this message translates to:
+  /// **'Chicken'**
+  String get subcatChicken;
+
+  /// No description provided for @subcatBeef.
+  ///
+  /// In en, this message translates to:
+  /// **'Beef'**
+  String get subcatBeef;
+
+  /// No description provided for @subcatGoat.
+  ///
+  /// In en, this message translates to:
+  /// **'Goat'**
+  String get subcatGoat;
+
+  /// No description provided for @subcatFish.
+  ///
+  /// In en, this message translates to:
+  /// **'Fish'**
+  String get subcatFish;
+
+  /// No description provided for @subcatCookware.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookware'**
+  String get subcatCookware;
+
+  /// No description provided for @subcatUtensils.
+  ///
+  /// In en, this message translates to:
+  /// **'Utensils'**
+  String get subcatUtensils;
+
+  /// No description provided for @subcatSpicesOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Spices & Oil'**
+  String get subcatSpicesOil;
+
+  /// No description provided for @subcatPantry.
+  ///
+  /// In en, this message translates to:
+  /// **'Pantry'**
+  String get subcatPantry;
+
+  /// No description provided for @subcatCleaning.
+  ///
+  /// In en, this message translates to:
+  /// **'Cleaning'**
+  String get subcatCleaning;
+
+  /// No description provided for @subcatRice.
+  ///
+  /// In en, this message translates to:
+  /// **'Rice'**
+  String get subcatRice;
+
+  /// No description provided for @subcatBeans.
+  ///
+  /// In en, this message translates to:
+  /// **'Beans'**
+  String get subcatBeans;
+
+  /// No description provided for @subcatGarri.
+  ///
+  /// In en, this message translates to:
+  /// **'Garri'**
+  String get subcatGarri;
+
+  /// No description provided for @subcatOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Oil'**
+  String get subcatOil;
+
+  /// No description provided for @subcatSugar.
+  ///
+  /// In en, this message translates to:
+  /// **'Sugar'**
+  String get subcatSugar;
+
+  /// No description provided for @subcatMilk.
+  ///
+  /// In en, this message translates to:
+  /// **'Milk'**
+  String get subcatMilk;
+
+  /// No description provided for @subcatBread.
+  ///
+  /// In en, this message translates to:
+  /// **'Bread'**
+  String get subcatBread;
+
+  /// No description provided for @subcatEggs.
+  ///
+  /// In en, this message translates to:
+  /// **'Eggs'**
+  String get subcatEggs;
+
+  /// No description provided for @subcatSpices.
+  ///
+  /// In en, this message translates to:
+  /// **'Spices'**
+  String get subcatSpices;
+
+  /// No description provided for @subcatRiceBags.
+  ///
+  /// In en, this message translates to:
+  /// **'Bags of rice'**
+  String get subcatRiceBags;
+
+  /// No description provided for @subcatCassava.
+  ///
+  /// In en, this message translates to:
+  /// **'Cassava'**
+  String get subcatCassava;
+
+  /// No description provided for @subcatPalmOil.
+  ///
+  /// In en, this message translates to:
+  /// **'Palm oil'**
+  String get subcatPalmOil;
+
+  /// No description provided for @subcatCocoa.
+  ///
+  /// In en, this message translates to:
+  /// **'Cocoa'**
+  String get subcatCocoa;
+
+  /// No description provided for @subcatMaize.
+  ///
+  /// In en, this message translates to:
+  /// **'Maize'**
+  String get subcatMaize;
+
+  /// No description provided for @subcatFeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Livestock feed'**
+  String get subcatFeed;
+
+  /// No description provided for @subcatFertilizer.
+  ///
+  /// In en, this message translates to:
+  /// **'Fertilizer'**
+  String get subcatFertilizer;
+
+  /// No description provided for @subcatBulkVeg.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulk vegetables'**
+  String get subcatBulkVeg;
+
+  /// No description provided for @subcatSoftDrinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Soft drinks'**
+  String get subcatSoftDrinks;
+
+  /// No description provided for @subcatWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get subcatWater;
+
+  /// No description provided for @subcatJuice.
+  ///
+  /// In en, this message translates to:
+  /// **'Juice'**
+  String get subcatJuice;
+
+  /// No description provided for @subcatEnergyDrinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy drinks'**
+  String get subcatEnergyDrinks;
+
+  /// No description provided for @subcatCakes.
+  ///
+  /// In en, this message translates to:
+  /// **'Cakes'**
+  String get subcatCakes;
+
+  /// No description provided for @subcatPastries.
+  ///
+  /// In en, this message translates to:
+  /// **'Pastries'**
+  String get subcatPastries;
+
+  /// No description provided for @subcatCookies.
+  ///
+  /// In en, this message translates to:
+  /// **'Cookies'**
+  String get subcatCookies;
+
+  /// No description provided for @subcatSnacks.
+  ///
+  /// In en, this message translates to:
+  /// **'Snacks'**
+  String get subcatSnacks;
+
+  /// No description provided for @subcatOtcMeds.
+  ///
+  /// In en, this message translates to:
+  /// **'OTC medication'**
+  String get subcatOtcMeds;
+
+  /// No description provided for @subcatWellness.
+  ///
+  /// In en, this message translates to:
+  /// **'Wellness'**
+  String get subcatWellness;
+
+  /// No description provided for @subcatVitamins.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamins'**
+  String get subcatVitamins;
 }
 
 class _AppLocalizationsDelegate

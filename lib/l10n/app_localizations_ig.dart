@@ -1676,4 +1676,267 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get recipeOrderChildVendors => 'Sitere n\'aka ndị a na-ere';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return 'Ụtụtụ ọma$name. Gịnị ka ị ga-eri?';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return 'Ndewo$name. Njedebe nri ehihie?';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return 'Ọ bọọlọ$name. Atụmatụ nri abalị?';
+  }
+
+  @override
+  String homeGreetingNight(String name) {
+    return 'Aguu abalị$name? Anyị nọ ebe a.';
+  }
+
+  @override
+  String get homeQuickMealKits => 'Kits Nri';
+
+  @override
+  String get homeQuickTrack => 'Śo';
+
+  @override
+  String get homeQuickChat => 'Mkparịta Ụka';
+
+  @override
+  String get homeQuickReorder => 'Tọọ Ọzọ';
+
+  @override
+  String get catRestaurants => 'Ụlọ Oriri';
+
+  @override
+  String get catFreshMarket => 'Ahịa Ọhụrụ';
+
+  @override
+  String get catLivestock => 'Ụlọ Ọ Chị';
+
+  @override
+  String get catKitchenEssentials => 'Ihe Dị Mkpa N\'ebe Isi Nri';
+
+  @override
+  String get catGroceries => 'Ihe Iri Nri';
+
+  @override
+  String get catFarmProduce => 'Ihe Ubi';
+
+  @override
+  String get catDrinks => 'Mmanya';
+
+  @override
+  String get catSnacks => 'Nri Nta';
+
+  @override
+  String get catPharmacy => 'Ụlọ Ọgwụ';
+
+  @override
+  String get catTagRestaurants => 'Nri dị ọkụ. Ngwa ngwa.';
+
+  @override
+  String get catTagFreshMarket => 'Ozugbo n\'ubi.';
+
+  @override
+  String get catTagLivestock => 'Ebere dị ka ị chọrọ.';
+
+  @override
+  String get catTagKitchenEssentials => 'Ite, efere, na ihe ndị ọzọ.';
+
+  @override
+  String get catTagGroceries => 'Ihe oriri nke ụbọchị';
+
+  @override
+  String get catTagFarmProduce => 'Ọtụtụ · Ozugbo n\'ubi';
+
+  @override
+  String get catTagDrinks => 'Mmanya na-atọ ụto · Mmiri · Juisi';
+
+  @override
+  String get catTagSnacks => 'Achịcha · Ihe ụtọ';
+
+  @override
+  String get catTagPharmacy => 'Ahụ ike · Ọgwụ';
+
+  @override
+  String get subcatAll => 'Nile';
+
+  @override
+  String get subcatFastFood => 'Nri Ngwa Ngwa';
+
+  @override
+  String get subcatLocalCuisine => 'Nri Mba';
+
+  @override
+  String get subcatFineDining => 'Oriri Ọ Dị Mma';
+
+  @override
+  String get subcatGrillsBbq => 'Anụ E Ji Ọkụ';
+
+  @override
+  String get subcatSeafood => 'Azụ Na Ihe Mmiri Ọzọ';
+
+  @override
+  String get subcatBreakfastBrunch => 'Nri Ụtụtụ';
+
+  @override
+  String get subcatCafes => 'Café';
+
+  @override
+  String get subcatShawarma => 'Shawarma';
+
+  @override
+  String get subcatPizza => 'Pizza';
+
+  @override
+  String get subcatBurgers => 'Burger';
+
+  @override
+  String get subcatSmallChops => 'Nri Nta';
+
+  @override
+  String get subcatRiceDishes => 'Nri Osikapa';
+
+  @override
+  String get subcatTomatoes => 'Tomato';
+
+  @override
+  String get subcatPepper => 'Ose';
+
+  @override
+  String get subcatOnion => 'Yabase';
+
+  @override
+  String get subcatYam => 'Ji';
+
+  @override
+  String get subcatPlantain => 'Ogede';
+
+  @override
+  String get subcatVegetables => 'Akwụkwọ Nri';
+
+  @override
+  String get subcatFreshFish => 'Azụ Ọhụrụ';
+
+  @override
+  String get subcatFreshMeat => 'Anụ Ọhụrụ';
+
+  @override
+  String get subcatFruits => 'Mkpụrụ Osisi';
+
+  @override
+  String get subcatChicken => 'Ọkụkọ';
+
+  @override
+  String get subcatBeef => 'Anụ Ehi';
+
+  @override
+  String get subcatGoat => 'Anụ Ewu';
+
+  @override
+  String get subcatFish => 'Azụ';
+
+  @override
+  String get subcatCookware => 'Ite na Efere';
+
+  @override
+  String get subcatUtensils => 'Ihe Isi Nri';
+
+  @override
+  String get subcatSpicesOil => 'Ọgịrị na Mmanụ';
+
+  @override
+  String get subcatPantry => 'Ihe Oriri Ejiri';
+
+  @override
+  String get subcatCleaning => 'Ịsa Ọcha';
+
+  @override
+  String get subcatRice => 'Osikapa';
+
+  @override
+  String get subcatBeans => 'Agwa';
+
+  @override
+  String get subcatGarri => 'Garri';
+
+  @override
+  String get subcatOil => 'Mmanụ';
+
+  @override
+  String get subcatSugar => 'Suga';
+
+  @override
+  String get subcatMilk => 'Mmiri Ara';
+
+  @override
+  String get subcatBread => 'Achịcha';
+
+  @override
+  String get subcatEggs => 'Àkwa';
+
+  @override
+  String get subcatSpices => 'Ọgịrị';
+
+  @override
+  String get subcatRiceBags => 'Akpa Osikapa';
+
+  @override
+  String get subcatCassava => 'Akpu';
+
+  @override
+  String get subcatPalmOil => 'Mmanụ Nri';
+
+  @override
+  String get subcatCocoa => 'Koko';
+
+  @override
+  String get subcatMaize => 'Ọka';
+
+  @override
+  String get subcatFeed => 'Nri Ụlọ Ọ Chị';
+
+  @override
+  String get subcatFertilizer => 'Nzu';
+
+  @override
+  String get subcatBulkVeg => 'Akwụkwọ Nri Ọtụtụ';
+
+  @override
+  String get subcatSoftDrinks => 'Mmanya Ọchịchọ';
+
+  @override
+  String get subcatWater => 'Mmiri';
+
+  @override
+  String get subcatJuice => 'Juisi';
+
+  @override
+  String get subcatEnergyDrinks => 'Mmanya Ike';
+
+  @override
+  String get subcatCakes => 'Kek';
+
+  @override
+  String get subcatPastries => 'Achịcha Ọtọ';
+
+  @override
+  String get subcatCookies => 'Kuki';
+
+  @override
+  String get subcatSnacks => 'Nri Nta';
+
+  @override
+  String get subcatOtcMeds => 'Ọgwụ Na-Achọghị Akwụkwọ';
+
+  @override
+  String get subcatWellness => 'Ahụ Ike';
+
+  @override
+  String get subcatVitamins => 'Vitamin';
 }

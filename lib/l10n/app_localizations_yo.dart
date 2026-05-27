@@ -1677,4 +1677,267 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get recipeOrderChildVendors => 'Láti ọ̀dọ̀ àwọn olùtà wọ̀nyí';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return 'Ẹ káàárọ̀$name. Kíni a máa jẹ?';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return 'Ẹ káàárọ̀$name. Àárọ̀ oúnjẹ?';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return 'Ẹ kàálẹ̀$name. Ìmọ̀ fún alẹ?';
+  }
+
+  @override
+  String homeGreetingNight(String name) {
+    return 'Ebi alẹ$name? A rí ẹ.';
+  }
+
+  @override
+  String get homeQuickMealKits => 'Kits Oúnjẹ';
+
+  @override
+  String get homeQuickTrack => 'Tọpinpin';
+
+  @override
+  String get homeQuickChat => 'Ìjọrọ';
+
+  @override
+  String get homeQuickReorder => 'Tún Paṣẹ';
+
+  @override
+  String get catRestaurants => 'Ilé Oúnjẹ';
+
+  @override
+  String get catFreshMarket => 'Ọjà Tuntun';
+
+  @override
+  String get catLivestock => 'Ẹran Àgbé';
+
+  @override
+  String get catKitchenEssentials => 'Ohun Elo Ilé Ìdáná';
+
+  @override
+  String get catGroceries => 'Oúnjẹ Ilé';
+
+  @override
+  String get catFarmProduce => 'Ọjà Oko';
+
+  @override
+  String get catDrinks => 'Mímu';
+
+  @override
+  String get catSnacks => 'Oúnjẹ Kékeré';
+
+  @override
+  String get catPharmacy => 'Ilé Ìtọ́jú';
+
+  @override
+  String get catTagRestaurants => 'Oúnjẹ gbígbóná. Kíákíá.';
+
+  @override
+  String get catTagFreshMarket => 'Tààrà láti oko.';
+
+  @override
+  String get catTagLivestock => 'Gé gẹ́gẹ́ bí o ṣe fẹ́.';
+
+  @override
+  String get catTagKitchenEssentials => 'Àwo, panù, àti ohun gbogbo.';
+
+  @override
+  String get catTagGroceries => 'Ohun elo ilé · Àárọ̀ oúnjẹ';
+
+  @override
+  String get catTagFarmProduce => 'Púpọ̀ · Tó pọ̀ · Tààrà láti oko';
+
+  @override
+  String get catTagDrinks => 'Omi àmùpè · Omi · Oje';
+
+  @override
+  String get catTagSnacks => 'Àkàrà · Adídùn';
+
+  @override
+  String get catTagPharmacy => 'Ìlera · Oogun';
+
+  @override
+  String get subcatAll => 'Gbogbo';
+
+  @override
+  String get subcatFastFood => 'Oúnjẹ Kíákíá';
+
+  @override
+  String get subcatLocalCuisine => 'Oúnjẹ Ìbílẹ̀';
+
+  @override
+  String get subcatFineDining => 'Oúnjẹ Àkànṣe';
+
+  @override
+  String get subcatGrillsBbq => 'Ẹran Gígrí';
+
+  @override
+  String get subcatSeafood => 'Ẹja àti Ẹran Omi';
+
+  @override
+  String get subcatBreakfastBrunch => 'Oúnjẹ Àárọ̀';
+
+  @override
+  String get subcatCafes => 'Cafés';
+
+  @override
+  String get subcatShawarma => 'Shawarma';
+
+  @override
+  String get subcatPizza => 'Pizza';
+
+  @override
+  String get subcatBurgers => 'Búgà';
+
+  @override
+  String get subcatSmallChops => 'Oúnjẹ Kékeré';
+
+  @override
+  String get subcatRiceDishes => 'Oúnjẹ Ìrẹsì';
+
+  @override
+  String get subcatTomatoes => 'Tomati';
+
+  @override
+  String get subcatPepper => 'Ata';
+
+  @override
+  String get subcatOnion => 'Àlùbọ́sà';
+
+  @override
+  String get subcatYam => 'Isu';
+
+  @override
+  String get subcatPlantain => 'Ọ̀gẹ̀dẹ̀';
+
+  @override
+  String get subcatVegetables => 'Ewébẹ̀';
+
+  @override
+  String get subcatFreshFish => 'Ẹja Tuntun';
+
+  @override
+  String get subcatFreshMeat => 'Ẹran Tuntun';
+
+  @override
+  String get subcatFruits => 'Èso';
+
+  @override
+  String get subcatChicken => 'Adìyẹ';
+
+  @override
+  String get subcatBeef => 'Ẹran Màlúù';
+
+  @override
+  String get subcatGoat => 'Ẹran Ewúrẹ́';
+
+  @override
+  String get subcatFish => 'Ẹja';
+
+  @override
+  String get subcatCookware => 'Ohun Elo Ìdáná';
+
+  @override
+  String get subcatUtensils => 'Ohun Elo Oúnjẹ';
+
+  @override
+  String get subcatSpicesOil => 'Ata àti Epo';
+
+  @override
+  String get subcatPantry => 'Àpótí Oúnjẹ';
+
+  @override
+  String get subcatCleaning => 'Ìmọ́tótó';
+
+  @override
+  String get subcatRice => 'Ìrẹsì';
+
+  @override
+  String get subcatBeans => 'Ẹ̀wà';
+
+  @override
+  String get subcatGarri => 'Gárí';
+
+  @override
+  String get subcatOil => 'Epo';
+
+  @override
+  String get subcatSugar => 'Suga';
+
+  @override
+  String get subcatMilk => 'Wàrà';
+
+  @override
+  String get subcatBread => 'Búrẹ́dì';
+
+  @override
+  String get subcatEggs => 'Ẹyin';
+
+  @override
+  String get subcatSpices => 'Ata';
+
+  @override
+  String get subcatRiceBags => 'Àpò Ìrẹsì';
+
+  @override
+  String get subcatCassava => 'Pákò';
+
+  @override
+  String get subcatPalmOil => 'Epo Pupa';
+
+  @override
+  String get subcatCocoa => 'Koko';
+
+  @override
+  String get subcatMaize => 'Àgbàdo';
+
+  @override
+  String get subcatFeed => 'Oúnjẹ Ẹran Ìgbẹ́';
+
+  @override
+  String get subcatFertilizer => 'Ajíle';
+
+  @override
+  String get subcatBulkVeg => 'Ewébẹ̀ Púpọ̀';
+
+  @override
+  String get subcatSoftDrinks => 'Omi Àmùpè';
+
+  @override
+  String get subcatWater => 'Omi';
+
+  @override
+  String get subcatJuice => 'Oje';
+
+  @override
+  String get subcatEnergyDrinks => 'Mímu Agbára';
+
+  @override
+  String get subcatCakes => 'Kéèkì';
+
+  @override
+  String get subcatPastries => 'Àkàrà Tùútù';
+
+  @override
+  String get subcatCookies => 'Kúkì';
+
+  @override
+  String get subcatSnacks => 'Oúnjẹ Kékeré';
+
+  @override
+  String get subcatOtcMeds => 'Oogun Laisi Àṣẹ Dókítà';
+
+  @override
+  String get subcatWellness => 'Ìlera';
+
+  @override
+  String get subcatVitamins => 'Vitamin';
 }

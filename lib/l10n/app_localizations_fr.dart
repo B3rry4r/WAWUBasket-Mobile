@@ -1720,4 +1720,268 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get recipeOrderChildVendors => 'Provenant de ces vendeurs';
+
+  @override
+  String homeGreetingMorning(String name) {
+    return 'Bonjour$name. Qu\'est-ce qu\'on mange ?';
+  }
+
+  @override
+  String homeGreetingAfternoon(String name) {
+    return 'Hé$name. Pause déjeuner ?';
+  }
+
+  @override
+  String homeGreetingEvening(String name) {
+    return 'Bonsoir$name. Des plans pour le dîner ?';
+  }
+
+  @override
+  String homeGreetingNight(String name) {
+    return 'Fringale nocturne$name ? On est là.';
+  }
+
+  @override
+  String get homeQuickMealKits => 'Kits de repas';
+
+  @override
+  String get homeQuickTrack => 'Suivre';
+
+  @override
+  String get homeQuickChat => 'Chat';
+
+  @override
+  String get homeQuickReorder => 'Recommander';
+
+  @override
+  String get catRestaurants => 'Restaurants';
+
+  @override
+  String get catFreshMarket => 'Marché Frais';
+
+  @override
+  String get catLivestock => 'Bétail';
+
+  @override
+  String get catKitchenEssentials => 'Essentiels Cuisine';
+
+  @override
+  String get catGroceries => 'Épicerie';
+
+  @override
+  String get catFarmProduce => 'Produits Fermiers';
+
+  @override
+  String get catDrinks => 'Boissons';
+
+  @override
+  String get catSnacks => 'En-cas';
+
+  @override
+  String get catPharmacy => 'Pharmacie';
+
+  @override
+  String get catTagRestaurants => 'Repas chauds. Vite.';
+
+  @override
+  String get catTagFreshMarket => 'Directement de la ferme.';
+
+  @override
+  String get catTagLivestock => 'Coupé exactement comme vous voulez.';
+
+  @override
+  String get catTagKitchenEssentials => 'Casseroles, poêles et tout le reste.';
+
+  @override
+  String get catTagGroceries => 'Garde-manger · Produits du quotidien';
+
+  @override
+  String get catTagFarmProduce =>
+      'En gros · Vente en gros · Direct de la ferme';
+
+  @override
+  String get catTagDrinks => 'Sodas · Eau · Jus';
+
+  @override
+  String get catTagSnacks => 'Boulangerie · Douceurs';
+
+  @override
+  String get catTagPharmacy => 'Bien-être · Sans ordonnance';
+
+  @override
+  String get subcatAll => 'Tout';
+
+  @override
+  String get subcatFastFood => 'Restauration rapide';
+
+  @override
+  String get subcatLocalCuisine => 'Cuisine locale';
+
+  @override
+  String get subcatFineDining => 'Gastronomie';
+
+  @override
+  String get subcatGrillsBbq => 'Grillades & BBQ';
+
+  @override
+  String get subcatSeafood => 'Fruits de mer';
+
+  @override
+  String get subcatBreakfastBrunch => 'Petit-déjeuner & Brunch';
+
+  @override
+  String get subcatCafes => 'Cafés';
+
+  @override
+  String get subcatShawarma => 'Shawarma';
+
+  @override
+  String get subcatPizza => 'Pizza';
+
+  @override
+  String get subcatBurgers => 'Burgers';
+
+  @override
+  String get subcatSmallChops => 'Amuse-bouches';
+
+  @override
+  String get subcatRiceDishes => 'Plats de riz';
+
+  @override
+  String get subcatTomatoes => 'Tomates';
+
+  @override
+  String get subcatPepper => 'Poivre';
+
+  @override
+  String get subcatOnion => 'Oignon';
+
+  @override
+  String get subcatYam => 'Igname';
+
+  @override
+  String get subcatPlantain => 'Plantain';
+
+  @override
+  String get subcatVegetables => 'Légumes';
+
+  @override
+  String get subcatFreshFish => 'Poisson frais';
+
+  @override
+  String get subcatFreshMeat => 'Viande fraîche';
+
+  @override
+  String get subcatFruits => 'Fruits';
+
+  @override
+  String get subcatChicken => 'Poulet';
+
+  @override
+  String get subcatBeef => 'Bœuf';
+
+  @override
+  String get subcatGoat => 'Chèvre';
+
+  @override
+  String get subcatFish => 'Poisson';
+
+  @override
+  String get subcatCookware => 'Ustensiles de cuisine';
+
+  @override
+  String get subcatUtensils => 'Couverts';
+
+  @override
+  String get subcatSpicesOil => 'Épices & Huile';
+
+  @override
+  String get subcatPantry => 'Garde-manger';
+
+  @override
+  String get subcatCleaning => 'Nettoyage';
+
+  @override
+  String get subcatRice => 'Riz';
+
+  @override
+  String get subcatBeans => 'Haricots';
+
+  @override
+  String get subcatGarri => 'Garri';
+
+  @override
+  String get subcatOil => 'Huile';
+
+  @override
+  String get subcatSugar => 'Sucre';
+
+  @override
+  String get subcatMilk => 'Lait';
+
+  @override
+  String get subcatBread => 'Pain';
+
+  @override
+  String get subcatEggs => 'Œufs';
+
+  @override
+  String get subcatSpices => 'Épices';
+
+  @override
+  String get subcatRiceBags => 'Sacs de riz';
+
+  @override
+  String get subcatCassava => 'Manioc';
+
+  @override
+  String get subcatPalmOil => 'Huile de palme';
+
+  @override
+  String get subcatCocoa => 'Cacao';
+
+  @override
+  String get subcatMaize => 'Maïs';
+
+  @override
+  String get subcatFeed => 'Fourrage';
+
+  @override
+  String get subcatFertilizer => 'Engrais';
+
+  @override
+  String get subcatBulkVeg => 'Légumes en vrac';
+
+  @override
+  String get subcatSoftDrinks => 'Sodas';
+
+  @override
+  String get subcatWater => 'Eau';
+
+  @override
+  String get subcatJuice => 'Jus';
+
+  @override
+  String get subcatEnergyDrinks => 'Boissons énergisantes';
+
+  @override
+  String get subcatCakes => 'Gâteaux';
+
+  @override
+  String get subcatPastries => 'Viennoiseries';
+
+  @override
+  String get subcatCookies => 'Biscuits';
+
+  @override
+  String get subcatSnacks => 'En-cas';
+
+  @override
+  String get subcatOtcMeds => 'Médicaments sans ordonnance';
+
+  @override
+  String get subcatWellness => 'Bien-être';
+
+  @override
+  String get subcatVitamins => 'Vitamines';
 }

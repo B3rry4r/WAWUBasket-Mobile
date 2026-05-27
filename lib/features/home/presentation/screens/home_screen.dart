@@ -24,13 +24,14 @@ import '../../application/category_controller.dart';
 import '../../domain/models/category.dart';
 import '../widgets/category_body.dart';
 
-String _greeting(String? firstName) {
+String _greeting(BuildContext context, String? firstName) {
   final h = DateTime.now().hour;
   final name = firstName != null ? ', $firstName' : '';
-  if (h >= 5 && h < 12) return 'Good morning$name. What\'s cooking?';
-  if (h >= 12 && h < 17) return 'Hey$name. Lunch break?';
-  if (h >= 17 && h < 22) return 'Evening$name. Dinner plans?';
-  return 'Late night craving$name? We see you.';
+  final l = context.l10n;
+  if (h >= 5 && h < 12) return l.homeGreetingMorning(name);
+  if (h >= 12 && h < 17) return l.homeGreetingAfternoon(name);
+  if (h >= 17 && h < 22) return l.homeGreetingEvening(name);
+  return l.homeGreetingNight(name);
 }
 
 Widget _padded(Widget child) =>
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final firstName = profile?.fullName.isNotEmpty == true
               ? profile!.fullName.split(' ').first
               : null;
-          final greeting = _greeting(firstName);
+          final greeting = _greeting(context, firstName);
           final defaultAddr =
               addresses.where((a) => a.isDefault).firstOrNull;
           return ListView(
@@ -150,22 +151,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _QuickAction(
                     icon: WBIconName.star,
-                    label: 'Meal Kits',
+                    label: context.l10n.homeQuickMealKits,
                     onTap: () => context.push(AppRoutes.recipes),
                   ),
                   _QuickAction(
                     icon: WBIconName.pin,
-                    label: 'Track',
+                    label: context.l10n.homeQuickTrack,
                     onTap: () => context.push(AppRoutes.tracking),
                   ),
                   _QuickAction(
                     icon: WBIconName.message,
-                    label: 'Chat',
+                    label: context.l10n.homeQuickChat,
                     onTap: () => context.push(AppRoutes.chatInbox),
                   ),
                   _QuickAction(
                     icon: WBIconName.basket,
-                    label: 'Reorder',
+                    label: context.l10n.homeQuickReorder,
                     onTap: () => context.push(AppRoutes.ordersHistory),
                   ),
                 ],
@@ -388,7 +389,7 @@ class _CategoryPillRow extends StatelessWidget {
                   ),
                   const SizedBox(width: 9),
                   Text(
-                    c.label,
+                    context.categoryLabel(c.id, fallback: c.label),
                     style: WBTypography.caption.copyWith(
                       color: active ? Colors.white : WBColors.fgHeader,
                       fontWeight: FontWeight.w500,
@@ -632,7 +633,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
                   ),
                   child: active == null
                       ? SizedBox(width: centerD, height: centerD)
-                      : _buildCenter(active, centerD),
+                      : _buildCenter(context, active, centerD),
                 ),
               ),
             ],
@@ -642,7 +643,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     });
   }
 
-  Widget _buildCenter(Category cat, double d) {
+  Widget _buildCenter(BuildContext context, Category cat, double d) {
     final iconD = d * 0.36;
     // SizedBox enforces the fixed size — AnimatedSwitcher's internal Stack
     // passes loose constraints, so without explicit size the Container
@@ -678,7 +679,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
             Padding(
               padding: EdgeInsets.symmetric(horizontal: d * 0.10),
               child: Text(
-                cat.label,
+                context.categoryLabel(cat.id, fallback: cat.label),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
