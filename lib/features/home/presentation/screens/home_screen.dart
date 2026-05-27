@@ -44,7 +44,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? _activeCategoryId;
+  String? _activeCategoryId = 'restaurants';
   String? _activeSubcategoryId;
 
   static const _navSafePad = 140.0;
