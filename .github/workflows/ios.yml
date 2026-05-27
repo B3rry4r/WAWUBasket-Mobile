@@ -41,6 +41,17 @@ jobs:
       working-directory: ios
       run: bundle exec pod install
 
+    - name: Resolve Swift Package dependencies
+      working-directory: ios
+      run: |
+        xcodebuild -resolvePackageDependencies \
+          -workspace Runner.xcworkspace \
+          -scheme Runner \
+          -disableAutomaticPackageResolution 2>/dev/null || \
+        xcodebuild -resolvePackageDependencies \
+          -workspace Runner.xcworkspace \
+          -scheme Runner
+
     - name: Setup Git credentials for Match
       run: |
         git config --global user.email "ci@github.com"
@@ -127,6 +138,8 @@ jobs:
         MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_TOKEN }}
         MATCH_SKIP_CONFIRMATION: true
         MATCH_VERBOSE: true
+        FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: "120"
+        FASTLANE_XCODEBUILD_SETTINGS_RETRIES: "2"
       run: |
         cd ios
 

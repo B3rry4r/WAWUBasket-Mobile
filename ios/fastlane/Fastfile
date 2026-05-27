@@ -126,7 +126,8 @@ platform :ios do
           "com.wawubasket.wawubasket" => profile_uuid
         }
       },
-      clean: true
+      clean: false,
+      xcargs: "-disableAutomaticPackageResolution -skipPackagePluginValidation"
     )
 
     # -----------------------------
