@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -9,6 +10,7 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
 import '../../application/profile_controller.dart';
+import '../../data/profile_api.dart';
 import '../widgets/account_menu.dart';
 import '../widgets/role_switcher_sheet.dart';
 
@@ -403,7 +405,7 @@ String _nairaK(int naira) {
   return wbNaira(naira);
 }
 
-class _Hero extends StatelessWidget {
+class _Hero extends StatefulWidget {
   const _Hero({
     required this.name,
     required this.handle,
@@ -424,7 +426,34 @@ class _Hero extends StatelessWidget {
   final String? avatarUrl;
 
   @override
+  State<_Hero> createState() => _HeroState();
+}
+
+class _HeroState extends State<_Hero> {
+  bool _uploading = false;
+  String? _localAvatarUrl;
+
+  Future<void> _uploadAvatar() async {
+    if (_uploading) return;
+    setState(() => _uploading = true);
+    try {
+      final result = await UploadService.instance.pickAndUpload(
+        folder: UploadFolder.avatars,
+      );
+      if (result == null) return;
+      await ProfileApi.instance.updateAvatar(result.key);
+      await ProfileController.instance.load();
+      if (mounted) setState(() => _localAvatarUrl = result.publicUrl);
+    } catch (_) {
+      if (mounted) wbShowSnack(context, 'Could not update photo. Try again.');
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final displayUrl = _localAvatarUrl ?? widget.avatarUrl;
     return Container(
       decoration: const BoxDecoration(
         color: WBColors.bgPrimary,
@@ -443,8 +472,7 @@ class _Hero extends StatelessWidget {
           Row(
             children: [
               GestureDetector(
-                onTap: () =>
-                    wbShowSnack(context, context.l10n.operatorChoosePhoto),
+                onTap: _uploadAvatar,
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
@@ -460,9 +488,19 @@ class _Hero extends StatelessWidget {
                         ),
                       ),
                       child: ClipOval(
-                        child: avatarUrl != null && avatarUrl!.isNotEmpty
-                            ? WBNetworkImage(url: avatarUrl!)
-                            : _InitialsAvatar(name: name),
+                        child: _uploading
+                            ? Container(
+                                color: WBColors.bgSoft,
+                                alignment: Alignment.center,
+                                child: const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                ),
+                              )
+                            : displayUrl != null && displayUrl.isNotEmpty
+                                ? WBNetworkImage(url: displayUrl)
+                                : _InitialsAvatar(name: widget.name),
                       ),
                     ),
                     Positioned(
@@ -497,7 +535,7 @@ class _Hero extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      widget.name,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: WBTypography.cardTitle.copyWith(
@@ -508,7 +546,7 @@ class _Hero extends StatelessWidget {
                     ),
                     const SizedBox(height: 3),
                     Text(
-                      handle,
+                      widget.handle,
                       style: WBTypography.caption.copyWith(
                         color: WBColors.fgSecondary,
                         fontSize: 13,
@@ -525,7 +563,7 @@ class _Hero extends StatelessWidget {
                         borderRadius: BorderRadius.circular(WBRadius.pill),
                       ),
                       child: Text(
-                        badge,
+                        widget.badge,
                         style: WBTypography.caption.copyWith(
                           color: WBColors.fgHeader,
                           fontWeight: FontWeight.w600,
@@ -566,9 +604,9 @@ class _Hero extends StatelessWidget {
             ),
             child: Row(
               children: [
-                _StatTile(stat: stat1),
-                _StatTile(stat: stat2),
-                _StatTile(stat: stat3, last: true),
+                _StatTile(stat: widget.stat1),
+                _StatTile(stat: widget.stat2),
+                _StatTile(stat: widget.stat3, last: true),
               ],
             ),
           ),
