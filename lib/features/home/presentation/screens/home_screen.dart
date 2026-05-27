@@ -590,15 +590,13 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
       final w = constraints.maxWidth;
 
       // Adaptive geometry — scales with screen width.
-      final orbitR = (w * 0.265).clamp(92.0, 126.0);
-      final centerD = (w * 0.228).clamp(84.0, 108.0);
-      final orbitD = (w * 0.155).clamp(56.0, 70.0);
-      final nodeW = (orbitD + 18.0).clamp(72.0, 90.0);
-      const labelH = 14.0;
-      const labelGap = 4.0;
-      final totalH = 2 * orbitR + orbitD + labelH + labelGap + 18.0;
+      final orbitR = (w * 0.315).clamp(116.0, 152.0);
+      final centerD = (w * 0.330).clamp(122.0, 156.0);
+      final orbitD = (w * 0.200).clamp(72.0, 92.0);
+      // Height = orbit diameter + top/bottom padding so no node clips.
+      final totalH = 2 * orbitR + orbitD + 20.0;
       final cx = w / 2;
-      final cy = totalH / 2;
+      final cy = orbitR + orbitD / 2 + 10.0;
 
       final n = cats.length;
       final byDepth = List.generate(n, (i) => i)
@@ -618,8 +616,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
               for (final i in byDepth)
                 if (i != _activeIdx)
                   _buildNode(cats[i], i, n, cx, cy,
-                      orbitR: orbitR, orbitD: orbitD, nodeW: nodeW,
-                      labelH: labelH, labelGap: labelGap),
+                      orbitR: orbitR, orbitD: orbitD),
               Positioned(
                 left: cx - centerD / 2,
                 top: cy - centerD / 2,
@@ -634,7 +631,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
                     child: FadeTransition(opacity: anim, child: child),
                   ),
                   child: active == null
-                      ? const SizedBox.shrink()
+                      ? SizedBox(width: centerD, height: centerD)
                       : _buildCenter(active, centerD),
                 ),
               ),
@@ -646,48 +643,55 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   }
 
   Widget _buildCenter(Category cat, double d) {
-    final iconD = d * 0.32;
-    return Container(
+    final iconD = d * 0.36;
+    // SizedBox enforces the fixed size — AnimatedSwitcher's internal Stack
+    // passes loose constraints, so without explicit size the Container
+    // would shrink to its content.
+    return SizedBox(
       key: ValueKey(cat.id),
-      decoration: BoxDecoration(
-        color: WBColors.surfaceDark,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.22),
-            blurRadius: 26,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: iconD,
-            height: iconD,
-            child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
-                ? SvgPicture.asset(cat.svgAsset!, fit: BoxFit.contain,
-                    errorBuilder: (_, _, _) => const SizedBox.shrink())
-                : const SizedBox.shrink(),
-          ),
-          SizedBox(height: d * 0.045),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: d * 0.09),
-            child: Text(
-              cat.label,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: WBTypography.caption.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 10,
-                height: 1.1,
+      width: d,
+      height: d,
+      child: Container(
+        decoration: BoxDecoration(
+          color: WBColors.surfaceDark,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.22),
+              blurRadius: 28,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: iconD,
+              height: iconD,
+              child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
+                  ? SvgPicture.asset(cat.svgAsset!, fit: BoxFit.contain,
+                      errorBuilder: (_, _, _) => const SizedBox.shrink())
+                  : const SizedBox.shrink(),
+            ),
+            SizedBox(height: d * 0.05),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: d * 0.10),
+              child: Text(
+                cat.label,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: WBTypography.caption.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 12,
+                  height: 1.1,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -700,66 +704,39 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     double cy, {
     required double orbitR,
     required double orbitD,
-    required double nodeW,
-    required double labelH,
-    required double labelGap,
   }) {
     final angle = _angleFor(i, n) + _rotation;
     final dx = orbitR * sin(angle);
     final dy = -orbitR * cos(angle);
     final depth = _depth(i, n);
-    final scale = 1.0 - depth * 0.14;
-    final opacity = (1.0 - depth * 0.36).clamp(0.44, 1.0);
-    final iconPad = orbitD * 0.20;
+    final scale = 1.0 - depth * 0.12;
+    final opacity = (1.0 - depth * 0.38).clamp(0.42, 1.0);
 
     return Positioned(
-      left: cx + dx - nodeW / 2,
+      // Position the circle by its centre.
+      left: cx + dx - orbitD / 2,
       top: cy + dy - orbitD / 2,
-      width: nodeW,
-      height: orbitD + labelGap + labelH,
+      width: orbitD,
+      height: orbitD,
       child: GestureDetector(
         onTap: () => _tapNode(i),
         behavior: HitTestBehavior.opaque,
         child: Opacity(
           opacity: opacity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Transform.scale(
-                scale: scale,
-                child: Container(
-                  width: orbitD,
-                  height: orbitD,
-                  decoration: BoxDecoration(
-                    color: WBColors.surfaceCard,
-                    shape: BoxShape.circle,
-                    boxShadow: WBShadows.card,
-                  ),
-                  padding: EdgeInsets.all(iconPad),
-                  child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
-                      ? SvgPicture.asset(cat.svgAsset!, fit: BoxFit.contain,
-                          errorBuilder: (_, _, _) => const SizedBox.shrink())
-                      : const SizedBox.shrink(),
-                ),
+          child: Transform.scale(
+            scale: scale,
+            child: Container(
+              decoration: BoxDecoration(
+                color: WBColors.surfaceCard,
+                shape: BoxShape.circle,
+                boxShadow: WBShadows.card,
               ),
-              SizedBox(height: labelGap),
-              SizedBox(
-                width: nodeW,
-                height: labelH,
-                child: Text(
-                  cat.label,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: WBTypography.caption.copyWith(
-                    color: WBColors.fgSecondary,
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.w500,
-                    height: 1.0,
-                  ),
-                ),
-              ),
-            ],
+              padding: EdgeInsets.all(orbitD * 0.22),
+              child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
+                  ? SvgPicture.asset(cat.svgAsset!, fit: BoxFit.contain,
+                      errorBuilder: (_, _, _) => const SizedBox.shrink())
+                  : const SizedBox.shrink(),
+            ),
           ),
         ),
       ),
@@ -769,12 +746,12 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   Widget _buildShimmer() {
     return LayoutBuilder(builder: (_, constraints) {
       final w = constraints.maxWidth;
-      final orbitR = (w * 0.265).clamp(92.0, 126.0);
-      final centerD = (w * 0.228).clamp(84.0, 108.0);
-      final orbitD = (w * 0.155).clamp(56.0, 70.0);
-      final totalH = 2 * orbitR + orbitD + 36.0;
+      final orbitR = (w * 0.315).clamp(116.0, 152.0);
+      final centerD = (w * 0.330).clamp(122.0, 156.0);
+      final orbitD = (w * 0.200).clamp(72.0, 92.0);
+      final totalH = 2 * orbitR + orbitD + 20.0;
       final cx = w / 2;
-      final cy = totalH / 2;
+      final cy = orbitR + orbitD / 2 + 10.0;
       return SizedBox(
         width: w,
         height: totalH,
