@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'dart:async';
+
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/websocket_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
@@ -9,6 +12,7 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/notifications_controller.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../application/vendor_orders_controller.dart';
 import '../../data/vendor_api.dart';
@@ -23,12 +27,26 @@ class VendorHomeScreen extends StatefulWidget {
 
 class _VendorHomeScreenState extends State<VendorHomeScreen> {
   bool _open = true;
+  StreamSubscription<WsFrame>? _wsSub;
 
   @override
   void initState() {
     super.initState();
     ProfileController.instance.load();
     VendorOrdersController.instance.load();
+    // Reload orders and bump badge whenever a new order arrives in real time.
+    _wsSub = WebSocketService.instance.frames
+        .where((f) => f.type == 'notification.new' || f.type == 'order.paid')
+        .listen((_) {
+      VendorOrdersController.instance.load();
+      NotificationsController.instance.refresh();
+    });
+  }
+
+  @override
+  void dispose() {
+    _wsSub?.cancel();
+    super.dispose();
   }
 
   @override

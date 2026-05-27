@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
-import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
@@ -30,9 +29,11 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   @override
   void initState() {
     super.initState();
-    // Kick off both loads in parallel — the legacy product cart loads from
-    // the StateNotifier constructor and recipe cart loads here.
     RecipeCartController.instance.load();
+    // Reload cart on every open so stale state from a prior session is cleared.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) ref.read(cartControllerProvider.notifier).load();
+    });
   }
 
   String _sizeLabel(BuildContext context, RecipeSizeLabel l) {
@@ -282,44 +283,6 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                           ),
                           const SizedBox(height: WBSpacing.md),
                         ],
-                        // Promo code
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: WBColors.bgPrimary,
-                            borderRadius:
-                                BorderRadius.circular(WBRadius.pill),
-                            border: Border.all(color: WBColors.bgDivider),
-                            boxShadow: WBShadows.card,
-                          ),
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 16),
-                              const WBIcon(
-                                WBIconName.star,
-                                size: 16,
-                                color: WBColors.fgPlaceholder,
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  context.l10n.cartPromo,
-                                  style: WBTypography.caption.copyWith(
-                                    color: WBColors.fgPlaceholder,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              WBButton(
-                                label: context.l10n.cartPromoApply,
-                                size: WBButtonSize.sm,
-                                onPressed: () =>
-                                    wbShowSnack(context, 'Promo code applied'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: WBSpacing.md),
                         WBCard(
                           child: Column(
                             children: [

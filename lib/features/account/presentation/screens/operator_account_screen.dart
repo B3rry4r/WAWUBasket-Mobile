@@ -8,7 +8,6 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
-import '../../../shopping/application/wb_images.dart';
 import '../../application/profile_controller.dart';
 import '../widgets/account_menu.dart';
 import '../widgets/role_switcher_sheet.dart';
@@ -461,7 +460,9 @@ class _Hero extends StatelessWidget {
                         ),
                       ),
                       child: ClipOval(
-                        child: WBNetworkImage(url: avatarUrl ?? WBImages.avatar),
+                        child: avatarUrl != null
+                            ? WBNetworkImage(url: avatarUrl!)
+                            : _InitialsAvatar(name: name),
                       ),
                     ),
                     Positioned(
@@ -709,4 +710,31 @@ class _Stat {
   const _Stat(this.label, this.value);
   final String label;
   final String value;
+}
+
+class _InitialsAvatar extends StatelessWidget {
+  const _InitialsAvatar({required this.name});
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    final parts = name.trim().split(' ');
+    final initials = parts.length >= 2
+        ? '${parts.first[0]}${parts.last[0]}'.toUpperCase()
+        : parts.isNotEmpty && parts.first.isNotEmpty
+            ? parts.first[0].toUpperCase()
+            : '?';
+    return Container(
+      color: WBColors.bgSoft,
+      alignment: Alignment.center,
+      child: Text(
+        initials,
+        style: WBTypography.body.copyWith(
+          fontWeight: FontWeight.w700,
+          color: WBColors.fgHeader,
+          fontSize: 22,
+        ),
+      ),
+    );
+  }
 }

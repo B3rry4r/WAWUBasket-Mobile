@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/account/application/notifications_controller.dart';
+import '../../features/account/application/profile_controller.dart';
 import '../../features/auth/application/role_controller.dart';
-import '../../features/shopping/application/wb_images.dart';
 import '../router/app_routes.dart';
 import '../theme/wb_theme_exports.dart';
 import 'wb_icon.dart';
@@ -52,12 +52,20 @@ class WBHomeAppBar extends StatelessWidget {
         GestureDetector(
           onTap: () => _openAccount(context),
           behavior: HitTestBehavior.opaque,
-          child: ClipOval(
-            child: SizedBox(
-              width: 44,
-              height: 44,
-              child: WBNetworkImage(url: WBImages.avatar),
-            ),
+          child: ValueListenableBuilder(
+            valueListenable: ProfileController.instance.profile,
+            builder: (_, profile, _) {
+              final avatarUrl = profile?.avatarUrl;
+              return ClipOval(
+                child: SizedBox(
+                  width: 44,
+                  height: 44,
+                  child: avatarUrl != null
+                      ? WBNetworkImage(url: avatarUrl)
+                      : _AvatarInitials(name: profile?.fullName ?? ''),
+                ),
+              );
+            },
           ),
         ),
         const SizedBox(width: 12),
@@ -129,6 +137,33 @@ class WBHomeAppBar extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _AvatarInitials extends StatelessWidget {
+  const _AvatarInitials({required this.name});
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    final parts = name.trim().split(' ');
+    final initials = parts.length >= 2
+        ? '${parts.first[0]}${parts.last[0]}'.toUpperCase()
+        : parts.isNotEmpty && parts.first.isNotEmpty
+            ? parts.first[0].toUpperCase()
+            : '?';
+    return Container(
+      color: WBColors.bgSoft,
+      alignment: Alignment.center,
+      child: Text(
+        initials,
+        style: WBTypography.body.copyWith(
+          fontWeight: FontWeight.w700,
+          color: WBColors.fgHeader,
+          fontSize: 16,
+        ),
+      ),
     );
   }
 }

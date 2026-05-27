@@ -12,6 +12,7 @@ class Product extends Equatable {
     required this.imageUrl,
     required this.categoryId,
     required this.subcategoryId,
+    this.vendorId,
     this.unit,
   });
 
@@ -23,6 +24,9 @@ class Product extends Equatable {
   final String imageUrl;
   final String categoryId;
   final String subcategoryId;
+
+  /// The owner's user ID — used to fetch "more from this vendor".
+  final String? vendorId;
 
   /// Optional unit suffix for marketplace products, e.g. `'/ kg'`.
   final String? unit;
@@ -42,6 +46,7 @@ class Product extends Equatable {
       imageUrl: images.isNotEmpty ? images.first.toString() : '',
       categoryId: (j['category'] ?? 'all').toString(),
       subcategoryId: (j['subcategory'] ?? '').toString(),
+      vendorId: j['ownerId']?.toString(),
       unit: j['unit'] as String?,
     );
   }

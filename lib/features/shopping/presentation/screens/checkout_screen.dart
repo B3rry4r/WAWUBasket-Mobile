@@ -145,7 +145,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       try {
         final order = await OrdersApi.instance.orderDetail(orderId);
         final state = order['state'] as String? ?? '';
-        if (state.isNotEmpty && state != 'awaiting_payment') {
+        if (state.isNotEmpty && state != 'placed') {
           if (mounted) {
             context.go('${AppRoutes.orderConfirmation}?orderId=$orderId');
           }

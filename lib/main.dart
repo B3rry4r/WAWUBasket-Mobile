@@ -92,6 +92,8 @@ Future<void> main() async {
   // and tears down on logout via TokenStore.tokenNotifier — no auth-screen
   // wiring required.
   WebSocketService.instance.init();
+  // Wire in-app notification badge to real-time WS frames.
+  NotificationsController.instance.listenToWebSocket();
   // On logout, wipe the offline chat cache so the next signed-in user
   // never sees the previous user's threads. sqflite has no web
   // implementation so the chat store is skipped on web.

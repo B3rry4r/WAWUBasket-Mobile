@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
+import '../../../core/services/websocket_service.dart';
 import '../data/account_extras_api.dart';
 
 /// Single source of truth for the unread-notifications badge on the
@@ -11,9 +14,27 @@ import '../data/account_extras_api.dart';
 /// that drives the list — we count entries where `read != true`. When
 /// the API later adds a dedicated `/notifications/unread-count` route,
 /// swap [_loadFromFullList] for that single integer call.
+///
+/// Real-time: the controller also listens to `notification.new` frames
+/// from [WebSocketService] and increments the badge immediately without
+/// waiting for the next poll.
 class NotificationsController {
   NotificationsController._();
   static final NotificationsController instance = NotificationsController._();
+
+  StreamSubscription<WsFrame>? _wsSub;
+
+  /// Call once at app boot (after WebSocketService.init) to wire up
+  /// real-time badge increments via WebSocket.
+  void listenToWebSocket() {
+    _wsSub?.cancel();
+    _wsSub = WebSocketService.instance.frames
+        .where((f) => f.type == 'notification.new')
+        .listen((_) {
+      unreadCount.value += 1;
+      _hasUnread.value = true;
+    });
+  }
 
   /// 0 when there are no unread notifications. The home app bar treats
   /// any value > 0 as "show the red dot".

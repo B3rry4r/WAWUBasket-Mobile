@@ -7,7 +7,6 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../../shopping/application/wb_images.dart';
 import '../../application/profile_controller.dart';
 import '../../data/profile_api.dart';
 
@@ -18,19 +17,20 @@ class PersonalInfoScreen extends StatefulWidget {
   State<PersonalInfoScreen> createState() => _PersonalInfoScreenState();
 }
 
-const _months = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
-];
-
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _phone = TextEditingController();
-  final _dob = TextEditingController();
   bool _busy = false;
   bool _uploadingAvatar = false;
   String? _avatarUrl;
+
+  String _nameInitials() {
+    final parts = _name.text.trim().split(' ');
+    if (parts.isEmpty || parts.first.isEmpty) return '?';
+    if (parts.length == 1) return parts.first[0].toUpperCase();
+    return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
+  }
 
   Future<void> _pickAvatar() async {
     setState(() => _uploadingAvatar = true);
@@ -76,7 +76,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     _name.dispose();
     _email.dispose();
     _phone.dispose();
-    _dob.dispose();
     super.dispose();
   }
 
@@ -92,9 +91,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     _name.text = p.fullName;
     _email.text = p.email;
     _phone.text = p.phone;
-    final d = p.dateOfBirth;
-    _dob.text =
-        d == null ? '' : '${d.day} ${_months[d.month - 1]} ${d.year}';
+    _avatarUrl = p.avatarUrl;
   }
 
   Future<void> _save() async {
@@ -157,9 +154,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: WBNetworkImage(
-                        url: _avatarUrl ?? WBImages.avatar,
-                      ),
+                      child: _avatarUrl != null
+                          ? WBNetworkImage(url: _avatarUrl!)
+                          : Container(
+                              color: WBColors.bgSoft,
+                              alignment: Alignment.center,
+                              child: Text(
+                                _nameInitials(),
+                                style: WBTypography.hero.copyWith(
+                                  fontSize: 36,
+                                  color: WBColors.fgHeader,
+                                ),
+                              ),
+                            ),
                     ),
                     if (_uploadingAvatar)
                       Positioned.fill(
@@ -235,13 +242,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               label: context.l10n.personalInfoPhone,
               controller: _phone,
               leadingIcon: WBIconName.phone,
-              enabled: false,
-            ),
-            const SizedBox(height: WBSpacing.md),
-            WBInput(
-              label: context.l10n.personalInfoDob,
-              controller: _dob,
-              leadingIcon: WBIconName.clock,
               enabled: false,
             ),
             const SizedBox(height: WBSpacing.xl),

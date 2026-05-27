@@ -34,6 +34,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
 
   Product? _product;
   String? _error;
+  List<Product> _moreLikeThis = [];
 
   @override
   void initState() {
@@ -88,8 +89,6 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     setState(() => _error = null);
     final id = widget.productId;
     if (id == null || id.isEmpty) {
-      // Cannot use context here (called from initState); set literal for now,
-      // will be rendered in build where context.l10n is available.
       setState(() => _error = 'product_not_found');
       return;
     }
@@ -98,8 +97,27 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
       if (!mounted) return;
       setState(() => _product = p);
       _loadFavoriteState(id);
+      _loadMoreLikeThis(p);
     } on ApiException catch (e) {
       if (mounted) setState(() => _error = e.message);
+    }
+  }
+
+  Future<void> _loadMoreLikeThis(Product p) async {
+    try {
+      final vendorId = p.vendorId;
+      final List<Product> similar;
+      if (vendorId != null && vendorId.isNotEmpty) {
+        similar = await CatalogApi.instance.items(vendorId: vendorId);
+      } else {
+        similar = await CatalogApi.instance.items(category: p.categoryId);
+      }
+      if (!mounted) return;
+      setState(() {
+        _moreLikeThis = similar.where((x) => x.id != p.id).take(10).toList();
+      });
+    } catch (_) {
+      // Non-critical — page works fine without this section.
     }
   }
 
@@ -107,14 +125,14 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     final product = _product;
     if (product == null) return;
     if (!GuestModeController.instance.requireAccount(context,
-        // TODO(i18n): key=guestActionAddToCart
         action: 'add to your cart')) {
       return;
     }
     setState(() => _adding = true);
+    final note = _notesCtrl.text.trim();
     await ref
         .read(cartControllerProvider.notifier)
-        .add(product, qty: _qty);
+        .add(product, qty: _qty, note: note.isEmpty ? null : note);
     if (!mounted) return;
     setState(() => _adding = false);
     final error = ref.read(cartControllerProvider).error;
@@ -274,7 +292,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     ),
                     const SizedBox(height: WBSpacing.lg),
                     Text(
-                      'Notes for the restaurant',
+                      'Special instructions (optional)',
                       style: WBTypography.body.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
@@ -282,13 +300,76 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     const SizedBox(height: WBSpacing.sm + 2),
                     WBInput(
                       controller: _notesCtrl,
-                      label: 'Special instructions',
-                      placeholder: 'Less spicy, no onions…',
+                      label: 'Add a note',
+                      placeholder: 'E.g. less spicy, no onions…',
                       keyboardType: TextInputType.text,
                     ),
                   ],
                 ),
               ),
+              if (_moreLikeThis.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    WBSpacing.screenPadding, WBSpacing.lg, WBSpacing.screenPadding, 0),
+                  child: Text(
+                    'More from this vendor',
+                    style: WBTypography.cardTitle.copyWith(fontSize: 17),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 200,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: WBSpacing.screenPadding),
+                    itemCount: _moreLikeThis.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 12),
+                    itemBuilder: (_, i) {
+                      final p = _moreLikeThis[i];
+                      return GestureDetector(
+                        onTap: () => context.push(
+                            '${AppRoutes.product}/${p.id}'),
+                        child: SizedBox(
+                          width: 140,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(WBRadius.card),
+                                child: SizedBox(
+                                  width: 140,
+                                  height: 120,
+                                  child: WBNetworkImage(url: p.imageUrl),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                p.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: WBTypography.body.copyWith(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                p.formattedPrice,
+                                style: WBTypography.caption.copyWith(
+                                  color: WBColors.fgHeader,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ],
           ),
           Positioned(
