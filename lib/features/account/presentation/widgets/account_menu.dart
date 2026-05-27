@@ -13,6 +13,7 @@ class AccountMenuRow {
     required this.onTap,
     this.sub,
     this.trailingPill,
+    this.trailing,
     this.danger = false,
   });
   final WBIconName icon;
@@ -23,6 +24,10 @@ class AccountMenuRow {
   /// Optional small status pill drawn between the label column and the
   /// chevron. Used by the role switcher to surface KYC status inline.
   final Widget? trailingPill;
+
+  /// If set, replaces the default chevron. Use for inline controls like a
+  /// Switch that should live right in the row without navigating away.
+  final Widget? trailing;
   final bool danger;
 }
 
@@ -144,11 +149,14 @@ class _MenuRowView extends StatelessWidget {
               spec.trailingPill!,
               const SizedBox(width: 6),
             ],
-            const WBIcon(
-              WBIconName.chevronRight,
-              size: 16,
-              color: WBColors.fgPlaceholder,
-            ),
+            if (spec.trailing != null)
+              spec.trailing!
+            else
+              const WBIcon(
+                WBIconName.chevronRight,
+                size: 16,
+                color: WBColors.fgPlaceholder,
+              ),
           ],
         ),
       ),

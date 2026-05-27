@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../core/auth/biometric_service.dart';
 import '../core/i18n/locale_controller.dart';
 import '../core/network/api_client.dart';
 import '../core/router/app_router.dart';
@@ -21,7 +22,13 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
   @override
   void initState() {
     super.initState();
-    ApiClient.instance.onSessionExpired = () => _router.go(AppRoutes.login);
+    ApiClient.instance.onSessionExpired = () {
+      // Clear the biometric enabled flag so the next password sign-in
+      // re-offers biometric setup (the old refresh token it was guarding
+      // is gone, so "enabled" was pointing at nothing).
+      BiometricService.instance.setEnabled(false);
+      _router.go(AppRoutes.login);
+    };
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

@@ -220,6 +220,13 @@ class RoleController {
   Future<void> syncFromApi() async {
     try {
       final roles = await AuthApi.instance.getRoles();
+      // API response is authoritative — reset all operator statuses first so
+      // a previous user's approved roles don't bleed into a new session.
+      for (final r in AppRole.values) {
+        if (r == AppRole.customer || r == AppRole.admin) continue;
+        _status[r] = RoleStatus.unregistered;
+        _persistStatus(r);
+      }
       for (final entry in roles) {
         final map = entry as Map<String, dynamic>;
         final roleName = map['role'] as String?;
