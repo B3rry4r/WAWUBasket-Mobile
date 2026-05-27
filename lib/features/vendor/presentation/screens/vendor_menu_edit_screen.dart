@@ -87,7 +87,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
   void _save() {
     final priceParsed = int.tryParse(_price.text.replaceAll(',', '')) ?? 0;
     if (_name.text.trim().isEmpty || priceParsed <= 0) {
-      wbShowSnack(context, 'Dish name and price are required.');
+      wbShowSnack(context, context.l10n.vendorMenuDishRequired);
       return;
     }
     final groups = [for (final g in _groups) g.toGroup()];
@@ -104,7 +104,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
         imageUrl: _imageUrl,
         modifierGroups: groups,
       );
-      wbShowSnack(context, '${_name.text.trim()} updated');
+      wbShowSnack(context, context.l10n.vendorMenuDishUpdated(_name.text.trim()));
     } else {
       ctrl.add(
         name: _name.text.trim(),
@@ -116,7 +116,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
         imageUrl: _imageUrl ?? _defaultMenuImage,
         modifierGroups: groups,
       );
-      wbShowSnack(context, '${_name.text.trim()} added to the menu');
+      wbShowSnack(context, context.l10n.vendorMenuDishAdded(_name.text.trim()));
     }
     context.pop();
   }
@@ -375,14 +375,14 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 WBInput(
-                  label: 'Dish name',
-                  placeholder: 'e.g. Jollof rice',
+                  label: context.l10n.vendorMenuDishNameLabel,
+                  placeholder: context.l10n.vendorMenuDishNamePlaceholder,
                   controller: _name,
                 ),
                 const SizedBox(height: WBSpacing.md),
                 WBInput(
-                  label: 'Description',
-                  placeholder: 'Tasty, spicy, fresh…',
+                  label: context.l10n.vendorMenuDescLabel,
+                  placeholder: context.l10n.vendorMenuDescPlaceholder,
                   controller: _desc,
                 ),
                 const SizedBox(height: WBSpacing.md),
@@ -390,7 +390,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                   children: [
                     Expanded(
                       child: WBInput(
-                        label: 'Price (₦)',
+                        label: context.l10n.vendorMenuPriceLabel,
                         placeholder: '0',
                         controller: _price,
                         keyboardType: TextInputType.number,
@@ -417,7 +417,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                                     ).label);
                               return WBInput(
                                 key: ValueKey('cat-$_category'),
-                                label: 'Category',
+                                label: context.l10n.vendorMenuCategoryLabel,
                                 initialValue: label,
                                 trailing: const WBIcon(
                                   WBIconName.chevronDown,
@@ -515,7 +515,7 @@ class _VendorMenuEditScreenState extends State<VendorMenuEditScreen> {
                       ),
                     ),
                     WBButton(
-                      label: 'Add group',
+                      label: context.l10n.vendorMenuAddGroup,
                       size: WBButtonSize.sm,
                       variant: WBButtonVariant.secondary,
                       trailingIcon: WBIconName.plus,
@@ -605,7 +605,7 @@ class _ModifierGroupEditor extends StatelessWidget {
             children: [
               Expanded(
                 child: WBInput(
-                  label: 'Group name',
+                  label: context.l10n.vendorMenuGroupNameLabel,
                   initialValue: group.name,
                   onChanged: (v) {
                     group.name = v;
@@ -663,7 +663,7 @@ class _ModifierGroupEditor extends StatelessWidget {
                   Expanded(
                     flex: 5,
                     child: WBInput(
-                      placeholder: 'Option label',
+                      placeholder: context.l10n.vendorMenuOptionLabelPlaceholder,
                       initialValue: group.options[i].label,
                       onChanged: (v) => group.options[i].label = v,
                     ),
@@ -672,7 +672,7 @@ class _ModifierGroupEditor extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: WBInput(
-                      placeholder: '+₦0',
+                      placeholder: context.l10n.vendorMenuOptionPricePlaceholder,
                       initialValue: group.options[i].priceDeltaNaira == 0
                           ? ''
                           : '${group.options[i].priceDeltaNaira}',

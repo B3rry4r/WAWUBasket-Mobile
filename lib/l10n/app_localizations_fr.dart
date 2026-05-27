@@ -2042,4 +2042,694 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'Actif';
+
+  @override
+  String get deleteAccountLeavingTitle => 'Vous partez ?';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'Nous sommes tristes de vous voir partir. Avant de partir :';
+
+  @override
+  String get deleteAccountConfirmPermanent =>
+      'Supprimer votre compte définitivement ?';
+
+  @override
+  String get deleteAccountCannotUndo => 'Cette action est irréversible.';
+
+  @override
+  String get profilePhotoError =>
+      'Impossible de mettre à jour la photo. Réessayez.';
+
+  @override
+  String get profilePreferences => 'Préférences';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'Légal';
+
+  @override
+  String get profileStatsOrders => 'Commandes';
+
+  @override
+  String get profileStatsBulk => 'Gros';
+
+  @override
+  String get profileStatsFavorites => 'Favoris';
+
+  @override
+  String get profileLanguageSub =>
+      'Anglais · Français · Haoussa · Yorùbá · Igbo';
+
+  @override
+  String get profileGuestTitle => 'Vous naviguez en tant qu\'invité';
+
+  @override
+  String get profileGuestBody =>
+      'Connectez-vous pour gérer votre profil, vos commandes, votre portefeuille et vos favoris.';
+
+  @override
+  String get profileCreateAccount => 'Créer un compte';
+
+  @override
+  String get operatorAccountTitle => 'Compte';
+
+  @override
+  String get operatorOperationsTitle => 'Opérations';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'SMS';
+
+  @override
+  String get forgotSmsSub => 'Sur votre téléphone';
+
+  @override
+  String get forgotEmailLabel => 'Email';
+
+  @override
+  String get forgotEmailSub => 'Dans votre boîte mail';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'Continuer avec $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'Commande acceptée';
+
+  @override
+  String get vendorOrderDeclined => 'Commande refusée';
+
+  @override
+  String get vendorLiveOrdersTitle => 'Commandes en direct';
+
+  @override
+  String get vendorDashboardSubtitle => 'Tableau de bord vendeur';
+
+  @override
+  String get vendorCallingCustomer => 'Appel du client…';
+
+  @override
+  String get vendorTicketSent => 'Ticket envoyé à l\'imprimante';
+
+  @override
+  String get vendorIssueSent => 'Problème signalé au support';
+
+  @override
+  String get vendorSettingsSaved => 'Paramètres enregistrés';
+
+  @override
+  String get vendorSettingsStoreHours => 'Heures d\'ouverture';
+
+  @override
+  String get vendorNotifPushEmail => 'Push + email';
+
+  @override
+  String get vendorNotifPushOnly => 'Push seulement';
+
+  @override
+  String get vendorMenuAdd => 'Ajouter';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'Trouver un plat…';
+
+  @override
+  String get vendorMenuEditDish => 'Modifier le plat';
+
+  @override
+  String get vendorMenuDuplicate => 'Dupliquer';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return '$name dupliqué';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'Supprimer le plat';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return '$name supprimé';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'Le nom du plat et le prix sont requis.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return '$name mis à jour';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return '$name ajouté au menu';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'Nom du plat';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'ex. Riz jollof';
+
+  @override
+  String get vendorMenuDescLabel => 'Description';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'Savoureux, épicé, frais…';
+
+  @override
+  String get vendorMenuPriceLabel => 'Prix (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'Catégorie';
+
+  @override
+  String get vendorMenuAddGroup => 'Ajouter un groupe';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'Nom du groupe';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'Étiquette d\'option';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'Réponse publiée à $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'Répondu';
+
+  @override
+  String get vendorReviewYourReply => 'Votre réponse';
+
+  @override
+  String get vendorReviewReplyPlaceholder =>
+      'Merci pour le retour, nous vous entendons...';
+
+  @override
+  String get vendorReviewPostReply => 'Publier la réponse';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'Export CSV démarré';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'Rupture de stock';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'Mauvaise adresse';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'Changement client';
+
+  @override
+  String get vendorAnalyticsOther => 'Autre';
+
+  @override
+  String get vendorInventoryItemName => 'Nom de l\'article';
+
+  @override
+  String get vendorInventoryQuantity => 'Quantité';
+
+  @override
+  String get vendorInventoryUnit => 'Unité (kg / sacs…)';
+
+  @override
+  String get vendorInventoryThreshold => 'Seuil bas de stock';
+
+  @override
+  String get vendorInventoryAddItem => 'Ajouter un article';
+
+  @override
+  String get vendorInventoryNewBatch => 'Nouveau lot';
+
+  @override
+  String get vendorInventoryUpdateStock => 'Mettre à jour le stock';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return '$name mis à jour';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'Nouveau lot enregistré pour $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub =>
+      'Réapprovisionnez pour continuer à accepter des commandes';
+
+  @override
+  String get vendorPayoutsEarnings => 'Vos gains';
+
+  @override
+  String get agentTxnTraderRequired =>
+      'Sélectionnez un commerçant pour enregistrer cette vente.';
+
+  @override
+  String get agentTxnFieldsRequired =>
+      'Le produit, la quantité et le prix unitaire sont requis.';
+
+  @override
+  String get agentTxnSavedOffline => 'Transaction enregistrée hors ligne';
+
+  @override
+  String get agentTxnTraderLabel => 'Commerçant';
+
+  @override
+  String get agentTxnProductLabel => 'Produit';
+
+  @override
+  String get agentTxnQuantityLabel => 'Quantité (kg)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'Prix unitaire (₦)';
+
+  @override
+  String get agentTxnSave => 'Enregistrer la transaction';
+
+  @override
+  String get agentPayoutTraderRequired =>
+      'Sélectionnez un commerçant pour enregistrer ce paiement.';
+
+  @override
+  String get agentPayoutAmountRequired =>
+      'Le montant doit être supérieur à ₦0.';
+
+  @override
+  String get agentPayoutRecorded =>
+      'Paiement enregistré · remboursement en file';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'Paiement pour vente de tomates';
+
+  @override
+  String get agentSyncTitle => 'Synchroniser avec WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'Commerçants en attente';
+
+  @override
+  String get agentSyncPendingTxns => 'Transactions en attente';
+
+  @override
+  String get agentSyncPendingPayouts => 'Paiements en attente';
+
+  @override
+  String get agentSyncLastSync => 'Dernière sync';
+
+  @override
+  String get agentSyncOfflineCopy => 'Votre copie hors ligne';
+
+  @override
+  String get agentSyncServer => 'Serveur WAWU';
+
+  @override
+  String get agentSyncKeepThis => 'Garder cette version';
+
+  @override
+  String get agentRegNamePhoneRequired => 'Le nom et le téléphone sont requis.';
+
+  @override
+  String get agentRegSavedOffline =>
+      'Commerçant enregistré hors ligne · sera synchronisé ensuite';
+
+  @override
+  String get agentRegNewTraderTitle => 'Nouveau commerçant';
+
+  @override
+  String get agentRegFullNameLabel => 'Nom complet';
+
+  @override
+  String get agentRegFullNamePlaceholder =>
+      'Nom complet comme sur la pièce d\'identité';
+
+  @override
+  String get agentRegPhoneLabel => 'Numéro de téléphone';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'Lieu';
+
+  @override
+  String get agentRegLocationPlaceholder => 'Nom du marché ou du village';
+
+  @override
+  String get agentRegPhotoLabel => 'Photo du commerçant';
+
+  @override
+  String get agentRegIdLabel => 'Pièce d\'identité';
+
+  @override
+  String get agentTradersPageTitle => 'Vos commerçants';
+
+  @override
+  String get agentTradersSearchPlaceholder =>
+      'Rechercher par nom ou téléphone…';
+
+  @override
+  String get tradeSuppliersEmpty => 'Aucun fournisseur listé pour l\'instant.';
+
+  @override
+  String get tradeBulkEmpty => 'Aucun lot en gros listé pour l\'instant.';
+
+  @override
+  String get bulkUnitPrice => 'Prix unitaire';
+
+  @override
+  String get bulkLotSize => 'Taille du lot';
+
+  @override
+  String get bulkMoq => 'MOQ';
+
+  @override
+  String get bulkLeadTime => 'Délai';
+
+  @override
+  String get bulkOrigin => 'Origine';
+
+  @override
+  String get bulkShipping => 'Expédition';
+
+  @override
+  String get bulkQuality => 'Qualité';
+
+  @override
+  String get bulkRequestQuote => 'Demander un devis';
+
+  @override
+  String get bulkThisWeek => 'Cette semaine';
+
+  @override
+  String get bulkWithin2Wks => 'Dans 2 sem.';
+
+  @override
+  String get bulkThisMonth => 'Ce mois-ci';
+
+  @override
+  String get bulkDeliveryHint => 'Adresse de livraison, notes d\'emballage…';
+
+  @override
+  String get bulkSendRequest => 'Envoyer la demande';
+
+  @override
+  String get exportQtyAvailable => 'Quantité disponible';
+
+  @override
+  String get exportPricePerKg => 'Prix par kg';
+
+  @override
+  String get exportHarvestDate => 'Date de récolte';
+
+  @override
+  String get exportCorridor => 'Corridor';
+
+  @override
+  String get exportEnquire => 'S\'enquérir';
+
+  @override
+  String get supplierConnect => 'Connecter';
+
+  @override
+  String get traderEditListing => 'Modifier l\'annonce';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return 'Statut de $produce mis à jour';
+  }
+
+  @override
+  String get traderDeleteListing => 'Supprimer l\'annonce';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return '$produce supprimé';
+  }
+
+  @override
+  String get traderPostListing => 'Publier';
+
+  @override
+  String get traderFilterAll => 'Tout';
+
+  @override
+  String get traderFieldsRequired =>
+      'Le produit, la quantité et le prix sont requis.';
+
+  @override
+  String get traderFarmRequired =>
+      'Le nom de la ferme et la région sont requis.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return '$produce mis à jour';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return '$produce publié';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'Date de récolte';
+
+  @override
+  String get traderCorridorOrigin => 'Corridor d\'origine';
+
+  @override
+  String get traderCorridorDest => 'Corridor de destination';
+
+  @override
+  String get traderMarketCategory => 'Catégorie marketplace';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'Optionnel — choisissez une catégorie pour apparaître dans le marché.';
+
+  @override
+  String get traderClearCategory => 'Effacer la catégorie';
+
+  @override
+  String get traderEditListingTitle => 'Modifier l\'annonce';
+
+  @override
+  String get traderNewListingTitle => 'Nouvelle annonce d\'exportation';
+
+  @override
+  String get traderChangePhoto => 'Changer la photo';
+
+  @override
+  String get traderUploadPhoto => 'Télécharger une photo';
+
+  @override
+  String get traderPhotoHint => 'Photo du lot prêt à l\'expédition';
+
+  @override
+  String get traderProducePlaceholder => 'ex. Tomates';
+
+  @override
+  String get traderFarmPlaceholder => 'ex. Ferme Hauwa & Fils';
+
+  @override
+  String get traderRegionPlaceholder => 'ex. Kano';
+
+  @override
+  String get traderFromLabel => 'De';
+
+  @override
+  String get traderToLabel => 'À';
+
+  @override
+  String get traderCategoryLabel => 'Catégorie marketplace (optionnel)';
+
+  @override
+  String get traderNoCategories => 'Aucune catégorie';
+
+  @override
+  String get traderNoneSelected => 'Aucun';
+
+  @override
+  String get traderSaveChanges => 'Enregistrer les modifications';
+
+  @override
+  String get traderPostListingBtn => 'Publier l\'annonce';
+
+  @override
+  String get traderDashboardSubtitle => 'Tableau de bord commerçant';
+
+  @override
+  String get searchVendors => 'Vendeurs';
+
+  @override
+  String get searchDishes => 'Plats';
+
+  @override
+  String get productAddNote => 'Ajouter une note';
+
+  @override
+  String get productNotePlaceholder => 'Ex. moins épicé, sans oignons…';
+
+  @override
+  String get shoppingViewBasket => 'Voir le panier';
+
+  @override
+  String get escrowAddDropOff => 'Ajoutez une adresse de livraison.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'Où le lot doit-il arriver ?';
+
+  @override
+  String get escrowBulkOrdersTitle => 'Commandes en gros';
+
+  @override
+  String get escrowDisputeTitle => 'Ouvrir un litige';
+
+  @override
+  String get escrowPhotoUploadSoon =>
+      'Téléchargement de photo bientôt disponible';
+
+  @override
+  String get livestockSameDay => 'Le jour même';
+
+  @override
+  String get livestockVacuumPacked => 'Emballé sous vide';
+
+  @override
+  String get driverOpenLoads => 'Charges ouvertes';
+
+  @override
+  String get driverToday => 'Aujourd\'hui';
+
+  @override
+  String get driverBid => 'Enchérir';
+
+  @override
+  String get driverAddPriceEta => 'Ajoutez un prix et une heure d\'arrivée.';
+
+  @override
+  String get driverBidTitle => 'Placer votre offre';
+
+  @override
+  String get driverPriceLabel => 'Prix (₦)';
+
+  @override
+  String get driverEtaLabel => 'Heure d\'arrivée à destination (heures)';
+
+  @override
+  String get driverNotesLabel => 'Notes (optionnel)';
+
+  @override
+  String get driverNotesPlaceholder => 'Je fais cette route chaque semaine.';
+
+  @override
+  String driverOtherBids(int count) {
+    return '$count autres offres';
+  }
+
+  @override
+  String get driverSubmitBid => 'Soumettre l\'offre';
+
+  @override
+  String get driverBrowseLoads => 'Parcourir les charges';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'En route vers $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'Appeler';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'Appel de $name…';
+  }
+
+  @override
+  String get riderSupportNotified => 'Le support a été notifié';
+
+  @override
+  String get catStandardLabel => 'Standard';
+
+  @override
+  String get catStandardSub => 'Bon au quotidien';
+
+  @override
+  String get catPremiumLabel => 'Premium';
+
+  @override
+  String get catPremiumSub => 'Plus grand, plus mûr';
+
+  @override
+  String get catJollofBundleTitle => 'Forfait Jollof';
+
+  @override
+  String get catJollofBundleSub => 'Tout ce qu\'il vous faut · économisez 15%';
+
+  @override
+  String get catBundleAdded => 'Forfait ajouté au panier';
+
+  @override
+  String get catFarmerTitle => 'Rencontrer l\'agriculteur';
+
+  @override
+  String get catFarmerSub => 'Derrière vos tomates';
+
+  @override
+  String get catFarmerSoon => 'Mise en avant agriculteur bientôt';
+
+  @override
+  String get catReorderLabel => 'Réorganiser';
+
+  @override
+  String get catLastBasketReordered => 'Dernier panier recommandé';
+
+  @override
+  String get catBodyChooseCut => 'Choisissez votre coupe';
+
+  @override
+  String get catBodyPopularNearYou => 'Populaire près de vous';
+
+  @override
+  String get catBodyTrendingToday => 'Plats tendance aujourd\'hui';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'Restaurants en vedette';
+
+  @override
+  String get catBodyPopularDishes => 'Plats populaires';
+
+  @override
+  String get catBodyTopPicks => 'Meilleurs choix';
+
+  @override
+  String get catBodyTopBulkLots => 'Lots en gros premium';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'Fournisseurs en vedette';
+
+  @override
+  String loginError(String error) {
+    return 'Erreur de connexion : $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'Sélection de méthode, bientôt disponible';
+
+  @override
+  String get trackingRetry => 'Réessayer';
+
+  @override
+  String get vendorSettingsTitle => 'Paramètres de votre boutique';
 }

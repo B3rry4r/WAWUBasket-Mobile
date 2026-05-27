@@ -197,9 +197,9 @@ class _Hero extends StatelessWidget {
           const SizedBox(height: WBSpacing.lg),
           Row(
             children: [
-              _Stat(label: 'Open loads', value: '$open'),
+              _Stat(label: context.l10n.driverOpenLoads, value: '$open'),
               const SizedBox(width: 10),
-              _Stat(label: 'Today', value: '$pendingToday'),
+              _Stat(label: context.l10n.driverToday, value: '$pendingToday'),
               const SizedBox(width: 10),
               _Stat(label: context.l10n.vendorAnalyticsRating, value: driverRating != null && (double.tryParse(driverRating!) ?? 0) > 0 ? '★ $driverRating' : 'New'),
             ],
@@ -300,7 +300,7 @@ class _LoadCard extends StatelessWidget {
                 _Tag(label: _ago(load.postedAt)),
                 const Spacer(),
                 WBButton(
-                  label: 'Bid',
+                  label: context.l10n.driverBid,
                   size: WBButtonSize.sm,
                   trailingIcon: WBIconName.arrowRight,
                   onPressed: onTap,

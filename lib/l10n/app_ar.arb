@@ -664,5 +664,330 @@
   "roleStatusApproved": "معتمد",
   "roleStatusPending": "قيد المراجعة",
   "roleStatusGetVerified": "احصل على التحقق",
-  "roleStatusActive": "نشط"
+  "roleStatusActive": "نشط",
+  "deleteAccountLeavingTitle": "هل تغادر؟",
+  "deleteAccountLeavingBody": "نحن حزينون لرؤيتك تغادر. قبل أن تغادر:",
+  "deleteAccountConfirmPermanent": "حذف حسابك نهائياً؟",
+  "deleteAccountCannotUndo": "لا يمكن التراجع عن هذا.",
+  "profilePhotoError": "تعذر تحديث الصورة. حاول مرة أخرى.",
+  "profilePreferences": "التفضيلات",
+  "profileVersionSub": "v2.1.0",
+  "profileLegal": "قانوني",
+  "profileStatsOrders": "الطلبات",
+  "profileStatsBulk": "الجملة",
+  "profileStatsFavorites": "المفضلة",
+  "profileLanguageSub": "الإنجليزية · الفرنسية · الهوسا · اليوروبا · الإيغبو",
+  "profileGuestTitle": "تتصفح كضيف",
+  "profileGuestBody": "سجّل الدخول لإدارة ملفك الشخصي وطلباتك ومحفظتك ومفضلتك.",
+  "profileCreateAccount": "إنشاء حساب",
+  "operatorAccountTitle": "الحساب",
+  "operatorOperationsTitle": "العمليات",
+  "operatorVersionSub": "v2.1.0",
+  "forgotSmsLabel": "رسالة نصية",
+  "forgotSmsSub": "إلى هاتفك",
+  "forgotEmailLabel": "البريد الإلكتروني",
+  "forgotEmailSub": "إلى صندوق بريدك",
+  "welcomeBiometric": "المتابعة مع {bio}",
+  "@welcomeBiometric": {
+    "placeholders": {
+      "bio": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorOrderAccepted": "تم قبول الطلب",
+  "vendorOrderDeclined": "تم رفض الطلب",
+  "vendorLiveOrdersTitle": "الطلبات المباشرة",
+  "vendorDashboardSubtitle": "لوحة تحكم البائع",
+  "vendorCallingCustomer": "جارٍ الاتصال بالعميل…",
+  "vendorTicketSent": "تم إرسال التذكرة للطابعة",
+  "vendorIssueSent": "تم الإبلاغ عن المشكلة للدعم",
+  "vendorSettingsSaved": "تم حفظ الإعدادات",
+  "vendorSettingsStoreHours": "ساعات المتجر",
+  "vendorNotifPushEmail": "الإشعارات + البريد",
+  "vendorNotifPushOnly": "الإشعارات فقط",
+  "vendorMenuAdd": "إضافة",
+  "vendorMenuSearchPlaceholder": "ابحث عن طبق…",
+  "vendorMenuEditDish": "تعديل الطبق",
+  "vendorMenuDuplicate": "تكرار",
+  "vendorMenuDuplicated": "تم تكرار {name}",
+  "@vendorMenuDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDeleteDish": "حذف الطبق",
+  "vendorMenuDishRemoved": "تمت إزالة {name}",
+  "@vendorMenuDishRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishRequired": "اسم الطبق والسعر مطلوبان.",
+  "vendorMenuDishUpdated": "تم تحديث {name}",
+  "@vendorMenuDishUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishAdded": "تمت إضافة {name} للقائمة",
+  "@vendorMenuDishAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishNameLabel": "اسم الطبق",
+  "vendorMenuDishNamePlaceholder": "مثال: أرز جولوف",
+  "vendorMenuDescLabel": "الوصف",
+  "vendorMenuDescPlaceholder": "لذيذ، حار، طازج…",
+  "vendorMenuPriceLabel": "السعر (₦)",
+  "vendorMenuCategoryLabel": "الفئة",
+  "vendorMenuAddGroup": "إضافة مجموعة",
+  "vendorMenuGroupNameLabel": "اسم المجموعة",
+  "vendorMenuOptionLabelPlaceholder": "تسمية الخيار",
+  "vendorMenuOptionPricePlaceholder": "+₦0",
+  "vendorReviewReplyPosted": "تم نشر الرد على {reviewer}",
+  "@vendorReviewReplyPosted": {
+    "placeholders": {
+      "reviewer": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorReviewRepliedLabel": "تم الرد",
+  "vendorReviewYourReply": "ردّك",
+  "vendorReviewReplyPlaceholder": "شكراً على التعليق، نسمعك...",
+  "vendorReviewPostReply": "نشر الرد",
+  "vendorAnalyticsCsvStarted": "بدأ تصدير CSV",
+  "vendorAnalyticsOutOfStock": "نفد المخزون",
+  "vendorAnalyticsWrongAddress": "عنوان خاطئ",
+  "vendorAnalyticsCustomerChange": "تغيير من العميل",
+  "vendorAnalyticsOther": "أخرى",
+  "vendorInventoryItemName": "اسم الصنف",
+  "vendorInventoryQuantity": "الكمية",
+  "vendorInventoryUnit": "الوحدة (كغ / أكياس…)",
+  "vendorInventoryThreshold": "حد المخزون المنخفض",
+  "vendorInventoryAddItem": "إضافة صنف",
+  "vendorInventoryNewBatch": "دفعة جديدة",
+  "vendorInventoryUpdateStock": "تحديث المخزون",
+  "vendorInventoryItemUpdated": "تم تحديث {name}",
+  "@vendorInventoryItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorInventoryBatchLogged": "تم تسجيل دفعة جديدة لـ {name}",
+  "@vendorInventoryBatchLogged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorAlertsRestockSub": "أعد التخزين للاستمرار في قبول الطلبات",
+  "vendorPayoutsEarnings": "أرباحك",
+  "agentTxnTraderRequired": "اختر تاجراً لتسجيل هذا البيع.",
+  "agentTxnFieldsRequired": "المنتج والكمية وسعر الوحدة مطلوبة.",
+  "agentTxnSavedOffline": "تم حفظ المعاملة دون اتصال",
+  "agentTxnTraderLabel": "التاجر",
+  "agentTxnProductLabel": "المنتج",
+  "agentTxnQuantityLabel": "الكمية (كغ)",
+  "agentTxnUnitPriceLabel": "سعر الوحدة (₦)",
+  "agentTxnSave": "حفظ المعاملة",
+  "agentPayoutTraderRequired": "اختر تاجراً لتسجيل هذا الدفع.",
+  "agentPayoutAmountRequired": "يجب أن يكون المبلغ أكبر من ₦0.",
+  "agentPayoutRecorded": "تم تسجيل الدفع · الاسترداد في قائمة الانتظار",
+  "agentPayoutNotePlaceholder": "دفع مبيعات الطماطم",
+  "agentSyncTitle": "مزامنة مع WAWU",
+  "agentSyncPendingTraders": "التجار المعلقون",
+  "agentSyncPendingTxns": "المعاملات المعلقة",
+  "agentSyncPendingPayouts": "المدفوعات المعلقة",
+  "agentSyncLastSync": "آخر مزامنة",
+  "agentSyncOfflineCopy": "نسختك دون اتصال",
+  "agentSyncServer": "خادم WAWU",
+  "agentSyncKeepThis": "الاحتفاظ بهذه النسخة",
+  "agentRegNamePhoneRequired": "الاسم والهاتف مطلوبان.",
+  "agentRegSavedOffline": "تم حفظ التاجر دون اتصال · سيتم المزامنة لاحقاً",
+  "agentRegNewTraderTitle": "تاجر جديد",
+  "agentRegFullNameLabel": "الاسم الكامل",
+  "agentRegFullNamePlaceholder": "الاسم الكامل كما في بطاقة الهوية",
+  "agentRegPhoneLabel": "رقم الهاتف",
+  "agentRegPhonePlaceholder": "812 345 6789",
+  "agentRegLocationLabel": "الموقع",
+  "agentRegLocationPlaceholder": "اسم السوق أو القرية",
+  "agentRegPhotoLabel": "صورة التاجر",
+  "agentRegIdLabel": "وثيقة الهوية",
+  "agentTradersPageTitle": "تجارك",
+  "agentTradersSearchPlaceholder": "ابحث بالاسم أو الهاتف…",
+  "tradeSuppliersEmpty": "لا يوجد موردون مدرجون حتى الآن.",
+  "tradeBulkEmpty": "لا توجد طرود بالجملة مدرجة حتى الآن.",
+  "bulkUnitPrice": "سعر الوحدة",
+  "bulkLotSize": "حجم الطرد",
+  "bulkMoq": "الحد الأدنى للطلب",
+  "bulkLeadTime": "مدة التسليم",
+  "bulkOrigin": "المصدر",
+  "bulkShipping": "الشحن",
+  "bulkQuality": "الجودة",
+  "bulkRequestQuote": "طلب عرض سعر",
+  "bulkThisWeek": "هذا الأسبوع",
+  "bulkWithin2Wks": "خلال أسبوعين",
+  "bulkThisMonth": "هذا الشهر",
+  "bulkDeliveryHint": "عنوان التسليم، ملاحظات التعبئة…",
+  "bulkSendRequest": "إرسال الطلب",
+  "exportQtyAvailable": "الكمية المتاحة",
+  "exportPricePerKg": "السعر لكل كيلوغرام",
+  "exportHarvestDate": "تاريخ الحصاد",
+  "exportCorridor": "الممر",
+  "exportEnquire": "الاستفسار",
+  "supplierConnect": "تواصل",
+  "traderEditListing": "تعديل القائمة",
+  "traderStatusUpdated": "تم تحديث حالة {produce}",
+  "@traderStatusUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderDeleteListing": "حذف القائمة",
+  "traderListingRemoved": "تمت إزالة {produce}",
+  "@traderListingRemoved": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderPostListing": "نشر",
+  "traderFilterAll": "الكل",
+  "traderFieldsRequired": "المنتج والكمية والسعر مطلوبة.",
+  "traderFarmRequired": "اسم المزرعة والمنطقة مطلوبان.",
+  "traderListingUpdated": "تم تحديث {produce}",
+  "@traderListingUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderListingPosted": "تم إدراج {produce}",
+  "@traderListingPosted": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderHarvestDateLabel": "تاريخ الحصاد",
+  "traderCorridorOrigin": "ممر المصدر",
+  "traderCorridorDest": "ممر الوجهة",
+  "traderMarketCategory": "فئة السوق",
+  "traderMarketCategoryNote": "اختياري — اختر فئة لتظهر في سوق العملاء.",
+  "traderClearCategory": "مسح الفئة",
+  "traderEditListingTitle": "تعديل القائمة",
+  "traderNewListingTitle": "إدراج تصدير جديد",
+  "traderChangePhoto": "تغيير الصورة",
+  "traderUploadPhoto": "رفع صورة",
+  "traderPhotoHint": "صورة الطرد جاهزاً للشحن",
+  "traderProducePlaceholder": "مثال: طماطم",
+  "traderFarmPlaceholder": "مثال: مزرعة هوا وأبنائها",
+  "traderRegionPlaceholder": "مثال: كانو",
+  "traderFromLabel": "من",
+  "traderToLabel": "إلى",
+  "traderCategoryLabel": "فئة السوق (اختياري)",
+  "traderNoCategories": "لا توجد فئات",
+  "traderNoneSelected": "لا شيء",
+  "traderSaveChanges": "حفظ التغييرات",
+  "traderPostListingBtn": "نشر القائمة",
+  "traderDashboardSubtitle": "لوحة تحكم التاجر",
+  "searchVendors": "البائعون",
+  "searchDishes": "الأطباق",
+  "productAddNote": "إضافة ملاحظة",
+  "productNotePlaceholder": "مثال: أقل حراً، بدون بصل…",
+  "shoppingViewBasket": "عرض السلة",
+  "escrowAddDropOff": "أضف عنوان التسليم.",
+  "escrowDropOffPlaceholder": "أين يجب أن يصل الطرد؟",
+  "escrowBulkOrdersTitle": "الطلبات بالجملة",
+  "escrowDisputeTitle": "فتح نزاع",
+  "escrowPhotoUploadSoon": "رفع الصور قادم قريباً",
+  "livestockSameDay": "نفس اليوم",
+  "livestockVacuumPacked": "معبأ في الفراغ",
+  "driverOpenLoads": "الأحمال المفتوحة",
+  "driverToday": "اليوم",
+  "driverBid": "تقديم عرض",
+  "driverAddPriceEta": "أضف سعراً ووقت وصول.",
+  "driverBidTitle": "ضع عرضك",
+  "driverPriceLabel": "السعر (₦)",
+  "driverEtaLabel": "وقت الوصول إلى الوجهة (ساعات)",
+  "driverNotesLabel": "ملاحظات (اختياري)",
+  "driverNotesPlaceholder": "أسلك هذا الطريق كل أسبوع.",
+  "driverOtherBids": "{count} عروض أخرى",
+  "@driverOtherBids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driverSubmitBid": "تقديم العرض",
+  "driverBrowseLoads": "تصفح الأحمال",
+  "driverHeadingTo": "في الطريق إلى {destination}",
+  "@driverHeadingTo": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "driverCallLabel": "اتصال",
+  "driverCallingTrader": "جارٍ الاتصال بـ {name}…",
+  "@driverCallingTrader": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "riderSupportNotified": "تم إخطار الدعم",
+  "catStandardLabel": "عادي",
+  "catStandardSub": "جيد يومياً",
+  "catPremiumLabel": "مميز",
+  "catPremiumSub": "أكبر، أنضج",
+  "catJollofBundleTitle": "حزمة الجولوف",
+  "catJollofBundleSub": "كل ما تحتاجه · وفّر 15%",
+  "catBundleAdded": "تمت إضافة الحزمة للسلة",
+  "catFarmerTitle": "التعرف على المزارع",
+  "catFarmerSub": "خلف طماطمك",
+  "catFarmerSoon": "تسليط الضوء على المزارع قادم قريباً",
+  "catReorderLabel": "إعادة الطلب",
+  "catLastBasketReordered": "تمت إعادة طلب آخر سلة",
+  "catBodyChooseCut": "اختر قطعتك",
+  "catBodyPopularNearYou": "شائع بالقرب منك",
+  "catBodyTrendingToday": "أطباق رائجة اليوم",
+  "catBodyFeaturedRestaurants": "مطاعم مميزة",
+  "catBodyPopularDishes": "أطباق شائعة",
+  "catBodyTopPicks": "أفضل الاختيارات",
+  "catBodyTopBulkLots": "أفضل الطرود بالجملة",
+  "catBodyFeaturedSuppliers": "موردون مميزون",
+  "loginError": "خطأ تسجيل الدخول: {error}",
+  "@loginError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpMethodSoon": "اختيار الطريقة قادم قريباً",
+  "trackingRetry": "حاول مجدداً",
+  "vendorSettingsTitle": "إعدادات متجرك"
 }

@@ -271,7 +271,7 @@ class _BodyState extends State<_Body> {
                           variant: WBButtonVariant.secondary,
                           trailingIcon: WBIconName.phone,
                           onPressed: () =>
-                              wbShowSnack(context, 'Calling customer…'),
+                              wbShowSnack(context, context.l10n.vendorCallingCustomer),
                         ),
                       ],
                     ),
@@ -398,7 +398,7 @@ class _BodyState extends State<_Body> {
                       label: 'Print ticket',
                       variant: WBButtonVariant.secondary,
                       onPressed: () =>
-                          wbShowSnack(context, 'Ticket sent to printer'),
+                          wbShowSnack(context, context.l10n.vendorTicketSent),
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -407,7 +407,7 @@ class _BodyState extends State<_Body> {
                       label: 'Report issue',
                       variant: WBButtonVariant.secondary,
                       onPressed: () =>
-                          wbShowSnack(context, 'Issue reported to support'),
+                          wbShowSnack(context, context.l10n.vendorIssueSent),
                     ),
                   ),
                 ],

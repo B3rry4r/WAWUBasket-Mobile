@@ -285,7 +285,7 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
                         Expanded(
                           child: _FreshTile(
                             label: 'Fresh',
-                            sub: 'Same day',
+                            sub: context.l10n.livestockSameDay,
                             active: _fresh,
                             onTap: () => setState(() => _fresh = true),
                           ),
@@ -294,7 +294,7 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
                         Expanded(
                           child: _FreshTile(
                             label: 'Frozen',
-                            sub: 'Vacuum packed',
+                            sub: context.l10n.livestockVacuumPacked,
                             active: !_fresh,
                             onTap: () => setState(() => _fresh = false),
                           ),

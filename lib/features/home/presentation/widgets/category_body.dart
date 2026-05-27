@@ -13,6 +13,7 @@ import '../../../trade/presentation/widgets/bulk_lot_card.dart';
 import '../../../trade/presentation/widgets/supplier_card.dart';
 import '../../domain/models/vendor.dart';
 import 'ds_vendor_card.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 const _hPad = 20.0;
 
@@ -136,7 +137,7 @@ class _LivestockBodyState extends State<_LivestockBody> {
         )),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
-          title: 'Choose your cut',
+          title: context.l10n.catBodyChooseCut,
           onSeeAll: () =>
               context.push('${AppRoutes.categoryDetail}/livestock'),
         )),
@@ -223,7 +224,7 @@ class _AllBodyState extends State<_AllBody> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _padH(_SectionHeader(
-          title: 'Popular near you',
+          title: context.l10n.catBodyPopularNearYou,
           onSeeAll: () =>
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
@@ -234,7 +235,7 @@ class _AllBodyState extends State<_AllBody> {
           _VendorCarousel(vendors: _vendors!),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
-          title: 'Trending dishes today',
+          title: context.l10n.catBodyTrendingToday,
           onSeeAll: () =>
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
@@ -299,7 +300,7 @@ class _RestaurantBodyState extends State<_RestaurantBody> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _padH(_SectionHeader(
-          title: 'Featured restaurants',
+          title: context.l10n.catBodyFeaturedRestaurants,
           onSeeAll: () =>
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
@@ -312,7 +313,7 @@ class _RestaurantBodyState extends State<_RestaurantBody> {
           _VendorCarousel(vendors: _vendors!),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
-          title: 'Popular dishes',
+          title: context.l10n.catBodyPopularDishes,
           onSeeAll: () =>
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
@@ -396,7 +397,7 @@ class _MarketplaceBodyState extends State<_MarketplaceBody> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _padH(_SectionHeader(
-          title: 'Top picks',
+          title: context.l10n.catBodyTopPicks,
           onSeeAll: () =>
               context.push('${AppRoutes.categoryDetail}/${widget.categoryId}'),
         )),
@@ -502,7 +503,7 @@ class _TradeBodyState extends State<_TradeBody> {
         )),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
-          title: 'Top bulk lots',
+          title: context.l10n.catBodyTopBulkLots,
           onSeeAll: () => context.push(AppRoutes.trade),
         )),
         const SizedBox(height: 14),
@@ -535,7 +536,7 @@ class _TradeBodyState extends State<_TradeBody> {
         ),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
-          title: 'Featured suppliers',
+          title: context.l10n.catBodyFeaturedSuppliers,
           onSeeAll: () => context.push(AppRoutes.trade),
         )),
         const SizedBox(height: 14),

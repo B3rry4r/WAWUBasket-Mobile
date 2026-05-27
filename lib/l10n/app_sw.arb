@@ -664,5 +664,330 @@
   "roleStatusApproved": "Imeidhinishwa",
   "roleStatusPending": "Inapitiwa",
   "roleStatusGetVerified": "Thibitisha",
-  "roleStatusActive": "Hai"
+  "roleStatusActive": "Hai",
+  "deleteAccountLeavingTitle": "Unatuacha?",
+  "deleteAccountLeavingBody": "Tunasikitika kukuona ukienda. Kabla hujaenda:",
+  "deleteAccountConfirmPermanent": "Futa akaunti yako kabisa?",
+  "deleteAccountCannotUndo": "Hii haiwezi kutenduliwa.",
+  "profilePhotoError": "Haiwezi kusasisha picha. Jaribu tena.",
+  "profilePreferences": "Mapendeleo",
+  "profileVersionSub": "v2.1.0",
+  "profileLegal": "Kisheria",
+  "profileStatsOrders": "Maagizo",
+  "profileStatsBulk": "Jumla",
+  "profileStatsFavorites": "Vipendwa",
+  "profileLanguageSub": "Kiingereza · Kifaransa · Hausa · Yoruba · Igbo",
+  "profileGuestTitle": "Unavinjari kama mgeni",
+  "profileGuestBody": "Ingia ili kudhibiti wasifu wako, maagizo, mkoba na vipendwa.",
+  "profileCreateAccount": "Fungua akaunti",
+  "operatorAccountTitle": "Akaunti",
+  "operatorOperationsTitle": "Shughuli",
+  "operatorVersionSub": "v2.1.0",
+  "forgotSmsLabel": "SMS",
+  "forgotSmsSub": "Kwa simu yako",
+  "forgotEmailLabel": "Barua pepe",
+  "forgotEmailSub": "Kwa sanduku lako",
+  "welcomeBiometric": "Endelea na {bio}",
+  "@welcomeBiometric": {
+    "placeholders": {
+      "bio": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorOrderAccepted": "Agizo limekubaliwa",
+  "vendorOrderDeclined": "Agizo linakataliwa",
+  "vendorLiveOrdersTitle": "Maagizo hai",
+  "vendorDashboardSubtitle": "Dashibodi ya muuzaji",
+  "vendorCallingCustomer": "Inapigia mteja simu…",
+  "vendorTicketSent": "Tikiti imetumwa kwa printa",
+  "vendorIssueSent": "Tatizo limeripotiwa kwa msaada",
+  "vendorSettingsSaved": "Mipangilio imehifadhiwa",
+  "vendorSettingsStoreHours": "Masaa ya duka",
+  "vendorNotifPushEmail": "Push + barua pepe",
+  "vendorNotifPushOnly": "Push tu",
+  "vendorMenuAdd": "Ongeza",
+  "vendorMenuSearchPlaceholder": "Tafuta sahani…",
+  "vendorMenuEditDish": "Hariri sahani",
+  "vendorMenuDuplicate": "Nakili",
+  "vendorMenuDuplicated": "{name} imenakiliwa",
+  "@vendorMenuDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDeleteDish": "Futa sahani",
+  "vendorMenuDishRemoved": "{name} imeondolewa",
+  "@vendorMenuDishRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishRequired": "Jina la sahani na bei inahitajika.",
+  "vendorMenuDishUpdated": "{name} imesasishwa",
+  "@vendorMenuDishUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishAdded": "{name} imeongezwa kwenye menyu",
+  "@vendorMenuDishAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishNameLabel": "Jina la sahani",
+  "vendorMenuDishNamePlaceholder": "mf. Mchele wa jollof",
+  "vendorMenuDescLabel": "Maelezo",
+  "vendorMenuDescPlaceholder": "Kitamu, chenye viungo, safi…",
+  "vendorMenuPriceLabel": "Bei (₦)",
+  "vendorMenuCategoryLabel": "Kategoria",
+  "vendorMenuAddGroup": "Ongeza kikundi",
+  "vendorMenuGroupNameLabel": "Jina la kikundi",
+  "vendorMenuOptionLabelPlaceholder": "Lebo la chaguo",
+  "vendorMenuOptionPricePlaceholder": "+₦0",
+  "vendorReviewReplyPosted": "Jibu limetumwa kwa {reviewer}",
+  "@vendorReviewReplyPosted": {
+    "placeholders": {
+      "reviewer": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorReviewRepliedLabel": "Amejibu",
+  "vendorReviewYourReply": "Jibu lako",
+  "vendorReviewReplyPlaceholder": "Asante kwa maoni, tunakusikia...",
+  "vendorReviewPostReply": "Chapisha jibu",
+  "vendorAnalyticsCsvStarted": "Usafirishaji wa CSV umeanza",
+  "vendorAnalyticsOutOfStock": "Nje ya stoki",
+  "vendorAnalyticsWrongAddress": "Anwani mbaya",
+  "vendorAnalyticsCustomerChange": "Mabadiliko ya mteja",
+  "vendorAnalyticsOther": "Nyingine",
+  "vendorInventoryItemName": "Jina la bidhaa",
+  "vendorInventoryQuantity": "Kiasi",
+  "vendorInventoryUnit": "Kitengo (kg / mifuko…)",
+  "vendorInventoryThreshold": "Kiwango cha chini cha stoki",
+  "vendorInventoryAddItem": "Ongeza bidhaa",
+  "vendorInventoryNewBatch": "Bichi mpya",
+  "vendorInventoryUpdateStock": "Sasisha stoki",
+  "vendorInventoryItemUpdated": "{name} imesasishwa",
+  "@vendorInventoryItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorInventoryBatchLogged": "Bichi jipya imerekodiwa kwa {name}",
+  "@vendorInventoryBatchLogged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorAlertsRestockSub": "Jaza tena ili kuendelea kupokea maagizo",
+  "vendorPayoutsEarnings": "Mapato yako",
+  "agentTxnTraderRequired": "Chagua mfanyabiashara kurekodi mauzo haya.",
+  "agentTxnFieldsRequired": "Bidhaa, kiasi na bei ya kitengo inahitajika.",
+  "agentTxnSavedOffline": "Muamala umehifadhiwa nje ya mtandao",
+  "agentTxnTraderLabel": "Mfanyabiashara",
+  "agentTxnProductLabel": "Bidhaa",
+  "agentTxnQuantityLabel": "Kiasi (kg)",
+  "agentTxnUnitPriceLabel": "Bei ya kitengo (₦)",
+  "agentTxnSave": "Hifadhi muamala",
+  "agentPayoutTraderRequired": "Chagua mfanyabiashara kurekodi malipo haya.",
+  "agentPayoutAmountRequired": "Kiasi lazima kiwe zaidi ya ₦0.",
+  "agentPayoutRecorded": "Malipo imerekodiwa · urejesho umepangwa",
+  "agentPayoutNotePlaceholder": "Malipo ya mauzo ya nyanya",
+  "agentSyncTitle": "Sawazisha na WAWU",
+  "agentSyncPendingTraders": "Wafanyabiashara wanaongoja",
+  "agentSyncPendingTxns": "Miamala inayosubiri",
+  "agentSyncPendingPayouts": "Malipo yanayosubiri",
+  "agentSyncLastSync": "Usawazishaji wa mwisho",
+  "agentSyncOfflineCopy": "Nakala yako nje ya mtandao",
+  "agentSyncServer": "Seva ya WAWU",
+  "agentSyncKeepThis": "Hifadhi toleo hili",
+  "agentRegNamePhoneRequired": "Jina na simu inahitajika.",
+  "agentRegSavedOffline": "Mfanyabiashara amehifadhiwa nje · atasawazishwa baadaye",
+  "agentRegNewTraderTitle": "Mfanyabiashara mpya",
+  "agentRegFullNameLabel": "Jina kamili",
+  "agentRegFullNamePlaceholder": "Jina kamili kama kwenye kitambulisho",
+  "agentRegPhoneLabel": "Nambari ya simu",
+  "agentRegPhonePlaceholder": "812 345 6789",
+  "agentRegLocationLabel": "Mahali",
+  "agentRegLocationPlaceholder": "Jina la soko au kijiji",
+  "agentRegPhotoLabel": "Picha ya mfanyabiashara",
+  "agentRegIdLabel": "Hati ya utambulisho",
+  "agentTradersPageTitle": "Wafanyabiashara wako",
+  "agentTradersSearchPlaceholder": "Tafuta kwa jina au simu…",
+  "tradeSuppliersEmpty": "Hakuna wasambazaji walioorodheshwa bado.",
+  "tradeBulkEmpty": "Hakuna bidhaa za jumla zilizorodheshwa bado.",
+  "bulkUnitPrice": "Bei ya kitengo",
+  "bulkLotSize": "Ukubwa wa bichi",
+  "bulkMoq": "MOQ",
+  "bulkLeadTime": "Muda wa uwasilishaji",
+  "bulkOrigin": "Asili",
+  "bulkShipping": "Usafirishaji",
+  "bulkQuality": "Ubora",
+  "bulkRequestQuote": "Omba nukuu",
+  "bulkThisWeek": "Wiki hii",
+  "bulkWithin2Wks": "Ndani ya wiki 2",
+  "bulkThisMonth": "Mwezi huu",
+  "bulkDeliveryHint": "Anwani ya uwasilishaji, maelezo ya ufungaji…",
+  "bulkSendRequest": "Tuma ombi",
+  "exportQtyAvailable": "Kiasi kilichopo",
+  "exportPricePerKg": "Bei kwa kg",
+  "exportHarvestDate": "Tarehe ya mavuno",
+  "exportCorridor": "Njia",
+  "exportEnquire": "Uliza",
+  "supplierConnect": "Ungana",
+  "traderEditListing": "Hariri orodha",
+  "traderStatusUpdated": "Hali ya {produce} imesasishwa",
+  "@traderStatusUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderDeleteListing": "Futa orodha",
+  "traderListingRemoved": "{produce} imeondolewa",
+  "@traderListingRemoved": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderPostListing": "Chapisha",
+  "traderFilterAll": "Yote",
+  "traderFieldsRequired": "Mazao, kiasi na bei inahitajika.",
+  "traderFarmRequired": "Jina la shamba na eneo inahitajika.",
+  "traderListingUpdated": "{produce} imesasishwa",
+  "@traderListingUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderListingPosted": "{produce} imeorodheshwa",
+  "@traderListingPosted": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderHarvestDateLabel": "Tarehe ya mavuno",
+  "traderCorridorOrigin": "Njia ya asili",
+  "traderCorridorDest": "Njia ya uwasilishaji",
+  "traderMarketCategory": "Kategoria ya soko",
+  "traderMarketCategoryNote": "Hiari — chagua kategoria ili orodha hii ionekane sokoni.",
+  "traderClearCategory": "Futa kategoria",
+  "traderEditListingTitle": "Hariri orodha",
+  "traderNewListingTitle": "Orodha mpya ya usafirishaji",
+  "traderChangePhoto": "Badilisha picha",
+  "traderUploadPhoto": "Pakia picha",
+  "traderPhotoHint": "Picha ya bichi iliyoandaliwa kwa usafirishaji",
+  "traderProducePlaceholder": "mf. Nyanya",
+  "traderFarmPlaceholder": "mf. Shamba la Hauwa & Wanawe",
+  "traderRegionPlaceholder": "mf. Kano",
+  "traderFromLabel": "Kutoka",
+  "traderToLabel": "Hadi",
+  "traderCategoryLabel": "Kategoria ya soko (hiari)",
+  "traderNoCategories": "Hakuna kategoria",
+  "traderNoneSelected": "Hakuna",
+  "traderSaveChanges": "Hifadhi mabadiliko",
+  "traderPostListingBtn": "Chapisha orodha",
+  "traderDashboardSubtitle": "Dashibodi ya mfanyabiashara",
+  "searchVendors": "Wauzaji",
+  "searchDishes": "Sahani",
+  "productAddNote": "Ongeza kumbuka",
+  "productNotePlaceholder": "Mf. pilipili kidogo, bila vitunguu…",
+  "shoppingViewBasket": "Tazama kikapu",
+  "escrowAddDropOff": "Ongeza anwani ya kukabidhi.",
+  "escrowDropOffPlaceholder": "Bichi iende wapi?",
+  "escrowBulkOrdersTitle": "Maagizo ya jumla",
+  "escrowDisputeTitle": "Fungua malalamiko",
+  "escrowPhotoUploadSoon": "Upakiaji wa picha unakuja hivi karibuni",
+  "livestockSameDay": "Siku moja",
+  "livestockVacuumPacked": "Imefungwa kwa vakiumu",
+  "driverOpenLoads": "Mizigo wazi",
+  "driverToday": "Leo",
+  "driverBid": "Toa zabuni",
+  "driverAddPriceEta": "Ongeza bei na wakati wa kuwasili.",
+  "driverBidTitle": "Weka zabuni yako",
+  "driverPriceLabel": "Bei (₦)",
+  "driverEtaLabel": "Wakati wa kuwasili (masaa)",
+  "driverNotesLabel": "Maelezo (hiari)",
+  "driverNotesPlaceholder": "Ninapitia njia hii kila wiki.",
+  "driverOtherBids": "Zabuni nyingine {count}",
+  "@driverOtherBids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driverSubmitBid": "Wasilisha zabuni",
+  "driverBrowseLoads": "Tazama mizigo",
+  "driverHeadingTo": "Kuelekea {destination}",
+  "@driverHeadingTo": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "driverCallLabel": "Piga simu",
+  "driverCallingTrader": "Inapigia {name} simu…",
+  "@driverCallingTrader": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "riderSupportNotified": "Msaada umearifiwa",
+  "catStandardLabel": "Kawaida",
+  "catStandardSub": "Nzuri kila siku",
+  "catPremiumLabel": "Premium",
+  "catPremiumSub": "Kubwa zaidi, mbivu zaidi",
+  "catJollofBundleTitle": "Kifurushi cha Jollof",
+  "catJollofBundleSub": "Kila unachohitaji · okoa 15%",
+  "catBundleAdded": "Kifurushi kimeongezwa kwenye kikapu",
+  "catFarmerTitle": "Kutana na mkulima",
+  "catFarmerSub": "Nyuma ya nyanya zako",
+  "catFarmerSoon": "Hadithi ya mkulima inakuja hivi karibuni",
+  "catReorderLabel": "Agiza tena",
+  "catLastBasketReordered": "Kikapu cha mwisho kimeagizwa tena",
+  "catBodyChooseCut": "Chagua mkata wako",
+  "catBodyPopularNearYou": "Maarufu karibu nawe",
+  "catBodyTrendingToday": "Sahani maarufu leo",
+  "catBodyFeaturedRestaurants": "Mikahawa iliyoangaziwa",
+  "catBodyPopularDishes": "Sahani maarufu",
+  "catBodyTopPicks": "Machaguo bora",
+  "catBodyTopBulkLots": "Bidhaa za jumla bora",
+  "catBodyFeaturedSuppliers": "Wasambazaji walioangaziwa",
+  "loginError": "Hitilafu ya kuingia: {error}",
+  "@loginError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpMethodSoon": "Chaguo la njia, linakuja hivi karibuni",
+  "trackingRetry": "Jaribu tena",
+  "vendorSettingsTitle": "Mipangilio ya duka lako"
 }

@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await ProfileApi.instance.updateAvatar(result.key);
       await ProfileController.instance.load();
     } catch (_) {
-      if (mounted) wbShowSnack(context, 'Could not update photo. Try again.');
+      if (mounted) wbShowSnack(context, context.l10n.profilePhotoError);
     } finally {
       if (mounted) setState(() => _uploadingAvatar = false);
     }
@@ -115,13 +115,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         const SizedBox(height: WBSpacing.lg),
         Text(
-          "You're browsing as a guest",
+          context.l10n.profileGuestTitle,
           textAlign: TextAlign.center,
           style: WBTypography.hero.copyWith(fontSize: 24),
         ),
         const SizedBox(height: WBSpacing.sm),
         Text(
-          'Sign in to manage your profile, orders, wallet and favorites.',
+          context.l10n.profileGuestBody,
           textAlign: TextAlign.center,
           style: WBTypography.body.copyWith(
             color: WBColors.fgSecondary,
@@ -130,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         const SizedBox(height: WBSpacing.xl),
         WBButton(
-          label: 'Sign in',
+          label: context.l10n.signIn,
           size: WBButtonSize.lg,
           fullWidth: true,
           trailingIcon: WBIconName.arrowRight,
@@ -138,7 +138,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         const SizedBox(height: WBSpacing.sm + 4),
         WBButton(
-          label: 'Create an account',
+          label: context.l10n.profileCreateAccount,
           size: WBButtonSize.lg,
           fullWidth: true,
           variant: WBButtonVariant.secondary,
@@ -307,15 +307,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       _Stat(
                         value: '${stats?.orders ?? 0}',
-                        label: 'Orders',
+                        label: context.l10n.profileStatsOrders,
                       ),
                       _Stat(
                         value: '${stats?.orders ?? 0}',
-                        label: 'Bulk',
+                        label: context.l10n.profileStatsBulk,
                       ),
                       _Stat(
                         value: '${stats?.favorites ?? 0}',
-                        label: 'Favorites',
+                        label: context.l10n.profileStatsFavorites,
                         last: true,
                       ),
                     ],
@@ -383,12 +383,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       AccountMenuSection(
-        title: 'Preferences',
+        title: context.l10n.profilePreferences,
         rows: [
           AccountMenuRow(
             icon: WBIconName.message,
             label: context.l10n.profileLanguage,
-            sub: 'English · Français · Hausa · Yorùbá · Igbo',
+            sub: context.l10n.profileLanguageSub,
             onTap: () => context.push(AppRoutes.language),
           ),
           AccountMenuRow(
@@ -400,7 +400,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           AccountMenuRow(
             icon: WBIconName.more,
             label: context.l10n.profileAbout,
-            sub: 'v2.1.0',
+            sub: context.l10n.profileVersionSub,
             onTap: () => context.push(AppRoutes.about),
           ),
         ],
@@ -452,7 +452,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       AccountMenuSection(
-        title: 'Legal',
+        title: context.l10n.profileLegal,
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,

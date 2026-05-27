@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_menu_controller.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 class VendorMenuScreen extends StatefulWidget {
   const VendorMenuScreen({super.key});
@@ -102,7 +103,7 @@ class _VendorMenuScreenState extends State<VendorMenuScreen> {
                     ),
                   ),
                   WBButton(
-                    label: 'Add',
+                    label: context.l10n.vendorMenuAdd,
                     size: WBButtonSize.sm,
                     trailingIcon: WBIconName.plus,
                     onPressed: () => context.push(AppRoutes.vendorMenuEdit),
@@ -111,7 +112,7 @@ class _VendorMenuScreenState extends State<VendorMenuScreen> {
               ),
               const SizedBox(height: WBSpacing.md),
               WBInput(
-                placeholder: 'Find a dish…',
+                placeholder: context.l10n.vendorMenuSearchPlaceholder,
                 leadingIcon: WBIconName.search,
                 onChanged: (v) => setState(() => _query = v),
               ),
@@ -206,7 +207,7 @@ class _ItemCard extends StatelessWidget {
               const SizedBox(height: WBSpacing.lg),
               _SheetAction(
                 icon: WBIconName.more,
-                label: 'Edit dish',
+                label: sheetCtx.l10n.vendorMenuEditDish,
                 onTap: () {
                   Navigator.of(sheetCtx).pop();
                   _open(context);
@@ -214,7 +215,7 @@ class _ItemCard extends StatelessWidget {
               ),
               _SheetAction(
                 icon: WBIconName.plus,
-                label: 'Duplicate',
+                label: sheetCtx.l10n.vendorMenuDuplicate,
                 onTap: () {
                   VendorMenuController.instance.clone(item.id);
                   Navigator.of(sheetCtx).pop();
@@ -237,7 +238,7 @@ class _ItemCard extends StatelessWidget {
               ),
               _SheetAction(
                 icon: WBIconName.close,
-                label: 'Delete dish',
+                label: sheetCtx.l10n.vendorMenuDeleteDish,
                 danger: true,
                 onTap: () {
                   VendorMenuController.instance.delete(item.id);

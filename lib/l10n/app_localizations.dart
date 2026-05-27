@@ -3945,6 +3945,1284 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Active'**
   String get roleStatusActive;
+
+  /// No description provided for @deleteAccountLeavingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaving us?'**
+  String get deleteAccountLeavingTitle;
+
+  /// No description provided for @deleteAccountLeavingBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re sad to see you go. Before you leave:'**
+  String get deleteAccountLeavingBody;
+
+  /// No description provided for @deleteAccountConfirmPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account permanently?'**
+  String get deleteAccountConfirmPermanent;
+
+  /// No description provided for @deleteAccountCannotUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'This cannot be undone.'**
+  String get deleteAccountCannotUndo;
+
+  /// No description provided for @profilePhotoError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update photo. Try again.'**
+  String get profilePhotoError;
+
+  /// No description provided for @profilePreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get profilePreferences;
+
+  /// No description provided for @profileVersionSub.
+  ///
+  /// In en, this message translates to:
+  /// **'v2.1.0'**
+  String get profileVersionSub;
+
+  /// No description provided for @profileLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get profileLegal;
+
+  /// No description provided for @profileStatsOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get profileStatsOrders;
+
+  /// No description provided for @profileStatsBulk.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulk'**
+  String get profileStatsBulk;
+
+  /// No description provided for @profileStatsFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get profileStatsFavorites;
+
+  /// No description provided for @profileLanguageSub.
+  ///
+  /// In en, this message translates to:
+  /// **'English · Français · Hausa · Yorùbá · Igbo'**
+  String get profileLanguageSub;
+
+  /// No description provided for @profileGuestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re browsing as a guest'**
+  String get profileGuestTitle;
+
+  /// No description provided for @profileGuestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to manage your profile, orders, wallet and favorites.'**
+  String get profileGuestBody;
+
+  /// No description provided for @profileCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account'**
+  String get profileCreateAccount;
+
+  /// No description provided for @operatorAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get operatorAccountTitle;
+
+  /// No description provided for @operatorOperationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Operations'**
+  String get operatorOperationsTitle;
+
+  /// No description provided for @operatorVersionSub.
+  ///
+  /// In en, this message translates to:
+  /// **'v2.1.0'**
+  String get operatorVersionSub;
+
+  /// No description provided for @forgotSmsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SMS'**
+  String get forgotSmsLabel;
+
+  /// No description provided for @forgotSmsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'To your phone'**
+  String get forgotSmsSub;
+
+  /// No description provided for @forgotEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get forgotEmailLabel;
+
+  /// No description provided for @forgotEmailSub.
+  ///
+  /// In en, this message translates to:
+  /// **'To your inbox'**
+  String get forgotEmailSub;
+
+  /// No description provided for @welcomeBiometric.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue with {bio}'**
+  String welcomeBiometric(String bio);
+
+  /// No description provided for @vendorOrderAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Order accepted'**
+  String get vendorOrderAccepted;
+
+  /// No description provided for @vendorOrderDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Order declined'**
+  String get vendorOrderDeclined;
+
+  /// No description provided for @vendorLiveOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live orders'**
+  String get vendorLiveOrdersTitle;
+
+  /// No description provided for @vendorDashboardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vendor dashboard'**
+  String get vendorDashboardSubtitle;
+
+  /// No description provided for @vendorCallingCustomer.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling customer…'**
+  String get vendorCallingCustomer;
+
+  /// No description provided for @vendorTicketSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket sent to printer'**
+  String get vendorTicketSent;
+
+  /// No description provided for @vendorIssueSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue reported to support'**
+  String get vendorIssueSent;
+
+  /// No description provided for @vendorSettingsSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings saved'**
+  String get vendorSettingsSaved;
+
+  /// No description provided for @vendorSettingsStoreHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Store hours'**
+  String get vendorSettingsStoreHours;
+
+  /// No description provided for @vendorNotifPushEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Push + email'**
+  String get vendorNotifPushEmail;
+
+  /// No description provided for @vendorNotifPushOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Push only'**
+  String get vendorNotifPushOnly;
+
+  /// No description provided for @vendorMenuAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get vendorMenuAdd;
+
+  /// No description provided for @vendorMenuSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Find a dish…'**
+  String get vendorMenuSearchPlaceholder;
+
+  /// No description provided for @vendorMenuEditDish.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit dish'**
+  String get vendorMenuEditDish;
+
+  /// No description provided for @vendorMenuDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get vendorMenuDuplicate;
+
+  /// No description provided for @vendorMenuDuplicated.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} duplicated'**
+  String vendorMenuDuplicated(String name);
+
+  /// No description provided for @vendorMenuDeleteDish.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete dish'**
+  String get vendorMenuDeleteDish;
+
+  /// No description provided for @vendorMenuDishRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} removed'**
+  String vendorMenuDishRemoved(String name);
+
+  /// No description provided for @vendorMenuDishRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Dish name and price are required.'**
+  String get vendorMenuDishRequired;
+
+  /// No description provided for @vendorMenuDishUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} updated'**
+  String vendorMenuDishUpdated(String name);
+
+  /// No description provided for @vendorMenuDishAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} added to the menu'**
+  String vendorMenuDishAdded(String name);
+
+  /// No description provided for @vendorMenuDishNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dish name'**
+  String get vendorMenuDishNameLabel;
+
+  /// No description provided for @vendorMenuDishNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Jollof rice'**
+  String get vendorMenuDishNamePlaceholder;
+
+  /// No description provided for @vendorMenuDescLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get vendorMenuDescLabel;
+
+  /// No description provided for @vendorMenuDescPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasty, spicy, fresh…'**
+  String get vendorMenuDescPlaceholder;
+
+  /// No description provided for @vendorMenuPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (₦)'**
+  String get vendorMenuPriceLabel;
+
+  /// No description provided for @vendorMenuCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get vendorMenuCategoryLabel;
+
+  /// No description provided for @vendorMenuAddGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Add group'**
+  String get vendorMenuAddGroup;
+
+  /// No description provided for @vendorMenuGroupNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get vendorMenuGroupNameLabel;
+
+  /// No description provided for @vendorMenuOptionLabelPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Option label'**
+  String get vendorMenuOptionLabelPlaceholder;
+
+  /// No description provided for @vendorMenuOptionPricePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'+₦0'**
+  String get vendorMenuOptionPricePlaceholder;
+
+  /// No description provided for @vendorReviewReplyPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'Reply posted to {reviewer}'**
+  String vendorReviewReplyPosted(String reviewer);
+
+  /// No description provided for @vendorReviewRepliedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Replied'**
+  String get vendorReviewRepliedLabel;
+
+  /// No description provided for @vendorReviewYourReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Your reply'**
+  String get vendorReviewYourReply;
+
+  /// No description provided for @vendorReviewReplyPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for the feedback, we hear you...'**
+  String get vendorReviewReplyPlaceholder;
+
+  /// No description provided for @vendorReviewPostReply.
+  ///
+  /// In en, this message translates to:
+  /// **'Post reply'**
+  String get vendorReviewPostReply;
+
+  /// No description provided for @vendorAnalyticsCsvStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV export started'**
+  String get vendorAnalyticsCsvStarted;
+
+  /// No description provided for @vendorAnalyticsOutOfStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of stock'**
+  String get vendorAnalyticsOutOfStock;
+
+  /// No description provided for @vendorAnalyticsWrongAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong address'**
+  String get vendorAnalyticsWrongAddress;
+
+  /// No description provided for @vendorAnalyticsCustomerChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer change'**
+  String get vendorAnalyticsCustomerChange;
+
+  /// No description provided for @vendorAnalyticsOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get vendorAnalyticsOther;
+
+  /// No description provided for @vendorInventoryItemName.
+  ///
+  /// In en, this message translates to:
+  /// **'Item name'**
+  String get vendorInventoryItemName;
+
+  /// No description provided for @vendorInventoryQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get vendorInventoryQuantity;
+
+  /// No description provided for @vendorInventoryUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit (kg / bags…)'**
+  String get vendorInventoryUnit;
+
+  /// No description provided for @vendorInventoryThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'Low-stock threshold'**
+  String get vendorInventoryThreshold;
+
+  /// No description provided for @vendorInventoryAddItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add item'**
+  String get vendorInventoryAddItem;
+
+  /// No description provided for @vendorInventoryNewBatch.
+  ///
+  /// In en, this message translates to:
+  /// **'New batch'**
+  String get vendorInventoryNewBatch;
+
+  /// No description provided for @vendorInventoryUpdateStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Update stock'**
+  String get vendorInventoryUpdateStock;
+
+  /// No description provided for @vendorInventoryItemUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} updated'**
+  String vendorInventoryItemUpdated(String name);
+
+  /// No description provided for @vendorInventoryBatchLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'New batch logged for {name}'**
+  String vendorInventoryBatchLogged(String name);
+
+  /// No description provided for @vendorAlertsRestockSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Restock to keep accepting orders'**
+  String get vendorAlertsRestockSub;
+
+  /// No description provided for @vendorPayoutsEarnings.
+  ///
+  /// In en, this message translates to:
+  /// **'Your earnings'**
+  String get vendorPayoutsEarnings;
+
+  /// No description provided for @agentTxnTraderRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a trader to log this sale against.'**
+  String get agentTxnTraderRequired;
+
+  /// No description provided for @agentTxnFieldsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Product, quantity and unit price are required.'**
+  String get agentTxnFieldsRequired;
+
+  /// No description provided for @agentTxnSavedOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction saved offline'**
+  String get agentTxnSavedOffline;
+
+  /// No description provided for @agentTxnTraderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trader'**
+  String get agentTxnTraderLabel;
+
+  /// No description provided for @agentTxnProductLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Product'**
+  String get agentTxnProductLabel;
+
+  /// No description provided for @agentTxnQuantityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity (kg)'**
+  String get agentTxnQuantityLabel;
+
+  /// No description provided for @agentTxnUnitPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit price (₦)'**
+  String get agentTxnUnitPriceLabel;
+
+  /// No description provided for @agentTxnSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save transaction'**
+  String get agentTxnSave;
+
+  /// No description provided for @agentPayoutTraderRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a trader to record this payout against.'**
+  String get agentPayoutTraderRequired;
+
+  /// No description provided for @agentPayoutAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than ₦0.'**
+  String get agentPayoutAmountRequired;
+
+  /// No description provided for @agentPayoutRecorded.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout recorded · reimbursement queued'**
+  String get agentPayoutRecorded;
+
+  /// No description provided for @agentPayoutNotePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Payout for tomato sale'**
+  String get agentPayoutNotePlaceholder;
+
+  /// No description provided for @agentSyncTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync with WAWU'**
+  String get agentSyncTitle;
+
+  /// No description provided for @agentSyncPendingTraders.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending traders'**
+  String get agentSyncPendingTraders;
+
+  /// No description provided for @agentSyncPendingTxns.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending transactions'**
+  String get agentSyncPendingTxns;
+
+  /// No description provided for @agentSyncPendingPayouts.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending payouts'**
+  String get agentSyncPendingPayouts;
+
+  /// No description provided for @agentSyncLastSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Last sync'**
+  String get agentSyncLastSync;
+
+  /// No description provided for @agentSyncOfflineCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Your offline copy'**
+  String get agentSyncOfflineCopy;
+
+  /// No description provided for @agentSyncServer.
+  ///
+  /// In en, this message translates to:
+  /// **'WAWU server'**
+  String get agentSyncServer;
+
+  /// No description provided for @agentSyncKeepThis.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this version'**
+  String get agentSyncKeepThis;
+
+  /// No description provided for @agentRegNamePhoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name and phone are required.'**
+  String get agentRegNamePhoneRequired;
+
+  /// No description provided for @agentRegSavedOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Trader saved offline · will sync next'**
+  String get agentRegSavedOffline;
+
+  /// No description provided for @agentRegNewTraderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New trader'**
+  String get agentRegNewTraderTitle;
+
+  /// No description provided for @agentRegFullNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name'**
+  String get agentRegFullNameLabel;
+
+  /// No description provided for @agentRegFullNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Full name as on ID'**
+  String get agentRegFullNamePlaceholder;
+
+  /// No description provided for @agentRegPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get agentRegPhoneLabel;
+
+  /// No description provided for @agentRegPhonePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'812 345 6789'**
+  String get agentRegPhonePlaceholder;
+
+  /// No description provided for @agentRegLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get agentRegLocationLabel;
+
+  /// No description provided for @agentRegLocationPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Market or village name'**
+  String get agentRegLocationPlaceholder;
+
+  /// No description provided for @agentRegPhotoLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Trader photo'**
+  String get agentRegPhotoLabel;
+
+  /// No description provided for @agentRegIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ID document'**
+  String get agentRegIdLabel;
+
+  /// No description provided for @agentTradersPageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your traders'**
+  String get agentTradersPageTitle;
+
+  /// No description provided for @agentTradersSearchPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or phone…'**
+  String get agentTradersSearchPlaceholder;
+
+  /// No description provided for @tradeSuppliersEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No suppliers listed yet.'**
+  String get tradeSuppliersEmpty;
+
+  /// No description provided for @tradeBulkEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No bulk lots listed yet.'**
+  String get tradeBulkEmpty;
+
+  /// No description provided for @bulkUnitPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit price'**
+  String get bulkUnitPrice;
+
+  /// No description provided for @bulkLotSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Lot size'**
+  String get bulkLotSize;
+
+  /// No description provided for @bulkMoq.
+  ///
+  /// In en, this message translates to:
+  /// **'MOQ'**
+  String get bulkMoq;
+
+  /// No description provided for @bulkLeadTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Lead time'**
+  String get bulkLeadTime;
+
+  /// No description provided for @bulkOrigin.
+  ///
+  /// In en, this message translates to:
+  /// **'Origin'**
+  String get bulkOrigin;
+
+  /// No description provided for @bulkShipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping'**
+  String get bulkShipping;
+
+  /// No description provided for @bulkQuality.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get bulkQuality;
+
+  /// No description provided for @bulkRequestQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'Request quote'**
+  String get bulkRequestQuote;
+
+  /// No description provided for @bulkThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get bulkThisWeek;
+
+  /// No description provided for @bulkWithin2Wks.
+  ///
+  /// In en, this message translates to:
+  /// **'Within 2 wks'**
+  String get bulkWithin2Wks;
+
+  /// No description provided for @bulkThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'This month'**
+  String get bulkThisMonth;
+
+  /// No description provided for @bulkDeliveryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery address, packing notes…'**
+  String get bulkDeliveryHint;
+
+  /// No description provided for @bulkSendRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Send request'**
+  String get bulkSendRequest;
+
+  /// No description provided for @exportQtyAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity available'**
+  String get exportQtyAvailable;
+
+  /// No description provided for @exportPricePerKg.
+  ///
+  /// In en, this message translates to:
+  /// **'Price per kg'**
+  String get exportPricePerKg;
+
+  /// No description provided for @exportHarvestDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Harvest date'**
+  String get exportHarvestDate;
+
+  /// No description provided for @exportCorridor.
+  ///
+  /// In en, this message translates to:
+  /// **'Corridor'**
+  String get exportCorridor;
+
+  /// No description provided for @exportEnquire.
+  ///
+  /// In en, this message translates to:
+  /// **'Enquire'**
+  String get exportEnquire;
+
+  /// No description provided for @supplierConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get supplierConnect;
+
+  /// No description provided for @traderEditListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit listing'**
+  String get traderEditListing;
+
+  /// No description provided for @traderStatusUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{produce} status updated'**
+  String traderStatusUpdated(String produce);
+
+  /// No description provided for @traderDeleteListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete listing'**
+  String get traderDeleteListing;
+
+  /// No description provided for @traderListingRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'{produce} removed'**
+  String traderListingRemoved(String produce);
+
+  /// No description provided for @traderPostListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get traderPostListing;
+
+  /// No description provided for @traderFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get traderFilterAll;
+
+  /// No description provided for @traderFieldsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Produce, quantity and price are required.'**
+  String get traderFieldsRequired;
+
+  /// No description provided for @traderFarmRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Farm name and region are required.'**
+  String get traderFarmRequired;
+
+  /// No description provided for @traderListingUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'{produce} updated'**
+  String traderListingUpdated(String produce);
+
+  /// No description provided for @traderListingPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'{produce} listed'**
+  String traderListingPosted(String produce);
+
+  /// No description provided for @traderHarvestDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Harvest date'**
+  String get traderHarvestDateLabel;
+
+  /// No description provided for @traderCorridorOrigin.
+  ///
+  /// In en, this message translates to:
+  /// **'Origin corridor'**
+  String get traderCorridorOrigin;
+
+  /// No description provided for @traderCorridorDest.
+  ///
+  /// In en, this message translates to:
+  /// **'Destination corridor'**
+  String get traderCorridorDest;
+
+  /// No description provided for @traderMarketCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketplace category'**
+  String get traderMarketCategory;
+
+  /// No description provided for @traderMarketCategoryNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional — pick a category so this listing appears in the customer marketplace.'**
+  String get traderMarketCategoryNote;
+
+  /// No description provided for @traderClearCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear category'**
+  String get traderClearCategory;
+
+  /// No description provided for @traderEditListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit listing'**
+  String get traderEditListingTitle;
+
+  /// No description provided for @traderNewListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New export listing'**
+  String get traderNewListingTitle;
+
+  /// No description provided for @traderChangePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change photo'**
+  String get traderChangePhoto;
+
+  /// No description provided for @traderUploadPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload photo'**
+  String get traderUploadPhoto;
+
+  /// No description provided for @traderPhotoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Shot of the lot ready for shipping'**
+  String get traderPhotoHint;
+
+  /// No description provided for @traderProducePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Tomatoes'**
+  String get traderProducePlaceholder;
+
+  /// No description provided for @traderFarmPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Hauwa & Sons Farm'**
+  String get traderFarmPlaceholder;
+
+  /// No description provided for @traderRegionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Kano'**
+  String get traderRegionPlaceholder;
+
+  /// No description provided for @traderFromLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'From'**
+  String get traderFromLabel;
+
+  /// No description provided for @traderToLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'To'**
+  String get traderToLabel;
+
+  /// No description provided for @traderCategoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketplace category (optional)'**
+  String get traderCategoryLabel;
+
+  /// No description provided for @traderNoCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories'**
+  String get traderNoCategories;
+
+  /// No description provided for @traderNoneSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get traderNoneSelected;
+
+  /// No description provided for @traderSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get traderSaveChanges;
+
+  /// No description provided for @traderPostListingBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Post listing'**
+  String get traderPostListingBtn;
+
+  /// No description provided for @traderDashboardSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trader dashboard'**
+  String get traderDashboardSubtitle;
+
+  /// No description provided for @searchVendors.
+  ///
+  /// In en, this message translates to:
+  /// **'Vendors'**
+  String get searchVendors;
+
+  /// No description provided for @searchDishes.
+  ///
+  /// In en, this message translates to:
+  /// **'Dishes'**
+  String get searchDishes;
+
+  /// No description provided for @productAddNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a note'**
+  String get productAddNote;
+
+  /// No description provided for @productNotePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'E.g. less spicy, no onions…'**
+  String get productNotePlaceholder;
+
+  /// No description provided for @shoppingViewBasket.
+  ///
+  /// In en, this message translates to:
+  /// **'View basket'**
+  String get shoppingViewBasket;
+
+  /// No description provided for @escrowAddDropOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a drop-off address.'**
+  String get escrowAddDropOff;
+
+  /// No description provided for @escrowDropOffPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Where should the lot land?'**
+  String get escrowDropOffPlaceholder;
+
+  /// No description provided for @escrowBulkOrdersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulk orders'**
+  String get escrowBulkOrdersTitle;
+
+  /// No description provided for @escrowDisputeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a dispute'**
+  String get escrowDisputeTitle;
+
+  /// No description provided for @escrowPhotoUploadSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo upload coming soon'**
+  String get escrowPhotoUploadSoon;
+
+  /// No description provided for @livestockSameDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Same day'**
+  String get livestockSameDay;
+
+  /// No description provided for @livestockVacuumPacked.
+  ///
+  /// In en, this message translates to:
+  /// **'Vacuum packed'**
+  String get livestockVacuumPacked;
+
+  /// No description provided for @driverOpenLoads.
+  ///
+  /// In en, this message translates to:
+  /// **'Open loads'**
+  String get driverOpenLoads;
+
+  /// No description provided for @driverToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get driverToday;
+
+  /// No description provided for @driverBid.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid'**
+  String get driverBid;
+
+  /// No description provided for @driverAddPriceEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a price and an ETA.'**
+  String get driverAddPriceEta;
+
+  /// No description provided for @driverBidTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Place your bid'**
+  String get driverBidTitle;
+
+  /// No description provided for @driverPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (₦)'**
+  String get driverPriceLabel;
+
+  /// No description provided for @driverEtaLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ETA to destination (hours)'**
+  String get driverEtaLabel;
+
+  /// No description provided for @driverNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get driverNotesLabel;
+
+  /// No description provided for @driverNotesPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'I run this route every week.'**
+  String get driverNotesPlaceholder;
+
+  /// No description provided for @driverOtherBids.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} other bids'**
+  String driverOtherBids(int count);
+
+  /// No description provided for @driverSubmitBid.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit bid'**
+  String get driverSubmitBid;
+
+  /// No description provided for @driverBrowseLoads.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse loads'**
+  String get driverBrowseLoads;
+
+  /// No description provided for @driverHeadingTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading to {destination}'**
+  String driverHeadingTo(String destination);
+
+  /// No description provided for @driverCallLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get driverCallLabel;
+
+  /// No description provided for @driverCallingTrader.
+  ///
+  /// In en, this message translates to:
+  /// **'Calling {name}…'**
+  String driverCallingTrader(String name);
+
+  /// No description provided for @riderSupportNotified.
+  ///
+  /// In en, this message translates to:
+  /// **'Support has been notified'**
+  String get riderSupportNotified;
+
+  /// No description provided for @catStandardLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get catStandardLabel;
+
+  /// No description provided for @catStandardSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyday good'**
+  String get catStandardSub;
+
+  /// No description provided for @catPremiumLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get catPremiumLabel;
+
+  /// No description provided for @catPremiumSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Larger, riper'**
+  String get catPremiumSub;
+
+  /// No description provided for @catJollofBundleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jollof bundle'**
+  String get catJollofBundleTitle;
+
+  /// No description provided for @catJollofBundleSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything you need · save 15%'**
+  String get catJollofBundleSub;
+
+  /// No description provided for @catBundleAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Bundle added to basket'**
+  String get catBundleAdded;
+
+  /// No description provided for @catFarmerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meet the farmer'**
+  String get catFarmerTitle;
+
+  /// No description provided for @catFarmerSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Behind your tomatoes'**
+  String get catFarmerSub;
+
+  /// No description provided for @catFarmerSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Farmer spotlight coming soon'**
+  String get catFarmerSoon;
+
+  /// No description provided for @catReorderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get catReorderLabel;
+
+  /// No description provided for @catLastBasketReordered.
+  ///
+  /// In en, this message translates to:
+  /// **'Last basket reordered'**
+  String get catLastBasketReordered;
+
+  /// No description provided for @catBodyChooseCut.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your cut'**
+  String get catBodyChooseCut;
+
+  /// No description provided for @catBodyPopularNearYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular near you'**
+  String get catBodyPopularNearYou;
+
+  /// No description provided for @catBodyTrendingToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Trending dishes today'**
+  String get catBodyTrendingToday;
+
+  /// No description provided for @catBodyFeaturedRestaurants.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured restaurants'**
+  String get catBodyFeaturedRestaurants;
+
+  /// No description provided for @catBodyPopularDishes.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular dishes'**
+  String get catBodyPopularDishes;
+
+  /// No description provided for @catBodyTopPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'Top picks'**
+  String get catBodyTopPicks;
+
+  /// No description provided for @catBodyTopBulkLots.
+  ///
+  /// In en, this message translates to:
+  /// **'Top bulk lots'**
+  String get catBodyTopBulkLots;
+
+  /// No description provided for @catBodyFeaturedSuppliers.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured suppliers'**
+  String get catBodyFeaturedSuppliers;
+
+  /// No description provided for @loginError.
+  ///
+  /// In en, this message translates to:
+  /// **'Login error: {error}'**
+  String loginError(String error);
+
+  /// No description provided for @topUpMethodSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Method picker, coming soon'**
+  String get topUpMethodSoon;
+
+  /// No description provided for @trackingRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get trackingRetry;
+
+  /// No description provided for @vendorSettingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your store settings'**
+  String get vendorSettingsTitle;
 }
 
 class _AppLocalizationsDelegate

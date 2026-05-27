@@ -664,5 +664,330 @@
   "roleStatusApproved": "Anabatara",
   "roleStatusPending": "Na-atụle",
   "roleStatusGetVerified": "Nọchitere",
-  "roleStatusActive": "Ọrụ ugbu a"
+  "roleStatusActive": "Ọrụ ugbu a",
+  "deleteAccountLeavingTitle": "Ị na-apụ?",
+  "deleteAccountLeavingBody": "Anyị na-adị mwute ịhụ gị na-apụ. Tupu ịpụ:",
+  "deleteAccountConfirmPermanent": "Hichaa akaụntụ gị kpamkpam?",
+  "deleteAccountCannotUndo": "Ihe a enweghị ike ịgbanweghachi ya.",
+  "profilePhotoError": "Enweghị ike ịmelite foto. Nwalịa.",
+  "profilePreferences": "Nhọpụta",
+  "profileVersionSub": "v2.1.0",
+  "profileLegal": "Iwu",
+  "profileStatsOrders": "Ọnụ ahịa",
+  "profileStatsBulk": "Ọtụtụ",
+  "profileStatsFavorites": "Ndị a hụrụ n'anya",
+  "profileLanguageSub": "Bekee · Frenchi · Hausa · Yoruba · Igbo",
+  "profileGuestTitle": "Ị na-achọ dịka onye ọbịa",
+  "profileGuestBody": "Banyere ịhịkwa profaịlụ gị, ọnụ ahịa, wallet na ndị a hụrụ n'anya.",
+  "profileCreateAccount": "Mepụta akaụntụ",
+  "operatorAccountTitle": "Akaụntụ",
+  "operatorOperationsTitle": "Ọrụ",
+  "operatorVersionSub": "v2.1.0",
+  "forgotSmsLabel": "SMS",
+  "forgotSmsSub": "Na ekwentị gị",
+  "forgotEmailLabel": "Ozi-e",
+  "forgotEmailSub": "Na igbe ozi-e gị",
+  "welcomeBiometric": "Gaa n'ihu na {bio}",
+  "@welcomeBiometric": {
+    "placeholders": {
+      "bio": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorOrderAccepted": "Ọnụ ahịa nabatara",
+  "vendorOrderDeclined": "Ọnụ ahịa kọọrọ",
+  "vendorLiveOrdersTitle": "Ọnụ ahịa dị ndụ",
+  "vendorDashboardSubtitle": "Njikọ onye na-ere ahịa",
+  "vendorCallingCustomer": "Na-akpọ onye ahịa…",
+  "vendorTicketSent": "Tiket ezigara na printer",
+  "vendorIssueSent": "Nsogbu ekwuoro nkwado",
+  "vendorSettingsSaved": "Ntọzite echekwara",
+  "vendorSettingsStoreHours": "Oge ụlọ ahịa",
+  "vendorNotifPushEmail": "Push + email",
+  "vendorNotifPushOnly": "Push naanị",
+  "vendorMenuAdd": "Tinye",
+  "vendorMenuSearchPlaceholder": "Chọọ nri…",
+  "vendorMenuEditDish": "Dezie nri",
+  "vendorMenuDuplicate": "Deezie ọzọ",
+  "vendorMenuDuplicated": "{name} edeeziela",
+  "@vendorMenuDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDeleteDish": "Hichaa nri",
+  "vendorMenuDishRemoved": "{name} ewepụọ",
+  "@vendorMenuDishRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishRequired": "Aha nri na ọnụahịa dịnọ.",
+  "vendorMenuDishUpdated": "{name} emelitere",
+  "@vendorMenuDishUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishAdded": "{name} etinyere na menu",
+  "@vendorMenuDishAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishNameLabel": "Aha nri",
+  "vendorMenuDishNamePlaceholder": "dịka Jollof raịsị",
+  "vendorMenuDescLabel": "Nkọwa",
+  "vendorMenuDescPlaceholder": "Dị ụtọ, ọ na-ere ọkụ, ọhụụ…",
+  "vendorMenuPriceLabel": "Ọnụahịa (₦)",
+  "vendorMenuCategoryLabel": "Ọ nke",
+  "vendorMenuAddGroup": "Tinye otu",
+  "vendorMenuGroupNameLabel": "Aha otu",
+  "vendorMenuOptionLabelPlaceholder": "Akara nhọpụta",
+  "vendorMenuOptionPricePlaceholder": "+₦0",
+  "vendorReviewReplyPosted": "Ọzaazị edere {reviewer}",
+  "@vendorReviewReplyPosted": {
+    "placeholders": {
+      "reviewer": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorReviewRepliedLabel": "Ezaalaghachi",
+  "vendorReviewYourReply": "Ọzaazị gị",
+  "vendorReviewReplyPlaceholder": "Daalụ maka nzaghachi, anyị nụrụ gị...",
+  "vendorReviewPostReply": "Zipu ọzaazị",
+  "vendorAnalyticsCsvStarted": "Ọpụpụ CSV amalitere",
+  "vendorAnalyticsOutOfStock": "Ngwaahịa agwụchala",
+  "vendorAnalyticsWrongAddress": "Adreesị njọ",
+  "vendorAnalyticsCustomerChange": "Mgbanwe onye ahịa",
+  "vendorAnalyticsOther": "Ọzọ",
+  "vendorInventoryItemName": "Aha ngwongwo",
+  "vendorInventoryQuantity": "Ọnụọgụ",
+  "vendorInventoryUnit": "Nnukwu (kg / akpa…)",
+  "vendorInventoryThreshold": "Ókè mkpado ala",
+  "vendorInventoryAddItem": "Tinye ngwongwo",
+  "vendorInventoryNewBatch": "Otu ọhụụ",
+  "vendorInventoryUpdateStock": "Melite ngwaahịa",
+  "vendorInventoryItemUpdated": "{name} emelitere",
+  "@vendorInventoryItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorInventoryBatchLogged": "Otu ọhụụ edere maka {name}",
+  "@vendorInventoryBatchLogged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorAlertsRestockSub": "Nwezie ngwaahịa iji nọgide na-anabata ọnụ ahịa",
+  "vendorPayoutsEarnings": "Ego i nwetara",
+  "agentTxnTraderRequired": "Họrọ onye na-azụ ahịa iji dee azụmaahịa a.",
+  "agentTxnFieldsRequired": "Ngwa, ọnụọgụ na ọnụahịa dị ọnọdụ.",
+  "agentTxnSavedOffline": "Azụmaahịa echekwara offline",
+  "agentTxnTraderLabel": "Onye na-azụ ahịa",
+  "agentTxnProductLabel": "Ngwa",
+  "agentTxnQuantityLabel": "Ọnụọgụ (kg)",
+  "agentTxnUnitPriceLabel": "Ọnụahịa (₦)",
+  "agentTxnSave": "Chekwaa azụmaahịa",
+  "agentPayoutTraderRequired": "Họrọ onye na-azụ ahịa iji dee ịkwụ ụgwọ a.",
+  "agentPayoutAmountRequired": "Ego ga-abawanye ₦0.",
+  "agentPayoutRecorded": "Ịkwụ ụgwọ edere · ntapadị na ọnọdụ",
+  "agentPayoutNotePlaceholder": "Ịkwụ ụgwọ maka ire tomato",
+  "agentSyncTitle": "Kọwaa na WAWU",
+  "agentSyncPendingTraders": "Ndị na-azụ ahịa na-atọ ụlọ",
+  "agentSyncPendingTxns": "Azụmaahịa na-atọ ụlọ",
+  "agentSyncPendingPayouts": "Ịkwụ ụgwọ na-atọ ụlọ",
+  "agentSyncLastSync": "Kọwaa ikẹnta",
+  "agentSyncOfflineCopy": "Ọdịịta offline gị",
+  "agentSyncServer": "Sava WAWU",
+  "agentSyncKeepThis": "Chekwaa ọ nke a",
+  "agentRegNamePhoneRequired": "Aha na ekwentị dị ọnọdụ.",
+  "agentRegSavedOffline": "Onye na-azụ ahịa echekwara offline · ga-akọwa n'oge na-abịa",
+  "agentRegNewTraderTitle": "Onye ọhụụ na-azụ ahịa",
+  "agentRegFullNameLabel": "Aha ọzụzụ",
+  "agentRegFullNamePlaceholder": "Aha ọzụzụ dị ka ọ dị n'asambodo ID",
+  "agentRegPhoneLabel": "Nọmba ekwentị",
+  "agentRegPhonePlaceholder": "812 345 6789",
+  "agentRegLocationLabel": "Ọnọdụ",
+  "agentRegLocationPlaceholder": "Aha ọja ma ọ bụ obodo",
+  "agentRegPhotoLabel": "Foto onye na-azụ ahịa",
+  "agentRegIdLabel": "Asambodo njirimara",
+  "agentTradersPageTitle": "Ndị gị na-azụ ahịa",
+  "agentTradersSearchPlaceholder": "Chọọ site na aha ma ọ bụ ekwentị…",
+  "tradeSuppliersEmpty": "Ọ dịghị ndị na-enye ihe edere aha ya titi ugbu a.",
+  "tradeBulkEmpty": "Ọ dịghị ọtụtụ ngwa edere aha ya titi ugbu a.",
+  "bulkUnitPrice": "Ọnụahịa otu",
+  "bulkLotSize": "Nnukwu otu",
+  "bulkMoq": "MOQ",
+  "bulkLeadTime": "Oge nọdị na-atọ ụlọ",
+  "bulkOrigin": "Isi mmalite",
+  "bulkShipping": "Nziga",
+  "bulkQuality": "Àgwà",
+  "bulkRequestQuote": "Rịọ nzaghachi ọnụahịa",
+  "bulkThisWeek": "Izu a",
+  "bulkWithin2Wks": "N'ime izu 2",
+  "bulkThisMonth": "Ọnwa a",
+  "bulkDeliveryHint": "Adreesị nnyefe, ndetu ọpọlọpọ…",
+  "bulkSendRequest": "Zipu arịọ",
+  "exportQtyAvailable": "Ọnụọgụ dị",
+  "exportPricePerKg": "Ọnụahịa n'otu kg",
+  "exportHarvestDate": "Ụbọchị izozo",
+  "exportCorridor": "Ụzọ",
+  "exportEnquire": "Jụọ ajụjụ",
+  "supplierConnect": "Jikọọ",
+  "traderEditListing": "Dezie ndepụta",
+  "traderStatusUpdated": "Ọnọdụ {produce} emelitere",
+  "@traderStatusUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderDeleteListing": "Hichaa ndepụta",
+  "traderListingRemoved": "{produce} ewepụọ",
+  "@traderListingRemoved": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderPostListing": "Dee",
+  "traderFilterAll": "Nile",
+  "traderFieldsRequired": "Ngwa ubi, ọnụọgụ na ọnụahịa dị ọnọdụ.",
+  "traderFarmRequired": "Aha ubi na mpaghara dị ọnọdụ.",
+  "traderListingUpdated": "{produce} emelitere",
+  "@traderListingUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderListingPosted": "{produce} edere aha",
+  "@traderListingPosted": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderHarvestDateLabel": "Ụbọchị izozo",
+  "traderCorridorOrigin": "Ụzọ isi mmalite",
+  "traderCorridorDest": "Ụzọ ebe ọchọcha",
+  "traderMarketCategory": "Ọ nke ọcha ahịa",
+  "traderMarketCategoryNote": "Nhọpụta — họrọ ọ nke ka ndepụta a pụta na ahịa.",
+  "traderClearCategory": "Hichaa ọ nke",
+  "traderEditListingTitle": "Dezie ndepụta",
+  "traderNewListingTitle": "Ndepụta ọhụụ nrewepụ",
+  "traderChangePhoto": "Gbanwee foto",
+  "traderUploadPhoto": "Bulite foto",
+  "traderPhotoHint": "Foto otu dị njikere maka nziga",
+  "traderProducePlaceholder": "dịka Tomato",
+  "traderFarmPlaceholder": "dịka Ubi Hauwa na Ụmụ Ya",
+  "traderRegionPlaceholder": "dịka Kano",
+  "traderFromLabel": "Si",
+  "traderToLabel": "Ruo",
+  "traderCategoryLabel": "Ọ nke ahịa (nhọpụta)",
+  "traderNoCategories": "Ọ dịghị ọ nke",
+  "traderNoneSelected": "Ọ dịghị",
+  "traderSaveChanges": "Chekwaa mgbanwe",
+  "traderPostListingBtn": "Dee ndepụta",
+  "traderDashboardSubtitle": "Njikọ onye na-azụ ahịa",
+  "searchVendors": "Ndị na-ere ahịa",
+  "searchDishes": "Nri",
+  "productAddNote": "Tinye ihe ọ bụla",
+  "productNotePlaceholder": "dịka. obere ọkụ, enweghị ọniọns…",
+  "shoppingViewBasket": "Lelee agba",
+  "escrowAddDropOff": "Tinye adreesị itinye ihe.",
+  "escrowDropOffPlaceholder": "Ebe ọ bụla otu kwesịrị ịruo?",
+  "escrowBulkOrdersTitle": "Ọnụ ahịa ọtụtụ",
+  "escrowDisputeTitle": "Mepee esemokwu",
+  "escrowPhotoUploadSoon": "Bulite foto na-abịa n'oge na-abịa",
+  "livestockSameDay": "Ụbọchị ahụ",
+  "livestockVacuumPacked": "A fakịrịa n'óghere",
+  "driverOpenLoads": "Ibu mepere",
+  "driverToday": "Taata",
+  "driverBid": "Tọlee",
+  "driverAddPriceEta": "Tinye ọnụahịa na oge ọ ga-eruo.",
+  "driverBidTitle": "Dee tọlee gị",
+  "driverPriceLabel": "Ọnụahịa (₦)",
+  "driverEtaLabel": "Oge ọ ga-eruo (awa)",
+  "driverNotesLabel": "Ndetu (nhọpụta)",
+  "driverNotesPlaceholder": "Anọ na-aga ụzọ a kwa izu.",
+  "driverOtherBids": "Tọlee {count} ndị ọzọ",
+  "@driverOtherBids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driverSubmitBid": "Nyefee tọlee",
+  "driverBrowseLoads": "Lee ibu",
+  "driverHeadingTo": "Na-aga {destination}",
+  "@driverHeadingTo": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "driverCallLabel": "Kpọọ",
+  "driverCallingTrader": "Na-akpọ {name}…",
+  "@driverCallingTrader": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "riderSupportNotified": "Nkwado anọchiela",
+  "catStandardLabel": "Ọkwọ",
+  "catStandardSub": "Ọ dị mma ụbọchị niile",
+  "catPremiumLabel": "Premium",
+  "catPremiumSub": "Kariri, imeloha",
+  "catJollofBundleTitle": "Jollof bundle",
+  "catJollofBundleSub": "Ihe nile ị chọrọ · chekwaa 15%",
+  "catBundleAdded": "Bundle etinyere na agba",
+  "catFarmerTitle": "Zuo onye ọrụ ubi",
+  "catFarmerSub": "N'azụ tomato gị",
+  "catFarmerSoon": "Ihe gbasara onye ọrụ ubi na-abịa n'oge na-abịa",
+  "catReorderLabel": "Dee ọzọ",
+  "catLastBasketReordered": "Agba ikẹnta edere ọzọ",
+  "catBodyChooseCut": "Họrọ ọbọ gị",
+  "catBodyPopularNearYou": "A ma ama n'akụkụ gị",
+  "catBodyTrendingToday": "Nri ndị na-ewu ewu taa",
+  "catBodyFeaturedRestaurants": "Ụlọ oriri edepụtara",
+  "catBodyPopularDishes": "Nri a ma ama",
+  "catBodyTopPicks": "Nhọpụta kachasị mma",
+  "catBodyTopBulkLots": "Ọtụtụ ngwa kachasị mma",
+  "catBodyFeaturedSuppliers": "Ndị na-enye ihe edepụtara",
+  "loginError": "Mperi nbanye: {error}",
+  "@loginError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpMethodSoon": "Nhọpụta ụzọ, na-abịa n'oge na-abịa",
+  "trackingRetry": "Nwalịa",
+  "vendorSettingsTitle": "Ntọzite ụlọ ahịa gị"
 }

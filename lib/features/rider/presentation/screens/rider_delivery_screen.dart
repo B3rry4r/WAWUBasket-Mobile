@@ -9,6 +9,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/rider_controller.dart';
 import '../widgets/rider_map_view.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 /// Active delivery screen, the rider walks the order through four stages:
 /// Heading to vendor → At vendor → Picked up → En route → Delivered.
@@ -254,7 +255,7 @@ class _Body extends StatelessWidget {
                     label: 'Report issue',
                     variant: WBButtonVariant.secondary,
                     onPressed: () =>
-                        wbShowSnack(context, 'Support has been notified'),
+                        wbShowSnack(context, context.l10n.riderSupportNotified),
                   ),
                 ),
               ],

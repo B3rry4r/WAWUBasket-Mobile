@@ -110,7 +110,7 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
                       : profile?.fullName.isNotEmpty == true
                           ? profile!.fullName
                           : 'My Store',
-                  subtitle: 'Vendor dashboard',
+                  subtitle: context.l10n.vendorDashboardSubtitle,
                 ),
               ),
               const SizedBox(height: WBSpacing.lg),
@@ -488,7 +488,7 @@ class _PendingCardState extends State<_PendingCard> {
     setState(() => _accepting = true);
     try {
       await VendorOrdersController.instance.advance(widget.order.id);
-      if (mounted) wbShowSnack(context, 'Order accepted');
+      if (mounted) wbShowSnack(context, context.l10n.vendorOrderAccepted);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
@@ -500,7 +500,7 @@ class _PendingCardState extends State<_PendingCard> {
     setState(() => _declining = true);
     try {
       await VendorOrdersController.instance.decline(widget.order.id);
-      if (mounted) wbShowSnack(context, 'Order declined');
+      if (mounted) wbShowSnack(context, context.l10n.vendorOrderDeclined);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {

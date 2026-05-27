@@ -89,7 +89,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Open a dispute', style: WBTypography.page),
+                              Text(context.l10n.escrowDisputeTitle, style: WBTypography.page),
                               Text(
                                 "#${order.id} · we'll mediate within 48 hours.",
                                 style: WBTypography.caption.copyWith(
@@ -132,7 +132,7 @@ class _EscrowDisputeScreenState extends State<EscrowDisputeScreen> {
                     const SizedBox(height: WBSpacing.lg),
                     GestureDetector(
                       onTap: () =>
-                          wbShowSnack(context, 'Photo upload coming soon'),
+                          wbShowSnack(context, context.l10n.escrowPhotoUploadSoon),
                       child: Container(
                         height: 120,
                         decoration: BoxDecoration(

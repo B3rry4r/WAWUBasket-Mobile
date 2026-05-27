@@ -302,7 +302,7 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
   ) {
     return [
       AccountMenuSection(
-        title: 'Account',
+        title: context.l10n.operatorAccountTitle,
         rows: [
           AccountMenuRow(
             icon: WBIconName.card,
@@ -332,7 +332,7 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
       ),
       if (config.settingsRoute != null)
         AccountMenuSection(
-          title: 'Operations',
+          title: context.l10n.operatorOperationsTitle,
           rows: [
             AccountMenuRow(
               icon: WBIconName.more,
@@ -343,18 +343,18 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
           ],
         ),
       AccountMenuSection(
-        title: 'Preferences',
+        title: context.l10n.profilePreferences,
         rows: [
           AccountMenuRow(
             icon: WBIconName.message,
             label: context.l10n.operatorLanguage,
-            sub: 'English',
+            sub: context.l10n.profileLanguageSub,
             onTap: () => context.push(AppRoutes.language),
           ),
           AccountMenuRow(
             icon: WBIconName.more,
             label: context.l10n.operatorAbout,
-            sub: 'v2.1.0',
+            sub: context.l10n.operatorVersionSub,
             onTap: () => context.push(AppRoutes.about),
           ),
         ],
@@ -458,7 +458,7 @@ class _HeroState extends State<_Hero> {
       await ProfileController.instance.load();
       if (mounted) setState(() => _localAvatarUrl = result.publicUrl);
     } catch (_) {
-      if (mounted) wbShowSnack(context, 'Could not update photo. Try again.');
+      if (mounted) wbShowSnack(context, context.l10n.profilePhotoError);
     } finally {
       if (mounted) setState(() => _uploading = false);
     }

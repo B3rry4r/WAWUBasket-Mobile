@@ -730,6 +730,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
               decoration: BoxDecoration(
                 color: WBColors.surfaceCard,
                 shape: BoxShape.circle,
+                border: Border.all(color: WBColors.borderFilled, width: 1.2),
                 boxShadow: WBShadows.card,
               ),
               padding: EdgeInsets.all(orbitD * 0.22),

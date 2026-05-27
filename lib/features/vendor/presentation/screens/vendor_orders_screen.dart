@@ -56,7 +56,7 @@ class _VendorOrdersScreenState extends State<VendorOrdersScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Live orders', style: WBTypography.page),
+                        Text(context.l10n.vendorLiveOrdersTitle, style: WBTypography.page),
                         Text(
                           'The ones waiting for your magic.',
                           style: WBTypography.body.copyWith(
@@ -159,7 +159,7 @@ class _OrderCardState extends State<_OrderCard> {
     setState(() => _accepting = true);
     try {
       await VendorOrdersController.instance.advance(widget.order.id);
-      if (mounted) wbShowSnack(context, 'Order accepted');
+      if (mounted) wbShowSnack(context, context.l10n.vendorOrderAccepted);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
@@ -171,7 +171,7 @@ class _OrderCardState extends State<_OrderCard> {
     setState(() => _declining = true);
     try {
       await VendorOrdersController.instance.decline(widget.order.id);
-      if (mounted) wbShowSnack(context, 'Order declined');
+      if (mounted) wbShowSnack(context, context.l10n.vendorOrderDeclined);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {

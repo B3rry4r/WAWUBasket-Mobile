@@ -51,7 +51,7 @@ class _EscrowOrdersScreenState extends State<EscrowOrdersScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Bulk orders', style: WBTypography.page),
+                          Text(context.l10n.escrowBulkOrdersTitle, style: WBTypography.page),
                           Text(
                             'Escrow-protected purchases.',
                             style: WBTypography.caption.copyWith(

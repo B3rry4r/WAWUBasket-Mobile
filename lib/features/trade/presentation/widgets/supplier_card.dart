@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../domain/models/supplier.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 class SupplierCard extends StatelessWidget {
   const SupplierCard({
@@ -137,7 +138,7 @@ class SupplierCard extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           WBButton(
-            label: 'Connect',
+            label: context.l10n.supplierConnect,
             size: WBButtonSize.sm,
             fullWidth: true,
             trailingIcon: WBIconName.arrowRight,

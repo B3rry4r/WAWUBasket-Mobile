@@ -280,7 +280,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 const WBDivider(),
                 const SizedBox(height: WBSpacing.lg),
               ],
-              const SectionHeader(title: 'Vendors'),
+              SectionHeader(title: context.l10n.searchVendors),
               const SizedBox(height: WBSpacing.sm + 4),
               for (final vendor in _idleVendors.take(2)) ...[
                 _VendorRow(vendor: vendor),
@@ -307,7 +307,7 @@ class _SearchScreenState extends State<SearchScreen> {
               _hint('Nothing matched "${_query.text}".')
             else ...[
               if (showVendors && _vendors.isNotEmpty) ...[
-                const SectionHeader(title: 'Vendors'),
+                SectionHeader(title: context.l10n.searchVendors),
                 const SizedBox(height: WBSpacing.sm + 4),
                 for (final v in _vendors) ...[
                   _VendorRow(vendor: v),
@@ -316,7 +316,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
               if (showDishes && _products.isNotEmpty) ...[
                 const SizedBox(height: WBSpacing.sm),
-                const SectionHeader(title: 'Dishes'),
+                SectionHeader(title: context.l10n.searchDishes),
                 const SizedBox(height: WBSpacing.sm + 4),
                 for (final p in _products) ...[
                   WBProductCard(

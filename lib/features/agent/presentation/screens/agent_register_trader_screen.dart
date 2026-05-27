@@ -40,7 +40,7 @@ class _AgentRegisterTraderScreenState
 
   void _save() {
     if (_name.text.trim().isEmpty || _phone.text.trim().isEmpty) {
-      wbShowSnack(context, 'Name and phone are required.');
+      wbShowSnack(context, context.l10n.agentRegNamePhoneRequired);
       return;
     }
     AgentController.instance.addTrader(
@@ -49,7 +49,7 @@ class _AgentRegisterTraderScreenState
       location: _location.text.trim(),
       type: BusinessTypeX.fromKey(_typeKey),
     );
-    wbShowSnack(context, 'Trader saved offline · will sync next');
+    wbShowSnack(context, context.l10n.agentRegSavedOffline);
     context.go(AppRoutes.agentTraders);
   }
 
@@ -77,7 +77,7 @@ class _AgentRegisterTraderScreenState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('New trader', style: WBTypography.page),
+                          Text(context.l10n.agentRegNewTraderTitle, style: WBTypography.page),
                           Text(
                             context.l10n.agentRegisterSetUp,
                             style: WBTypography.caption.copyWith(
@@ -91,14 +91,14 @@ class _AgentRegisterTraderScreenState
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 WBInput(
-                  label: 'Full name',
-                  placeholder: 'Full name as on ID',
+                  label: context.l10n.agentRegFullNameLabel,
+                  placeholder: context.l10n.agentRegFullNamePlaceholder,
                   controller: _name,
                 ),
                 const SizedBox(height: WBSpacing.md),
                 WBInput(
-                  label: 'Phone number',
-                  placeholder: '812 345 6789',
+                  label: context.l10n.agentRegPhoneLabel,
+                  placeholder: context.l10n.agentRegPhonePlaceholder,
                   controller: _phone,
                   keyboardType: TextInputType.phone,
                 ),
@@ -125,8 +125,8 @@ class _AgentRegisterTraderScreenState
                 ),
                 const SizedBox(height: WBSpacing.md),
                 WBInput(
-                  label: 'Location',
-                  placeholder: 'Market or village name',
+                  label: context.l10n.agentRegLocationLabel,
+                  placeholder: context.l10n.agentRegLocationPlaceholder,
                   controller: _location,
                 ),
                 const SizedBox(height: WBSpacing.lg),
@@ -135,7 +135,7 @@ class _AgentRegisterTraderScreenState
                     Expanded(
                       child: _PhotoSquare(
                         icon: WBIconName.user,
-                        label: 'Trader photo',
+                        label: context.l10n.agentRegPhotoLabel,
                         onTap: () => wbShowSnack(context, 'Camera opened'),
                       ),
                     ),
@@ -143,7 +143,7 @@ class _AgentRegisterTraderScreenState
                     Expanded(
                       child: _PhotoSquare(
                         icon: WBIconName.card,
-                        label: 'ID document',
+                        label: context.l10n.agentRegIdLabel,
                         onTap: () => wbShowSnack(context, 'Camera opened'),
                       ),
                     ),

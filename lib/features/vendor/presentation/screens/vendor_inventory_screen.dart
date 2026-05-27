@@ -64,34 +64,34 @@ class _VendorInventoryScreenState extends State<VendorInventoryScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Add inventory item',
+              Text(ctx.l10n.vendorInventoryTitle,
                   style: WBTypography.cardTitle.copyWith(fontSize: 18)),
               const SizedBox(height: WBSpacing.lg),
-              WBInput(label: 'Item name', controller: nameCtrl),
+              WBInput(label: ctx.l10n.vendorInventoryItemName, controller: nameCtrl),
               const SizedBox(height: WBSpacing.md),
               Row(
                 children: [
                   Expanded(child: WBInput(
-                    label: 'Quantity',
+                    label: ctx.l10n.vendorInventoryQuantity,
                     controller: stockCtrl,
                     keyboardType: TextInputType.number,
                   )),
                   const SizedBox(width: WBSpacing.sm),
                   Expanded(child: WBInput(
-                    label: 'Unit (kg / bags…)',
+                    label: ctx.l10n.vendorInventoryUnit,
                     controller: unitCtrl,
                   )),
                 ],
               ),
               const SizedBox(height: WBSpacing.md),
               WBInput(
-                label: 'Low-stock threshold',
+                label: ctx.l10n.vendorInventoryThreshold,
                 controller: thresholdCtrl,
                 keyboardType: TextInputType.number,
               ),
               const SizedBox(height: WBSpacing.lg),
               WBButton(
-                label: 'Add item',
+                label: ctx.l10n.vendorInventoryAddItem,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 loading: busy,
@@ -376,7 +376,7 @@ class _InventoryCard extends StatelessWidget {
               if (showBatch)
                 Expanded(
                   child: WBButton(
-                    label: 'New batch',
+                    label: context.l10n.vendorInventoryNewBatch,
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
                     onPressed: () => _showBatchSheet(context, item),
@@ -385,7 +385,7 @@ class _InventoryCard extends StatelessWidget {
               if (showBatch) const SizedBox(width: 10),
               Expanded(
                 child: WBButton(
-                  label: 'Update stock',
+                  label: context.l10n.vendorInventoryUpdateStock,
                   size: WBButtonSize.sm,
                   onPressed: () => _showUpdateSheet(context, item),
                 ),
@@ -466,7 +466,7 @@ void _showUpdateSheet(BuildContext context, InventoryItem item) {
                       double.tryParse(thresholdCtrl.text) ?? item.threshold,
                 );
                 Navigator.of(sheetCtx).pop();
-                wbShowSnack(context, '${item.name} updated');
+                wbShowSnack(context, context.l10n.vendorInventoryItemUpdated(item.name));
               },
             ),
           ],
@@ -494,6 +494,6 @@ void _showBatchSheet(BuildContext context, InventoryItem item) {
       batchId: batchId,
     );
     if (!context.mounted) return;
-    wbShowSnack(context, 'New batch logged for ${item.name}');
+    wbShowSnack(context, context.l10n.vendorInventoryBatchLogged(item.name));
   });
 }

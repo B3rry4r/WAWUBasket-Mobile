@@ -2009,4 +2009,685 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'Aiki';
+
+  @override
+  String get deleteAccountLeavingTitle => 'Kuna tafiya?';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'Muna bakin ciki da ganin ku tafi. Kafin ku tafi:';
+
+  @override
+  String get deleteAccountConfirmPermanent => 'Goge asusun ku har abada?';
+
+  @override
+  String get deleteAccountCannotUndo => 'Ba za a iya maido da shi ba.';
+
+  @override
+  String get profilePhotoError => 'Ba a iya canza hoton ba. Sake gwadawa.';
+
+  @override
+  String get profilePreferences => 'Zaɓuɓɓuka';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'Doka';
+
+  @override
+  String get profileStatsOrders => 'Oda';
+
+  @override
+  String get profileStatsBulk => 'Jimla';
+
+  @override
+  String get profileStatsFavorites => 'Abubuwan da ake so';
+
+  @override
+  String get profileLanguageSub =>
+      'Turanci · Faransanci · Hausa · Yoruba · Igbo';
+
+  @override
+  String get profileGuestTitle => 'Kuna bincike a matsayin baƙo';
+
+  @override
+  String get profileGuestBody =>
+      'Shiga don sarrafa bayananku, oda, walat da abubuwan da ake so.';
+
+  @override
+  String get profileCreateAccount => 'Ƙirƙiri asusun';
+
+  @override
+  String get operatorAccountTitle => 'Asusun';
+
+  @override
+  String get operatorOperationsTitle => 'Ayyuka';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'SMS';
+
+  @override
+  String get forgotSmsSub => 'Zuwa wayarku';
+
+  @override
+  String get forgotEmailLabel => 'Email';
+
+  @override
+  String get forgotEmailSub => 'Zuwa imel ɗinku';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'Ci gaba da $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'An karɓi oda';
+
+  @override
+  String get vendorOrderDeclined => 'An ƙi oda';
+
+  @override
+  String get vendorLiveOrdersTitle => 'Oda na aiki';
+
+  @override
+  String get vendorDashboardSubtitle => 'Allon sarrafa mai siyarwa';
+
+  @override
+  String get vendorCallingCustomer => 'Ana kiran abokin ciniki…';
+
+  @override
+  String get vendorTicketSent => 'An aika tikiti zuwa na\'urar buga';
+
+  @override
+  String get vendorIssueSent => 'An ba da rahoto ga tallafi';
+
+  @override
+  String get vendorSettingsSaved => 'An adana saitunan';
+
+  @override
+  String get vendorSettingsStoreHours => 'Awannin shago';
+
+  @override
+  String get vendorNotifPushEmail => 'Push + email';
+
+  @override
+  String get vendorNotifPushOnly => 'Push kawai';
+
+  @override
+  String get vendorMenuAdd => 'Ƙara';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'Nemo abinci…';
+
+  @override
+  String get vendorMenuEditDish => 'Gyara abinci';
+
+  @override
+  String get vendorMenuDuplicate => 'Kwafi';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return '$name an kwafi';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'Goge abinci';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return 'An cire $name';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'Sunan abinci da farashi an buƙata.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return 'An sabunta $name';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return 'An ƙara $name zuwa menu';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'Sunan abinci';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'misali. Shinkafan jollof';
+
+  @override
+  String get vendorMenuDescLabel => 'Bayani';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'Mai dadi, mai yaji, sabo…';
+
+  @override
+  String get vendorMenuPriceLabel => 'Farashi (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'Rukunin';
+
+  @override
+  String get vendorMenuAddGroup => 'Ƙara ƙungiya';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'Sunan ƙungiya';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'Zaɓin yanayi';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'An buga amsa ga $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'An amsa';
+
+  @override
+  String get vendorReviewYourReply => 'Amsar ku';
+
+  @override
+  String get vendorReviewReplyPlaceholder => 'Nagode da ra\'ayin, mun ji ku...';
+
+  @override
+  String get vendorReviewPostReply => 'Buga amsa';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'Fitar da CSV ya fara';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'Kayan sun ƙare';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'Kuskuren adireshin';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'Canjin abokin ciniki';
+
+  @override
+  String get vendorAnalyticsOther => 'Sauran';
+
+  @override
+  String get vendorInventoryItemName => 'Sunan kaya';
+
+  @override
+  String get vendorInventoryQuantity => 'Yawa';
+
+  @override
+  String get vendorInventoryUnit => 'Naúrar (kg / jakunan...)';
+
+  @override
+  String get vendorInventoryThreshold => 'Iyakar kayan da suka ƙaranta';
+
+  @override
+  String get vendorInventoryAddItem => 'Ƙara kaya';
+
+  @override
+  String get vendorInventoryNewBatch => 'Sabon jeri';
+
+  @override
+  String get vendorInventoryUpdateStock => 'Sabunta kayan';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return 'An sabunta $name';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'An yi rikodin sabon jeri don $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub => 'Sake kaya don ci gaba da karɓar oda';
+
+  @override
+  String get vendorPayoutsEarnings => 'Kuɗin da kuka samu';
+
+  @override
+  String get agentTxnTraderRequired =>
+      'Zaɓi mai siyarwa don rubuta wannan siyar.';
+
+  @override
+  String get agentTxnFieldsRequired => 'An buƙaci kaya, yawa da farashi.';
+
+  @override
+  String get agentTxnSavedOffline => 'An adana ma\'amala a layin ƙasa';
+
+  @override
+  String get agentTxnTraderLabel => 'Mai siyarwa';
+
+  @override
+  String get agentTxnProductLabel => 'Kaya';
+
+  @override
+  String get agentTxnQuantityLabel => 'Yawa (kg)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'Farashin naúrar (₦)';
+
+  @override
+  String get agentTxnSave => 'Adana ma\'amala';
+
+  @override
+  String get agentPayoutTraderRequired =>
+      'Zaɓi mai siyarwa don rubuta wannan biyan.';
+
+  @override
+  String get agentPayoutAmountRequired => 'Adadin ya kamata ya wuce ₦0.';
+
+  @override
+  String get agentPayoutRecorded => 'An rubuta biya · an jera maidowar';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'Biya don siyar da tumatir';
+
+  @override
+  String get agentSyncTitle => 'Daidaita da WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'Masu siyarwa masu jira';
+
+  @override
+  String get agentSyncPendingTxns => 'Ma\'amalolin da ke jira';
+
+  @override
+  String get agentSyncPendingPayouts => 'Biyan da ke jira';
+
+  @override
+  String get agentSyncLastSync => 'Daidaitawar ƙarshe';
+
+  @override
+  String get agentSyncOfflineCopy => 'Kwafin ku na layin ƙasa';
+
+  @override
+  String get agentSyncServer => 'Sabar na WAWU';
+
+  @override
+  String get agentSyncKeepThis => 'Kiyaye wannan sigar';
+
+  @override
+  String get agentRegNamePhoneRequired => 'Suna da waya an buƙata.';
+
+  @override
+  String get agentRegSavedOffline =>
+      'An adana mai siyarwa a layin ƙasa · za a daidaita daga baya';
+
+  @override
+  String get agentRegNewTraderTitle => 'Sabon mai siyarwa';
+
+  @override
+  String get agentRegFullNameLabel => 'Cikakken suna';
+
+  @override
+  String get agentRegFullNamePlaceholder =>
+      'Cikakken suna kamar yadda yake a takardar shaidar';
+
+  @override
+  String get agentRegPhoneLabel => 'Lambar wayar';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'Wurin';
+
+  @override
+  String get agentRegLocationPlaceholder => 'Sunan kasuwa ko ƙauye';
+
+  @override
+  String get agentRegPhotoLabel => 'Hoton mai siyarwa';
+
+  @override
+  String get agentRegIdLabel => 'Takardar shaidar';
+
+  @override
+  String get agentTradersPageTitle => 'Masu siyarwa ku';
+
+  @override
+  String get agentTradersSearchPlaceholder => 'Nemo da suna ko waya…';
+
+  @override
+  String get tradeSuppliersEmpty => 'Babu masu samar da kaya da aka jera.';
+
+  @override
+  String get tradeBulkEmpty => 'Babu kayan jimla da aka jera.';
+
+  @override
+  String get bulkUnitPrice => 'Farashin naúrar';
+
+  @override
+  String get bulkLotSize => 'Girman jeri';
+
+  @override
+  String get bulkMoq => 'MOQ';
+
+  @override
+  String get bulkLeadTime => 'Lokacin jira';
+
+  @override
+  String get bulkOrigin => 'Asali';
+
+  @override
+  String get bulkShipping => 'Jigilar kaya';
+
+  @override
+  String get bulkQuality => 'Inganci';
+
+  @override
+  String get bulkRequestQuote => 'Nemi ƙididdiga';
+
+  @override
+  String get bulkThisWeek => 'Wannan mako';
+
+  @override
+  String get bulkWithin2Wks => 'A cikin makon 2';
+
+  @override
+  String get bulkThisMonth => 'Wannan wata';
+
+  @override
+  String get bulkDeliveryHint => 'Adireshin isarwa, bayanan fakiti…';
+
+  @override
+  String get bulkSendRequest => 'Aika buƙata';
+
+  @override
+  String get exportQtyAvailable => 'Adadin da ake da shi';
+
+  @override
+  String get exportPricePerKg => 'Farashi a kowane kg';
+
+  @override
+  String get exportHarvestDate => 'Ranar girbi';
+
+  @override
+  String get exportCorridor => 'Hanyar';
+
+  @override
+  String get exportEnquire => 'Tambaya';
+
+  @override
+  String get supplierConnect => 'Haɗa';
+
+  @override
+  String get traderEditListing => 'Gyara jera';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return 'An sabunta yanayin $produce';
+  }
+
+  @override
+  String get traderDeleteListing => 'Goge jera';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return 'An cire $produce';
+  }
+
+  @override
+  String get traderPostListing => 'Buga';
+
+  @override
+  String get traderFilterAll => 'Duka';
+
+  @override
+  String get traderFieldsRequired =>
+      'Kayan amfanin gona, yawa da farashi an buƙata.';
+
+  @override
+  String get traderFarmRequired => 'Sunan gona da yanki an buƙata.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return 'An sabunta $produce';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return 'An jera $produce';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'Ranar girbi';
+
+  @override
+  String get traderCorridorOrigin => 'Hanyar asali';
+
+  @override
+  String get traderCorridorDest => 'Hanyar ƙunshe';
+
+  @override
+  String get traderMarketCategory => 'Rukunin kasuwa';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'Na zaɓi — zaɓi rukunin don bayyana a kasuwar abokan ciniki.';
+
+  @override
+  String get traderClearCategory => 'Share rukunin';
+
+  @override
+  String get traderEditListingTitle => 'Gyara jera';
+
+  @override
+  String get traderNewListingTitle => 'Sabon jerin fitarwa';
+
+  @override
+  String get traderChangePhoto => 'Canja hoto';
+
+  @override
+  String get traderUploadPhoto => 'Loda hoto';
+
+  @override
+  String get traderPhotoHint => 'Hoto na kayan da aka shirya don jigilar';
+
+  @override
+  String get traderProducePlaceholder => 'misali. Tumatir';
+
+  @override
+  String get traderFarmPlaceholder => 'misali. Gonar Hauwa & \'Ya\'ya';
+
+  @override
+  String get traderRegionPlaceholder => 'misali. Kano';
+
+  @override
+  String get traderFromLabel => 'Daga';
+
+  @override
+  String get traderToLabel => 'Zuwa';
+
+  @override
+  String get traderCategoryLabel => 'Rukunin kasuwa (zaɓi)';
+
+  @override
+  String get traderNoCategories => 'Babu rukuni';
+
+  @override
+  String get traderNoneSelected => 'Babu';
+
+  @override
+  String get traderSaveChanges => 'Adana canje-canje';
+
+  @override
+  String get traderPostListingBtn => 'Buga jera';
+
+  @override
+  String get traderDashboardSubtitle => 'Allon sarrafa mai siyarwa';
+
+  @override
+  String get searchVendors => 'Masu siyarwa';
+
+  @override
+  String get searchDishes => 'Abinci';
+
+  @override
+  String get productAddNote => 'Ƙara lura';
+
+  @override
+  String get productNotePlaceholder => 'misali. ƙasa da yaji, babu albasa…';
+
+  @override
+  String get shoppingViewBasket => 'Duba kwandon';
+
+  @override
+  String get escrowAddDropOff => 'Ƙara adireshin isarwa.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'Ina ya kamata jeri ya isa?';
+
+  @override
+  String get escrowBulkOrdersTitle => 'Oda-oda jumla';
+
+  @override
+  String get escrowDisputeTitle => 'Buɗe rikici';
+
+  @override
+  String get escrowPhotoUploadSoon => 'Loda hoto yana zuwa nan ba da jimawa ba';
+
+  @override
+  String get livestockSameDay => 'Ranar nan';
+
+  @override
+  String get livestockVacuumPacked => 'An fake a cikin famfo';
+
+  @override
+  String get driverOpenLoads => 'Kayan buɗe';
+
+  @override
+  String get driverToday => 'Yau';
+
+  @override
+  String get driverBid => 'Tayi tsinke';
+
+  @override
+  String get driverAddPriceEta => 'Ƙara farashi da lokacin isowa.';
+
+  @override
+  String get driverBidTitle => 'Kafa tsinkenku';
+
+  @override
+  String get driverPriceLabel => 'Farashi (₦)';
+
+  @override
+  String get driverEtaLabel => 'Lokacin isowa zuwa wuri (awowi)';
+
+  @override
+  String get driverNotesLabel => 'Bayanan (zaɓi)';
+
+  @override
+  String get driverNotesPlaceholder =>
+      'Ina gudanar da wannan hanyar a kowane mako.';
+
+  @override
+  String driverOtherBids(int count) {
+    return 'Sauran tsinke $count';
+  }
+
+  @override
+  String get driverSubmitBid => 'Mika tsinke';
+
+  @override
+  String get driverBrowseLoads => 'Duba kayan';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'Muna tafiya zuwa $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'Kira';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'Ana kiran $name…';
+  }
+
+  @override
+  String get riderSupportNotified => 'An sanar da tallafi';
+
+  @override
+  String get catStandardLabel => 'Na yau da kullum';
+
+  @override
+  String get catStandardSub => 'Mai dadi kowace rana';
+
+  @override
+  String get catPremiumLabel => 'Na musamman';
+
+  @override
+  String get catPremiumSub => 'Mafi girma, mafi nuna';
+
+  @override
+  String get catJollofBundleTitle => 'Fakitin Jollof';
+
+  @override
+  String get catJollofBundleSub => 'Duk abin da kuke buƙata · adana 15%';
+
+  @override
+  String get catBundleAdded => 'An ƙara fakiti zuwa kwandon';
+
+  @override
+  String get catFarmerTitle => 'Haɗu da manomi';
+
+  @override
+  String get catFarmerSub => 'Bayan tumatir ɗinku';
+
+  @override
+  String get catFarmerSoon => 'Yanayin manomi yana zuwa nan ba da jimawa ba';
+
+  @override
+  String get catReorderLabel => 'Sake umarnin';
+
+  @override
+  String get catLastBasketReordered => 'An sake umarnin kwandon ƙarshe';
+
+  @override
+  String get catBodyChooseCut => 'Zaɓi yankan ku';
+
+  @override
+  String get catBodyPopularNearYou => 'Shahararru kusa da ku';
+
+  @override
+  String get catBodyTrendingToday => 'Abinci na fama yau';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'Gidajen abinci na musamman';
+
+  @override
+  String get catBodyPopularDishes => 'Abinci shahararru';
+
+  @override
+  String get catBodyTopPicks => 'Zaɓuɓɓukan da aka fi so';
+
+  @override
+  String get catBodyTopBulkLots => 'Manyan kayan jimla';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'Masu samar da kaya na musamman';
+
+  @override
+  String loginError(String error) {
+    return 'Kuskuren shiga: $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'Zaɓin hanya, yana zuwa nan ba da jimawa ba';
+
+  @override
+  String get trackingRetry => 'Sake gwadawa';
+
+  @override
+  String get vendorSettingsTitle => 'Saitunan shagon ku';
 }

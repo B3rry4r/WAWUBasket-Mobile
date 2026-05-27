@@ -125,7 +125,7 @@ class _Body extends StatelessWidget {
                       children: [
                         _DetailRow(
                           icon: WBIconName.basket,
-                          label: 'Quantity available',
+                          label: context.l10n.exportQtyAvailable,
                           value: '${wbThousands(listing.quantityKg)} kg',
                         ),
                         const SizedBox(height: 12),
@@ -133,7 +133,7 @@ class _Body extends StatelessWidget {
                         const SizedBox(height: 12),
                         _DetailRow(
                           icon: WBIconName.card,
-                          label: 'Price per kg',
+                          label: context.l10n.exportPricePerKg,
                           value: wbNaira(listing.pricePerKgNaira),
                         ),
                         const SizedBox(height: 12),
@@ -141,7 +141,7 @@ class _Body extends StatelessWidget {
                         const SizedBox(height: 12),
                         _DetailRow(
                           icon: WBIconName.clock,
-                          label: 'Harvest date',
+                          label: context.l10n.exportHarvestDate,
                           value: _formatDate(listing.harvestDate),
                         ),
                         const SizedBox(height: 12),
@@ -149,7 +149,7 @@ class _Body extends StatelessWidget {
                         const SizedBox(height: 12),
                         _DetailRow(
                           icon: WBIconName.pin,
-                          label: 'Corridor',
+                          label: context.l10n.exportCorridor,
                           value:
                               '${listing.originCorridor.label} → ${listing.destinationCorridor.label}',
                         ),
@@ -211,7 +211,7 @@ class _Body extends StatelessWidget {
                 children: [
                   Expanded(
                     child: WBButton(
-                      label: 'Enquire',
+                      label: context.l10n.exportEnquire,
                       size: WBButtonSize.lg,
                       variant: WBButtonVariant.secondary,
                       onPressed: () => _enquire(context),

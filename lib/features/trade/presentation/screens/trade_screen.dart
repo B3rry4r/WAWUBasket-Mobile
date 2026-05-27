@@ -9,6 +9,7 @@ import '../widgets/bulk_lot_card.dart';
 import '../widgets/corridor_prices_table.dart';
 import '../widgets/export_listing_card.dart';
 import '../widgets/supplier_card.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 /// Customer-side bulk-trade browse. Four tabs: Suppliers, Bulk lots,
 /// Export listings, Corridor prices. The tab pills sit in a segmented
@@ -133,7 +134,7 @@ class _TradeScreenState extends State<TradeScreen> {
           valueListenable: TradeController.instance.suppliers,
           builder: (_, suppliers, _) {
             if (suppliers.isEmpty) {
-              return _Empty(label: 'No suppliers listed yet.');
+              return _Empty(label: context.l10n.tradeSuppliersEmpty);
             }
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(
@@ -159,7 +160,7 @@ class _TradeScreenState extends State<TradeScreen> {
           valueListenable: TradeController.instance.bulkLots,
           builder: (_, lots, _) {
             if (lots.isEmpty) {
-              return _Empty(label: 'No bulk lots listed yet.');
+              return _Empty(label: context.l10n.tradeBulkEmpty);
             }
             return GridView.builder(
               padding: const EdgeInsets.fromLTRB(

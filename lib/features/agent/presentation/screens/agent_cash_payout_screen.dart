@@ -8,6 +8,7 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/agent_controller.dart';
 import '../widgets/signature_pad.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 class AgentCashPayoutScreen extends StatefulWidget {
   const AgentCashPayoutScreen({super.key});
@@ -119,12 +120,12 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
         ? null
         : AgentController.instance.traderById(_traderId!);
     if (trader == null) {
-      wbShowSnack(context, 'Pick a trader to record this payout against.');
+      wbShowSnack(context, context.l10n.agentPayoutTraderRequired);
       return;
     }
     final amt = int.tryParse(_amount.text.replaceAll(',', '')) ?? 0;
     if (amt <= 0) {
-      wbShowSnack(context, 'Amount must be greater than ₦0.');
+      wbShowSnack(context, context.l10n.agentPayoutAmountRequired);
       return;
     }
     if (_sig.isEmpty) {
@@ -141,7 +142,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
       note: _note.text.trim().isEmpty ? null : _note.text.trim(),
       signatureBytes: _sig.strokes,
     );
-    wbShowSnack(context, 'Payout recorded · reimbursement queued');
+    wbShowSnack(context, context.l10n.agentPayoutRecorded);
     context.go(AppRoutes.agentHome);
   }
 
@@ -157,7 +158,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
           140,
         ),
         children: [
-          Text('Cash payout', style: WBTypography.page),
+          Text(context.l10n.navPayout, style: WBTypography.page),
           const SizedBox(height: 4),
           Text(
             'Give trader their money.',
@@ -228,7 +229,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
           const SizedBox(height: WBSpacing.md),
           WBInput(
             label: 'Agent note (optional)',
-            placeholder: 'Payout for tomato sale',
+            placeholder: context.l10n.agentPayoutNotePlaceholder,
             controller: _note,
           ),
           const SizedBox(height: WBSpacing.lg),

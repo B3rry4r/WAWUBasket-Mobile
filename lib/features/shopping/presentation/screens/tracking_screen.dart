@@ -89,7 +89,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     WBTypography.body.copyWith(color: WBColors.fgSecondary)),
             const SizedBox(height: 14),
             WBButton(
-              label: 'Try again',
+              label: context.l10n.actionRetry,
               size: WBButtonSize.sm,
               variant: WBButtonVariant.secondary,
               onPressed: _load,

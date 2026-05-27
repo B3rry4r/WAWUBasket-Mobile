@@ -1998,4 +1998,684 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'Lọwọlọwọ';
+
+  @override
+  String get deleteAccountLeavingTitle => 'Ẹ ń lọ?';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'A bànújẹ rí yín lọ. Ṣáájú kí ẹ tó lọ:';
+
+  @override
+  String get deleteAccountConfirmPermanent => 'Pa àkọọ́lẹ̀ rẹ pa dé gbẹ̀?';
+
+  @override
+  String get deleteAccountCannotUndo => 'Àṣeyọrí yìí kò ṣeépadà.';
+
+  @override
+  String get profilePhotoError =>
+      'A kò lè ṣe àyípadà fọ́tò. Gbìyànjú lẹ́ẹ̀kan si.';
+
+  @override
+  String get profilePreferences => 'Àwọn àṣàyàn';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'Òfin';
+
+  @override
+  String get profileStatsOrders => 'Àwọn àṣẹ';
+
+  @override
+  String get profileStatsBulk => 'Iye-ńlá';
+
+  @override
+  String get profileStatsFavorites => 'Àwọn àyọ̀';
+
+  @override
+  String get profileLanguageSub => 'Gẹ̀ẹ́sì · Faransé · Hausa · Yorùbá · Igbo';
+
+  @override
+  String get profileGuestTitle => 'O ń ṣàgbéyẹ̀wò gẹ́gẹ́ bí àlejò';
+
+  @override
+  String get profileGuestBody =>
+      'Wọlé láti ṣàkóso profáìlì, àwọn àṣẹ, àpamọ́wọ́ àti àwọn àyọ̀ rẹ.';
+
+  @override
+  String get profileCreateAccount => 'Ṣẹ̀dá àkọọ́lẹ̀';
+
+  @override
+  String get operatorAccountTitle => 'Àkọọ́lẹ̀';
+
+  @override
+  String get operatorOperationsTitle => 'Àwọn ìṣẹ́';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'SMS';
+
+  @override
+  String get forgotSmsSub => 'Sí foónu rẹ';
+
+  @override
+  String get forgotEmailLabel => 'Ìméèlì';
+
+  @override
+  String get forgotEmailSub => 'Sí ìnboxì rẹ';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'Tẹ̀síwájú pẹ̀lú $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'Àṣẹ ti gbà';
+
+  @override
+  String get vendorOrderDeclined => 'Àṣẹ ti kọ̀';
+
+  @override
+  String get vendorLiveOrdersTitle => 'Àwọn àṣẹ tó wà';
+
+  @override
+  String get vendorDashboardSubtitle => 'Pánẹ̀lì olùtà';
+
+  @override
+  String get vendorCallingCustomer => 'Ń pè olùbàṣepọ̀…';
+
+  @override
+  String get vendorTicketSent => 'Tíkẹ́tì ti rán sí ẹ̀rọ ìtẹ̀wé';
+
+  @override
+  String get vendorIssueSent => 'Ìṣòro ti fi ránṣẹ́ sí ìtìlẹ́yìn';
+
+  @override
+  String get vendorSettingsSaved => 'Àwọn ìpèsè ti pamọ́';
+
+  @override
+  String get vendorSettingsStoreHours => 'Àkókò ìṣòwò';
+
+  @override
+  String get vendorNotifPushEmail => 'Push + email';
+
+  @override
+  String get vendorNotifPushOnly => 'Push péré';
+
+  @override
+  String get vendorMenuAdd => 'Fikún';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'Wá oúnjẹ kan…';
+
+  @override
+  String get vendorMenuEditDish => 'Àtúnṣe oúnjẹ';
+
+  @override
+  String get vendorMenuDuplicate => 'Ẹ̀dà';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return '$name ti ẹ̀dà';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'Pa oúnjẹ rẹ̀';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return '$name ti yọ';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'Orúkọ oúnjẹ àti iye owó nílò.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return '$name ti ṣe àyípadà';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return '$name ti fikún sí àkójọ oúnjẹ';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'Orúkọ oúnjẹ';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'fún àpẹẹrẹ Ìrẹsì jollof';
+
+  @override
+  String get vendorMenuDescLabel => 'Àpèjúwe';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'Dára, ọlóòrísì, tútù…';
+
+  @override
+  String get vendorMenuPriceLabel => 'Iye owó (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'Ẹ̀ka';
+
+  @override
+  String get vendorMenuAddGroup => 'Fikún ẹgbẹ́';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'Orúkọ ẹgbẹ́';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'Àmì àṣàyàn';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'Ìdáhùn ti firánṣẹ́ sí $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'Ti dáhùn';
+
+  @override
+  String get vendorReviewYourReply => 'Ìdáhùn rẹ';
+
+  @override
+  String get vendorReviewReplyPlaceholder => 'E ṣeun fún èrò naa, a gbà yín…';
+
+  @override
+  String get vendorReviewPostReply => 'Firánṣẹ́ ìdáhùn';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'Gbígba CSV ti bẹ̀rẹ̀';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'Àjà ti parí';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'Àdírẹ́sì àṣìṣe';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'Ìyípadà olùbàṣepọ̀';
+
+  @override
+  String get vendorAnalyticsOther => 'Míràn';
+
+  @override
+  String get vendorInventoryItemName => 'Orúkọ ohun';
+
+  @override
+  String get vendorInventoryQuantity => 'Iye';
+
+  @override
+  String get vendorInventoryUnit => 'Ìwọ̀n (kg / àpò…)';
+
+  @override
+  String get vendorInventoryThreshold => 'Ìwọ̀n ìsàlẹ̀ àjà';
+
+  @override
+  String get vendorInventoryAddItem => 'Fikún ohun';
+
+  @override
+  String get vendorInventoryNewBatch => 'Ẹgbẹ́ tuntun';
+
+  @override
+  String get vendorInventoryUpdateStock => 'Ṣe àyípadà àjà';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return '$name ti ṣe àyípadà';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'Ẹgbẹ́ tuntun ti gba fún $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub => 'Tún àjà ṣe láti tẹ̀síwájú gbígbà àṣẹ';
+
+  @override
+  String get vendorPayoutsEarnings => 'Owó tí o jèrè';
+
+  @override
+  String get agentTxnTraderRequired => 'Yan oniṣòwò láti gba ìṣòwò yìí.';
+
+  @override
+  String get agentTxnFieldsRequired => 'Ọjà, iye, àti iye owó fẹ́ jẹ́.';
+
+  @override
+  String get agentTxnSavedOffline => 'Ìdúnàádúrà ti pamọ́ lásìkò ayé';
+
+  @override
+  String get agentTxnTraderLabel => 'Oníṣòwò';
+
+  @override
+  String get agentTxnProductLabel => 'Ọjà';
+
+  @override
+  String get agentTxnQuantityLabel => 'Iye (kg)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'Iye owó fò ọ̀kan (₦)';
+
+  @override
+  String get agentTxnSave => 'Pamọ́ ìdúnàádúrà';
+
+  @override
+  String get agentPayoutTraderRequired => 'Yan oniṣòwò láti gba ìsanwó yìí.';
+
+  @override
+  String get agentPayoutAmountRequired => 'Iye owó gbọdọ̀ ju ₦0 lọ.';
+
+  @override
+  String get agentPayoutRecorded => 'Ìsanwó ti gbasilẹ · ìpadàsanwó ti dúró';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'Ìsanwó fún ìtajà tomátì';
+
+  @override
+  String get agentSyncTitle => 'Síncronáìsì pẹ̀lú WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'Àwọn oniṣòwò tó ndúró';
+
+  @override
+  String get agentSyncPendingTxns => 'Àwọn ìdúnàádúrà tó ndúró';
+
+  @override
+  String get agentSyncPendingPayouts => 'Àwọn ìsanwó tó ndúró';
+
+  @override
+  String get agentSyncLastSync => 'Ìdọ́gba ìkẹyìn';
+
+  @override
+  String get agentSyncOfflineCopy => 'Àdàkọ rẹ lásìkò ayé';
+
+  @override
+  String get agentSyncServer => 'Sáféà WAWU';
+
+  @override
+  String get agentSyncKeepThis => 'Jẹ́ kí ó jẹ ìtẹ̀jáde yìí';
+
+  @override
+  String get agentRegNamePhoneRequired => 'Orúkọ àti foónu nílò.';
+
+  @override
+  String get agentRegSavedOffline =>
+      'Oníṣòwò ti pamọ́ lásìkò ayé · yóò dọ́gba lẹ́yìn';
+
+  @override
+  String get agentRegNewTraderTitle => 'Oníṣòwò tuntun';
+
+  @override
+  String get agentRegFullNameLabel => 'Orúkọ kíkún';
+
+  @override
+  String get agentRegFullNamePlaceholder =>
+      'Orúkọ kíkún bí ó ṣe wà ní káàdì ìdánimọ̀';
+
+  @override
+  String get agentRegPhoneLabel => 'Nọ́mbà foónu';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'Àgbègbè';
+
+  @override
+  String get agentRegLocationPlaceholder => 'Orúkọ ọjà tàbí abúlé';
+
+  @override
+  String get agentRegPhotoLabel => 'Fọ́tò oníṣòwò';
+
+  @override
+  String get agentRegIdLabel => 'Ìwé ìdánimọ̀';
+
+  @override
+  String get agentTradersPageTitle => 'Àwọn oniṣòwò rẹ';
+
+  @override
+  String get agentTradersSearchPlaceholder => 'Wá pẹ̀lú orúkọ tàbí foónu…';
+
+  @override
+  String get tradeSuppliersEmpty =>
+      'Kò sí olùpèsè tí a kò forúkọ sílẹ̀ títí di isisiyi.';
+
+  @override
+  String get tradeBulkEmpty =>
+      'Kò sí àwọn kẹ̀kẹ̀ jimla tí a forúkọ sílẹ̀ títí di isisiyi.';
+
+  @override
+  String get bulkUnitPrice => 'Iye owó fò ọ̀kan';
+
+  @override
+  String get bulkLotSize => 'Iwọn ẹgbẹ́';
+
+  @override
+  String get bulkMoq => 'MOQ';
+
+  @override
+  String get bulkLeadTime => 'Àkókò ìdúró';
+
+  @override
+  String get bulkOrigin => 'Ìpilẹ̀ṣẹ̀';
+
+  @override
+  String get bulkShipping => 'Gbígba kékeré';
+
+  @override
+  String get bulkQuality => 'Ìwọ̀n dídára';
+
+  @override
+  String get bulkRequestQuote => 'Béèrè fún iye';
+
+  @override
+  String get bulkThisWeek => 'Ọ̀sẹ̀ yìí';
+
+  @override
+  String get bulkWithin2Wks => 'Láàárín ọ̀sẹ̀ 2';
+
+  @override
+  String get bulkThisMonth => 'Oṣù yìí';
+
+  @override
+  String get bulkDeliveryHint => 'Àdírẹ́sì ifiránṣẹ́, àwọn ìṣirò ifò…';
+
+  @override
+  String get bulkSendRequest => 'Firánṣẹ́ ìbéèrè';
+
+  @override
+  String get exportQtyAvailable => 'Iye tó wà';
+
+  @override
+  String get exportPricePerKg => 'Iye owó fò kg';
+
+  @override
+  String get exportHarvestDate => 'Ọjọ́ ìkórè';
+
+  @override
+  String get exportCorridor => 'Ọ̀nà';
+
+  @override
+  String get exportEnquire => 'Bére wò';
+
+  @override
+  String get supplierConnect => 'Ìdásọ̀pọ̀';
+
+  @override
+  String get traderEditListing => 'Àtúnṣe ìkéde';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return 'Ipò $produce ti ṣe àyípadà';
+  }
+
+  @override
+  String get traderDeleteListing => 'Pa ìkéde rẹ̀';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return '$produce ti yọ';
+  }
+
+  @override
+  String get traderPostListing => 'Firánṣẹ́';
+
+  @override
+  String get traderFilterAll => 'Gbogbo';
+
+  @override
+  String get traderFieldsRequired => 'Àwọn ọjà, iye, àti iye owó fẹ́ jẹ́.';
+
+  @override
+  String get traderFarmRequired => 'Orúkọ oko àti agbègbè fẹ́ jẹ́.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return '$produce ti ṣe àyípadà';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return '$produce ti forúkọ sílẹ̀';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'Ọjọ́ ìkórè';
+
+  @override
+  String get traderCorridorOrigin => 'Ọ̀nà ìpilẹ̀ṣẹ̀';
+
+  @override
+  String get traderCorridorDest => 'Ọ̀nà ìdókòwò';
+
+  @override
+  String get traderMarketCategory => 'Ẹ̀ka ọjà';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'Àṣàyàn — yan ẹ̀ka kan kí ìkéde yìí hàn ní ọjà.';
+
+  @override
+  String get traderClearCategory => 'Pa ẹ̀ka rẹ̀';
+
+  @override
+  String get traderEditListingTitle => 'Àtúnṣe ìkéde';
+
+  @override
+  String get traderNewListingTitle => 'Ìkéde ìtajà tuntun';
+
+  @override
+  String get traderChangePhoto => 'Yí fọ́tò padà';
+
+  @override
+  String get traderUploadPhoto => 'Gbé fọ́tò lọ';
+
+  @override
+  String get traderPhotoHint => 'Fọ́tò ẹgbẹ́ tó ṣetán fún gbígba';
+
+  @override
+  String get traderProducePlaceholder => 'fún àpẹẹrẹ Tomátì';
+
+  @override
+  String get traderFarmPlaceholder => 'fún àpẹẹrẹ Oko Hauwa';
+
+  @override
+  String get traderRegionPlaceholder => 'fún àpẹẹrẹ Kano';
+
+  @override
+  String get traderFromLabel => 'Láti';
+
+  @override
+  String get traderToLabel => 'Sí';
+
+  @override
+  String get traderCategoryLabel => 'Ẹ̀ka ọjà (àṣàyàn)';
+
+  @override
+  String get traderNoCategories => 'Kò sí ẹ̀ka';
+
+  @override
+  String get traderNoneSelected => 'Kò sí';
+
+  @override
+  String get traderSaveChanges => 'Pamọ́ àwọn ìyípadà';
+
+  @override
+  String get traderPostListingBtn => 'Firánṣẹ́ ìkéde';
+
+  @override
+  String get traderDashboardSubtitle => 'Pánẹ̀lì oníṣòwò';
+
+  @override
+  String get searchVendors => 'Àwọn olùtà';
+
+  @override
+  String get searchDishes => 'Àwọn oúnjẹ';
+
+  @override
+  String get productAddNote => 'Fikún àkọsílẹ̀';
+
+  @override
+  String get productNotePlaceholder =>
+      'Fún àpẹẹrẹ. kò tó yíyan, àìsí àlùbọ́sà…';
+
+  @override
+  String get shoppingViewBasket => 'Wò àgọ̀';
+
+  @override
+  String get escrowAddDropOff => 'Fikún àdírẹ́sì ipadọ sílẹ̀.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'Níbo ni ẹgbẹ́ gbọdọ̀ dé?';
+
+  @override
+  String get escrowBulkOrdersTitle => 'Àṣẹ jimla';
+
+  @override
+  String get escrowDisputeTitle => 'Ṣí ìjiyàn';
+
+  @override
+  String get escrowPhotoUploadSoon => 'Gbíga fọ́tò sí wọlẹ̀ ń bọ̀';
+
+  @override
+  String get livestockSameDay => 'Ọjọ́ kan náà';
+
+  @override
+  String get livestockVacuumPacked => 'Ìfò fákíùm';
+
+  @override
+  String get driverOpenLoads => 'Àwọn èrù tó ṣíwọ́';
+
+  @override
+  String get driverToday => 'Lónìí';
+
+  @override
+  String get driverBid => 'Ṣàbẹtẹ';
+
+  @override
+  String get driverAddPriceEta => 'Fikún iye owó àti àkókò dídé.';
+
+  @override
+  String get driverBidTitle => 'Fi àbẹtẹ rẹ sílẹ̀';
+
+  @override
+  String get driverPriceLabel => 'Iye owó (₦)';
+
+  @override
+  String get driverEtaLabel => 'Àkókò dídé sí ìdó (wákàtí)';
+
+  @override
+  String get driverNotesLabel => 'Àwọn ìṣirò (àṣàyàn)';
+
+  @override
+  String get driverNotesPlaceholder => 'Mo máa ń gbé ọ̀nà yìí ní gbogbo ọ̀sẹ̀.';
+
+  @override
+  String driverOtherBids(int count) {
+    return 'Àwọn àbẹtẹ $count míràn';
+  }
+
+  @override
+  String get driverSubmitBid => 'Fí àbẹtẹ sílẹ̀';
+
+  @override
+  String get driverBrowseLoads => 'Wò àwọn èrù';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'Ń lọ sí $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'Pe';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'Ń pè $name…';
+  }
+
+  @override
+  String get riderSupportNotified => 'Ìtìlẹ́yìn ti gba ìfitọ́';
+
+  @override
+  String get catStandardLabel => 'Ìwọ̀n dídára';
+
+  @override
+  String get catStandardSub => 'Dára lójoojúmọ́';
+
+  @override
+  String get catPremiumLabel => 'Àgbára-ẹlẹ́gbẹ̀rí';
+
+  @override
+  String get catPremiumSub => 'Títóbi, ó pọn jùlọ';
+
+  @override
+  String get catJollofBundleTitle => 'Àkójọpọ̀ Jollof';
+
+  @override
+  String get catJollofBundleSub => 'Ohun gbogbo tó o nílò · fipamọ́ 15%';
+
+  @override
+  String get catBundleAdded => 'Àkójọpọ̀ ti fikún sí àgọ̀';
+
+  @override
+  String get catFarmerTitle => 'Pàdé agbẹ̀';
+
+  @override
+  String get catFarmerSub => 'Lẹ́yìn tomátì rẹ';
+
+  @override
+  String get catFarmerSoon => 'Ìtẹ̀nugbẹ̀ agbẹ̀ ń bọ̀';
+
+  @override
+  String get catReorderLabel => 'Ṣètò padà';
+
+  @override
+  String get catLastBasketReordered => 'Àgọ̀ ìkẹyìn ti tún àṣẹ ṣe';
+
+  @override
+  String get catBodyChooseCut => 'Yan ìgéegun rẹ';
+
+  @override
+  String get catBodyPopularNearYou => 'Olókìkí nítòsí rẹ';
+
+  @override
+  String get catBodyTrendingToday => 'Oúnjẹ ìjókòó lónìí';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'Àwọn ilé oúnjẹ tí a yàn';
+
+  @override
+  String get catBodyPopularDishes => 'Àwọn oúnjẹ olókìkí';
+
+  @override
+  String get catBodyTopPicks => 'Àwọn àṣàyàn tóp';
+
+  @override
+  String get catBodyTopBulkLots => 'Àwọn kẹ̀kẹ̀ jimla tóp';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'Àwọn olùpèsè tí a yàn';
+
+  @override
+  String loginError(String error) {
+    return 'Àṣìṣe wíwọlé: $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'Àṣàyàn ọ̀nà, ń bọ̀';
+
+  @override
+  String get trackingRetry => 'Gbìyànjú lẹ́ẹ̀kan si';
+
+  @override
+  String get vendorSettingsTitle => 'Àwọn ìpèsè ilé ìtajà rẹ';
 }

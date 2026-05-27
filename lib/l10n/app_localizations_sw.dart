@@ -2000,4 +2000,685 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'Hai';
+
+  @override
+  String get deleteAccountLeavingTitle => 'Unatuacha?';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'Tunasikitika kukuona ukienda. Kabla hujaenda:';
+
+  @override
+  String get deleteAccountConfirmPermanent => 'Futa akaunti yako kabisa?';
+
+  @override
+  String get deleteAccountCannotUndo => 'Hii haiwezi kutenduliwa.';
+
+  @override
+  String get profilePhotoError => 'Haiwezi kusasisha picha. Jaribu tena.';
+
+  @override
+  String get profilePreferences => 'Mapendeleo';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'Kisheria';
+
+  @override
+  String get profileStatsOrders => 'Maagizo';
+
+  @override
+  String get profileStatsBulk => 'Jumla';
+
+  @override
+  String get profileStatsFavorites => 'Vipendwa';
+
+  @override
+  String get profileLanguageSub =>
+      'Kiingereza · Kifaransa · Hausa · Yoruba · Igbo';
+
+  @override
+  String get profileGuestTitle => 'Unavinjari kama mgeni';
+
+  @override
+  String get profileGuestBody =>
+      'Ingia ili kudhibiti wasifu wako, maagizo, mkoba na vipendwa.';
+
+  @override
+  String get profileCreateAccount => 'Fungua akaunti';
+
+  @override
+  String get operatorAccountTitle => 'Akaunti';
+
+  @override
+  String get operatorOperationsTitle => 'Shughuli';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'SMS';
+
+  @override
+  String get forgotSmsSub => 'Kwa simu yako';
+
+  @override
+  String get forgotEmailLabel => 'Barua pepe';
+
+  @override
+  String get forgotEmailSub => 'Kwa sanduku lako';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'Endelea na $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'Agizo limekubaliwa';
+
+  @override
+  String get vendorOrderDeclined => 'Agizo linakataliwa';
+
+  @override
+  String get vendorLiveOrdersTitle => 'Maagizo hai';
+
+  @override
+  String get vendorDashboardSubtitle => 'Dashibodi ya muuzaji';
+
+  @override
+  String get vendorCallingCustomer => 'Inapigia mteja simu…';
+
+  @override
+  String get vendorTicketSent => 'Tikiti imetumwa kwa printa';
+
+  @override
+  String get vendorIssueSent => 'Tatizo limeripotiwa kwa msaada';
+
+  @override
+  String get vendorSettingsSaved => 'Mipangilio imehifadhiwa';
+
+  @override
+  String get vendorSettingsStoreHours => 'Masaa ya duka';
+
+  @override
+  String get vendorNotifPushEmail => 'Push + barua pepe';
+
+  @override
+  String get vendorNotifPushOnly => 'Push tu';
+
+  @override
+  String get vendorMenuAdd => 'Ongeza';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'Tafuta sahani…';
+
+  @override
+  String get vendorMenuEditDish => 'Hariri sahani';
+
+  @override
+  String get vendorMenuDuplicate => 'Nakili';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return '$name imenakiliwa';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'Futa sahani';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return '$name imeondolewa';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'Jina la sahani na bei inahitajika.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return '$name imesasishwa';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return '$name imeongezwa kwenye menyu';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'Jina la sahani';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'mf. Mchele wa jollof';
+
+  @override
+  String get vendorMenuDescLabel => 'Maelezo';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'Kitamu, chenye viungo, safi…';
+
+  @override
+  String get vendorMenuPriceLabel => 'Bei (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'Kategoria';
+
+  @override
+  String get vendorMenuAddGroup => 'Ongeza kikundi';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'Jina la kikundi';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'Lebo la chaguo';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'Jibu limetumwa kwa $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'Amejibu';
+
+  @override
+  String get vendorReviewYourReply => 'Jibu lako';
+
+  @override
+  String get vendorReviewReplyPlaceholder => 'Asante kwa maoni, tunakusikia...';
+
+  @override
+  String get vendorReviewPostReply => 'Chapisha jibu';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'Usafirishaji wa CSV umeanza';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'Nje ya stoki';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'Anwani mbaya';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'Mabadiliko ya mteja';
+
+  @override
+  String get vendorAnalyticsOther => 'Nyingine';
+
+  @override
+  String get vendorInventoryItemName => 'Jina la bidhaa';
+
+  @override
+  String get vendorInventoryQuantity => 'Kiasi';
+
+  @override
+  String get vendorInventoryUnit => 'Kitengo (kg / mifuko…)';
+
+  @override
+  String get vendorInventoryThreshold => 'Kiwango cha chini cha stoki';
+
+  @override
+  String get vendorInventoryAddItem => 'Ongeza bidhaa';
+
+  @override
+  String get vendorInventoryNewBatch => 'Bichi mpya';
+
+  @override
+  String get vendorInventoryUpdateStock => 'Sasisha stoki';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return '$name imesasishwa';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'Bichi jipya imerekodiwa kwa $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub =>
+      'Jaza tena ili kuendelea kupokea maagizo';
+
+  @override
+  String get vendorPayoutsEarnings => 'Mapato yako';
+
+  @override
+  String get agentTxnTraderRequired =>
+      'Chagua mfanyabiashara kurekodi mauzo haya.';
+
+  @override
+  String get agentTxnFieldsRequired =>
+      'Bidhaa, kiasi na bei ya kitengo inahitajika.';
+
+  @override
+  String get agentTxnSavedOffline => 'Muamala umehifadhiwa nje ya mtandao';
+
+  @override
+  String get agentTxnTraderLabel => 'Mfanyabiashara';
+
+  @override
+  String get agentTxnProductLabel => 'Bidhaa';
+
+  @override
+  String get agentTxnQuantityLabel => 'Kiasi (kg)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'Bei ya kitengo (₦)';
+
+  @override
+  String get agentTxnSave => 'Hifadhi muamala';
+
+  @override
+  String get agentPayoutTraderRequired =>
+      'Chagua mfanyabiashara kurekodi malipo haya.';
+
+  @override
+  String get agentPayoutAmountRequired => 'Kiasi lazima kiwe zaidi ya ₦0.';
+
+  @override
+  String get agentPayoutRecorded => 'Malipo imerekodiwa · urejesho umepangwa';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'Malipo ya mauzo ya nyanya';
+
+  @override
+  String get agentSyncTitle => 'Sawazisha na WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'Wafanyabiashara wanaongoja';
+
+  @override
+  String get agentSyncPendingTxns => 'Miamala inayosubiri';
+
+  @override
+  String get agentSyncPendingPayouts => 'Malipo yanayosubiri';
+
+  @override
+  String get agentSyncLastSync => 'Usawazishaji wa mwisho';
+
+  @override
+  String get agentSyncOfflineCopy => 'Nakala yako nje ya mtandao';
+
+  @override
+  String get agentSyncServer => 'Seva ya WAWU';
+
+  @override
+  String get agentSyncKeepThis => 'Hifadhi toleo hili';
+
+  @override
+  String get agentRegNamePhoneRequired => 'Jina na simu inahitajika.';
+
+  @override
+  String get agentRegSavedOffline =>
+      'Mfanyabiashara amehifadhiwa nje · atasawazishwa baadaye';
+
+  @override
+  String get agentRegNewTraderTitle => 'Mfanyabiashara mpya';
+
+  @override
+  String get agentRegFullNameLabel => 'Jina kamili';
+
+  @override
+  String get agentRegFullNamePlaceholder =>
+      'Jina kamili kama kwenye kitambulisho';
+
+  @override
+  String get agentRegPhoneLabel => 'Nambari ya simu';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'Mahali';
+
+  @override
+  String get agentRegLocationPlaceholder => 'Jina la soko au kijiji';
+
+  @override
+  String get agentRegPhotoLabel => 'Picha ya mfanyabiashara';
+
+  @override
+  String get agentRegIdLabel => 'Hati ya utambulisho';
+
+  @override
+  String get agentTradersPageTitle => 'Wafanyabiashara wako';
+
+  @override
+  String get agentTradersSearchPlaceholder => 'Tafuta kwa jina au simu…';
+
+  @override
+  String get tradeSuppliersEmpty => 'Hakuna wasambazaji walioorodheshwa bado.';
+
+  @override
+  String get tradeBulkEmpty => 'Hakuna bidhaa za jumla zilizorodheshwa bado.';
+
+  @override
+  String get bulkUnitPrice => 'Bei ya kitengo';
+
+  @override
+  String get bulkLotSize => 'Ukubwa wa bichi';
+
+  @override
+  String get bulkMoq => 'MOQ';
+
+  @override
+  String get bulkLeadTime => 'Muda wa uwasilishaji';
+
+  @override
+  String get bulkOrigin => 'Asili';
+
+  @override
+  String get bulkShipping => 'Usafirishaji';
+
+  @override
+  String get bulkQuality => 'Ubora';
+
+  @override
+  String get bulkRequestQuote => 'Omba nukuu';
+
+  @override
+  String get bulkThisWeek => 'Wiki hii';
+
+  @override
+  String get bulkWithin2Wks => 'Ndani ya wiki 2';
+
+  @override
+  String get bulkThisMonth => 'Mwezi huu';
+
+  @override
+  String get bulkDeliveryHint => 'Anwani ya uwasilishaji, maelezo ya ufungaji…';
+
+  @override
+  String get bulkSendRequest => 'Tuma ombi';
+
+  @override
+  String get exportQtyAvailable => 'Kiasi kilichopo';
+
+  @override
+  String get exportPricePerKg => 'Bei kwa kg';
+
+  @override
+  String get exportHarvestDate => 'Tarehe ya mavuno';
+
+  @override
+  String get exportCorridor => 'Njia';
+
+  @override
+  String get exportEnquire => 'Uliza';
+
+  @override
+  String get supplierConnect => 'Ungana';
+
+  @override
+  String get traderEditListing => 'Hariri orodha';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return 'Hali ya $produce imesasishwa';
+  }
+
+  @override
+  String get traderDeleteListing => 'Futa orodha';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return '$produce imeondolewa';
+  }
+
+  @override
+  String get traderPostListing => 'Chapisha';
+
+  @override
+  String get traderFilterAll => 'Yote';
+
+  @override
+  String get traderFieldsRequired => 'Mazao, kiasi na bei inahitajika.';
+
+  @override
+  String get traderFarmRequired => 'Jina la shamba na eneo inahitajika.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return '$produce imesasishwa';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return '$produce imeorodheshwa';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'Tarehe ya mavuno';
+
+  @override
+  String get traderCorridorOrigin => 'Njia ya asili';
+
+  @override
+  String get traderCorridorDest => 'Njia ya uwasilishaji';
+
+  @override
+  String get traderMarketCategory => 'Kategoria ya soko';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'Hiari — chagua kategoria ili orodha hii ionekane sokoni.';
+
+  @override
+  String get traderClearCategory => 'Futa kategoria';
+
+  @override
+  String get traderEditListingTitle => 'Hariri orodha';
+
+  @override
+  String get traderNewListingTitle => 'Orodha mpya ya usafirishaji';
+
+  @override
+  String get traderChangePhoto => 'Badilisha picha';
+
+  @override
+  String get traderUploadPhoto => 'Pakia picha';
+
+  @override
+  String get traderPhotoHint => 'Picha ya bichi iliyoandaliwa kwa usafirishaji';
+
+  @override
+  String get traderProducePlaceholder => 'mf. Nyanya';
+
+  @override
+  String get traderFarmPlaceholder => 'mf. Shamba la Hauwa & Wanawe';
+
+  @override
+  String get traderRegionPlaceholder => 'mf. Kano';
+
+  @override
+  String get traderFromLabel => 'Kutoka';
+
+  @override
+  String get traderToLabel => 'Hadi';
+
+  @override
+  String get traderCategoryLabel => 'Kategoria ya soko (hiari)';
+
+  @override
+  String get traderNoCategories => 'Hakuna kategoria';
+
+  @override
+  String get traderNoneSelected => 'Hakuna';
+
+  @override
+  String get traderSaveChanges => 'Hifadhi mabadiliko';
+
+  @override
+  String get traderPostListingBtn => 'Chapisha orodha';
+
+  @override
+  String get traderDashboardSubtitle => 'Dashibodi ya mfanyabiashara';
+
+  @override
+  String get searchVendors => 'Wauzaji';
+
+  @override
+  String get searchDishes => 'Sahani';
+
+  @override
+  String get productAddNote => 'Ongeza kumbuka';
+
+  @override
+  String get productNotePlaceholder => 'Mf. pilipili kidogo, bila vitunguu…';
+
+  @override
+  String get shoppingViewBasket => 'Tazama kikapu';
+
+  @override
+  String get escrowAddDropOff => 'Ongeza anwani ya kukabidhi.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'Bichi iende wapi?';
+
+  @override
+  String get escrowBulkOrdersTitle => 'Maagizo ya jumla';
+
+  @override
+  String get escrowDisputeTitle => 'Fungua malalamiko';
+
+  @override
+  String get escrowPhotoUploadSoon => 'Upakiaji wa picha unakuja hivi karibuni';
+
+  @override
+  String get livestockSameDay => 'Siku moja';
+
+  @override
+  String get livestockVacuumPacked => 'Imefungwa kwa vakiumu';
+
+  @override
+  String get driverOpenLoads => 'Mizigo wazi';
+
+  @override
+  String get driverToday => 'Leo';
+
+  @override
+  String get driverBid => 'Toa zabuni';
+
+  @override
+  String get driverAddPriceEta => 'Ongeza bei na wakati wa kuwasili.';
+
+  @override
+  String get driverBidTitle => 'Weka zabuni yako';
+
+  @override
+  String get driverPriceLabel => 'Bei (₦)';
+
+  @override
+  String get driverEtaLabel => 'Wakati wa kuwasili (masaa)';
+
+  @override
+  String get driverNotesLabel => 'Maelezo (hiari)';
+
+  @override
+  String get driverNotesPlaceholder => 'Ninapitia njia hii kila wiki.';
+
+  @override
+  String driverOtherBids(int count) {
+    return 'Zabuni nyingine $count';
+  }
+
+  @override
+  String get driverSubmitBid => 'Wasilisha zabuni';
+
+  @override
+  String get driverBrowseLoads => 'Tazama mizigo';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'Kuelekea $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'Piga simu';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'Inapigia $name simu…';
+  }
+
+  @override
+  String get riderSupportNotified => 'Msaada umearifiwa';
+
+  @override
+  String get catStandardLabel => 'Kawaida';
+
+  @override
+  String get catStandardSub => 'Nzuri kila siku';
+
+  @override
+  String get catPremiumLabel => 'Premium';
+
+  @override
+  String get catPremiumSub => 'Kubwa zaidi, mbivu zaidi';
+
+  @override
+  String get catJollofBundleTitle => 'Kifurushi cha Jollof';
+
+  @override
+  String get catJollofBundleSub => 'Kila unachohitaji · okoa 15%';
+
+  @override
+  String get catBundleAdded => 'Kifurushi kimeongezwa kwenye kikapu';
+
+  @override
+  String get catFarmerTitle => 'Kutana na mkulima';
+
+  @override
+  String get catFarmerSub => 'Nyuma ya nyanya zako';
+
+  @override
+  String get catFarmerSoon => 'Hadithi ya mkulima inakuja hivi karibuni';
+
+  @override
+  String get catReorderLabel => 'Agiza tena';
+
+  @override
+  String get catLastBasketReordered => 'Kikapu cha mwisho kimeagizwa tena';
+
+  @override
+  String get catBodyChooseCut => 'Chagua mkata wako';
+
+  @override
+  String get catBodyPopularNearYou => 'Maarufu karibu nawe';
+
+  @override
+  String get catBodyTrendingToday => 'Sahani maarufu leo';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'Mikahawa iliyoangaziwa';
+
+  @override
+  String get catBodyPopularDishes => 'Sahani maarufu';
+
+  @override
+  String get catBodyTopPicks => 'Machaguo bora';
+
+  @override
+  String get catBodyTopBulkLots => 'Bidhaa za jumla bora';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'Wasambazaji walioangaziwa';
+
+  @override
+  String loginError(String error) {
+    return 'Hitilafu ya kuingia: $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'Chaguo la njia, linakuja hivi karibuni';
+
+  @override
+  String get trackingRetry => 'Jaribu tena';
+
+  @override
+  String get vendorSettingsTitle => 'Mipangilio ya duka lako';
 }

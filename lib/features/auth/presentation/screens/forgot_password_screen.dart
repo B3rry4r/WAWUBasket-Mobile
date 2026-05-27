@@ -89,8 +89,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 children: [
                   Expanded(
                     child: _MethodCard(
-                      label: 'SMS',
-                      sub: 'To your phone',
+                      label: context.l10n.forgotSmsLabel,
+                      sub: context.l10n.forgotSmsSub,
                       active: _method == 'sms',
                       onTap: () => setState(() => _method = 'sms'),
                     ),
@@ -98,8 +98,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: _MethodCard(
-                      label: 'Email',
-                      sub: 'To your inbox',
+                      label: context.l10n.forgotEmailLabel,
+                      sub: context.l10n.forgotEmailSub,
                       active: _method == 'email',
                       onTap: () => setState(() => _method = 'email'),
                     ),

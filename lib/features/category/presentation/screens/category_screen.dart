@@ -346,14 +346,14 @@ class _ContextBand extends StatelessWidget {
           child: Row(
             children: [
               _QualityTab(
-                label: 'Standard',
-                sub: 'Everyday good',
+                label: context.l10n.catStandardLabel,
+                sub: context.l10n.catStandardSub,
                 active: !premium,
                 onTap: () => onQualityChanged(false),
               ),
               _QualityTab(
-                label: 'Premium',
-                sub: 'Larger, riper',
+                label: context.l10n.catPremiumLabel,
+                sub: context.l10n.catPremiumSub,
                 active: premium,
                 onTap: () => onQualityChanged(true),
               ),
@@ -366,19 +366,19 @@ class _ContextBand extends StatelessWidget {
             Expanded(
               child: _MiniCard(
                 icon: WBIconName.basket,
-                title: 'Jollof bundle',
-                sub: 'Everything you need · save 15%',
-                onTap: () => wbShowSnack(context, 'Bundle added to basket'),
+                title: context.l10n.catJollofBundleTitle,
+                sub: context.l10n.catJollofBundleSub,
+                onTap: () => wbShowSnack(context, context.l10n.catBundleAdded),
               ),
             ),
             const SizedBox(width: 10),
             Expanded(
               child: _MiniCard(
                 icon: WBIconName.user,
-                title: 'Meet the farmer',
-                sub: 'Behind your tomatoes',
+                title: context.l10n.catFarmerTitle,
+                sub: context.l10n.catFarmerSub,
                 onTap: () =>
-                    wbShowSnack(context, 'Farmer spotlight coming soon'),
+                    wbShowSnack(context, context.l10n.catFarmerSoon),
               ),
             ),
           ],
@@ -469,9 +469,9 @@ class _ContextBand extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           WBButton(
-            label: 'Reorder',
+            label: context.l10n.catReorderLabel,
             size: WBButtonSize.sm,
-            onPressed: () => wbShowSnack(context, 'Last basket reordered'),
+            onPressed: () => wbShowSnack(context, context.l10n.catLastBasketReordered),
           ),
         ],
       ),

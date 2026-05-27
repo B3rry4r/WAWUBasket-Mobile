@@ -321,7 +321,7 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
             bottom: 0,
             child: StickyActionBar(
               child: WBButton(
-                label: 'View basket',
+                label: context.l10n.shoppingViewBasket,
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 leading: Container(

@@ -152,13 +152,13 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
         ? null
         : AgentController.instance.traderById(_traderId!);
     if (trader == null) {
-      wbShowSnack(context, 'Pick a trader to log this sale against.');
+      wbShowSnack(context, context.l10n.agentTxnTraderRequired);
       return;
     }
     final q = int.tryParse(_qty.text) ?? 0;
     final p = int.tryParse(_price.text.replaceAll(',', '')) ?? 0;
     if (q <= 0 || p <= 0 || _product.text.trim().isEmpty) {
-      wbShowSnack(context, 'Product, quantity and unit price are required.');
+      wbShowSnack(context, context.l10n.agentTxnFieldsRequired);
       return;
     }
     AgentController.instance.addTransaction(
@@ -168,7 +168,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
       quantityKg: q,
       pricePerKgNaira: p,
     );
-    wbShowSnack(context, 'Transaction saved offline');
+    wbShowSnack(context, context.l10n.agentTxnSavedOffline);
     context.go(AppRoutes.agentHome);
   }
 
@@ -184,7 +184,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
           140,
         ),
         children: [
-          Text('Record sale', style: WBTypography.page),
+          Text(context.l10n.navRecord, style: WBTypography.page),
           const SizedBox(height: 4),
           Text(
             'Help trader log what they sold.',
@@ -200,7 +200,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
             child: AbsorbPointer(
               child: WBInput(
                 key: ValueKey('trader-$_traderId'),
-                label: 'Trader',
+                label: context.l10n.agentTxnTraderLabel,
                 initialValue: _traderLabel(_traderId),
                 leadingIcon: WBIconName.user,
                 trailing: const WBIcon(WBIconName.chevronDown, size: 14),
@@ -209,7 +209,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
           ),
           const SizedBox(height: WBSpacing.md),
           WBInput(
-            label: 'Product',
+            label: context.l10n.agentTxnProductLabel,
             controller: _product,
             leadingIcon: WBIconName.basket,
           ),
@@ -218,7 +218,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
             children: [
               Expanded(
                 child: WBInput(
-                  label: 'Quantity (kg)',
+                  label: context.l10n.agentTxnQuantityLabel,
                   controller: _qty,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -230,7 +230,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: WBInput(
-                  label: 'Unit price (₦)',
+                  label: context.l10n.agentTxnUnitPriceLabel,
                   controller: _price,
                   keyboardType: TextInputType.number,
                   inputFormatters: [
@@ -260,7 +260,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
           ),
           const SizedBox(height: WBSpacing.lg),
           WBButton(
-            label: 'Save transaction',
+            label: context.l10n.agentTxnSave,
             fullWidth: true,
             size: WBButtonSize.lg,
             onPressed: _save,

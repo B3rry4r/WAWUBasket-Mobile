@@ -300,8 +300,8 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     const SizedBox(height: WBSpacing.sm + 2),
                     WBInput(
                       controller: _notesCtrl,
-                      label: 'Add a note',
-                      placeholder: 'E.g. less spicy, no onions…',
+                      label: context.l10n.productAddNote,
+                      placeholder: context.l10n.productNotePlaceholder,
                       keyboardType: TextInputType.text,
                     ),
                   ],

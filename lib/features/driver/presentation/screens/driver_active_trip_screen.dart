@@ -8,6 +8,7 @@ import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 /// Active trip screen, vertical checkpoint timeline, GPS-active banner,
 /// masked-call trader. "Log checkpoint" advances state; the last
@@ -67,7 +68,7 @@ class _NoTrip extends StatelessWidget {
         ),
         const SizedBox(height: WBSpacing.lg),
         WBButton(
-          label: 'Browse loads',
+          label: context.l10n.driverBrowseLoads,
           fullWidth: true,
           size: WBButtonSize.lg,
           trailingIcon: WBIconName.arrowRight,
@@ -94,7 +95,7 @@ class _Body extends StatelessWidget {
       );
     } else {
       final next = trip.checkpointNames[trip.reachedCheckpoints.length];
-      wbShowSnack(context, 'Heading to $next');
+      wbShowSnack(context, context.l10n.driverHeadingTo(next));
     }
   }
 
@@ -183,12 +184,12 @@ class _Body extends StatelessWidget {
                     ),
                   ),
                   WBButton(
-                    label: 'Call',
+                    label: context.l10n.driverCallLabel,
                     size: WBButtonSize.sm,
                     variant: WBButtonVariant.secondary,
                     trailingIcon: WBIconName.phone,
                     onPressed: () =>
-                        wbShowSnack(context, 'Calling ${trip.traderName}…'),
+                        wbShowSnack(context, context.l10n.driverCallingTrader(trip.traderName)),
                   ),
                 ],
               ),

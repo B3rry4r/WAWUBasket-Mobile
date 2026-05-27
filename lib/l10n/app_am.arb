@@ -664,5 +664,330 @@
   "roleStatusApproved": "Approved",
   "roleStatusPending": "In review",
   "roleStatusGetVerified": "Get verified",
-  "roleStatusActive": "Active"
+  "roleStatusActive": "Active",
+  "deleteAccountLeavingTitle": "Leaving us?",
+  "deleteAccountLeavingBody": "We're sad to see you go. Before you leave:",
+  "deleteAccountConfirmPermanent": "Delete your account permanently?",
+  "deleteAccountCannotUndo": "This cannot be undone.",
+  "profilePhotoError": "Could not update photo. Try again.",
+  "profilePreferences": "Preferences",
+  "profileVersionSub": "v2.1.0",
+  "profileLegal": "Legal",
+  "profileStatsOrders": "Orders",
+  "profileStatsBulk": "Bulk",
+  "profileStatsFavorites": "Favorites",
+  "profileLanguageSub": "English · Français · Hausa · Yorùbá · Igbo",
+  "profileGuestTitle": "You're browsing as a guest",
+  "profileGuestBody": "Sign in to manage your profile, orders, wallet and favorites.",
+  "profileCreateAccount": "Create an account",
+  "operatorAccountTitle": "Account",
+  "operatorOperationsTitle": "Operations",
+  "operatorVersionSub": "v2.1.0",
+  "forgotSmsLabel": "SMS",
+  "forgotSmsSub": "To your phone",
+  "forgotEmailLabel": "Email",
+  "forgotEmailSub": "To your inbox",
+  "welcomeBiometric": "Continue with {bio}",
+  "@welcomeBiometric": {
+    "placeholders": {
+      "bio": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorOrderAccepted": "Order accepted",
+  "vendorOrderDeclined": "Order declined",
+  "vendorLiveOrdersTitle": "Live orders",
+  "vendorDashboardSubtitle": "Vendor dashboard",
+  "vendorCallingCustomer": "Calling customer…",
+  "vendorTicketSent": "Ticket sent to printer",
+  "vendorIssueSent": "Issue reported to support",
+  "vendorSettingsSaved": "Settings saved",
+  "vendorSettingsStoreHours": "Store hours",
+  "vendorNotifPushEmail": "Push + email",
+  "vendorNotifPushOnly": "Push only",
+  "vendorMenuAdd": "Add",
+  "vendorMenuSearchPlaceholder": "Find a dish…",
+  "vendorMenuEditDish": "Edit dish",
+  "vendorMenuDuplicate": "Duplicate",
+  "vendorMenuDuplicated": "{name} duplicated",
+  "@vendorMenuDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDeleteDish": "Delete dish",
+  "vendorMenuDishRemoved": "{name} removed",
+  "@vendorMenuDishRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishRequired": "Dish name and price are required.",
+  "vendorMenuDishUpdated": "{name} updated",
+  "@vendorMenuDishUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishAdded": "{name} added to the menu",
+  "@vendorMenuDishAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishNameLabel": "Dish name",
+  "vendorMenuDishNamePlaceholder": "e.g. Jollof rice",
+  "vendorMenuDescLabel": "Description",
+  "vendorMenuDescPlaceholder": "Tasty, spicy, fresh…",
+  "vendorMenuPriceLabel": "Price (₦)",
+  "vendorMenuCategoryLabel": "Category",
+  "vendorMenuAddGroup": "Add group",
+  "vendorMenuGroupNameLabel": "Group name",
+  "vendorMenuOptionLabelPlaceholder": "Option label",
+  "vendorMenuOptionPricePlaceholder": "+₦0",
+  "vendorReviewReplyPosted": "Reply posted to {reviewer}",
+  "@vendorReviewReplyPosted": {
+    "placeholders": {
+      "reviewer": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorReviewRepliedLabel": "Replied",
+  "vendorReviewYourReply": "Your reply",
+  "vendorReviewReplyPlaceholder": "Thanks for the feedback, we hear you...",
+  "vendorReviewPostReply": "Post reply",
+  "vendorAnalyticsCsvStarted": "CSV export started",
+  "vendorAnalyticsOutOfStock": "Out of stock",
+  "vendorAnalyticsWrongAddress": "Wrong address",
+  "vendorAnalyticsCustomerChange": "Customer change",
+  "vendorAnalyticsOther": "Other",
+  "vendorInventoryItemName": "Item name",
+  "vendorInventoryQuantity": "Quantity",
+  "vendorInventoryUnit": "Unit (kg / bags…)",
+  "vendorInventoryThreshold": "Low-stock threshold",
+  "vendorInventoryAddItem": "Add item",
+  "vendorInventoryNewBatch": "New batch",
+  "vendorInventoryUpdateStock": "Update stock",
+  "vendorInventoryItemUpdated": "{name} updated",
+  "@vendorInventoryItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorInventoryBatchLogged": "New batch logged for {name}",
+  "@vendorInventoryBatchLogged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorAlertsRestockSub": "Restock to keep accepting orders",
+  "vendorPayoutsEarnings": "Your earnings",
+  "agentTxnTraderRequired": "Pick a trader to log this sale against.",
+  "agentTxnFieldsRequired": "Product, quantity and unit price are required.",
+  "agentTxnSavedOffline": "Transaction saved offline",
+  "agentTxnTraderLabel": "Trader",
+  "agentTxnProductLabel": "Product",
+  "agentTxnQuantityLabel": "Quantity (kg)",
+  "agentTxnUnitPriceLabel": "Unit price (₦)",
+  "agentTxnSave": "Save transaction",
+  "agentPayoutTraderRequired": "Pick a trader to record this payout against.",
+  "agentPayoutAmountRequired": "Amount must be greater than ₦0.",
+  "agentPayoutRecorded": "Payout recorded · reimbursement queued",
+  "agentPayoutNotePlaceholder": "Payout for tomato sale",
+  "agentSyncTitle": "Sync with WAWU",
+  "agentSyncPendingTraders": "Pending traders",
+  "agentSyncPendingTxns": "Pending transactions",
+  "agentSyncPendingPayouts": "Pending payouts",
+  "agentSyncLastSync": "Last sync",
+  "agentSyncOfflineCopy": "Your offline copy",
+  "agentSyncServer": "WAWU server",
+  "agentSyncKeepThis": "Keep this version",
+  "agentRegNamePhoneRequired": "Name and phone are required.",
+  "agentRegSavedOffline": "Trader saved offline · will sync next",
+  "agentRegNewTraderTitle": "New trader",
+  "agentRegFullNameLabel": "Full name",
+  "agentRegFullNamePlaceholder": "Full name as on ID",
+  "agentRegPhoneLabel": "Phone number",
+  "agentRegPhonePlaceholder": "812 345 6789",
+  "agentRegLocationLabel": "Location",
+  "agentRegLocationPlaceholder": "Market or village name",
+  "agentRegPhotoLabel": "Trader photo",
+  "agentRegIdLabel": "ID document",
+  "agentTradersPageTitle": "Your traders",
+  "agentTradersSearchPlaceholder": "Search by name or phone…",
+  "tradeSuppliersEmpty": "No suppliers listed yet.",
+  "tradeBulkEmpty": "No bulk lots listed yet.",
+  "bulkUnitPrice": "Unit price",
+  "bulkLotSize": "Lot size",
+  "bulkMoq": "MOQ",
+  "bulkLeadTime": "Lead time",
+  "bulkOrigin": "Origin",
+  "bulkShipping": "Shipping",
+  "bulkQuality": "Quality",
+  "bulkRequestQuote": "Request quote",
+  "bulkThisWeek": "This week",
+  "bulkWithin2Wks": "Within 2 wks",
+  "bulkThisMonth": "This month",
+  "bulkDeliveryHint": "Delivery address, packing notes…",
+  "bulkSendRequest": "Send request",
+  "exportQtyAvailable": "Quantity available",
+  "exportPricePerKg": "Price per kg",
+  "exportHarvestDate": "Harvest date",
+  "exportCorridor": "Corridor",
+  "exportEnquire": "Enquire",
+  "supplierConnect": "Connect",
+  "traderEditListing": "Edit listing",
+  "traderStatusUpdated": "{produce} status updated",
+  "@traderStatusUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderDeleteListing": "Delete listing",
+  "traderListingRemoved": "{produce} removed",
+  "@traderListingRemoved": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderPostListing": "Post",
+  "traderFilterAll": "All",
+  "traderFieldsRequired": "Produce, quantity and price are required.",
+  "traderFarmRequired": "Farm name and region are required.",
+  "traderListingUpdated": "{produce} updated",
+  "@traderListingUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderListingPosted": "{produce} listed",
+  "@traderListingPosted": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderHarvestDateLabel": "Harvest date",
+  "traderCorridorOrigin": "Origin corridor",
+  "traderCorridorDest": "Destination corridor",
+  "traderMarketCategory": "Marketplace category",
+  "traderMarketCategoryNote": "Optional — pick a category so this listing appears in the customer marketplace.",
+  "traderClearCategory": "Clear category",
+  "traderEditListingTitle": "Edit listing",
+  "traderNewListingTitle": "New export listing",
+  "traderChangePhoto": "Change photo",
+  "traderUploadPhoto": "Upload photo",
+  "traderPhotoHint": "Shot of the lot ready for shipping",
+  "traderProducePlaceholder": "e.g. Tomatoes",
+  "traderFarmPlaceholder": "e.g. Hauwa & Sons Farm",
+  "traderRegionPlaceholder": "e.g. Kano",
+  "traderFromLabel": "From",
+  "traderToLabel": "To",
+  "traderCategoryLabel": "Marketplace category (optional)",
+  "traderNoCategories": "No categories",
+  "traderNoneSelected": "None",
+  "traderSaveChanges": "Save changes",
+  "traderPostListingBtn": "Post listing",
+  "traderDashboardSubtitle": "Trader dashboard",
+  "searchVendors": "Vendors",
+  "searchDishes": "Dishes",
+  "productAddNote": "Add a note",
+  "productNotePlaceholder": "E.g. less spicy, no onions…",
+  "shoppingViewBasket": "View basket",
+  "escrowAddDropOff": "Add a drop-off address.",
+  "escrowDropOffPlaceholder": "Where should the lot land?",
+  "escrowBulkOrdersTitle": "Bulk orders",
+  "escrowDisputeTitle": "Open a dispute",
+  "escrowPhotoUploadSoon": "Photo upload coming soon",
+  "livestockSameDay": "Same day",
+  "livestockVacuumPacked": "Vacuum packed",
+  "driverOpenLoads": "Open loads",
+  "driverToday": "Today",
+  "driverBid": "Bid",
+  "driverAddPriceEta": "Add a price and an ETA.",
+  "driverBidTitle": "Place your bid",
+  "driverPriceLabel": "Price (₦)",
+  "driverEtaLabel": "ETA to destination (hours)",
+  "driverNotesLabel": "Notes (optional)",
+  "driverNotesPlaceholder": "I run this route every week.",
+  "driverOtherBids": "{count} other bids",
+  "@driverOtherBids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driverSubmitBid": "Submit bid",
+  "driverBrowseLoads": "Browse loads",
+  "driverHeadingTo": "Heading to {destination}",
+  "@driverHeadingTo": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "driverCallLabel": "Call",
+  "driverCallingTrader": "Calling {name}…",
+  "@driverCallingTrader": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "riderSupportNotified": "Support has been notified",
+  "catStandardLabel": "Standard",
+  "catStandardSub": "Everyday good",
+  "catPremiumLabel": "Premium",
+  "catPremiumSub": "Larger, riper",
+  "catJollofBundleTitle": "Jollof bundle",
+  "catJollofBundleSub": "Everything you need · save 15%",
+  "catBundleAdded": "Bundle added to basket",
+  "catFarmerTitle": "Meet the farmer",
+  "catFarmerSub": "Behind your tomatoes",
+  "catFarmerSoon": "Farmer spotlight coming soon",
+  "catReorderLabel": "Reorder",
+  "catLastBasketReordered": "Last basket reordered",
+  "catBodyChooseCut": "Choose your cut",
+  "catBodyPopularNearYou": "Popular near you",
+  "catBodyTrendingToday": "Trending dishes today",
+  "catBodyFeaturedRestaurants": "Featured restaurants",
+  "catBodyPopularDishes": "Popular dishes",
+  "catBodyTopPicks": "Top picks",
+  "catBodyTopBulkLots": "Top bulk lots",
+  "catBodyFeaturedSuppliers": "Featured suppliers",
+  "loginError": "Login error: {error}",
+  "@loginError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpMethodSoon": "Method picker, coming soon",
+  "trackingRetry": "Try again",
+  "vendorSettingsTitle": "Your store settings"
 }

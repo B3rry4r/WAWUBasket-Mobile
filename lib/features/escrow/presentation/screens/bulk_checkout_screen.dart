@@ -62,7 +62,7 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
       return;
     }
     if (_address.text.trim().isEmpty) {
-      wbShowSnack(context, 'Add a drop-off address.');
+      wbShowSnack(context, context.l10n.escrowAddDropOff);
       return;
     }
     setState(() => _busy = true);
@@ -140,7 +140,7 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Checkout', style: WBTypography.page),
+                          Text(context.l10n.checkoutTitle, style: WBTypography.page),
                           Text(
                             'Funds stay in escrow until you confirm delivery.',
                             style: WBTypography.caption.copyWith(
@@ -168,7 +168,7 @@ class _BulkCheckoutScreenState extends State<BulkCheckoutScreen> {
                 WBInput(
                   controller: _address,
                   label: 'Address or warehouse',
-                  placeholder: 'Where should the lot land?',
+                  placeholder: context.l10n.escrowDropOffPlaceholder,
                   leadingIcon: WBIconName.pin,
                 ),
                 const SizedBox(height: WBSpacing.lg),

@@ -107,7 +107,7 @@ class _AgentSyncScreenState extends State<AgentSyncScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Sync with WAWU', style: WBTypography.page),
+                              Text(context.l10n.agentSyncTitle, style: WBTypography.page),
                               Text(
                                 'Send your offline data to the cloud.',
                                 style: WBTypography.caption.copyWith(
@@ -125,22 +125,22 @@ class _AgentSyncScreenState extends State<AgentSyncScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _SyncRow(
-                            label: 'Pending traders',
+                            label: context.l10n.agentSyncPendingTraders,
                             value: '$pendingTraders',
                           ),
                           const SizedBox(height: 12),
                           _SyncRow(
-                            label: 'Pending transactions',
+                            label: context.l10n.agentSyncPendingTxns,
                             value: '$pendingTxns',
                           ),
                           const SizedBox(height: 12),
                           _SyncRow(
-                            label: 'Pending payouts',
+                            label: context.l10n.agentSyncPendingPayouts,
                             value: '$pendingPayouts',
                           ),
                           const SizedBox(height: 12),
                           _SyncRow(
-                            label: 'Last sync',
+                            label: context.l10n.agentSyncLastSync,
                             value: _done
                                 ? 'Just now'
                                 : AgentController.instance.lastSyncAt != null
@@ -337,7 +337,7 @@ class _ConflictSheet extends StatelessWidget {
               ),
               const SizedBox(height: WBSpacing.md),
               _Version(
-                label: 'Your offline copy',
+                label: context.l10n.agentSyncOfflineCopy,
                 qty: c.localQty,
                 price: c.localPrice,
                 onKeep: () {
@@ -348,7 +348,7 @@ class _ConflictSheet extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _Version(
-                label: 'WAWU server',
+                label: context.l10n.agentSyncServer,
                 qty: c.serverQty,
                 price: c.serverPrice,
                 emphasised: true,
@@ -416,7 +416,7 @@ class _Version extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           WBButton(
-            label: 'Keep this version',
+            label: context.l10n.agentSyncKeepThis,
             fullWidth: true,
             size: WBButtonSize.sm,
             variant: emphasised ? WBButtonVariant.ghost : WBButtonVariant.secondary,

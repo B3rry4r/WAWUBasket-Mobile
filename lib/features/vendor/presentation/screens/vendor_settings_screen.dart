@@ -75,7 +75,7 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
         'notifyLowStock': _pushLowStock,
         'emailReports': _emailReports,
       });
-      if (mounted) wbShowSnack(context, 'Settings saved');
+      if (mounted) wbShowSnack(context, context.l10n.vendorSettingsSaved);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
@@ -133,11 +133,11 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
               children: [
                 WBBackChip(onPressed: () => context.pop()),
                 const SizedBox(width: 14),
-                Text('Your store settings', style: WBTypography.page),
+                Text(context.l10n.vendorSettingsTitle, style: WBTypography.page),
               ],
             ),
             const SizedBox(height: WBSpacing.lg),
-            _SectionLabel(label: 'Store hours'),
+            _SectionLabel(label: context.l10n.vendorSettingsStoreHours),
             const SizedBox(height: 10),
             WBCard(
               child: Column(
@@ -219,22 +219,22 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
               ),
             ),
             const SizedBox(height: WBSpacing.lg),
-            _SectionLabel(label: 'Notifications'),
+            _SectionLabel(label: context.l10n.operatorNotifications),
             const SizedBox(height: 10),
             WBCard(
               padding: EdgeInsets.zero,
               child: Column(
                 children: [
                   _Toggle(
-                    label: 'New order alerts',
-                    sub: 'Push + email',
+                    label: context.l10n.vendorHomeAlerts,
+                    sub: context.l10n.vendorNotifPushEmail,
                     value: _pushOrders,
                     onChanged: (v) => setState(() => _pushOrders = v),
                   ),
                   const WBDivider(),
                   _Toggle(
-                    label: 'Low stock alerts',
-                    sub: 'Push only',
+                    label: context.l10n.vendorHomeInventory,
+                    sub: context.l10n.vendorNotifPushOnly,
                     value: _pushLowStock,
                     onChanged: (v) => setState(() => _pushLowStock = v),
                   ),

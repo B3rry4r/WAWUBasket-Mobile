@@ -1997,4 +1997,686 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'Ọrụ ugbu a';
+
+  @override
+  String get deleteAccountLeavingTitle => 'Ị na-apụ?';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'Anyị na-adị mwute ịhụ gị na-apụ. Tupu ịpụ:';
+
+  @override
+  String get deleteAccountConfirmPermanent => 'Hichaa akaụntụ gị kpamkpam?';
+
+  @override
+  String get deleteAccountCannotUndo => 'Ihe a enweghị ike ịgbanweghachi ya.';
+
+  @override
+  String get profilePhotoError => 'Enweghị ike ịmelite foto. Nwalịa.';
+
+  @override
+  String get profilePreferences => 'Nhọpụta';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'Iwu';
+
+  @override
+  String get profileStatsOrders => 'Ọnụ ahịa';
+
+  @override
+  String get profileStatsBulk => 'Ọtụtụ';
+
+  @override
+  String get profileStatsFavorites => 'Ndị a hụrụ n\'anya';
+
+  @override
+  String get profileLanguageSub => 'Bekee · Frenchi · Hausa · Yoruba · Igbo';
+
+  @override
+  String get profileGuestTitle => 'Ị na-achọ dịka onye ọbịa';
+
+  @override
+  String get profileGuestBody =>
+      'Banyere ịhịkwa profaịlụ gị, ọnụ ahịa, wallet na ndị a hụrụ n\'anya.';
+
+  @override
+  String get profileCreateAccount => 'Mepụta akaụntụ';
+
+  @override
+  String get operatorAccountTitle => 'Akaụntụ';
+
+  @override
+  String get operatorOperationsTitle => 'Ọrụ';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'SMS';
+
+  @override
+  String get forgotSmsSub => 'Na ekwentị gị';
+
+  @override
+  String get forgotEmailLabel => 'Ozi-e';
+
+  @override
+  String get forgotEmailSub => 'Na igbe ozi-e gị';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'Gaa n\'ihu na $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'Ọnụ ahịa nabatara';
+
+  @override
+  String get vendorOrderDeclined => 'Ọnụ ahịa kọọrọ';
+
+  @override
+  String get vendorLiveOrdersTitle => 'Ọnụ ahịa dị ndụ';
+
+  @override
+  String get vendorDashboardSubtitle => 'Njikọ onye na-ere ahịa';
+
+  @override
+  String get vendorCallingCustomer => 'Na-akpọ onye ahịa…';
+
+  @override
+  String get vendorTicketSent => 'Tiket ezigara na printer';
+
+  @override
+  String get vendorIssueSent => 'Nsogbu ekwuoro nkwado';
+
+  @override
+  String get vendorSettingsSaved => 'Ntọzite echekwara';
+
+  @override
+  String get vendorSettingsStoreHours => 'Oge ụlọ ahịa';
+
+  @override
+  String get vendorNotifPushEmail => 'Push + email';
+
+  @override
+  String get vendorNotifPushOnly => 'Push naanị';
+
+  @override
+  String get vendorMenuAdd => 'Tinye';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'Chọọ nri…';
+
+  @override
+  String get vendorMenuEditDish => 'Dezie nri';
+
+  @override
+  String get vendorMenuDuplicate => 'Deezie ọzọ';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return '$name edeeziela';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'Hichaa nri';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return '$name ewepụọ';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'Aha nri na ọnụahịa dịnọ.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return '$name emelitere';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return '$name etinyere na menu';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'Aha nri';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'dịka Jollof raịsị';
+
+  @override
+  String get vendorMenuDescLabel => 'Nkọwa';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'Dị ụtọ, ọ na-ere ọkụ, ọhụụ…';
+
+  @override
+  String get vendorMenuPriceLabel => 'Ọnụahịa (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'Ọ nke';
+
+  @override
+  String get vendorMenuAddGroup => 'Tinye otu';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'Aha otu';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'Akara nhọpụta';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'Ọzaazị edere $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'Ezaalaghachi';
+
+  @override
+  String get vendorReviewYourReply => 'Ọzaazị gị';
+
+  @override
+  String get vendorReviewReplyPlaceholder =>
+      'Daalụ maka nzaghachi, anyị nụrụ gị...';
+
+  @override
+  String get vendorReviewPostReply => 'Zipu ọzaazị';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'Ọpụpụ CSV amalitere';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'Ngwaahịa agwụchala';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'Adreesị njọ';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'Mgbanwe onye ahịa';
+
+  @override
+  String get vendorAnalyticsOther => 'Ọzọ';
+
+  @override
+  String get vendorInventoryItemName => 'Aha ngwongwo';
+
+  @override
+  String get vendorInventoryQuantity => 'Ọnụọgụ';
+
+  @override
+  String get vendorInventoryUnit => 'Nnukwu (kg / akpa…)';
+
+  @override
+  String get vendorInventoryThreshold => 'Ókè mkpado ala';
+
+  @override
+  String get vendorInventoryAddItem => 'Tinye ngwongwo';
+
+  @override
+  String get vendorInventoryNewBatch => 'Otu ọhụụ';
+
+  @override
+  String get vendorInventoryUpdateStock => 'Melite ngwaahịa';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return '$name emelitere';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'Otu ọhụụ edere maka $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub =>
+      'Nwezie ngwaahịa iji nọgide na-anabata ọnụ ahịa';
+
+  @override
+  String get vendorPayoutsEarnings => 'Ego i nwetara';
+
+  @override
+  String get agentTxnTraderRequired =>
+      'Họrọ onye na-azụ ahịa iji dee azụmaahịa a.';
+
+  @override
+  String get agentTxnFieldsRequired => 'Ngwa, ọnụọgụ na ọnụahịa dị ọnọdụ.';
+
+  @override
+  String get agentTxnSavedOffline => 'Azụmaahịa echekwara offline';
+
+  @override
+  String get agentTxnTraderLabel => 'Onye na-azụ ahịa';
+
+  @override
+  String get agentTxnProductLabel => 'Ngwa';
+
+  @override
+  String get agentTxnQuantityLabel => 'Ọnụọgụ (kg)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'Ọnụahịa (₦)';
+
+  @override
+  String get agentTxnSave => 'Chekwaa azụmaahịa';
+
+  @override
+  String get agentPayoutTraderRequired =>
+      'Họrọ onye na-azụ ahịa iji dee ịkwụ ụgwọ a.';
+
+  @override
+  String get agentPayoutAmountRequired => 'Ego ga-abawanye ₦0.';
+
+  @override
+  String get agentPayoutRecorded => 'Ịkwụ ụgwọ edere · ntapadị na ọnọdụ';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'Ịkwụ ụgwọ maka ire tomato';
+
+  @override
+  String get agentSyncTitle => 'Kọwaa na WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'Ndị na-azụ ahịa na-atọ ụlọ';
+
+  @override
+  String get agentSyncPendingTxns => 'Azụmaahịa na-atọ ụlọ';
+
+  @override
+  String get agentSyncPendingPayouts => 'Ịkwụ ụgwọ na-atọ ụlọ';
+
+  @override
+  String get agentSyncLastSync => 'Kọwaa ikẹnta';
+
+  @override
+  String get agentSyncOfflineCopy => 'Ọdịịta offline gị';
+
+  @override
+  String get agentSyncServer => 'Sava WAWU';
+
+  @override
+  String get agentSyncKeepThis => 'Chekwaa ọ nke a';
+
+  @override
+  String get agentRegNamePhoneRequired => 'Aha na ekwentị dị ọnọdụ.';
+
+  @override
+  String get agentRegSavedOffline =>
+      'Onye na-azụ ahịa echekwara offline · ga-akọwa n\'oge na-abịa';
+
+  @override
+  String get agentRegNewTraderTitle => 'Onye ọhụụ na-azụ ahịa';
+
+  @override
+  String get agentRegFullNameLabel => 'Aha ọzụzụ';
+
+  @override
+  String get agentRegFullNamePlaceholder =>
+      'Aha ọzụzụ dị ka ọ dị n\'asambodo ID';
+
+  @override
+  String get agentRegPhoneLabel => 'Nọmba ekwentị';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'Ọnọdụ';
+
+  @override
+  String get agentRegLocationPlaceholder => 'Aha ọja ma ọ bụ obodo';
+
+  @override
+  String get agentRegPhotoLabel => 'Foto onye na-azụ ahịa';
+
+  @override
+  String get agentRegIdLabel => 'Asambodo njirimara';
+
+  @override
+  String get agentTradersPageTitle => 'Ndị gị na-azụ ahịa';
+
+  @override
+  String get agentTradersSearchPlaceholder =>
+      'Chọọ site na aha ma ọ bụ ekwentị…';
+
+  @override
+  String get tradeSuppliersEmpty =>
+      'Ọ dịghị ndị na-enye ihe edere aha ya titi ugbu a.';
+
+  @override
+  String get tradeBulkEmpty => 'Ọ dịghị ọtụtụ ngwa edere aha ya titi ugbu a.';
+
+  @override
+  String get bulkUnitPrice => 'Ọnụahịa otu';
+
+  @override
+  String get bulkLotSize => 'Nnukwu otu';
+
+  @override
+  String get bulkMoq => 'MOQ';
+
+  @override
+  String get bulkLeadTime => 'Oge nọdị na-atọ ụlọ';
+
+  @override
+  String get bulkOrigin => 'Isi mmalite';
+
+  @override
+  String get bulkShipping => 'Nziga';
+
+  @override
+  String get bulkQuality => 'Àgwà';
+
+  @override
+  String get bulkRequestQuote => 'Rịọ nzaghachi ọnụahịa';
+
+  @override
+  String get bulkThisWeek => 'Izu a';
+
+  @override
+  String get bulkWithin2Wks => 'N\'ime izu 2';
+
+  @override
+  String get bulkThisMonth => 'Ọnwa a';
+
+  @override
+  String get bulkDeliveryHint => 'Adreesị nnyefe, ndetu ọpọlọpọ…';
+
+  @override
+  String get bulkSendRequest => 'Zipu arịọ';
+
+  @override
+  String get exportQtyAvailable => 'Ọnụọgụ dị';
+
+  @override
+  String get exportPricePerKg => 'Ọnụahịa n\'otu kg';
+
+  @override
+  String get exportHarvestDate => 'Ụbọchị izozo';
+
+  @override
+  String get exportCorridor => 'Ụzọ';
+
+  @override
+  String get exportEnquire => 'Jụọ ajụjụ';
+
+  @override
+  String get supplierConnect => 'Jikọọ';
+
+  @override
+  String get traderEditListing => 'Dezie ndepụta';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return 'Ọnọdụ $produce emelitere';
+  }
+
+  @override
+  String get traderDeleteListing => 'Hichaa ndepụta';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return '$produce ewepụọ';
+  }
+
+  @override
+  String get traderPostListing => 'Dee';
+
+  @override
+  String get traderFilterAll => 'Nile';
+
+  @override
+  String get traderFieldsRequired => 'Ngwa ubi, ọnụọgụ na ọnụahịa dị ọnọdụ.';
+
+  @override
+  String get traderFarmRequired => 'Aha ubi na mpaghara dị ọnọdụ.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return '$produce emelitere';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return '$produce edere aha';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'Ụbọchị izozo';
+
+  @override
+  String get traderCorridorOrigin => 'Ụzọ isi mmalite';
+
+  @override
+  String get traderCorridorDest => 'Ụzọ ebe ọchọcha';
+
+  @override
+  String get traderMarketCategory => 'Ọ nke ọcha ahịa';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'Nhọpụta — họrọ ọ nke ka ndepụta a pụta na ahịa.';
+
+  @override
+  String get traderClearCategory => 'Hichaa ọ nke';
+
+  @override
+  String get traderEditListingTitle => 'Dezie ndepụta';
+
+  @override
+  String get traderNewListingTitle => 'Ndepụta ọhụụ nrewepụ';
+
+  @override
+  String get traderChangePhoto => 'Gbanwee foto';
+
+  @override
+  String get traderUploadPhoto => 'Bulite foto';
+
+  @override
+  String get traderPhotoHint => 'Foto otu dị njikere maka nziga';
+
+  @override
+  String get traderProducePlaceholder => 'dịka Tomato';
+
+  @override
+  String get traderFarmPlaceholder => 'dịka Ubi Hauwa na Ụmụ Ya';
+
+  @override
+  String get traderRegionPlaceholder => 'dịka Kano';
+
+  @override
+  String get traderFromLabel => 'Si';
+
+  @override
+  String get traderToLabel => 'Ruo';
+
+  @override
+  String get traderCategoryLabel => 'Ọ nke ahịa (nhọpụta)';
+
+  @override
+  String get traderNoCategories => 'Ọ dịghị ọ nke';
+
+  @override
+  String get traderNoneSelected => 'Ọ dịghị';
+
+  @override
+  String get traderSaveChanges => 'Chekwaa mgbanwe';
+
+  @override
+  String get traderPostListingBtn => 'Dee ndepụta';
+
+  @override
+  String get traderDashboardSubtitle => 'Njikọ onye na-azụ ahịa';
+
+  @override
+  String get searchVendors => 'Ndị na-ere ahịa';
+
+  @override
+  String get searchDishes => 'Nri';
+
+  @override
+  String get productAddNote => 'Tinye ihe ọ bụla';
+
+  @override
+  String get productNotePlaceholder => 'dịka. obere ọkụ, enweghị ọniọns…';
+
+  @override
+  String get shoppingViewBasket => 'Lelee agba';
+
+  @override
+  String get escrowAddDropOff => 'Tinye adreesị itinye ihe.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'Ebe ọ bụla otu kwesịrị ịruo?';
+
+  @override
+  String get escrowBulkOrdersTitle => 'Ọnụ ahịa ọtụtụ';
+
+  @override
+  String get escrowDisputeTitle => 'Mepee esemokwu';
+
+  @override
+  String get escrowPhotoUploadSoon => 'Bulite foto na-abịa n\'oge na-abịa';
+
+  @override
+  String get livestockSameDay => 'Ụbọchị ahụ';
+
+  @override
+  String get livestockVacuumPacked => 'A fakịrịa n\'óghere';
+
+  @override
+  String get driverOpenLoads => 'Ibu mepere';
+
+  @override
+  String get driverToday => 'Taata';
+
+  @override
+  String get driverBid => 'Tọlee';
+
+  @override
+  String get driverAddPriceEta => 'Tinye ọnụahịa na oge ọ ga-eruo.';
+
+  @override
+  String get driverBidTitle => 'Dee tọlee gị';
+
+  @override
+  String get driverPriceLabel => 'Ọnụahịa (₦)';
+
+  @override
+  String get driverEtaLabel => 'Oge ọ ga-eruo (awa)';
+
+  @override
+  String get driverNotesLabel => 'Ndetu (nhọpụta)';
+
+  @override
+  String get driverNotesPlaceholder => 'Anọ na-aga ụzọ a kwa izu.';
+
+  @override
+  String driverOtherBids(int count) {
+    return 'Tọlee $count ndị ọzọ';
+  }
+
+  @override
+  String get driverSubmitBid => 'Nyefee tọlee';
+
+  @override
+  String get driverBrowseLoads => 'Lee ibu';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'Na-aga $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'Kpọọ';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'Na-akpọ $name…';
+  }
+
+  @override
+  String get riderSupportNotified => 'Nkwado anọchiela';
+
+  @override
+  String get catStandardLabel => 'Ọkwọ';
+
+  @override
+  String get catStandardSub => 'Ọ dị mma ụbọchị niile';
+
+  @override
+  String get catPremiumLabel => 'Premium';
+
+  @override
+  String get catPremiumSub => 'Kariri, imeloha';
+
+  @override
+  String get catJollofBundleTitle => 'Jollof bundle';
+
+  @override
+  String get catJollofBundleSub => 'Ihe nile ị chọrọ · chekwaa 15%';
+
+  @override
+  String get catBundleAdded => 'Bundle etinyere na agba';
+
+  @override
+  String get catFarmerTitle => 'Zuo onye ọrụ ubi';
+
+  @override
+  String get catFarmerSub => 'N\'azụ tomato gị';
+
+  @override
+  String get catFarmerSoon => 'Ihe gbasara onye ọrụ ubi na-abịa n\'oge na-abịa';
+
+  @override
+  String get catReorderLabel => 'Dee ọzọ';
+
+  @override
+  String get catLastBasketReordered => 'Agba ikẹnta edere ọzọ';
+
+  @override
+  String get catBodyChooseCut => 'Họrọ ọbọ gị';
+
+  @override
+  String get catBodyPopularNearYou => 'A ma ama n\'akụkụ gị';
+
+  @override
+  String get catBodyTrendingToday => 'Nri ndị na-ewu ewu taa';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'Ụlọ oriri edepụtara';
+
+  @override
+  String get catBodyPopularDishes => 'Nri a ma ama';
+
+  @override
+  String get catBodyTopPicks => 'Nhọpụta kachasị mma';
+
+  @override
+  String get catBodyTopBulkLots => 'Ọtụtụ ngwa kachasị mma';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'Ndị na-enye ihe edepụtara';
+
+  @override
+  String loginError(String error) {
+    return 'Mperi nbanye: $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'Nhọpụta ụzọ, na-abịa n\'oge na-abịa';
+
+  @override
+  String get trackingRetry => 'Nwalịa';
+
+  @override
+  String get vendorSettingsTitle => 'Ntọzite ụlọ ahịa gị';
 }

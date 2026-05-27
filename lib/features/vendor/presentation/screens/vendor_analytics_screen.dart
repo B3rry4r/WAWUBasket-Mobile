@@ -141,7 +141,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                       ),
                       const SizedBox(height: WBSpacing.md),
                       WBButton(
-                        label: 'Try again',
+                        label: context.l10n.actionRetry,
                         size: WBButtonSize.sm,
                         variant: WBButtonVariant.secondary,
                         onPressed: _load,
@@ -273,28 +273,28 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         _LegendRow(
-                          color: Color(0xFF1F1F1F),
-                          label: 'Out of stock',
+                          color: const Color(0xFF1F1F1F),
+                          label: context.l10n.vendorAnalyticsOutOfStock,
                           value: '42%',
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         _LegendRow(
-                          color: Color(0xFF6B7280),
-                          label: 'Wrong address',
+                          color: const Color(0xFF6B7280),
+                          label: context.l10n.vendorAnalyticsWrongAddress,
                           value: '23%',
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         _LegendRow(
-                          color: Color(0xFFA3A3A3),
-                          label: 'Customer change',
+                          color: const Color(0xFFA3A3A3),
+                          label: context.l10n.vendorAnalyticsCustomerChange,
                           value: '20%',
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         _LegendRow(
-                          color: Color(0xFFD4D4D4),
-                          label: 'Other',
+                          color: const Color(0xFFD4D4D4),
+                          label: context.l10n.vendorAnalyticsOther,
                           value: '15%',
                         ),
                       ],
@@ -313,7 +313,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () => wbShowSnack(context, 'CSV export started'),
+                  onTap: () => wbShowSnack(context, context.l10n.vendorAnalyticsCsvStarted),
                   child: Row(
                     children: [
                       const WBIcon(WBIconName.more, size: 14),

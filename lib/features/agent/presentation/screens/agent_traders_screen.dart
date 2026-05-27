@@ -52,7 +52,7 @@ class _AgentTradersScreenState extends State<AgentTradersScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Your traders', style: WBTypography.page),
+                          Text(context.l10n.agentTradersPageTitle, style: WBTypography.page),
                           Text(
                             '${AgentController.instance.traders.value.length} registered',
                             style: WBTypography.caption.copyWith(
@@ -73,7 +73,7 @@ class _AgentTradersScreenState extends State<AgentTradersScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 WBInput(
-                  placeholder: 'Search by name or phone…',
+                  placeholder: context.l10n.agentTradersSearchPlaceholder,
                   leadingIcon: WBIconName.search,
                   onChanged: (v) => setState(() => _query = v),
                 ),

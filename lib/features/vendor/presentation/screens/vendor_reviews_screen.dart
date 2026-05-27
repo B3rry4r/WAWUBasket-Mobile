@@ -79,7 +79,7 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
     setState(() => _replied.add(id));
     try {
       await VendorApi.instance.replyReview(id, result);
-      if (mounted) wbShowSnack(context, 'Reply posted to $reviewer');
+      if (mounted) wbShowSnack(context, context.l10n.vendorReviewReplyPosted(reviewer));
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _replied.remove(id));
@@ -231,8 +231,8 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
                               ),
                               const Spacer(),
                               if (_replied.contains(r.id))
-                                const WBStatusPill(
-                                  label: 'Replied',
+                                WBStatusPill(
+                                  label: context.l10n.vendorReviewRepliedLabel,
                                   kind: WBStatusKind.success,
                                 )
                               else
@@ -403,14 +403,14 @@ class _ReplySheetState extends State<_ReplySheet> {
           ),
           const SizedBox(height: WBSpacing.lg),
           WBInput(
-            label: 'Your reply',
-            placeholder: 'Thanks for the feedback, we hear you...',
+            label: context.l10n.vendorReviewYourReply,
+            placeholder: context.l10n.vendorReviewReplyPlaceholder,
             controller: _ctrl,
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: WBSpacing.lg),
           WBButton(
-            label: 'Post reply',
+            label: context.l10n.vendorReviewPostReply,
             size: WBButtonSize.lg,
             fullWidth: true,
             disabled: !canSend,

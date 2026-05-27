@@ -664,5 +664,330 @@
   "roleStatusApproved": "Ti fọwọsi",
   "roleStatusPending": "Ní àtúnyẹ̀wò",
   "roleStatusGetVerified": "Jẹ́ríisi",
-  "roleStatusActive": "Lọwọlọwọ"
+  "roleStatusActive": "Lọwọlọwọ",
+  "deleteAccountLeavingTitle": "Ẹ ń lọ?",
+  "deleteAccountLeavingBody": "A bànújẹ rí yín lọ. Ṣáájú kí ẹ tó lọ:",
+  "deleteAccountConfirmPermanent": "Pa àkọọ́lẹ̀ rẹ pa dé gbẹ̀?",
+  "deleteAccountCannotUndo": "Àṣeyọrí yìí kò ṣeépadà.",
+  "profilePhotoError": "A kò lè ṣe àyípadà fọ́tò. Gbìyànjú lẹ́ẹ̀kan si.",
+  "profilePreferences": "Àwọn àṣàyàn",
+  "profileVersionSub": "v2.1.0",
+  "profileLegal": "Òfin",
+  "profileStatsOrders": "Àwọn àṣẹ",
+  "profileStatsBulk": "Iye-ńlá",
+  "profileStatsFavorites": "Àwọn àyọ̀",
+  "profileLanguageSub": "Gẹ̀ẹ́sì · Faransé · Hausa · Yorùbá · Igbo",
+  "profileGuestTitle": "O ń ṣàgbéyẹ̀wò gẹ́gẹ́ bí àlejò",
+  "profileGuestBody": "Wọlé láti ṣàkóso profáìlì, àwọn àṣẹ, àpamọ́wọ́ àti àwọn àyọ̀ rẹ.",
+  "profileCreateAccount": "Ṣẹ̀dá àkọọ́lẹ̀",
+  "operatorAccountTitle": "Àkọọ́lẹ̀",
+  "operatorOperationsTitle": "Àwọn ìṣẹ́",
+  "operatorVersionSub": "v2.1.0",
+  "forgotSmsLabel": "SMS",
+  "forgotSmsSub": "Sí foónu rẹ",
+  "forgotEmailLabel": "Ìméèlì",
+  "forgotEmailSub": "Sí ìnboxì rẹ",
+  "welcomeBiometric": "Tẹ̀síwájú pẹ̀lú {bio}",
+  "@welcomeBiometric": {
+    "placeholders": {
+      "bio": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorOrderAccepted": "Àṣẹ ti gbà",
+  "vendorOrderDeclined": "Àṣẹ ti kọ̀",
+  "vendorLiveOrdersTitle": "Àwọn àṣẹ tó wà",
+  "vendorDashboardSubtitle": "Pánẹ̀lì olùtà",
+  "vendorCallingCustomer": "Ń pè olùbàṣepọ̀…",
+  "vendorTicketSent": "Tíkẹ́tì ti rán sí ẹ̀rọ ìtẹ̀wé",
+  "vendorIssueSent": "Ìṣòro ti fi ránṣẹ́ sí ìtìlẹ́yìn",
+  "vendorSettingsSaved": "Àwọn ìpèsè ti pamọ́",
+  "vendorSettingsStoreHours": "Àkókò ìṣòwò",
+  "vendorNotifPushEmail": "Push + email",
+  "vendorNotifPushOnly": "Push péré",
+  "vendorMenuAdd": "Fikún",
+  "vendorMenuSearchPlaceholder": "Wá oúnjẹ kan…",
+  "vendorMenuEditDish": "Àtúnṣe oúnjẹ",
+  "vendorMenuDuplicate": "Ẹ̀dà",
+  "vendorMenuDuplicated": "{name} ti ẹ̀dà",
+  "@vendorMenuDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDeleteDish": "Pa oúnjẹ rẹ̀",
+  "vendorMenuDishRemoved": "{name} ti yọ",
+  "@vendorMenuDishRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishRequired": "Orúkọ oúnjẹ àti iye owó nílò.",
+  "vendorMenuDishUpdated": "{name} ti ṣe àyípadà",
+  "@vendorMenuDishUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishAdded": "{name} ti fikún sí àkójọ oúnjẹ",
+  "@vendorMenuDishAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishNameLabel": "Orúkọ oúnjẹ",
+  "vendorMenuDishNamePlaceholder": "fún àpẹẹrẹ Ìrẹsì jollof",
+  "vendorMenuDescLabel": "Àpèjúwe",
+  "vendorMenuDescPlaceholder": "Dára, ọlóòrísì, tútù…",
+  "vendorMenuPriceLabel": "Iye owó (₦)",
+  "vendorMenuCategoryLabel": "Ẹ̀ka",
+  "vendorMenuAddGroup": "Fikún ẹgbẹ́",
+  "vendorMenuGroupNameLabel": "Orúkọ ẹgbẹ́",
+  "vendorMenuOptionLabelPlaceholder": "Àmì àṣàyàn",
+  "vendorMenuOptionPricePlaceholder": "+₦0",
+  "vendorReviewReplyPosted": "Ìdáhùn ti firánṣẹ́ sí {reviewer}",
+  "@vendorReviewReplyPosted": {
+    "placeholders": {
+      "reviewer": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorReviewRepliedLabel": "Ti dáhùn",
+  "vendorReviewYourReply": "Ìdáhùn rẹ",
+  "vendorReviewReplyPlaceholder": "E ṣeun fún èrò naa, a gbà yín…",
+  "vendorReviewPostReply": "Firánṣẹ́ ìdáhùn",
+  "vendorAnalyticsCsvStarted": "Gbígba CSV ti bẹ̀rẹ̀",
+  "vendorAnalyticsOutOfStock": "Àjà ti parí",
+  "vendorAnalyticsWrongAddress": "Àdírẹ́sì àṣìṣe",
+  "vendorAnalyticsCustomerChange": "Ìyípadà olùbàṣepọ̀",
+  "vendorAnalyticsOther": "Míràn",
+  "vendorInventoryItemName": "Orúkọ ohun",
+  "vendorInventoryQuantity": "Iye",
+  "vendorInventoryUnit": "Ìwọ̀n (kg / àpò…)",
+  "vendorInventoryThreshold": "Ìwọ̀n ìsàlẹ̀ àjà",
+  "vendorInventoryAddItem": "Fikún ohun",
+  "vendorInventoryNewBatch": "Ẹgbẹ́ tuntun",
+  "vendorInventoryUpdateStock": "Ṣe àyípadà àjà",
+  "vendorInventoryItemUpdated": "{name} ti ṣe àyípadà",
+  "@vendorInventoryItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorInventoryBatchLogged": "Ẹgbẹ́ tuntun ti gba fún {name}",
+  "@vendorInventoryBatchLogged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorAlertsRestockSub": "Tún àjà ṣe láti tẹ̀síwájú gbígbà àṣẹ",
+  "vendorPayoutsEarnings": "Owó tí o jèrè",
+  "agentTxnTraderRequired": "Yan oniṣòwò láti gba ìṣòwò yìí.",
+  "agentTxnFieldsRequired": "Ọjà, iye, àti iye owó fẹ́ jẹ́.",
+  "agentTxnSavedOffline": "Ìdúnàádúrà ti pamọ́ lásìkò ayé",
+  "agentTxnTraderLabel": "Oníṣòwò",
+  "agentTxnProductLabel": "Ọjà",
+  "agentTxnQuantityLabel": "Iye (kg)",
+  "agentTxnUnitPriceLabel": "Iye owó fò ọ̀kan (₦)",
+  "agentTxnSave": "Pamọ́ ìdúnàádúrà",
+  "agentPayoutTraderRequired": "Yan oniṣòwò láti gba ìsanwó yìí.",
+  "agentPayoutAmountRequired": "Iye owó gbọdọ̀ ju ₦0 lọ.",
+  "agentPayoutRecorded": "Ìsanwó ti gbasilẹ · ìpadàsanwó ti dúró",
+  "agentPayoutNotePlaceholder": "Ìsanwó fún ìtajà tomátì",
+  "agentSyncTitle": "Síncronáìsì pẹ̀lú WAWU",
+  "agentSyncPendingTraders": "Àwọn oniṣòwò tó ndúró",
+  "agentSyncPendingTxns": "Àwọn ìdúnàádúrà tó ndúró",
+  "agentSyncPendingPayouts": "Àwọn ìsanwó tó ndúró",
+  "agentSyncLastSync": "Ìdọ́gba ìkẹyìn",
+  "agentSyncOfflineCopy": "Àdàkọ rẹ lásìkò ayé",
+  "agentSyncServer": "Sáféà WAWU",
+  "agentSyncKeepThis": "Jẹ́ kí ó jẹ ìtẹ̀jáde yìí",
+  "agentRegNamePhoneRequired": "Orúkọ àti foónu nílò.",
+  "agentRegSavedOffline": "Oníṣòwò ti pamọ́ lásìkò ayé · yóò dọ́gba lẹ́yìn",
+  "agentRegNewTraderTitle": "Oníṣòwò tuntun",
+  "agentRegFullNameLabel": "Orúkọ kíkún",
+  "agentRegFullNamePlaceholder": "Orúkọ kíkún bí ó ṣe wà ní káàdì ìdánimọ̀",
+  "agentRegPhoneLabel": "Nọ́mbà foónu",
+  "agentRegPhonePlaceholder": "812 345 6789",
+  "agentRegLocationLabel": "Àgbègbè",
+  "agentRegLocationPlaceholder": "Orúkọ ọjà tàbí abúlé",
+  "agentRegPhotoLabel": "Fọ́tò oníṣòwò",
+  "agentRegIdLabel": "Ìwé ìdánimọ̀",
+  "agentTradersPageTitle": "Àwọn oniṣòwò rẹ",
+  "agentTradersSearchPlaceholder": "Wá pẹ̀lú orúkọ tàbí foónu…",
+  "tradeSuppliersEmpty": "Kò sí olùpèsè tí a kò forúkọ sílẹ̀ títí di isisiyi.",
+  "tradeBulkEmpty": "Kò sí àwọn kẹ̀kẹ̀ jimla tí a forúkọ sílẹ̀ títí di isisiyi.",
+  "bulkUnitPrice": "Iye owó fò ọ̀kan",
+  "bulkLotSize": "Iwọn ẹgbẹ́",
+  "bulkMoq": "MOQ",
+  "bulkLeadTime": "Àkókò ìdúró",
+  "bulkOrigin": "Ìpilẹ̀ṣẹ̀",
+  "bulkShipping": "Gbígba kékeré",
+  "bulkQuality": "Ìwọ̀n dídára",
+  "bulkRequestQuote": "Béèrè fún iye",
+  "bulkThisWeek": "Ọ̀sẹ̀ yìí",
+  "bulkWithin2Wks": "Láàárín ọ̀sẹ̀ 2",
+  "bulkThisMonth": "Oṣù yìí",
+  "bulkDeliveryHint": "Àdírẹ́sì ifiránṣẹ́, àwọn ìṣirò ifò…",
+  "bulkSendRequest": "Firánṣẹ́ ìbéèrè",
+  "exportQtyAvailable": "Iye tó wà",
+  "exportPricePerKg": "Iye owó fò kg",
+  "exportHarvestDate": "Ọjọ́ ìkórè",
+  "exportCorridor": "Ọ̀nà",
+  "exportEnquire": "Bére wò",
+  "supplierConnect": "Ìdásọ̀pọ̀",
+  "traderEditListing": "Àtúnṣe ìkéde",
+  "traderStatusUpdated": "Ipò {produce} ti ṣe àyípadà",
+  "@traderStatusUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderDeleteListing": "Pa ìkéde rẹ̀",
+  "traderListingRemoved": "{produce} ti yọ",
+  "@traderListingRemoved": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderPostListing": "Firánṣẹ́",
+  "traderFilterAll": "Gbogbo",
+  "traderFieldsRequired": "Àwọn ọjà, iye, àti iye owó fẹ́ jẹ́.",
+  "traderFarmRequired": "Orúkọ oko àti agbègbè fẹ́ jẹ́.",
+  "traderListingUpdated": "{produce} ti ṣe àyípadà",
+  "@traderListingUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderListingPosted": "{produce} ti forúkọ sílẹ̀",
+  "@traderListingPosted": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderHarvestDateLabel": "Ọjọ́ ìkórè",
+  "traderCorridorOrigin": "Ọ̀nà ìpilẹ̀ṣẹ̀",
+  "traderCorridorDest": "Ọ̀nà ìdókòwò",
+  "traderMarketCategory": "Ẹ̀ka ọjà",
+  "traderMarketCategoryNote": "Àṣàyàn — yan ẹ̀ka kan kí ìkéde yìí hàn ní ọjà.",
+  "traderClearCategory": "Pa ẹ̀ka rẹ̀",
+  "traderEditListingTitle": "Àtúnṣe ìkéde",
+  "traderNewListingTitle": "Ìkéde ìtajà tuntun",
+  "traderChangePhoto": "Yí fọ́tò padà",
+  "traderUploadPhoto": "Gbé fọ́tò lọ",
+  "traderPhotoHint": "Fọ́tò ẹgbẹ́ tó ṣetán fún gbígba",
+  "traderProducePlaceholder": "fún àpẹẹrẹ Tomátì",
+  "traderFarmPlaceholder": "fún àpẹẹrẹ Oko Hauwa",
+  "traderRegionPlaceholder": "fún àpẹẹrẹ Kano",
+  "traderFromLabel": "Láti",
+  "traderToLabel": "Sí",
+  "traderCategoryLabel": "Ẹ̀ka ọjà (àṣàyàn)",
+  "traderNoCategories": "Kò sí ẹ̀ka",
+  "traderNoneSelected": "Kò sí",
+  "traderSaveChanges": "Pamọ́ àwọn ìyípadà",
+  "traderPostListingBtn": "Firánṣẹ́ ìkéde",
+  "traderDashboardSubtitle": "Pánẹ̀lì oníṣòwò",
+  "searchVendors": "Àwọn olùtà",
+  "searchDishes": "Àwọn oúnjẹ",
+  "productAddNote": "Fikún àkọsílẹ̀",
+  "productNotePlaceholder": "Fún àpẹẹrẹ. kò tó yíyan, àìsí àlùbọ́sà…",
+  "shoppingViewBasket": "Wò àgọ̀",
+  "escrowAddDropOff": "Fikún àdírẹ́sì ipadọ sílẹ̀.",
+  "escrowDropOffPlaceholder": "Níbo ni ẹgbẹ́ gbọdọ̀ dé?",
+  "escrowBulkOrdersTitle": "Àṣẹ jimla",
+  "escrowDisputeTitle": "Ṣí ìjiyàn",
+  "escrowPhotoUploadSoon": "Gbíga fọ́tò sí wọlẹ̀ ń bọ̀",
+  "livestockSameDay": "Ọjọ́ kan náà",
+  "livestockVacuumPacked": "Ìfò fákíùm",
+  "driverOpenLoads": "Àwọn èrù tó ṣíwọ́",
+  "driverToday": "Lónìí",
+  "driverBid": "Ṣàbẹtẹ",
+  "driverAddPriceEta": "Fikún iye owó àti àkókò dídé.",
+  "driverBidTitle": "Fi àbẹtẹ rẹ sílẹ̀",
+  "driverPriceLabel": "Iye owó (₦)",
+  "driverEtaLabel": "Àkókò dídé sí ìdó (wákàtí)",
+  "driverNotesLabel": "Àwọn ìṣirò (àṣàyàn)",
+  "driverNotesPlaceholder": "Mo máa ń gbé ọ̀nà yìí ní gbogbo ọ̀sẹ̀.",
+  "driverOtherBids": "Àwọn àbẹtẹ {count} míràn",
+  "@driverOtherBids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driverSubmitBid": "Fí àbẹtẹ sílẹ̀",
+  "driverBrowseLoads": "Wò àwọn èrù",
+  "driverHeadingTo": "Ń lọ sí {destination}",
+  "@driverHeadingTo": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "driverCallLabel": "Pe",
+  "driverCallingTrader": "Ń pè {name}…",
+  "@driverCallingTrader": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "riderSupportNotified": "Ìtìlẹ́yìn ti gba ìfitọ́",
+  "catStandardLabel": "Ìwọ̀n dídára",
+  "catStandardSub": "Dára lójoojúmọ́",
+  "catPremiumLabel": "Àgbára-ẹlẹ́gbẹ̀rí",
+  "catPremiumSub": "Títóbi, ó pọn jùlọ",
+  "catJollofBundleTitle": "Àkójọpọ̀ Jollof",
+  "catJollofBundleSub": "Ohun gbogbo tó o nílò · fipamọ́ 15%",
+  "catBundleAdded": "Àkójọpọ̀ ti fikún sí àgọ̀",
+  "catFarmerTitle": "Pàdé agbẹ̀",
+  "catFarmerSub": "Lẹ́yìn tomátì rẹ",
+  "catFarmerSoon": "Ìtẹ̀nugbẹ̀ agbẹ̀ ń bọ̀",
+  "catReorderLabel": "Ṣètò padà",
+  "catLastBasketReordered": "Àgọ̀ ìkẹyìn ti tún àṣẹ ṣe",
+  "catBodyChooseCut": "Yan ìgéegun rẹ",
+  "catBodyPopularNearYou": "Olókìkí nítòsí rẹ",
+  "catBodyTrendingToday": "Oúnjẹ ìjókòó lónìí",
+  "catBodyFeaturedRestaurants": "Àwọn ilé oúnjẹ tí a yàn",
+  "catBodyPopularDishes": "Àwọn oúnjẹ olókìkí",
+  "catBodyTopPicks": "Àwọn àṣàyàn tóp",
+  "catBodyTopBulkLots": "Àwọn kẹ̀kẹ̀ jimla tóp",
+  "catBodyFeaturedSuppliers": "Àwọn olùpèsè tí a yàn",
+  "loginError": "Àṣìṣe wíwọlé: {error}",
+  "@loginError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpMethodSoon": "Àṣàyàn ọ̀nà, ń bọ̀",
+  "trackingRetry": "Gbìyànjú lẹ́ẹ̀kan si",
+  "vendorSettingsTitle": "Àwọn ìpèsè ilé ìtajà rẹ"
 }

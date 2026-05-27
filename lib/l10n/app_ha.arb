@@ -709,5 +709,330 @@
   "roleStatusApproved": "An amince",
   "roleStatusPending": "Ana duba",
   "roleStatusGetVerified": "Tabbatar",
-  "roleStatusActive": "Aiki"
+  "roleStatusActive": "Aiki",
+  "deleteAccountLeavingTitle": "Kuna tafiya?",
+  "deleteAccountLeavingBody": "Muna bakin ciki da ganin ku tafi. Kafin ku tafi:",
+  "deleteAccountConfirmPermanent": "Goge asusun ku har abada?",
+  "deleteAccountCannotUndo": "Ba za a iya maido da shi ba.",
+  "profilePhotoError": "Ba a iya canza hoton ba. Sake gwadawa.",
+  "profilePreferences": "Zaɓuɓɓuka",
+  "profileVersionSub": "v2.1.0",
+  "profileLegal": "Doka",
+  "profileStatsOrders": "Oda",
+  "profileStatsBulk": "Jimla",
+  "profileStatsFavorites": "Abubuwan da ake so",
+  "profileLanguageSub": "Turanci · Faransanci · Hausa · Yoruba · Igbo",
+  "profileGuestTitle": "Kuna bincike a matsayin baƙo",
+  "profileGuestBody": "Shiga don sarrafa bayananku, oda, walat da abubuwan da ake so.",
+  "profileCreateAccount": "Ƙirƙiri asusun",
+  "operatorAccountTitle": "Asusun",
+  "operatorOperationsTitle": "Ayyuka",
+  "operatorVersionSub": "v2.1.0",
+  "forgotSmsLabel": "SMS",
+  "forgotSmsSub": "Zuwa wayarku",
+  "forgotEmailLabel": "Email",
+  "forgotEmailSub": "Zuwa imel ɗinku",
+  "welcomeBiometric": "Ci gaba da {bio}",
+  "@welcomeBiometric": {
+    "placeholders": {
+      "bio": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorOrderAccepted": "An karɓi oda",
+  "vendorOrderDeclined": "An ƙi oda",
+  "vendorLiveOrdersTitle": "Oda na aiki",
+  "vendorDashboardSubtitle": "Allon sarrafa mai siyarwa",
+  "vendorCallingCustomer": "Ana kiran abokin ciniki…",
+  "vendorTicketSent": "An aika tikiti zuwa na'urar buga",
+  "vendorIssueSent": "An ba da rahoto ga tallafi",
+  "vendorSettingsSaved": "An adana saitunan",
+  "vendorSettingsStoreHours": "Awannin shago",
+  "vendorNotifPushEmail": "Push + email",
+  "vendorNotifPushOnly": "Push kawai",
+  "vendorMenuAdd": "Ƙara",
+  "vendorMenuSearchPlaceholder": "Nemo abinci…",
+  "vendorMenuEditDish": "Gyara abinci",
+  "vendorMenuDuplicate": "Kwafi",
+  "vendorMenuDuplicated": "{name} an kwafi",
+  "@vendorMenuDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDeleteDish": "Goge abinci",
+  "vendorMenuDishRemoved": "An cire {name}",
+  "@vendorMenuDishRemoved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishRequired": "Sunan abinci da farashi an buƙata.",
+  "vendorMenuDishUpdated": "An sabunta {name}",
+  "@vendorMenuDishUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishAdded": "An ƙara {name} zuwa menu",
+  "@vendorMenuDishAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorMenuDishNameLabel": "Sunan abinci",
+  "vendorMenuDishNamePlaceholder": "misali. Shinkafan jollof",
+  "vendorMenuDescLabel": "Bayani",
+  "vendorMenuDescPlaceholder": "Mai dadi, mai yaji, sabo…",
+  "vendorMenuPriceLabel": "Farashi (₦)",
+  "vendorMenuCategoryLabel": "Rukunin",
+  "vendorMenuAddGroup": "Ƙara ƙungiya",
+  "vendorMenuGroupNameLabel": "Sunan ƙungiya",
+  "vendorMenuOptionLabelPlaceholder": "Zaɓin yanayi",
+  "vendorMenuOptionPricePlaceholder": "+₦0",
+  "vendorReviewReplyPosted": "An buga amsa ga {reviewer}",
+  "@vendorReviewReplyPosted": {
+    "placeholders": {
+      "reviewer": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorReviewRepliedLabel": "An amsa",
+  "vendorReviewYourReply": "Amsar ku",
+  "vendorReviewReplyPlaceholder": "Nagode da ra'ayin, mun ji ku...",
+  "vendorReviewPostReply": "Buga amsa",
+  "vendorAnalyticsCsvStarted": "Fitar da CSV ya fara",
+  "vendorAnalyticsOutOfStock": "Kayan sun ƙare",
+  "vendorAnalyticsWrongAddress": "Kuskuren adireshin",
+  "vendorAnalyticsCustomerChange": "Canjin abokin ciniki",
+  "vendorAnalyticsOther": "Sauran",
+  "vendorInventoryItemName": "Sunan kaya",
+  "vendorInventoryQuantity": "Yawa",
+  "vendorInventoryUnit": "Naúrar (kg / jakunan...)",
+  "vendorInventoryThreshold": "Iyakar kayan da suka ƙaranta",
+  "vendorInventoryAddItem": "Ƙara kaya",
+  "vendorInventoryNewBatch": "Sabon jeri",
+  "vendorInventoryUpdateStock": "Sabunta kayan",
+  "vendorInventoryItemUpdated": "An sabunta {name}",
+  "@vendorInventoryItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorInventoryBatchLogged": "An yi rikodin sabon jeri don {name}",
+  "@vendorInventoryBatchLogged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "vendorAlertsRestockSub": "Sake kaya don ci gaba da karɓar oda",
+  "vendorPayoutsEarnings": "Kuɗin da kuka samu",
+  "agentTxnTraderRequired": "Zaɓi mai siyarwa don rubuta wannan siyar.",
+  "agentTxnFieldsRequired": "An buƙaci kaya, yawa da farashi.",
+  "agentTxnSavedOffline": "An adana ma'amala a layin ƙasa",
+  "agentTxnTraderLabel": "Mai siyarwa",
+  "agentTxnProductLabel": "Kaya",
+  "agentTxnQuantityLabel": "Yawa (kg)",
+  "agentTxnUnitPriceLabel": "Farashin naúrar (₦)",
+  "agentTxnSave": "Adana ma'amala",
+  "agentPayoutTraderRequired": "Zaɓi mai siyarwa don rubuta wannan biyan.",
+  "agentPayoutAmountRequired": "Adadin ya kamata ya wuce ₦0.",
+  "agentPayoutRecorded": "An rubuta biya · an jera maidowar",
+  "agentPayoutNotePlaceholder": "Biya don siyar da tumatir",
+  "agentSyncTitle": "Daidaita da WAWU",
+  "agentSyncPendingTraders": "Masu siyarwa masu jira",
+  "agentSyncPendingTxns": "Ma'amalolin da ke jira",
+  "agentSyncPendingPayouts": "Biyan da ke jira",
+  "agentSyncLastSync": "Daidaitawar ƙarshe",
+  "agentSyncOfflineCopy": "Kwafin ku na layin ƙasa",
+  "agentSyncServer": "Sabar na WAWU",
+  "agentSyncKeepThis": "Kiyaye wannan sigar",
+  "agentRegNamePhoneRequired": "Suna da waya an buƙata.",
+  "agentRegSavedOffline": "An adana mai siyarwa a layin ƙasa · za a daidaita daga baya",
+  "agentRegNewTraderTitle": "Sabon mai siyarwa",
+  "agentRegFullNameLabel": "Cikakken suna",
+  "agentRegFullNamePlaceholder": "Cikakken suna kamar yadda yake a takardar shaidar",
+  "agentRegPhoneLabel": "Lambar wayar",
+  "agentRegPhonePlaceholder": "812 345 6789",
+  "agentRegLocationLabel": "Wurin",
+  "agentRegLocationPlaceholder": "Sunan kasuwa ko ƙauye",
+  "agentRegPhotoLabel": "Hoton mai siyarwa",
+  "agentRegIdLabel": "Takardar shaidar",
+  "agentTradersPageTitle": "Masu siyarwa ku",
+  "agentTradersSearchPlaceholder": "Nemo da suna ko waya…",
+  "tradeSuppliersEmpty": "Babu masu samar da kaya da aka jera.",
+  "tradeBulkEmpty": "Babu kayan jimla da aka jera.",
+  "bulkUnitPrice": "Farashin naúrar",
+  "bulkLotSize": "Girman jeri",
+  "bulkMoq": "MOQ",
+  "bulkLeadTime": "Lokacin jira",
+  "bulkOrigin": "Asali",
+  "bulkShipping": "Jigilar kaya",
+  "bulkQuality": "Inganci",
+  "bulkRequestQuote": "Nemi ƙididdiga",
+  "bulkThisWeek": "Wannan mako",
+  "bulkWithin2Wks": "A cikin makon 2",
+  "bulkThisMonth": "Wannan wata",
+  "bulkDeliveryHint": "Adireshin isarwa, bayanan fakiti…",
+  "bulkSendRequest": "Aika buƙata",
+  "exportQtyAvailable": "Adadin da ake da shi",
+  "exportPricePerKg": "Farashi a kowane kg",
+  "exportHarvestDate": "Ranar girbi",
+  "exportCorridor": "Hanyar",
+  "exportEnquire": "Tambaya",
+  "supplierConnect": "Haɗa",
+  "traderEditListing": "Gyara jera",
+  "traderStatusUpdated": "An sabunta yanayin {produce}",
+  "@traderStatusUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderDeleteListing": "Goge jera",
+  "traderListingRemoved": "An cire {produce}",
+  "@traderListingRemoved": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderPostListing": "Buga",
+  "traderFilterAll": "Duka",
+  "traderFieldsRequired": "Kayan amfanin gona, yawa da farashi an buƙata.",
+  "traderFarmRequired": "Sunan gona da yanki an buƙata.",
+  "traderListingUpdated": "An sabunta {produce}",
+  "@traderListingUpdated": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderListingPosted": "An jera {produce}",
+  "@traderListingPosted": {
+    "placeholders": {
+      "produce": {
+        "type": "String"
+      }
+    }
+  },
+  "traderHarvestDateLabel": "Ranar girbi",
+  "traderCorridorOrigin": "Hanyar asali",
+  "traderCorridorDest": "Hanyar ƙunshe",
+  "traderMarketCategory": "Rukunin kasuwa",
+  "traderMarketCategoryNote": "Na zaɓi — zaɓi rukunin don bayyana a kasuwar abokan ciniki.",
+  "traderClearCategory": "Share rukunin",
+  "traderEditListingTitle": "Gyara jera",
+  "traderNewListingTitle": "Sabon jerin fitarwa",
+  "traderChangePhoto": "Canja hoto",
+  "traderUploadPhoto": "Loda hoto",
+  "traderPhotoHint": "Hoto na kayan da aka shirya don jigilar",
+  "traderProducePlaceholder": "misali. Tumatir",
+  "traderFarmPlaceholder": "misali. Gonar Hauwa & 'Ya'ya",
+  "traderRegionPlaceholder": "misali. Kano",
+  "traderFromLabel": "Daga",
+  "traderToLabel": "Zuwa",
+  "traderCategoryLabel": "Rukunin kasuwa (zaɓi)",
+  "traderNoCategories": "Babu rukuni",
+  "traderNoneSelected": "Babu",
+  "traderSaveChanges": "Adana canje-canje",
+  "traderPostListingBtn": "Buga jera",
+  "traderDashboardSubtitle": "Allon sarrafa mai siyarwa",
+  "searchVendors": "Masu siyarwa",
+  "searchDishes": "Abinci",
+  "productAddNote": "Ƙara lura",
+  "productNotePlaceholder": "misali. ƙasa da yaji, babu albasa…",
+  "shoppingViewBasket": "Duba kwandon",
+  "escrowAddDropOff": "Ƙara adireshin isarwa.",
+  "escrowDropOffPlaceholder": "Ina ya kamata jeri ya isa?",
+  "escrowBulkOrdersTitle": "Oda-oda jumla",
+  "escrowDisputeTitle": "Buɗe rikici",
+  "escrowPhotoUploadSoon": "Loda hoto yana zuwa nan ba da jimawa ba",
+  "livestockSameDay": "Ranar nan",
+  "livestockVacuumPacked": "An fake a cikin famfo",
+  "driverOpenLoads": "Kayan buɗe",
+  "driverToday": "Yau",
+  "driverBid": "Tayi tsinke",
+  "driverAddPriceEta": "Ƙara farashi da lokacin isowa.",
+  "driverBidTitle": "Kafa tsinkenku",
+  "driverPriceLabel": "Farashi (₦)",
+  "driverEtaLabel": "Lokacin isowa zuwa wuri (awowi)",
+  "driverNotesLabel": "Bayanan (zaɓi)",
+  "driverNotesPlaceholder": "Ina gudanar da wannan hanyar a kowane mako.",
+  "driverOtherBids": "Sauran tsinke {count}",
+  "@driverOtherBids": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "driverSubmitBid": "Mika tsinke",
+  "driverBrowseLoads": "Duba kayan",
+  "driverHeadingTo": "Muna tafiya zuwa {destination}",
+  "@driverHeadingTo": {
+    "placeholders": {
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "driverCallLabel": "Kira",
+  "driverCallingTrader": "Ana kiran {name}…",
+  "@driverCallingTrader": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "riderSupportNotified": "An sanar da tallafi",
+  "catStandardLabel": "Na yau da kullum",
+  "catStandardSub": "Mai dadi kowace rana",
+  "catPremiumLabel": "Na musamman",
+  "catPremiumSub": "Mafi girma, mafi nuna",
+  "catJollofBundleTitle": "Fakitin Jollof",
+  "catJollofBundleSub": "Duk abin da kuke buƙata · adana 15%",
+  "catBundleAdded": "An ƙara fakiti zuwa kwandon",
+  "catFarmerTitle": "Haɗu da manomi",
+  "catFarmerSub": "Bayan tumatir ɗinku",
+  "catFarmerSoon": "Yanayin manomi yana zuwa nan ba da jimawa ba",
+  "catReorderLabel": "Sake umarnin",
+  "catLastBasketReordered": "An sake umarnin kwandon ƙarshe",
+  "catBodyChooseCut": "Zaɓi yankan ku",
+  "catBodyPopularNearYou": "Shahararru kusa da ku",
+  "catBodyTrendingToday": "Abinci na fama yau",
+  "catBodyFeaturedRestaurants": "Gidajen abinci na musamman",
+  "catBodyPopularDishes": "Abinci shahararru",
+  "catBodyTopPicks": "Zaɓuɓɓukan da aka fi so",
+  "catBodyTopBulkLots": "Manyan kayan jimla",
+  "catBodyFeaturedSuppliers": "Masu samar da kaya na musamman",
+  "loginError": "Kuskuren shiga: {error}",
+  "@loginError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "topUpMethodSoon": "Zaɓin hanya, yana zuwa nan ba da jimawa ba",
+  "trackingRetry": "Sake gwadawa",
+  "vendorSettingsTitle": "Saitunan shagon ku"
 }

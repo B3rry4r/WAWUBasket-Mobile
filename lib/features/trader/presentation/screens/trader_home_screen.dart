@@ -63,7 +63,7 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
                       : profile?.fullName.isNotEmpty == true
                           ? profile!.fullName
                           : 'My Business',
-                  subtitle: 'Trader dashboard',
+                  subtitle: context.l10n.traderDashboardSubtitle,
                 ),
               ),
               const SizedBox(height: WBSpacing.lg),

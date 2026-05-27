@@ -8,6 +8,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/trade_controller.dart';
 import '../../domain/models/bulk_lot.dart';
 import '../../domain/models/supplier.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 class BulkLotDetailScreen extends StatefulWidget {
   const BulkLotDetailScreen({super.key, required this.lotId});
@@ -157,11 +158,11 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                     const SizedBox(height: WBSpacing.lg),
                     Row(
                       children: [
-                        _StatTile(label: 'Unit price', value: lot.unitPriceLabel),
+                        _StatTile(label: context.l10n.bulkUnitPrice, value: lot.unitPriceLabel),
                         const SizedBox(width: 10),
-                        _StatTile(label: 'Lot size', value: lot.lotSize),
+                        _StatTile(label: context.l10n.bulkLotSize, value: lot.lotSize),
                         const SizedBox(width: 10),
-                        _StatTile(label: 'MOQ', value: lot.minOrderLabel),
+                        _StatTile(label: context.l10n.bulkMoq, value: lot.minOrderLabel),
                       ],
                     ),
                     const SizedBox(height: WBSpacing.lg),
@@ -174,22 +175,22 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                       child: Column(
                         children: [
                           _LineRow(
-                            label: 'Lead time',
+                            label: context.l10n.bulkLeadTime,
                             value: '3–5 working days',
                           ),
                           const SizedBox(height: 12),
                           _LineRow(
-                            label: 'Origin',
+                            label: context.l10n.bulkOrigin,
                             value: '${lot.region}, Nigeria',
                           ),
                           const SizedBox(height: 12),
                           _LineRow(
-                            label: 'Shipping',
+                            label: context.l10n.bulkShipping,
                             value: 'Nationwide · Shipbubble',
                           ),
                           const SizedBox(height: 12),
                           _LineRow(
-                            label: 'Quality',
+                            label: context.l10n.bulkQuality,
                             value: 'Inspected, batch-coded',
                           ),
                         ],
@@ -265,7 +266,7 @@ class _BulkLotDetailScreenState extends State<BulkLotDetailScreen> {
                   20,
                 ),
                 child: WBButton(
-                  label: 'Request quote',
+                  label: context.l10n.bulkRequestQuote,
                   fullWidth: true,
                   size: WBButtonSize.lg,
                   trailingIcon: WBIconName.arrowRight,
@@ -372,19 +373,19 @@ class _QuoteSheetState extends State<_QuoteSheet> {
             Row(
               children: [
                 _NeedChip(
-                  label: 'This week',
+                  label: context.l10n.bulkThisWeek,
                   active: _need == 'this-week',
                   onTap: () => setState(() => _need = 'this-week'),
                 ),
                 const SizedBox(width: 8),
                 _NeedChip(
-                  label: 'Within 2 wks',
+                  label: context.l10n.bulkWithin2Wks,
                   active: _need == 'within-week',
                   onTap: () => setState(() => _need = 'within-week'),
                 ),
                 const SizedBox(width: 8),
                 _NeedChip(
-                  label: 'This month',
+                  label: context.l10n.bulkThisMonth,
                   active: _need == 'this-month',
                   onTap: () => setState(() => _need = 'this-month'),
                 ),
@@ -416,7 +417,7 @@ class _QuoteSheetState extends State<_QuoteSheet> {
                 decoration: InputDecoration(
                   isCollapsed: true,
                   border: InputBorder.none,
-                  hintText: 'Delivery address, packing notes…',
+                  hintText: context.l10n.bulkDeliveryHint,
                   hintStyle: WBTypography.body.copyWith(
                     color: WBColors.fgPlaceholder,
                     fontSize: 14,
@@ -426,7 +427,7 @@ class _QuoteSheetState extends State<_QuoteSheet> {
             ),
             const SizedBox(height: 18),
             WBButton(
-              label: 'Send request',
+              label: context.l10n.bulkSendRequest,
               fullWidth: true,
               size: WBButtonSize.lg,
               onPressed: () {

@@ -1975,4 +1975,681 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'نشط';
+
+  @override
+  String get deleteAccountLeavingTitle => 'هل تغادر؟';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'نحن حزينون لرؤيتك تغادر. قبل أن تغادر:';
+
+  @override
+  String get deleteAccountConfirmPermanent => 'حذف حسابك نهائياً؟';
+
+  @override
+  String get deleteAccountCannotUndo => 'لا يمكن التراجع عن هذا.';
+
+  @override
+  String get profilePhotoError => 'تعذر تحديث الصورة. حاول مرة أخرى.';
+
+  @override
+  String get profilePreferences => 'التفضيلات';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'قانوني';
+
+  @override
+  String get profileStatsOrders => 'الطلبات';
+
+  @override
+  String get profileStatsBulk => 'الجملة';
+
+  @override
+  String get profileStatsFavorites => 'المفضلة';
+
+  @override
+  String get profileLanguageSub =>
+      'الإنجليزية · الفرنسية · الهوسا · اليوروبا · الإيغبو';
+
+  @override
+  String get profileGuestTitle => 'تتصفح كضيف';
+
+  @override
+  String get profileGuestBody =>
+      'سجّل الدخول لإدارة ملفك الشخصي وطلباتك ومحفظتك ومفضلتك.';
+
+  @override
+  String get profileCreateAccount => 'إنشاء حساب';
+
+  @override
+  String get operatorAccountTitle => 'الحساب';
+
+  @override
+  String get operatorOperationsTitle => 'العمليات';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'رسالة نصية';
+
+  @override
+  String get forgotSmsSub => 'إلى هاتفك';
+
+  @override
+  String get forgotEmailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get forgotEmailSub => 'إلى صندوق بريدك';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'المتابعة مع $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'تم قبول الطلب';
+
+  @override
+  String get vendorOrderDeclined => 'تم رفض الطلب';
+
+  @override
+  String get vendorLiveOrdersTitle => 'الطلبات المباشرة';
+
+  @override
+  String get vendorDashboardSubtitle => 'لوحة تحكم البائع';
+
+  @override
+  String get vendorCallingCustomer => 'جارٍ الاتصال بالعميل…';
+
+  @override
+  String get vendorTicketSent => 'تم إرسال التذكرة للطابعة';
+
+  @override
+  String get vendorIssueSent => 'تم الإبلاغ عن المشكلة للدعم';
+
+  @override
+  String get vendorSettingsSaved => 'تم حفظ الإعدادات';
+
+  @override
+  String get vendorSettingsStoreHours => 'ساعات المتجر';
+
+  @override
+  String get vendorNotifPushEmail => 'الإشعارات + البريد';
+
+  @override
+  String get vendorNotifPushOnly => 'الإشعارات فقط';
+
+  @override
+  String get vendorMenuAdd => 'إضافة';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'ابحث عن طبق…';
+
+  @override
+  String get vendorMenuEditDish => 'تعديل الطبق';
+
+  @override
+  String get vendorMenuDuplicate => 'تكرار';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return 'تم تكرار $name';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'حذف الطبق';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return 'تمت إزالة $name';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'اسم الطبق والسعر مطلوبان.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return 'تم تحديث $name';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return 'تمت إضافة $name للقائمة';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'اسم الطبق';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'مثال: أرز جولوف';
+
+  @override
+  String get vendorMenuDescLabel => 'الوصف';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'لذيذ، حار، طازج…';
+
+  @override
+  String get vendorMenuPriceLabel => 'السعر (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'الفئة';
+
+  @override
+  String get vendorMenuAddGroup => 'إضافة مجموعة';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'اسم المجموعة';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'تسمية الخيار';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'تم نشر الرد على $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'تم الرد';
+
+  @override
+  String get vendorReviewYourReply => 'ردّك';
+
+  @override
+  String get vendorReviewReplyPlaceholder => 'شكراً على التعليق، نسمعك...';
+
+  @override
+  String get vendorReviewPostReply => 'نشر الرد';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'بدأ تصدير CSV';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'نفد المخزون';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'عنوان خاطئ';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'تغيير من العميل';
+
+  @override
+  String get vendorAnalyticsOther => 'أخرى';
+
+  @override
+  String get vendorInventoryItemName => 'اسم الصنف';
+
+  @override
+  String get vendorInventoryQuantity => 'الكمية';
+
+  @override
+  String get vendorInventoryUnit => 'الوحدة (كغ / أكياس…)';
+
+  @override
+  String get vendorInventoryThreshold => 'حد المخزون المنخفض';
+
+  @override
+  String get vendorInventoryAddItem => 'إضافة صنف';
+
+  @override
+  String get vendorInventoryNewBatch => 'دفعة جديدة';
+
+  @override
+  String get vendorInventoryUpdateStock => 'تحديث المخزون';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return 'تم تحديث $name';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'تم تسجيل دفعة جديدة لـ $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub => 'أعد التخزين للاستمرار في قبول الطلبات';
+
+  @override
+  String get vendorPayoutsEarnings => 'أرباحك';
+
+  @override
+  String get agentTxnTraderRequired => 'اختر تاجراً لتسجيل هذا البيع.';
+
+  @override
+  String get agentTxnFieldsRequired => 'المنتج والكمية وسعر الوحدة مطلوبة.';
+
+  @override
+  String get agentTxnSavedOffline => 'تم حفظ المعاملة دون اتصال';
+
+  @override
+  String get agentTxnTraderLabel => 'التاجر';
+
+  @override
+  String get agentTxnProductLabel => 'المنتج';
+
+  @override
+  String get agentTxnQuantityLabel => 'الكمية (كغ)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'سعر الوحدة (₦)';
+
+  @override
+  String get agentTxnSave => 'حفظ المعاملة';
+
+  @override
+  String get agentPayoutTraderRequired => 'اختر تاجراً لتسجيل هذا الدفع.';
+
+  @override
+  String get agentPayoutAmountRequired => 'يجب أن يكون المبلغ أكبر من ₦0.';
+
+  @override
+  String get agentPayoutRecorded =>
+      'تم تسجيل الدفع · الاسترداد في قائمة الانتظار';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'دفع مبيعات الطماطم';
+
+  @override
+  String get agentSyncTitle => 'مزامنة مع WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'التجار المعلقون';
+
+  @override
+  String get agentSyncPendingTxns => 'المعاملات المعلقة';
+
+  @override
+  String get agentSyncPendingPayouts => 'المدفوعات المعلقة';
+
+  @override
+  String get agentSyncLastSync => 'آخر مزامنة';
+
+  @override
+  String get agentSyncOfflineCopy => 'نسختك دون اتصال';
+
+  @override
+  String get agentSyncServer => 'خادم WAWU';
+
+  @override
+  String get agentSyncKeepThis => 'الاحتفاظ بهذه النسخة';
+
+  @override
+  String get agentRegNamePhoneRequired => 'الاسم والهاتف مطلوبان.';
+
+  @override
+  String get agentRegSavedOffline =>
+      'تم حفظ التاجر دون اتصال · سيتم المزامنة لاحقاً';
+
+  @override
+  String get agentRegNewTraderTitle => 'تاجر جديد';
+
+  @override
+  String get agentRegFullNameLabel => 'الاسم الكامل';
+
+  @override
+  String get agentRegFullNamePlaceholder => 'الاسم الكامل كما في بطاقة الهوية';
+
+  @override
+  String get agentRegPhoneLabel => 'رقم الهاتف';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'الموقع';
+
+  @override
+  String get agentRegLocationPlaceholder => 'اسم السوق أو القرية';
+
+  @override
+  String get agentRegPhotoLabel => 'صورة التاجر';
+
+  @override
+  String get agentRegIdLabel => 'وثيقة الهوية';
+
+  @override
+  String get agentTradersPageTitle => 'تجارك';
+
+  @override
+  String get agentTradersSearchPlaceholder => 'ابحث بالاسم أو الهاتف…';
+
+  @override
+  String get tradeSuppliersEmpty => 'لا يوجد موردون مدرجون حتى الآن.';
+
+  @override
+  String get tradeBulkEmpty => 'لا توجد طرود بالجملة مدرجة حتى الآن.';
+
+  @override
+  String get bulkUnitPrice => 'سعر الوحدة';
+
+  @override
+  String get bulkLotSize => 'حجم الطرد';
+
+  @override
+  String get bulkMoq => 'الحد الأدنى للطلب';
+
+  @override
+  String get bulkLeadTime => 'مدة التسليم';
+
+  @override
+  String get bulkOrigin => 'المصدر';
+
+  @override
+  String get bulkShipping => 'الشحن';
+
+  @override
+  String get bulkQuality => 'الجودة';
+
+  @override
+  String get bulkRequestQuote => 'طلب عرض سعر';
+
+  @override
+  String get bulkThisWeek => 'هذا الأسبوع';
+
+  @override
+  String get bulkWithin2Wks => 'خلال أسبوعين';
+
+  @override
+  String get bulkThisMonth => 'هذا الشهر';
+
+  @override
+  String get bulkDeliveryHint => 'عنوان التسليم، ملاحظات التعبئة…';
+
+  @override
+  String get bulkSendRequest => 'إرسال الطلب';
+
+  @override
+  String get exportQtyAvailable => 'الكمية المتاحة';
+
+  @override
+  String get exportPricePerKg => 'السعر لكل كيلوغرام';
+
+  @override
+  String get exportHarvestDate => 'تاريخ الحصاد';
+
+  @override
+  String get exportCorridor => 'الممر';
+
+  @override
+  String get exportEnquire => 'الاستفسار';
+
+  @override
+  String get supplierConnect => 'تواصل';
+
+  @override
+  String get traderEditListing => 'تعديل القائمة';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return 'تم تحديث حالة $produce';
+  }
+
+  @override
+  String get traderDeleteListing => 'حذف القائمة';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return 'تمت إزالة $produce';
+  }
+
+  @override
+  String get traderPostListing => 'نشر';
+
+  @override
+  String get traderFilterAll => 'الكل';
+
+  @override
+  String get traderFieldsRequired => 'المنتج والكمية والسعر مطلوبة.';
+
+  @override
+  String get traderFarmRequired => 'اسم المزرعة والمنطقة مطلوبان.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return 'تم تحديث $produce';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return 'تم إدراج $produce';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'تاريخ الحصاد';
+
+  @override
+  String get traderCorridorOrigin => 'ممر المصدر';
+
+  @override
+  String get traderCorridorDest => 'ممر الوجهة';
+
+  @override
+  String get traderMarketCategory => 'فئة السوق';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'اختياري — اختر فئة لتظهر في سوق العملاء.';
+
+  @override
+  String get traderClearCategory => 'مسح الفئة';
+
+  @override
+  String get traderEditListingTitle => 'تعديل القائمة';
+
+  @override
+  String get traderNewListingTitle => 'إدراج تصدير جديد';
+
+  @override
+  String get traderChangePhoto => 'تغيير الصورة';
+
+  @override
+  String get traderUploadPhoto => 'رفع صورة';
+
+  @override
+  String get traderPhotoHint => 'صورة الطرد جاهزاً للشحن';
+
+  @override
+  String get traderProducePlaceholder => 'مثال: طماطم';
+
+  @override
+  String get traderFarmPlaceholder => 'مثال: مزرعة هوا وأبنائها';
+
+  @override
+  String get traderRegionPlaceholder => 'مثال: كانو';
+
+  @override
+  String get traderFromLabel => 'من';
+
+  @override
+  String get traderToLabel => 'إلى';
+
+  @override
+  String get traderCategoryLabel => 'فئة السوق (اختياري)';
+
+  @override
+  String get traderNoCategories => 'لا توجد فئات';
+
+  @override
+  String get traderNoneSelected => 'لا شيء';
+
+  @override
+  String get traderSaveChanges => 'حفظ التغييرات';
+
+  @override
+  String get traderPostListingBtn => 'نشر القائمة';
+
+  @override
+  String get traderDashboardSubtitle => 'لوحة تحكم التاجر';
+
+  @override
+  String get searchVendors => 'البائعون';
+
+  @override
+  String get searchDishes => 'الأطباق';
+
+  @override
+  String get productAddNote => 'إضافة ملاحظة';
+
+  @override
+  String get productNotePlaceholder => 'مثال: أقل حراً، بدون بصل…';
+
+  @override
+  String get shoppingViewBasket => 'عرض السلة';
+
+  @override
+  String get escrowAddDropOff => 'أضف عنوان التسليم.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'أين يجب أن يصل الطرد؟';
+
+  @override
+  String get escrowBulkOrdersTitle => 'الطلبات بالجملة';
+
+  @override
+  String get escrowDisputeTitle => 'فتح نزاع';
+
+  @override
+  String get escrowPhotoUploadSoon => 'رفع الصور قادم قريباً';
+
+  @override
+  String get livestockSameDay => 'نفس اليوم';
+
+  @override
+  String get livestockVacuumPacked => 'معبأ في الفراغ';
+
+  @override
+  String get driverOpenLoads => 'الأحمال المفتوحة';
+
+  @override
+  String get driverToday => 'اليوم';
+
+  @override
+  String get driverBid => 'تقديم عرض';
+
+  @override
+  String get driverAddPriceEta => 'أضف سعراً ووقت وصول.';
+
+  @override
+  String get driverBidTitle => 'ضع عرضك';
+
+  @override
+  String get driverPriceLabel => 'السعر (₦)';
+
+  @override
+  String get driverEtaLabel => 'وقت الوصول إلى الوجهة (ساعات)';
+
+  @override
+  String get driverNotesLabel => 'ملاحظات (اختياري)';
+
+  @override
+  String get driverNotesPlaceholder => 'أسلك هذا الطريق كل أسبوع.';
+
+  @override
+  String driverOtherBids(int count) {
+    return '$count عروض أخرى';
+  }
+
+  @override
+  String get driverSubmitBid => 'تقديم العرض';
+
+  @override
+  String get driverBrowseLoads => 'تصفح الأحمال';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'في الطريق إلى $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'اتصال';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'جارٍ الاتصال بـ $name…';
+  }
+
+  @override
+  String get riderSupportNotified => 'تم إخطار الدعم';
+
+  @override
+  String get catStandardLabel => 'عادي';
+
+  @override
+  String get catStandardSub => 'جيد يومياً';
+
+  @override
+  String get catPremiumLabel => 'مميز';
+
+  @override
+  String get catPremiumSub => 'أكبر، أنضج';
+
+  @override
+  String get catJollofBundleTitle => 'حزمة الجولوف';
+
+  @override
+  String get catJollofBundleSub => 'كل ما تحتاجه · وفّر 15%';
+
+  @override
+  String get catBundleAdded => 'تمت إضافة الحزمة للسلة';
+
+  @override
+  String get catFarmerTitle => 'التعرف على المزارع';
+
+  @override
+  String get catFarmerSub => 'خلف طماطمك';
+
+  @override
+  String get catFarmerSoon => 'تسليط الضوء على المزارع قادم قريباً';
+
+  @override
+  String get catReorderLabel => 'إعادة الطلب';
+
+  @override
+  String get catLastBasketReordered => 'تمت إعادة طلب آخر سلة';
+
+  @override
+  String get catBodyChooseCut => 'اختر قطعتك';
+
+  @override
+  String get catBodyPopularNearYou => 'شائع بالقرب منك';
+
+  @override
+  String get catBodyTrendingToday => 'أطباق رائجة اليوم';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'مطاعم مميزة';
+
+  @override
+  String get catBodyPopularDishes => 'أطباق شائعة';
+
+  @override
+  String get catBodyTopPicks => 'أفضل الاختيارات';
+
+  @override
+  String get catBodyTopBulkLots => 'أفضل الطرود بالجملة';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'موردون مميزون';
+
+  @override
+  String loginError(String error) {
+    return 'خطأ تسجيل الدخول: $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'اختيار الطريقة قادم قريباً';
+
+  @override
+  String get trackingRetry => 'حاول مجدداً';
+
+  @override
+  String get vendorSettingsTitle => 'إعدادات متجرك';
 }

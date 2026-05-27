@@ -69,19 +69,19 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 ),
               ),
               Text(
-                'Delete your account permanently?',
+                sheetCtx.l10n.deleteAccountConfirmPermanent,
                 style: WBTypography.page,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: WBSpacing.sm),
               Text(
-                'This cannot be undone.',
+                sheetCtx.l10n.deleteAccountCannotUndo,
                 textAlign: TextAlign.center,
                 style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
               ),
               const SizedBox(height: WBSpacing.xl),
               WBButton(
-                label: 'Yes, delete my account',
+                label: sheetCtx.l10n.deleteAccountYes,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 variant: WBButtonVariant.danger,
@@ -108,7 +108,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
               ),
               const SizedBox(height: WBSpacing.sm + 4),
               WBButton(
-                label: 'No, I want to stay',
+                label: sheetCtx.l10n.deleteAccountNo,
                 size: WBButtonSize.lg,
                 fullWidth: true,
                 variant: WBButtonVariant.secondary,
@@ -145,9 +145,9 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Leaving us?', style: WBTypography.page),
+                          Text(context.l10n.deleteAccountLeavingTitle, style: WBTypography.page),
                           Text(
-                            "We're sad to see you go. Before you leave:",
+                            context.l10n.deleteAccountLeavingBody,
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),
@@ -189,7 +189,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 Text(
-                  'Why are you leaving? (optional)',
+                  context.l10n.deleteAccountWhyLeaving,
                   style: WBTypography.cardTitle.copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 10),
@@ -222,7 +222,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   child: Column(
                     children: [
                       WBButton(
-                        label: 'Yes, delete my account',
+                        label: context.l10n.deleteAccountYes,
                         fullWidth: true,
                         size: WBButtonSize.lg,
                         variant: WBButtonVariant.danger,
@@ -230,7 +230,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       ),
                       const SizedBox(height: 10),
                       WBButton(
-                        label: 'No, I want to stay',
+                        label: context.l10n.deleteAccountNo,
                         fullWidth: true,
                         size: WBButtonSize.lg,
                         variant: WBButtonVariant.secondary,

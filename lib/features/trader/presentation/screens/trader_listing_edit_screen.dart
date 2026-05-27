@@ -126,11 +126,11 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     final q = int.tryParse(_quantity.text.replaceAll(',', '')) ?? 0;
     final p = int.tryParse(_price.text.replaceAll(',', '')) ?? 0;
     if (_produce.text.trim().isEmpty || q <= 0 || p <= 0) {
-      wbShowSnack(context, 'Produce, quantity and price are required.');
+      wbShowSnack(context, context.l10n.traderFieldsRequired);
       return;
     }
     if (_farmName.text.trim().isEmpty || _farmRegion.text.trim().isEmpty) {
-      wbShowSnack(context, 'Farm name and region are required.');
+      wbShowSnack(context, context.l10n.traderFarmRequired);
       return;
     }
     final s = _source;
@@ -151,10 +151,10 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
     );
     if (_isEdit) {
       TradeController.instance.update(updated);
-      wbShowSnack(context, '${updated.produce} updated');
+      wbShowSnack(context, context.l10n.traderListingUpdated(updated.produce));
     } else {
       TradeController.instance.add(updated);
-      wbShowSnack(context, '${updated.produce} listed');
+      wbShowSnack(context, context.l10n.traderListingPosted(updated.produce));
     }
     context.pop();
   }
@@ -165,7 +165,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
       initialDate: _harvest,
       firstDate: DateTime.now().subtract(const Duration(days: 60)),
       lastDate: DateTime.now(),
-      helpText: 'Harvest date',
+      helpText: context.l10n.traderHarvestDateLabel,
     );
     if (picked != null) setState(() => _harvest = picked);
   }
@@ -346,7 +346,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                             setState(() => _category = '');
                             Navigator.of(sheetCtx).pop();
                           },
-                          child: const Text('Clear category'),
+                          child: Text(context.l10n.traderClearCategory),
                         ),
                       ),
                     ],
@@ -482,7 +482,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                 const SizedBox(height: WBSpacing.lg),
                 WBInput(
                   label: 'Produce',
-                  placeholder: 'e.g. Tomatoes',
+                  placeholder: context.l10n.traderProducePlaceholder,
                   controller: _produce,
                 ),
                 const SizedBox(height: WBSpacing.md),
@@ -517,7 +517,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                     Expanded(
                       child: WBInput(
                         label: 'Farm name',
-                        placeholder: 'e.g. Hauwa & Sons Farm',
+                        placeholder: context.l10n.traderFarmPlaceholder,
                         controller: _farmName,
                       ),
                     ),
@@ -525,7 +525,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                     Expanded(
                       child: WBInput(
                         label: 'Farm region',
-                        placeholder: 'e.g. Kano',
+                        placeholder: context.l10n.traderRegionPlaceholder,
                         controller: _farmRegion,
                       ),
                     ),
@@ -536,7 +536,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                   children: [
                     Expanded(
                       child: _PickerField(
-                        label: 'From',
+                        label: context.l10n.traderFromLabel,
                         value: _origin.label,
                         onTap: () => _pickCorridor(origin: true),
                       ),
@@ -544,7 +544,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: _PickerField(
-                        label: 'To',
+                        label: context.l10n.traderToLabel,
                         value: _destination.label,
                         onTap: () => _pickCorridor(origin: false),
                       ),
@@ -553,13 +553,13 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                 ),
                 const SizedBox(height: WBSpacing.md),
                 _PickerField(
-                  label: 'Harvest date',
+                  label: context.l10n.traderHarvestDateLabel,
                   value: _formatDate(_harvest),
                   onTap: _pickHarvest,
                 ),
                 const SizedBox(height: WBSpacing.md),
                 _PickerField(
-                  label: 'Marketplace category (optional)',
+                  label: context.l10n.traderCategoryLabel,
                   value: _loadingCats
                       ? 'Loading…'
                       : _catOptions.isEmpty
@@ -589,7 +589,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
                     20,
                   ),
                   child: WBButton(
-                    label: _isEdit ? 'Save changes' : 'Post listing',
+                    label: _isEdit ? context.l10n.traderSaveChanges : context.l10n.traderPostListingBtn,
                     fullWidth: true,
                     size: WBButtonSize.lg,
                     onPressed: _save,

@@ -2017,4 +2017,684 @@ class AppLocalizationsRw extends AppLocalizations {
 
   @override
   String get roleStatusActive => 'Active';
+
+  @override
+  String get deleteAccountLeavingTitle => 'Leaving us?';
+
+  @override
+  String get deleteAccountLeavingBody =>
+      'We\'re sad to see you go. Before you leave:';
+
+  @override
+  String get deleteAccountConfirmPermanent =>
+      'Delete your account permanently?';
+
+  @override
+  String get deleteAccountCannotUndo => 'This cannot be undone.';
+
+  @override
+  String get profilePhotoError => 'Could not update photo. Try again.';
+
+  @override
+  String get profilePreferences => 'Preferences';
+
+  @override
+  String get profileVersionSub => 'v2.1.0';
+
+  @override
+  String get profileLegal => 'Legal';
+
+  @override
+  String get profileStatsOrders => 'Orders';
+
+  @override
+  String get profileStatsBulk => 'Bulk';
+
+  @override
+  String get profileStatsFavorites => 'Favorites';
+
+  @override
+  String get profileLanguageSub => 'English · Français · Hausa · Yorùbá · Igbo';
+
+  @override
+  String get profileGuestTitle => 'You\'re browsing as a guest';
+
+  @override
+  String get profileGuestBody =>
+      'Sign in to manage your profile, orders, wallet and favorites.';
+
+  @override
+  String get profileCreateAccount => 'Create an account';
+
+  @override
+  String get operatorAccountTitle => 'Account';
+
+  @override
+  String get operatorOperationsTitle => 'Operations';
+
+  @override
+  String get operatorVersionSub => 'v2.1.0';
+
+  @override
+  String get forgotSmsLabel => 'SMS';
+
+  @override
+  String get forgotSmsSub => 'To your phone';
+
+  @override
+  String get forgotEmailLabel => 'Email';
+
+  @override
+  String get forgotEmailSub => 'To your inbox';
+
+  @override
+  String welcomeBiometric(String bio) {
+    return 'Continue with $bio';
+  }
+
+  @override
+  String get vendorOrderAccepted => 'Order accepted';
+
+  @override
+  String get vendorOrderDeclined => 'Order declined';
+
+  @override
+  String get vendorLiveOrdersTitle => 'Live orders';
+
+  @override
+  String get vendorDashboardSubtitle => 'Vendor dashboard';
+
+  @override
+  String get vendorCallingCustomer => 'Calling customer…';
+
+  @override
+  String get vendorTicketSent => 'Ticket sent to printer';
+
+  @override
+  String get vendorIssueSent => 'Issue reported to support';
+
+  @override
+  String get vendorSettingsSaved => 'Settings saved';
+
+  @override
+  String get vendorSettingsStoreHours => 'Store hours';
+
+  @override
+  String get vendorNotifPushEmail => 'Push + email';
+
+  @override
+  String get vendorNotifPushOnly => 'Push only';
+
+  @override
+  String get vendorMenuAdd => 'Add';
+
+  @override
+  String get vendorMenuSearchPlaceholder => 'Find a dish…';
+
+  @override
+  String get vendorMenuEditDish => 'Edit dish';
+
+  @override
+  String get vendorMenuDuplicate => 'Duplicate';
+
+  @override
+  String vendorMenuDuplicated(String name) {
+    return '$name duplicated';
+  }
+
+  @override
+  String get vendorMenuDeleteDish => 'Delete dish';
+
+  @override
+  String vendorMenuDishRemoved(String name) {
+    return '$name removed';
+  }
+
+  @override
+  String get vendorMenuDishRequired => 'Dish name and price are required.';
+
+  @override
+  String vendorMenuDishUpdated(String name) {
+    return '$name updated';
+  }
+
+  @override
+  String vendorMenuDishAdded(String name) {
+    return '$name added to the menu';
+  }
+
+  @override
+  String get vendorMenuDishNameLabel => 'Dish name';
+
+  @override
+  String get vendorMenuDishNamePlaceholder => 'e.g. Jollof rice';
+
+  @override
+  String get vendorMenuDescLabel => 'Description';
+
+  @override
+  String get vendorMenuDescPlaceholder => 'Tasty, spicy, fresh…';
+
+  @override
+  String get vendorMenuPriceLabel => 'Price (₦)';
+
+  @override
+  String get vendorMenuCategoryLabel => 'Category';
+
+  @override
+  String get vendorMenuAddGroup => 'Add group';
+
+  @override
+  String get vendorMenuGroupNameLabel => 'Group name';
+
+  @override
+  String get vendorMenuOptionLabelPlaceholder => 'Option label';
+
+  @override
+  String get vendorMenuOptionPricePlaceholder => '+₦0';
+
+  @override
+  String vendorReviewReplyPosted(String reviewer) {
+    return 'Reply posted to $reviewer';
+  }
+
+  @override
+  String get vendorReviewRepliedLabel => 'Replied';
+
+  @override
+  String get vendorReviewYourReply => 'Your reply';
+
+  @override
+  String get vendorReviewReplyPlaceholder =>
+      'Thanks for the feedback, we hear you...';
+
+  @override
+  String get vendorReviewPostReply => 'Post reply';
+
+  @override
+  String get vendorAnalyticsCsvStarted => 'CSV export started';
+
+  @override
+  String get vendorAnalyticsOutOfStock => 'Out of stock';
+
+  @override
+  String get vendorAnalyticsWrongAddress => 'Wrong address';
+
+  @override
+  String get vendorAnalyticsCustomerChange => 'Customer change';
+
+  @override
+  String get vendorAnalyticsOther => 'Other';
+
+  @override
+  String get vendorInventoryItemName => 'Item name';
+
+  @override
+  String get vendorInventoryQuantity => 'Quantity';
+
+  @override
+  String get vendorInventoryUnit => 'Unit (kg / bags…)';
+
+  @override
+  String get vendorInventoryThreshold => 'Low-stock threshold';
+
+  @override
+  String get vendorInventoryAddItem => 'Add item';
+
+  @override
+  String get vendorInventoryNewBatch => 'New batch';
+
+  @override
+  String get vendorInventoryUpdateStock => 'Update stock';
+
+  @override
+  String vendorInventoryItemUpdated(String name) {
+    return '$name updated';
+  }
+
+  @override
+  String vendorInventoryBatchLogged(String name) {
+    return 'New batch logged for $name';
+  }
+
+  @override
+  String get vendorAlertsRestockSub => 'Restock to keep accepting orders';
+
+  @override
+  String get vendorPayoutsEarnings => 'Your earnings';
+
+  @override
+  String get agentTxnTraderRequired =>
+      'Pick a trader to log this sale against.';
+
+  @override
+  String get agentTxnFieldsRequired =>
+      'Product, quantity and unit price are required.';
+
+  @override
+  String get agentTxnSavedOffline => 'Transaction saved offline';
+
+  @override
+  String get agentTxnTraderLabel => 'Trader';
+
+  @override
+  String get agentTxnProductLabel => 'Product';
+
+  @override
+  String get agentTxnQuantityLabel => 'Quantity (kg)';
+
+  @override
+  String get agentTxnUnitPriceLabel => 'Unit price (₦)';
+
+  @override
+  String get agentTxnSave => 'Save transaction';
+
+  @override
+  String get agentPayoutTraderRequired =>
+      'Pick a trader to record this payout against.';
+
+  @override
+  String get agentPayoutAmountRequired => 'Amount must be greater than ₦0.';
+
+  @override
+  String get agentPayoutRecorded => 'Payout recorded · reimbursement queued';
+
+  @override
+  String get agentPayoutNotePlaceholder => 'Payout for tomato sale';
+
+  @override
+  String get agentSyncTitle => 'Sync with WAWU';
+
+  @override
+  String get agentSyncPendingTraders => 'Pending traders';
+
+  @override
+  String get agentSyncPendingTxns => 'Pending transactions';
+
+  @override
+  String get agentSyncPendingPayouts => 'Pending payouts';
+
+  @override
+  String get agentSyncLastSync => 'Last sync';
+
+  @override
+  String get agentSyncOfflineCopy => 'Your offline copy';
+
+  @override
+  String get agentSyncServer => 'WAWU server';
+
+  @override
+  String get agentSyncKeepThis => 'Keep this version';
+
+  @override
+  String get agentRegNamePhoneRequired => 'Name and phone are required.';
+
+  @override
+  String get agentRegSavedOffline => 'Trader saved offline · will sync next';
+
+  @override
+  String get agentRegNewTraderTitle => 'New trader';
+
+  @override
+  String get agentRegFullNameLabel => 'Full name';
+
+  @override
+  String get agentRegFullNamePlaceholder => 'Full name as on ID';
+
+  @override
+  String get agentRegPhoneLabel => 'Phone number';
+
+  @override
+  String get agentRegPhonePlaceholder => '812 345 6789';
+
+  @override
+  String get agentRegLocationLabel => 'Location';
+
+  @override
+  String get agentRegLocationPlaceholder => 'Market or village name';
+
+  @override
+  String get agentRegPhotoLabel => 'Trader photo';
+
+  @override
+  String get agentRegIdLabel => 'ID document';
+
+  @override
+  String get agentTradersPageTitle => 'Your traders';
+
+  @override
+  String get agentTradersSearchPlaceholder => 'Search by name or phone…';
+
+  @override
+  String get tradeSuppliersEmpty => 'No suppliers listed yet.';
+
+  @override
+  String get tradeBulkEmpty => 'No bulk lots listed yet.';
+
+  @override
+  String get bulkUnitPrice => 'Unit price';
+
+  @override
+  String get bulkLotSize => 'Lot size';
+
+  @override
+  String get bulkMoq => 'MOQ';
+
+  @override
+  String get bulkLeadTime => 'Lead time';
+
+  @override
+  String get bulkOrigin => 'Origin';
+
+  @override
+  String get bulkShipping => 'Shipping';
+
+  @override
+  String get bulkQuality => 'Quality';
+
+  @override
+  String get bulkRequestQuote => 'Request quote';
+
+  @override
+  String get bulkThisWeek => 'This week';
+
+  @override
+  String get bulkWithin2Wks => 'Within 2 wks';
+
+  @override
+  String get bulkThisMonth => 'This month';
+
+  @override
+  String get bulkDeliveryHint => 'Delivery address, packing notes…';
+
+  @override
+  String get bulkSendRequest => 'Send request';
+
+  @override
+  String get exportQtyAvailable => 'Quantity available';
+
+  @override
+  String get exportPricePerKg => 'Price per kg';
+
+  @override
+  String get exportHarvestDate => 'Harvest date';
+
+  @override
+  String get exportCorridor => 'Corridor';
+
+  @override
+  String get exportEnquire => 'Enquire';
+
+  @override
+  String get supplierConnect => 'Connect';
+
+  @override
+  String get traderEditListing => 'Edit listing';
+
+  @override
+  String traderStatusUpdated(String produce) {
+    return '$produce status updated';
+  }
+
+  @override
+  String get traderDeleteListing => 'Delete listing';
+
+  @override
+  String traderListingRemoved(String produce) {
+    return '$produce removed';
+  }
+
+  @override
+  String get traderPostListing => 'Post';
+
+  @override
+  String get traderFilterAll => 'All';
+
+  @override
+  String get traderFieldsRequired =>
+      'Produce, quantity and price are required.';
+
+  @override
+  String get traderFarmRequired => 'Farm name and region are required.';
+
+  @override
+  String traderListingUpdated(String produce) {
+    return '$produce updated';
+  }
+
+  @override
+  String traderListingPosted(String produce) {
+    return '$produce listed';
+  }
+
+  @override
+  String get traderHarvestDateLabel => 'Harvest date';
+
+  @override
+  String get traderCorridorOrigin => 'Origin corridor';
+
+  @override
+  String get traderCorridorDest => 'Destination corridor';
+
+  @override
+  String get traderMarketCategory => 'Marketplace category';
+
+  @override
+  String get traderMarketCategoryNote =>
+      'Optional — pick a category so this listing appears in the customer marketplace.';
+
+  @override
+  String get traderClearCategory => 'Clear category';
+
+  @override
+  String get traderEditListingTitle => 'Edit listing';
+
+  @override
+  String get traderNewListingTitle => 'New export listing';
+
+  @override
+  String get traderChangePhoto => 'Change photo';
+
+  @override
+  String get traderUploadPhoto => 'Upload photo';
+
+  @override
+  String get traderPhotoHint => 'Shot of the lot ready for shipping';
+
+  @override
+  String get traderProducePlaceholder => 'e.g. Tomatoes';
+
+  @override
+  String get traderFarmPlaceholder => 'e.g. Hauwa & Sons Farm';
+
+  @override
+  String get traderRegionPlaceholder => 'e.g. Kano';
+
+  @override
+  String get traderFromLabel => 'From';
+
+  @override
+  String get traderToLabel => 'To';
+
+  @override
+  String get traderCategoryLabel => 'Marketplace category (optional)';
+
+  @override
+  String get traderNoCategories => 'No categories';
+
+  @override
+  String get traderNoneSelected => 'None';
+
+  @override
+  String get traderSaveChanges => 'Save changes';
+
+  @override
+  String get traderPostListingBtn => 'Post listing';
+
+  @override
+  String get traderDashboardSubtitle => 'Trader dashboard';
+
+  @override
+  String get searchVendors => 'Vendors';
+
+  @override
+  String get searchDishes => 'Dishes';
+
+  @override
+  String get productAddNote => 'Add a note';
+
+  @override
+  String get productNotePlaceholder => 'E.g. less spicy, no onions…';
+
+  @override
+  String get shoppingViewBasket => 'View basket';
+
+  @override
+  String get escrowAddDropOff => 'Add a drop-off address.';
+
+  @override
+  String get escrowDropOffPlaceholder => 'Where should the lot land?';
+
+  @override
+  String get escrowBulkOrdersTitle => 'Bulk orders';
+
+  @override
+  String get escrowDisputeTitle => 'Open a dispute';
+
+  @override
+  String get escrowPhotoUploadSoon => 'Photo upload coming soon';
+
+  @override
+  String get livestockSameDay => 'Same day';
+
+  @override
+  String get livestockVacuumPacked => 'Vacuum packed';
+
+  @override
+  String get driverOpenLoads => 'Open loads';
+
+  @override
+  String get driverToday => 'Today';
+
+  @override
+  String get driverBid => 'Bid';
+
+  @override
+  String get driverAddPriceEta => 'Add a price and an ETA.';
+
+  @override
+  String get driverBidTitle => 'Place your bid';
+
+  @override
+  String get driverPriceLabel => 'Price (₦)';
+
+  @override
+  String get driverEtaLabel => 'ETA to destination (hours)';
+
+  @override
+  String get driverNotesLabel => 'Notes (optional)';
+
+  @override
+  String get driverNotesPlaceholder => 'I run this route every week.';
+
+  @override
+  String driverOtherBids(int count) {
+    return '$count other bids';
+  }
+
+  @override
+  String get driverSubmitBid => 'Submit bid';
+
+  @override
+  String get driverBrowseLoads => 'Browse loads';
+
+  @override
+  String driverHeadingTo(String destination) {
+    return 'Heading to $destination';
+  }
+
+  @override
+  String get driverCallLabel => 'Call';
+
+  @override
+  String driverCallingTrader(String name) {
+    return 'Calling $name…';
+  }
+
+  @override
+  String get riderSupportNotified => 'Support has been notified';
+
+  @override
+  String get catStandardLabel => 'Standard';
+
+  @override
+  String get catStandardSub => 'Everyday good';
+
+  @override
+  String get catPremiumLabel => 'Premium';
+
+  @override
+  String get catPremiumSub => 'Larger, riper';
+
+  @override
+  String get catJollofBundleTitle => 'Jollof bundle';
+
+  @override
+  String get catJollofBundleSub => 'Everything you need · save 15%';
+
+  @override
+  String get catBundleAdded => 'Bundle added to basket';
+
+  @override
+  String get catFarmerTitle => 'Meet the farmer';
+
+  @override
+  String get catFarmerSub => 'Behind your tomatoes';
+
+  @override
+  String get catFarmerSoon => 'Farmer spotlight coming soon';
+
+  @override
+  String get catReorderLabel => 'Reorder';
+
+  @override
+  String get catLastBasketReordered => 'Last basket reordered';
+
+  @override
+  String get catBodyChooseCut => 'Choose your cut';
+
+  @override
+  String get catBodyPopularNearYou => 'Popular near you';
+
+  @override
+  String get catBodyTrendingToday => 'Trending dishes today';
+
+  @override
+  String get catBodyFeaturedRestaurants => 'Featured restaurants';
+
+  @override
+  String get catBodyPopularDishes => 'Popular dishes';
+
+  @override
+  String get catBodyTopPicks => 'Top picks';
+
+  @override
+  String get catBodyTopBulkLots => 'Top bulk lots';
+
+  @override
+  String get catBodyFeaturedSuppliers => 'Featured suppliers';
+
+  @override
+  String loginError(String error) {
+    return 'Login error: $error';
+  }
+
+  @override
+  String get topUpMethodSoon => 'Method picker, coming soon';
+
+  @override
+  String get trackingRetry => 'Try again';
+
+  @override
+  String get vendorSettingsTitle => 'Your store settings';
 }

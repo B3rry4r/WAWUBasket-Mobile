@@ -71,7 +71,7 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
             const SizedBox(height: WBSpacing.lg),
             _SheetAction(
               icon: WBIconName.more,
-              label: 'Edit listing',
+              label: context.l10n.traderEditListing,
               onTap: () {
                 Navigator.of(sheetCtx).pop();
                 context.push('${AppRoutes.traderListings}/edit?id=${l.id}');
@@ -102,17 +102,17 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
                   ),
                 );
                 Navigator.of(sheetCtx).pop();
-                wbShowSnack(context, '${l.produce} status updated');
+                wbShowSnack(context, context.l10n.traderStatusUpdated(l.produce));
               },
             ),
             _SheetAction(
               icon: WBIconName.close,
-              label: 'Delete listing',
+              label: context.l10n.traderDeleteListing,
               danger: true,
               onTap: () {
                 TradeController.instance.remove(l.id);
                 Navigator.of(sheetCtx).pop();
-                wbShowSnack(context, '${l.produce} removed');
+                wbShowSnack(context, context.l10n.traderListingRemoved(l.produce));
               },
             ),
           ],
@@ -143,7 +143,7 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Your listings', style: WBTypography.page),
+                        Text(context.l10n.navListings, style: WBTypography.page),
                         Text(
                           '${listings.length} total · ${listings.where((l) => l.status == ExportListingStatus.active).length} active',
                           style: WBTypography.caption.copyWith(
@@ -154,7 +154,7 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
                     ),
                   ),
                   WBButton(
-                    label: 'Post',
+                    label: context.l10n.traderPostListing,
                     size: WBButtonSize.sm,
                     trailingIcon: WBIconName.plus,
                     onPressed: () =>
@@ -172,7 +172,7 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
                   itemBuilder: (_, i) {
                     if (i == 0) {
                       return WBTag(
-                        label: 'All',
+                        label: context.l10n.traderFilterAll,
                         active: _filter == null,
                         onTap: () => setState(() => _filter = null),
                       );

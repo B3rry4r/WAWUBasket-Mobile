@@ -247,7 +247,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
               size: WBButtonSize.lg,
               fullWidth: true,
               variant: WBButtonVariant.secondary,
-              onPressed: () => wbShowSnack(context, 'Method picker, coming soon'),
+              onPressed: () => wbShowSnack(context, context.l10n.topUpMethodSoon),
             ),
           ],
         ),

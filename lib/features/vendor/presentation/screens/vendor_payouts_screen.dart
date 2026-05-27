@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/vendor_api.dart';
+import '../../../../core/utils/wb_l10n.dart';
 
 /// One payout row mapped from the `/v1/vendor/payouts` payload.
 class _Payout {
@@ -112,7 +113,7 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Your earnings', style: WBTypography.page),
+                      Text(context.l10n.vendorPayoutsEarnings, style: WBTypography.page),
                       Text(
                         'Money in the bank.',
                         style: WBTypography.caption.copyWith(
