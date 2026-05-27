@@ -69,7 +69,7 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
             badge: 'Trader',
             payoutLabel: 'Escrow & settlements',
             payoutSub: 'Held funds, released funds',
-            payoutRoute: AppRoutes.traderHome,
+            payoutRoute: AppRoutes.escrowOrders,
             settingsLabel: 'Transport requests',
             settingsSub: 'Loads posted for drivers',
             settingsRoute: AppRoutes.traderTransport,

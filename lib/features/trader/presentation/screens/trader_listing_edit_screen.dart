@@ -144,9 +144,7 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
       destinationCorridor: _destination,
       farmName: _farmName.text.trim(),
       farmRegion: _farmRegion.text.trim(),
-      imageUrl: _imageUrl ??
-          s?.imageUrl ??
-          'https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=600&q=80&auto=format&fit=crop',
+      imageUrl: _imageUrl ?? s?.imageUrl ?? '',
       enquiries: s?.enquiries ?? 0,
       status: s?.status ?? ExportListingStatus.active,
       category: _category.isNotEmpty ? _category : null,
