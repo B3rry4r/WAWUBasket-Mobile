@@ -105,7 +105,20 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
   }
 
   void _addStaff() {
-    wbShowSnack(context, 'Invite staff — coming soon.');
+    showModalBottomSheet<_StaffMember>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => const _StaffSheet(),
+    ).then((m) {
+      if (m == null || !mounted) return;
+      setState(() => _staff.add(m));
+      wbShowSnack(context, 'Invited ${m.name} as ${m.role.toLowerCase()}');
+    });
   }
 
   void _removeStaff(_StaffMember m) {
@@ -454,6 +467,111 @@ class _Toggle extends StatelessWidget {
             value: value,
             activeThumbColor: WBColors.surfaceDark,
             onChanged: onChanged,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StaffSheet extends StatefulWidget {
+  const _StaffSheet();
+
+  @override
+  State<_StaffSheet> createState() => _StaffSheetState();
+}
+
+class _StaffSheetState extends State<_StaffSheet> {
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  String _role = 'Cashier';
+  static const _roles = ['Manager', 'Cashier', 'Cook'];
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _email.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final canSend = _name.text.trim().isNotEmpty && _email.text.trim().isNotEmpty;
+    return Padding(
+      padding: EdgeInsets.only(
+        left: WBSpacing.screenPadding,
+        right: WBSpacing.screenPadding,
+        top: WBSpacing.lg,
+        bottom: MediaQuery.of(context).viewInsets.bottom + WBSpacing.xl,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+              decoration: BoxDecoration(
+                color: WBColors.bgDivider,
+                borderRadius: BorderRadius.circular(WBRadius.pill),
+              ),
+            ),
+          ),
+          Text(
+            'Invite a staff member',
+            style: WBTypography.cardTitle.copyWith(fontSize: 18),
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          WBInput(
+            label: 'Full name',
+            controller: _name,
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: WBSpacing.md),
+          WBInput(
+            label: 'Email',
+            controller: _email,
+            keyboardType: TextInputType.emailAddress,
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: WBSpacing.md),
+          Text(
+            'ROLE',
+            style: WBTypography.label.copyWith(
+              fontWeight: FontWeight.w600,
+              color: WBColors.fgPlaceholder,
+              letterSpacing: 0.66,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: [
+              for (final r in _roles)
+                WBTag(
+                  label: r,
+                  active: r == _role,
+                  onTap: () => setState(() => _role = r),
+                ),
+            ],
+          ),
+          const SizedBox(height: WBSpacing.lg),
+          WBButton(
+            label: 'Send invite',
+            size: WBButtonSize.lg,
+            fullWidth: true,
+            disabled: !canSend,
+            onPressed: canSend
+                ? () => Navigator.of(context).pop(
+                      _StaffMember(
+                        name: _name.text.trim(),
+                        role: _role,
+                        email: _email.text.trim(),
+                      ),
+                    )
+                : null,
           ),
         ],
       ),

@@ -460,7 +460,7 @@ class _Hero extends StatelessWidget {
                         ),
                       ),
                       child: ClipOval(
-                        child: avatarUrl != null
+                        child: avatarUrl != null && avatarUrl!.isNotEmpty
                             ? WBNetworkImage(url: avatarUrl!)
                             : _InitialsAvatar(name: name),
                       ),

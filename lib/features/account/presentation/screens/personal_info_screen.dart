@@ -154,7 +154,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ),
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: _avatarUrl != null
+                      child: _avatarUrl != null && _avatarUrl!.isNotEmpty
                           ? WBNetworkImage(url: _avatarUrl!)
                           : Container(
                               color: WBColors.bgSoft,

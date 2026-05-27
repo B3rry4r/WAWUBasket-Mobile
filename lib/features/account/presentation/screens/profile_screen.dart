@@ -164,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               child: ClipOval(
-                                child: url != null
+                                child: url != null && url.isNotEmpty
                                     ? WBNetworkImage(url: url)
                                     : Container(
                                         color: WBColors.surfaceDark,
