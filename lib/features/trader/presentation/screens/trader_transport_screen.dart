@@ -6,6 +6,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../account/application/profile_controller.dart';
 import '../../../trade/domain/models/corridor.dart';
 import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
@@ -23,11 +24,11 @@ class TraderTransportScreen extends StatefulWidget {
 class _TraderTransportScreenState extends State<TraderTransportScreen> {
   Corridor _origin = Corridor.nigeria;
   Corridor _destination = Corridor.benin;
-  final _originLabel = TextEditingController(text: 'Kano');
-  final _destinationLabel = TextEditingController(text: 'Cotonou');
-  final _weight = TextEditingController(text: '5000');
-  final _offer = TextEditingController(text: '450000');
-  final _distance = TextEditingController(text: '1280');
+  final _originLabel = TextEditingController();
+  final _destinationLabel = TextEditingController();
+  final _weight = TextEditingController();
+  final _offer = TextEditingController();
+  final _distance = TextEditingController();
 
   @override
   void initState() {
@@ -127,6 +128,8 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
       wbShowSnack(context, 'Add weight and an offer price.');
       return;
     }
+    final traderName =
+        ProfileController.instance.profile.value?.fullName ?? '';
     final offer = LoadOffer(
       id: 'LOAD-${DateTime.now().millisecondsSinceEpoch}',
       origin: _origin,
@@ -139,7 +142,7 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
           : _destinationLabel.text.trim(),
       weightKg: w,
       offerNaira: o,
-      traderName: 'Hauwa & Sons Bulk Co.',
+      traderName: traderName,
       distanceKm: d,
       checkpointNames: const [
         'Origin depot',
@@ -165,9 +168,11 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
         child: ValueListenableBuilder(
           valueListenable: TransportController.instance.loads,
           builder: (_, loads, _) {
+            final myName =
+                ProfileController.instance.profile.value?.fullName ?? '';
             final mine = [
               for (final l in loads)
-                if (l.traderName == 'Hauwa & Sons Bulk Co.') l,
+                if (myName.isNotEmpty && l.traderName == myName) l,
             ];
             return Stack(
               children: [
