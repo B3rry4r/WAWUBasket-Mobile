@@ -10,6 +10,8 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import '../../../../core/utils/wb_permissions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
@@ -62,6 +64,15 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
   }
 
   Future<void> _ensureLocation() async {
+    // If permission is already granted (previous session), start tracking
+    // immediately without showing any system dialog.
+    final alreadyGranted = await Permission.locationAlways.isGranted ||
+        await Permission.locationWhenInUse.isGranted;
+    if (alreadyGranted) {
+      if (mounted && RiderController.instance.online.value) _startTracking();
+      return;
+    }
+    // First time or permission was revoked — prompt once.
     final granted = await WBPermissions.requestLocationAlways();
     if (!granted || !mounted) return;
     if (RiderController.instance.online.value) _startTracking();

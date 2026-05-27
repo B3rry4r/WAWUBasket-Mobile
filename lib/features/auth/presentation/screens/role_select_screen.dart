@@ -111,25 +111,30 @@ class _RoleSelectScreenState extends State<RoleSelectScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const WBBackChip(),
-                  TextButton(
-                    onPressed: () async {
-                      RoleController.instance.setRole(AppRole.customer);
-                      final prefs = await SharedPreferences.getInstance();
-                      final onboardingDone =
-                          prefs.getBool('onboardingDone') ?? false;
-                      if (!context.mounted) return;
-                      context.go(
-                        onboardingDone ? AppRoutes.home : AppRoutes.onboarding,
-                      );
-                    },
-                    child: Text(
-                      context.l10n.onboardingSkip,
-                      style: WBTypography.secondary.copyWith(
-                        color: WBColors.fgSecondary,
-                        fontWeight: FontWeight.w500,
+                  // Skip is only useful for brand-new users exploring the
+                  // onboarding.  Returning users already have a role; don't
+                  // show a button that leads them through permission screens
+                  // they already approved.
+                  if (!RoleController.instance.hasEverSignedIn)
+                    TextButton(
+                      onPressed: () async {
+                        RoleController.instance.setRole(AppRole.customer);
+                        final prefs = await SharedPreferences.getInstance();
+                        final onboardingDone =
+                            prefs.getBool('onboardingDone') ?? false;
+                        if (!context.mounted) return;
+                        context.go(
+                          onboardingDone ? AppRoutes.home : AppRoutes.onboarding,
+                        );
+                      },
+                      child: Text(
+                        context.l10n.onboardingSkip,
+                        style: WBTypography.secondary.copyWith(
+                          color: WBColors.fgSecondary,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

@@ -69,21 +69,35 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _busy = true);
     try {
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
-      // Sync role / KYC status from the backend so returning users see their
-      // actual approved/pending roles on the role-select screen.
       await RoleController.instance.syncFromApi();
-      RoleController.instance.setRole(AppRole.customer);
       GuestModeController.instance.exit();
-      // Register FCM token — fire-and-forget, non-critical.
       NotificationService.instance.registerToken();
       if (!mounted) return;
       await _offerBiometric();
       if (!mounted) return;
-      context.go(AppRoutes.roleSelect);
+      _navigateAfterAuth();
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  /// After any successful auth, navigate to the user's last role home (if
+  /// they're a returning user with an approved role) or to the role selector
+  /// (first-time login or role no longer approved).
+  void _navigateAfterAuth() {
+    final ctrl = RoleController.instance;
+    final lastRole = ctrl.role;
+    final isReturning = ctrl.hasEverSignedIn;
+    // hasEverSignedIn was set by a previous setRole call that was already
+    // persisted; after syncFromApi() _status reflects backend truth.
+    if (isReturning && ctrl.statusOf(lastRole) == RoleStatus.approved) {
+      ctrl.setRole(lastRole);
+      context.go(lastRole.homeRoute);
+    } else {
+      ctrl.setRole(AppRole.customer);
+      context.go(AppRoutes.roleSelect);
     }
   }
 
@@ -188,11 +202,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!mounted) return;
     if (ok) {
       await RoleController.instance.syncFromApi();
-      RoleController.instance.setRole(AppRole.customer);
       GuestModeController.instance.exit();
       NotificationService.instance.registerToken();
       if (!mounted) return;
-      context.go(AppRoutes.roleSelect);
+      _navigateAfterAuth();
     } else {
       // TODO(i18n): key=loginBiometricFailed
       wbShowSnack(context, "Couldn't verify it's you — try your password.");
