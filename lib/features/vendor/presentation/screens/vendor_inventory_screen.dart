@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../application/vendor_inventory_controller.dart';
+import '../../data/vendor_api.dart';
 
 class VendorInventoryScreen extends StatefulWidget {
   const VendorInventoryScreen({super.key});
@@ -36,10 +38,105 @@ class _VendorInventoryScreenState extends State<VendorInventoryScreen> {
     }
   }
 
+  Future<void> _showAddDialog() async {
+    final nameCtrl = TextEditingController();
+    final stockCtrl = TextEditingController(text: '0');
+    final thresholdCtrl = TextEditingController(text: '0');
+    final unitCtrl = TextEditingController(text: 'kg');
+    bool busy = false;
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: WBColors.bgPrimary,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSt) => Padding(
+          padding: EdgeInsets.fromLTRB(
+            WBSpacing.screenPadding,
+            WBSpacing.lg,
+            WBSpacing.screenPadding,
+            MediaQuery.of(ctx).viewInsets.bottom + WBSpacing.xl,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Add inventory item',
+                  style: WBTypography.cardTitle.copyWith(fontSize: 18)),
+              const SizedBox(height: WBSpacing.lg),
+              WBInput(label: 'Item name', controller: nameCtrl),
+              const SizedBox(height: WBSpacing.md),
+              Row(
+                children: [
+                  Expanded(child: WBInput(
+                    label: 'Quantity',
+                    controller: stockCtrl,
+                    keyboardType: TextInputType.number,
+                  )),
+                  const SizedBox(width: WBSpacing.sm),
+                  Expanded(child: WBInput(
+                    label: 'Unit (kg / bags…)',
+                    controller: unitCtrl,
+                  )),
+                ],
+              ),
+              const SizedBox(height: WBSpacing.md),
+              WBInput(
+                label: 'Low-stock threshold',
+                controller: thresholdCtrl,
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: WBSpacing.lg),
+              WBButton(
+                label: 'Add item',
+                size: WBButtonSize.lg,
+                fullWidth: true,
+                loading: busy,
+                onPressed: busy ? null : () async {
+                  final name = nameCtrl.text.trim();
+                  if (name.isEmpty) {
+                    wbShowSnack(ctx, 'Enter a name for the item.');
+                    return;
+                  }
+                  setSt(() => busy = true);
+                  try {
+                    await VendorApi.instance.createInventoryItem({
+                      'name': name,
+                      'stock': double.tryParse(stockCtrl.text) ?? 0,
+                      'threshold': double.tryParse(thresholdCtrl.text) ?? 0,
+                      'unit': unitCtrl.text.trim().isEmpty ? 'kg' : unitCtrl.text.trim(),
+                    });
+                    await VendorInventoryController.instance.load();
+                    if (ctx.mounted) Navigator.of(ctx).pop();
+                  } on ApiException catch (e) {
+                    if (ctx.mounted) wbShowSnack(ctx, e.message);
+                    setSt(() => busy = false);
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    nameCtrl.dispose();
+    stockCtrl.dispose();
+    thresholdCtrl.dispose();
+    unitCtrl.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: WBColors.surfaceDark,
+        onPressed: _showAddDialog,
+        child: const WBIcon(WBIconName.plus, size: 22, color: Colors.white),
+      ),
       body: SafeArea(
         bottom: false,
         child: ValueListenableBuilder(
@@ -101,11 +198,38 @@ class _VendorInventoryScreenState extends State<VendorInventoryScreen> {
                   ),
                 ),
                 const SizedBox(height: WBSpacing.md),
-                for (final i in filtered)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: _InventoryCard(item: i),
-                  ),
+                if (items.isEmpty)
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Column(
+                        children: [
+                          const WBIcon(WBIconName.basket,
+                              size: 40, color: WBColors.fgPlaceholder),
+                          const SizedBox(height: WBSpacing.md),
+                          Text(
+                            'No inventory items yet.',
+                            style: WBTypography.body.copyWith(
+                              color: WBColors.fgSecondary,
+                            ),
+                          ),
+                          const SizedBox(height: WBSpacing.sm),
+                          Text(
+                            'Tap + to add your first item.',
+                            style: WBTypography.caption.copyWith(
+                              color: WBColors.fgPlaceholder,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                else
+                  for (final i in filtered)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: _InventoryCard(item: i),
+                    ),
               ],
             );
           },

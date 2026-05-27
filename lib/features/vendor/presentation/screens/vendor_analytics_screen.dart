@@ -38,6 +38,7 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
 
   Map<String, dynamic>? _data;
   bool _loading = true;
+  bool _error = false;
 
   @override
   void initState() {
@@ -46,16 +47,14 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
   }
 
   Future<void> _load() async {
+    if (mounted) setState(() { _loading = true; _error = false; });
     try {
       final d = await VendorApi.instance.analytics(range: _range);
-      if (mounted) {
-        setState(() {
-          _data = d;
-          _loading = false;
-        });
-      }
+      if (mounted) setState(() { _data = d; _loading = false; });
     } on ApiException {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) setState(() { _loading = false; _error = true; });
+    } catch (_) {
+      if (mounted) setState(() { _loading = false; _error = true; });
     }
   }
 
@@ -124,6 +123,30 @@ class _VendorAnalyticsScreenState extends State<VendorAnalyticsScreen> {
                     strokeWidth: 2.6,
                     valueColor:
                         AlwaysStoppedAnimation(WBColors.surfaceDark),
+                  ),
+                ),
+              )
+            : _error && _data == null
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(WBSpacing.screenPadding),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Could not load analytics.',
+                        style: WBTypography.body.copyWith(
+                          color: WBColors.fgSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: WBSpacing.md),
+                      WBButton(
+                        label: 'Try again',
+                        size: WBButtonSize.sm,
+                        variant: WBButtonVariant.secondary,
+                        onPressed: _load,
+                      ),
+                    ],
                   ),
                 ),
               )

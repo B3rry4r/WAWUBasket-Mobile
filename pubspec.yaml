@@ -76,6 +76,10 @@ dependencies:
   sqflite: ^2.3.3+1
   path: ^1.9.0
 
+  # PDF asset extraction + opening (onboarding gift playbook).
+  path_provider: ^2.1.4
+  open_filex: ^4.7.0
+
   # Localization — African-language support via ARB files + gen-l10n.
   flutter_localizations:
     sdk: flutter
@@ -109,5 +113,6 @@ flutter:
   assets:
     - assets/logos/
     - assets/categories/
+    - assets/docs/
 
   # Albert Sans is loaded at runtime via google_fonts.

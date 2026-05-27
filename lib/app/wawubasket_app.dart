@@ -21,7 +21,7 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
   @override
   void initState() {
     super.initState();
-    ApiClient.instance.onSessionExpired = () => _router.go(AppRoutes.welcome);
+    ApiClient.instance.onSessionExpired = () => _router.go(AppRoutes.login);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

@@ -669,7 +669,7 @@ void _showSignOutSheet(BuildContext context) {
             onPressed: () {
               RoleController.instance.signOut();
               Navigator.of(ctx).pop();
-              context.go(AppRoutes.welcome);
+              context.go(AppRoutes.login);
             },
           ),
           const SizedBox(height: WBSpacing.sm + 4),

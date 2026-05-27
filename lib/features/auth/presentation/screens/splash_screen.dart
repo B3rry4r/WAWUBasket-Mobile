@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -30,14 +29,16 @@ class _SplashScreenState extends State<SplashScreen>
     Timer(const Duration(milliseconds: 1400), _route);
   }
 
-  /// Cold-start routing: new users go to /welcome (onboarding); returning
-  /// users (signedIn flag + refresh token on disk) go directly to /login
-  /// where biometrics will auto-trigger.
+  /// Cold-start routing: first-time users go to /welcome (onboarding);
+  /// anyone who has signed in at least once goes to /login so biometrics
+  /// can auto-trigger (even after an explicit sign-out).
   Future<void> _route() async {
     if (!mounted) return;
-    final isReturning = RoleController.instance.signedIn &&
-        (TokenStore.instance.refreshToken ?? '').isNotEmpty;
-    context.go(isReturning ? AppRoutes.login : AppRoutes.welcome);
+    context.go(
+      RoleController.instance.hasEverSignedIn
+          ? AppRoutes.login
+          : AppRoutes.welcome,
+    );
   }
 
   @override

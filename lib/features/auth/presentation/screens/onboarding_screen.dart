@@ -1,7 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart' show openAppSettings;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -601,9 +608,32 @@ class _QuizLabel extends StatelessWidget {
 
 // ───────────────────────── Step 3 · First-order gift ────────────────────
 
-class _GiftStep extends StatelessWidget {
+class _GiftStep extends StatefulWidget {
   const _GiftStep({super.key, required this.onNext});
   final VoidCallback onNext;
+
+  @override
+  State<_GiftStep> createState() => _GiftStepState();
+}
+
+class _GiftStepState extends State<_GiftStep> {
+  bool _downloading = false;
+
+  Future<void> _downloadPlaybook() async {
+    if (_downloading) return;
+    setState(() => _downloading = true);
+    try {
+      final ByteData data = await rootBundle.load('assets/docs/business_playbook.pdf');
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File(p.join(dir.path, 'WAWUAfrica_Business_Playbook.pdf'));
+      await file.writeAsBytes(data.buffer.asUint8List(), flush: true);
+      await OpenFilex.open(file.path);
+    } catch (e) {
+      if (mounted) wbShowSnack(context, 'Could not open the playbook. Try again.');
+    } finally {
+      if (mounted) setState(() => _downloading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -647,26 +677,37 @@ class _GiftStep extends StatelessWidget {
             ),
           ),
           const SizedBox(height: WBSpacing.lg),
-          Container(
-            padding: const EdgeInsets.all(WBSpacing.md),
-            decoration: BoxDecoration(
-              color: WBColors.bgSoft,
-              borderRadius: BorderRadius.circular(WBRadius.card),
-            ),
-            child: Row(
-              children: [
-                const WBIcon(WBIconName.star, size: 16),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    'Gift: Download The Business Playbook',
-                    style: WBTypography.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+          GestureDetector(
+            onTap: _downloadPlaybook,
+            child: Container(
+              padding: const EdgeInsets.all(WBSpacing.md),
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(WBRadius.card),
+              ),
+              child: Row(
+                children: [
+                  if (_downloading)
+                    const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  else
+                    const WBIcon(WBIconName.star, size: 16),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      'Gift: Download The Business Playbook',
+                      style: WBTypography.body.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  const WBIcon(WBIconName.arrowRight, size: 14),
+                ],
+              ),
             ),
           ),
           const Spacer(),
@@ -675,7 +716,7 @@ class _GiftStep extends StatelessWidget {
             size: WBButtonSize.lg,
             fullWidth: true,
             trailingIcon: WBIconName.arrowRight,
-            onPressed: onNext,
+            onPressed: widget.onNext,
           ),
           const SizedBox(height: WBSpacing.sm + 4),
           Text(

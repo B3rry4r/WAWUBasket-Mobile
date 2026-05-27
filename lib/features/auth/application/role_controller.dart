@@ -101,6 +101,7 @@ class RoleController {
 
   static const _kRoleKey = 'wb.role';
   static const _kSignedInKey = 'wb.signedIn';
+  static const _kHasEverSignedIn = 'wb.hasEverSignedIn';
   static const _kStatusPrefix = 'wb.status.';
 
   final ValueNotifier<AppRole> notifier = ValueNotifier(AppRole.customer);
@@ -110,6 +111,12 @@ class RoleController {
   /// `/welcome`, a signed-in user lands on their role's home.
   bool _signedIn = false;
   bool get signedIn => _signedIn;
+
+  /// Set the first time the user ever signs in; never cleared on sign-out.
+  /// Splash uses this to send returning users directly to /login (where
+  /// biometrics auto-triggers) rather than to /welcome (onboarding).
+  bool _hasEverSignedIn = false;
+  bool get hasEverSignedIn => _hasEverSignedIn;
 
   final Map<AppRole, RoleStatus> _status = {
     for (final r in AppRole.values)
@@ -148,6 +155,7 @@ class RoleController {
   void setRole(AppRole next) {
     notifier.value = next;
     _signedIn = true;
+    _hasEverSignedIn = true;
     _persistRole();
   }
 
@@ -194,6 +202,7 @@ class RoleController {
       if (match != null) notifier.value = match;
     }
     _signedIn = p.getBool(_kSignedInKey) ?? false;
+    _hasEverSignedIn = p.getBool(_kHasEverSignedIn) ?? _signedIn;
     for (final r in AppRole.values) {
       if (r == AppRole.customer) continue;
       final v = p.getString('$_kStatusPrefix${r.name}');
@@ -234,6 +243,7 @@ class RoleController {
     if (p == null) return;
     p.setString(_kRoleKey, notifier.value.name);
     p.setBool(_kSignedInKey, _signedIn);
+    if (_hasEverSignedIn) p.setBool(_kHasEverSignedIn, true);
   }
 
   void _persistStatus(AppRole r) {

@@ -151,7 +151,16 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-    if (enable == true) await bio.setEnabled(true);
+    if (enable == true) {
+      final verified = await bio.authenticate(
+        reason: 'Register your biometric for WAWUBasket',
+      );
+      if (verified) {
+        await bio.setEnabled(true);
+      } else if (mounted) {
+        wbShowSnack(context, "Biometric not verified — it hasn't been enabled.");
+      }
+    }
   }
 
   /// Unlocks an existing session with Face ID / fingerprint. Needs a prior

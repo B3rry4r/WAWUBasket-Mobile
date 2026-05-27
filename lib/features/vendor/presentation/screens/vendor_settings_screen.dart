@@ -270,13 +270,6 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
                     value: _pushLowStock,
                     onChanged: (v) => setState(() => _pushLowStock = v),
                   ),
-                  const WBDivider(),
-                  _Toggle(
-                    label: 'Weekly reports',
-                    sub: 'Email',
-                    value: _emailReports,
-                    onChanged: (v) => setState(() => _emailReports = v),
-                  ),
                 ],
               ),
             ),

@@ -200,63 +200,62 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 200, child: CustomPaint(painter: _MapPainter())),
             if (order.riderName != null)
-              Transform.translate(
-                offset: const Offset(0, -20),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: WBSpacing.screenPadding,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  WBSpacing.screenPadding,
+                  WBSpacing.md,
+                  WBSpacing.screenPadding,
+                  0,
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(WBSpacing.md + 2),
+                  decoration: BoxDecoration(
+                    color: WBColors.surfaceCard,
+                    borderRadius: BorderRadius.circular(WBRadius.card),
+                    boxShadow: WBShadows.float,
                   ),
-                  child: Container(
-                    padding: const EdgeInsets.all(WBSpacing.md + 2),
-                    decoration: BoxDecoration(
-                      color: WBColors.surfaceCard,
-                      borderRadius: BorderRadius.circular(WBRadius.card),
-                      boxShadow: WBShadows.float,
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 52,
-                          height: 52,
-                          decoration: const BoxDecoration(
-                            color: WBColors.bgSoft,
-                            shape: BoxShape.circle,
-                          ),
-                          alignment: Alignment.center,
-                          child: const WBIcon(WBIconName.user,
-                              size: 24, color: WBColors.fgPlaceholder),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 52,
+                        height: 52,
+                        decoration: const BoxDecoration(
+                          color: WBColors.bgSoft,
+                          shape: BoxShape.circle,
                         ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Text(
-                            order.riderName!,
-                            style: WBTypography.cardTitle
-                                .copyWith(fontWeight: FontWeight.w600),
-                          ),
+                        alignment: Alignment.center,
+                        child: const WBIcon(WBIconName.user,
+                            size: 24, color: WBColors.fgPlaceholder),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(
+                        child: Text(
+                          order.riderName!,
+                          style: WBTypography.cardTitle
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
-                        _ContactCircle(
-                          icon: WBIconName.message,
-                          onTap: () => context.push(
-                            Uri(
-                              path: AppRoutes.chatRider,
-                              queryParameters: {
-                                'orderId': order.id,
-                                'title': order.riderName!,
-                              },
-                            ).toString(),
-                          ),
+                      ),
+                      _ContactCircle(
+                        icon: WBIconName.message,
+                        onTap: () => context.push(
+                          Uri(
+                            path: AppRoutes.chatRider,
+                            queryParameters: {
+                              'orderId': order.id,
+                              'title': order.riderName!,
+                            },
+                          ).toString(),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             Padding(
-              padding: EdgeInsets.fromLTRB(
+              padding: const EdgeInsets.fromLTRB(
                 WBSpacing.screenPadding,
-                order.riderName != null ? 0 : 20,
+                WBSpacing.lg,
                 WBSpacing.screenPadding,
                 40,
               ),
@@ -531,34 +530,3 @@ class _TimelineRow extends StatelessWidget {
   }
 }
 
-class _MapPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final bg = Paint()..color = const Color(0xFFEBEBEB);
-    canvas.drawRect(Offset.zero & size, bg);
-    final block = Paint()..color = const Color(0xFFDEDEDE);
-    final sx = size.width / 350;
-    for (final b in [
-      [0.0, 0.0, 110.0, 90.0],
-      [130.0, 0.0, 90.0, 90.0],
-      [240.0, 0.0, 110.0, 90.0],
-      [0.0, 110.0, 80.0, size.height - 110],
-      [100.0, 110.0, 120.0, size.height - 110],
-      [240.0, 110.0, 110.0, size.height - 110],
-    ]) {
-      canvas.drawRect(
-        Rect.fromLTWH(b[0] * sx, b[1], b[2] * sx, b[3]),
-        block,
-      );
-    }
-    final dest = Paint()..color = const Color(0xFF111111);
-    canvas.drawCircle(Offset(280 * sx, size.height - 40), 11, dest);
-    canvas.drawCircle(Offset(280 * sx, size.height - 40), 4.5,
-        Paint()..color = Colors.white);
-    canvas.drawCircle(
-        Offset(80 * sx, 50), 12, Paint()..color = const Color(0xFFBDBDBD));
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
