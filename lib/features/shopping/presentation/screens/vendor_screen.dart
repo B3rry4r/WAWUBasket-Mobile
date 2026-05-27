@@ -26,7 +26,7 @@ class VendorScreen extends ConsumerStatefulWidget {
 }
 
 class _VendorScreenState extends ConsumerState<VendorScreen> {
-  static const _tabs = ['All', 'Mains', 'Sides', 'Drinks'];
+  List<String> _tabs = const ['All'];
   String _activeTab = 'All';
 
   Vendor? _vendor;
@@ -51,9 +51,16 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
     try {
       final result = await CatalogApi.instance.vendorDetail(id);
       if (!mounted) return;
+      final subs = result.menu
+          .map((p) => p.subcategoryId)
+          .where((s) => s.isNotEmpty)
+          .toSet()
+          .toList();
       setState(() {
         _vendor = result.vendor;
         _menu = result.menu;
+        _tabs = ['All', ...subs];
+        _activeTab = 'All';
       });
       _loadFavoriteState(id);
     } on ApiException catch (e) {
@@ -136,7 +143,7 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
     final vendor = _vendor!;
     final items = _activeTab == 'All'
         ? _menu
-        : _menu.where((p) => p.categoryId == _activeTab).toList();
+        : _menu.where((p) => p.subcategoryId == _activeTab).toList();
 
     final cart = ref.watch(cartControllerProvider);
     final cartCount = cart.items.fold<int>(0, (s, l) => s + l.quantity);
@@ -260,7 +267,7 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
                   itemCount: _tabs.length,
                   separatorBuilder: (_, _) => const SizedBox(width: 8),
                   itemBuilder: (_, i) => WBTag(
-                    label: _tabs[i],
+                    label: _tabLabel(_tabs[i]),
                     active: _tabs[i] == _activeTab,
                     onTap: () => setState(() => _activeTab = _tabs[i]),
                   ),
@@ -274,10 +281,6 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12, bottom: 4),
-                      child: Text('Mains', style: WBTypography.cardTitle),
-                    ),
                     if (items.isEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -354,6 +357,14 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
       ),
     );
   }
+}
+
+String _tabLabel(String id) {
+  if (id == 'All') return 'All';
+  return id
+      .split('-')
+      .map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}')
+      .join(' ');
 }
 
 String _naira(int v) {
