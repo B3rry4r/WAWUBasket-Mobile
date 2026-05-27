@@ -438,6 +438,289 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
   }
 }
 
+/// Searchable list sheet for plain string options (states, cities).
+class _StringPickerSheet extends StatefulWidget {
+  const _StringPickerSheet({
+    required this.title,
+    required this.items,
+    this.selected,
+  });
+  final String title;
+  final List<String> items;
+  final String? selected;
+
+  @override
+  State<_StringPickerSheet> createState() => _StringPickerSheetState();
+}
+
+class _StringPickerSheetState extends State<_StringPickerSheet> {
+  String _q = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final q = _q.trim().toLowerCase();
+    final filtered = q.isEmpty
+        ? widget.items
+        : widget.items.where((s) => s.toLowerCase().contains(q)).toList();
+    return Padding(
+      padding: EdgeInsets.only(
+        left: WBSpacing.screenPadding,
+        right: WBSpacing.screenPadding,
+        top: WBSpacing.lg,
+        bottom: MediaQuery.of(context).viewInsets.bottom + WBSpacing.lg,
+      ),
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: WBSpacing.lg),
+                decoration: BoxDecoration(
+                  color: WBColors.bgDivider,
+                  borderRadius: BorderRadius.circular(WBRadius.pill),
+                ),
+              ),
+            ),
+            Text(widget.title,
+                style: WBTypography.cardTitle.copyWith(fontSize: 18)),
+            const SizedBox(height: WBSpacing.sm),
+            WBInput(
+              placeholder: 'Search',
+              leadingIcon: WBIconName.search,
+              autofocus: true,
+              onChanged: (v) => setState(() => _q = v),
+            ),
+            const SizedBox(height: WBSpacing.sm),
+            Expanded(
+              child: ListView.builder(
+                itemCount: filtered.length,
+                itemBuilder: (_, i) => GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Navigator.of(context).pop(filtered[i]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(filtered[i],
+                              style: WBTypography.body.copyWith(fontSize: 15)),
+                        ),
+                        if (filtered[i] == widget.selected)
+                          const WBIcon(WBIconName.check, size: 16),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// State/province picker driven by [countryName]. Fetches from countriesnow
+/// via [CountryApi.statesFor]. Resets when [countryName] changes.
+class WBStateField extends StatefulWidget {
+  const WBStateField({
+    super.key,
+    required this.countryName,
+    required this.onChanged,
+    this.value,
+    this.label = 'State / Province',
+  });
+  final String countryName;
+  final ValueChanged<String> onChanged;
+  final String? value;
+  final String label;
+
+  @override
+  State<WBStateField> createState() => _WBStateFieldState();
+}
+
+class _WBStateFieldState extends State<WBStateField> {
+  List<String> _states = const [];
+  bool _loading = false;
+  String? _loadedFor;
+
+  @override
+  void didUpdateWidget(WBStateField old) {
+    super.didUpdateWidget(old);
+    if (old.countryName != widget.countryName) _load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    if (widget.countryName.isEmpty) return;
+    setState(() { _loading = true; _loadedFor = widget.countryName; });
+    try {
+      final list = await CountryApi.instance.statesFor(widget.countryName);
+      if (mounted && _loadedFor == widget.countryName) {
+        setState(() { _states = list; _loading = false; });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _open() async {
+    if (_states.isEmpty || widget.countryName.isEmpty) return;
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => _StringPickerSheet(
+        title: widget.label,
+        items: _states,
+        selected: widget.value,
+      ),
+    );
+    if (picked != null && mounted) widget.onChanged(picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final empty = widget.countryName.isEmpty;
+    return GestureDetector(
+      onTap: empty || _loading ? null : _open,
+      behavior: HitTestBehavior.opaque,
+      child: AbsorbPointer(
+        child: WBInput(
+          key: ValueKey('state-${widget.countryName}-${widget.value ?? ''}'),
+          label: widget.label,
+          initialValue: widget.value ?? '',
+          placeholder: empty
+              ? 'Select country first'
+              : _loading
+                  ? 'Loading…'
+                  : 'Select ${widget.label.toLowerCase()}',
+          trailing: _loading
+              ? const SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(strokeWidth: 1.5),
+                )
+              : const WBIcon(WBIconName.chevronDown, size: 14),
+        ),
+      ),
+    );
+  }
+}
+
+/// City picker driven by [countryName] + [stateName]. Fetches from
+/// countriesnow via [CountryApi.citiesFor]. Resets when state changes.
+class WBCityField extends StatefulWidget {
+  const WBCityField({
+    super.key,
+    required this.countryName,
+    required this.stateName,
+    required this.onChanged,
+    this.value,
+    this.label = 'City / LGA',
+  });
+  final String countryName;
+  final String stateName;
+  final ValueChanged<String> onChanged;
+  final String? value;
+  final String label;
+
+  @override
+  State<WBCityField> createState() => _WBCityFieldState();
+}
+
+class _WBCityFieldState extends State<WBCityField> {
+  List<String> _cities = const [];
+  bool _loading = false;
+  String? _loadedFor;
+
+  @override
+  void didUpdateWidget(WBCityField old) {
+    super.didUpdateWidget(old);
+    if (old.countryName != widget.countryName ||
+        old.stateName != widget.stateName) _load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    if (widget.stateName.isEmpty) return;
+    final key = '${widget.countryName}|${widget.stateName}';
+    setState(() { _loading = true; _loadedFor = key; });
+    try {
+      final list =
+          await CountryApi.instance.citiesFor(widget.countryName, widget.stateName);
+      if (mounted && _loadedFor == key) {
+        setState(() { _cities = list; _loading = false; });
+      }
+    } catch (_) {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _open() async {
+    if (_cities.isEmpty || widget.stateName.isEmpty) return;
+    final picked = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => _StringPickerSheet(
+        title: widget.label,
+        items: _cities,
+        selected: widget.value,
+      ),
+    );
+    if (picked != null && mounted) widget.onChanged(picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final empty = widget.stateName.isEmpty;
+    return GestureDetector(
+      onTap: empty || _loading ? null : _open,
+      behavior: HitTestBehavior.opaque,
+      child: AbsorbPointer(
+        child: WBInput(
+          key: ValueKey('city-${widget.stateName}-${widget.value ?? ''}'),
+          label: widget.label,
+          initialValue: widget.value ?? '',
+          placeholder: empty
+              ? 'Select state first'
+              : _loading
+                  ? 'Loading…'
+                  : 'Select city',
+          trailing: _loading
+              ? const SizedBox(
+                  width: 14,
+                  height: 14,
+                  child: CircularProgressIndicator(strokeWidth: 1.5),
+                )
+              : const WBIcon(WBIconName.chevronDown, size: 14),
+        ),
+      ),
+    );
+  }
+}
+
 /// Address-country picker. Shows flag + name in a searchable bottom sheet
 /// backed by [CountryApi] (restcountries.com). Returns the country name.
 class WBCountryField extends StatefulWidget {

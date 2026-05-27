@@ -39,13 +39,16 @@ class Country {
 }
 
 /// Fetches the country + dial-code list from the public restcountries.com
-/// API. The result is cached in memory for the app session.
+/// API. States and cities come from countriesnow.space. All results are
+/// cached in memory for the app session.
 class CountryApi {
   CountryApi._();
   static final CountryApi instance = CountryApi._();
 
   final _dio = Dio();
   List<Country>? _cache;
+  final _statesCache = <String, List<String>>{};
+  final _citiesCache = <String, List<String>>{};
 
   Future<List<Country>> all() async {
     if (_cache != null) return _cache!;
@@ -68,5 +71,71 @@ class CountryApi {
       if (c.iso2 == iso2) return c;
     }
     return null;
+  }
+
+  /// States/provinces for [countryName] via countriesnow.space.
+  Future<List<String>> statesFor(String countryName) async {
+    if (countryName.isEmpty) return const [];
+    if (_statesCache.containsKey(countryName)) return _statesCache[countryName]!;
+    try {
+      final res = await _dio.get<dynamic>(
+        'https://countriesnow.space/api/v0.1/countries/states/q',
+        queryParameters: {'country': countryName},
+      );
+      final data = (res.data as Map?)?.cast<String, dynamic>() ?? const {};
+      if (data['error'] == true) return const [];
+      final states = ((data['data']?['states'] as List?) ?? const [])
+          .map((s) => ((s as Map?)?['name'] ?? '').toString().trim())
+          .where((s) => s.isNotEmpty)
+          .toList()
+        ..sort();
+      _statesCache[countryName] = states;
+      return states;
+    } catch (_) {
+      return const [];
+    }
+  }
+
+  /// Cities in [stateName] of [countryName] via countriesnow.space.
+  Future<List<String>> citiesFor(String countryName, String stateName) async {
+    if (countryName.isEmpty || stateName.isEmpty) return const [];
+    final key = '$countryName|$stateName';
+    if (_citiesCache.containsKey(key)) return _citiesCache[key]!;
+    Future<List<String>> parse(dynamic body) async {
+      final data = (body as Map?)?.cast<String, dynamic>() ?? const {};
+      if (data['error'] == true) return const [];
+      final cities = ((data['data'] as List?) ?? const [])
+          .map((c) => c.toString().trim())
+          .where((c) => c.isNotEmpty)
+          .toList()
+        ..sort();
+      return cities;
+    }
+    try {
+      final res = await _dio.post<dynamic>(
+        'https://countriesnow.space/api/v0.1/countries/state/cities',
+        data: {
+          'country': countryName,
+          'state': stateName.replaceAll(' State', ''),
+        },
+      );
+      final cities = await parse(res.data);
+      if (cities.isNotEmpty) {
+        _citiesCache[key] = cities;
+        return cities;
+      }
+    } catch (_) {}
+    // Fallback GET
+    try {
+      final res = await _dio.get<dynamic>(
+        'https://countriesnow.space/api/v0.1/countries/state/cities/q',
+        queryParameters: {'country': countryName, 'state': stateName},
+      );
+      final cities = await parse(res.data);
+      _citiesCache[key] = cities;
+      return cities;
+    } catch (_) {
+      return const [];
+    }
   }
 }

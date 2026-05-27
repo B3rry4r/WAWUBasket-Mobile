@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
+import '../../../../core/widgets/wb_form_fields.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../../trade/domain/models/corridor.dart';
@@ -24,8 +25,10 @@ class TraderTransportScreen extends StatefulWidget {
 class _TraderTransportScreenState extends State<TraderTransportScreen> {
   Corridor _origin = Corridor.nigeria;
   Corridor _destination = Corridor.benin;
-  final _originLabel = TextEditingController();
-  final _destinationLabel = TextEditingController();
+  String _originState = '';
+  String _originCity = '';
+  String _destinationState = '';
+  String _destinationCity = '';
   final _weight = TextEditingController();
   final _offer = TextEditingController();
   final _distance = TextEditingController();
@@ -38,8 +41,6 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
 
   @override
   void dispose() {
-    _originLabel.dispose();
-    _destinationLabel.dispose();
     _weight.dispose();
     _offer.dispose();
     _distance.dispose();
@@ -88,8 +89,12 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                   setState(() {
                     if (origin) {
                       _origin = c;
+                      _originState = '';
+                      _originCity = '';
                     } else {
                       _destination = c;
+                      _destinationState = '';
+                      _destinationCity = '';
                     }
                   });
                   Navigator.of(sheetCtx).pop();
@@ -130,16 +135,22 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
     }
     final traderName =
         ProfileController.instance.profile.value?.fullName ?? '';
+    final originLabel = _originCity.isNotEmpty
+        ? _originCity
+        : _originState.isNotEmpty
+            ? _originState
+            : _origin.label;
+    final destinationLabel = _destinationCity.isNotEmpty
+        ? _destinationCity
+        : _destinationState.isNotEmpty
+            ? _destinationState
+            : _destination.label;
     final offer = LoadOffer(
       id: 'LOAD-${DateTime.now().millisecondsSinceEpoch}',
       origin: _origin,
       destination: _destination,
-      originLabel: _originLabel.text.trim().isEmpty
-          ? _origin.label
-          : _originLabel.text.trim(),
-      destinationLabel: _destinationLabel.text.trim().isEmpty
-          ? _destination.label
-          : _destinationLabel.text.trim(),
+      originLabel: originLabel,
+      destinationLabel: destinationLabel,
       weightKg: w,
       offerNaira: o,
       traderName: traderName,
@@ -239,16 +250,50 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                           Row(
                             children: [
                               Expanded(
-                                child: WBInput(
-                                  label: 'Pickup city',
-                                  controller: _originLabel,
+                                child: WBStateField(
+                                  countryName: _origin.label,
+                                  value: _originState.isEmpty ? null : _originState,
+                                  label: 'Pickup state',
+                                  onChanged: (s) => setState(() {
+                                    _originState = s;
+                                    _originCity = '';
+                                  }),
                                 ),
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: WBInput(
+                                child: WBStateField(
+                                  countryName: _destination.label,
+                                  value: _destinationState.isEmpty ? null : _destinationState,
+                                  label: 'Dropoff state',
+                                  onChanged: (s) => setState(() {
+                                    _destinationState = s;
+                                    _destinationCity = '';
+                                  }),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: WBSpacing.md),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: WBCityField(
+                                  countryName: _origin.label,
+                                  stateName: _originState,
+                                  value: _originCity.isEmpty ? null : _originCity,
+                                  label: 'Pickup city',
+                                  onChanged: (c) => setState(() => _originCity = c),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: WBCityField(
+                                  countryName: _destination.label,
+                                  stateName: _destinationState,
+                                  value: _destinationCity.isEmpty ? null : _destinationCity,
                                   label: 'Dropoff city',
-                                  controller: _destinationLabel,
+                                  onChanged: (c) => setState(() => _destinationCity = c),
                                 ),
                               ),
                             ],
