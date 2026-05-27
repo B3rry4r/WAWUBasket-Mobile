@@ -123,17 +123,20 @@ LoadStatus _loadStatusFromName(String? s) => switch (s) {
 /// One driver's bid on an open load.
 class LoadBid {
   const LoadBid({
+    this.id = '',
     required this.driverName,
     required this.priceNaira,
     required this.etaHours,
     this.notes = '',
   });
+  final String id;
   final String driverName;
   final int priceNaira;
   final int etaHours;
   final String notes;
 
   factory LoadBid.fromJson(Map<String, dynamic> j) => LoadBid(
+        id: (j['id'] ?? '').toString(),
         driverName: (j['driverName'] ?? '').toString(),
         priceNaira: _loadInt(j['priceNaira']),
         etaHours: (j['etaHours'] as num?)?.toInt() ?? 0,

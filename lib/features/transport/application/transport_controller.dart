@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../core/network/api_exception.dart';
+import '../../account/application/profile_controller.dart';
 import '../../driver/data/driver_api.dart';
 import '../data/transport_api.dart';
 import '../domain/models/load_offer.dart';
@@ -15,7 +16,11 @@ class TransportController {
         mutationError = ValueNotifier<String?>(null);
   static final TransportController instance = TransportController._();
 
-  static const driverName = 'Aliyu Bala';
+  /// Logged-in driver's display name, read from the profile controller.
+  String? get currentDriverName =>
+      ProfileController.instance.profile.value?.driverDisplayName?.isNotEmpty == true
+          ? ProfileController.instance.profile.value!.driverDisplayName
+          : ProfileController.instance.profile.value?.fullName;
 
   /// Every load the system knows about, newest first.
   final ValueNotifier<List<LoadOffer>> loads;
@@ -114,7 +119,7 @@ class TransportController {
     final l = byId(id);
     if (l == null) return;
     l.status = LoadStatus.assigned;
-    l.assignedDriver = driverName;
+    l.assignedDriver = currentDriverName ?? 'Driver';
     activeTrip.value = l;
     _bump();
     _driverApi.acceptLoad(id).catchError((Object e) {
@@ -160,6 +165,9 @@ class TransportController {
       });
     }
   }
+
+  /// Called by the trader UI after assigning a driver to refresh listeners.
+  void notifyLoadsChanged() => _bump();
 
   void _bump() => loads.value = List.of(loads.value);
 }

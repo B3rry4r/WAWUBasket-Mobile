@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
@@ -47,21 +46,22 @@ class _DriverBidScreenState extends State<DriverBidScreen> {
       wbShowSnack(context, 'Add a price and an ETA.');
       return;
     }
+    final driverName =
+        TransportController.instance.currentDriverName ?? 'Driver';
     TransportController.instance.bid(
       load.id,
       LoadBid(
-        driverName: TransportController.driverName,
+        driverName: driverName,
         priceNaira: p,
         etaHours: h,
         notes: _notes.text.trim(),
       ),
     );
-    TransportController.instance.accept(load.id);
     wbShowSnack(
       context,
-      'Bid accepted · trip starts whenever you log the first checkpoint',
+      'Bid submitted · waiting for trader to assign you',
     );
-    context.go(AppRoutes.driverActiveTrip);
+    context.pop();
   }
 
   @override

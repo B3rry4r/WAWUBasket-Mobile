@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
@@ -10,6 +11,7 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../../trade/domain/models/corridor.dart';
 import '../../../transport/application/transport_controller.dart';
+import '../../../transport/data/transport_api.dart';
 import '../../../transport/domain/models/load_offer.dart';
 
 /// Trader posts a load that drivers (the new operator role from batch E)
@@ -362,26 +364,41 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                         ),
                       )
                     else
-                      WBCard(
-                        padding: EdgeInsets.zero,
-                        child: Column(
-                          children: [
-                            for (var i = 0;
-                                i < (mine.isEmpty ? loads : mine).length;
-                                i++) ...[
+                      for (final load in (mine.isEmpty ? loads : mine)) ...[
+                        WBCard(
+                          padding: EdgeInsets.zero,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Padding(
                                 padding: const EdgeInsets.all(14),
-                                child: _LoadRow(
-                                  load: (mine.isEmpty ? loads : mine)[i],
-                                ),
+                                child: _LoadRow(load: load),
                               ),
-                              if (i !=
-                                  (mine.isEmpty ? loads : mine).length - 1)
+                              if (load.bids.isNotEmpty) ...[
                                 const WBDivider(),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(14, 10, 14, 4),
+                                  child: Text(
+                                    '${load.bids.length} bid${load.bids.length == 1 ? '' : 's'}',
+                                    style: WBTypography.caption.copyWith(
+                                      color: WBColors.fgSecondary,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                for (final bid in load.bids)
+                                  _BidRow(
+                                    load: load,
+                                    bid: bid,
+                                    canAccept: load.status == LoadStatus.open,
+                                  ),
+                                const SizedBox(height: 6),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                      ],
                   ],
                 ),
                 Positioned(
@@ -463,6 +480,86 @@ class _LoadRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _BidRow extends StatefulWidget {
+  const _BidRow({
+    required this.load,
+    required this.bid,
+    required this.canAccept,
+  });
+  final LoadOffer load;
+  final LoadBid bid;
+  final bool canAccept;
+
+  @override
+  State<_BidRow> createState() => _BidRowState();
+}
+
+class _BidRowState extends State<_BidRow> {
+  bool _loading = false;
+
+  Future<void> _accept() async {
+    if (_loading) return;
+    setState(() => _loading = true);
+    try {
+      await TransportApi.instance.assignDriver(widget.load.id, widget.bid.id);
+      if (!mounted) return;
+      widget.load.status = LoadStatus.assigned;
+      TransportController.instance.notifyLoadsChanged();
+      wbShowSnack(context, '${widget.bid.driverName} assigned to this load');
+    } on ApiException catch (e) {
+      if (mounted) wbShowSnack(context, e.message);
+    } catch (_) {
+      if (mounted) wbShowSnack(context, 'Could not assign driver. Try again.');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.bid.driverName,
+                  style: WBTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+                Text(
+                  '${wbNaira(widget.bid.priceNaira)} · ${widget.bid.etaHours}h ETA'
+                  '${widget.bid.notes.isNotEmpty ? ' · ${widget.bid.notes}' : ''}',
+                  style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          if (widget.canAccept)
+            _loading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : WBButton(
+                    label: 'Accept',
+                    size: WBButtonSize.sm,
+                    onPressed: _accept,
+                  ),
+        ],
+      ),
     );
   }
 }

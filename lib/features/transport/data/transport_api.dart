@@ -17,4 +17,7 @@ class TransportApi {
     final res = await _api.post('/trader/loads', body: dto);
     return (res as Map).cast<String, dynamic>();
   }
+
+  Future<void> assignDriver(String loadId, String bidId) =>
+      _api.post('/trader/loads/$loadId/assign-driver', body: {'bidId': bidId});
 }

@@ -12,8 +12,22 @@ import '../../../transport/domain/models/load_offer.dart';
 /// Active trip screen, vertical checkpoint timeline, GPS-active banner,
 /// masked-call trader. "Log checkpoint" advances state; the last
 /// checkpoint marks the trip delivered.
-class DriverActiveTripScreen extends StatelessWidget {
+///
+/// StatefulWidget so [initState] reloads the active trip from the API
+/// every time the tab is entered — prevents stale checkpoint state.
+class DriverActiveTripScreen extends StatefulWidget {
   const DriverActiveTripScreen({super.key});
+
+  @override
+  State<DriverActiveTripScreen> createState() => _DriverActiveTripScreenState();
+}
+
+class _DriverActiveTripScreenState extends State<DriverActiveTripScreen> {
+  @override
+  void initState() {
+    super.initState();
+    TransportController.instance.loadActiveTrip();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +212,9 @@ class _Body extends StatelessWidget {
                     ? 'Complete trip'
                     : nextCheckpoint == null
                         ? 'Trip complete'
-                        : "I'm at $nextCheckpoint",
+                        : trip.status == LoadStatus.assigned && progress == 0
+                            ? 'Start trip — I\'m at ${nextCheckpoint}'
+                            : 'I\'m at $nextCheckpoint',
                 fullWidth: true,
                 size: WBButtonSize.lg,
                 trailingIcon: WBIconName.arrowRight,
