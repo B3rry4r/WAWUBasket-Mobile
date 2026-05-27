@@ -521,16 +521,17 @@ class _PendingCardState extends State<_PendingCard> {
           children: [
             Row(
               children: [
+                VendorOrderStatusPill(stage: order.stage),
+                const Spacer(),
                 Text(
-                  '#${order.id}',
-                  style: WBTypography.body.copyWith(
+                  '#${order.id.substring(0, 8).toUpperCase()}',
+                  style: WBTypography.caption.copyWith(
+                    color: WBColors.fgSecondary,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontFamily: 'monospace',
                   ),
                 ),
                 const SizedBox(width: 8),
-                VendorOrderStatusPill(stage: order.stage),
-                const Spacer(),
                 Text(
                   '${order.placedMinsAgo} min',
                   style: WBTypography.caption.copyWith(
