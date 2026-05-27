@@ -47,3 +47,5 @@ app.*.map.json
 # Local tooling / scratch
 /tmp/
 .claude/
+*.p8
+AuthKey*.p8
