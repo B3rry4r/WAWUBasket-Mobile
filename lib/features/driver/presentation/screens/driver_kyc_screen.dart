@@ -23,13 +23,16 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
   String _vehicleType = 'truck';
   bool _busy = false;
   final Map<String, String> _docs = {};
+  String? _selectedBankName;
+  String? _selectedBankCode;
 
   final _fullName = TextEditingController();
   final _phone = TextEditingController();
   final _union = TextEditingController();
   final _plate = TextEditingController();
   final _capacity = TextEditingController();
-  final _payout = TextEditingController();
+  final _accountNumber = TextEditingController();
+  final _accountName = TextEditingController();
 
   static const _vehicleTypes = [
     ('truck', 'Long-haul truck'),
@@ -40,7 +43,7 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
 
   @override
   void dispose() {
-    for (final c in [_fullName, _phone, _union, _plate, _capacity, _payout]) {
+    for (final c in [_fullName, _phone, _union, _plate, _capacity, _accountNumber, _accountName]) {
       c.dispose();
     }
     super.dispose();
@@ -59,7 +62,12 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
           'vehicleType': _vehicleType,
           'plate': _plate.text.trim(),
           'capacityKg': _capacity.text.trim(),
-          'payout': _payout.text.trim(),
+          'payout': {
+            'bankName': _selectedBankName ?? '',
+            'bankCode': _selectedBankCode ?? '',
+            'accountNumber': _accountNumber.text.trim(),
+            'accountName': _accountName.text.trim(),
+          },
         },
         documents: [
           for (final e in _docs.entries) {'label': e.key, 'key': e.value},
@@ -256,11 +264,23 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
                   sub: 'Where we settle each completed trip.',
                 ),
                 const SizedBox(height: 12),
+                KycBankPickerField(
+                  value: _selectedBankName,
+                  onChanged: (name, code) => setState(() {
+                    _selectedBankName = name;
+                    _selectedBankCode = code;
+                  }),
+                ),
+                const SizedBox(height: WBSpacing.md - 2),
                 WBInput(
-                  label: 'Mobile money / bank',
-                  controller: _payout,
-                  leadingIcon: WBIconName.card,
-                  keyboardType: TextInputType.phone,
+                  label: 'Account number',
+                  controller: _accountNumber,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: WBSpacing.md - 2),
+                WBInput(
+                  label: 'Account name',
+                  controller: _accountName,
                 ),
               ],
             ),

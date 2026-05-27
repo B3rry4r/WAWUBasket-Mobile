@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/network/payouts_api.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -216,3 +217,170 @@ class KycStatusChip extends StatelessWidget {
 }
 
 enum KycStatusTone { unregistered, pending, approved }
+
+/// Tap-to-open bank picker.  Fetches the Flutterwave bank list once, caches
+/// it in memory, and shows a searchable bottom sheet.  Calls [onChanged] with
+/// the selected bank name and bank code.
+class KycBankPickerField extends StatefulWidget {
+  const KycBankPickerField({
+    super.key,
+    required this.onChanged,
+    this.value,
+  });
+
+  final String? value;
+  final void Function(String bankName, String bankCode) onChanged;
+
+  @override
+  State<KycBankPickerField> createState() => _KycBankPickerFieldState();
+}
+
+class _KycBankPickerFieldState extends State<KycBankPickerField> {
+  Future<void> _openPicker() async {
+    List<BankItem> banks;
+    try {
+      banks = await PayoutsApi.instance.fetchBanks();
+    } catch (_) {
+      if (mounted) wbShowSnack(context, 'Could not load bank list. Try again.');
+      return;
+    }
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: WBColors.bgPrimary,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(WBRadius.sheet)),
+      ),
+      builder: (_) => _BankPickerSheet(banks: banks, onSelected: widget.onChanged),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _openPicker,
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: WBColors.surfaceInput,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+        ),
+        child: Row(
+          children: [
+            const WBIcon(WBIconName.card, size: 18, color: WBColors.fgPlaceholder),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                widget.value ?? 'Select bank',
+                style: WBTypography.body.copyWith(
+                  color: widget.value != null ? WBColors.fgHeader : WBColors.fgPlaceholder,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const WBIcon(WBIconName.chevronDown, size: 14, color: WBColors.fgPlaceholder),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BankPickerSheet extends StatefulWidget {
+  const _BankPickerSheet({required this.banks, required this.onSelected});
+  final List<BankItem> banks;
+  final void Function(String bankName, String bankCode) onSelected;
+
+  @override
+  State<_BankPickerSheet> createState() => _BankPickerSheetState();
+}
+
+class _BankPickerSheetState extends State<_BankPickerSheet> {
+  final _search = TextEditingController();
+  List<BankItem> _filtered = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filtered = widget.banks;
+    _search.addListener(_filter);
+  }
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _filter() {
+    final q = _search.text.toLowerCase();
+    setState(() {
+      _filtered = q.isEmpty
+          ? widget.banks
+          : widget.banks.where((b) => b.name.toLowerCase().contains(q)).toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.7,
+      maxChildSize: 0.95,
+      builder: (_, scrollCtrl) => Column(
+        children: [
+          const SizedBox(height: 12),
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: WBColors.bgDivider,
+              borderRadius: BorderRadius.circular(WBRadius.pill),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              controller: _search,
+              autofocus: true,
+              style: WBTypography.body,
+              decoration: InputDecoration(
+                hintText: 'Search banks…',
+                hintStyle: WBTypography.body.copyWith(color: WBColors.fgPlaceholder),
+                filled: true,
+                fillColor: WBColors.surfaceInput,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(WBRadius.pill),
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                prefixIcon: const Icon(Icons.search, size: 18, color: WBColors.fgPlaceholder),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView.builder(
+              controller: scrollCtrl,
+              itemCount: _filtered.length,
+              itemBuilder: (_, i) {
+                final bank = _filtered[i];
+                return ListTile(
+                  title: Text(bank.name, style: WBTypography.body),
+                  onTap: () {
+                    widget.onSelected(bank.name, bank.code);
+                    Navigator.of(context).pop();
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -23,11 +23,14 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
   String _vehicle = 'motorbike';
   bool _busy = false;
   final Map<String, String> _docs = {};
+  String? _selectedBankName;
+  String? _selectedBankCode;
 
   final _fullName = TextEditingController();
   final _phone = TextEditingController();
   final _homeAddress = TextEditingController();
-  final _payout = TextEditingController();
+  final _accountNumber = TextEditingController();
+  final _accountName = TextEditingController();
 
   static const _vehicles = [
     ('bicycle', 'Bicycle'),
@@ -37,7 +40,7 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
 
   @override
   void dispose() {
-    for (final c in [_fullName, _phone, _homeAddress, _payout]) {
+    for (final c in [_fullName, _phone, _homeAddress, _accountNumber, _accountName]) {
       c.dispose();
     }
     super.dispose();
@@ -54,7 +57,12 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
           'phone': _phone.text.trim(),
           'homeAddress': _homeAddress.text.trim(),
           'vehicle': _vehicle,
-          'payout': _payout.text.trim(),
+          'payout': {
+            'bankName': _selectedBankName ?? '',
+            'bankCode': _selectedBankCode ?? '',
+            'accountNumber': _accountNumber.text.trim(),
+            'accountName': _accountName.text.trim(),
+          },
         },
         documents: [
           for (final e in _docs.entries) {'label': e.key, 'key': e.value},
@@ -207,11 +215,23 @@ class _RiderKycScreenState extends State<RiderKycScreen> {
                   sub: 'Where we send your earnings.',
                 ),
                 const SizedBox(height: 12),
+                KycBankPickerField(
+                  value: _selectedBankName,
+                  onChanged: (name, code) => setState(() {
+                    _selectedBankName = name;
+                    _selectedBankCode = code;
+                  }),
+                ),
+                const SizedBox(height: WBSpacing.md - 2),
                 WBInput(
-                  label: 'Mobile money / bank',
-                  controller: _payout,
-                  leadingIcon: WBIconName.card,
-                  keyboardType: TextInputType.phone,
+                  label: 'Account number',
+                  controller: _accountNumber,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: WBSpacing.md - 2),
+                WBInput(
+                  label: 'Account name',
+                  controller: _accountName,
                 ),
               ],
             ),

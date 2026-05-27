@@ -26,6 +26,8 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
   final Map<String, String> _docs = {};
   String? _selectedCountry;
   String? _selectedState;
+  String? _selectedBankName;
+  String? _selectedBankCode;
 
   final _businessName = TextEditingController();
   final _ownerName = TextEditingController();
@@ -34,7 +36,6 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
   final _addressLine = TextEditingController();
   final _city = TextEditingController();
   final _stateText = TextEditingController();
-  final _bankName = TextEditingController();
   final _accountNumber = TextEditingController();
   final _accountName = TextEditingController();
 
@@ -56,7 +57,6 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
       _addressLine,
       _city,
       _stateText,
-      _bankName,
       _accountNumber,
       _accountName,
     ]) {
@@ -125,9 +125,12 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
           'city': _city.text.trim(),
           'state': _selectedState ?? _stateText.text.trim(),
           'country': _selectedCountry ?? '',
-          'bankName': _bankName.text.trim(),
-          'accountNumber': _accountNumber.text.trim(),
-          'accountName': _accountName.text.trim(),
+          'payout': {
+            'bankName': _selectedBankName ?? '',
+            'bankCode': _selectedBankCode ?? '',
+            'accountNumber': _accountNumber.text.trim(),
+            'accountName': _accountName.text.trim(),
+          },
         },
         documents: [
           for (final e in _docs.entries) {'label': e.key, 'key': e.value},
@@ -332,10 +335,12 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
                   sub: 'Where we send your earnings.',
                 ),
                 const SizedBox(height: 12),
-                WBInput(
-                  label: 'Bank name',
-                  controller: _bankName,
-                  leadingIcon: WBIconName.card,
+                KycBankPickerField(
+                  value: _selectedBankName,
+                  onChanged: (name, code) => setState(() {
+                    _selectedBankName = name;
+                    _selectedBankCode = code;
+                  }),
                 ),
                 const SizedBox(height: WBSpacing.md - 2),
                 WBInput(
