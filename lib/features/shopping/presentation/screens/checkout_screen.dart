@@ -225,8 +225,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     );
     final subtotal = productSubtotal + recipeSubtotal;
     var delivery = 600;
-    // Mirror server-side fee logic: 1.5% service fee, min ₦50, max ₦5000.
-    final serviceFee = (subtotal * 150 / 10000).ceil().clamp(50, 5000);
+    final serviceFee = (subtotal * 750 / 10000).ceil().clamp(50, 5000);
     final total = subtotal + delivery + serviceFee;
 
     // Show waiting-for-payment screen while polling.

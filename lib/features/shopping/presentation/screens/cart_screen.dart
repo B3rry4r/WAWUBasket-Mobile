@@ -88,8 +88,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             final recipeSubtotalNaira =
                 recipeItems.fold<int>(0, (s, i) => s + (i.totalPriceKobo ~/ 100));
             final subtotal = productSubtotal + recipeSubtotalNaira;
-            // Mirror server-side fee logic: 1.5% service fee, ₦600 base delivery.
-            final serviceFee = (subtotal * 150 / 10000).ceil().clamp(50, 5000);
+            final serviceFee = (subtotal * 750 / 10000).ceil().clamp(50, 5000);
             const delivery = 600;
             final total = subtotal + delivery + serviceFee;
             final loading = state.loading || recipeLoading;
