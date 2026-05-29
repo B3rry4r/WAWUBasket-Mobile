@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -29,6 +30,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
   @override
   void initState() {
     super.initState();
+    if (GuestModeController.instance.isGuest.value) return;
     RecipeCartController.instance.load();
     // Reload cart on every open so stale state from a prior session is cleared.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,8 +74,71 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     }
   }
 
+  Widget _buildGuest(BuildContext context) {
+    return Scaffold(
+      backgroundColor: WBColors.bgSecondary,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            WBSpacing.screenPadding,
+            80 + MediaQuery.of(context).padding.top,
+            WBSpacing.screenPadding,
+            120,
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  color: WBColors.bgSoft,
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                alignment: Alignment.center,
+                child: const WBIcon(WBIconName.basket, size: 36, color: WBColors.fgHeader),
+              ),
+              const SizedBox(height: WBSpacing.lg),
+              Text(
+                'Your basket is waiting',
+                textAlign: TextAlign.center,
+                style: WBTypography.hero.copyWith(fontSize: 22),
+              ),
+              const SizedBox(height: WBSpacing.sm),
+              Text(
+                'Sign in to add items, place orders and track deliveries.',
+                textAlign: TextAlign.center,
+                style: WBTypography.body.copyWith(
+                  color: WBColors.fgSecondary,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: WBSpacing.xl),
+              WBButton(
+                label: 'Sign in',
+                size: WBButtonSize.lg,
+                fullWidth: true,
+                trailingIcon: WBIconName.arrowRight,
+                onPressed: () => context.push(AppRoutes.login),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: GuestModeController.instance.isGuest,
+      builder: (_, isGuest, _) {
+        if (isGuest) return _buildGuest(context);
+        return _buildSignedIn(context);
+      },
+    );
+  }
+
+  Widget _buildSignedIn(BuildContext context) {
     final state = ref.watch(cartControllerProvider);
     final controller = ref.read(cartControllerProvider.notifier);
     final productLines = state.items;

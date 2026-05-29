@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/account/application/notifications_controller.dart';
 import '../../features/account/application/profile_controller.dart';
 import '../../features/auth/application/role_controller.dart';
+import '../../core/services/guest_mode.dart';
 import '../router/app_routes.dart';
 import '../theme/wb_theme_exports.dart';
 import 'wb_icon.dart';
@@ -53,17 +54,33 @@ class WBHomeAppBar extends StatelessWidget {
           onTap: () => _openAccount(context),
           behavior: HitTestBehavior.opaque,
           child: ValueListenableBuilder(
-            valueListenable: ProfileController.instance.profile,
-            builder: (_, profile, _) {
-              final avatarUrl = profile?.avatarUrl;
-              return ClipOval(
-                child: SizedBox(
-                  width: 44,
-                  height: 44,
-                  child: avatarUrl != null
-                      ? WBNetworkImage(url: avatarUrl)
-                      : _AvatarInitials(name: profile?.fullName ?? ''),
-                ),
+            valueListenable: GuestModeController.instance.isGuest,
+            builder: (_, isGuest, _) {
+              if (isGuest) {
+                return ClipOval(
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    color: WBColors.bgSoft,
+                    alignment: Alignment.center,
+                    child: const WBIcon(WBIconName.user, size: 20, color: WBColors.fgHeader),
+                  ),
+                );
+              }
+              return ValueListenableBuilder(
+                valueListenable: ProfileController.instance.profile,
+                builder: (_, profile, _) {
+                  final avatarUrl = profile?.avatarUrl;
+                  return ClipOval(
+                    child: SizedBox(
+                      width: 44,
+                      height: 44,
+                      child: avatarUrl != null
+                          ? WBNetworkImage(url: avatarUrl)
+                          : _AvatarInitials(name: profile?.fullName ?? ''),
+                    ),
+                  );
+                },
               );
             },
           ),

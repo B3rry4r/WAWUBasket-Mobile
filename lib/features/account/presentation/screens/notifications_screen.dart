@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -37,7 +38,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    _load();
+    if (!GuestModeController.instance.isGuest.value) _load();
   }
 
   Future<void> _load() async {
@@ -115,8 +116,71 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return [for (final l in order) (label: l, items: map[l]!)];
   }
 
+  Widget _buildGuest(BuildContext context) {
+    return Scaffold(
+      backgroundColor: WBColors.bgSecondary,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            WBSpacing.screenPadding,
+            80 + MediaQuery.of(context).padding.top,
+            WBSpacing.screenPadding,
+            120,
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 96,
+                height: 96,
+                decoration: BoxDecoration(
+                  color: WBColors.bgSoft,
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                alignment: Alignment.center,
+                child: const WBIcon(WBIconName.bell, size: 36, color: WBColors.fgHeader),
+              ),
+              const SizedBox(height: WBSpacing.lg),
+              Text(
+                'Stay in the loop',
+                textAlign: TextAlign.center,
+                style: WBTypography.hero.copyWith(fontSize: 22),
+              ),
+              const SizedBox(height: WBSpacing.sm),
+              Text(
+                'Sign in to receive order updates, delivery alerts and promotions.',
+                textAlign: TextAlign.center,
+                style: WBTypography.body.copyWith(
+                  color: WBColors.fgSecondary,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: WBSpacing.xl),
+              WBButton(
+                label: 'Sign in',
+                size: WBButtonSize.lg,
+                fullWidth: true,
+                trailingIcon: WBIconName.arrowRight,
+                onPressed: () => context.push(AppRoutes.login),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: GuestModeController.instance.isGuest,
+      builder: (_, isGuest, _) {
+        if (isGuest) return _buildGuest(context);
+        return _buildSignedIn(context);
+      },
+    );
+  }
+
+  Widget _buildSignedIn(BuildContext context) {
     final items = _items;
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,

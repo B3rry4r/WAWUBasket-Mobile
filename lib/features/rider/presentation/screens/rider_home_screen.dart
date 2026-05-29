@@ -35,6 +35,7 @@ class RiderHomeScreen extends StatefulWidget {
 
 class _RiderHomeScreenState extends State<RiderHomeScreen> {
   StreamSubscription<Position>? _locationSub;
+  Timer? _locationHeartbeat;
 
   @override
   void initState() {
@@ -52,6 +53,7 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
   void dispose() {
     RiderController.instance.online.removeListener(_onOnlineChanged);
     _locationSub?.cancel();
+    _locationHeartbeat?.cancel();
     super.dispose();
   }
 
@@ -89,11 +91,31 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
       (pos) => RiderController.instance.updatePosition(pos.latitude, pos.longitude),
       onError: (_) {},
     );
+    // Heartbeat: re-ping the last known position every 3 minutes so the
+    // server never considers the rider stale (matcher drops riders whose
+    // last ping is > 5 min old). The stream only fires on movement, so
+    // a stationary rider would go stale without this.
+    _locationHeartbeat ??= Timer.periodic(
+      const Duration(minutes: 3),
+      (_) {
+        final pos = RiderController.instance.currentPosition.value;
+        if (pos != null) {
+          RiderController.instance.updatePosition(pos.lat, pos.lng);
+        } else {
+          // No GPS fix yet — get a one-shot position to prime the record.
+          Geolocator.getCurrentPosition().then(
+            (p) => RiderController.instance.updatePosition(p.latitude, p.longitude),
+          ).catchError((_) {});
+        }
+      },
+    );
   }
 
   void _stopTracking() {
     _locationSub?.cancel();
     _locationSub = null;
+    _locationHeartbeat?.cancel();
+    _locationHeartbeat = null;
   }
 
   Future<void> _open(DeliveryOffer offer) async {

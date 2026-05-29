@@ -15,6 +15,7 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
 import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../account/application/address_controller.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../../category/domain/models/category_kind.dart';
@@ -106,9 +107,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               _padded(WBHomeAppBar(
                 title: greeting,
-                subtitle: defaultAddr != null
-                    ? context.l10n.homeDeliveringTo(defaultAddr.line)
-                    : context.l10n.homeAddAddress,
+                subtitle: GuestModeController.instance.isGuest.value
+                    ? null
+                    : defaultAddr != null
+                        ? context.l10n.homeDeliveringTo(defaultAddr.line)
+                        : context.l10n.homeAddAddress,
                 subtitleIcon: WBIconName.pin,
                 showChat: false,
                 trailingExtra: Consumer(
