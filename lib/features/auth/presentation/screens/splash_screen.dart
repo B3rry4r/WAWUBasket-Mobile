@@ -39,41 +39,46 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: WBColors.bgPrimary,
       body: Stack(
         children: [
-          // ── Logo + tagline (upper area) ──────────────────────────────
+          // ── Logo + tagline centred in the upper half ─────────────────
           Positioned(
-            top: MediaQuery.of(context).padding.top + 40,
-            left: WBSpacing.screenPadding,
-            right: WBSpacing.screenPadding,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: screenH * 0.52,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(
                   'assets/logos/logo-splash.svg',
-                  height: 36,
+                  height: 40,
                   fit: BoxFit.contain,
-                  placeholderBuilder: (_) => const SizedBox(height: 36),
+                  placeholderBuilder: (_) => const SizedBox(height: 40),
                 ),
-                SizedBox(height: screenH * 0.07),
-                Text(
-                  context.l10n.splashHeadline,
-                  style: WBTypography.hero.copyWith(
-                    fontSize: 42,
-                    height: 1.15,
-                    letterSpacing: -1.0,
+                SizedBox(height: screenH * 0.05),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: WBSpacing.screenPadding),
+                  child: Text(
+                    context.l10n.splashHeadline,
+                    textAlign: TextAlign.center,
+                    style: WBTypography.hero.copyWith(
+                      fontSize: 40,
+                      height: 1.15,
+                      letterSpacing: -1.0,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          // ── Basket illustration (bottom half) ────────────────────────
+          // ── Basket illustration filling the bottom half ───────────────
           Positioned(
             left: 0,
             right: 0,
             bottom: 0,
+            height: screenH * 0.52,
             child: SvgPicture.asset(
               'assets/logos/splash-basket.svg',
               width: double.infinity,
-              height: screenH * 0.52,
               fit: BoxFit.fitWidth,
               alignment: Alignment.bottomCenter,
               placeholderBuilder: (_) => SizedBox(height: screenH * 0.52),
