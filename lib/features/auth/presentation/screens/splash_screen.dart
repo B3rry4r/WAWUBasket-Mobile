@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Positioned(
               left: 0,
               right: 0,
-              bottom: -(screenH * 0.15),
+              bottom: -(screenH * 0.22),
               child: SizedBox(
                 width: screenW,
                 height: screenH * 0.65,
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             // ── Logo + tagline centred in the upper half ─────────────────
             Positioned(
-              top: MediaQuery.of(context).padding.top + 32,
+              top: MediaQuery.of(context).padding.top + 72,
               left: WBSpacing.screenPadding,
               right: WBSpacing.screenPadding,
               child: Column(
@@ -68,14 +68,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 children: [
                   Image.asset(
                     'assets/logos/Logo 1.png',
-                    height: 30,
+                    height: 22,
                   ),
-                  SizedBox(height: screenH * 0.06),
+                  SizedBox(height: screenH * 0.05),
                   Text(
                     context.l10n.splashHeadline,
                     textAlign: TextAlign.center,
                     style: WBTypography.hero.copyWith(
-                      fontSize: 40,
+                      fontSize: 32,
                       height: 1.15,
                       letterSpacing: -1.0,
                     ),
