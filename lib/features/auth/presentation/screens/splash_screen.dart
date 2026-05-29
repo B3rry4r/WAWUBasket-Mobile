@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/widgets/wb_logo.dart';
 import '../../application/role_controller.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -47,16 +48,14 @@ class _SplashScreenState extends State<SplashScreen> {
             height: screenH * 0.52,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  'assets/logos/logo-splash.svg',
-                  height: 40,
-                  fit: BoxFit.contain,
-                  placeholderBuilder: (_) => const SizedBox(height: 40),
-                ),
+                const WBWordmark(height: 28),
                 SizedBox(height: screenH * 0.05),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: WBSpacing.screenPadding),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: WBSpacing.screenPadding,
+                  ),
                   child: Text(
                     context.l10n.splashHeadline,
                     textAlign: TextAlign.center,
