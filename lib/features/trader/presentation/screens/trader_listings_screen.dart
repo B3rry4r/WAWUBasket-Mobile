@@ -34,7 +34,7 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
     return l.status == _filter;
   }
 
-  WBEmptyIllustration _illustrationFor(ExportListingStatus? filter) {
+  String _illustrationFor(ExportListingStatus? filter) {
     return switch (filter) {
       ExportListingStatus.draft => WBEmptyIllustration.noDraftListing,
       ExportListingStatus.sold => WBEmptyIllustration.noSoldListing,
