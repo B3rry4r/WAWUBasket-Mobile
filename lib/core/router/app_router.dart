@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/account/presentation/screens/about_screen.dart';
+import '../../features/account/presentation/screens/terms_screen.dart';
+import '../../features/account/presentation/screens/privacy_screen.dart';
 import '../../features/account/presentation/screens/delete_account_screen.dart';
 import '../../features/account/presentation/screens/dev_settings_screen.dart';
 import '../../features/account/presentation/screens/dietary_preferences_screen.dart';
@@ -304,6 +306,14 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.about,
         builder: (_, _) => const AboutScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.terms,
+        builder: (_, _) => const TermsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.privacy,
+        builder: (_, _) => const PrivacyScreen(),
       ),
       GoRoute(
         path: AppRoutes.wawuPlus,

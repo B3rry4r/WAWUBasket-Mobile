@@ -56,6 +56,8 @@ abstract final class AppRoutes {
   static const addAddress = '/account/addresses/edit';
   static const language = '/account/language';
   static const about = '/account/about';
+  static const terms = '/account/terms';
+  static const privacy = '/account/privacy';
   static const wawuPlus = '/account/wawu-plus';
   static const dietary = '/account/dietary';
   static const security = '/account/security';

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -230,48 +232,60 @@ class AboutScreen extends StatelessWidget {
               child: Column(
                 children: [
                   for (var i = 0; i < _rows(context).length; i++)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 36,
-                            height: 36,
-                            decoration: BoxDecoration(
-                              color: WBColors.bgSoft,
-                              borderRadius: BorderRadius.circular(12),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        if (i == 0) {
+                          wbLaunchEmail(context, 'support@wawu.africa');
+                        } else if (i == 1) {
+                          context.push(AppRoutes.terms);
+                        } else {
+                          context.push(AppRoutes.privacy);
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: WBColors.bgSoft,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              alignment: Alignment.center,
+                              child: WBIcon(_rows(context)[i].icon, size: 17),
                             ),
-                            alignment: Alignment.center,
-                            child: WBIcon(_rows(context)[i].icon, size: 17),
-                          ),
-                          const SizedBox(width: 14),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _rows(context)[i].label,
-                                  style: WBTypography.body.copyWith(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    _rows(context)[i].label,
+                                    style: WBTypography.body.copyWith(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 1),
-                                Text(
-                                  _rows(context)[i].sub,
-                                  style: WBTypography.caption.copyWith(
-                                    color: WBColors.fgSecondary,
+                                  const SizedBox(height: 1),
+                                  Text(
+                                    _rows(context)[i].sub,
+                                    style: WBTypography.caption.copyWith(
+                                      color: WBColors.fgSecondary,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const WBIcon(
-                            WBIconName.chevronRight,
-                            size: 16,
-                            color: WBColors.fgPlaceholder,
-                          ),
-                        ],
+                            const WBIcon(
+                              WBIconName.chevronRight,
+                              size: 16,
+                              color: WBColors.fgPlaceholder,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],
