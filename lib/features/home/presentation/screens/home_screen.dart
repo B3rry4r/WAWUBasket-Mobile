@@ -421,10 +421,13 @@ class _CategoryPillRow extends StatelessWidget {
 
 // ── Orbital category selector (feature flag ON) ───────────────────────────────
 //
-// Dragging the ring spins it with momentum → decelerates → snaps to nearest.
-// Tapping an orbit node snaps it to the front quickly without spinning.
-// Content (onSelect) only fires after a snap settles, not during drag.
-// All geometry is adaptive to available screen width via LayoutBuilder.
+// Rules:
+//   • Horizontal drag spins the ring with momentum (mobile + web).
+//   • Spinning is visual-only — content does NOT change until a node is tapped.
+//   • Tapping a node selects it: orbit snaps with a spring, content updates.
+//   • All n nodes stay in the orbit at all times (no gap for the active item).
+//   • Active node gets a dark ring; other nodes orbit at reduced opacity/scale.
+//   • Center disc always shows the currently selected category (from parent).
 
 class _OrbitalCategorySelector extends StatefulWidget {
   const _OrbitalCategorySelector({
@@ -446,15 +449,18 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   double _rotation = 0.0;
   double _vel = 0.0;
   Ticker? _ticker;
-  int _activeIdx = 0;
 
-  // Prevent didUpdateWidget from resetting rotation after our own onSelect.
+  // Orbital "front" position — updated visually during spin, but does NOT
+  // drive content. Content is driven exclusively by widget.activeId.
+  int _spinIdx = 0;
+
+  // Prevent didUpdateWidget from snapping the orbit when the parent echoes
+  // back the same activeId we just emitted from _tapNode.
   bool _suppressSync = false;
 
   late final AnimationController _snapCtrl;
   Animation<double>? _snapAnim;
 
-  // Physics constants
   static const _sensitivity = 0.0048;
   static const _friction = 0.910;
   static const _stopVel = 0.0022;
@@ -462,7 +468,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   @override
   void initState() {
     super.initState();
-    _snapCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 360));
+    _snapCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 380));
     _syncFromParent();
   }
 
@@ -475,17 +481,14 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   }
 
   void _syncFromParent() {
-    if (_suppressSync) {
-      _suppressSync = false;
-      return;
-    }
+    if (_suppressSync) { _suppressSync = false; return; }
     final cats = widget.cats;
     if (cats == null || cats.isEmpty) return;
     final id = widget.activeId;
     if (id == null) return;
     final idx = cats.indexWhere((c) => c.id == id);
-    if (idx >= 0 && idx != _activeIdx) {
-      _activeIdx = idx;
+    if (idx >= 0 && idx != _spinIdx) {
+      _spinIdx = idx;
       _rotation = -_angleFor(idx, cats.length);
     }
   }
@@ -512,15 +515,17 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   }
 
   // ── Gesture handlers ───────────────────────────────────────────────────────
+  // Use horizontal-drag (not pan) so the parent ListView keeps its vertical
+  // scroll — pan competes with the scroll view on mobile and loses.
 
-  void _onPanUpdate(DragUpdateDetails d) {
+  void _onHorizontalDragUpdate(DragUpdateDetails d) {
     _ticker?.stop();
     _snapCtrl.stop();
     setState(() => _rotation += d.delta.dx * _sensitivity);
-    _updateVisualActive();
+    _updateSpinIdx();
   }
 
-  void _onPanEnd(DragEndDetails d) {
+  void _onHorizontalDragEnd(DragEndDetails d) {
     _vel = (d.velocity.pixelsPerSecond.dx * _sensitivity).clamp(-0.16, 0.16);
     _ticker ??= createTicker(_onTick);
     _ticker!.start();
@@ -529,30 +534,30 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   void _onTick(Duration _) {
     _vel *= _friction;
     setState(() => _rotation += _vel);
-    _updateVisualActive();
+    _updateSpinIdx();
     if (_vel.abs() < _stopVel) {
       _ticker!.stop();
-      _snapAndNotify(_nearestIdx(widget.cats?.length ?? 1));
+      // Snap the orbit to the nearest node visually — NO content change.
+      _snapVisual(_nearestIdx(widget.cats?.length ?? 1));
     }
   }
 
-  // Updates the visual active indicator during drag/momentum (no content update).
-  void _updateVisualActive() {
+  void _updateSpinIdx() {
     final n = widget.cats?.length ?? 0;
     if (n == 0) return;
     final idx = _nearestIdx(n);
-    if (idx != _activeIdx) {
-      setState(() => _activeIdx = idx);
+    if (idx != _spinIdx) {
+      setState(() => _spinIdx = idx);
       HapticFeedback.selectionClick();
     }
   }
 
-  // Tap: immediate select + fast snap animation (no physics).
+  // Tap: snap + fire content change.
   void _tapNode(int idx) {
     final cats = widget.cats;
     if (cats == null || cats.isEmpty) return;
-    setState(() => _activeIdx = idx);
-    _animateSnap(idx, const Duration(milliseconds: 220));
+    setState(() => _spinIdx = idx);
+    _animateSnap(idx, const Duration(milliseconds: 400), spring: true);
     final id = cats[idx].id;
     if (id != widget.activeId) {
       _suppressSync = true;
@@ -560,20 +565,13 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     }
   }
 
-  // Post-momentum snap: animate then notify parent.
-  void _snapAndNotify(int idx) {
-    final cats = widget.cats;
-    if (cats == null || cats.isEmpty) return;
-    setState(() => _activeIdx = idx);
-    _animateSnap(idx, const Duration(milliseconds: 370));
-    final id = cats[idx].id;
-    if (id != widget.activeId) {
-      _suppressSync = true;
-      widget.onSelect(id);
-    }
+  // Post-momentum snap: visual only, no content change.
+  void _snapVisual(int idx) {
+    setState(() => _spinIdx = idx);
+    _animateSnap(idx, const Duration(milliseconds: 380), spring: false);
   }
 
-  void _animateSnap(int idx, Duration duration) {
+  void _animateSnap(int idx, Duration duration, {required bool spring}) {
     final n = widget.cats?.length ?? 1;
     if (n == 0) return;
     final target = -_angleFor(idx, n);
@@ -585,8 +583,11 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     _snapCtrl.duration = duration;
     _snapCtrl.reset();
     final begin = _rotation;
+    // Tap uses easeOutBack (slight overshoot = iOS spring feel).
+    // Momentum settle uses easeOutCubic (clean decelerate, no bounce).
+    final curve = spring ? Curves.easeOutBack : Curves.easeOutCubic;
     _snapAnim = Tween<double>(begin: begin, end: dest).animate(
-      CurvedAnimation(parent: _snapCtrl, curve: Curves.easeOutCubic),
+      CurvedAnimation(parent: _snapCtrl, curve: curve),
     )..addListener(() {
         if (mounted) setState(() => _rotation = _snapAnim!.value);
       });
@@ -603,34 +604,42 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     return LayoutBuilder(builder: (_, constraints) {
       final w = constraints.maxWidth;
 
-      // Adaptive geometry — scales with screen width.
       final orbitR = (w * 0.315).clamp(116.0, 152.0);
       final centerD = (w * 0.330).clamp(122.0, 156.0);
       final orbitD = (w * 0.200).clamp(72.0, 92.0);
-      // Height = orbit diameter + top/bottom padding so no node clips.
       final totalH = 2 * orbitR + orbitD + 20.0;
       final cx = w / 2;
       final cy = orbitR + orbitD / 2 + 10.0;
 
       final n = cats.length;
+
+      // Selected = what the parent says is loaded.
+      final selectedIdx = cats.indexWhere((c) => c.id == widget.activeId);
+      final selectedCat = selectedIdx >= 0
+          ? cats[selectedIdx]
+          : (n > 0 ? cats[_spinIdx] : null);
+
+      // Depth-sort ALL nodes (back → front) for correct z-ordering.
       final byDepth = List.generate(n, (i) => i)
         ..sort((a, b) => _depth(a, n).compareTo(_depth(b, n)));
-      final active = n > 0 ? cats[_activeIdx] : null;
 
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onPanUpdate: _onPanUpdate,
-        onPanEnd: _onPanEnd,
+        onHorizontalDragUpdate: _onHorizontalDragUpdate,
+        onHorizontalDragEnd: _onHorizontalDragEnd,
         child: SizedBox(
           width: w,
           height: totalH,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
+              // All orbit nodes (including the selected one — no gap).
               for (final i in byDepth)
-                if (i != _activeIdx)
-                  _buildNode(cats[i], i, n, cx, cy,
-                      orbitR: orbitR, orbitD: orbitD),
+                _buildNode(cats[i], i, n, cx, cy,
+                    orbitR: orbitR,
+                    orbitD: orbitD,
+                    isSelected: i == selectedIdx),
+              // Center disc: always shows the selected category.
               Positioned(
                 left: cx - centerD / 2,
                 top: cy - centerD / 2,
@@ -640,13 +649,13 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
                   duration: WBMotion.base,
                   transitionBuilder: (child, anim) => ScaleTransition(
                     scale: Tween<double>(begin: 0.84, end: 1.0).animate(
-                      CurvedAnimation(parent: anim, curve: WBMotion.easeSoft),
+                      CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
                     ),
                     child: FadeTransition(opacity: anim, child: child),
                   ),
-                  child: active == null
-                      ? SizedBox(width: centerD, height: centerD)
-                      : _buildCenter(context, active, centerD),
+                  child: selectedCat == null
+                      ? SizedBox(key: const ValueKey('empty'), width: centerD, height: centerD)
+                      : _buildCenter(context, selectedCat, centerD),
                 ),
               ),
             ],
@@ -658,9 +667,6 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
 
   Widget _buildCenter(BuildContext context, Category cat, double d) {
     final iconD = d * 0.36;
-    // SizedBox enforces the fixed size — AnimatedSwitcher's internal Stack
-    // passes loose constraints, so without explicit size the Container
-    // would shrink to its content.
     return SizedBox(
       key: ValueKey(cat.id),
       width: d,
@@ -718,16 +724,17 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     double cy, {
     required double orbitR,
     required double orbitD,
+    required bool isSelected,
   }) {
     final angle = _angleFor(i, n) + _rotation;
     final dx = orbitR * sin(angle);
     final dy = -orbitR * cos(angle);
     final depth = _depth(i, n);
-    final scale = 1.0 - depth * 0.12;
-    final opacity = (1.0 - depth * 0.38).clamp(0.42, 1.0);
+    // Selected node is always full-size and full-opacity in the orbit.
+    final scale = isSelected ? 1.0 : (1.0 - depth * 0.12);
+    final opacity = isSelected ? 1.0 : (1.0 - depth * 0.38).clamp(0.42, 1.0);
 
     return Positioned(
-      // Position the circle by its centre.
       left: cx + dx - orbitD / 2,
       top: cy + dy - orbitD / 2,
       width: orbitD,
@@ -743,8 +750,17 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
               decoration: BoxDecoration(
                 color: WBColors.surfaceCard,
                 shape: BoxShape.circle,
-                border: Border.all(color: WBColors.borderFilled, width: 1.2),
-                boxShadow: WBShadows.card,
+                border: Border.all(
+                  color: isSelected ? WBColors.surfaceDark : WBColors.borderFilled,
+                  width: isSelected ? 2.5 : 1.2,
+                ),
+                boxShadow: isSelected ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.20),
+                    blurRadius: 14,
+                    offset: const Offset(0, 4),
+                  ),
+                ] : WBShadows.card,
               ),
               padding: EdgeInsets.all(orbitD * 0.22),
               child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty

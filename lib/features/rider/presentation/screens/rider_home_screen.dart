@@ -43,6 +43,9 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
     RiderController.instance.loadOffers();
     ProfileController.instance.load();
     ProfileController.instance.loadStats();
+    // Sync the app's default-online=true to the server so the matcher can
+    // find this rider even before the user manually toggles the switch.
+    RiderController.instance.syncOnline();
     RiderController.instance.online.addListener(_onOnlineChanged);
     // Ask for location (always-on for background delivery tracking) once the
     // first build settles, then start the position stream if online.
@@ -82,6 +85,13 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
 
   void _startTracking() {
     if (_locationSub != null) return;
+    // Immediately prime the DB with current GPS so the matcher finds this
+    // rider right away — the position stream only fires after 20 m of movement.
+    Geolocator.getCurrentPosition(
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+    ).then((p) => RiderController.instance.updatePosition(p.latitude, p.longitude))
+     .catchError((_) {});
+
     _locationSub = Geolocator.getPositionStream(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.high,

@@ -193,6 +193,13 @@ class RiderController {
     _api.updateLocation(lat, lng).catchError((_) {});
   }
 
+  /// Pushes the current online state to the server. Called on screen init so
+  /// the DB record matches the app's default-online state without waiting for
+  /// the user to toggle.
+  void syncOnline() {
+    _api.setOnline(online.value).catchError((_) {});
+  }
+
   /// Pulls the rider's pending delivery offers from the API.
   Future<void> loadOffers() async {
     try {
