@@ -30,10 +30,16 @@ abstract final class WBPermissions {
     return status.isGranted;
   }
 
-  /// Non-prompting check.
+  /// Non-prompting check — location.
   static Future<bool> hasLocation() async {
     if (kIsWeb) return false;
     return Permission.locationWhenInUse.status
         .then((s) => s.isGranted || s.isLimited);
+  }
+
+  /// Non-prompting check — notifications.
+  static Future<bool> hasNotifications() async {
+    if (kIsWeb) return false;
+    return Permission.notification.status.then((s) => s.isGranted);
   }
 }

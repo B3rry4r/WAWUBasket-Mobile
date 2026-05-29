@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../core/auth/biometric_service.dart';
 import '../core/i18n/locale_controller.dart';
 import '../core/network/api_client.dart';
 import '../core/router/app_router.dart';
@@ -29,7 +28,6 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
     super.initState();
 
     ApiClient.instance.onSessionExpired = () {
-      BiometricService.instance.setEnabled(false);
       _router.go(AppRoutes.login);
     };
 

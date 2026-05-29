@@ -1,14 +1,14 @@
 import 'dart:typed_data';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart' show openAppSettings;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -30,6 +30,31 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int _step = 0;
+  bool _quizAlreadyDone = false;
+  bool _loadingQuizCheck = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkQuizStatus();
+  }
+
+  Future<void> _checkQuizStatus() async {
+    try {
+      final prefs = await ProfileApi.instance.getQuizPreferences();
+      if (mounted) setState(() => _quizAlreadyDone = prefs != null && prefs.isNotEmpty);
+    } catch (_) {
+      // On failure assume not done — safer to show the quiz than skip it.
+    } finally {
+      if (mounted) setState(() => _loadingQuizCheck = false);
+    }
+  }
+
+  List<Widget> _computeSteps() => [
+    if (!kIsWeb) _PermissionsStep(key: const ValueKey('perms'), onNext: _next),
+    if (!_quizAlreadyDone) _QuizStep(key: const ValueKey('quiz'), onNext: _next),
+    _GiftStep(key: const ValueKey('gift'), onNext: _next),
+  ];
 
   Future<void> _markDoneAndGo() async {
     final prefs = await SharedPreferences.getInstance();
@@ -39,7 +64,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _next() {
-    if (_step < 2) {
+    final steps = _computeSteps();
+    if (_step < steps.length - 1) {
       setState(() => _step++);
     } else {
       _markDoneAndGo();
@@ -50,6 +76,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_loadingQuizCheck) {
+      return const Scaffold(
+        backgroundColor: WBColors.bgPrimary,
+        body: Center(
+          child: SizedBox(
+            width: 28,
+            height: 28,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.6,
+              valueColor: AlwaysStoppedAnimation(WBColors.surfaceDark),
+            ),
+          ),
+        ),
+      );
+    }
+
+    final steps = _computeSteps();
+    final total = steps.length;
+
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       body: SafeArea(
@@ -57,27 +102,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                WBSpacing.screenPadding,
-                12,
-                WBSpacing.screenPadding,
-                0,
-              ),
+                WBSpacing.screenPadding, 12, WBSpacing.screenPadding, 0),
               child: Row(
                 children: [
-                  for (var i = 0; i < 3; i++) ...[
+                  for (var i = 0; i < total; i++) ...[
                     Expanded(
                       child: AnimatedContainer(
                         duration: WBMotion.base,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: i <= _step
-                              ? WBColors.surfaceDark
-                              : WBColors.bgSoft,
+                          color: i <= _step ? WBColors.surfaceDark : WBColors.bgSoft,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
                     ),
-                    if (i != 2) const SizedBox(width: 6),
+                    if (i != total - 1) const SizedBox(width: 6),
                   ],
                   const SizedBox(width: 14),
                   GestureDetector(
@@ -96,11 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Expanded(
               child: AnimatedSwitcher(
                 duration: WBMotion.base,
-                child: switch (_step) {
-                  0 => _PermissionsStep(key: const ValueKey(0), onNext: _next),
-                  1 => _QuizStep(key: const ValueKey(1), onNext: _next),
-                  _ => _GiftStep(key: const ValueKey(2), onNext: _next),
-                },
+                child: _step < steps.length ? steps[_step] : steps.last,
               ),
             ),
           ],
@@ -110,347 +145,115 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-// ───────────────────────── Step 1 · Permissions ─────────────────────────
+// ───────────────────────── Step 1 · Permissions (mobile only) ───────────
 
-class _PermissionsStep extends StatelessWidget {
+class _PermissionsStep extends StatefulWidget {
   const _PermissionsStep({super.key, required this.onNext});
   final VoidCallback onNext;
 
   @override
+  State<_PermissionsStep> createState() => _PermissionsStepState();
+}
+
+class _PermissionsStepState extends State<_PermissionsStep> {
+  bool _requesting = false;
+
+  Future<void> _grantAndNext() async {
+    setState(() => _requesting = true);
+    // Only request each permission if not already granted.
+    if (!await WBPermissions.hasLocation()) {
+      await WBPermissions.requestLocation();
+    }
+    if (!await WBPermissions.hasNotifications()) {
+      await WBPermissions.requestNotifications();
+    }
+    if (mounted) widget.onNext();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Padding(
       padding: const EdgeInsets.fromLTRB(
-        WBSpacing.screenPadding,
-        WBSpacing.xl,
-        WBSpacing.screenPadding,
-        WBSpacing.xl,
-      ),
-      children: [
-        Text(
-          context.l10n.onboardingPermissionsTitle,
-          style: WBTypography.hero.copyWith(fontSize: 30, height: 1.15),
-        ),
-        const SizedBox(height: WBSpacing.sm + 2),
-        Text(
-          context.l10n.onboardingPermissionsSubtitle,
-          style: WBTypography.body.copyWith(
-            color: WBColors.fgSecondary,
-            fontSize: 14,
-          ),
-        ),
-        const SizedBox(height: WBSpacing.xl),
-        _PermissionCard(
-          icon: WBIconName.pin,
-          title: context.l10n.onboardingLocationTitle,
-          sub: context.l10n.onboardingLocationBody,
-          primary: context.l10n.onboardingLocationPrimary,
-          secondary: context.l10n.onboardingLocationSecondary,
-          tertiary: context.l10n.onboardingLocationTertiary,
-          onPrimary: WBPermissions.requestLocation,
-          onSecondary: WBPermissions.requestLocation,
-          onTertiary: onNext,
-        ),
-        const SizedBox(height: WBSpacing.md),
-        _PermissionCard(
-          icon: WBIconName.bell,
-          title: context.l10n.onboardingNotificationsTitle,
-          sub: context.l10n.onboardingNotificationsBody,
-          primary: context.l10n.onboardingNotificationsPrimary,
-          secondary: context.l10n.onboardingNotificationsSecondary,
-          onPrimary: WBPermissions.requestNotifications,
-        ),
-        const SizedBox(height: WBSpacing.xl),
-        WBButton(
-          label: context.l10n.actionContinue,
-          size: WBButtonSize.lg,
-          fullWidth: true,
-          trailingIcon: WBIconName.arrowRight,
-          onPressed: onNext,
-        ),
-      ],
-    );
-  }
-}
-
-/// Tri-state result of a single permission prompt. Drives whether the
-/// card shows the original Allow/Deny buttons, a "Granted" success pill,
-/// or a "Denied — enable in settings" link.
-enum _PermissionState { unknown, granted, denied }
-
-class _PermissionCard extends StatefulWidget {
-  const _PermissionCard({
-    required this.icon,
-    required this.title,
-    required this.sub,
-    required this.primary,
-    required this.secondary,
-    this.tertiary,
-    this.onPrimary,
-    this.onSecondary,
-    this.onTertiary,
-  });
-  final WBIconName icon;
-  final String title;
-  final String sub;
-  final String primary;
-  final String secondary;
-  final String? tertiary;
-
-  /// Real permission-handler callbacks. Returning `true` means the OS
-  /// granted the permission. The card surfaces a snackbar either way.
-  final Future<bool> Function()? onPrimary;
-  final Future<bool> Function()? onSecondary;
-
-  /// Called when the user taps the tertiary ("Not now") link.
-  final VoidCallback? onTertiary;
-
-  @override
-  State<_PermissionCard> createState() => _PermissionCardState();
-}
-
-class _PermissionCardState extends State<_PermissionCard> {
-  _PermissionState _state = _PermissionState.unknown;
-  bool _busy = false;
-
-  Future<void> _runPrimary() async {
-    if (widget.onPrimary == null || _busy) return;
-    setState(() => _busy = true);
-    final granted = await widget.onPrimary!.call();
-    if (!mounted) return;
-    setState(() {
-      _state = granted ? _PermissionState.granted : _PermissionState.denied;
-      _busy = false;
-    });
-    // TODO(i18n): key=onboardingPermissionGranted / onboardingPermissionDenied
-    wbShowSnack(
-      context,
-      granted
-          ? '${widget.primary}, thanks!'
-          : 'Permission denied. You can enable it later in settings.',
-    );
-  }
-
-  Future<void> _runSecondary() async {
-    if (widget.onSecondary == null || _busy) return;
-    setState(() => _busy = true);
-    final granted = await widget.onSecondary!.call();
-    if (!mounted) return;
-    setState(() {
-      _state = granted ? _PermissionState.granted : _PermissionState.denied;
-      _busy = false;
-    });
-    // TODO(i18n): key=onboardingPermissionAskLater
-    wbShowSnack(
-      context,
-      granted
-          ? '${widget.secondary}, thanks!'
-          : 'No problem, ask me later.',
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WBCard(
+          WBSpacing.screenPadding, WBSpacing.xl,
+          WBSpacing.screenPadding, WBSpacing.xl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: WBColors.bgSoft,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: WBIcon(widget.icon, size: 18),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  widget.title,
-                  style: WBTypography.body.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
-                ),
-              ),
-              if (_state == _PermissionState.granted) _GrantedPill(),
-            ],
-          ),
-          const SizedBox(height: 10),
+          const Spacer(),
           Text(
-            widget.sub,
-            style: WBTypography.caption.copyWith(
-              color: WBColors.fgSecondary,
-              height: 1.45,
-            ),
+            context.l10n.onboardingPermissionsTitle,
+            style: WBTypography.hero.copyWith(fontSize: 30, height: 1.15),
           ),
-          const SizedBox(height: 14),
-          _actionRow(),
-          if (widget.tertiary != null &&
-              _state != _PermissionState.granted) ...[
-            const SizedBox(height: 6),
-            Center(
-              child: GestureDetector(
-                onTap: widget.onTertiary,
-                child: Text(
-                  widget.tertiary!,
-                  style: WBTypography.caption.copyWith(
-                    color: WBColors.fgPlaceholder,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          ],
+          const SizedBox(height: WBSpacing.sm + 2),
+          Text(
+            context.l10n.onboardingPermissionsSubtitle,
+            style: WBTypography.body.copyWith(
+                color: WBColors.fgSecondary, fontSize: 14, height: 1.5),
+          ),
+          const SizedBox(height: WBSpacing.xl),
+          _PermItem(
+            icon: WBIconName.pin,
+            label: context.l10n.onboardingLocationTitle,
+            sub: context.l10n.onboardingLocationBody,
+          ),
+          const SizedBox(height: WBSpacing.md),
+          _PermItem(
+            icon: WBIconName.bell,
+            label: context.l10n.onboardingNotificationsTitle,
+            sub: context.l10n.onboardingNotificationsBody,
+          ),
+          const Spacer(),
+          WBButton(
+            label: context.l10n.actionContinue,
+            size: WBButtonSize.lg,
+            fullWidth: true,
+            trailingIcon: WBIconName.arrowRight,
+            loading: _requesting,
+            onPressed: _requesting ? null : _grantAndNext,
+          ),
         ],
       ),
-    );
-  }
-
-  Widget _actionRow() {
-    if (_state == _PermissionState.granted) {
-      // TODO(i18n): key=onboardingPermissionEnabled
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0x1410B981),
-          borderRadius: BorderRadius.circular(WBRadius.input),
-          border: Border.all(color: const Color(0x3310B981)),
-        ),
-        child: Row(
-          children: [
-            const WBIcon(
-              WBIconName.check,
-              size: 14,
-              color: Color(0xFF065F46),
-              strokeWidth: 2.4,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Enabled — you’re all set.',
-              style: WBTypography.caption.copyWith(
-                color: const Color(0xFF065F46),
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-    if (_state == _PermissionState.denied) {
-      // TODO(i18n): key=onboardingPermissionDeniedSettings
-      return Row(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: openAppSettings,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: WBColors.bgSoft,
-                  borderRadius: BorderRadius.circular(WBRadius.input),
-                ),
-                child: Row(
-                  children: [
-                    const WBIcon(
-                      WBIconName.close,
-                      size: 13,
-                      color: WBColors.fgSecondary,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Denied — enable in settings',
-                        style: WBTypography.caption.copyWith(
-                          color: WBColors.fgSecondary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const WBIcon(
-                      WBIconName.chevronRight,
-                      size: 13,
-                      color: WBColors.fgPlaceholder,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          WBButton(
-            label: widget.primary,
-            size: WBButtonSize.sm,
-            variant: WBButtonVariant.secondary,
-            onPressed: _busy ? null : _runPrimary,
-          ),
-        ],
-      );
-    }
-    return Row(
-      children: [
-        Expanded(
-          child: WBButton(
-            label: widget.primary,
-            size: WBButtonSize.sm,
-            fullWidth: true,
-            loading: _busy,
-            onPressed: _runPrimary,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: WBButton(
-            label: widget.secondary,
-            size: WBButtonSize.sm,
-            fullWidth: true,
-            variant: WBButtonVariant.secondary,
-            onPressed: widget.onSecondary == null ? null : _runSecondary,
-          ),
-        ),
-      ],
     );
   }
 }
 
-class _GrantedPill extends StatelessWidget {
+class _PermItem extends StatelessWidget {
+  const _PermItem({required this.icon, required this.label, required this.sub});
+  final WBIconName icon;
+  final String label;
+  final String sub;
+
   @override
   Widget build(BuildContext context) {
-    // TODO(i18n): key=onboardingPermissionGrantedPill
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: const Color(0x1410B981),
-        borderRadius: BorderRadius.circular(WBRadius.pill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const WBIcon(
-            WBIconName.check,
-            size: 11,
-            color: Color(0xFF065F46),
-            strokeWidth: 2.5,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: WBColors.bgSoft,
+            borderRadius: BorderRadius.circular(12),
           ),
-          const SizedBox(width: 4),
-          Text(
-            'Granted',
-            style: WBTypography.caption.copyWith(
-              color: const Color(0xFF065F46),
-              fontWeight: FontWeight.w600,
-              fontSize: 11,
-              letterSpacing: 0.2,
-            ),
+          alignment: Alignment.center,
+          child: WBIcon(icon, size: 18),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(label,
+                  style: WBTypography.body
+                      .copyWith(fontWeight: FontWeight.w600, fontSize: 14)),
+              const SizedBox(height: 3),
+              Text(sub,
+                  style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary, height: 1.45)),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

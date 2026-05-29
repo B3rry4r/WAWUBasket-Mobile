@@ -274,7 +274,8 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 12),
-              const WBBackChip(),
+              if (context.canPop()) const WBBackChip(),
+              if (!context.canPop()) const SizedBox(height: 44),
               const SizedBox(height: WBSpacing.xl),
               Text(context.l10n.loginTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm),

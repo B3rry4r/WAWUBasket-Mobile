@@ -48,8 +48,8 @@ class WBCircleIconButton extends StatelessWidget {
             ),
             if (badge)
               Positioned(
-                top: 11,
-                right: 12,
+                top: 2,
+                right: 2,
                 child: Container(
                   width: 7,
                   height: 7,

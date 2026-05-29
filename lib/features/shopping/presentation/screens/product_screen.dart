@@ -198,6 +198,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     }
 
     final total = product.priceNaira * _qty;
+    final cartCount = ref.watch(cartControllerProvider.select(
+      (s) => s.items.fold(0, (n, l) => n + l.quantity),
+    ));
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       body: Stack(
@@ -377,20 +380,75 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
             right: 0,
             bottom: 0,
             child: StickyActionBar(
-              child: WBButton(
-                label: context.l10n.productAddButton,
-                fullWidth: true,
-                size: WBButtonSize.lg,
-                loading: _adding,
-                trailing: Text(
-                  '₦${_format(total)}',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: WBButton(
+                      label: context.l10n.productAddButton,
+                      fullWidth: true,
+                      size: WBButtonSize.lg,
+                      loading: _adding,
+                      trailing: Text(
+                        '₦${_format(total)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      onPressed: _addToBasket,
+                    ),
                   ),
-                ),
-                onPressed: _addToBasket,
+                  const SizedBox(width: 12),
+                  GestureDetector(
+                    onTap: () => context.push(AppRoutes.cart),
+                    behavior: HitTestBehavior.opaque,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: WBColors.surfaceCard,
+                            borderRadius: BorderRadius.circular(WBRadius.card),
+                            border: Border.all(color: WBColors.bgDivider),
+                            boxShadow: WBShadows.card,
+                          ),
+                          alignment: Alignment.center,
+                          child: const WBIcon(WBIconName.basket, size: 22),
+                        ),
+                        if (cartCount > 0)
+                          Positioned(
+                            right: -4,
+                            top: -4,
+                            child: Container(
+                              constraints: const BoxConstraints(minWidth: 18),
+                              height: 18,
+                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                color: WBColors.surfaceDark,
+                                borderRadius:
+                                    BorderRadius.circular(WBRadius.pill),
+                                border: Border.all(
+                                    color: WBColors.bgPrimary, width: 1.5),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                cartCount > 9 ? '9+' : '$cartCount',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w700,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -58,6 +58,7 @@ class _SupportScreenState extends State<SupportScreen> {
   ];
 
   List<_Faq>? _faqs;
+  final Set<int> _expandedFaqs = {};
   _Ticket? _ticket;
 
   @override
@@ -161,16 +162,14 @@ class _SupportScreenState extends State<SupportScreen> {
             const SizedBox(height: 10),
             for (final c in _contacts(context)) ...[
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
                 decoration: BoxDecoration(
                   color: WBColors.surfaceCard,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: WBShadows.card,
                 ),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 44,
@@ -189,6 +188,8 @@ class _SupportScreenState extends State<SupportScreen> {
                         children: [
                           Text(
                             c.label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: WBTypography.body.copyWith(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
@@ -197,25 +198,28 @@ class _SupportScreenState extends State<SupportScreen> {
                           const SizedBox(height: 2),
                           Text(
                             c.sub,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: WBTypography.caption.copyWith(
                               color: WBColors.fgSecondary,
                             ),
                           ),
+                          const SizedBox(height: 10),
+                          WBButton(
+                            label: c.cta,
+                            size: WBButtonSize.sm,
+                            onPressed: () {
+                              if (c.icon == WBIconName.message) {
+                                context.push(AppRoutes.chatSupport);
+                              } else if (c.icon == WBIconName.phone) {
+                                wbCallPhone(context, '+2348009292822');
+                              } else {
+                                wbLaunchEmail(context, 'support@wawu.africa');
+                              }
+                            },
+                          ),
                         ],
                       ),
-                    ),
-                    WBButton(
-                      label: c.cta,
-                      size: WBButtonSize.sm,
-                      onPressed: () {
-                        if (c.icon == WBIconName.message) {
-                          context.push(AppRoutes.chatSupport);
-                        } else if (c.icon == WBIconName.phone) {
-                          wbCallPhone(context, '+2348009292822');
-                        } else {
-                          wbLaunchEmail(context, 'support@wawu.africa');
-                        }
-                      },
                     ),
                   ],
                 ),
@@ -253,16 +257,20 @@ class _SupportScreenState extends State<SupportScreen> {
                     for (var i = 0; i < faqs.length; i++) ...[
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
-                        onTap: () => wbShowSnack(context, faqs[i].q),
+                        onTap: () => setState(() {
+                          if (_expandedFaqs.contains(i)) {
+                            _expandedFaqs.remove(i);
+                          } else {
+                            _expandedFaqs.add(i);
+                          }
+                        }),
                         child: Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(18, 16, 18, 16),
+                          padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: Text(
@@ -275,21 +283,34 @@ class _SupportScreenState extends State<SupportScreen> {
                                     ),
                                   ),
                                   const SizedBox(width: 12),
-                                  const WBIcon(
-                                    WBIconName.chevronRight,
-                                    size: 16,
-                                    color: WBColors.fgPlaceholder,
+                                  AnimatedRotation(
+                                    turns: _expandedFaqs.contains(i) ? 0.25 : 0,
+                                    duration: WBMotion.base,
+                                    child: const WBIcon(
+                                      WBIconName.chevronRight,
+                                      size: 16,
+                                      color: WBColors.fgPlaceholder,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                faqs[i].a,
-                                style: WBTypography.caption.copyWith(
-                                  color: WBColors.fgSecondary,
-                                  fontSize: 13,
-                                  height: 1.5,
-                                ),
+                              AnimatedSize(
+                                duration: WBMotion.base,
+                                curve: WBMotion.easeSoft,
+                                alignment: Alignment.topCenter,
+                                child: _expandedFaqs.contains(i)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child: Text(
+                                          faqs[i].a,
+                                          style: WBTypography.caption.copyWith(
+                                            color: WBColors.fgSecondary,
+                                            fontSize: 13,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox(width: double.infinity),
                               ),
                             ],
                           ),

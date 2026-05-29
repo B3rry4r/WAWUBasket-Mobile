@@ -224,8 +224,8 @@ class WBHomeAppBarButton extends StatelessWidget {
           ),
           if (showBadge)
             Positioned(
-              right: label.isEmpty ? 10 : 4,
-              top: label.isEmpty ? 10 : 4,
+              right: label.isEmpty ? 0 : -4,
+              top: label.isEmpty ? 0 : -4,
               child: Container(
                 constraints: const BoxConstraints(minWidth: 16),
                 height: label.isEmpty ? 8 : 16,

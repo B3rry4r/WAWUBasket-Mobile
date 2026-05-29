@@ -17,6 +17,7 @@ import '../../../../core/widgets/wb_random_tagline.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../../core/services/guest_mode.dart';
 import '../../../account/application/address_controller.dart';
+import '../../../account/application/notifications_controller.dart';
 import '../../../account/application/profile_controller.dart';
 import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
@@ -40,14 +41,14 @@ String _greeting(BuildContext context, String? firstName) {
 Widget _padded(Widget child) =>
     Padding(padding: const EdgeInsets.symmetric(horizontal: 20), child: child);
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   String? _activeCategoryId = 'restaurants';
   String? _activeSubcategoryId;
 
@@ -60,6 +61,8 @@ class _HomeScreenState extends State<HomeScreen> {
     AddressController.instance.load();
     CategoryController.instance.load();
     RecipesController.instance.load();
+    NotificationsController.instance.refresh();
+    ref.read(cartControllerProvider.notifier).load();
   }
 
   void _onCategoryTap(String id) {
@@ -114,17 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         : context.l10n.homeAddAddress,
                 subtitleIcon: WBIconName.pin,
                 showChat: false,
-                trailingExtra: Consumer(
-                  builder: (_, ref, _) {
-                    final count = ref.watch(cartControllerProvider.select(
-                      (s) => s.items.fold(0, (n, l) => n + l.quantity),
-                    ));
-                    return WBHomeAppBarButton(
-                      icon: WBIconName.basket,
-                      badgeCount: count,
-                      onTap: () => context.push(AppRoutes.cart),
-                    );
-                  },
+                trailingExtra: WBHomeAppBarButton(
+                  icon: WBIconName.basket,
+                  badgeCount: ref.watch(cartControllerProvider.select(
+                    (s) => s.items.fold(0, (n, l) => n + l.quantity),
+                  )),
+                  onTap: () => context.push(AppRoutes.cart),
                 ),
               )),
               const SizedBox(height: 22),
@@ -450,12 +448,10 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   double _vel = 0.0;
   Ticker? _ticker;
 
-  // Orbital "front" position — updated visually during spin, but does NOT
-  // drive content. Content is driven exclusively by widget.activeId.
+  // Visual front-node index into _orbitCats (does NOT drive content).
   int _spinIdx = 0;
 
-  // Prevent didUpdateWidget from snapping the orbit when the parent echoes
-  // back the same activeId we just emitted from _tapNode.
+  // Suppress the didUpdateWidget snap when we ourselves just fired onSelect.
   bool _suppressSync = false;
 
   late final AnimationController _snapCtrl;
@@ -465,31 +461,33 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   static const _friction = 0.910;
   static const _stopVel = 0.0022;
 
+  // The orbit is all cats EXCEPT the currently active one.
+  List<Category> get _orbitCats {
+    final cats = widget.cats;
+    if (cats == null) return const [];
+    final selIdx = cats.indexWhere((c) => c.id == widget.activeId);
+    return [
+      for (var i = 0; i < cats.length; i++)
+        if (i != selIdx) cats[i],
+    ];
+  }
+
   @override
   void initState() {
     super.initState();
     _snapCtrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 380));
-    _syncFromParent();
   }
 
   @override
   void didUpdateWidget(_OrbitalCategorySelector old) {
     super.didUpdateWidget(old);
     if (old.cats != widget.cats || old.activeId != widget.activeId) {
-      _syncFromParent();
-    }
-  }
-
-  void _syncFromParent() {
-    if (_suppressSync) { _suppressSync = false; return; }
-    final cats = widget.cats;
-    if (cats == null || cats.isEmpty) return;
-    final id = widget.activeId;
-    if (id == null) return;
-    final idx = cats.indexWhere((c) => c.id == id);
-    if (idx >= 0 && idx != _spinIdx) {
-      _spinIdx = idx;
-      _rotation = -_angleFor(idx, cats.length);
+      if (_suppressSync) {
+        _suppressSync = false;
+      } else {
+        final n = _orbitCats.length;
+        if (n > 0 && _spinIdx >= n) _spinIdx = 0;
+      }
     }
   }
 
@@ -537,13 +535,13 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     _updateSpinIdx();
     if (_vel.abs() < _stopVel) {
       _ticker!.stop();
-      // Snap the orbit to the nearest node visually — NO content change.
-      _snapVisual(_nearestIdx(widget.cats?.length ?? 1));
+      final n = _orbitCats.length;
+      if (n > 0) _snapVisual(_nearestIdx(n));
     }
   }
 
   void _updateSpinIdx() {
-    final n = widget.cats?.length ?? 0;
+    final n = _orbitCats.length;
     if (n == 0) return;
     final idx = _nearestIdx(n);
     if (idx != _spinIdx) {
@@ -554,11 +552,11 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
 
   // Tap: snap + fire content change.
   void _tapNode(int idx) {
-    final cats = widget.cats;
-    if (cats == null || cats.isEmpty) return;
+    final orbit = _orbitCats;
+    if (orbit.isEmpty || idx >= orbit.length) return;
     setState(() => _spinIdx = idx);
     _animateSnap(idx, const Duration(milliseconds: 400), spring: true);
-    final id = cats[idx].id;
+    final id = orbit[idx].id;
     if (id != widget.activeId) {
       _suppressSync = true;
       widget.onSelect(id);
@@ -572,7 +570,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   }
 
   void _animateSnap(int idx, Duration duration, {required bool spring}) {
-    final n = widget.cats?.length ?? 1;
+    final n = _orbitCats.length;
     if (n == 0) return;
     final target = -_angleFor(idx, n);
     final diff = (target - _rotation + pi) % (2 * pi) - pi;
@@ -583,8 +581,6 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     _snapCtrl.duration = duration;
     _snapCtrl.reset();
     final begin = _rotation;
-    // Tap uses easeOutBack (slight overshoot = iOS spring feel).
-    // Momentum settle uses easeOutCubic (clean decelerate, no bounce).
     final curve = spring ? Curves.easeOutBack : Curves.easeOutCubic;
     _snapAnim = Tween<double>(begin: begin, end: dest).animate(
       CurvedAnimation(parent: _snapCtrl, curve: curve),
@@ -605,21 +601,23 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
       final w = constraints.maxWidth;
 
       final orbitR = (w * 0.315).clamp(116.0, 152.0);
-      final centerD = (w * 0.330).clamp(122.0, 156.0);
       final orbitD = (w * 0.200).clamp(72.0, 92.0);
+      final centerD = (w * 0.330).clamp(122.0, 156.0);
       final totalH = 2 * orbitR + orbitD + 20.0;
       final cx = w / 2;
       final cy = orbitR + orbitD / 2 + 10.0;
 
-      final n = cats.length;
-
-      // Selected = what the parent says is loaded.
+      // Center disc = selected cat from parent.
       final selectedIdx = cats.indexWhere((c) => c.id == widget.activeId);
-      final selectedCat = selectedIdx >= 0
-          ? cats[selectedIdx]
-          : (n > 0 ? cats[_spinIdx] : null);
+      final selectedCat = selectedIdx >= 0 ? cats[selectedIdx] : (cats.isNotEmpty ? cats[0] : null);
 
-      // Depth-sort ALL nodes (back → front) for correct z-ordering.
+      // Orbit = everything except the active one.
+      final orbitCats = [
+        for (var i = 0; i < cats.length; i++)
+          if (i != selectedIdx) cats[i],
+      ];
+      final n = orbitCats.length;
+
       final byDepth = List.generate(n, (i) => i)
         ..sort((a, b) => _depth(a, n).compareTo(_depth(b, n)));
 
@@ -633,87 +631,25 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // All orbit nodes (including the selected one — no gap).
               for (final i in byDepth)
-                _buildNode(cats[i], i, n, cx, cy,
-                    orbitR: orbitR,
-                    orbitD: orbitD,
-                    isSelected: i == selectedIdx),
-              // Center disc: always shows the selected category.
-              Positioned(
-                left: cx - centerD / 2,
-                top: cy - centerD / 2,
-                width: centerD,
-                height: centerD,
-                child: AnimatedSwitcher(
-                  duration: WBMotion.base,
-                  transitionBuilder: (child, anim) => ScaleTransition(
-                    scale: Tween<double>(begin: 0.84, end: 1.0).animate(
-                      CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
-                    ),
-                    child: FadeTransition(opacity: anim, child: child),
+                _buildNode(orbitCats[i], i, n, cx, cy,
+                    orbitR: orbitR, orbitD: orbitD),
+              if (selectedCat != null)
+                Positioned(
+                  left: cx - centerD / 2,
+                  top: cy - centerD / 2,
+                  width: centerD,
+                  height: centerD,
+                  child: AnimatedSwitcher(
+                    duration: WBMotion.base,
+                    child: _buildCenter(context, selectedCat, centerD),
                   ),
-                  child: selectedCat == null
-                      ? SizedBox(key: const ValueKey('empty'), width: centerD, height: centerD)
-                      : _buildCenter(context, selectedCat, centerD),
                 ),
-              ),
             ],
           ),
         ),
       );
     });
-  }
-
-  Widget _buildCenter(BuildContext context, Category cat, double d) {
-    final iconD = d * 0.36;
-    return SizedBox(
-      key: ValueKey(cat.id),
-      width: d,
-      height: d,
-      child: Container(
-        decoration: BoxDecoration(
-          color: WBColors.surfaceDark,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.22),
-              blurRadius: 28,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: iconD,
-              height: iconD,
-              child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
-                  ? SvgPicture.asset(cat.svgAsset!, fit: BoxFit.contain,
-                      errorBuilder: (_, _, _) => const SizedBox.shrink())
-                  : const SizedBox.shrink(),
-            ),
-            SizedBox(height: d * 0.05),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: d * 0.10),
-              child: Text(
-                context.categoryLabel(cat.id, fallback: cat.label),
-                textAlign: TextAlign.center,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: WBTypography.caption.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                  height: 1.1,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildNode(
@@ -724,15 +660,13 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     double cy, {
     required double orbitR,
     required double orbitD,
-    required bool isSelected,
   }) {
     final angle = _angleFor(i, n) + _rotation;
     final dx = orbitR * sin(angle);
     final dy = -orbitR * cos(angle);
     final depth = _depth(i, n);
-    // Selected node is always full-size and full-opacity in the orbit.
-    final scale = isSelected ? 1.0 : (1.0 - depth * 0.12);
-    final opacity = isSelected ? 1.0 : (1.0 - depth * 0.38).clamp(0.42, 1.0);
+    final scale = (1.0 - depth * 0.12);
+    final opacity = (1.0 - depth * 0.38).clamp(0.42, 1.0);
 
     return Positioned(
       left: cx + dx - orbitD / 2,
@@ -750,17 +684,8 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
               decoration: BoxDecoration(
                 color: WBColors.surfaceCard,
                 shape: BoxShape.circle,
-                border: Border.all(
-                  color: isSelected ? WBColors.surfaceDark : WBColors.borderFilled,
-                  width: isSelected ? 2.5 : 1.2,
-                ),
-                boxShadow: isSelected ? [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.20),
-                    blurRadius: 14,
-                    offset: const Offset(0, 4),
-                  ),
-                ] : WBShadows.card,
+                border: Border.all(color: WBColors.borderFilled, width: 1.2),
+                boxShadow: WBShadows.card,
               ),
               padding: EdgeInsets.all(orbitD * 0.22),
               child: cat.svgAsset != null && cat.svgAsset!.isNotEmpty
@@ -774,12 +699,55 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     );
   }
 
+  Widget _buildCenter(BuildContext context, Category cat, double d) {
+    return Container(
+      key: ValueKey(cat.id),
+      width: d,
+      height: d,
+      decoration: BoxDecoration(
+        color: WBColors.surfaceDark,
+        shape: BoxShape.circle,
+        boxShadow: WBShadows.card,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (cat.svgAsset != null && cat.svgAsset!.isNotEmpty)
+            SizedBox(
+              width: d * 0.32,
+              height: d * 0.32,
+              child: SvgPicture.asset(
+                cat.svgAsset!,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
+              ),
+            ),
+          const SizedBox(height: 6),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: d * 0.10),
+            child: Text(
+              context.categoryLabel(cat.id, fallback: cat.label),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: WBTypography.caption.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildShimmer() {
     return LayoutBuilder(builder: (_, constraints) {
       final w = constraints.maxWidth;
       final orbitR = (w * 0.315).clamp(116.0, 152.0);
-      final centerD = (w * 0.330).clamp(122.0, 156.0);
       final orbitD = (w * 0.200).clamp(72.0, 92.0);
+      final centerD = (w * 0.330).clamp(122.0, 156.0);
       final totalH = 2 * orbitR + orbitD + 20.0;
       final cx = w / 2;
       final cy = orbitR + orbitD / 2 + 10.0;
@@ -791,18 +759,6 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
           highlightColor: WBColors.bgSecondary,
           child: Stack(
             children: [
-              Positioned(
-                left: cx - centerD / 2,
-                top: cy - centerD / 2,
-                width: centerD,
-                height: centerD,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
               for (var i = 0; i < 6; i++)
                 Positioned(
                   left: cx + orbitR * sin(2 * pi * i / 6) - orbitD / 2,
@@ -816,6 +772,18 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
                     ),
                   ),
                 ),
+              Positioned(
+                left: cx - centerD / 2,
+                top: cy - centerD / 2,
+                width: centerD,
+                height: centerD,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
