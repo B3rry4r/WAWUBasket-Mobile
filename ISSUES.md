@@ -30,6 +30,11 @@ Last updated: 2026-05-27
 | 20 | Session access token | Access token extended from 15 m to 60 m to reduce aggressive re-auth prompts | configuration.ts |
 | 21 | Orbital category selector | Feature-flagged `new_categories_ui` now shows spinning orbital selector with physics | home_screen.dart |
 | 22 | Scroll bounce physics | Main home screen and key screens use `BouncingScrollPhysics` for iOS-like feel | home_screen.dart + others |
+| 23 | Subcategory filtering broken | Tapping a subcategory chip now calls `_load(subcategoryId:)` — products/vendors reload correctly | category_screen.dart |
+| 24 | "Chicken Republic" as cuisine category | Replaced brand-name subcategory with cuisine types: Fast Food, Local Cuisine, Fine Dining, Grills & BBQ, Seafood, Breakfast & Brunch, Cafés | categories.constants.ts, mock_data.dart |
+| 25 | Vendor rating 4.6/4.5 fallback (API) | vendors.controller.ts no longer falls back to 4.6/4.5; unrated vendors return 0 (shown as "New") | vendors.controller.ts |
+| 26 | Vendor category filtering (API) | `/vendors?category=X` now actually filters vendors whose menu items are tagged with that subcategory | vendors.controller.ts |
+| 27 | Seed category values invalid | Restaurant vendor menu items used "Popular"/"Mains"/"Sides"/"Drinks" display names; replaced with valid subcategory IDs | seed.ts |
 
 ---
 

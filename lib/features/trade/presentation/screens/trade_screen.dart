@@ -191,9 +191,18 @@ class _TradeScreenState extends State<TradeScreen> {
           valueListenable: TradeController.instance.listings,
           builder: (_, listings, _) {
             if (listings.isEmpty) {
-              return _Empty(
-                label:
-                    'No active export listings right now. Check back in a bit.',
+              return const Padding(
+                padding: EdgeInsets.fromLTRB(
+                  WBSpacing.screenPadding,
+                  4,
+                  WBSpacing.screenPadding,
+                  40,
+                ),
+                child: WBEmptyState(
+                  illustration: WBEmptyIllustration.noActiveListing,
+                  label: 'No active export listings right now.',
+                  sub: 'Check back in a bit.',
+                ),
               );
             }
             return ListView.separated(

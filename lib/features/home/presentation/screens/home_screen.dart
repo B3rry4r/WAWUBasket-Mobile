@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -19,6 +20,7 @@ import '../../../account/application/profile_controller.dart';
 import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
 import '../../../recipes/application/recipes_controller.dart';
+import '../../../shopping/application/cart_controller.dart';
 import '../../../shopping/application/mock_data.dart';
 import '../../application/category_controller.dart';
 import '../../domain/models/category.dart';
@@ -109,9 +111,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     : context.l10n.homeAddAddress,
                 subtitleIcon: WBIconName.pin,
                 showChat: false,
-                trailingExtra: WBHomeAppBarButton(
-                  icon: WBIconName.basket,
-                  onTap: () => context.push(AppRoutes.cart),
+                trailingExtra: Consumer(
+                  builder: (_, ref, _) {
+                    final count = ref.watch(cartControllerProvider.select(
+                      (s) => s.items.fold(0, (n, l) => n + l.quantity),
+                    ));
+                    return WBHomeAppBarButton(
+                      icon: WBIconName.basket,
+                      badgeCount: count,
+                      onTap: () => context.push(AppRoutes.cart),
+                    );
+                  },
                 ),
               )),
               const SizedBox(height: 22),

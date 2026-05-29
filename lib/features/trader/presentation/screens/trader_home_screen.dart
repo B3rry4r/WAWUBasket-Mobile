@@ -150,9 +150,10 @@ class _TraderHomeScreenState extends State<TraderHomeScreen> {
               ),
               const SizedBox(height: 12),
               if (active.isEmpty)
-                _EmptyTile(
-                  label:
-                      'No listings up yet. Post one to start receiving enquiries.',
+                const WBEmptyState(
+                  illustration: WBEmptyIllustration.noActiveListing,
+                  label: 'No listings up yet.',
+                  sub: 'Post one to start receiving enquiries.',
                 )
               else
                 for (final l in active.take(3))
@@ -216,9 +217,10 @@ class _LiveEscrowSection extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             if (live.isEmpty)
-              _EmptyTile(
-                label:
-                    'Funds sit here when a buyer pays for a listing, release on delivery.',
+              const WBEmptyState(
+                illustration: WBEmptyIllustration.noOrders,
+                label: 'No funded orders right now.',
+                sub: 'Funds sit here when a buyer pays, released on delivery.',
               )
             else
               for (final o in live)

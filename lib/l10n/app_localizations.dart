@@ -298,6 +298,12 @@ abstract class AppLocalizations {
   /// **'One basket. Everything.'**
   String get splashTagline;
 
+  /// No description provided for @splashHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'One Basket,\nEverything'**
+  String get splashHeadline;
+
   /// No description provided for @onboardingSkip.
   ///
   /// In en, this message translates to:
@@ -1167,6 +1173,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add to basket'**
   String get productAddButton;
+
+  /// No description provided for @productAddedToBasket.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to basket'**
+  String get productAddedToBasket;
 
   /// No description provided for @productNotFound.
   ///

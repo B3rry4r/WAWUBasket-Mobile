@@ -199,7 +199,10 @@ class _VendorHomeScreenState extends State<VendorHomeScreen> {
               ),
               const SizedBox(height: 12),
               if (pending.isEmpty)
-                _EmptyTile(label: context.l10n.vendorHomeNoOrders)
+                WBEmptyState(
+                  illustration: WBEmptyIllustration.noNewOrder,
+                  label: context.l10n.vendorHomeNoOrders,
+                )
               else
                 for (final o in pending.take(3))
                   Padding(

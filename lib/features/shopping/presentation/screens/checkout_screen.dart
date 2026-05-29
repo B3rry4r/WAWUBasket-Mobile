@@ -58,11 +58,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   _ScheduleSlot? _slot;
   _PayMethod _payMethod = _PayMethod.card;
 
+  bool _forSomeoneElse = false;
+  final _recipientNameCtrl = TextEditingController();
+  final _recipientPhoneCtrl = TextEditingController();
+
   @override
   void initState() {
     super.initState();
     AddressController.instance.load();
     RecipeCartController.instance.load();
+  }
+
+  @override
+  void dispose() {
+    _recipientNameCtrl.dispose();
+    _recipientPhoneCtrl.dispose();
+    super.dispose();
   }
 
   /// Converts the picked slot into an ISO datetime for the API.
@@ -125,6 +136,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           addressId: productAddr?.id,
           scheduledFor: _scheduledForIso(),
           paymentMethod: _payMethod.apiValue,
+          recipientName: _forSomeoneElse ? _recipientNameCtrl.text.trim() : null,
+          recipientPhone: _forSomeoneElse ? _recipientPhoneCtrl.text.trim() : null,
         );
         await ref.read(cartControllerProvider.notifier).load();
         // The product order takes precedence as the order we follow on the
@@ -400,6 +413,61 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         ],
                       );
                     },
+                  ),
+                ),
+                const SizedBox(height: WBSpacing.md),
+                _Section(
+                  label: 'RECIPIENT',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          _RecipientToggle(
+                            label: 'For me',
+                            active: !_forSomeoneElse,
+                            onTap: () => setState(() => _forSomeoneElse = false),
+                          ),
+                          const SizedBox(width: 10),
+                          _RecipientToggle(
+                            label: 'For someone else',
+                            active: _forSomeoneElse,
+                            onTap: () => setState(() => _forSomeoneElse = true),
+                          ),
+                        ],
+                      ),
+                      if (_forSomeoneElse) ...[
+                        const SizedBox(height: WBSpacing.md),
+                        WBInput(
+                          label: 'Recipient name',
+                          placeholder: 'Who are you sending this to?',
+                          controller: _recipientNameCtrl,
+                        ),
+                        const SizedBox(height: WBSpacing.sm),
+                        WBInput(
+                          label: 'Recipient phone',
+                          placeholder: '+234 800 000 0000',
+                          controller: _recipientPhoneCtrl,
+                          keyboardType: TextInputType.phone,
+                        ),
+                        const SizedBox(height: WBSpacing.sm),
+                        Row(
+                          children: [
+                            const WBIcon(WBIconName.pin, size: 13, color: WBColors.fgPlaceholder),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                'Update the delivery address above to their location.',
+                                style: WBTypography.caption.copyWith(
+                                  color: WBColors.fgPlaceholder,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
                   ),
                 ),
                 const SizedBox(height: WBSpacing.md),
@@ -978,6 +1046,41 @@ class _PayMethodRow extends StatelessWidget {
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _RecipientToggle extends StatelessWidget {
+  const _RecipientToggle({
+    required this.label,
+    required this.active,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          color: active ? WBColors.surfaceDark : WBColors.bgSecondary,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+          border: active ? null : Border.all(color: WBColors.bgDivider),
+        ),
+        child: Text(
+          label,
+          style: WBTypography.caption.copyWith(
+            color: active ? Colors.white : WBColors.fgSecondary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     );

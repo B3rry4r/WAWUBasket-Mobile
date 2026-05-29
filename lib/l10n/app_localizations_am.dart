@@ -96,6 +96,9 @@ class AppLocalizationsAm extends AppLocalizations {
   String get splashTagline => 'አንድ ቅርጫት። ሁሉም ነገር።';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'ዝለል';
 
   @override
@@ -535,6 +538,9 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get productAddButton => 'ወደ ቅርጫት ጨምር';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'ምርቱ አልተገኘም።';

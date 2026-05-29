@@ -215,7 +215,10 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
               onAction: _load,
             )
           else if (_filtered.isEmpty)
-            _Hint(text: context.l10n.orderHistoryEmpty)
+            WBEmptyState(
+              illustration: WBEmptyIllustration.noOrders,
+              label: context.l10n.orderHistoryEmpty,
+            )
           else
             for (final order in _filtered) ...[
               _OrderCard(order: order, onChanged: _load),

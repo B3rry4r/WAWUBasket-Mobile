@@ -57,19 +57,10 @@ class _NoActive extends StatelessWidget {
           ],
         ),
         const SizedBox(height: WBSpacing.xl),
-        Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: WBColors.bgSoft,
-            borderRadius: BorderRadius.circular(WBRadius.card),
-          ),
-          child: Text(
-            'Head back to the map to pick up a new offer.',
-            style: WBTypography.body.copyWith(
-              color: WBColors.fgSecondary,
-              fontSize: 14,
-            ),
-          ),
+        const WBEmptyState(
+          illustration: WBEmptyIllustration.noActiveDelivery,
+          label: 'No active delivery.',
+          sub: 'Head back to the map to pick up a new offer.',
         ),
       ],
     );

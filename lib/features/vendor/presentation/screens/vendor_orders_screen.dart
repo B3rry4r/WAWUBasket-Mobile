@@ -92,7 +92,11 @@ class _VendorOrdersScreenState extends State<VendorOrdersScreen> {
               ),
               const SizedBox(height: WBSpacing.lg),
               if (filtered.isEmpty)
-                _EmptyState(label: 'No orders right now. Time to take a breath.')
+                const WBEmptyState(
+                  illustration: WBEmptyIllustration.noNewOrder,
+                  label: 'No orders right now.',
+                  sub: 'Time to take a breath.',
+                )
               else
                 for (final o in filtered)
                   Padding(

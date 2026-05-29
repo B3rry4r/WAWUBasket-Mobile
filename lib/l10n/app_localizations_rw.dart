@@ -99,6 +99,9 @@ class AppLocalizationsRw extends AppLocalizations {
   String get splashTagline => 'Agasaho kamwe. Byose.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Simbuka';
 
   @override
@@ -557,6 +560,9 @@ class AppLocalizationsRw extends AppLocalizations {
 
   @override
   String get productAddButton => 'Shyira mu gasaho';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Ibicuruzwa ntibyabonetse.';

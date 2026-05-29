@@ -215,17 +215,9 @@ class _DriverEarningsScreenState extends State<DriverEarningsScreen> {
           else if (_loading)
             const SizedBox.shrink()
           else if (_data == null || _data!.trips.isEmpty)
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
-              child: Text(
-                'No trips for this period.',
-                style: WBTypography.body
-                    .copyWith(color: WBColors.fgSecondary, fontSize: 14),
-              ),
+            const WBEmptyState(
+              illustration: WBEmptyIllustration.noTrips,
+              label: 'No trips for this period.',
             )
           else
             WBCard(

@@ -119,14 +119,11 @@ class WBHomeAppBar extends StatelessWidget {
               ),
               const SizedBox(width: 8),
             ],
-            // The badge is driven by the live unread count — even when
-            // the caller passes notificationBadge=true the dot only
-            // appears while at least one notification is unread.
             ValueListenableBuilder<int>(
               valueListenable: NotificationsController.instance.unreadCount,
               builder: (_, count, _) => WBHomeAppBarButton(
                 icon: WBIconName.bell,
-                badge: notificationBadge && count > 0,
+                badgeCount: notificationBadge ? count : 0,
                 onTap: () => context.push(AppRoutes.notifications),
               ),
             ),
@@ -170,20 +167,27 @@ class _AvatarInitials extends StatelessWidget {
 
 /// Circular icon button used in [WBHomeAppBar]. Public so screens with a
 /// custom top bar (e.g. the rider map overlay) can reuse the exact chrome.
+///
+/// Pass [badgeCount] > 0 to show a numbered pill. Values > 9 render "9+".
 class WBHomeAppBarButton extends StatelessWidget {
   const WBHomeAppBarButton({
     super.key,
     required this.icon,
     required this.onTap,
     this.badge = false,
+    this.badgeCount = 0,
   });
 
   final WBIconName icon;
   final VoidCallback onTap;
+  /// Deprecated dot-only badge. Prefer [badgeCount].
   final bool badge;
+  final int badgeCount;
 
   @override
   Widget build(BuildContext context) {
+    final showBadge = badgeCount > 0 || badge;
+    final label = badgeCount > 9 ? '9+' : badgeCount > 0 ? '$badgeCount' : '';
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -201,18 +205,33 @@ class WBHomeAppBarButton extends StatelessWidget {
             alignment: Alignment.center,
             child: WBIcon(icon, size: 18, color: WBColors.fgHeader),
           ),
-          if (badge)
+          if (showBadge)
             Positioned(
-              right: 10,
-              top: 10,
+              right: label.isEmpty ? 10 : 4,
+              top: label.isEmpty ? 10 : 4,
               child: Container(
-                width: 8,
-                height: 8,
+                constraints: const BoxConstraints(minWidth: 16),
+                height: label.isEmpty ? 8 : 16,
+                padding: label.isEmpty
+                    ? EdgeInsets.zero
+                    : const EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
-                  color: WBColors.statusError,
-                  shape: BoxShape.circle,
+                  color: WBColors.surfaceDark,
+                  borderRadius: BorderRadius.circular(WBRadius.pill),
                   border: Border.all(color: WBColors.bgPrimary, width: 1.5),
                 ),
+                alignment: Alignment.center,
+                child: label.isEmpty
+                    ? null
+                    : Text(
+                        label,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w700,
+                          height: 1,
+                        ),
+                      ),
               ),
             ),
         ],

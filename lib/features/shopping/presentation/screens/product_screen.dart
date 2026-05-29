@@ -139,7 +139,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     if (error != null) {
       wbShowSnack(context, error);
     } else {
-      context.push(AppRoutes.cart);
+      wbShowSnack(context, context.l10n.productAddedToBasket);
     }
   }
 

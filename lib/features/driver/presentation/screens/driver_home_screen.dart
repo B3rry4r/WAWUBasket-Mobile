@@ -121,9 +121,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   ),
                   const SizedBox(height: 10),
                   if (open.isEmpty)
-                    _EmptyTile(
-                      label:
-                          'No open loads near you right now. Check back at corridor peak hours.',
+                    const WBEmptyState(
+                      illustration: WBEmptyIllustration.noOpenLoads,
+                      label: 'No open loads near you right now.',
+                      sub: 'Check back at corridor peak hours.',
                     )
                   else
                     for (final l in open)

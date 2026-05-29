@@ -99,6 +99,9 @@ class AppLocalizationsTw extends AppLocalizations {
   String get splashTagline => 'Kete baako. Biribiara.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Twa kwan';
 
   @override
@@ -551,6 +554,9 @@ class AppLocalizationsTw extends AppLocalizations {
 
   @override
   String get productAddButton => 'De kɔ kete mu';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Wɔanhu deɛ wotɔn no.';

@@ -98,6 +98,9 @@ class AppLocalizationsHa extends AppLocalizations {
   String get splashTagline => 'Kwando ɗaya. Komai.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Tsallake';
 
   @override
@@ -555,6 +558,9 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get productAddButton => 'Ƙara zuwa kwando';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Ba a sami kayan ba.';

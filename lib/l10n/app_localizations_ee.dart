@@ -97,6 +97,9 @@ class AppLocalizationsEe extends AppLocalizations {
   String get splashTagline => 'Kpakpa ɖeka. Nuwo katã.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Ƒo kpotã';
 
   @override
@@ -546,6 +549,9 @@ class AppLocalizationsEe extends AppLocalizations {
 
   @override
   String get productAddButton => 'Tsɔ kpe ɖe kpakpa ŋu';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Womekpɔ nudzraɖa la o.';

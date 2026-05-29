@@ -135,20 +135,11 @@ class _VendorMenuScreenState extends State<VendorMenuScreen> {
               ),
               const SizedBox(height: WBSpacing.lg),
               if (filtered.isEmpty)
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: WBColors.bgSoft,
-                    borderRadius: BorderRadius.circular(WBRadius.card),
-                  ),
-                  child: Text(
-                    _query.isNotEmpty
-                        ? 'Nothing matches "$_query".'
-                        : 'No dishes in this category yet.',
-                    style: WBTypography.body.copyWith(
-                      color: WBColors.fgSecondary,
-                    ),
-                  ),
+                WBEmptyState(
+                  illustration: WBEmptyIllustration.noDish,
+                  label: _query.isNotEmpty
+                      ? 'Nothing matches "$_query".'
+                      : 'No dishes in this category yet.',
                 )
               else
                 for (final it in filtered)

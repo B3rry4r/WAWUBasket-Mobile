@@ -184,8 +184,10 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
               ),
               const SizedBox(height: WBSpacing.lg),
               if (reviews.isEmpty)
-                const _Hint(
-                  text: 'No reviews yet. They land here as orders complete.',
+                const WBEmptyState(
+                  illustration: WBEmptyIllustration.noOrders,
+                  label: 'No reviews yet.',
+                  sub: 'They land here as orders complete.',
                 )
               else
                 for (final r in reviews)

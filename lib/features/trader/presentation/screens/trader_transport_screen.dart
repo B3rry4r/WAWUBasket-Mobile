@@ -349,19 +349,9 @@ class _TraderTransportScreenState extends State<TraderTransportScreen> {
                     ),
                     const SizedBox(height: 10),
                     if ((mine.isEmpty ? loads : mine).isEmpty)
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: WBColors.bgSoft,
-                          borderRadius: BorderRadius.circular(WBRadius.card),
-                        ),
-                        child: Text(
-                          'No loads posted yet.',
-                          style: WBTypography.body.copyWith(
-                            color: WBColors.fgSecondary,
-                            fontSize: 14,
-                          ),
-                        ),
+                      const WBEmptyState(
+                        illustration: WBEmptyIllustration.noActiveLoads,
+                        label: 'No loads posted yet.',
                       )
                     else
                       for (final load in (mine.isEmpty ? loads : mine)) ...[

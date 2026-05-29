@@ -96,6 +96,9 @@ class AppLocalizationsIg extends AppLocalizations {
   String get splashTagline => 'Ọdụ otu. Ihe niile.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Wụfuo';
 
   @override
@@ -550,6 +553,9 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get productAddButton => 'Tinye na ihe ọkpọ';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Ahụghị ngwaahịa.';

@@ -1,4 +1,5 @@
 export 'wb_back_chip.dart';
+export 'wb_empty_state.dart';
 export 'wb_bottom_nav.dart';
 export 'wb_button.dart';
 export 'wb_card.dart';

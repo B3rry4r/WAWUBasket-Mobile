@@ -34,6 +34,15 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
     return l.status == _filter;
   }
 
+  WBEmptyIllustration _illustrationFor(ExportListingStatus? filter) {
+    return switch (filter) {
+      ExportListingStatus.draft => WBEmptyIllustration.noDraftListing,
+      ExportListingStatus.sold => WBEmptyIllustration.noSoldListing,
+      ExportListingStatus.expired => WBEmptyIllustration.noExpiredListing,
+      _ => WBEmptyIllustration.noActiveListing,
+    };
+  }
+
   void _showActions(ExportListing l) {
     showModalBottomSheet<void>(
       context: context,
@@ -188,21 +197,11 @@ class _TraderListingsScreenState extends State<TraderListingsScreen> {
               ),
               const SizedBox(height: WBSpacing.lg),
               if (filtered.isEmpty)
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: WBColors.bgSoft,
-                    borderRadius: BorderRadius.circular(WBRadius.card),
-                  ),
-                  child: Text(
-                    _filter == null
-                        ? context.l10n.traderListingsEmpty
-                        : 'No ${_filter!.label.toLowerCase()} listings.',
-                    style: WBTypography.body.copyWith(
-                      color: WBColors.fgSecondary,
-                      fontSize: 14,
-                    ),
-                  ),
+                WBEmptyState(
+                  illustration: _illustrationFor(_filter),
+                  label: _filter == null
+                      ? context.l10n.traderListingsEmpty
+                      : 'No ${_filter!.label.toLowerCase()} listings.',
                 )
               else
                 for (final l in filtered)

@@ -118,5 +118,6 @@ flutter:
     - assets/logos/
     - assets/categories/
     - assets/docs/
+    - assets/empty_states/
 
   # Albert Sans is loaded at runtime via google_fonts.

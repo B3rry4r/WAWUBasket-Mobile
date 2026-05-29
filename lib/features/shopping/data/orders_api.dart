@@ -15,6 +15,8 @@ class OrdersApi {
     String? promoCode,
     String? scheduledFor,
     String? paymentMethod,
+    String? recipientName,
+    String? recipientPhone,
   }) async {
     final body = <String, dynamic>{};
     if (addressId != null) body['addressId'] = addressId;
@@ -22,6 +24,8 @@ class OrdersApi {
     if (promoCode != null && promoCode.isNotEmpty) body['promoCode'] = promoCode;
     if (scheduledFor != null) body['scheduledFor'] = scheduledFor;
     if (paymentMethod != null) body['paymentMethod'] = paymentMethod;
+    if (recipientName != null && recipientName.isNotEmpty) body['recipientName'] = recipientName;
+    if (recipientPhone != null && recipientPhone.isNotEmpty) body['recipientPhone'] = recipientPhone;
     final res = await _api.post('/orders', body: body);
     return (res as Map).cast<String, dynamic>();
   }

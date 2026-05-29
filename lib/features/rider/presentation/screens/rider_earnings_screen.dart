@@ -216,17 +216,9 @@ class _RiderEarningsScreenState extends State<RiderEarningsScreen> {
           else if (_loading)
             const SizedBox.shrink()
           else if (_data == null || _data!.deliveries.isEmpty)
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: WBColors.bgSoft,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
-              child: Text(
-                'No deliveries for this period.',
-                style: WBTypography.body
-                    .copyWith(color: WBColors.fgSecondary, fontSize: 14),
-              ),
+            const WBEmptyState(
+              illustration: WBEmptyIllustration.noTrips,
+              label: 'No deliveries for this period.',
             )
           else
             WBCard(

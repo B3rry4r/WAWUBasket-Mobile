@@ -98,6 +98,9 @@ class AppLocalizationsWo extends AppLocalizations {
   String get splashTagline => 'Bënn panier. Dafa am dëkk.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Jàll';
 
   @override
@@ -550,6 +553,9 @@ class AppLocalizationsWo extends AppLocalizations {
 
   @override
   String get productAddButton => 'Yokk ci panier';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Marsandiis gisuñu ko.';

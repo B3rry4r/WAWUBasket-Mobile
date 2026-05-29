@@ -97,6 +97,9 @@ class AppLocalizationsLn extends AppLocalizations {
   String get splashTagline => 'Saki moko. Makambo nyonso.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Leká';
 
   @override
@@ -552,6 +555,9 @@ class AppLocalizationsLn extends AppLocalizations {
 
   @override
   String get productAddButton => 'Bakisa na saki';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Eloko emonani tɛ.';

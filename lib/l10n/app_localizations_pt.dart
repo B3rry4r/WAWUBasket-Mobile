@@ -99,6 +99,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get splashTagline => 'Uma cesta. Tudo.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Pular';
 
   @override
@@ -551,6 +554,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get productAddButton => 'Adicionar à cesta';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Produto não encontrado.';

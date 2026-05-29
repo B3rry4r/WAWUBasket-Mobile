@@ -96,6 +96,9 @@ class AppLocalizationsSw extends AppLocalizations {
   String get splashTagline => 'Kikapu kimoja. Kila kitu.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Ruka';
 
   @override
@@ -547,6 +550,9 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get productAddButton => 'Ongeza kwenye kikapu';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Bidhaa haikupatikana.';

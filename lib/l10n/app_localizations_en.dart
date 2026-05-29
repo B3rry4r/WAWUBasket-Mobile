@@ -98,6 +98,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splashTagline => 'One basket. Everything.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Skip';
 
   @override
@@ -548,6 +551,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productAddButton => 'Add to basket';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Product not found.';

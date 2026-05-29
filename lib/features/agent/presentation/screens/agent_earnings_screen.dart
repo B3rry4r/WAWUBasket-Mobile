@@ -138,19 +138,9 @@ class _AgentEarningsScreenState extends State<AgentEarningsScreen> {
                 ),
                 const SizedBox(height: 10),
                 if (filtered.isEmpty)
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: WBColors.bgSoft,
-                      borderRadius: BorderRadius.circular(WBRadius.card),
-                    ),
-                    child: Text(
-                      'No transactions in this window.',
-                      style: WBTypography.body.copyWith(
-                        color: WBColors.fgSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
+                  const WBEmptyState(
+                    illustration: WBEmptyIllustration.noTransaction,
+                    label: 'No transactions in this window.',
                   )
                 else
                   WBCard(

@@ -58,13 +58,11 @@ class _NoTrip extends StatelessWidget {
       ),
       children: [
         Text('No active trip', style: WBTypography.page),
-        const SizedBox(height: 4),
-        Text(
-          'Pick a load from your board to start.',
-          style: WBTypography.body.copyWith(
-            color: WBColors.fgSecondary,
-            fontSize: 14,
-          ),
+        const SizedBox(height: WBSpacing.lg),
+        const WBEmptyState(
+          illustration: WBEmptyIllustration.noActiveLoads,
+          label: 'No active trip.',
+          sub: 'Pick a load from your board to start.',
         ),
         const SizedBox(height: WBSpacing.lg),
         WBButton(

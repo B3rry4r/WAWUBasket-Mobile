@@ -180,7 +180,10 @@ class AgentTraderDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   if (traderTxns.isEmpty)
-                    _Empty(label: 'No sales logged for this trader yet.')
+                    const WBEmptyState(
+                      illustration: WBEmptyIllustration.noTransaction,
+                      label: 'No sales logged for this trader yet.',
+                    )
                   else
                     WBCard(
                       padding: EdgeInsets.zero,
@@ -237,7 +240,10 @@ class AgentTraderDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   if (traderPayouts.isEmpty)
-                    _Empty(label: 'No cash payouts recorded yet.')
+                    const WBEmptyState(
+                      illustration: WBEmptyIllustration.noTransaction,
+                      label: 'No cash payouts recorded yet.',
+                    )
                   else
                     WBCard(
                       padding: EdgeInsets.zero,

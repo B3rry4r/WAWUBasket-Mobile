@@ -98,6 +98,9 @@ class AppLocalizationsYo extends AppLocalizations {
   String get splashTagline => 'Agbọn kan. Ohun gbogbo.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Fo';
 
   @override
@@ -551,6 +554,9 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get productAddButton => 'Fi sínú agbọn';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'A kò rí ọja náà.';

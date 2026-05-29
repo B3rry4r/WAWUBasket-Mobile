@@ -79,21 +79,11 @@ class _AgentTradersScreenState extends State<AgentTradersScreen> {
                 ),
                 const SizedBox(height: WBSpacing.lg),
                 if (results.isEmpty)
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: WBColors.bgSoft,
-                      borderRadius: BorderRadius.circular(WBRadius.card),
-                    ),
-                    child: Text(
-                      _query.isEmpty
-                          ? context.l10n.agentTradersEmpty
-                          : 'No traders match "$_query".',
-                      style: WBTypography.body.copyWith(
-                        color: WBColors.fgSecondary,
-                        fontSize: 14,
-                      ),
-                    ),
+                  WBEmptyState(
+                    illustration: WBEmptyIllustration.noOrders,
+                    label: _query.isEmpty
+                        ? context.l10n.agentTradersEmpty
+                        : 'No traders match "$_query".',
                   )
                 else
                   for (final t in results)

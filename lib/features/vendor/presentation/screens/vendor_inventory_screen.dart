@@ -199,30 +199,10 @@ class _VendorInventoryScreenState extends State<VendorInventoryScreen> {
                 ),
                 const SizedBox(height: WBSpacing.md),
                 if (items.isEmpty)
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 40),
-                      child: Column(
-                        children: [
-                          const WBIcon(WBIconName.basket,
-                              size: 40, color: WBColors.fgPlaceholder),
-                          const SizedBox(height: WBSpacing.md),
-                          Text(
-                            'No inventory items yet.',
-                            style: WBTypography.body.copyWith(
-                              color: WBColors.fgSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: WBSpacing.sm),
-                          Text(
-                            'Tap + to add your first item.',
-                            style: WBTypography.caption.copyWith(
-                              color: WBColors.fgPlaceholder,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  const WBEmptyState(
+                    illustration: WBEmptyIllustration.noProducts,
+                    label: 'No inventory items yet.',
+                    sub: 'Tap + to add your first item.',
                   )
                 else
                   for (final i in filtered)

@@ -98,6 +98,9 @@ class AppLocalizationsZu extends AppLocalizations {
   String get splashTagline => 'Ubhasikidi owodwa. Konke.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'Yeqa';
 
   @override
@@ -556,6 +559,9 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get productAddButton => 'Engeza engceleni';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'Umkhiqizo awutholakanga.';

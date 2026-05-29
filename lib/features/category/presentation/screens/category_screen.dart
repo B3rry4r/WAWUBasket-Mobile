@@ -207,12 +207,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   Widget _vendorList(BuildContext context, List<Vendor> vendors) {
     if (vendors.isEmpty) {
-      return SliverToBoxAdapter(
+      return const SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: WBSpacing.screenPadding,
           ),
-          child: _emptyHint('No vendors match this filter yet.'),
+          child: WBEmptyState(
+            illustration: WBEmptyIllustration.noProducts,
+            label: 'No vendors match this filter yet.',
+          ),
         ),
       );
     }
@@ -238,12 +241,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   Widget _productGrid(BuildContext context, List<Product> products) {
     if (products.isEmpty) {
-      return SliverToBoxAdapter(
+      return const SliverToBoxAdapter(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: WBSpacing.screenPadding,
           ),
-          child: _emptyHint('No products match this filter yet.'),
+          child: WBEmptyState(
+            illustration: WBEmptyIllustration.noProducts,
+            label: 'No products match this filter yet.',
+          ),
         ),
       );
     }

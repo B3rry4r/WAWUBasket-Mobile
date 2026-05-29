@@ -96,6 +96,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get splashTagline => 'سلة واحدة. كل شيء.';
 
   @override
+  String get splashHeadline => 'One Basket,\nEverything';
+
+  @override
   String get onboardingSkip => 'تخطي';
 
   @override
@@ -545,6 +548,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get productAddButton => 'أضف إلى السلة';
+
+  @override
+  String get productAddedToBasket => 'Added to basket';
 
   @override
   String get productNotFound => 'المنتج غير موجود.';

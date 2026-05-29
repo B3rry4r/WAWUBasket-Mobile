@@ -161,18 +161,10 @@ class _VendorPayoutsScreenState extends State<VendorPayoutsScreen> {
                 ),
               )
             else if (payouts!.isEmpty)
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(WBSpacing.md + 4),
-                decoration: BoxDecoration(
-                  color: WBColors.bgSoft,
-                  borderRadius: BorderRadius.circular(WBRadius.card),
-                ),
-                child: Text(
-                  'No payouts yet. Earnings are paid out automatically.',
-                  style: WBTypography.caption
-                      .copyWith(color: WBColors.fgSecondary),
-                ),
+              const WBEmptyState(
+                illustration: WBEmptyIllustration.noTransaction,
+                label: 'No payouts yet.',
+                sub: 'Earnings are paid out automatically.',
               )
             else
               WBCard(
