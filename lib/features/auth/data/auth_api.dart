@@ -1,4 +1,8 @@
+import 'package:dio/dio.dart';
+
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_config.dart';
+import '../../../core/network/api_exception.dart';
 import '../../../core/network/token_store.dart';
 
 /// Thin typed wrapper over the WAWUBasket `/v1/auth/*` endpoints.
@@ -12,6 +16,26 @@ class AuthApi {
   final _api = ApiClient.instance;
   final _tokens = TokenStore.instance;
 
+  /// Dedicated client for the WAWU ID identity service. Auth (login, OTP,
+  /// sign-up, password recovery) lives there now; role/session endpoints
+  /// stay on the Basket API via [_api].
+  final Dio _wawuId = Dio(BaseOptions(
+    baseUrl: wawuIdBaseUrl,
+    connectTimeout: apiTimeout,
+    receiveTimeout: apiTimeout,
+    sendTimeout: apiTimeout,
+    contentType: 'application/json',
+  ));
+
+  Future<dynamic> _idPost(String path, {Object? body}) async {
+    try {
+      final res = await _wawuId.post<dynamic>(path, data: body);
+      return res.data;
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
+
   // ─── Sign-up (name + phone + email + password, verified by OTP) ─────────
 
   /// Registers the user and triggers an OTP to their phone. The account is
@@ -22,7 +46,7 @@ class AuthApi {
     required String email,
     required String password,
   }) async {
-    await _api.post('/auth/signup', body: {
+    await _idPost('/auth/register', body: {
       'fullName': fullName,
       'phone': phone,
       'email': email,
@@ -32,7 +56,7 @@ class AuthApi {
 
   /// Confirms the sign-up OTP, creating the account and starting a session.
   Future<void> verifySignup(String phone, String code) async {
-    final res = await _api.post('/auth/signup/verify',
+    final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
     await _persist(res);
   }
@@ -41,7 +65,7 @@ class AuthApi {
 
   /// Password sign-in with a phone number or email.
   Future<void> login(String identifier, String password) async {
-    final res = await _api.post('/auth/login',
+    final res = await _idPost('/auth/login',
         body: {'identifier': identifier, 'password': password});
     await _persist(res);
   }
@@ -49,10 +73,10 @@ class AuthApi {
   // ─── OTP-only sign-in (no password) ──────────────────────────────────────
 
   Future<void> startOtp(String phone) =>
-      _api.post('/auth/phone/start', body: {'phone': phone});
+      _idPost('/auth/otp/start', body: {'phone': phone});
 
   Future<void> verifyOtp(String phone, String code) async {
-    final res = await _api.post('/auth/phone/verify',
+    final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
     await _persist(res);
   }
@@ -60,12 +84,12 @@ class AuthApi {
   // ─── Password recovery ──────────────────────────────────────────────────
 
   Future<void> forgotPassword(String identifier, {String method = 'sms'}) =>
-      _api.post('/auth/forgot-password',
+      _idPost('/auth/forgot-password',
           body: {'identifier': identifier, 'method': method});
 
   Future<void> resetPassword(
       String identifier, String code, String newPassword) async {
-    final res = await _api.post('/auth/reset-password', body: {
+    final res = await _idPost('/auth/reset-password', body: {
       'identifier': identifier,
       'code': code,
       'newPassword': newPassword,

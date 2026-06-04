@@ -23,5 +23,12 @@ String get apiOrigin =>
 /// The versioned base URL every request is built against.
 String get apiBaseUrl => '$apiOrigin/v1';
 
+const String _wawuIdOverride = String.fromEnvironment(
+  'WAWU_ID_BASE_URL', defaultValue: ''
+);
+const String _wawuIdFallback = 'https://wawu-id-production.up.railway.app';
+String get wawuIdBaseUrl =>
+  (_wawuIdOverride.isNotEmpty ? _wawuIdOverride : _wawuIdFallback);
+
 /// Per-request timeout.
 const Duration apiTimeout = Duration(seconds: 20);
