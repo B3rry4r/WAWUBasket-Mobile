@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/wb_responsive_exports.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/utils/wb_l10n.dart';
 import '../../../core/widgets/wb_widgets.dart';
+import '../../auth/application/role_controller.dart';
+import '../../shell/presentation/desktop/operator_desktop_scaffold.dart';
 
 /// Trader operator shell. Four tabs, Home · Listings · Prices · Account.
 /// Transport (post-a-load for drivers) is a pushed route from Home, since
@@ -41,6 +44,13 @@ class TraderShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = _navItems(context);
     final activeId = _activeId(items);
+    if (context.isDesktop) {
+      return OperatorDesktopScaffold(
+        role: AppRole.trader,
+        location: location,
+        child: child,
+      );
+    }
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       extendBody: true,

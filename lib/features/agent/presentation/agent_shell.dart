@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/wb_responsive_exports.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/utils/wb_l10n.dart';
 import '../../../core/widgets/wb_widgets.dart';
+import '../../auth/application/role_controller.dart';
+import '../../shell/presentation/desktop/operator_desktop_scaffold.dart';
 
 /// Trade-agent shell. Four tabs, Home, Record sale, Cash payout, Account.
 /// Register-trader is reached as a pushed route from Home's quick action
@@ -41,6 +44,13 @@ class AgentShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = _navItems(context);
     final activeId = _activeId(items);
+    if (context.isDesktop) {
+      return OperatorDesktopScaffold(
+        role: AppRole.agent,
+        location: location,
+        child: child,
+      );
+    }
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       extendBody: true,

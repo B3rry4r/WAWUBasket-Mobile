@@ -69,6 +69,23 @@ import '../../features/trader/presentation/screens/trader_listings_screen.dart';
 import '../../features/trader/presentation/screens/trader_login_screen.dart';
 import '../../features/trader/presentation/screens/trader_prices_screen.dart';
 import '../../features/trader/presentation/screens/trader_transport_screen.dart';
+import '../../features/trader/presentation/desktop/trader_home_desktop_screen.dart';
+import '../../features/trader/presentation/desktop/trader_listings_desktop_screen.dart';
+import '../../features/trader/presentation/desktop/trader_prices_desktop_screen.dart';
+import '../../features/trader/presentation/desktop/trader_listing_edit_desktop_screen.dart';
+import '../../features/trader/presentation/desktop/trader_transport_desktop_screen.dart';
+import '../../features/trader/presentation/desktop/trader_login_desktop_screen.dart';
+import '../../features/trader/presentation/desktop/trader_kyc_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_home_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_record_txn_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_cash_payout_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_register_trader_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_sync_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_traders_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_trader_detail_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_earnings_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_login_desktop_screen.dart';
+import '../../features/agent/presentation/desktop/agent_kyc_desktop_screen.dart';
 import '../../features/trader/presentation/trader_shell.dart';
 import '../../features/driver/presentation/driver_shell.dart';
 import '../../features/driver/presentation/screens/driver_active_trip_screen.dart';
@@ -93,6 +110,20 @@ import '../../features/vendor/presentation/screens/vendor_payouts_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_reviews_screen.dart';
 import '../../features/vendor/presentation/screens/vendor_settings_screen.dart';
 import '../../features/vendor/presentation/vendor_shell.dart';
+import '../../features/vendor/presentation/desktop/vendor_home_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_orders_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_menu_desktop_screen.dart';
+import '../../features/account/presentation/desktop/operator_account_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_order_detail_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_payouts_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_alerts_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_menu_edit_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_inventory_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_analytics_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_reviews_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_settings_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_login_desktop_screen.dart';
+import '../../features/vendor/presentation/desktop/vendor_kyc_desktop_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
@@ -137,6 +168,26 @@ import '../../features/shopping/presentation/desktop/delivery_complete_desktop_s
 import '../../features/shopping/presentation/desktop/tracking_desktop_screen.dart';
 import '../../features/account/presentation/desktop/order_history_desktop_screen.dart';
 import '../../features/account/presentation/desktop/receipt_desktop_screen.dart';
+import '../../features/account/presentation/desktop/profile_desktop_screen.dart';
+import '../../features/account/presentation/desktop/favorites_desktop_screen.dart';
+import '../../features/account/presentation/desktop/wallet_desktop_screen.dart';
+import '../../features/account/presentation/desktop/personal_info_desktop_screen.dart';
+import '../../features/account/presentation/desktop/saved_addresses_desktop_screen.dart';
+import '../../features/account/presentation/desktop/add_address_desktop_screen.dart';
+import '../../features/account/presentation/desktop/notifications_desktop_screen.dart';
+import '../../features/account/presentation/desktop/support_desktop_screen.dart';
+import '../../features/account/presentation/desktop/chat_inbox_desktop_screen.dart';
+import '../../features/account/presentation/desktop/chat_desktop_screen.dart';
+import '../../features/account/presentation/desktop/top_up_desktop_screen.dart';
+import '../../features/account/presentation/desktop/security_desktop_screen.dart';
+import '../../features/account/presentation/desktop/dietary_preferences_desktop_screen.dart';
+import '../../features/account/presentation/desktop/language_desktop_screen.dart';
+import '../../features/account/presentation/desktop/about_desktop_screen.dart';
+import '../../features/account/presentation/desktop/terms_desktop_screen.dart';
+import '../../features/account/presentation/desktop/privacy_desktop_screen.dart';
+import '../../features/account/presentation/desktop/wawu_plus_desktop_screen.dart';
+import '../../features/account/presentation/desktop/delete_account_desktop_screen.dart';
+import '../../features/account/presentation/desktop/dev_settings_desktop_screen.dart';
 import '../theme/wb_theme_exports.dart';
 import 'app_routes.dart';
 
@@ -376,7 +427,10 @@ GoRouter buildRouter() {
           ),
           GoRoute(
             path: AppRoutes.favorites,
-            pageBuilder: (_, _) => _tabFade(const FavoritesScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: FavoritesScreen(),
+              desktop: FavoritesDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.orders,
@@ -387,7 +441,10 @@ GoRouter buildRouter() {
           ),
           GoRoute(
             path: AppRoutes.profile,
-            pageBuilder: (_, _) => _tabFade(const ProfileScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: ProfileScreen(),
+              desktop: ProfileDesktopScreen(),
+            )),
           ),
         ],
       ),
@@ -484,59 +541,101 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.wallet,
-        builder: (_, _) => const WalletScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: WalletScreen(),
+          desktop: WalletDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.notifications,
-        builder: (_, _) => const NotificationsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: NotificationsScreen(),
+          desktop: NotificationsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.support,
-        builder: (_, _) => const SupportScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: SupportScreen(),
+          desktop: SupportDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.personalInfo,
-        builder: (_, _) => const PersonalInfoScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: PersonalInfoScreen(),
+          desktop: PersonalInfoDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.savedAddresses,
-        builder: (_, _) => const SavedAddressesScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: SavedAddressesScreen(),
+          desktop: SavedAddressesDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.language,
-        builder: (_, _) => const LanguageScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const LanguageScreen(),
+          desktop: const LanguageDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.about,
-        builder: (_, _) => const AboutScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const AboutScreen(),
+          desktop: const AboutDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.terms,
-        builder: (_, _) => const TermsScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const TermsScreen(),
+          desktop: const TermsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.privacy,
-        builder: (_, _) => const PrivacyScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const PrivacyScreen(),
+          desktop: const PrivacyDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.wawuPlus,
-        builder: (_, _) => const WawuPlusScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const WawuPlusScreen(),
+          desktop: const WawuPlusDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.dietary,
-        builder: (_, _) => const DietaryPreferencesScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const DietaryPreferencesScreen(),
+          desktop: const DietaryPreferencesDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.security,
-        builder: (_, _) => const SecurityScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const SecurityScreen(),
+          desktop: const SecurityDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.deleteAccount,
-        builder: (_, _) => const DeleteAccountScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const DeleteAccountScreen(),
+          desktop: const DeleteAccountDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.devSettings,
-        builder: (_, _) => const DevSettingsScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const DevSettingsScreen(),
+          desktop: const DevSettingsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.trade,
@@ -618,41 +717,71 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.addAddress,
-        builder: (_, state) => AddAddressScreen(
-          addressId: state.uri.queryParameters['id'],
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: AddAddressScreen(
+            addressId: state.uri.queryParameters['id'],
+          ),
+          desktop: AddAddressDesktopScreen(
+            addressId: state.uri.queryParameters['id'],
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.walletTopUp,
-        builder: (_, _) => const TopUpScreen(kind: WalletActionKind.topUp),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TopUpScreen(kind: WalletActionKind.topUp),
+          desktop: TopUpDesktopScreen(kind: WalletActionKind.topUp),
+        ),
       ),
       GoRoute(
         path: AppRoutes.walletSend,
-        builder: (_, _) => const TopUpScreen(kind: WalletActionKind.send),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TopUpScreen(kind: WalletActionKind.send),
+          desktop: TopUpDesktopScreen(kind: WalletActionKind.send),
+        ),
       ),
       GoRoute(
         path: AppRoutes.walletWithdraw,
-        builder: (_, _) => const TopUpScreen(kind: WalletActionKind.withdraw),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TopUpScreen(kind: WalletActionKind.withdraw),
+          desktop: TopUpDesktopScreen(kind: WalletActionKind.withdraw),
+        ),
       ),
       GoRoute(
         path: AppRoutes.walletCards,
-        builder: (_, _) => const TopUpScreen(kind: WalletActionKind.cards),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TopUpScreen(kind: WalletActionKind.cards),
+          desktop: TopUpDesktopScreen(kind: WalletActionKind.cards),
+        ),
       ),
       GoRoute(
         path: AppRoutes.chatInbox,
-        builder: (_, _) => const ChatInboxScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: ChatInboxScreen(),
+          desktop: ChatInboxDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.chatRider,
-        builder: (_, state) => ChatScreen(
-          kind: ChatContextKind.rider,
-          orderId: state.uri.queryParameters['orderId'],
-          title: state.uri.queryParameters['title'],
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: ChatScreen(
+            kind: ChatContextKind.rider,
+            orderId: state.uri.queryParameters['orderId'],
+            title: state.uri.queryParameters['title'],
+          ),
+          desktop: ChatDesktopScreen(
+            kind: ChatContextKind.rider,
+            orderId: state.uri.queryParameters['orderId'],
+            title: state.uri.queryParameters['title'],
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.chatSupport,
-        builder: (_, _) => const ChatScreen(kind: ChatContextKind.support),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: ChatScreen(kind: ChatContextKind.support),
+          desktop: ChatDesktopScreen(kind: ChatContextKind.support),
+        ),
       ),
       GoRoute(
         path: AppRoutes.receipt,
@@ -693,11 +822,17 @@ GoRouter buildRouter() {
       // ───────── Vendor (RBAC) ─────────
       GoRoute(
         path: AppRoutes.vendorLogin,
-        builder: (_, _) => const VendorLoginScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorLoginScreen(),
+          desktop: VendorLoginDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendorKyc,
-        builder: (_, _) => const VendorKycScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorKycScreen(),
+          desktop: VendorKycDesktopScreen(),
+        ),
       ),
       ShellRoute(
         builder: (context, state, child) => VendorShell(
@@ -707,69 +842,112 @@ GoRouter buildRouter() {
         routes: [
           GoRoute(
             path: AppRoutes.vendorHome,
-            pageBuilder: (_, _) => _tabFade(const VendorHomeScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: VendorHomeScreen(),
+              desktop: VendorHomeDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.vendorOrders,
-            pageBuilder: (_, _) => _tabFade(const VendorOrdersScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: VendorOrdersScreen(),
+              desktop: VendorOrdersDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.vendorMenu,
-            pageBuilder: (_, _) => _tabFade(const VendorMenuScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: VendorMenuScreen(),
+              desktop: VendorMenuDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.vendorAccount,
-            pageBuilder: (_, _) =>
-                _tabFade(const OperatorAccountScreen(role: AppRole.vendor)),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: OperatorAccountScreen(role: AppRole.vendor),
+              desktop: OperatorAccountDesktopScreen(role: AppRole.vendor),
+            )),
           ),
         ],
       ),
       GoRoute(
         path: '${AppRoutes.vendorOrderDetail}/:id',
-        builder: (_, state) => VendorOrderDetailScreen(
-          orderId: state.pathParameters['id']!,
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: VendorOrderDetailScreen(
+            orderId: state.pathParameters['id']!,
+          ),
+          desktop: VendorOrderDetailDesktopScreen(
+            orderId: state.pathParameters['id']!,
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.vendorPayouts,
-        builder: (_, _) => const VendorPayoutsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorPayoutsScreen(),
+          desktop: VendorPayoutsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendorAlerts,
-        builder: (_, _) => const VendorAlertsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorAlertsScreen(),
+          desktop: VendorAlertsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendorMenuEdit,
         builder: (_, state) {
           final id = state.uri.queryParameters['id'];
-          return VendorMenuEditScreen(itemId: id);
+          return WBAdaptiveScreen(
+            mobile: VendorMenuEditScreen(itemId: id),
+            desktop: VendorMenuEditDesktopScreen(itemId: id),
+          );
         },
       ),
       GoRoute(
         path: AppRoutes.vendorInventory,
-        builder: (_, _) => const VendorInventoryScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorInventoryScreen(),
+          desktop: VendorInventoryDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendorAnalytics,
-        builder: (_, _) => const VendorAnalyticsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorAnalyticsScreen(),
+          desktop: VendorAnalyticsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendorReviews,
-        builder: (_, _) => const VendorReviewsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorReviewsScreen(),
+          desktop: VendorReviewsDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendorSettings,
-        builder: (_, _) => const VendorSettingsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorSettingsScreen(),
+          desktop: VendorSettingsDesktopScreen(),
+        ),
       ),
 
       // ───────── Agent (RBAC) ─────────
       GoRoute(
         path: AppRoutes.agentLogin,
-        builder: (_, _) => const AgentLoginScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: AgentLoginScreen(),
+          desktop: AgentLoginDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.agentKyc,
-        builder: (_, _) => const AgentKycScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: AgentKycScreen(),
+          desktop: AgentKycDesktopScreen(),
+        ),
       ),
       ShellRoute(
         builder: (context, state, child) => AgentShell(
@@ -779,44 +957,72 @@ GoRouter buildRouter() {
         routes: [
           GoRoute(
             path: AppRoutes.agentHome,
-            pageBuilder: (_, _) => _tabFade(const AgentHomeScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: AgentHomeScreen(),
+              desktop: AgentHomeDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.agentRecordTxn,
-            pageBuilder: (_, _) => _tabFade(const AgentRecordTxnScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: AgentRecordTxnScreen(),
+              desktop: AgentRecordTxnDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.agentCashPayout,
-            pageBuilder: (_, _) => _tabFade(const AgentCashPayoutScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: AgentCashPayoutScreen(),
+              desktop: AgentCashPayoutDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.agentAccount,
-            pageBuilder: (_, _) =>
-                _tabFade(const OperatorAccountScreen(role: AppRole.agent)),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: OperatorAccountScreen(role: AppRole.agent),
+              desktop: OperatorAccountDesktopScreen(role: AppRole.agent),
+            )),
           ),
         ],
       ),
       GoRoute(
         path: AppRoutes.agentRegisterTrader,
-        builder: (_, _) => const AgentRegisterTraderScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: AgentRegisterTraderScreen(),
+          desktop: AgentRegisterTraderDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.agentSync,
-        builder: (_, _) => const AgentSyncScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: AgentSyncScreen(),
+          desktop: AgentSyncDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.agentTraders,
-        builder: (_, _) => const AgentTradersScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: AgentTradersScreen(),
+          desktop: AgentTradersDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.agentTraderDetail}/:id',
-        builder: (_, state) => AgentTraderDetailScreen(
-          traderId: state.pathParameters['id']!,
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: AgentTraderDetailScreen(
+            traderId: state.pathParameters['id']!,
+          ),
+          desktop: AgentTraderDetailDesktopScreen(
+            traderId: state.pathParameters['id']!,
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.agentEarnings,
-        builder: (_, _) => const AgentEarningsScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: AgentEarningsScreen(),
+          desktop: AgentEarningsDesktopScreen(),
+        ),
       ),
 
       // ───────── Rider (RBAC) ─────────
@@ -861,11 +1067,17 @@ GoRouter buildRouter() {
       // ───────── Trader (RBAC) ─────────
       GoRoute(
         path: AppRoutes.traderLogin,
-        builder: (_, _) => const TraderLoginScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TraderLoginScreen(),
+          desktop: TraderLoginDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.traderKyc,
-        builder: (_, _) => const TraderKycScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TraderKycScreen(),
+          desktop: TraderKycDesktopScreen(),
+        ),
       ),
       ShellRoute(
         builder: (context, state, child) => TraderShell(
@@ -875,32 +1087,51 @@ GoRouter buildRouter() {
         routes: [
           GoRoute(
             path: AppRoutes.traderHome,
-            pageBuilder: (_, _) => _tabFade(const TraderHomeScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: TraderHomeScreen(),
+              desktop: TraderHomeDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.traderListings,
-            pageBuilder: (_, _) => _tabFade(const TraderListingsScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: TraderListingsScreen(),
+              desktop: TraderListingsDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.traderPrices,
-            pageBuilder: (_, _) => _tabFade(const TraderPricesScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: TraderPricesScreen(),
+              desktop: TraderPricesDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.traderAccount,
-            pageBuilder: (_, _) =>
-                _tabFade(const OperatorAccountScreen(role: AppRole.trader)),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: OperatorAccountScreen(role: AppRole.trader),
+              desktop: OperatorAccountDesktopScreen(role: AppRole.trader),
+            )),
           ),
         ],
       ),
       GoRoute(
         path: '${AppRoutes.traderListings}/edit',
-        builder: (_, state) => TraderListingEditScreen(
-          listingId: state.uri.queryParameters['id'],
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: TraderListingEditScreen(
+            listingId: state.uri.queryParameters['id'],
+          ),
+          desktop: TraderListingEditDesktopScreen(
+            listingId: state.uri.queryParameters['id'],
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.traderTransport,
-        builder: (_, _) => const TraderTransportScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TraderTransportScreen(),
+          desktop: TraderTransportDesktopScreen(),
+        ),
       ),
 
       // ───────── Driver (RBAC) ─────────
