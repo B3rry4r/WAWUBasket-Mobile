@@ -456,6 +456,11 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
 
   late final AnimationController _snapCtrl;
   Animation<double>? _snapAnim;
+  CurvedAnimation? _snapCurve;
+
+  void _onSnapTick() {
+    if (mounted) setState(() => _rotation = _snapAnim?.value ?? _rotation);
+  }
 
   static const _sensitivity = 0.0048;
   static const _friction = 0.910;
@@ -494,6 +499,8 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   @override
   void dispose() {
     _ticker?.dispose();
+    _snapAnim?.removeListener(_onSnapTick);
+    _snapCurve?.dispose();
     _snapCtrl.dispose();
     super.dispose();
   }
@@ -582,11 +589,13 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     _snapCtrl.reset();
     final begin = _rotation;
     final curve = spring ? Curves.easeOutBack : Curves.easeOutCubic;
-    _snapAnim = Tween<double>(begin: begin, end: dest).animate(
-      CurvedAnimation(parent: _snapCtrl, curve: curve),
-    )..addListener(() {
-        if (mounted) setState(() => _rotation = _snapAnim!.value);
-      });
+    // Detach the previous tick listener and dispose the old CurvedAnimation so
+    // stale ones don't pile up as listeners on _snapCtrl (one per snap).
+    _snapAnim?.removeListener(_onSnapTick);
+    _snapCurve?.dispose();
+    _snapCurve = CurvedAnimation(parent: _snapCtrl, curve: curve);
+    _snapAnim = Tween<double>(begin: begin, end: dest).animate(_snapCurve!)
+      ..addListener(_onSnapTick);
     _snapCtrl.forward();
   }
 

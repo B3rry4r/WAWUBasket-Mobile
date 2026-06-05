@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -72,11 +73,29 @@ class _SignaturePadState extends State<SignaturePad> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: GestureDetector(
-                onPanStart: (d) =>
-                    widget.controller.beginStroke(d.localPosition),
-                onPanUpdate: (d) =>
-                    widget.controller.appendToStroke(d.localPosition),
+              // A RawGestureDetector with an eager pan recognizer. The default
+              // GestureDetector defers its hit-test to the CustomPaint child
+              // (which isn't hittable), so taps never land; and a plain pan
+              // recognizer loses the gesture arena to the surrounding
+              // scrollable. _EagerPanGestureRecognizer claims every pointer so
+              // strokes draw reliably even inside a ListView.
+              child: RawGestureDetector(
+                behavior: HitTestBehavior.opaque,
+                gestures: {
+                  _EagerPanGestureRecognizer:
+                      GestureRecognizerFactoryWithHandlers<
+                          _EagerPanGestureRecognizer>(
+                    () => _EagerPanGestureRecognizer(),
+                    (r) {
+                      r.onStart = (d) {
+                        widget.controller.beginStroke(d.localPosition);
+                      };
+                      r.onUpdate = (d) {
+                        widget.controller.appendToStroke(d.localPosition);
+                      };
+                    },
+                  ),
+                },
                 child: CustomPaint(
                   painter: _InkPainter(widget.controller.strokes),
                   size: Size.infinite,
@@ -177,4 +196,17 @@ class _InkPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _InkPainter oldDelegate) =>
       oldDelegate.strokes != strokes;
+}
+
+/// A [PanGestureRecognizer] that immediately wins the gesture arena instead of
+/// yielding to an ancestor scrollable. Without this, a signature pad placed
+/// inside a `ListView` loses vertical drags to the list's own scroll
+/// recognizer and the user can't draw.
+class _EagerPanGestureRecognizer extends PanGestureRecognizer {
+  @override
+  void rejectGesture(int pointer) {
+    // The arena tried to hand the pointer to another member (the scrollable);
+    // accept it here so the stroke keeps drawing.
+    acceptGesture(pointer);
+  }
 }

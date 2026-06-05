@@ -1,3 +1,5 @@
+import '../../../../core/network/api_parse.dart';
+
 /// One line of an order as returned by the API.
 class OrderItemModel {
   const OrderItemModel({
@@ -15,10 +17,10 @@ class OrderItemModel {
   int get lineTotal => unitPrice * quantity;
 
   factory OrderItemModel.fromJson(Map<String, dynamic> j) => OrderItemModel(
-        title: (j['title'] ?? '').toString(),
-        quantity: (j['quantity'] as num?)?.toInt() ?? 1,
-        unitPrice: int.tryParse('${j['unitPrice'] ?? 0}') ?? 0,
-        note: j['note'] as String?,
+        title: safeString(j['title']),
+        quantity: safeInt(j['quantity'], fallback: 1),
+        unitPrice: safeMoney(j['unitPrice'], field: 'unitPrice'),
+        note: safeStringOrNull(j['note']),
       );
 }
 
@@ -130,38 +132,36 @@ class OrderModel {
       const ['delivered', 'confirmed', 'settled'].contains(state);
 
   factory OrderModel.fromJson(Map<String, dynamic> j) {
-    int money(dynamic v) => int.tryParse('${v ?? 0}') ?? 0;
-    final escrow = (j['escrowHold'] as Map?)?.cast<String, dynamic>();
-    final delivery = (j['delivery'] as Map?)?.cast<String, dynamic>();
-    final rider = (delivery?['rider'] as Map?)?.cast<String, dynamic>();
-    final vendor = (j['vendor'] as Map?)?.cast<String, dynamic>();
+    final escrow = safeMap(j['escrowHold'], context: 'escrowHold');
+    final delivery = safeMap(j['delivery'], context: 'delivery');
+    final rider = safeMap(delivery['rider'], context: 'rider');
+    final vendor = safeMap(j['vendor'], context: 'vendor');
     return OrderModel(
-      id: (j['id'] ?? '').toString(),
-      state: (j['state'] ?? 'placed').toString(),
-      subtotal: money(j['subtotal']),
-      deliveryFee: money(j['deliveryFee']),
-      serviceFee: money(j['serviceFee']),
-      total: money(j['total']),
-      placedAt:
-          DateTime.tryParse('${j['placedAt'] ?? ''}') ?? DateTime.now(),
-      items: ((j['items'] as List?) ?? const [])
-          .map((e) => OrderItemModel.fromJson(e as Map<String, dynamic>))
+      id: safeString(j['id']),
+      state: safeString(j['state'], fallback: 'placed'),
+      // Core amounts are strict — a malformed value surfaces an error rather
+      // than silently rendering a wrong total. Fees may legitimately be 0.
+      subtotal: safeMoney(j['subtotal'], field: 'subtotal'),
+      deliveryFee: safeMoney(j['deliveryFee'], field: 'deliveryFee', orZero: true),
+      serviceFee: safeMoney(j['serviceFee'], field: 'serviceFee', orZero: true),
+      total: safeMoney(j['total'], field: 'total'),
+      placedAt: safeDate(j['placedAt']) ?? DateTime.now(),
+      items: safeMapList(j['items'], context: 'orderItems')
+          .map(OrderItemModel.fromJson)
           .toList(),
-      escrowStatus: escrow?['status'] as String?,
-      deliveryState: delivery?['state'] as String?,
-      riderName: rider?['displayName'] as String?,
-      notes: j['notes'] as String?,
-      scheduledFor: j['scheduledFor'] != null
-          ? DateTime.tryParse('${j['scheduledFor']}')
-          : null,
-      parentOrderId: j['parentOrderId'] as String?,
-      orderType: j['orderType'] as String?,
-      recipeId: j['recipeId'] as String?,
-      recipeSizeId: j['recipeSizeId'] as String?,
-      vendorName: vendor?['displayName'] as String? ??
-          j['vendorName'] as String?,
-      childOrders: ((j['childOrders'] as List?) ?? const [])
-          .map((e) => OrderModel.fromJson((e as Map).cast<String, dynamic>()))
+      escrowStatus: safeStringOrNull(escrow['status']),
+      deliveryState: safeStringOrNull(delivery['state']),
+      riderName: safeStringOrNull(rider['displayName']),
+      notes: safeStringOrNull(j['notes']),
+      scheduledFor: safeDate(j['scheduledFor']),
+      parentOrderId: safeStringOrNull(j['parentOrderId']),
+      orderType: safeStringOrNull(j['orderType']),
+      recipeId: safeStringOrNull(j['recipeId']),
+      recipeSizeId: safeStringOrNull(j['recipeSizeId']),
+      vendorName:
+          safeStringOrNull(vendor['displayName']) ?? safeStringOrNull(j['vendorName']),
+      childOrders: safeMapList(j['childOrders'], context: 'childOrders')
+          .map(OrderModel.fromJson)
           .toList(),
     );
   }

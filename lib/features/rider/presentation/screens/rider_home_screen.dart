@@ -74,13 +74,30 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
     final alreadyGranted = await Permission.locationAlways.isGranted ||
         await Permission.locationWhenInUse.isGranted;
     if (alreadyGranted) {
+      _primeLocation();
       if (mounted && RiderController.instance.online.value) _startTracking();
       return;
     }
     // First time or permission was revoked — prompt once.
     final granted = await WBPermissions.requestLocationAlways();
     if (!granted || !mounted) return;
+    _primeLocation();
     if (RiderController.instance.online.value) _startTracking();
+  }
+
+  /// One-shot GPS read that publishes the rider's position to
+  /// [RiderController] so the map can centre on them — even while offline,
+  /// when the tracking stream isn't running.
+  void _primeLocation() {
+    Geolocator.getCurrentPosition(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        timeLimit: Duration(seconds: 10),
+      ),
+    )
+        .then((p) =>
+            RiderController.instance.updatePosition(p.latitude, p.longitude))
+        .catchError((_) {});
   }
 
   void _startTracking() {

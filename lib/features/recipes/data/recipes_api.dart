@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_parse.dart';
 import '../domain/models/recipe.dart';
 import '../domain/models/recipe_cart_item.dart';
 import '../domain/models/recipe_match.dart';
@@ -19,17 +20,17 @@ class RecipesApi {
     final res = await _api.get(
       '/recipes',
       query: params.isEmpty ? null : params,
-    ) as Map<String, dynamic>;
-    final raw = (res['recipes'] as List?) ?? const [];
-    return raw
-        .map((e) => Recipe.fromJson((e as Map).cast<String, dynamic>()))
+    );
+    return safeMapList(safeMap(res, context: 'recipes')['recipes'],
+            context: 'recipes')
+        .map(Recipe.fromJson)
         .toList();
   }
 
   /// Single recipe with `sizes` and `ingredients` populated.
   Future<Recipe> detail(String slug) async {
-    final res = await _api.get('/recipes/$slug') as Map<String, dynamic>;
-    return Recipe.fromJson(res);
+    final res = await _api.get('/recipes/$slug');
+    return Recipe.fromJson(safeMap(res, context: 'recipe'));
   }
 
   /// Quotes a recipe at a given size. `lat`/`lng` let the engine prefer
@@ -43,10 +44,8 @@ class RecipesApi {
     final body = <String, dynamic>{'sizeId': sizeId};
     if (lat != null) body['lat'] = lat;
     if (lng != null) body['lng'] = lng;
-    final res =
-        await _api.post('/recipes/$recipeId/match', body: body)
-            as Map<String, dynamic>;
-    return RecipeMatch.fromJson(res);
+    final res = await _api.post('/recipes/$recipeId/match', body: body);
+    return RecipeMatch.fromJson(safeMap(res, context: 'recipeMatch'));
   }
 
   /// Adds a recipe combo to the signed-in user's basket. The server
@@ -63,19 +62,20 @@ class RecipesApi {
     };
     if (lat != null) body['lat'] = lat;
     if (lng != null) body['lng'] = lng;
-    final res = await _api.post('/recipes/cart', body: body)
-        as Map<String, dynamic>;
-    final item =
-        (res['recipeCartItem'] as Map?)?.cast<String, dynamic>() ?? res;
+    final res = safeMap(await _api.post('/recipes/cart', body: body),
+        context: 'addToCart');
+    final item = res['recipeCartItem'] != null
+        ? safeMap(res['recipeCartItem'], context: 'recipeCartItem')
+        : res;
     return RecipeCartItem.fromJson(item);
   }
 
   /// All recipe combos in the signed-in user's basket.
   Future<List<RecipeCartItem>> cartItems() async {
-    final res = await _api.get('/recipes/cart') as Map<String, dynamic>;
-    final raw = (res['items'] as List?) ?? const [];
-    return raw
-        .map((e) => RecipeCartItem.fromJson((e as Map).cast<String, dynamic>()))
+    final res = await _api.get('/recipes/cart');
+    return safeMapList(safeMap(res, context: 'recipeCart')['items'],
+            context: 'recipeCartItems')
+        .map(RecipeCartItem.fromJson)
         .toList();
   }
 
@@ -93,10 +93,11 @@ class RecipesApi {
       '/recipes/cart/checkout',
       body: {'addressId': addressId},
     );
-    final map = (res as Map).cast<String, dynamic>();
+    final map = safeMap(res, context: 'recipeCheckout');
     // The endpoint shape is `{ order: {...} }`; surface a flat map that
     // mirrors the regular orders endpoint for caller convenience.
-    final order = (map['order'] as Map?)?.cast<String, dynamic>();
-    return order ?? map;
+    return map['order'] != null
+        ? safeMap(map['order'], context: 'recipeCheckoutOrder')
+        : map;
   }
 }

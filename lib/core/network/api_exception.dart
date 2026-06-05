@@ -41,7 +41,7 @@ class ApiException implements Exception {
   }
 
   static String _fallbackForStatus(int? status) => switch (status) {
-        401 => 'Incorrect code or password. Please try again.',
+        401 => 'Your session has expired. Please sign in again.',
         403 => "You don't have permission to do that.",
         404 => 'Not found.',
         409 => 'This already exists.',
@@ -52,11 +52,17 @@ class ApiException implements Exception {
 
   /// The API's error body is `{ statusCode, message, ... }`, where
   /// `message` is a string or (from class-validator) a list of strings.
+  ///
+  /// Older API builds (or a raw NestJS HttpException) can nest the body under
+  /// `message` itself — `{ message: { statusCode, message, error } }` — so we
+  /// unwrap one level of nesting before giving up, to surface the real reason
+  /// instead of a generic status fallback.
   static String? _extractMessage(dynamic data) {
     if (data is Map) {
       final m = data['message'];
-      if (m is String) return m;
+      if (m is String && m.isNotEmpty) return m;
       if (m is List && m.isNotEmpty) return m.first.toString();
+      if (m is Map) return _extractMessage(m);
     }
     if (data is String && data.isNotEmpty) return data;
     return null;

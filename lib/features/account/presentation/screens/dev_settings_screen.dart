@@ -7,6 +7,7 @@ import '../../../../core/services/feature_flag_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../auth/application/role_controller.dart';
 
 /// Dev / admin screen to toggle server-side feature flags in real time.
 /// Only accessible when the active user has the admin role.
@@ -78,6 +79,33 @@ class _DevSettingsScreenState extends State<DevSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Defense-in-depth: the profile entry is already admin-gated, but block
+    // direct deep-links to this route for anyone without the admin role.
+    if (RoleController.instance.statusOf(AppRole.admin) != RoleStatus.approved) {
+      return Scaffold(
+        backgroundColor: WBColors.bgSecondary,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(WBSpacing.screenPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 12),
+                WBBackChip(onPressed: () => context.pop()),
+                const Spacer(),
+                Center(
+                  child: Text(
+                    "You don't have access to this screen.",
+                    style: WBTypography.body,
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(

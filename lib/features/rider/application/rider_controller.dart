@@ -190,14 +190,21 @@ class RiderController {
 
   void updatePosition(double lat, double lng) {
     currentPosition.value = (lat: lat, lng: lng);
-    _api.updateLocation(lat, lng).catchError((_) {});
+    // Best-effort server ping. Failures are non-fatal (the next fix retries)
+    // but we log them so a persistently-failing uplink is diagnosable rather
+    // than silently dropping the rider's location.
+    _api.updateLocation(lat, lng).catchError(
+      (Object e) => debugPrint('[rider] updateLocation failed: $e'),
+    );
   }
 
   /// Pushes the current online state to the server. Called on screen init so
   /// the DB record matches the app's default-online state without waiting for
   /// the user to toggle.
   void syncOnline() {
-    _api.setOnline(online.value).catchError((_) {});
+    _api.setOnline(online.value).catchError(
+      (Object e) => debugPrint('[rider] syncOnline failed: $e'),
+    );
   }
 
   /// Pulls the rider's pending delivery offers from the API.

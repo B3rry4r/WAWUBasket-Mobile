@@ -145,6 +145,7 @@ class RoleSwitcherSheet extends StatelessWidget {
         ..showSnackBar(SnackBar(content: Text(e.message)));
       return;
     }
+    if (!context.mounted) return;
     RoleController.instance.setRole(role);
     router.go(role.homeRoute);
   }

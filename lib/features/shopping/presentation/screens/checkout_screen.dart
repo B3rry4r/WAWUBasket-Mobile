@@ -6,8 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/config/pricing.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/utils/wb_validators.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/application/address_controller.dart';
 import '../../../recipes/application/recipe_cart_controller.dart';
@@ -87,6 +89,18 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   }
 
   Future<void> _placeOrder() async {
+    // Validate gift-recipient details up front so we never send blank/invalid
+    // recipient data to the API for a "sending to someone else" order.
+    if (_forSomeoneElse) {
+      if (_recipientNameCtrl.text.trim().isEmpty) {
+        wbShowSnack(context, 'Enter the recipient\'s name.');
+        return;
+      }
+      if (!WbValidators.isValidPhone(_recipientPhoneCtrl.text)) {
+        wbShowSnack(context, 'Enter a valid recipient phone number.');
+        return;
+      }
+    }
     setState(() => _placing = true);
     try {
       final hasRecipes =
@@ -237,8 +251,8 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       (s, i) => s + (i.totalPriceKobo ~/ 100),
     );
     final subtotal = productSubtotal + recipeSubtotal;
-    var delivery = 600;
-    final serviceFee = (subtotal * 750 / 10000).ceil().clamp(50, 5000);
+    var delivery = WbPricing.deliveryFeeNaira;
+    final serviceFee = WbPricing.serviceFee(subtotal);
     final total = subtotal + delivery + serviceFee;
 
     // Show waiting-for-payment screen while polling.

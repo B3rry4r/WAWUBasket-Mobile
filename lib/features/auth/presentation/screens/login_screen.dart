@@ -76,55 +76,34 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _submit() async {
-    if (_identifier.text.trim().isEmpty || _password.text.isEmpty) {
+    // Trim for the emptiness check (a spaces-only password should be rejected
+    // here, not bounce off a 401), but send the password verbatim — it may
+    // legitimately contain leading/trailing characters.
+    if (_identifier.text.trim().isEmpty || _password.text.trim().isEmpty) {
       wbShowSnack(context, context.l10n.loginErrorEmpty);
       return;
     }
     setState(() => _busy = true);
-    debugPrint('[LOGIN] submit started — identifier: ${_identifier.text.trim()}');
     try {
-      debugPrint('[LOGIN] calling AuthApi.login...');
       await AuthApi.instance.login(_identifier.text.trim(), _password.text);
-      debugPrint('[LOGIN] login OK — access token present: ${TokenStore.instance.accessToken?.isNotEmpty}');
-
-      debugPrint('[LOGIN] syncing roles from API...');
       await RoleController.instance.syncFromApi();
-      debugPrint('[LOGIN] syncFromApi done — role: ${RoleController.instance.role}, hasEverSignedIn: ${RoleController.instance.hasEverSignedIn}');
-
       GuestModeController.instance.exit();
-      debugPrint('[LOGIN] guest mode exited');
-
       NotificationService.instance.registerToken();
-      debugPrint('[LOGIN] registerToken called (no-op on web)');
 
-      if (!mounted) {
-        debugPrint('[LOGIN] widget unmounted after registerToken — aborting');
-        return;
-      }
+      if (!mounted) return;
       await _offerBiometric();
-      if (!mounted) {
-        debugPrint('[LOGIN] widget unmounted after offerBiometric — aborting');
-        return;
-      }
+      if (!mounted) return;
       await _resolveBioButtonVisibility();
-      if (!mounted) {
-        debugPrint('[LOGIN] widget unmounted after resolveBioVisibility — aborting');
-        return;
-      }
-      debugPrint('[LOGIN] calling _navigateAfterAuth...');
+      if (!mounted) return;
       _navigateAfterAuth();
     } on ApiException catch (e) {
-      debugPrint('[LOGIN] ApiException: ${e.message}');
       if (mounted) wbShowSnack(context, e.message);
-    } catch (e, st) {
-      debugPrint('[LOGIN] UNEXPECTED ERROR: $e');
-      debugPrint('[LOGIN] stack trace: $st');
-      if (mounted) {
-        wbShowSnack(context, 'Login error: $e');
-      }
+    } catch (_) {
+      // Unexpected (non-API) failure — surface a generic message without
+      // leaking internal details to the UI or logs.
+      if (mounted) wbShowSnack(context, 'Something went wrong. Please try again.');
     } finally {
       if (mounted) setState(() => _busy = false);
-      debugPrint('[LOGIN] submit finished');
     }
   }
 
@@ -136,18 +115,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final lastRole = ctrl.role;
     final isReturning = ctrl.hasEverSignedIn;
     final status = ctrl.statusOf(lastRole);
-    debugPrint('[LOGIN] _navigateAfterAuth — role: $lastRole, isReturning: $isReturning, status: $status, mounted: $mounted');
     if (isReturning && status == RoleStatus.approved) {
-      final route = lastRole.homeRoute;
-      debugPrint('[LOGIN] navigating to role home: $route');
       ctrl.setRole(lastRole);
-      context.go(route);
+      context.go(lastRole.homeRoute);
     } else {
-      debugPrint('[LOGIN] navigating to role select');
       ctrl.setRole(AppRole.customer);
       context.go(AppRoutes.roleSelect);
     }
-    debugPrint('[LOGIN] context.go called — navigation dispatched');
   }
 
   /// After a password sign-in, offers to turn on biometric unlock so the
@@ -155,7 +129,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _offerBiometric() async {
     if (kIsWeb) return;
     final bio = BiometricService.instance;
-    if (!await bio.isAvailable() || await bio.isEnabled()) return;
+    // Don't re-offer if already enabled OR if the user previously declined —
+    // the offer-dismissed flag persists so we never nag on every sign-in.
+    if (!await bio.isAvailable() ||
+        await bio.isEnabled() ||
+        await bio.offerDismissed()) {
+      return;
+    }
     if (!mounted) return;
     final enable = await showModalBottomSheet<bool>(
       context: context,
@@ -224,6 +204,10 @@ class _LoginScreenState extends State<LoginScreen> {
       } else if (mounted) {
         wbShowSnack(context, "Biometric not verified — it hasn't been enabled.");
       }
+    } else {
+      // "Not now" — remember the choice so we stop offering on each sign-in.
+      // The user can still turn it on from Account → Security.
+      await bio.setOfferDismissed(true);
     }
   }
 

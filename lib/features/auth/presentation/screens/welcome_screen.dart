@@ -55,14 +55,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       setState(() => _unlocking = false);
       return;
     }
-    // Restore the customer session and hand off to home. The interceptor
-    // will refresh the access token from the stored refresh token on the
-    // first request.
-    RoleController.instance.setRole(AppRole.customer);
+    // Restore the user's LAST role session and hand off to that role's home
+    // (not always customer). The interceptor refreshes the access token from
+    // the stored refresh token on the first request.
+    final role = RoleController.instance;
+    role.setRole(role.role);
     GuestModeController.instance.exit();
     NotificationService.instance.registerToken();
     if (!mounted) return;
-    context.go(AppRoutes.home);
+    context.go(role.role.homeRoute);
   }
 
   static const _features = <_Feature>[

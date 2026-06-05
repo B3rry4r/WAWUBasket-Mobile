@@ -7,6 +7,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/utils/wb_validators.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../data/auth_api.dart';
 
@@ -48,6 +49,10 @@ class _SignupScreenState extends State<SignupScreen> {
         _phone.text.trim().isEmpty ||
         _email.text.trim().isEmpty) {
       wbShowSnack(context, context.l10n.signupErrorName);
+      return;
+    }
+    if (!WbValidators.isValidEmail(_email.text)) {
+      wbShowSnack(context, 'Please enter a valid email address.');
       return;
     }
     if (_password.text.length < 8) {

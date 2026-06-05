@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/auth/biometric_service.dart';
+import '../../../../core/network/token_store.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -24,11 +26,30 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _route() async {
     if (!mounted) return;
-    context.go(
-      RoleController.instance.hasEverSignedIn
-          ? AppRoutes.login
-          : AppRoutes.welcome,
-    );
+    final role = RoleController.instance;
+
+    // A returning user whose session can still be restored should reopen
+    // straight into the app — NOT the sign-in screen. The session is
+    // "restorable" when a refresh token is on disk (the interceptor mints a
+    // fresh access token on the first request); if that refresh is rejected,
+    // `onSessionExpired` bounces the user to /login at that point.
+    final restorable =
+        (TokenStore.instance.refreshToken ?? '').isNotEmpty ||
+            TokenStore.instance.hasSession;
+
+    if (restorable && role.signedIn) {
+      // Honour an opt-in biometric lock by gating the app behind /lock.
+      // Otherwise the persisted token session is sufficient — go home.
+      final bio = BiometricService.instance;
+      final bioGate = await bio.isEnabled() && await bio.isAvailable();
+      if (!mounted) return;
+      context.go(bioGate ? AppRoutes.lock : role.role.homeRoute);
+      return;
+    }
+
+    // Session is gone / never established. Returning users get the password
+    // screen; brand-new users get onboarding.
+    context.go(role.hasEverSignedIn ? AppRoutes.login : AppRoutes.welcome);
   }
 
   @override

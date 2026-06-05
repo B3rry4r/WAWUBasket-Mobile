@@ -22,6 +22,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
   final _amount = TextEditingController(text: '18000');
   final _note = TextEditingController();
   final _sig = SignaturePadController();
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -116,6 +117,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
   }
 
   void _save() {
+    if (_submitting) return;
     final trader = _traderId == null
         ? null
         : AgentController.instance.traderById(_traderId!);
@@ -123,7 +125,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
       wbShowSnack(context, context.l10n.agentPayoutTraderRequired);
       return;
     }
-    final amt = int.tryParse(_amount.text.replaceAll(',', '')) ?? 0;
+    final amt = int.tryParse(_amount.text.trim().replaceAll(',', '')) ?? 0;
     if (amt <= 0) {
       wbShowSnack(context, context.l10n.agentPayoutAmountRequired);
       return;
@@ -135,6 +137,7 @@ class _AgentCashPayoutScreenState extends State<AgentCashPayoutScreen> {
       );
       return;
     }
+    _submitting = true;
     AgentController.instance.addPayout(
       traderId: trader.id,
       traderName: trader.name,

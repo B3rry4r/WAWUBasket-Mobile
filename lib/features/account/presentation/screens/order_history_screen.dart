@@ -48,10 +48,19 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
     try {
       final raw = await OrdersApi.instance.myOrders();
       if (!mounted) return;
+      // Parse defensively: a single malformed order (e.g. a bad money field)
+      // is skipped + logged rather than blanking the entire history.
+      final parsed = <OrderModel>[];
+      for (final e in raw) {
+        if (e is! Map) continue;
+        try {
+          parsed.add(OrderModel.fromJson(e.cast<String, dynamic>()));
+        } on ApiException catch (err) {
+          debugPrint('[order_history] skipped malformed order: ${err.message}');
+        }
+      }
       setState(() {
-        _orders = raw
-            .map((e) => OrderModel.fromJson(e as Map<String, dynamic>))
-            .toList();
+        _orders = parsed;
         _loading = false;
       });
     } on ApiException catch (e) {

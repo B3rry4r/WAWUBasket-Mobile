@@ -60,29 +60,10 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
   }
 
   void _handleDeepLink(Uri uri) {
-    if (uri.scheme != 'wawubasket') return;
-    final host = uri.host;
-    final path = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
-    final orderId = uri.queryParameters['orderId'] ?? '';
-
-    if (host == 'payment') {
-      if (path == 'success' && orderId.isNotEmpty) {
-        _router.go(
-          '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=success',
-        );
-      } else if (path == 'success') {
-        _router.go(AppRoutes.orders);
-      } else if (orderId.isNotEmpty) {
-        // cancelled/failed redirect but the order was created — show order
-        // confirmation and let the app fetch the real status from the API.
-        // The Flutterwave webhook may have already confirmed the payment.
-        _router.go(
-          '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=pending',
-        );
-      } else {
-        _router.go(AppRoutes.checkout);
-      }
-    }
+    // Shared mapper with GoRouter.onException so warm-start and cold-start
+    // deep links resolve to exactly the same route.
+    final route = paymentDeepLinkRoute(uri);
+    if (route != null) _router.go(route);
   }
 
   @override

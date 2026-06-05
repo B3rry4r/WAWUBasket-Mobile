@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/config/pricing.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -153,8 +154,8 @@ class _CartScreenState extends ConsumerState<CartScreen> {
             final recipeSubtotalNaira =
                 recipeItems.fold<int>(0, (s, i) => s + (i.totalPriceKobo ~/ 100));
             final subtotal = productSubtotal + recipeSubtotalNaira;
-            final serviceFee = (subtotal * 750 / 10000).ceil().clamp(50, 5000);
-            const delivery = 600;
+            final serviceFee = WbPricing.serviceFee(subtotal);
+            const delivery = WbPricing.deliveryFeeNaira;
             final total = subtotal + delivery + serviceFee;
             final loading = state.loading || recipeLoading;
             final cartIsEmpty =

@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_parse.dart';
 
 /// Wraps the `/v1/profile` endpoints.
 class ProfileApi {
@@ -9,7 +10,7 @@ class ProfileApi {
 
   Future<Map<String, dynamic>> get() async {
     final res = await _api.get('/profile');
-    return (res as Map).cast<String, dynamic>();
+    return safeMap(res, context: 'profile');
   }
 
   Future<void> update(Map<String, dynamic> dto) =>
@@ -25,7 +26,7 @@ class ProfileApi {
 
   Future<Map<String, dynamic>> stats() async {
     final res = await _api.get('/profile/stats');
-    return (res as Map).cast<String, dynamic>();
+    return safeMap(res, context: 'profileStats');
   }
 
   Future<void> deleteAccount({String? reason}) =>
@@ -46,18 +47,18 @@ class ProfileApi {
 
   Future<Map<String, dynamic>?> getQuizPreferences() async {
     final res = await _api.get('/profile/preferences');
-    final prefs = (res as Map<String, dynamic>)['quizPreferences'];
+    final prefs = safeMap(res, context: 'preferences')['quizPreferences'];
     if (prefs == null) return null;
-    return (prefs as Map).cast<String, dynamic>();
+    return safeMap(prefs, context: 'quizPreferences');
   }
 
   Future<List<String>> getDietaryPreferences() async {
     final profile = await get();
-    final customer = profile['profileCustomer'];
-    if (customer == null) return [];
-    final list = customer['dietaryPreferences'];
-    if (list == null) return [];
-    return (list as List).cast<String>();
+    final customer = safeMap(profile['profileCustomer'], context: 'profileCustomer');
+    return safeList(customer['dietaryPreferences'], context: 'dietaryPreferences')
+        .map((e) => safeString(e))
+        .where((s) => s.isNotEmpty)
+        .toList();
   }
 
   Future<void> saveDietaryPreferences(List<String> preferences) =>

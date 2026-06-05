@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/application/role_controller.dart';
+import '../network/token_store.dart';
 import '../router/app_routes.dart';
 import '../utils/wb_actions.dart';
 
@@ -38,11 +39,16 @@ class GuestModeController {
     isGuest.value = false;
   }
 
-  /// Funnels the caller to the login screen if they're in guest mode.
-  /// Returns true when the action should proceed, false when the user
-  /// was redirected to sign in.
+  /// Funnels the caller to the login screen if they don't have a usable
+  /// session. Returns true when the action should proceed, false when the
+  /// user was redirected to sign in.
+  ///
+  /// Gating on the actual JWT (not just the guest flag) means a user who
+  /// landed in the customer shell without a valid token — guest, signed out,
+  /// or a session that was never established — is routed to sign-in instead
+  /// of firing an authenticated request that 401s with a confusing error.
   bool requireAccount(BuildContext context, {String? action}) {
-    if (!isGuest.value) return true;
+    if (!isGuest.value && TokenStore.instance.hasSession) return true;
     // TODO(i18n): key=guestSignInToContinue
     wbShowSnack(
       context,

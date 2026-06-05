@@ -70,8 +70,11 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } catch (_) {
-      if (mounted) wbShowSnack(context, context.l10n.dietarySaved);
-      if (mounted) context.pop();
+      // An unexpected (non-API) error is a failure — surface it instead of
+      // falsely reporting success and dismissing the screen.
+      if (mounted) {
+        wbShowSnack(context, 'Could not save your preferences. Please try again.');
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }

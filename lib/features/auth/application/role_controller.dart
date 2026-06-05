@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/auth/biometric_service.dart';
 import '../../../core/network/token_store.dart';
 import '../../../core/router/app_routes.dart';
 import '../data/auth_api.dart';
@@ -143,20 +146,20 @@ class RoleController {
   /// approves.
   void completeKyc(AppRole r) {
     _status[r] = RoleStatus.approved;
-    _persistStatus(r);
+    unawaited(_persistStatus(r));
   }
 
   /// Mark a role's application as awaiting admin review.
   void markPending(AppRole r) {
     _status[r] = RoleStatus.pending;
-    _persistStatus(r);
+    unawaited(_persistStatus(r));
   }
 
   void setRole(AppRole next) {
     notifier.value = next;
     _signedIn = true;
     _hasEverSignedIn = true;
-    _persistRole();
+    unawaited(_persistRole());
   }
 
   /// Drops the user into the customer shell without claiming a session.
@@ -166,16 +169,27 @@ class RoleController {
   void setGuest() {
     notifier.value = AppRole.customer;
     _signedIn = false;
-    _persistRole();
+    unawaited(_persistRole());
   }
 
-  /// Resets the active role to customer, clears the signed-in flag, and
-  /// wipes stored JWT tokens so no further authenticated API calls are made.
+  /// Resets the active role to customer, clears the signed-in flag, wipes
+  /// stored JWT tokens, and clears per-role KYC status + biometric opt-in so
+  /// the next user on this device starts from a clean slate (no cross-user
+  /// leakage of approved operator roles or another person's biometric unlock).
   void signOut() {
     notifier.value = AppRole.customer;
     _signedIn = false;
-    _persistRole();
+    unawaited(_persistRole());
+    // Reset every operator role's cached status so a stale "approved" flag
+    // can't survive into the next session before syncFromApi runs.
+    for (final r in AppRole.values) {
+      if (r == AppRole.customer) continue;
+      _status[r] = RoleStatus.unregistered;
+      unawaited(_persistStatus(r));
+    }
     TokenStore.instance.clear();
+    // Biometric is an explicit per-account opt-in; drop it on real logout.
+    BiometricService.instance.clear();
   }
 
   // ─── Persistence ─────────────────────────────────────────────────────
@@ -225,10 +239,11 @@ class RoleController {
       for (final r in AppRole.values) {
         if (r == AppRole.customer || r == AppRole.admin) continue;
         _status[r] = RoleStatus.unregistered;
-        _persistStatus(r);
+        await _persistStatus(r);
       }
       for (final entry in roles) {
-        final map = entry as Map<String, dynamic>;
+        if (entry is! Map) continue;
+        final map = entry.cast<String, dynamic>();
         final roleName = map['role'] as String?;
         final statusName = map['status'] as String?;
         if (roleName == null || statusName == null) continue;
@@ -237,7 +252,7 @@ class RoleController {
             RoleStatus.values.where((s) => s.name == statusName).firstOrNull;
         if (role != null && status != null) {
           _status[role] = status;
-          _persistStatus(role);
+          await _persistStatus(role);
         }
       }
     } catch (_) {
@@ -245,17 +260,29 @@ class RoleController {
     }
   }
 
-  void _persistRole() {
+  /// Persists the active role + session flags. Awaits the writes and logs
+  /// failures so a storage error is never swallowed. Sync callers invoke this
+  /// via [unawaited] (the in-memory state is already updated, the disk write
+  /// just needs to complete in the background).
+  Future<void> _persistRole() async {
     final p = _prefs;
     if (p == null) return;
-    p.setString(_kRoleKey, notifier.value.name);
-    p.setBool(_kSignedInKey, _signedIn);
-    if (_hasEverSignedIn) p.setBool(_kHasEverSignedIn, true);
+    try {
+      await p.setString(_kRoleKey, notifier.value.name);
+      await p.setBool(_kSignedInKey, _signedIn);
+      if (_hasEverSignedIn) await p.setBool(_kHasEverSignedIn, true);
+    } catch (e) {
+      debugPrint('[role] failed to persist role: $e');
+    }
   }
 
-  void _persistStatus(AppRole r) {
+  Future<void> _persistStatus(AppRole r) async {
     final p = _prefs;
     if (p == null) return;
-    p.setString('$_kStatusPrefix${r.name}', _status[r]!.name);
+    try {
+      await p.setString('$_kStatusPrefix${r.name}', _status[r]!.name);
+    } catch (e) {
+      debugPrint('[role] failed to persist status for ${r.name}: $e');
+    }
   }
 }

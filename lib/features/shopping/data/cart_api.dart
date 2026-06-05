@@ -1,4 +1,5 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_parse.dart';
 import '../domain/models/product.dart';
 
 /// Wraps the `/v1/cart` endpoints. All calls require a session.
@@ -10,10 +11,9 @@ class CartApi {
 
   /// The current user's cart, newest single-vendor basket.
   Future<List<CartLine>> getCart() async {
-    final res = await _api.get('/cart') as Map<String, dynamic>;
-    final items = (res['items'] as List?) ?? const [];
-    return items
-        .map((e) => CartLine.fromJson(e as Map<String, dynamic>))
+    final res = await _api.get('/cart');
+    return safeMapList(safeMap(res, context: 'cart')['items'], context: 'cartItems')
+        .map(CartLine.fromJson)
         .toList();
   }
 

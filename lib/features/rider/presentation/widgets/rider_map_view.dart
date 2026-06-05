@@ -96,6 +96,52 @@ class _MapboxLayerState extends State<_MapboxLayer> {
 
   bool _locating = false;
 
+  /// Whether the location puck has been turned on, and whether we've already
+  /// auto-centred the camera on the rider's first GPS fix. Both are one-shot:
+  /// the puck stays on, and we only auto-fly once so we never yank the camera
+  /// out from under a rider who has panned the map.
+  bool _puckEnabled = false;
+  bool _didAutoCenter = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // The home screen owns the location permission prompt + GPS stream and
+    // publishes fixes here. Follow it so the map centres on the rider as soon
+    // as a position arrives, regardless of when permission was granted.
+    RiderController.instance.currentPosition.addListener(_onPositionFix);
+  }
+
+  @override
+  void dispose() {
+    RiderController.instance.currentPosition.removeListener(_onPositionFix);
+    super.dispose();
+  }
+
+  /// Reacts to a new GPS fix from [RiderController]: enables the puck the
+  /// first time and flies the camera to the rider on the very first fix.
+  Future<void> _onPositionFix() async {
+    final pos = RiderController.instance.currentPosition.value;
+    final map = _map;
+    if (pos == null || map == null) return;
+    if (!_puckEnabled) {
+      _puckEnabled = true;
+      await map.location.updateSettings(
+        mb.LocationComponentSettings(enabled: true, pulsingEnabled: false),
+      );
+    }
+    if (!_didAutoCenter) {
+      _didAutoCenter = true;
+      await map.flyTo(
+        mb.CameraOptions(
+          center: mb.Point(coordinates: mb.Position(pos.lng, pos.lat)),
+          zoom: 15,
+        ),
+        mb.MapAnimationOptions(duration: 700),
+      );
+    }
+  }
+
   @override
   void didUpdateWidget(covariant _MapboxLayer oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -140,16 +186,24 @@ class _MapboxLayerState extends State<_MapboxLayer> {
       mb.LogoSettings(position: mb.OrnamentPosition.BOTTOM_LEFT),
     );
 
-    // Show the user's location puck if we have permission. Pulsing is off
-    // so the puck reads as a steady marker — GPS already jitters the
-    // position on its own and a pulse ring on top looks like extra motion.
-    final granted = await WBPermissions.hasLocation();
-    if (granted) {
+    // If the home screen already obtained a GPS fix before the map finished
+    // creating, centre on it right away (enables the puck + flies the camera).
+    if (RiderController.instance.currentPosition.value != null) {
+      _onPositionFix();
+    } else if (await WBPermissions.hasLocation()) {
+      // Permission already granted from a previous session but no fix yet —
+      // enable the puck and pull a one-shot position to centre on.
+      _puckEnabled = true;
       await map.location.updateSettings(
         mb.LocationComponentSettings(enabled: true, pulsingEnabled: false),
       );
       _centerOnCurrent();
     }
+    // First launch / permission not yet granted: do nothing here. The home
+    // screen owns the permission prompt and primes a GPS fix; _onPositionFix()
+    // then enables the puck and centres the camera. Requesting permission here
+    // too would collide with that prompt (permission_handler rejects
+    // concurrent requests).
 
     // The route line sits under the offer pins so the pins stay tappable.
     _polylineManager = await map.annotations.createPolylineAnnotationManager();

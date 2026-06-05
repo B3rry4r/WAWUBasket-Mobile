@@ -99,7 +99,13 @@ Future<void> main() async {
   // implementation so the chat store is skipped on web.
   TokenStore.instance.tokenNotifier.addListener(() {
     if (TokenStore.instance.accessToken == null) {
-      if (!kIsWeb) ChatLocalStore.instance.clearAll().ignore();
+      if (!kIsWeb) {
+        // Don't drop the cleanup Future on the floor — log if it fails so a
+        // stale chat cache surviving logout is diagnosable.
+        unawaited(ChatLocalStore.instance.clearAll().catchError(
+          (Object e) => debugPrint('[main] chat cache clear on logout failed: $e'),
+        ));
+      }
       NotificationsController.instance.markAllRead();
     }
   });

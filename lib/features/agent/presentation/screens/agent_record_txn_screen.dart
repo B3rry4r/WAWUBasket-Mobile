@@ -22,6 +22,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
   final _product = TextEditingController(text: 'Tomatoes');
   final _qty = TextEditingController(text: '50');
   final _price = TextEditingController(text: '360');
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -148,6 +149,7 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
   }
 
   void _save() {
+    if (_submitting) return;
     final trader = _traderId == null
         ? null
         : AgentController.instance.traderById(_traderId!);
@@ -155,12 +157,13 @@ class _AgentRecordTxnScreenState extends State<AgentRecordTxnScreen> {
       wbShowSnack(context, context.l10n.agentTxnTraderRequired);
       return;
     }
-    final q = int.tryParse(_qty.text) ?? 0;
-    final p = int.tryParse(_price.text.replaceAll(',', '')) ?? 0;
+    final q = int.tryParse(_qty.text.trim()) ?? 0;
+    final p = int.tryParse(_price.text.trim().replaceAll(',', '')) ?? 0;
     if (q <= 0 || p <= 0 || _product.text.trim().isEmpty) {
       wbShowSnack(context, context.l10n.agentTxnFieldsRequired);
       return;
     }
+    _submitting = true;
     AgentController.instance.addTransaction(
       traderId: trader.id,
       traderName: trader.name,

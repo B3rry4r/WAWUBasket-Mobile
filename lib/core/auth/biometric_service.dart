@@ -13,6 +13,7 @@ class BiometricService {
   static final BiometricService instance = BiometricService._();
 
   static const _kEnabled = 'wb.biometric.enabled';
+  static const _kOfferDismissed = 'wb.biometric.offerDismissed';
 
   final _auth = LocalAuthentication();
 
@@ -58,6 +59,29 @@ class BiometricService {
   Future<void> setEnabled(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kEnabled, value);
+  }
+
+  /// Whether the user has already dismissed the "turn on biometric unlock"
+  /// offer. Persisted so we never nag a user who said "Not now" on every
+  /// subsequent password sign-in. Cleared on explicit logout so a fresh
+  /// account on the same device is offered it again.
+  Future<bool> offerDismissed() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_kOfferDismissed) ?? false;
+  }
+
+  Future<void> setOfferDismissed(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kOfferDismissed, value);
+  }
+
+  /// Clears the opt-in + offer-dismissed flags. Call on EXPLICIT logout only
+  /// (not on session expiry) so the next user on this device starts clean,
+  /// while a returning user whose token merely expired keeps biometrics on.
+  Future<void> clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kEnabled);
+    await prefs.remove(_kOfferDismissed);
   }
 
   /// Shows the device biometric sheet; returns true only on success.

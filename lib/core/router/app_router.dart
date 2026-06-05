@@ -89,6 +89,7 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/otp_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
+import '../../features/auth/presentation/screens/lock_screen.dart';
 import '../../features/auth/presentation/screens/role_select_screen.dart';
 import '../../features/auth/presentation/screens/web_unavailable_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
@@ -107,43 +108,116 @@ import '../../features/shopping/presentation/screens/vendor_screen.dart';
 import '../theme/wb_theme_exports.dart';
 import 'app_routes.dart';
 
-/// Handles URIs that GoRouter cannot match — primarily payment deep links
-/// (`wawubasket://payment/success` and `wawubasket://payment/cancelled`) that
-/// the Flutter platform routing layer delivers before app_links can intercept.
+/// Single source of truth for mapping a `wawubasket://payment/...` deep link
+/// to the in-app route it should open. Returns null when [uri] isn't a
+/// recognised payment callback. Used by BOTH the warm-start handler
+/// (`wawubasket_app._handleDeepLink`) and GoRouter's [onException] so the two
+/// paths can never drift apart.
+String? paymentDeepLinkRoute(Uri uri) {
+  if (uri.scheme != 'wawubasket' || uri.host != 'payment') return null;
+  final orderId = uri.queryParameters['orderId'] ?? '';
+  final segment = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
+  if (segment == 'success' && orderId.isNotEmpty) {
+    return '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=success';
+  }
+  if (segment == 'success') {
+    // Paid, but we didn't get the order id back — land on the orders list.
+    return AppRoutes.orders;
+  }
+  if (orderId.isNotEmpty) {
+    // cancelled/failed redirect but the order was created — show the order
+    // confirmation screen so the user sees the real API status (the webhook
+    // may have already confirmed it).
+    return '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=pending';
+  }
+  return AppRoutes.checkout;
+}
+
+/// Handles URIs that GoRouter cannot match — primarily the payment deep links
+/// the platform routing layer delivers before app_links can intercept.
 void _onRouterException(
   BuildContext context,
   GoRouterState state,
   GoRouter router,
 ) {
-  final uri = state.uri;
-  if (uri.scheme == 'wawubasket' && uri.host == 'payment') {
-    final orderId = uri.queryParameters['orderId'] ?? '';
-    final segment =
-        uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
-    if (segment == 'success' && orderId.isNotEmpty) {
-      router.go(
-        '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=success',
-      );
-    } else if (orderId.isNotEmpty) {
-      // cancelled/failed redirect but the order was created — show the
-      // order confirmation screen so the user sees the actual API status
-      // (the webhook may have already confirmed it successfully).
-      router.go(
-        '${AppRoutes.orderConfirmation}?orderId=$orderId&paymentStatus=pending',
-      );
-    } else {
-      router.go(AppRoutes.checkout);
-    }
-  } else {
-    // Unknown location — go to splash so the router re-evaluates auth state.
-    router.go(AppRoutes.splash);
+  final route = paymentDeepLinkRoute(state.uri);
+  // Unknown non-payment location — go to splash so auth state is re-evaluated.
+  router.go(route ?? AppRoutes.splash);
+}
+
+/// Routes reachable without a session — onboarding, sign-in surfaces, and the
+/// per-operator login / KYC entry points (a signed-out user must be able to
+/// authenticate INTO an operator role).
+bool _isPublicRoute(String loc) {
+  const exact = <String>{
+    AppRoutes.splash,
+    AppRoutes.welcome,
+    AppRoutes.login,
+    AppRoutes.lock,
+    AppRoutes.signup,
+    AppRoutes.otp,
+    AppRoutes.forgotPassword,
+    AppRoutes.resetPassword,
+    AppRoutes.roleSelect,
+    AppRoutes.onboarding,
+  };
+  if (exact.contains(loc)) return true;
+  if (loc.startsWith('/web-unavailable')) return true;
+  for (final p in const ['/vendor', '/agent', '/rider', '/trader', '/driver']) {
+    if (loc == '$p/login' || loc == '$p/apply') return true;
   }
+  return false;
+}
+
+/// The role an operator/admin area requires, or null for customer-facing and
+/// browse routes (which stay open to guests — actions inside them are gated by
+/// `GuestModeController.requireAccount`). The customer storefront lives at
+/// `/storefront`, NOT `/vendor`, so there's no clash with the vendor shell.
+AppRole? _requiredRoleFor(String loc) {
+  if (loc == AppRoutes.devSettings || loc.startsWith('/dev-settings')) {
+    return AppRole.admin;
+  }
+  if (loc == AppRoutes.vendorHome || loc.startsWith('/vendor/')) {
+    return AppRole.vendor;
+  }
+  if (loc == AppRoutes.agentHome || loc.startsWith('/agent/')) {
+    return AppRole.agent;
+  }
+  if (loc == AppRoutes.riderHome || loc.startsWith('/rider/')) {
+    return AppRole.rider;
+  }
+  if (loc == AppRoutes.traderHome || loc.startsWith('/trader/')) {
+    return AppRole.trader;
+  }
+  if (loc == AppRoutes.driverHome || loc.startsWith('/driver/')) {
+    return AppRole.driver;
+  }
+  return null;
+}
+
+/// Global auth/role guard. Synchronous (reads only in-memory controller
+/// state) so it adds no latency. Signed-out users can't deep-link operator or
+/// admin shells; signed-in users without a given role are bounced to their own
+/// home. Public + customer/browse routes pass through untouched, so splash
+/// bootstrap, onboarding, guest browsing, and the biometric lock all still work.
+String? _authGuard(BuildContext context, GoRouterState state) {
+  final loc = state.matchedLocation;
+  if (_isPublicRoute(loc)) return null;
+  final required = _requiredRoleFor(loc);
+  if (required == null) return null;
+  final role = RoleController.instance;
+  if (!role.signedIn) return AppRoutes.login;
+  final inRole = role.role == required;
+  final approved = role.statusOf(required) == RoleStatus.approved;
+  if (!inRole && !approved) return role.role.homeRoute;
+  return null;
 }
 
 GoRouter buildRouter() {
   return GoRouter(
     initialLocation: AppRoutes.splash,
     onException: _onRouterException,
+    redirect: _authGuard,
     routes: [
       // Onboarding & Auth (no shell)
       GoRoute(
@@ -157,6 +231,10 @@ GoRouter buildRouter() {
       GoRoute(
         path: AppRoutes.login,
         builder: (_, _) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.lock,
+        builder: (_, _) => const LockScreen(),
       ),
       GoRoute(
         path: AppRoutes.signup,
