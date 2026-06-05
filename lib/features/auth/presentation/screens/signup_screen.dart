@@ -26,6 +26,7 @@ class _SignupScreenState extends State<SignupScreen> {
   Country? _country;
   bool _agreed = true;
   bool _busy = false;
+  bool _obscure = true;
 
   @override
   void dispose() {
@@ -129,7 +130,23 @@ class _SignupScreenState extends State<SignupScreen> {
                 controller: _password,
                 placeholder: context.l10n.signupPasswordPlaceholder,
                 leadingIcon: WBIconName.card,
-                obscureText: true,
+                obscureText: _obscure,
+                trailing: TextButton(
+                  onPressed: () => setState(() => _obscure = !_obscure),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: const Size(40, 24),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    _obscure ? 'Show' : 'Hide',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
               ),
               const SizedBox(height: WBSpacing.lg),
               GestureDetector(
