@@ -61,14 +61,90 @@ class AuthApi {
     await _persist(res);
   }
 
-  // ─── Login ───────────────────────────────────────────────────────────────
+  // ─── Login (with organic WAWU ID migration) ──────────────────────────────
 
   /// Password sign-in with a phone number or email.
+  ///
+  /// Accounts created before the WAWU ID cutover only exist on the legacy
+  /// Basket backend. We migrate them transparently on their first sign-in:
+  ///
+  ///   1. Try WAWU ID first. If it knows the user, we're done.
+  ///   2. If — and ONLY if — WAWU ID reports the user doesn't exist there yet
+  ///      (404 / `USER_NOT_IN_WAWUID`), verify the credentials against the old
+  ///      Basket `/auth/login`. Any *other* WAWU ID error (wrong password,
+  ///      locked account, network/server) is a real failure and is surfaced.
+  ///   3. Once Basket confirms the password, best-effort mirror the account
+  ///      into WAWU ID using the user's real profile, so the next login goes
+  ///      through the identity service. If that mirror can't complete, the
+  ///      user still gets in on the Basket session and migration retries later.
   Future<void> login(String identifier, String password) async {
-    final res = await _idPost('/auth/login',
+    try {
+      final res = await _idPost('/auth/login',
+          body: {'identifier': identifier, 'password': password});
+      await _persist(res);
+      return;
+    } on ApiException catch (e) {
+      final notMigrated =
+          e.statusCode == 404 || e.message.contains('USER_NOT_IN_WAWUID');
+      // Real error (incorrect password, etc.) — surface it untouched.
+      if (!notMigrated) rethrow;
+    }
+
+    // ── Organic migration: this user predates WAWU ID. ─────────────────────
+    // Verify on the legacy Basket backend. A failure here (e.g. wrong
+    // password) throws an ApiException that bubbles up to the UI unchanged.
+    final basketRes = await _api.post('/auth/login',
         body: {'identifier': identifier, 'password': password});
-    await _persist(res);
+    // Persist the Basket tokens immediately so the session is live regardless
+    // of whether the WAWU ID mirror below succeeds.
+    await _persist(basketRes);
+
+    // Best-effort mirror into WAWU ID. The Basket login response carries only
+    // tokens, so fetch the real profile (now that we hold a session) to
+    // register with good data rather than guesses.
+    try {
+      final profile = await _fetchProfile();
+      final fullName = _nonEmpty(profile?['fullName'] as String?) ?? 'WAWUBasket User';
+      final phone = _nonEmpty(profile?['phone'] as String?) ??
+          (_looksLikePhone(identifier) ? identifier : '');
+      final email = _nonEmpty(profile?['email'] as String?) ??
+          (identifier.contains('@') ? identifier : '');
+
+      final registerRes = await _idPost('/auth/register', body: {
+        'identifier': identifier,
+        'fullName': fullName,
+        'phone': phone,
+        'email': email,
+        'password': password,
+        'country': 'Nigeria',
+      });
+      // If WAWU ID returns a token pair (pre-verified migration), switch the
+      // session to it. If it instead kicks off an OTP and returns no tokens,
+      // [_persist] throws and the catch below keeps the working Basket session.
+      await _persist(registerRes);
+    } catch (_) {
+      // Mirror failed or needs OTP verification — keep the legacy Basket
+      // session. The user is signed in; migration retries on the next login.
+    }
   }
+
+  /// Fetches the signed-in user's `/profile` record, or null on any failure.
+  /// Used by the migration path to register WAWU ID with real profile data.
+  Future<Map<String, dynamic>?> _fetchProfile() async {
+    try {
+      final res = await _api.get('/profile');
+      return res is Map<String, dynamic> ? res : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Mirrors the Basket backend's phone-vs-email heuristic.
+  bool _looksLikePhone(String identifier) =>
+      identifier.startsWith('+') ||
+      (identifier.isNotEmpty && RegExp(r'^\d').hasMatch(identifier));
+
+  String? _nonEmpty(String? s) => (s != null && s.trim().isNotEmpty) ? s : null;
 
   // ─── OTP-only sign-in (no password) ──────────────────────────────────────
 
