@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,6 +12,21 @@ import '../core/router/app_router.dart';
 import '../core/router/app_routes.dart';
 import '../core/theme/wb_theme_exports.dart';
 import '../l10n/app_localizations.dart';
+
+/// Lets the desktop web build be dragged/scrolled with a mouse and trackpad,
+/// not just a touch screen. Harmless on native (those devices are already in
+/// the default set) but essential for the browser layouts.
+class _WBScrollBehavior extends MaterialScrollBehavior {
+  const _WBScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
+        PointerDeviceKind.stylus,
+      };
+}
 
 class WAWUBasketApp extends StatefulWidget {
   const WAWUBasketApp({super.key});
@@ -81,6 +97,7 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
           title: 'WAWUBasket',
           debugShowCheckedModeBanner: false,
           theme: buildWBTheme(),
+          scrollBehavior: const _WBScrollBehavior(),
           routerConfig: _router,
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,

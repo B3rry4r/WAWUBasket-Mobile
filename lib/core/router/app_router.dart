@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,6 +30,10 @@ import '../../features/escrow/presentation/screens/bulk_checkout_screen.dart';
 import '../../features/escrow/presentation/screens/escrow_dispute_screen.dart';
 import '../../features/escrow/presentation/screens/escrow_orders_screen.dart';
 import '../../features/escrow/presentation/screens/escrow_status_screen.dart';
+import '../../features/escrow/presentation/desktop/bulk_checkout_desktop_screen.dart';
+import '../../features/escrow/presentation/desktop/escrow_dispute_desktop_screen.dart';
+import '../../features/escrow/presentation/desktop/escrow_orders_desktop_screen.dart';
+import '../../features/escrow/presentation/desktop/escrow_status_desktop_screen.dart';
 import '../../features/agent/presentation/agent_shell.dart';
 import '../../features/agent/presentation/screens/agent_cash_payout_screen.dart';
 import '../../features/agent/presentation/screens/agent_earnings_screen.dart';
@@ -53,6 +58,10 @@ import '../../features/trade/presentation/screens/bulk_lot_detail_screen.dart';
 import '../../features/trade/presentation/screens/export_listing_detail_screen.dart';
 import '../../features/trade/presentation/screens/supplier_detail_screen.dart';
 import '../../features/trade/presentation/screens/trade_screen.dart';
+import '../../features/trade/presentation/desktop/bulk_lot_detail_desktop_screen.dart';
+import '../../features/trade/presentation/desktop/export_listing_detail_desktop_screen.dart';
+import '../../features/trade/presentation/desktop/supplier_detail_desktop_screen.dart';
+import '../../features/trade/presentation/desktop/trade_desktop_screen.dart';
 import '../../features/trader/presentation/screens/trader_home_screen.dart';
 import '../../features/trader/presentation/screens/trader_kyc_screen.dart';
 import '../../features/trader/presentation/screens/trader_listing_edit_screen.dart';
@@ -95,6 +104,14 @@ import '../../features/auth/presentation/screens/web_unavailable_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
+import '../../features/auth/presentation/desktop/welcome_desktop_screen.dart';
+import '../../features/auth/presentation/desktop/login_desktop_screen.dart';
+import '../../features/auth/presentation/desktop/signup_desktop_screen.dart';
+import '../../features/auth/presentation/desktop/otp_desktop_screen.dart';
+import '../../features/auth/presentation/desktop/forgot_password_desktop_screen.dart';
+import '../../features/auth/presentation/desktop/reset_password_desktop_screen.dart';
+import '../../features/auth/presentation/desktop/role_select_desktop_screen.dart';
+import '../responsive/wb_responsive_exports.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/shell/presentation/customer_shell.dart';
 import '../../features/shopping/presentation/screens/cart_screen.dart';
@@ -105,6 +122,21 @@ import '../../features/shopping/presentation/screens/product_screen.dart';
 import '../../features/shopping/presentation/screens/search_screen.dart';
 import '../../features/shopping/presentation/screens/tracking_screen.dart';
 import '../../features/shopping/presentation/screens/vendor_screen.dart';
+import '../../features/home/presentation/desktop/home_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/search_desktop_screen.dart';
+import '../../features/category/presentation/desktop/category_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/vendor_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/product_desktop_screen.dart';
+import '../../features/recipes/presentation/desktop/recipes_desktop_screen.dart';
+import '../../features/recipes/presentation/desktop/recipe_detail_desktop_screen.dart';
+import '../../features/livestock/presentation/desktop/meat_cut_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/cart_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/checkout_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/order_confirmation_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/delivery_complete_desktop_screen.dart';
+import '../../features/shopping/presentation/desktop/tracking_desktop_screen.dart';
+import '../../features/account/presentation/desktop/order_history_desktop_screen.dart';
+import '../../features/account/presentation/desktop/receipt_desktop_screen.dart';
 import '../theme/wb_theme_exports.dart';
 import 'app_routes.dart';
 
@@ -200,8 +232,31 @@ AppRole? _requiredRoleFor(String loc) {
 /// admin shells; signed-in users without a given role are bounced to their own
 /// home. Public + customer/browse routes pass through untouched, so splash
 /// bootstrap, onboarding, guest browsing, and the biometric lock all still work.
+/// True when [loc] points anywhere inside a role's area (shell, login, KYC).
+/// `home` is the bare prefix (e.g. `/rider`); every other route under it is
+/// `home/...` (e.g. `/rider/login`), so both forms have to be checked.
+bool _isRoleArea(String loc, String home) =>
+    loc == home || loc.startsWith('$home/');
+
+/// Rider & Driver are mobile-only. On the web build any route inside those
+/// areas resolves to the matching "get the app" screen — covering deep links,
+/// a restored operator session, and the role switcher alike. Returns null on
+/// native (the areas work normally) and for every other route.
+String? _webMobileOnlyGate(String loc) {
+  if (!kIsWeb) return null;
+  if (_isRoleArea(loc, AppRoutes.riderHome)) {
+    return AppRoutes.webUnavailableRider;
+  }
+  if (_isRoleArea(loc, AppRoutes.driverHome)) {
+    return AppRoutes.webUnavailableDriver;
+  }
+  return null;
+}
+
 String? _authGuard(BuildContext context, GoRouterState state) {
   final loc = state.matchedLocation;
+  final webGate = _webMobileOnlyGate(loc);
+  if (webGate != null) return webGate;
   if (_isPublicRoute(loc)) return null;
   final required = _requiredRoleFor(loc);
   if (required == null) return null;
@@ -226,11 +281,17 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.welcome,
-        builder: (_, _) => const WelcomeScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const WelcomeScreen(),
+          desktop: const WelcomeDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.login,
-        builder: (_, _) => const LoginScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const LoginScreen(),
+          desktop: const LoginDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.lock,
@@ -238,29 +299,50 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.signup,
-        builder: (_, _) => const SignupScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const SignupScreen(),
+          desktop: const SignupDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.otp,
-        builder: (_, state) => OtpScreen(
-          phone: state.uri.queryParameters['phone'] ?? '',
-          flow: state.uri.queryParameters['flow'] ?? 'signup',
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: OtpScreen(
+            phone: state.uri.queryParameters['phone'] ?? '',
+            flow: state.uri.queryParameters['flow'] ?? 'signup',
+          ),
+          desktop: OtpDesktopScreen(
+            phone: state.uri.queryParameters['phone'] ?? '',
+            flow: state.uri.queryParameters['flow'] ?? 'signup',
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.forgotPassword,
-        builder: (_, _) => const ForgotPasswordScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const ForgotPasswordScreen(),
+          desktop: const ForgotPasswordDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.resetPassword,
-        builder: (_, state) => ResetPasswordScreen(
-          identifier: state.uri.queryParameters['identifier'] ?? '',
-          code: state.uri.queryParameters['code'] ?? '',
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: ResetPasswordScreen(
+            identifier: state.uri.queryParameters['identifier'] ?? '',
+            code: state.uri.queryParameters['code'] ?? '',
+          ),
+          desktop: ResetPasswordDesktopScreen(
+            identifier: state.uri.queryParameters['identifier'] ?? '',
+            code: state.uri.queryParameters['code'] ?? '',
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.roleSelect,
-        builder: (_, _) => const RoleSelectScreen(),
+        builder: (_, _) => WBAdaptiveScreen(
+          mobile: const RoleSelectScreen(),
+          desktop: const RoleSelectDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.onboarding,
@@ -287,7 +369,10 @@ GoRouter buildRouter() {
         routes: [
           GoRoute(
             path: AppRoutes.home,
-            pageBuilder: (_, _) => _tabFade(const HomeScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: HomeScreen(),
+              desktop: HomeDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.favorites,
@@ -295,7 +380,10 @@ GoRouter buildRouter() {
           ),
           GoRoute(
             path: AppRoutes.orders,
-            pageBuilder: (_, _) => _tabFade(const OrderHistoryScreen()),
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: OrderHistoryScreen(),
+              desktop: OrderHistoryDesktopScreen(),
+            )),
           ),
           GoRoute(
             path: AppRoutes.profile,
@@ -307,55 +395,92 @@ GoRouter buildRouter() {
       // Pushed screens (no shell)
       GoRoute(
         path: AppRoutes.search,
-        builder: (_, _) => const SearchScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: SearchScreen(),
+          desktop: SearchDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.vendor,
-        builder: (_, _) => const VendorScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: VendorScreen(),
+          desktop: VendorDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.vendor}/:id',
-        builder: (_, state) =>
-            VendorScreen(vendorId: state.pathParameters['id']),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: VendorScreen(vendorId: state.pathParameters['id']),
+          desktop: VendorDesktopScreen(vendorId: state.pathParameters['id']),
+        ),
       ),
       GoRoute(
         path: AppRoutes.product,
-        builder: (_, _) => const ProductScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: ProductScreen(),
+          desktop: ProductDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.product}/:id',
-        builder: (_, state) =>
-            ProductScreen(productId: state.pathParameters['id']),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: ProductScreen(productId: state.pathParameters['id']),
+          desktop: ProductDesktopScreen(productId: state.pathParameters['id']),
+        ),
       ),
       GoRoute(
         path: AppRoutes.cart,
-        builder: (_, _) => const CartScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: CartScreen(),
+          desktop: CartDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.checkout,
-        builder: (_, _) => const CheckoutScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: CheckoutScreen(),
+          desktop: CheckoutDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: AppRoutes.orderConfirmation,
-        builder: (_, state) => OrderConfirmationScreen(
-          orderId: state.uri.queryParameters['orderId'],
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: OrderConfirmationScreen(
+            orderId: state.uri.queryParameters['orderId'],
+          ),
+          desktop: OrderConfirmationDesktopScreen(
+            orderId: state.uri.queryParameters['orderId'],
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.deliveryComplete,
-        builder: (_, state) => DeliveryCompleteScreen(
-          orderId: state.uri.queryParameters['orderId'] ?? '',
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: DeliveryCompleteScreen(
+            orderId: state.uri.queryParameters['orderId'] ?? '',
+          ),
+          desktop: DeliveryCompleteDesktopScreen(
+            orderId: state.uri.queryParameters['orderId'] ?? '',
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.tracking,
-        builder: (_, state) => TrackingScreen(
-          orderId: state.uri.queryParameters['orderId'],
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: TrackingScreen(
+            orderId: state.uri.queryParameters['orderId'],
+          ),
+          desktop: TrackingDesktopScreen(
+            orderId: state.uri.queryParameters['orderId'],
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.ordersHistory,
-        builder: (_, _) => const OrderHistoryScreen(standalone: true),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: OrderHistoryScreen(standalone: true),
+          desktop: OrderHistoryDesktopScreen(standalone: true),
+        ),
       ),
       GoRoute(
         path: AppRoutes.wallet,
@@ -415,48 +540,81 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.trade,
-        builder: (_, _) => const TradeScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: TradeScreen(),
+          desktop: TradeDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.tradeSupplier}/:id',
-        builder: (_, state) =>
-            SupplierDetailScreen(supplierId: state.pathParameters['id']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: SupplierDetailScreen(supplierId: state.pathParameters['id']!),
+          desktop: SupplierDetailDesktopScreen(
+            supplierId: state.pathParameters['id']!,
+          ),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.tradeLot}/:id',
-        builder: (_, state) =>
-            BulkLotDetailScreen(lotId: state.pathParameters['id']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: BulkLotDetailScreen(lotId: state.pathParameters['id']!),
+          desktop: BulkLotDetailDesktopScreen(lotId: state.pathParameters['id']!),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.tradeListing}/:id',
-        builder: (_, state) => ExportListingDetailScreen(
-          listingId: state.pathParameters['id']!,
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: ExportListingDetailScreen(
+            listingId: state.pathParameters['id']!,
+          ),
+          desktop: ExportListingDetailDesktopScreen(
+            listingId: state.pathParameters['id']!,
+          ),
         ),
       ),
       GoRoute(
         path: '${AppRoutes.escrowCheckout}/:listingId',
-        builder: (_, state) => BulkCheckoutScreen(
-          listingId: state.pathParameters['listingId']!,
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: BulkCheckoutScreen(
+            listingId: state.pathParameters['listingId']!,
+          ),
+          desktop: BulkCheckoutDesktopScreen(
+            listingId: state.pathParameters['listingId']!,
+          ),
         ),
       ),
       GoRoute(
         path: '${AppRoutes.escrowStatus}/:id',
-        builder: (_, state) =>
-            EscrowStatusScreen(orderId: state.pathParameters['id']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: EscrowStatusScreen(orderId: state.pathParameters['id']!),
+          desktop: EscrowStatusDesktopScreen(
+            orderId: state.pathParameters['id']!,
+          ),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.escrowDispute}/:id',
-        builder: (_, state) =>
-            EscrowDisputeScreen(orderId: state.pathParameters['id']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: EscrowDisputeScreen(orderId: state.pathParameters['id']!),
+          desktop: EscrowDisputeDesktopScreen(
+            orderId: state.pathParameters['id']!,
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.escrowOrders,
-        builder: (_, _) => const EscrowOrdersScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: EscrowOrdersScreen(),
+          desktop: EscrowOrdersDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.categoryDetail}/:id',
-        builder: (_, state) =>
-            CategoryScreen(categoryId: state.pathParameters['id']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: CategoryScreen(categoryId: state.pathParameters['id']!),
+          desktop:
+              CategoryDesktopScreen(categoryId: state.pathParameters['id']!),
+        ),
       ),
       GoRoute(
         path: AppRoutes.addAddress,
@@ -498,25 +656,38 @@ GoRouter buildRouter() {
       ),
       GoRoute(
         path: AppRoutes.receipt,
-        builder: (_, state) => ReceiptScreen(
-          orderId: state.uri.queryParameters['orderId'],
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: ReceiptScreen(
+            orderId: state.uri.queryParameters['orderId'],
+          ),
+          desktop: ReceiptDesktopScreen(
+            orderId: state.uri.queryParameters['orderId'],
+          ),
         ),
       ),
       GoRoute(
         path: '${AppRoutes.meatCut}/:id',
-        builder: (_, state) =>
-            MeatCutScreen(productId: state.pathParameters['id']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: MeatCutScreen(productId: state.pathParameters['id']!),
+          desktop: MeatCutDesktopScreen(productId: state.pathParameters['id']!),
+        ),
       ),
 
       // Recipe combos
       GoRoute(
         path: AppRoutes.recipes,
-        builder: (_, _) => const RecipesScreen(),
+        builder: (_, _) => const WBAdaptiveScreen(
+          mobile: RecipesScreen(),
+          desktop: RecipesDesktopScreen(),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.recipes}/:slug',
-        builder: (_, state) =>
-            RecipeDetailScreen(slug: state.pathParameters['slug']!),
+        builder: (_, state) => WBAdaptiveScreen(
+          mobile: RecipeDetailScreen(slug: state.pathParameters['slug']!),
+          desktop:
+              RecipeDetailDesktopScreen(slug: state.pathParameters['slug']!),
+        ),
       ),
 
       // ───────── Vendor (RBAC) ─────────

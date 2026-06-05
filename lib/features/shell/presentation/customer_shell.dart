@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/responsive/wb_responsive_exports.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/wb_theme_exports.dart';
 import '../../../core/utils/wb_l10n.dart';
 import '../../../core/widgets/wb_widgets.dart';
+import 'desktop/customer_web_scaffold.dart';
 
 /// The persistent shell wrapping the 4 customer tabs. The floating dark-pill
 /// nav sits above the content so cards can scroll under it.
@@ -40,6 +42,15 @@ class CustomerShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = _navItems(context);
     final activeId = _activeId(items);
+
+    // Desktop web — persistent top bar instead of the floating bottom nav.
+    if (context.isDesktop) {
+      return CustomerWebScaffold(
+        activeNavId: activeId,
+        child: child,
+      );
+    }
+
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
       extendBody: true,

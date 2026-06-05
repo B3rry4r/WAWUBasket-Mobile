@@ -1,0 +1,467 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../core/auth/biometric_service.dart';
+import '../../../../core/network/token_store.dart';
+import '../../../../core/responsive/wb_responsive_exports.dart';
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
+import '../../../../core/services/notification_service.dart';
+import '../../../../core/theme/wb_theme_exports.dart';
+import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/role_controller.dart';
+
+/// Desktop-web layout for [WelcomeScreen]. Isolated from the mobile build —
+/// re-lays the same content (brand pitch, biometric resume, get-started /
+/// sign-in CTAs, guest browse, operator sign-in) into a split brand panel.
+///
+/// Logic is mirrored from the mobile screen verbatim: same biometric flow,
+/// same routes pushed, same guest-mode handoff, same operator sheet.
+class WelcomeDesktopScreen extends StatefulWidget {
+  const WelcomeDesktopScreen({super.key});
+
+  @override
+  State<WelcomeDesktopScreen> createState() => _WelcomeDesktopScreenState();
+}
+
+class _WelcomeDesktopScreenState extends State<WelcomeDesktopScreen> {
+  bool _bioReady = false;
+  String _bioLabel = 'Biometric';
+  bool _unlocking = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkBiometric();
+  }
+
+  Future<void> _checkBiometric() async {
+    final hasRefresh = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
+    if (!hasRefresh) return;
+    final bio = BiometricService.instance;
+    if (!await bio.isAvailable() || !await bio.isEnabled()) return;
+    final label = await bio.label();
+    if (!mounted) return;
+    setState(() {
+      _bioReady = true;
+      _bioLabel = label;
+    });
+  }
+
+  Future<void> _biometricResume() async {
+    if (_unlocking) return;
+    setState(() => _unlocking = true);
+    final ok = await BiometricService.instance.authenticate(
+      reason: 'Sign in to WAWUBasket',
+    );
+    if (!mounted) {
+      return;
+    }
+    if (!ok) {
+      setState(() => _unlocking = false);
+      return;
+    }
+    // Restore the user's LAST role session and hand off to that role's home
+    // (not always customer). The interceptor refreshes the access token from
+    // the stored refresh token on the first request.
+    final role = RoleController.instance;
+    role.setRole(role.role);
+    GuestModeController.instance.exit();
+    NotificationService.instance.registerToken();
+    if (!mounted) return;
+    context.go(role.role.homeRoute);
+  }
+
+  static const _features = <_Feature>[
+    _Feature(WBIconName.basket, 'Eat now, gather fresh, stock up, one basket.'),
+    _Feature(WBIconName.bike, 'Watch your basket come to life in real time.'),
+    _Feature(WBIconName.card, 'Pay your way, card, transfer, or wallet.'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: WBColors.bgPrimary,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final showBrandPanel = constraints.maxWidth >= 1100;
+            return Row(
+              children: [
+                if (showBrandPanel) const Expanded(child: _BrandPanel()),
+                SizedBox(
+                  width: showBrandPanel ? 520 : constraints.maxWidth,
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: WBSpacing.xl,
+                        vertical: WBSpacing.xl,
+                      ),
+                      child: WBMaxWidth(
+                        maxWidth: WBBreakpoints.maxReading,
+                        alignment: Alignment.center,
+                        child: _buildForm(context),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildForm(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const WBWMark(size: 56),
+        const SizedBox(height: WBSpacing.xl),
+        Text(
+          'One basket.\nEverything.',
+          style: WBTypography.hero.copyWith(
+            fontSize: 40,
+            letterSpacing: -0.9,
+            height: 1.1,
+          ),
+        ),
+        const SizedBox(height: WBSpacing.sm + 4),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 360),
+          child: Text(
+            'Restaurants, fresh produce, livestock and kitchen '
+            'essentials, all in one basket.',
+            style: WBTypography.body.copyWith(
+              color: WBColors.fgSecondary,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        const SizedBox(height: WBSpacing.xl),
+        for (final feature in _features) ...[
+          _FeatureRow(feature: feature),
+          const SizedBox(height: WBSpacing.sm + 4),
+        ],
+        const SizedBox(height: WBSpacing.lg),
+        if (_bioReady) ...[
+          WBButton(
+            // TODO(i18n): key=welcomeContinueWithBiometric
+            label: 'Continue with $_bioLabel',
+            fullWidth: true,
+            size: WBButtonSize.lg,
+            trailingIcon: WBIconName.arrowRight,
+            loading: _unlocking,
+            onPressed: _biometricResume,
+          ),
+          const SizedBox(height: WBSpacing.sm + 4),
+          _SecondaryCta(
+            label: context.l10n.welcomeSignIn,
+            onPressed: () => context.push(AppRoutes.login),
+          ),
+        ] else ...[
+          WBButton(
+            label: context.l10n.welcomeGetStarted,
+            fullWidth: true,
+            size: WBButtonSize.lg,
+            onPressed: () => context.push(AppRoutes.signup),
+          ),
+          const SizedBox(height: WBSpacing.sm + 4),
+          _SecondaryCta(
+            label: context.l10n.welcomeSignIn,
+            onPressed: () => context.push(AppRoutes.login),
+          ),
+        ],
+        const SizedBox(height: WBSpacing.sm),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              GuestModeController.instance.enter();
+              context.go(AppRoutes.home);
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: WBColors.fgHeader,
+            ),
+            // TODO(i18n): key=welcomeBrowseAsGuest
+            child: Text(
+              'Browse as guest',
+              style: WBTypography.secondary.copyWith(
+                color: WBColors.fgHeader,
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: TextButton(
+            onPressed: () => _showOperatorSheet(context),
+            style: TextButton.styleFrom(
+              foregroundColor: WBColors.fgPlaceholder,
+            ),
+            child: Text(
+              'Sign in as vendor, rider or trade agent',
+              style: WBTypography.secondary.copyWith(
+                color: WBColors.fgPlaceholder,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Left brand panel — premium, calm, minimal. Hidden below ~1100px width.
+class _BrandPanel extends StatelessWidget {
+  const _BrandPanel();
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: WBColors.surfaceDark,
+      child: Padding(
+        padding: const EdgeInsets.all(56),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const WBWordmark(height: 34, color: WBColors.bgPrimary),
+            const SizedBox(height: WBSpacing.xl),
+            Text(
+              'One basket.\nEverything.',
+              style: WBTypography.hero.copyWith(
+                color: WBColors.bgPrimary,
+                fontSize: 52,
+                letterSpacing: -1.2,
+                height: 1.05,
+              ),
+            ),
+            const SizedBox(height: WBSpacing.lg),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Text(
+                'Restaurants, fresh produce, livestock and kitchen '
+                'essentials, all in one basket.',
+                style: WBTypography.body.copyWith(
+                  color: WBColors.bgDivider,
+                  fontSize: 16,
+                  height: 1.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+void _showOperatorSheet(BuildContext context) {
+  showModalBottomSheet<void>(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (_) => Container(
+      decoration: const BoxDecoration(
+        color: WBColors.surfaceCard,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        20,
+        14,
+        20,
+        MediaQuery.of(context).padding.bottom + 22,
+      ),
+      child: WBMaxWidth(
+        maxWidth: WBBreakpoints.maxReading,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 44,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: WBColors.bgDivider,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Sign in as operator',
+              style: WBTypography.cardTitle.copyWith(fontSize: 18),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Pick the dashboard you need.',
+              style: WBTypography.caption.copyWith(color: WBColors.fgSecondary),
+            ),
+            const SizedBox(height: 12),
+            for (final r in const [
+              (WBIconName.home, 'Vendor', 'Sell food, produce or essentials',
+                  AppRoutes.vendorLogin),
+              (WBIconName.basket, 'Trader', 'List bulk lots & corridor exports',
+                  AppRoutes.traderLogin),
+              (WBIconName.bike, 'Rider', 'Deliver baskets in the city',
+                  AppRoutes.riderLogin),
+              (WBIconName.bike, 'Driver', 'Move long-haul corridor loads',
+                  AppRoutes.driverLogin),
+              (WBIconName.card, 'Trade agent', 'Register traders, log sales',
+                  AppRoutes.agentLogin),
+            ])
+              _OperatorRow(icon: r.$1, label: r.$2, sub: r.$3, route: r.$4),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+class _OperatorRow extends StatelessWidget {
+  const _OperatorRow({
+    required this.icon,
+    required this.label,
+    required this.sub,
+    required this.route,
+  });
+  final WBIconName icon;
+  final String label;
+  final String sub;
+  final String route;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).pop();
+        context.push(route);
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: WBColors.bgSoft,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              alignment: Alignment.center,
+              child: WBIcon(icon, size: 16),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: WBTypography.body.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    sub,
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const WBIcon(
+              WBIconName.chevronRight,
+              size: 16,
+              color: WBColors.fgPlaceholder,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Feature {
+  const _Feature(this.icon, this.label);
+  final WBIconName icon;
+  final String label;
+}
+
+class _FeatureRow extends StatelessWidget {
+  const _FeatureRow({required this.feature});
+  final _Feature feature;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(WBSpacing.md - 2),
+      decoration: BoxDecoration(
+        color: WBColors.bgSecondary,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: const BoxDecoration(
+              color: WBColors.bgPrimary,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: WBIcon(feature.icon, size: 18),
+          ),
+          const SizedBox(width: WBSpacing.md - 2),
+          Expanded(
+            child: Text(
+              feature.label,
+              style: WBTypography.secondary.copyWith(
+                color: WBColors.fgHeader,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SecondaryCta extends StatelessWidget {
+  const _SecondaryCta({required this.label, required this.onPressed});
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 56,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: WBColors.bgPrimary,
+          borderRadius: BorderRadius.circular(WBRadius.pill),
+          border: Border.all(color: WBColors.bgDivider),
+        ),
+        child: Text(
+          label,
+          style: WBTypography.body.copyWith(
+            fontWeight: FontWeight.w500,
+            color: WBColors.fgHeader,
+          ),
+        ),
+      ),
+    );
+  }
+}
