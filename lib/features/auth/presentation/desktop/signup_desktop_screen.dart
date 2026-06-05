@@ -75,9 +75,12 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
         phone: _e164Phone,
         email: _email.text.trim(),
         password: _password.text,
+        country: _country?.name ?? 'Nigeria',
       );
       if (!mounted) return;
-      context.push('${AppRoutes.otp}?phone=${Uri.encodeComponent(_e164Phone)}&flow=signup');
+      // WAWU ID returns a live session from /auth/register, so the account is
+      // ready — go straight to role selection (no phone-OTP step on sign-up).
+      context.go(AppRoutes.roleSelect);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
     } finally {

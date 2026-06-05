@@ -38,23 +38,31 @@ class AuthApi {
 
   // ─── Sign-up (name + phone + email + password, verified by OTP) ─────────
 
-  /// Registers the user and triggers an OTP to their phone. The account is
-  /// only created once [verifySignup] succeeds.
+  /// Registers the user on WAWU ID and starts their session.
+  ///
+  /// WAWU ID's `/auth/register` requires `country` and a `password` (min 8),
+  /// creates the account, and returns a token pair immediately — there is no
+  /// separate phone-OTP step for password sign-up, so we persist the tokens
+  /// here and the caller can route straight into the app.
   Future<void> signup({
     required String fullName,
     required String phone,
     required String email,
     required String password,
+    required String country,
   }) async {
-    await _idPost('/auth/register', body: {
+    final res = await _idPost('/auth/register', body: {
       'fullName': fullName,
       'phone': phone,
       'email': email,
       'password': password,
+      'country': country,
     });
+    await _persist(res);
   }
 
-  /// Confirms the sign-up OTP, creating the account and starting a session.
+  /// Confirms a phone OTP, creating the account and starting a session.
+  /// Retained for the optional phone-verification flow.
   Future<void> verifySignup(String phone, String code) async {
     final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
