@@ -360,60 +360,86 @@ class _ContextBand extends StatelessWidget {
   }
 
   Widget _livestock(BuildContext context) {
-    return GestureDetector(
-      onTap: () => wbShowSnack(context, 'Connecting you to Butcher John…'),
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        padding: const EdgeInsets.all(WBSpacing.md),
-        decoration: BoxDecoration(
-          color: WBColors.surfaceDark,
-          borderRadius: BorderRadius.circular(WBRadius.card),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(12),
+    return IgnorePointer(
+      child: Opacity(
+        opacity: 0.55,
+        child: Container(
+          padding: const EdgeInsets.all(WBSpacing.md),
+          decoration: BoxDecoration(
+            color: WBColors.surfaceDark,
+            borderRadius: BorderRadius.circular(WBRadius.card),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                alignment: Alignment.center,
+                child: const WBIcon(
+                  WBIconName.phone,
+                  size: 18,
+                  color: Colors.white,
+                ),
               ),
-              alignment: Alignment.center,
-              child: const WBIcon(
-                WBIconName.phone,
-                size: 18,
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            'Watch your meat being cut',
+                            style: WBTypography.body.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.18),
+                            borderRadius: BorderRadius.circular(WBRadius.pill),
+                          ),
+                          child: Text(
+                            context.l10n.commonComingSoon,
+                            style: WBTypography.caption.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'Butcher John · 4.9★ · 5 min wait · WhatsApp call',
+                      style: WBTypography.caption.copyWith(
+                        color: Colors.white.withValues(alpha: 0.65),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const WBIcon(
+                WBIconName.arrowRight,
+                size: 16,
                 color: Colors.white,
               ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Watch your meat being cut',
-                    style: WBTypography.body.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    'Butcher John · 4.9★ · 5 min wait · WhatsApp call',
-                    style: WBTypography.caption.copyWith(
-                      color: Colors.white.withValues(alpha: 0.65),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const WBIcon(
-              WBIconName.arrowRight,
-              size: 16,
-              color: Colors.white,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
