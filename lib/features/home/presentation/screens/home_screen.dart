@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -462,8 +463,11 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
     if (mounted) setState(() => _rotation = _snapAnim?.value ?? _rotation);
   }
 
-  static const _sensitivity = 0.0048;
-  static const _friction = 0.910;
+  // Tuned for a light, responsive spin: more rotation per pixel, a longer
+  // glide, and a quick settle (previously felt heavy and appeared to "rewind"
+  // to the start because the ring barely moved before snapping to nearest).
+  static const _sensitivity = 0.0110;
+  static const _friction = 0.945;
   static const _stopVel = 0.0022;
 
   // The orbit is all cats EXCEPT the currently active one.
@@ -531,7 +535,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   }
 
   void _onHorizontalDragEnd(DragEndDetails d) {
-    _vel = (d.velocity.pixelsPerSecond.dx * _sensitivity).clamp(-0.16, 0.16);
+    _vel = (d.velocity.pixelsPerSecond.dx * _sensitivity).clamp(-0.34, 0.34);
     _ticker ??= createTicker(_onTick);
     _ticker!.start();
   }
@@ -573,7 +577,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
   // Post-momentum snap: visual only, no content change.
   void _snapVisual(int idx) {
     setState(() => _spinIdx = idx);
-    _animateSnap(idx, const Duration(milliseconds: 380), spring: false);
+    _animateSnap(idx, const Duration(milliseconds: 240), spring: false);
   }
 
   void _animateSnap(int idx, Duration duration, {required bool spring}) {
@@ -632,6 +636,7 @@ class _OrbitalCategorySelectorState extends State<_OrbitalCategorySelector>
 
       return GestureDetector(
         behavior: HitTestBehavior.opaque,
+        dragStartBehavior: DragStartBehavior.down,
         onHorizontalDragUpdate: _onHorizontalDragUpdate,
         onHorizontalDragEnd: _onHorizontalDragEnd,
         child: SizedBox(
