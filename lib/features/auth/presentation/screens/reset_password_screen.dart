@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
@@ -71,11 +73,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         widget.code,
         _password.text,
       );
+      // Reset returns a live session — complete the post-auth sequence so the
+      // user lands fully signed in (not still flagged as a guest).
+      await RoleController.instance.syncFromApi();
       RoleController.instance.setRole(AppRole.customer);
+      GuestModeController.instance.exit();
+      NotificationService.instance.registerToken();
       if (!mounted) return;
       context.go(AppRoutes.home);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
+    } catch (e) {
+      // Non-API failure — show the cause instead of failing silently.
+      if (mounted) wbShowSnack(context, "Couldn't reset password: $e");
     } finally {
       if (mounted) setState(() => _busy = false);
     }

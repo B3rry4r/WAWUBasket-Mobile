@@ -109,6 +109,9 @@ class _OtpScreenState extends State<OtpScreen>
       }
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
+    } catch (e) {
+      // Non-API failure — show the cause instead of failing silently.
+      if (mounted) wbShowSnack(context, "Couldn't verify code: $e");
     } finally {
       if (mounted) setState(() => _busy = false);
     }
