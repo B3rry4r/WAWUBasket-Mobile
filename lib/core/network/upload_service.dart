@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../media/media_compressor.dart';
 import 'api_client.dart';
 
 /// The R2 folders the storage presign endpoint whitelists.
@@ -38,8 +39,17 @@ class UploadService {
       imageQuality: 85,
     );
     if (file == null) return null;
-    final bytes = await file.readAsBytes();
-    final contentType = _contentType(file);
+    final rawBytes = await file.readAsBytes();
+
+    // WhatsApp/Telegram-style compression: downscale + re-encode to JPEG
+    // before the bytes ever leave the device. Falls back to the original
+    // bytes (and content type) if compression is skipped or fails.
+    final compressed = await MediaCompressor.compressImageBytes(
+      rawBytes,
+      originalContentType: _contentType(file),
+    );
+    final bytes = compressed.bytes;
+    final contentType = compressed.contentType;
 
     final res = await _api.post('/storage/presign', body: {
       'folder': folder,

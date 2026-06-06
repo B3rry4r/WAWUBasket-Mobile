@@ -53,6 +53,11 @@ dependencies:
   # documents and chat attachments; uploaded to R2 via a presigned PUT.
   image_picker: ^1.1.2
 
+  # WhatsApp/Telegram-style media compression before upload. Images are
+  # downscaled to a ~1600px longest edge at quality ~80 (JPEG) so we never
+  # ship raw camera originals over the wire. See lib/core/media/.
+  flutter_image_compress: ^2.3.0
+
   # WAWU+ subscription via App Store / Play Store in-app purchase.
   in_app_purchase: ^3.2.0
 
