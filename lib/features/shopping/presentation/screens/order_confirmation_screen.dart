@@ -5,13 +5,34 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../data/orders_api.dart';
 
 /// Celebratory order confirmation screen shown immediately after payment.
 /// Tapping "Track my order" pushes the live tracking screen.
-class OrderConfirmationScreen extends StatelessWidget {
+class OrderConfirmationScreen extends StatefulWidget {
   const OrderConfirmationScreen({super.key, this.orderId});
 
   final String? orderId;
+
+  @override
+  State<OrderConfirmationScreen> createState() =>
+      _OrderConfirmationScreenState();
+}
+
+class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Every post-checkout return path (mobile deep link and the web redirect)
+    // lands here — confirm the payment server-side so the order advances to
+    // `paid` even when the async webhook is delayed or never arrives.
+    final id = widget.orderId;
+    if (id != null && id.isNotEmpty) {
+      OrdersApi.instance
+          .verifyPayment(id)
+          .catchError((_) => <String, dynamic>{});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +79,11 @@ class OrderConfirmationScreen extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
-              if (orderId != null) ...[
+              if (widget.orderId != null) ...[
                 const SizedBox(height: WBSpacing.md),
                 Text(
                   () {
-                    final cleaned = orderId!.replaceAll('-', '');
+                    final cleaned = widget.orderId!.replaceAll('-', '');
                     final short = cleaned.length >= 6
                         ? cleaned.substring(0, 6)
                         : cleaned;
@@ -99,8 +120,8 @@ class OrderConfirmationScreen extends StatelessWidget {
                 fullWidth: true,
                 trailingIcon: WBIconName.arrowRight,
                 onPressed: () => context.go(
-                  orderId != null
-                      ? '${AppRoutes.tracking}?orderId=$orderId'
+                  widget.orderId != null
+                      ? '${AppRoutes.tracking}?orderId=${widget.orderId}'
                       : AppRoutes.tracking,
                 ),
               ),

@@ -7,6 +7,7 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../shell/presentation/desktop/customer_web_scaffold.dart';
+import '../../data/orders_api.dart';
 
 /// Desktop-web layout for the celebratory order confirmation surface shown
 /// immediately after payment. Mirrors [OrderConfirmationScreen]'s data, copy,
@@ -14,10 +15,30 @@ import '../../../shell/presentation/desktop/customer_web_scaffold.dart';
 /// customer web chrome with a calm, centered single column.
 ///
 /// Desktop-only — the mobile build never imports this file.
-class OrderConfirmationDesktopScreen extends StatelessWidget {
+class OrderConfirmationDesktopScreen extends StatefulWidget {
   const OrderConfirmationDesktopScreen({super.key, this.orderId});
 
   final String? orderId;
+
+  @override
+  State<OrderConfirmationDesktopScreen> createState() =>
+      _OrderConfirmationDesktopScreenState();
+}
+
+class _OrderConfirmationDesktopScreenState
+    extends State<OrderConfirmationDesktopScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Web checkout returns here via the Flutterwave redirect — confirm the
+    // payment server-side so the order advances even if the webhook is delayed.
+    final id = widget.orderId;
+    if (id != null && id.isNotEmpty) {
+      OrdersApi.instance
+          .verifyPayment(id)
+          .catchError((_) => <String, dynamic>{});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +92,11 @@ class OrderConfirmationDesktopScreen extends StatelessWidget {
                     height: 1.5,
                   ),
                 ),
-                if (orderId != null) ...[
+                if (widget.orderId != null) ...[
                   const SizedBox(height: WBSpacing.md),
                   Text(
                     () {
-                      final cleaned = orderId!.replaceAll('-', '');
+                      final cleaned = widget.orderId!.replaceAll('-', '');
                       final short = cleaned.length >= 6
                           ? cleaned.substring(0, 6)
                           : cleaned;
@@ -112,8 +133,8 @@ class OrderConfirmationDesktopScreen extends StatelessWidget {
                   fullWidth: true,
                   trailingIcon: WBIconName.arrowRight,
                   onPressed: () => context.go(
-                    orderId != null
-                        ? '${AppRoutes.tracking}?orderId=$orderId'
+                    widget.orderId != null
+                        ? '${AppRoutes.tracking}?orderId=${widget.orderId}'
                         : AppRoutes.tracking,
                   ),
                 ),

@@ -79,6 +79,10 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
       // otherwise the inbox stays usable and we just retry next time.
       final hasCache = (_chats ?? const []).isNotEmpty;
       setState(() {
+        // Leave the loading state even when the cache is empty (e.g. on web,
+        // where sqflite is unavailable) so the retry hint shows instead of an
+        // infinite spinner.
+        _chats ??= const [];
         _showSilentError = !hasCache;
         _errorMessage = e.message;
       });
@@ -86,6 +90,7 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
       if (!mounted) return;
       final hasCache = (_chats ?? const []).isNotEmpty;
       setState(() {
+        _chats ??= const [];
         _showSilentError = !hasCache;
         _errorMessage = context.l10n.chatInboxEmpty;
       });

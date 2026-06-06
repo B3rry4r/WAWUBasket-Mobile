@@ -17,6 +17,7 @@ class OrdersApi {
     String? paymentMethod,
     String? recipientName,
     String? recipientPhone,
+    String? platform,
   }) async {
     final body = <String, dynamic>{};
     if (addressId != null) body['addressId'] = addressId;
@@ -26,7 +27,17 @@ class OrdersApi {
     if (paymentMethod != null) body['paymentMethod'] = paymentMethod;
     if (recipientName != null && recipientName.isNotEmpty) body['recipientName'] = recipientName;
     if (recipientPhone != null && recipientPhone.isNotEmpty) body['recipientPhone'] = recipientPhone;
+    if (platform != null) body['platform'] = platform;
     final res = await _api.post('/orders', body: body);
+    return (res as Map).cast<String, dynamic>();
+  }
+
+  /// Asks the backend to confirm payment with Flutterwave and advance the order
+  /// to `paid` if the charge succeeded — used on return from checkout so the
+  /// order isn't stuck on "Awaiting payment" when the webhook is delayed or
+  /// never arrives. Idempotent; returns the (possibly updated) order.
+  Future<Map<String, dynamic>> verifyPayment(String id) async {
+    final res = await _api.post('/orders/$id/verify-payment');
     return (res as Map).cast<String, dynamic>();
   }
 

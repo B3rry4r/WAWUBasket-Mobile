@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -152,6 +153,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           paymentMethod: _payMethod.apiValue,
           recipientName: _forSomeoneElse ? _recipientNameCtrl.text.trim() : null,
           recipientPhone: _forSomeoneElse ? _recipientPhoneCtrl.text.trim() : null,
+          platform: kIsWeb ? 'web' : 'app',
         );
         await ref.read(cartControllerProvider.notifier).load();
         // The product order takes precedence as the order we follow on the
@@ -164,11 +166,19 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       if (!mounted) return;
 
       if (checkoutUrl.isNotEmpty) {
-        // Open the Flutterwave hosted checkout page in the device browser.
-        await launchUrl(
-          Uri.parse(checkoutUrl),
-          mode: LaunchMode.externalApplication,
-        );
+        if (kIsWeb) {
+          // Navigate the current tab to Flutterwave. Opening a new tab/popup
+          // after an await is blocked by browsers (no user gesture) — that's
+          // why web checkout silently did nothing. Flutterwave redirects back
+          // to the web app (order-confirmation) when done.
+          await launchUrl(Uri.parse(checkoutUrl), webOnlyWindowName: '_self');
+        } else {
+          // Open the Flutterwave hosted checkout page in the device browser.
+          await launchUrl(
+            Uri.parse(checkoutUrl),
+            mode: LaunchMode.externalApplication,
+          );
+        }
       }
 
       if (!mounted) return;
@@ -197,7 +207,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       await Future<void>.delayed(const Duration(seconds: 3));
       if (!mounted) return;
       try {
-        final order = await OrdersApi.instance.orderDetail(orderId);
+        // verify-payment also confirms the charge with Flutterwave server-side,
+        // so the order advances even if the async webhook never lands.
+        final order = await OrdersApi.instance.verifyPayment(orderId);
         final state = order['state'] as String? ?? '';
         if (state.isNotEmpty && state != 'placed') {
           if (mounted) {
