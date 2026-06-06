@@ -50,7 +50,7 @@ class WBWebTopBar extends StatelessWidget implements PreferredSizeWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: onLogoTap,
-                    child: const WBWordmark(height: 28),
+                    child: const WBWMark(size: 28),
                   ),
                 ),
                 const SizedBox(width: WBSpacing.xl),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../responsive/wb_responsive.dart';
 import '../theme/wb_theme_exports.dart';
 
 /// Hands turn-by-turn navigation off to the device's maps app, routing to
@@ -19,7 +20,7 @@ Future<void> wbLaunchNavigation(
   );
   final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!ok && context.mounted) {
-    wbShowSnack(context, "Couldn't open maps for $label");
+    wbShowError(context, "Couldn't open maps for $label");
   }
 }
 
@@ -30,7 +31,7 @@ Future<void> wbCallPhone(BuildContext context, String phone) async {
   final uri = Uri(scheme: 'tel', path: digits);
   final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!ok && context.mounted) {
-    wbShowSnack(context, "Couldn't open the phone app");
+    wbShowError(context, "Couldn't open the phone app");
   }
 }
 
@@ -39,28 +40,81 @@ Future<void> wbLaunchEmail(BuildContext context, String email) async {
   final uri = Uri(scheme: 'mailto', path: email);
   final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
   if (!ok && context.mounted) {
-    wbShowSnack(context, "Couldn't open email app — write to $email");
+    wbShowError(context, "Couldn't open email app — write to $email");
   }
 }
 
-/// Shows a soft snackbar at the bottom of the screen — used for placeholder
-/// actions while the underlying flow isn't wired to a backend yet.
-void wbShowSnack(BuildContext context, String message) {
+enum _WBSnackKind { info, error }
+
+/// Neutral confirmation / info snackbar (saved, copied, placeholder actions).
+void wbShowSnack(BuildContext context, String message) =>
+    _wbShowSnack(context, message, _WBSnackKind.info);
+
+/// Error snackbar — same footprint as [wbShowSnack] but flagged with the
+/// status-error accent and held on screen a little longer. Use for caught
+/// failures (`e.message`) so problems read differently from confirmations.
+void wbShowError(BuildContext context, String message) =>
+    _wbShowSnack(context, message, _WBSnackKind.error);
+
+/// One standardized snackbar for the whole app.
+///
+/// Fixes the old behaviour that floated a pill-shaped bar 100px up the screen
+/// (it looked like a stranded button): it now sits just above the bottom edge
+/// as a rounded card. On desktop/web it becomes a fixed, comfortably-narrow
+/// bar centred at the bottom instead of stretching the full monitor width.
+void _wbShowSnack(BuildContext context, String message, _WBSnackKind kind) {
   ScaffoldMessenger.of(context)
     ..clearSnackBars()
     ..showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: WBTypography.body.copyWith(color: Colors.white, fontSize: 14),
-        ),
-        backgroundColor: WBColors.surfaceDark,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.fromLTRB(20, 0, 20, 100),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(WBRadius.pill),
-        ),
-        duration: const Duration(milliseconds: 1800),
+      wbSnackBar(
+        message: message,
+        isDesktop: context.isDesktop,
+        isError: kind == _WBSnackKind.error,
       ),
     );
+}
+
+/// Builds the standardized snackbar widget. Exposed so the rare call site that
+/// must keep a `ScaffoldMessenger` captured across a `Navigator.pop()` (where
+/// the context is no longer mountable) can still render the identical bar.
+SnackBar wbSnackBar({
+  required String message,
+  required bool isDesktop,
+  bool isError = false,
+}) {
+  final text = Text(
+    message,
+    style: WBTypography.body.copyWith(color: Colors.white, fontSize: 14),
+  );
+  final Widget content = isError
+      ? Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(top: 1),
+              child: Icon(Icons.error_outline_rounded,
+                  size: 20, color: WBColors.statusError),
+            ),
+            const SizedBox(width: 12),
+            Flexible(child: text),
+          ],
+        )
+      : text;
+
+  return SnackBar(
+    content: content,
+    backgroundColor: WBColors.surfaceDark,
+    behavior: SnackBarBehavior.floating,
+    elevation: 6,
+    // `width` centres a fixed bar (desktop); `margin` keeps a full-width
+    // bar inset from the screen edge (mobile). They are mutually exclusive.
+    width: isDesktop ? 460 : null,
+    margin: isDesktop ? null : const EdgeInsets.fromLTRB(16, 0, 16, 16),
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(WBRadius.button),
+    ),
+    duration: Duration(milliseconds: isError ? 2800 : 1800),
+  );
 }

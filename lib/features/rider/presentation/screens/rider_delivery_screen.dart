@@ -89,7 +89,7 @@ class _Body extends StatelessWidget {
         wbShowSnack(context, next.next.label);
       }
     } on ApiException catch (e) {
-      if (context.mounted) wbShowSnack(context, e.message);
+      if (context.mounted) wbShowError(context, e.message);
     }
   }
 

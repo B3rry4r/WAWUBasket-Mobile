@@ -141,7 +141,7 @@ class _TraderKycDesktopScreenState extends State<TraderKycDesktopScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _busy = false);
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     }
   }
@@ -162,7 +162,7 @@ class _TraderKycDesktopScreenState extends State<TraderKycDesktopScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const WBWordmark(height: 32),
+                const WBWMark(size: 32),
                 const SizedBox(height: WBSpacing.xl),
                 Row(
                   children: [

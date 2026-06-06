@@ -102,7 +102,7 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       if (!mounted) return;
       _navigateAfterAuth();
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (e) {
       // Unexpected (non-API) failure — surface a short cause so it isn't a
       // dead end while debugging, instead of a blanket "Something went wrong".
@@ -298,7 +298,7 @@ class _BrandPanel extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const WBWordmark(height: 40, color: WBColors.bgPrimary),
+            const WBWMark(size: 40, color: WBColors.bgPrimary),
             const SizedBox(height: WBSpacing.lg),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 380),

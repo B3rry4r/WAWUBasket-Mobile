@@ -57,7 +57,7 @@ class _ReceiptScreenState extends State<ReceiptScreen> {
       wbShowSnack(context, context.l10n.orderHistoryReordered);
       context.go(AppRoutes.cart);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _reordering = false);
     }

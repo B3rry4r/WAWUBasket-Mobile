@@ -84,7 +84,7 @@ class _AgentKycScreenState extends State<AgentKycScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _busy = false);
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     }
   }

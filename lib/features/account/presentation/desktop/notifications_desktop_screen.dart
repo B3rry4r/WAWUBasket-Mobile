@@ -77,7 +77,7 @@ class _NotificationsDesktopScreenState
       await AccountExtrasApi.instance.markAllNotificationsRead();
       if (mounted) wbShowSnack(context, context.l10n.notificationsAllRead);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     }
   }
 

@@ -326,7 +326,7 @@ class _OrderCard extends StatelessWidget {
       wbShowSnack(context, context.l10n.orderHistoryReordered);
       context.push(AppRoutes.cart);
     } on ApiException catch (e) {
-      if (context.mounted) wbShowSnack(context, e.message);
+      if (context.mounted) wbShowError(context, e.message);
     }
   }
 

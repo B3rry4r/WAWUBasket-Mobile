@@ -46,7 +46,7 @@ class _ForgotPasswordDesktopScreenState
       if (!mounted) return;
       context.push('${AppRoutes.otp}?phone=${Uri.encodeComponent(id)}&flow=reset');
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -190,7 +190,7 @@ class _BrandPanel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const WBWordmark(height: 40, color: WBColors.bgPrimary),
+          const WBWMark(size: 40, color: WBColors.bgPrimary),
           const SizedBox(height: WBSpacing.lg),
           Text(
             context.l10n.forgotSubtitle,

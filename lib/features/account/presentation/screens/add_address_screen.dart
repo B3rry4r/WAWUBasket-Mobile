@@ -89,7 +89,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
       wbShowSnack(context, _editing ? context.l10n.addAddressUpdated : context.l10n.addAddressSaved);
       context.pop();
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

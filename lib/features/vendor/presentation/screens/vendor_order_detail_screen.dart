@@ -93,7 +93,7 @@ class _BodyState extends State<_Body> {
       await VendorOrdersController.instance.advance(order.id);
       if (mounted) wbShowSnack(context, '${order.id} · ${next.next.label}');
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _advancing = false);
     }
@@ -129,7 +129,7 @@ class _BodyState extends State<_Body> {
       await VendorOrdersController.instance.decline(widget.order.id);
       if (mounted) wbShowSnack(context, '${widget.order.id} declined');
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _declining = false);
     }

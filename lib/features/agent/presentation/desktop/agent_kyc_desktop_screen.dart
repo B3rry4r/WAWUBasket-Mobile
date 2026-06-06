@@ -91,7 +91,7 @@ class _AgentKycDesktopScreenState extends State<AgentKycDesktopScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _busy = false);
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     }
   }
@@ -123,7 +123,7 @@ class _AgentKycDesktopScreenState extends State<AgentKycDesktopScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const WBWordmark(height: 32),
+        const WBWMark(size: 32),
         const SizedBox(height: WBSpacing.lg),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,

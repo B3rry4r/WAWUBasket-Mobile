@@ -89,7 +89,7 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
       if (!mounted) return;
       context.go(AppRoutes.roleSelect);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (e) {
       // Non-API failure — show the cause instead of failing silently.
       if (mounted) wbShowSnack(context, "Couldn't create account: $e");
@@ -321,7 +321,7 @@ class _BrandPanel extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const WBWordmark(height: 40, color: Colors.white),
+            const WBWMark(size: 40, color: Colors.white),
             const SizedBox(height: WBSpacing.lg),
             Text(
               context.l10n.signupSubtitle,

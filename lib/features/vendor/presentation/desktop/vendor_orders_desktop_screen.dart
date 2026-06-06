@@ -256,7 +256,7 @@ class _OrderCardState extends State<_OrderCard> {
       await VendorOrdersController.instance.advance(widget.order.id);
       if (mounted) wbShowSnack(context, context.l10n.vendorOrderAccepted);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _accepting = false);
     }
@@ -268,7 +268,7 @@ class _OrderCardState extends State<_OrderCard> {
       await VendorOrdersController.instance.decline(widget.order.id);
       if (mounted) wbShowSnack(context, context.l10n.vendorOrderDeclined);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _declining = false);
     }
@@ -283,7 +283,7 @@ class _OrderCardState extends State<_OrderCard> {
         wbShowSnack(context, '${widget.order.id} · ${next.next.label}');
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _advancing = false);
     }

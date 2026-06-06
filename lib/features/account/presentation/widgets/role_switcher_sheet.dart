@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
+import '../../../../core/responsive/wb_responsive.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -136,13 +137,16 @@ class RoleSwitcherSheet extends StatelessWidget {
   Future<void> _switchTo(BuildContext context, AppRole role) async {
     final router = GoRouter.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final isDesktop = context.isDesktop;
     Navigator.of(context).pop();
     try {
       await AuthApi.instance.switchRole(role.name);
     } on ApiException catch (e) {
       messenger
         ..clearSnackBars()
-        ..showSnackBar(SnackBar(content: Text(e.message)));
+        ..showSnackBar(
+          wbSnackBar(message: e.message, isDesktop: isDesktop, isError: true),
+        );
       return;
     }
     if (!context.mounted) return;

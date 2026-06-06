@@ -111,7 +111,7 @@ class _OtpDesktopScreenState extends State<OtpDesktopScreen>
         context.go(AppRoutes.roleSelect);
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (e) {
       // Non-API failure — show the cause instead of failing silently.
       if (mounted) wbShowSnack(context, "Couldn't verify code: $e");
@@ -129,7 +129,7 @@ class _OtpDesktopScreenState extends State<OtpDesktopScreen>
         wbShowSnack(context, context.l10n.otpNewCode);
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     }
   }
 
@@ -184,7 +184,7 @@ class _BrandPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const WBWordmark(height: 40, color: WBColors.bgPrimary),
+          const WBWMark(size: 40, color: WBColors.bgPrimary),
           const SizedBox(height: WBSpacing.lg),
           SizedBox(
             width: 360,

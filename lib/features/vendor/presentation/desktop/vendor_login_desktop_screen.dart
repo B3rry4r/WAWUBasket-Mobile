@@ -50,7 +50,7 @@ class _VendorLoginDesktopScreenState extends State<VendorLoginDesktopScreen> {
       if (!mounted) return;
       context.go(AppRoutes.vendorHome);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -73,7 +73,7 @@ class _VendorLoginDesktopScreenState extends State<VendorLoginDesktopScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const WBWordmark(height: 32),
+                  const WBWMark(size: 32),
                   const SizedBox(height: WBSpacing.xxl),
                   WBBackChip(onPressed: () => context.go(AppRoutes.welcome)),
                   const SizedBox(height: WBSpacing.xl),

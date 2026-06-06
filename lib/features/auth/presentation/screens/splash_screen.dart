@@ -5,9 +5,11 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/token_store.dart';
+import '../../../../core/responsive/wb_responsive.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/widgets/wb_logo.dart';
 import '../../application/role_controller.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -54,6 +56,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Desktop/web: the basket PNG + wordmark lock-up is a portrait, mobile-only
+    // composition. On a wide browser show just the brand mark, centred.
+    if (context.isDesktop) {
+      return const Scaffold(
+        backgroundColor: WBColors.bgPrimary,
+        body: Center(child: WBWMark(size: 96)),
+      );
+    }
+
     final screenH = MediaQuery.of(context).size.height;
     final screenW = MediaQuery.of(context).size.width;
     return Scaffold(

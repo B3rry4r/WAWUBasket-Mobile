@@ -102,7 +102,7 @@ class _DeleteAccountDesktopScreenState
                           );
                         } on ApiException catch (e) {
                           if (sheetCtx.mounted) {
-                            wbShowSnack(sheetCtx, e.message);
+                            wbShowError(sheetCtx, e.message);
                           }
                           setSheet(() => _deleting = false);
                           return;

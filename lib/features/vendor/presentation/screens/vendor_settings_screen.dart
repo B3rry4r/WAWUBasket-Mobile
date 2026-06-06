@@ -77,7 +77,7 @@ class _VendorSettingsScreenState extends State<VendorSettingsScreen> {
       });
       if (mounted) wbShowSnack(context, context.l10n.vendorSettingsSaved);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _saving = false);
     }

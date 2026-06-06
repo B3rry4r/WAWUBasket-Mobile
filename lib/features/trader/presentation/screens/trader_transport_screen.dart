@@ -501,7 +501,7 @@ class _BidRowState extends State<_BidRow> {
       TransportController.instance.notifyLoadsChanged();
       wbShowSnack(context, '${widget.bid.driverName} assigned to this load');
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (_) {
       if (mounted) wbShowSnack(context, 'Could not assign driver. Try again.');
     } finally {

@@ -105,7 +105,7 @@ class _VendorDesktopScreenState extends ConsumerState<VendorDesktopScreen> {
     } on ApiException catch (e) {
       // Revert on error
       if (mounted) setState(() => _isFavorited = wasF);
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _togglingFavorite = false);
     }

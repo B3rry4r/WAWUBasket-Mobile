@@ -84,7 +84,7 @@ class _SignupScreenState extends State<SignupScreen> {
       if (!mounted) return;
       context.go(AppRoutes.roleSelect);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (e) {
       // Non-API failure — show the cause instead of failing silently.
       if (mounted) wbShowSnack(context, "Couldn't create account: $e");

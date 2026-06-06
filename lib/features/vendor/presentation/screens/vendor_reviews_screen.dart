@@ -83,7 +83,7 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _replied.remove(id));
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     }
   }

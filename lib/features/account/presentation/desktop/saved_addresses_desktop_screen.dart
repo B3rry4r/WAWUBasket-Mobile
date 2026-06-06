@@ -41,7 +41,7 @@ class _SavedAddressesDesktopScreenState
         wbShowSnack(context, context.l10n.savedAddressesSetDefault(a.label));
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     }
   }
 

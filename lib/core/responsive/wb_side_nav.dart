@@ -44,7 +44,7 @@ class WBSideNav extends StatelessWidget {
               child: header ??
                   const Align(
                     alignment: Alignment.centerLeft,
-                    child: WBWordmark(height: 26, color: Colors.white),
+                    child: WBWMark(size: 26, color: Colors.white),
                   ),
             ),
             Expanded(

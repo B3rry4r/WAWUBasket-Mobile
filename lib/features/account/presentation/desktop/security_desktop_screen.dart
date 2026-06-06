@@ -113,7 +113,7 @@ class _SecurityDesktopScreenState extends State<SecurityDesktopScreen> {
                     if (sheetCtx.mounted) Navigator.of(sheetCtx).pop();
                     if (mounted) wbShowSnack(context, context.l10n.securityPasswordUpdated);
                   } on ApiException catch (e) {
-                    if (sheetCtx.mounted) wbShowSnack(sheetCtx, e.message);
+                    if (sheetCtx.mounted) wbShowError(sheetCtx, e.message);
                   } finally {
                     if (sheetCtx.mounted) setSheet(() => busy = false);
                   }

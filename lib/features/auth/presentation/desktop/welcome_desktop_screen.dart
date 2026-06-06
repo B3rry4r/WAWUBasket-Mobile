@@ -230,7 +230,7 @@ class _BrandPanel extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const WBWordmark(height: 34, color: WBColors.bgPrimary),
+            const WBWMark(size: 34, color: WBColors.bgPrimary),
             const SizedBox(height: WBSpacing.xl),
             Text(
               'One basket.\nEverything.',

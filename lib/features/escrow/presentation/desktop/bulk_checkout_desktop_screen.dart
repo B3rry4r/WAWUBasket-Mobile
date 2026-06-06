@@ -89,7 +89,7 @@ class _BulkCheckoutDesktopScreenState extends State<BulkCheckoutDesktopScreen> {
       if (!mounted) return;
       context.pushReplacement('${AppRoutes.escrowStatus}/${order.id}');
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

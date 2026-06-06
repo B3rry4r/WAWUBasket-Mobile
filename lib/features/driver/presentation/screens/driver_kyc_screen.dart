@@ -84,7 +84,7 @@ class _DriverKycScreenState extends State<DriverKycScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _busy = false);
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     }
   }

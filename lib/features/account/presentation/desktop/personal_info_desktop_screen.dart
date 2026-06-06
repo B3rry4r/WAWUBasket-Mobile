@@ -62,7 +62,7 @@ class _PersonalInfoDesktopScreenState extends State<PersonalInfoDesktopScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _uploadingAvatar = false);
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     } catch (_) {
       if (mounted) {
@@ -116,7 +116,7 @@ class _PersonalInfoDesktopScreenState extends State<PersonalInfoDesktopScreen> {
       wbShowSnack(context, context.l10n.personalInfoSaved);
       context.pop();
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

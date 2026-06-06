@@ -45,7 +45,7 @@ class _VendorLoginScreenState extends State<VendorLoginScreen> {
       if (!mounted) return;
       context.go(AppRoutes.vendorHome);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

@@ -73,7 +73,7 @@ class _DevSettingsDesktopScreenState extends State<DevSettingsDesktopScreen> {
         wbShowSnack(context, enabled ? '$key enabled' : '$key disabled');
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (_) {
       if (mounted) wbShowSnack(context, 'Failed to update flag');
     } finally {

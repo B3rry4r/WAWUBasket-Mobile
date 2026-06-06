@@ -45,7 +45,7 @@ class _DriverLoginScreenState extends State<DriverLoginScreen> {
       if (!mounted) return;
       context.go(AppRoutes.driverHome);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

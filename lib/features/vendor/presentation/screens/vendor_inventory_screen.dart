@@ -112,7 +112,7 @@ class _VendorInventoryScreenState extends State<VendorInventoryScreen> {
                     await VendorInventoryController.instance.load();
                     if (ctx.mounted) Navigator.of(ctx).pop();
                   } on ApiException catch (e) {
-                    if (ctx.mounted) wbShowSnack(ctx, e.message);
+                    if (ctx.mounted) wbShowError(ctx, e.message);
                     setSt(() => busy = false);
                   }
                 },

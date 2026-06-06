@@ -192,7 +192,7 @@ class _CheckoutDesktopScreenState extends ConsumerState<CheckoutDesktopScreen> {
       }
       return; // skip the finally setState below — state already set
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted && _placing) setState(() => _placing = false);
     }

@@ -86,7 +86,7 @@ class _ProductDesktopScreenState extends ConsumerState<ProductDesktopScreen> {
           _isFavorited ? 'Saved to favorites' : 'Removed from favorites');
     } on ApiException catch (e) {
       if (mounted) setState(() => _isFavorited = wasF);
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _togglingFavorite = false);
     }

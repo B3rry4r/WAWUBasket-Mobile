@@ -147,7 +147,7 @@ class _VendorKycScreenState extends State<VendorKycScreen> {
     } on ApiException catch (e) {
       if (mounted) {
         setState(() => _busy = false);
-        wbShowSnack(context, e.message);
+        wbShowError(context, e.message);
       }
     }
   }

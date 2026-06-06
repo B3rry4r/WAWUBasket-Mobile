@@ -51,7 +51,7 @@ class _AgentLoginScreenState extends State<AgentLoginScreen> {
       if (!mounted) return;
       context.go(AppRoutes.agentHome);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

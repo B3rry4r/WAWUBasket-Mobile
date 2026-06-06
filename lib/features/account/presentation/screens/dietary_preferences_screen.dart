@@ -68,7 +68,7 @@ class _DietaryPreferencesScreenState extends State<DietaryPreferencesScreen> {
         context.pop();
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (_) {
       // An unexpected (non-API) error is a failure — surface it instead of
       // falsely reporting success and dismissing the screen.

@@ -96,7 +96,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                           );
                         } on ApiException catch (e) {
                           if (sheetCtx.mounted) {
-                            wbShowSnack(sheetCtx, e.message);
+                            wbShowError(sheetCtx, e.message);
                           }
                           setSheet(() => _deleting = false);
                           return;

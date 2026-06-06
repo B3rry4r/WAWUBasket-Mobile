@@ -297,7 +297,7 @@ class _ChatScreenState extends State<ChatScreen> {
         await _sendOrderMessage(text);
       }
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -384,7 +384,7 @@ class _ChatScreenState extends State<ChatScreen> {
       // Body can be blank when the message is image-only.
       await _sendOrderMessage(_composer.text.trim(), attachKey: up.key);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (_) {
       if (mounted) {
         wbShowSnack(context, context.l10n.chatAttachmentFailed);

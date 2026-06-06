@@ -154,7 +154,7 @@ class _RiderHomeScreenState extends State<RiderHomeScreen> {
       wbShowSnack(context, 'Offer accepted!');
       context.push(AppRoutes.riderDelivery);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     }
   }
 

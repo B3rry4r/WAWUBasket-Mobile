@@ -99,7 +99,7 @@ class _AddAddressDesktopScreenState extends State<AddAddressDesktopScreen> {
       );
       context.pop();
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _busy = false);
     }

@@ -124,7 +124,7 @@ class _RecipeDetailDesktopScreenState extends State<RecipeDetailDesktopScreen> {
       wbShowSnack(context, context.l10n.recipeAddedToBasket);
       context.go(AppRoutes.cart);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (_) {
       if (mounted) wbShowSnack(context, context.l10n.recipeAddFailed);
     } finally {

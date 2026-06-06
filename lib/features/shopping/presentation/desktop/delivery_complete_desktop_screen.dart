@@ -55,7 +55,7 @@ class _DeliveryCompleteDesktopScreenState
       );
       if (mounted) setState(() => _submitted = true);
     } on ApiException catch (e) {
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } finally {
       if (mounted) setState(() => _submitting = false);
     }

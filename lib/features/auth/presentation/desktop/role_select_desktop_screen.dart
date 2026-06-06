@@ -157,7 +157,7 @@ class _BrandPanel extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const WBWordmark(height: 40, color: Colors.white),
+            const WBWMark(size: 40, color: Colors.white),
             const SizedBox(height: WBSpacing.lg),
             Text(
               context.l10n.roleSelectTitle,

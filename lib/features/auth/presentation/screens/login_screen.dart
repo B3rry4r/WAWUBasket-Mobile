@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } on ApiException catch (e) {
       // Real API failure — show the server's reason (e.g. "Incorrect password",
       // "No account found with this email or phone number.").
-      if (mounted) wbShowSnack(context, e.message);
+      if (mounted) wbShowError(context, e.message);
     } catch (e) {
       // Unexpected (non-API) failure — surface a short cause so it isn't a
       // dead end while debugging, instead of a blanket "Something went wrong".
