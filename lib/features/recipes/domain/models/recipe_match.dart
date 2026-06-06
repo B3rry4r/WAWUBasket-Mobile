@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
 
 /// One ingredient successfully sourced to a real seller, with the price the
-/// matching engine quoted. `lineTotalKobo` already accounts for the size
-/// multiplier and the seller's per-unit price.
+/// matching engine quoted. `lineTotalNaira` already accounts for the size
+/// multiplier and the seller's per-unit price. Money is in WHOLE NAIRA —
+/// the API now sends naira directly in the legacy `*Kobo` JSON keys.
 class MatchedIngredient extends Equatable {
   const MatchedIngredient({
     required this.ingredientId,
@@ -12,8 +13,8 @@ class MatchedIngredient extends Equatable {
     required this.unit,
     required this.sellerId,
     required this.sellerName,
-    required this.unitPriceKobo,
-    required this.lineTotalKobo,
+    required this.unitPriceNaira,
+    required this.lineTotalNaira,
     required this.available,
     this.sellerRating,
   });
@@ -26,8 +27,8 @@ class MatchedIngredient extends Equatable {
   final String sellerId;
   final String sellerName;
   final double? sellerRating;
-  final int unitPriceKobo;
-  final int lineTotalKobo;
+  final int unitPriceNaira;
+  final int lineTotalNaira;
   final bool available;
 
   factory MatchedIngredient.fromJson(Map<String, dynamic> j) =>
@@ -40,14 +41,14 @@ class MatchedIngredient extends Equatable {
         sellerId: (j['sellerId'] ?? '').toString(),
         sellerName: (j['sellerName'] ?? '').toString(),
         sellerRating: (j['sellerRating'] as num?)?.toDouble(),
-        unitPriceKobo: (j['unitPriceKobo'] as num?)?.toInt() ?? 0,
-        lineTotalKobo: (j['lineTotalKobo'] as num?)?.toInt() ?? 0,
+        unitPriceNaira: (j['unitPriceKobo'] as num?)?.toInt() ?? 0,
+        lineTotalNaira: (j['lineTotalKobo'] as num?)?.toInt() ?? 0,
         available: j['available'] != false,
       );
 
   @override
   List<Object?> get props =>
-      [ingredientId, sellerId, qty, unit, lineTotalKobo, available];
+      [ingredientId, sellerId, qty, unit, lineTotalNaira, available];
 }
 
 /// One ingredient the matching engine couldn't source in the user's area —
@@ -79,11 +80,11 @@ class RecipeMatch extends Equatable {
     required this.servesLabel,
     required this.ingredients,
     required this.unavailable,
-    required this.subtotalKobo,
-    required this.serviceFeeKobo,
-    required this.packagingFeeKobo,
-    required this.deliveryFeeKobo,
-    required this.totalKobo,
+    required this.subtotalNaira,
+    required this.serviceFeeNaira,
+    required this.packagingFeeNaira,
+    required this.deliveryFeeNaira,
+    required this.totalNaira,
     required this.currency,
     required this.fullyAvailable,
   });
@@ -94,11 +95,11 @@ class RecipeMatch extends Equatable {
   final String servesLabel;
   final List<MatchedIngredient> ingredients;
   final List<UnavailableIngredient> unavailable;
-  final int subtotalKobo;
-  final int serviceFeeKobo;
-  final int packagingFeeKobo;
-  final int deliveryFeeKobo;
-  final int totalKobo;
+  final int subtotalNaira;
+  final int serviceFeeNaira;
+  final int packagingFeeNaira;
+  final int deliveryFeeNaira;
+  final int totalNaira;
   final String currency;
   final bool fullyAvailable;
 
@@ -119,15 +120,15 @@ class RecipeMatch extends Equatable {
             .map((e) => UnavailableIngredient.fromJson(
                 (e as Map).cast<String, dynamic>()))
             .toList(),
-        subtotalKobo: (j['subtotalKobo'] as num?)?.toInt() ?? 0,
-        serviceFeeKobo: (j['serviceFeeKobo'] as num?)?.toInt() ?? 0,
-        packagingFeeKobo: (j['packagingFeeKobo'] as num?)?.toInt() ?? 0,
-        deliveryFeeKobo: (j['deliveryFeeKobo'] as num?)?.toInt() ?? 0,
-        totalKobo: (j['totalKobo'] as num?)?.toInt() ?? 0,
+        subtotalNaira: (j['subtotalKobo'] as num?)?.toInt() ?? 0,
+        serviceFeeNaira: (j['serviceFeeKobo'] as num?)?.toInt() ?? 0,
+        packagingFeeNaira: (j['packagingFeeKobo'] as num?)?.toInt() ?? 0,
+        deliveryFeeNaira: (j['deliveryFeeKobo'] as num?)?.toInt() ?? 0,
+        totalNaira: (j['totalKobo'] as num?)?.toInt() ?? 0,
         currency: (j['currency'] ?? 'NGN').toString(),
         fullyAvailable: j['fullyAvailable'] == true,
       );
 
   @override
-  List<Object?> get props => [recipeId, sizeId, totalKobo, fullyAvailable];
+  List<Object?> get props => [recipeId, sizeId, totalNaira, fullyAvailable];
 }

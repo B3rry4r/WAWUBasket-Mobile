@@ -196,6 +196,7 @@ class KycStatusChip extends StatelessWidget {
       KycStatusTone.unregistered => (WBColors.bgSoft, WBColors.fgSecondary),
       KycStatusTone.pending => (const Color(0x14F59E0B), const Color(0xFFB45309)),
       KycStatusTone.approved => (const Color(0x1410B981), const Color(0xFF065F46)),
+      KycStatusTone.suspended => (const Color(0x14EF4444), const Color(0xFFB91C1C)),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -216,7 +217,7 @@ class KycStatusChip extends StatelessWidget {
   }
 }
 
-enum KycStatusTone { unregistered, pending, approved }
+enum KycStatusTone { unregistered, pending, approved, suspended }
 
 /// Tap-to-open bank picker.  Fetches the Flutterwave bank list once, caches
 /// it in memory, and shows a searchable bottom sheet.  Calls [onChanged] with

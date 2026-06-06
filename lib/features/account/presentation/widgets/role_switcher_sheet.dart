@@ -125,6 +125,11 @@ class RoleSwitcherSheet extends StatelessWidget {
           context,
           'Your ${role.title} application is under review.',
         );
+      case RoleStatus.suspended:
+        wbShowSnack(
+          context,
+          'Your ${role.title} role is suspended. Contact support to reinstate it.',
+        );
       case RoleStatus.unregistered:
         final kyc = role.kycRoute;
         Navigator.of(context).pop();
@@ -191,6 +196,7 @@ class _RoleRow extends StatelessWidget {
       RoleStatus.approved => (label: l.roleStatusApproved, tone: _PillTone.success),
       RoleStatus.pending => (label: l.roleStatusPending, tone: _PillTone.warning),
       RoleStatus.unregistered => (label: l.roleStatusGetVerified, tone: _PillTone.muted),
+      RoleStatus.suspended => (label: status.label, tone: _PillTone.danger),
     };
   }
 
@@ -293,7 +299,7 @@ class _RoleRow extends StatelessWidget {
   }
 }
 
-enum _PillTone { success, warning, muted }
+enum _PillTone { success, warning, muted, danger }
 
 class _Pill extends StatelessWidget {
   const _Pill({required this.label, required this.tone});
@@ -306,6 +312,7 @@ class _Pill extends StatelessWidget {
       _PillTone.success => (const Color(0x1410B981), const Color(0xFF047857)),
       _PillTone.warning => (const Color(0x14F59E0B), const Color(0xFFB45309)),
       _PillTone.muted => (WBColors.bgSoft, WBColors.fgSecondary),
+      _PillTone.danger => (const Color(0x14EF4444), const Color(0xFFB91C1C)),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),

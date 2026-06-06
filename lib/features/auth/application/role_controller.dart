@@ -80,14 +80,24 @@ extension AppRoleX on AppRole {
 /// Registration status for a given role. Customer is always [approved] —
 /// every other role has to submit KYC and be approved before the user can
 /// switch into that shell.
-enum RoleStatus { unregistered, pending, approved }
+///
+/// [suspended] is returned by the API when an operator role has been blocked
+/// by an admin (e.g. policy violation). The user keeps the role but cannot
+/// switch into its shell until it is reinstated.
+enum RoleStatus { unregistered, pending, approved, suspended }
 
 extension RoleStatusX on RoleStatus {
   String get label => switch (this) {
         RoleStatus.unregistered => 'Get verified',
         RoleStatus.pending => 'In review',
         RoleStatus.approved => 'Approved',
+        RoleStatus.suspended => 'Suspended',
       };
+
+  /// True when the role is blocked by an admin. Surfaced so the role switcher
+  /// can show a distinct "suspended" state rather than treating it as
+  /// unregistered.
+  bool get isSuspended => this == RoleStatus.suspended;
 }
 
 /// Persistent RBAC role state. Loaded from [SharedPreferences] on cold-start

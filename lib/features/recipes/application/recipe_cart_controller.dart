@@ -16,9 +16,9 @@ class RecipeCartController {
   final ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   final ValueNotifier<String?> error = ValueNotifier<String?>(null);
 
-  /// Sum of every combo's total, in kobo.
-  int get totalKobo =>
-      items.value.fold<int>(0, (s, i) => s + i.totalPriceKobo);
+  /// Sum of every combo's total, in WHOLE NAIRA.
+  int get totalNaira =>
+      items.value.fold<int>(0, (s, i) => s + i.totalPriceNaira);
 
   Future<void> load() async {
     loading.value = true;

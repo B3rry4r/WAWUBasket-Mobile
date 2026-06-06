@@ -34,9 +34,21 @@ class Product extends Equatable {
   String get formattedPrice => '₦${_n(priceNaira)}';
 
   /// Builds a [Product] from the API's `catalog_items` payload. `price`
-  /// arrives as a BigInt-string; `images` is a URL list.
+  /// arrives in WHOLE NAIRA (the canonical money unit end to end) as a
+  /// BigInt-string; `images` is a URL list.
+  ///
+  /// Taxonomy note: the API's `category` field actually carries the
+  /// SUBcategory id and `subcategory` comes back empty, so we map `category`
+  /// onto [subcategoryId] (falling back to the rarely-populated `subcategory`
+  /// key). The broader [categoryId] is taken from `categoryId`/`parentCategory`
+  /// when present, otherwise defaults to `'all'`. This keeps the client's
+  /// taxonomy grouping (which keys off [subcategoryId]) working.
   factory Product.fromJson(Map<String, dynamic> j) {
     final images = (j['images'] as List?)?.cast<dynamic>() ?? const [];
+    final subcat =
+        (j['category'] ?? j['subcategory'] ?? '').toString();
+    final parentCat =
+        (j['categoryId'] ?? j['parentCategory'] ?? 'all').toString();
     return Product(
       id: (j['id'] ?? '').toString(),
       name: (j['title'] ?? j['name'] ?? '').toString(),
@@ -44,8 +56,8 @@ class Product extends Equatable {
       priceNaira: int.tryParse('${j['price'] ?? 0}') ?? 0,
       vendorName: (j['vendorName'] ?? '').toString(),
       imageUrl: images.isNotEmpty ? images.first.toString() : '',
-      categoryId: (j['category'] ?? 'all').toString(),
-      subcategoryId: (j['subcategory'] ?? '').toString(),
+      categoryId: parentCat,
+      subcategoryId: subcat,
       vendorId: j['ownerId']?.toString(),
       unit: j['unit'] as String?,
     );

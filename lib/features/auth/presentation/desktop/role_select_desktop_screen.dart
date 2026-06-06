@@ -49,13 +49,15 @@ class _RoleSelectDesktopScreenState extends State<RoleSelectDesktopScreen> {
     return switch (status) {
       RoleStatus.approved => 'Continue as $_selectedTitle',
       RoleStatus.pending => 'Awaiting review',
+      RoleStatus.suspended => '$_selectedTitle suspended',
       RoleStatus.unregistered => 'Apply to be a $_selectedTitle',
     };
   }
 
   bool get _ctaDisabled =>
       _selected != AppRole.customer &&
-      RoleController.instance.statusOf(_selected) == RoleStatus.pending;
+      (RoleController.instance.statusOf(_selected) == RoleStatus.pending ||
+          RoleController.instance.statusOf(_selected) == RoleStatus.suspended);
 
   Future<void> _commit() async {
     if (_selected == AppRole.customer) {
@@ -86,6 +88,11 @@ class _RoleSelectDesktopScreenState extends State<RoleSelectDesktopScreen> {
         wbShowSnack(
           context,
           'Your $_selectedTitle application is under review.',
+        );
+      case RoleStatus.suspended:
+        wbShowSnack(
+          context,
+          'Your $_selectedTitle role is suspended. Contact support to reinstate it.',
         );
       case RoleStatus.unregistered:
         final kyc = _selected.kycRoute;
@@ -334,6 +341,7 @@ class _StatusFor extends StatelessWidget {
         RoleStatus.unregistered => KycStatusTone.unregistered,
         RoleStatus.pending => KycStatusTone.pending,
         RoleStatus.approved => KycStatusTone.approved,
+        RoleStatus.suspended => KycStatusTone.suspended,
       },
     );
   }

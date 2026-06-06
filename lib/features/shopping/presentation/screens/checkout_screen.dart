@@ -261,7 +261,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final productSubtotal = lines.fold<int>(0, (s, l) => s + l.total);
     final recipeSubtotal = recipeItems.fold<int>(
       0,
-      (s, i) => s + (i.totalPriceKobo ~/ 100),
+      (s, i) => s + i.totalPriceNaira,
     );
     final subtotal = productSubtotal + recipeSubtotal;
     var delivery = WbPricing.deliveryFeeNaira;
@@ -780,7 +780,7 @@ class _RecipeSubsection extends StatelessWidget {
         for (final i in items) ...[
           _Line(
             label: i.recipe.name,
-            value: '₦${_n(i.totalPriceKobo ~/ 100)}',
+            value: '₦${_n(i.totalPriceNaira)}',
           ),
           const SizedBox(height: 8),
         ],

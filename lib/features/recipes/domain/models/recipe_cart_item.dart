@@ -15,7 +15,7 @@ class RecipeCartItem extends Equatable {
     required this.recipe,
     required this.size,
     required this.matchedSellers,
-    required this.totalPriceKobo,
+    required this.totalPriceNaira,
     required this.createdAt,
   });
 
@@ -25,7 +25,10 @@ class RecipeCartItem extends Equatable {
   final Recipe recipe;
   final RecipeSize size;
   final List<MatchedIngredient> matchedSellers;
-  final int totalPriceKobo;
+
+  /// Combo total in WHOLE NAIRA — the canonical money unit end to end. The
+  /// API now sends naira directly in `totalPriceKobo` (legacy key name).
+  final int totalPriceNaira;
   final DateTime createdAt;
 
   /// Count of distinct vendors the combo sources from — used for the
@@ -50,7 +53,7 @@ class RecipeCartItem extends Equatable {
           .map((e) =>
               MatchedIngredient.fromJson((e as Map).cast<String, dynamic>()))
           .toList(),
-      totalPriceKobo: (j['totalPriceKobo'] as num?)?.toInt() ?? 0,
+      totalPriceNaira: (j['totalPriceKobo'] as num?)?.toInt() ?? 0,
       createdAt:
           DateTime.tryParse('${j['createdAt'] ?? ''}') ?? DateTime.now(),
     );
@@ -58,5 +61,5 @@ class RecipeCartItem extends Equatable {
 
   @override
   List<Object?> get props =>
-      [id, recipeId, recipeSizeId, totalPriceKobo];
+      [id, recipeId, recipeSizeId, totalPriceNaira];
 }

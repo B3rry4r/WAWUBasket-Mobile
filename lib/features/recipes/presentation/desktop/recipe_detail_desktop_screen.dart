@@ -191,7 +191,7 @@ class _RecipeDetailDesktopScreenState extends State<RecipeDetailDesktopScreen> {
     }
 
     final match = _match;
-    final priceNaira = match != null ? match.totalKobo ~/ 100 : 0;
+    final priceNaira = match != null ? match.totalNaira : 0;
     final fullyAvailable = match?.fullyAvailable ?? false;
     final canSubmit =
         match != null && fullyAvailable && !_matching && !_submitting;
@@ -525,7 +525,7 @@ class _IngredientsList extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    wbNaira(visible[i].lineTotalKobo ~/ 100),
+                    wbNaira(visible[i].lineTotalNaira),
                     style: WBTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,

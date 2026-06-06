@@ -117,7 +117,9 @@ class _ProductDesktopScreenState extends ConsumerState<ProductDesktopScreen> {
       if (vendorId != null && vendorId.isNotEmpty) {
         similar = await CatalogApi.instance.items(vendorId: vendorId);
       } else {
-        similar = await CatalogApi.instance.items(category: p.categoryId);
+        // The API's `category` filter keys off the subcategory id (see
+        // Product.fromJson taxonomy note), so filter "more like this" by it.
+        similar = await CatalogApi.instance.items(category: p.subcategoryId);
       }
       if (!mounted) return;
       setState(() {

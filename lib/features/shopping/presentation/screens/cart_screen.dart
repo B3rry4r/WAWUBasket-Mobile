@@ -152,7 +152,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
           valueListenable: RecipeCartController.instance.loading,
           builder: (_, recipeLoading, _) {
             final recipeSubtotalNaira =
-                recipeItems.fold<int>(0, (s, i) => s + (i.totalPriceKobo ~/ 100));
+                recipeItems.fold<int>(0, (s, i) => s + i.totalPriceNaira);
             final subtotal = productSubtotal + recipeSubtotalNaira;
             final serviceFee = WbPricing.serviceFee(subtotal);
             const delivery = WbPricing.deliveryFeeNaira;
@@ -540,7 +540,7 @@ class _RecipeCartRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final priceNaira = item.totalPriceKobo ~/ 100;
+    final priceNaira = item.totalPriceNaira;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -648,7 +648,7 @@ class _RecipeCartRow extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                wbNaira(s.lineTotalKobo ~/ 100),
+                                wbNaira(s.lineTotalNaira),
                                 style: WBTypography.caption.copyWith(
                                   color: WBColors.fgHeader,
                                   fontWeight: FontWeight.w600,
