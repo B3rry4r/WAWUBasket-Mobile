@@ -134,6 +134,13 @@ class RoleSwitcherSheet extends StatelessWidget {
 
   /// Mints a fresh token carrying the new `activeRole`, then routes into
   /// that role's shell. A failed switch leaves the user where they were.
+  ///
+  /// We capture the [GoRouter] and [ScaffoldMessenger] up front and drive the
+  /// post-await navigation off them rather than off [context]. The sheet is
+  /// popped before the network call, so its element is already unmounted by
+  /// the time `switchRole` resolves — gating navigation on `context.mounted`
+  /// (as before) silently dropped the switch, which is why it failed on
+  /// desktop/web where the pop completes before the request returns.
   Future<void> _switchTo(BuildContext context, AppRole role) async {
     final router = GoRouter.of(context);
     final messenger = ScaffoldMessenger.of(context);
@@ -149,7 +156,6 @@ class RoleSwitcherSheet extends StatelessWidget {
         );
       return;
     }
-    if (!context.mounted) return;
     RoleController.instance.setRole(role);
     router.go(role.homeRoute);
   }
