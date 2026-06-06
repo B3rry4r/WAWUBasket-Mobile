@@ -405,14 +405,15 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
                               ],
                             ),
                           ),
+                          // Live butcher video isn't wired yet (no vendor
+                          // WhatsApp/stream number is available), so the
+                          // control is disabled and clearly labelled rather
+                          // than firing a fake "Calling…" message.
                           WBButton(
-                            label: 'Watch live',
+                            label: context.l10n.commonComingSoon,
                             size: WBButtonSize.sm,
                             variant: WBButtonVariant.secondary,
-                            onPressed: () => wbShowSnack(
-                              context,
-                              'Calling Butcher John on WhatsApp…',
-                            ),
+                            disabled: true,
                           ),
                         ],
                       ),

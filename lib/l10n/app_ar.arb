@@ -881,6 +881,8 @@
   "escrowBulkOrdersTitle": "الطلبات بالجملة",
   "escrowDisputeTitle": "فتح نزاع",
   "escrowPhotoUploadSoon": "رفع الصور قادم قريباً",
+  "escrowPhotoUploadFailed": "Couldn't upload the photo. Try again.",
+  "commonComingSoon": "Coming soon",
   "livestockSameDay": "نفس اليوم",
   "livestockVacuumPacked": "معبأ في الفراغ",
   "driverOpenLoads": "الأحمال المفتوحة",

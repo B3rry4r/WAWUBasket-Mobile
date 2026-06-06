@@ -881,6 +881,8 @@
   "escrowBulkOrdersTitle": "Commandes en gros",
   "escrowDisputeTitle": "Ouvrir un litige",
   "escrowPhotoUploadSoon": "Téléchargement de photo bientôt disponible",
+  "escrowPhotoUploadFailed": "Couldn't upload the photo. Try again.",
+  "commonComingSoon": "Coming soon",
   "livestockSameDay": "Le jour même",
   "livestockVacuumPacked": "Emballé sous vide",
   "driverOpenLoads": "Charges ouvertes",

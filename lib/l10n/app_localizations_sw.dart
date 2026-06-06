@@ -2454,6 +2454,13 @@ class AppLocalizationsSw extends AppLocalizations {
   String get escrowPhotoUploadSoon => 'Upakiaji wa picha unakuja hivi karibuni';
 
   @override
+  String get escrowPhotoUploadFailed =>
+      'Couldn\'t upload the photo. Try again.';
+
+  @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
   String get livestockSameDay => 'Siku moja';
 
   @override

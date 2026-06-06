@@ -2449,6 +2449,13 @@ class AppLocalizationsYo extends AppLocalizations {
   String get escrowPhotoUploadSoon => 'Gbíga fọ́tò sí wọlẹ̀ ń bọ̀';
 
   @override
+  String get escrowPhotoUploadFailed =>
+      'Couldn\'t upload the photo. Try again.';
+
+  @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
   String get livestockSameDay => 'Ọjọ́ kan náà';
 
   @override

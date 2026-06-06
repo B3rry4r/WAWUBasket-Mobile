@@ -2443,6 +2443,13 @@ class AppLocalizationsTw extends AppLocalizations {
   String get escrowPhotoUploadSoon => 'Photo upload coming soon';
 
   @override
+  String get escrowPhotoUploadFailed =>
+      'Couldn\'t upload the photo. Try again.';
+
+  @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
   String get livestockSameDay => 'Same day';
 
   @override

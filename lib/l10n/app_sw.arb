@@ -881,6 +881,8 @@
   "escrowBulkOrdersTitle": "Maagizo ya jumla",
   "escrowDisputeTitle": "Fungua malalamiko",
   "escrowPhotoUploadSoon": "Upakiaji wa picha unakuja hivi karibuni",
+  "escrowPhotoUploadFailed": "Couldn't upload the photo. Try again.",
+  "commonComingSoon": "Coming soon",
   "livestockSameDay": "Siku moja",
   "livestockVacuumPacked": "Imefungwa kwa vakiumu",
   "driverOpenLoads": "Mizigo wazi",

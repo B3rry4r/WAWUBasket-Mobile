@@ -881,6 +881,8 @@
   "escrowBulkOrdersTitle": "Àṣẹ jimla",
   "escrowDisputeTitle": "Ṣí ìjiyàn",
   "escrowPhotoUploadSoon": "Gbíga fọ́tò sí wọlẹ̀ ń bọ̀",
+  "escrowPhotoUploadFailed": "Couldn't upload the photo. Try again.",
+  "commonComingSoon": "Coming soon",
   "livestockSameDay": "Ọjọ́ kan náà",
   "livestockVacuumPacked": "Ìfò fákíùm",
   "driverOpenLoads": "Àwọn èrù tó ṣíwọ́",

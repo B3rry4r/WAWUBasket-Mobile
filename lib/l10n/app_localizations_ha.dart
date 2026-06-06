@@ -2461,6 +2461,13 @@ class AppLocalizationsHa extends AppLocalizations {
   String get escrowPhotoUploadSoon => 'Loda hoto yana zuwa nan ba da jimawa ba';
 
   @override
+  String get escrowPhotoUploadFailed =>
+      'Couldn\'t upload the photo. Try again.';
+
+  @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
   String get livestockSameDay => 'Ranar nan';
 
   @override

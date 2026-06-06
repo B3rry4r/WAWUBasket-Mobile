@@ -78,9 +78,13 @@ class EscrowController {
     _setStatus(id, EscrowStatus.released);
   }
 
-  Future<void> dispute(String id, String reason) async {
+  Future<void> dispute(
+    String id,
+    String reason, {
+    List<String> photoKeys = const [],
+  }) async {
     try {
-      await _api.dispute(id, reason: reason);
+      await _api.dispute(id, reason: reason, photoKeys: photoKeys);
       final o = byId(id);
       if (o == null) return;
       o.disputeReason = reason;

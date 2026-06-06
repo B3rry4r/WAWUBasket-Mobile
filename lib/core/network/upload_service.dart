@@ -10,6 +10,7 @@ abstract final class UploadFolder {
   static const catalogItems = 'catalog/items';
   static const exportListings = 'export-listings';
   static const chatAttachments = 'chat/attachments';
+  static const disputes = 'disputes';
   static String kyc(String role) => 'kyc/$role';
 }
 

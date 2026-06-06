@@ -881,6 +881,8 @@
   "escrowBulkOrdersTitle": "Ọnụ ahịa ọtụtụ",
   "escrowDisputeTitle": "Mepee esemokwu",
   "escrowPhotoUploadSoon": "Bulite foto na-abịa n'oge na-abịa",
+  "escrowPhotoUploadFailed": "Couldn't upload the photo. Try again.",
+  "commonComingSoon": "Coming soon",
   "livestockSameDay": "Ụbọchị ahụ",
   "livestockVacuumPacked": "A fakịrịa n'óghere",
   "driverOpenLoads": "Ibu mepere",

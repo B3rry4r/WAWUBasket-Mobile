@@ -2502,6 +2502,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Téléchargement de photo bientôt disponible';
 
   @override
+  String get escrowPhotoUploadFailed =>
+      'Couldn\'t upload the photo. Try again.';
+
+  @override
+  String get commonComingSoon => 'Coming soon';
+
+  @override
   String get livestockSameDay => 'Le jour même';
 
   @override

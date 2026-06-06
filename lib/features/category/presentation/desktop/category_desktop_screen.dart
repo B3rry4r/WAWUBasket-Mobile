@@ -350,7 +350,7 @@ class _ContextBand extends StatelessWidget {
                 icon: WBIconName.user,
                 title: context.l10n.catFarmerTitle,
                 sub: context.l10n.catFarmerSub,
-                onTap: () => wbShowSnack(context, context.l10n.catFarmerSoon),
+                comingSoon: true,
               ),
             ),
           ],
@@ -512,18 +512,22 @@ class _MiniCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.sub,
-    required this.onTap,
+    this.onTap,
+    this.comingSoon = false,
   });
   final WBIconName icon;
   final String title;
   final String sub;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+
+  /// When true the tile is dimmed, non-interactive, and shows a "Coming soon"
+  /// badge — no tap handler fires.
+  final bool comingSoon;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
+    final card = Opacity(
+      opacity: comingSoon ? 0.55 : 1,
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
@@ -534,7 +538,32 @@ class _MiniCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            WBIcon(icon, size: 18),
+            Row(
+              children: [
+                WBIcon(icon, size: 18),
+                if (comingSoon) ...[
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: WBColors.bgSoft,
+                      borderRadius: BorderRadius.circular(WBRadius.pill),
+                    ),
+                    child: Text(
+                      context.l10n.commonComingSoon,
+                      style: WBTypography.caption.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: WBColors.fgSecondary,
+                        fontSize: 10,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
             const SizedBox(height: 10),
             Text(
               title,
@@ -553,6 +582,14 @@ class _MiniCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+    if (comingSoon) {
+      return IgnorePointer(child: card);
+    }
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: card,
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/network/api_exception.dart';
+import '../../../../core/network/upload_service.dart';
 import '../../../../core/responsive/wb_responsive_exports.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -28,6 +30,11 @@ class _EscrowDisputeDesktopScreenState
   String _reason = 'Wrong quantity';
   final _notes = TextEditingController();
 
+  /// Uploaded R2 object keys + preview URLs for the attached photo evidence.
+  final _photos = <UploadResult>[];
+  bool _uploading = false;
+  bool _submitting = false;
+
   static const _reasons = [
     'Wrong quantity',
     'Wrong produce',
@@ -42,16 +49,44 @@ class _EscrowDisputeDesktopScreenState
     super.dispose();
   }
 
-  void _submit(BulkOrder order) {
+  Future<void> _addPhoto() async {
+    if (_uploading) return;
+    setState(() => _uploading = true);
+    try {
+      final up = await UploadService.instance.pickAndUpload(
+        folder: UploadFolder.disputes,
+      );
+      if (up == null) return;
+      if (mounted) setState(() => _photos.add(up));
+    } on ApiException catch (e) {
+      if (mounted) wbShowError(context, e.message);
+    } catch (_) {
+      if (mounted) wbShowError(context, context.l10n.escrowPhotoUploadFailed);
+    } finally {
+      if (mounted) setState(() => _uploading = false);
+    }
+  }
+
+  Future<void> _submit(BulkOrder order) async {
+    if (_submitting) return;
+    setState(() => _submitting = true);
     final body = _notes.text.trim().isEmpty
         ? _reason
         : '$_reason, ${_notes.text.trim()}';
-    EscrowController.instance.dispute(order.id, body);
-    wbShowSnack(
-      context,
-      context.l10n.escrowDisputeOpened,
-    );
-    context.pop();
+    try {
+      await EscrowController.instance.dispute(
+        order.id,
+        body,
+        photoKeys: [for (final p in _photos) p.key],
+      );
+      if (!mounted) return;
+      wbShowSnack(context, context.l10n.escrowDisputeOpened);
+      context.pop();
+    } on ApiException catch (e) {
+      if (mounted) wbShowError(context, e.message);
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
   }
 
   @override
@@ -148,11 +183,22 @@ class _EscrowDisputeDesktopScreenState
                 controller: _notes,
               ),
               const SizedBox(height: WBSpacing.lg),
-              GestureDetector(
-                onTap: () => wbShowSnack(
-                  context,
-                  context.l10n.escrowPhotoUploadSoon,
+              if (_photos.isNotEmpty) ...[
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (var i = 0; i < _photos.length; i++)
+                      _PhotoThumb(
+                        url: _photos[i].publicUrl,
+                        onRemove: () => setState(() => _photos.removeAt(i)),
+                      ),
+                  ],
                 ),
+                const SizedBox(height: 8),
+              ],
+              GestureDetector(
+                onTap: _uploading ? null : _addPhoto,
                 child: Container(
                   height: 120,
                   decoration: BoxDecoration(
@@ -171,7 +217,15 @@ class _EscrowDisputeDesktopScreenState
                           shape: BoxShape.circle,
                         ),
                         alignment: Alignment.center,
-                        child: const WBIcon(WBIconName.plus, size: 16),
+                        child: _uploading
+                            ? const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const WBIcon(WBIconName.plus, size: 16),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -194,7 +248,52 @@ class _EscrowDisputeDesktopScreenState
           fullWidth: true,
           size: WBButtonSize.lg,
           trailingIcon: WBIconName.arrowRight,
+          loading: _submitting,
           onPressed: () => _submit(order),
+        ),
+      ],
+    );
+  }
+}
+
+/// A square preview of an attached evidence photo with a remove affordance.
+class _PhotoThumb extends StatelessWidget {
+  const _PhotoThumb({required this.url, required this.onRemove});
+  final String url;
+  final VoidCallback onRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(WBRadius.card),
+          child: SizedBox(
+            width: 84,
+            height: 84,
+            child: WBNetworkImage(url: url),
+          ),
+        ),
+        Positioned(
+          top: 4,
+          right: 4,
+          child: GestureDetector(
+            onTap: onRemove,
+            child: Container(
+              width: 22,
+              height: 22,
+              decoration: const BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const WBIcon(
+                WBIconName.close,
+                size: 12,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ],
     );

@@ -4792,6 +4792,18 @@ abstract class AppLocalizations {
   /// **'Photo upload coming soon'**
   String get escrowPhotoUploadSoon;
 
+  /// No description provided for @escrowPhotoUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t upload the photo. Try again.'**
+  String get escrowPhotoUploadFailed;
+
+  /// No description provided for @commonComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get commonComingSoon;
+
   /// No description provided for @livestockSameDay.
   ///
   /// In en, this message translates to:

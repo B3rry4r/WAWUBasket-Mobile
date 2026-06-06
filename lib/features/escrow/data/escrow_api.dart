@@ -33,7 +33,16 @@ class EscrowApi {
   Future<void> release(String orderId) =>
       _api.post('/escrow/orders/$orderId/release', body: {});
 
-  Future<void> dispute(String orderId, {String? reason}) =>
-      _api.post('/escrow/orders/$orderId/dispute',
-          body: {'reason': reason ?? 'Disputed by buyer'});
+  Future<void> dispute(
+    String orderId, {
+    String? reason,
+    List<String> photoKeys = const [],
+  }) =>
+      _api.post('/escrow/orders/$orderId/dispute', body: {
+        'reason': reason ?? 'Disputed by buyer',
+        // Object keys for any photo evidence the buyer attached, uploaded to
+        // R2 via the storage presign flow. Followup: confirm the backend
+        // persists `photoKeys` on the dispute record.
+        if (photoKeys.isNotEmpty) 'photoKeys': photoKeys,
+      });
 }
