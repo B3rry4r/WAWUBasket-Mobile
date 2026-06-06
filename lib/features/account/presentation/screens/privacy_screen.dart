@@ -129,7 +129,7 @@ class PrivacyScreen extends StatelessWidget {
               '• Request deletion of your account and personal data\n'
               '• Object to or restrict certain processing activities\n'
               '• Withdraw consent where processing is based on consent\n\n'
-              'To exercise any of these rights, contact us at support@wawu.africa. We will '
+              'To exercise any of these rights, contact us at support@wawubasket.com. We will '
               'respond within 30 days.',
             ),
             _buildSection(
@@ -143,8 +143,8 @@ class PrivacyScreen extends StatelessWidget {
               'If you have questions or concerns about this Privacy Policy or our data practices, '
               'please contact us:\n\n'
               'WAWUBasket Ltd\n'
-              'Email: support@wawu.africa\n'
-              'Phone: +234 800 929 2822',
+              'Email: support@wawubasket.com\n'
+              'Phone: 07050622222',
             ),
           ],
         ),

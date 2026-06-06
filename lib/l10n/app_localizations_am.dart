@@ -900,12 +900,6 @@ class AppLocalizationsAm extends AppLocalizations {
   String get profileBulkOrdersSub => 'ከ/trade የተጠበቁ ግዢዎች';
 
   @override
-  String get profileWawuPlus => 'WAWU+ አባልነት';
-
-  @override
-  String get profileWawuPlusSub => 'የቅናሽ ማድረሻ እና ተጨማሪ';
-
-  @override
   String get profileLanguage => 'ቋንቋ';
 
   @override
@@ -1108,7 +1102,7 @@ class AppLocalizationsAm extends AppLocalizations {
   String get supportCall => 'ይደውሉ';
 
   @override
-  String get supportCallSub => 'ከተወካያችን ጋር ይነጋገሩ';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'ደዉሉ';
@@ -1117,7 +1111,7 @@ class AppLocalizationsAm extends AppLocalizations {
   String get supportEmail => 'ኢሜይል ላኩን';
 
   @override
-  String get supportEmailSub => 'በፍጥነት እንመልሳለን';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'ኢሜይል ላክ';
@@ -1204,63 +1198,6 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'ዘዴ ተወግዷል';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'ፕሉስ ሂዱ። ተጨማሪ ሂዱ።';
-
-  @override
-  String get wawuPlusSubtitle => 'ተጨማሪ ያግኙ';
-
-  @override
-  String get wawuPlusMembers => 'ከ12,400 ደስተኛ ቅርጫቶች ጋር ይቀላቀሉ';
-
-  @override
-  String get wawuPlusIncluded => 'ምን ተካቷል';
-
-  @override
-  String get wawuPlusBenefit1 => 'ሁሉም ትዕዛዞች ነፃ ደሊቨሪ';
-
-  @override
-  String get wawuPlusBenefit2 => 'ሰፊ የደሊቨሪ ርቀት';
-
-  @override
-  String get wawuPlusBenefit3 => '24 ሰዓት ድጋፍ';
-
-  @override
-  String get wawuPlusBenefit4 => 'ልዩ ቅናሾች እና ቅድሚያ ዕድሎች';
-
-  @override
-  String get wawuPlusBenefit5 => 'ለአዲስ ባህሪዎች ቀዳሚ ዕድል';
-
-  @override
-  String get wawuPlusPickPlan => 'ዕቅድ ምረጡ';
-
-  @override
-  String get wawuPlusYearly => 'አመታዊ (20% ቆጥቡ)';
-
-  @override
-  String get wawuPlusYearlyNote => '20% ቆጥቡ · አንድ ጊዜ ይከፈላል';
-
-  @override
-  String get wawuPlusMonthly => 'ወርሃዊ';
-
-  @override
-  String get wawuPlusMonthlyNote => 'ማንኛውም ጊዜ ሰርዝ';
-
-  @override
-  String get wawuPlusStartTrial => '7 ቀን ነፃ ሙከራ ጀምር';
-
-  @override
-  String get wawuPlusActiveMember => 'የ WAWU+ አባል ነዎት';
-
-  @override
-  String get wawuPlusWebOnly => 'ወደ WAWU+ ለመቀላቀል WAWUBasket ስልክዎ ላይ ይክፈቱ።';
-
-  @override
-  String get wawuPlusWelcome => 'ወደ WAWU+ እንኳን ደህና መጡ!';
 
   @override
   String get operatorSignOutTitle => 'ትወጣለህ?';

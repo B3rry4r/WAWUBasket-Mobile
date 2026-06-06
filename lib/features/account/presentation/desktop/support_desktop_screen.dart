@@ -254,9 +254,9 @@ class _SupportDesktopScreenState extends State<SupportDesktopScreen> {
                 if (c.icon == WBIconName.message) {
                   context.push(AppRoutes.chatSupport);
                 } else if (c.icon == WBIconName.phone) {
-                  wbCallPhone(context, '+2348009292822');
+                  wbCallPhone(context, '07050622222');
                 } else {
-                  wbLaunchEmail(context, 'support@wawu.africa');
+                  wbLaunchEmail(context, 'support@wawubasket.com');
                 }
               },
             ),

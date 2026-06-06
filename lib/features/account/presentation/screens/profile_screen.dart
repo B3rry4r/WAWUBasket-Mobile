@@ -348,12 +348,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             sub: context.l10n.profileNotificationsSub,
             onTap: () => context.push(AppRoutes.notifications),
           ),
-          AccountMenuRow(
-            icon: WBIconName.star,
-            label: context.l10n.profileWawuPlus,
-            sub: context.l10n.profileWawuPlusSub,
-            onTap: () => context.push(AppRoutes.wawuPlus),
-          ),
         ],
       ),
       AccountMenuSection(

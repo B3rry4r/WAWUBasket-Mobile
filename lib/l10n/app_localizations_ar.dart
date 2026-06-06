@@ -910,12 +910,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileBulkOrdersSub => 'مشتريات محمية بالضمان من /trade';
 
   @override
-  String get profileWawuPlus => 'عضوية WAWU+';
-
-  @override
-  String get profileWawuPlusSub => 'توصيل مخفّض والمزيد';
-
-  @override
   String get profileLanguage => 'اللغة';
 
   @override
@@ -1120,7 +1114,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get supportCall => 'اتصل بنا';
 
   @override
-  String get supportCallSub => 'تحدث مع أحد ممثلينا';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'اتصل';
@@ -1129,7 +1123,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get supportEmail => 'أرسل إيميلاً';
 
   @override
-  String get supportEmailSub => 'سنرد في أقرب وقت';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'إرسال بريد';
@@ -1216,63 +1210,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'تم حذف الطريقة';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'كن بلاس. افعل أكثر.';
-
-  @override
-  String get wawuPlusSubtitle => 'احصل على المزيد';
-
-  @override
-  String get wawuPlusMembers => 'انضم إلى 12,400 سلة سعيدة أخرى';
-
-  @override
-  String get wawuPlusIncluded => 'ما هو مشمول';
-
-  @override
-  String get wawuPlusBenefit1 => 'توصيل مجاني على جميع الطلبات';
-
-  @override
-  String get wawuPlusBenefit2 => 'نطاق توصيل ممتد';
-
-  @override
-  String get wawuPlusBenefit3 => 'دعم متاح على مدار الساعة';
-
-  @override
-  String get wawuPlusBenefit4 => 'عروض حصرية وأولوية الوصول';
-
-  @override
-  String get wawuPlusBenefit5 => 'الوصول المبكر للميزات الجديدة';
-
-  @override
-  String get wawuPlusPickPlan => 'اختر خطة';
-
-  @override
-  String get wawuPlusYearly => 'سنوي (وفّر 20%)';
-
-  @override
-  String get wawuPlusYearlyNote => 'وفّر 20٪ · يُدفع مرة واحدة';
-
-  @override
-  String get wawuPlusMonthly => 'شهري';
-
-  @override
-  String get wawuPlusMonthlyNote => 'إلغاء في أي وقت';
-
-  @override
-  String get wawuPlusStartTrial => 'ابدأ تجربة مجانية 7 أيام';
-
-  @override
-  String get wawuPlusActiveMember => 'أنت عضو WAWU+';
-
-  @override
-  String get wawuPlusWebOnly => 'افتح WAWUBasket على هاتفك للانضمام إلى WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'مرحباً بك في WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'هل تريد الخروج؟';

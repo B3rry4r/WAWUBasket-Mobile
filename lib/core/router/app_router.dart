@@ -9,7 +9,6 @@ import '../../features/account/presentation/screens/delete_account_screen.dart';
 import '../../features/account/presentation/screens/dev_settings_screen.dart';
 import '../../features/account/presentation/screens/dietary_preferences_screen.dart';
 import '../../features/account/presentation/screens/security_screen.dart';
-import '../../features/account/presentation/screens/wawu_plus_screen.dart';
 import '../../features/account/presentation/screens/add_address_screen.dart';
 import '../../features/account/presentation/screens/chat_inbox_screen.dart';
 import '../../features/account/presentation/screens/chat_screen.dart';
@@ -184,7 +183,6 @@ import '../../features/account/presentation/desktop/language_desktop_screen.dart
 import '../../features/account/presentation/desktop/about_desktop_screen.dart';
 import '../../features/account/presentation/desktop/terms_desktop_screen.dart';
 import '../../features/account/presentation/desktop/privacy_desktop_screen.dart';
-import '../../features/account/presentation/desktop/wawu_plus_desktop_screen.dart';
 import '../../features/account/presentation/desktop/delete_account_desktop_screen.dart';
 import '../../features/account/presentation/desktop/dev_settings_desktop_screen.dart';
 import '../theme/wb_theme_exports.dart';
@@ -594,13 +592,6 @@ GoRouter buildRouter() {
         builder: (_, _) => WBAdaptiveScreen(
           mobile: const PrivacyScreen(),
           desktop: const PrivacyDesktopScreen(),
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.wawuPlus,
-        builder: (_, _) => WBAdaptiveScreen(
-          mobile: const WawuPlusScreen(),
-          desktop: const WawuPlusDesktopScreen(),
         ),
       ),
       GoRoute(

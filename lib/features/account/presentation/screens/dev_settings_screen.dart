@@ -26,7 +26,7 @@ class _DevSettingsScreenState extends State<DevSettingsScreen> {
   final Set<String> _saving = {};
 
   // Only home UI flags belong here. App-level features (cross_border_trading,
-  // wawu_plus, live_tracking) are always on and not togglable from this screen.
+  // live_tracking) are always on and not togglable from this screen.
   static const _uiFlags = {'new_categories_ui', 'recipe_combos'};
 
   static const _descriptions = <String, String>{

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/gestures.dart' show DragStartBehavior;
@@ -8,7 +9,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/config/wawuafrica_hub.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/feature_flag_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -80,6 +83,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _onSubcategoryTap(String? id) {
     setState(() => _activeSubcategoryId = id);
+  }
+
+  Future<void> _openHub(String path) async {
+    final uri = Uri.parse('$wawuAfricaHubUrl$path');
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!ok && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open WAWUAfrica')),
+      );
+    }
   }
 
   @override
@@ -183,6 +196,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ],
               )),
+              const SizedBox(height: 22),
+              _padded(_WawuServicesStrip(onOpen: _openHub)),
               const SizedBox(height: 22),
               ValueListenableBuilder<Map<String, bool>>(
                 valueListenable: FeatureFlagService.instance.flags,
@@ -314,6 +329,221 @@ class _QuickAction extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+// ── WAWUAfrica services strip ────────────────────────────────────────────────
+//
+// The two-line WAWUAfrica brand mark stays fixed on top while the individual
+// services (EasyBuy, Health Insurance, Pension, …) fade/slide through
+// automatically — three visible at a time, cycling through the whole list so
+// every WAWUAfrica service is surfaced from the WAWUBasket home. Tapping a row
+// (or the mark) opens the hub web platform via url_launcher.
+
+/// A single WAWUAfrica service entry surfaced by [_WawuServicesStrip].
+class _WawuService {
+  const _WawuService({
+    required this.label,
+    required this.path,
+    required this.icon,
+    this.soon = false,
+  });
+
+  final String label;
+  final String path;
+  final IconData icon;
+  final bool soon;
+}
+
+const List<_WawuService> _wawuServices = [
+  _WawuService(
+    label: 'EasyBuy',
+    path: '/services/easybuy/apply',
+    icon: Icons.shopping_bag_outlined,
+  ),
+  _WawuService(
+    label: 'Health Insurance',
+    path: '/services/insurance',
+    icon: Icons.health_and_safety_outlined,
+    soon: true,
+  ),
+  _WawuService(
+    label: 'Pension',
+    path: '/services/pension',
+    icon: Icons.savings_outlined,
+    soon: true,
+  ),
+  _WawuService(
+    label: 'Banking',
+    path: '/services/banking',
+    icon: Icons.account_balance_outlined,
+  ),
+  _WawuService(
+    label: 'Grants & Funding',
+    path: '/services/grants',
+    icon: Icons.volunteer_activism_outlined,
+  ),
+  _WawuService(
+    label: 'CAC Registration',
+    path: '/services/cac-registration/apply',
+    icon: Icons.assignment_outlined,
+  ),
+  _WawuService(
+    label: 'NEPC Registration',
+    path: '/services/nepc-registration/apply',
+    icon: Icons.public_outlined,
+  ),
+  _WawuService(
+    label: 'Mentorship',
+    path: '/services/mentors',
+    icon: Icons.diversity_3_outlined,
+  ),
+];
+
+class _WawuServicesStrip extends StatefulWidget {
+  final void Function(String path) onOpen;
+  const _WawuServicesStrip({required this.onOpen});
+
+  @override
+  State<_WawuServicesStrip> createState() => _WawuServicesStripState();
+}
+
+class _WawuServicesStripState extends State<_WawuServicesStrip> {
+  static const Duration _interval = Duration(milliseconds: 2800);
+  static const int _slots = 3; // services shown (and animating) at once
+
+  Timer? _timer;
+  int _step = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(_interval, (_) {
+      if (!mounted) return;
+      setState(() => _step++);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  // One fading service slot. Each of the [_slots] slots shows a different
+  // service and they all advance (animate) together on every tick, cycling
+  // through the whole list.
+  Widget _slot(int i) {
+    final service = _wawuServices[(_step * _slots + i) % _wawuServices.length];
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => widget.onOpen(service.path),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 450),
+        transitionBuilder: (child, animation) {
+          final slide = Tween<Offset>(
+            begin: const Offset(0, 0.22),
+            end: Offset.zero,
+          ).animate(animation);
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(position: slide, child: child),
+          );
+        },
+        child: Padding(
+          key: ValueKey<String>('$i-${service.path}'),
+          padding: const EdgeInsets.symmetric(vertical: 7),
+          child: _ServiceItem(service: service),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
+      decoration: BoxDecoration(
+        color: WBColors.bgSecondary,
+        borderRadius: BorderRadius.circular(WBRadius.card),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Fixed black two-row WAWUAfrica mark — opens the services home.
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => widget.onOpen('/services'),
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/brand_icons/wawuafrica_mark.png',
+                  height: 46,
+                  fit: BoxFit.contain,
+                ),
+                const Spacer(),
+                const Icon(Icons.arrow_outward,
+                    size: 16, color: WBColors.fgSecondary),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Divider(height: 1, thickness: 1, color: WBColors.bgDivider),
+          const SizedBox(height: 2),
+          // Three services visible at once, all fading/cycling together.
+          for (int i = 0; i < _slots; i++) _slot(i),
+        ],
+      ),
+    );
+  }
+}
+
+class _ServiceItem extends StatelessWidget {
+  const _ServiceItem({required this.service});
+
+  final _WawuService service;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(service.icon, size: 22, color: WBColors.fgHeader),
+        const SizedBox(width: 10),
+        Flexible(
+          child: Text(
+            service.label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: WBTypography.body.copyWith(
+              color: WBColors.fgHeader,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        if (service.soon) ...[
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+              color: WBColors.surfaceDark,
+              borderRadius: BorderRadius.circular(WBRadius.pill),
+            ),
+            child: const Text(
+              'Soon',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ],
+        const SizedBox(width: 8),
+        const Icon(Icons.arrow_outward, size: 18, color: WBColors.fgSecondary),
+      ],
     );
   }
 }

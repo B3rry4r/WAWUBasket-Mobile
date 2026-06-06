@@ -922,12 +922,6 @@ class AppLocalizationsLn extends AppLocalizations {
   String get profileBulkOrdersSub => 'Bosombi ya escrow kobanda na /trade';
 
   @override
-  String get profileWawuPlus => 'WAWU+ membership';
-
-  @override
-  String get profileWawuPlusSub => 'Bopesi ya ntalo moke mpé biloko mosusu';
-
-  @override
   String get profileLanguage => 'Lokóta';
 
   @override
@@ -1134,7 +1128,7 @@ class AppLocalizationsLn extends AppLocalizations {
   String get supportCall => 'Bengá biso';
 
   @override
-  String get supportCallSub => '+234 800 WAWUBasket';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Bengá';
@@ -1143,7 +1137,7 @@ class AppLocalizationsLn extends AppLocalizations {
   String get supportEmail => 'Tindá biso email';
 
   @override
-  String get supportEmailSub => 'support@wawu.africa';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Tindá email';
@@ -1230,66 +1224,6 @@ class AppLocalizationsLn extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'Ndenge elongolami';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Kende plus. Zwá mingi.';
-
-  @override
-  String get wawuPlusSubtitle =>
-      'Bopesi ya ntalo moke. Bilóko ya bondeko. Lisálísi ya yambo.';
-
-  @override
-  String get wawuPlusMembers => 'Bongána na bato 12,400 ya esengo';
-
-  @override
-  String get wawuPlusIncluded => 'Oyo ezali';
-
-  @override
-  String get wawuPlusBenefit1 => 'Bopesi ya ntalo moke na komandi nyonso';
-
-  @override
-  String get wawuPlusBenefit2 => 'Bilóko ya bandimi kaka pɔsɔ na pɔsɔ';
-
-  @override
-  String get wawuPlusBenefit3 => 'Lisálísi ya yambo, leka linyé';
-
-  @override
-  String get wawuPlusBenefit4 => 'Bozongi ya ofele soki ezali mabe';
-
-  @override
-  String get wawuPlusBenefit5 =>
-      'Bokɔtí ya yambo na ba fonctionnalités ya sika';
-
-  @override
-  String get wawuPlusPickPlan => 'Poná plan';
-
-  @override
-  String get wawuPlusYearly => 'Mbula na mbula';
-
-  @override
-  String get wawuPlusYearlyNote => 'Bómba 20% · futá mbala moko';
-
-  @override
-  String get wawuPlusMonthly => 'Sanza na sanza';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Tika ntango nyonso';
-
-  @override
-  String get wawuPlusStartTrial => 'Bandá komeka ya ofele, mikolo 7';
-
-  @override
-  String get wawuPlusActiveMember => 'Ozali moto ya WAWU+';
-
-  @override
-  String get wawuPlusWebOnly =>
-      'Fungolá WAWUBasket na telefone na yo mpo na kobongana na WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'Boyei malamu na WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Bimá?';

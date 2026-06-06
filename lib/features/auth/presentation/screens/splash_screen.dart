@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/token_store.dart';
-import '../../../../core/responsive/wb_responsive.dart';
-import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
-import '../../../../core/utils/wb_l10n.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/widgets/wb_logo.dart';
 import '../../application/role_controller.dart';
 
@@ -54,68 +52,44 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Desktop/web: the basket PNG + wordmark lock-up is a portrait, mobile-only
-    // composition. On a wide browser show just the brand mark, centred.
-    if (context.isDesktop) {
-      return const Scaffold(
-        backgroundColor: WBColors.bgPrimary,
-        body: Center(child: WBWMark(size: 96)),
-      );
-    }
-
-    final screenH = MediaQuery.of(context).size.height;
-    final screenW = MediaQuery.of(context).size.width;
-    return Scaffold(
+    // Clean, centred brand mark + spinner + loading text on every breakpoint.
+    return const Scaffold(
       backgroundColor: WBColors.bgPrimary,
-      body: SizedBox.expand(
-        child: Stack(
-          clipBehavior: Clip.hardEdge,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // ── Basket PNG: covers its container, bottom bleeds off screen.
-            //    Container top starts at ~50% screen height, bottom pushed
-            //    15% below screen edge so the wicker base is cut off.
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: -(screenH * 0.22),
-              child: SizedBox(
-                width: screenW,
-                height: screenH * 0.65,
-                child: Image.asset(
-                  'assets/logos/splash-basket.png',
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-            // ── Logo + tagline centred in the upper half ─────────────────
-            Positioned(
-              top: MediaQuery.of(context).padding.top + 72,
-              left: WBSpacing.screenPadding,
-              right: WBSpacing.screenPadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/logos/wordmark.png',
-                    height: 26,
-                  ),
-                  SizedBox(height: screenH * 0.05),
-                  Text(
-                    context.l10n.splashHeadline,
-                    textAlign: TextAlign.center,
-                    style: WBTypography.hero.copyWith(
-                      fontSize: 32,
-                      height: 1.15,
-                      letterSpacing: -1.0,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            WBWMark(size: 96),
+            SizedBox(height: 48),
+            _SplashLoading(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SplashLoading extends StatelessWidget {
+  const _SplashLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(
+          width: 36,
+          height: 36,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.4,
+            valueColor: AlwaysStoppedAnimation<Color>(WBColors.surfaceDark),
+          ),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          'Loading...',
+          style: WBTypography.secondary.copyWith(color: WBColors.fgSecondary),
+        ),
+      ],
     );
   }
 }

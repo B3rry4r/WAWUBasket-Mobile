@@ -1888,18 +1888,6 @@ abstract class AppLocalizations {
   /// **'Escrow-protected purchases from /trade'**
   String get profileBulkOrdersSub;
 
-  /// No description provided for @profileWawuPlus.
-  ///
-  /// In en, this message translates to:
-  /// **'WAWU+ membership'**
-  String get profileWawuPlus;
-
-  /// No description provided for @profileWawuPlusSub.
-  ///
-  /// In en, this message translates to:
-  /// **'Discounted delivery and more'**
-  String get profileWawuPlusSub;
-
   /// No description provided for @profileLanguage.
   ///
   /// In en, this message translates to:
@@ -2299,7 +2287,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportCallSub.
   ///
   /// In en, this message translates to:
-  /// **'+234 800 WAWUBasket'**
+  /// **'07050622222'**
   String get supportCallSub;
 
   /// No description provided for @supportCallCta.
@@ -2317,7 +2305,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportEmailSub.
   ///
   /// In en, this message translates to:
-  /// **'support@wawu.africa'**
+  /// **'support@wawubasket.com'**
   String get supportEmailSub;
 
   /// No description provided for @supportEmailCta.
@@ -2487,120 +2475,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Method removed'**
   String get walletMethodRemoved;
-
-  /// No description provided for @wawuPlusTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'WAWU+'**
-  String get wawuPlusTitle;
-
-  /// No description provided for @wawuPlusHero.
-  ///
-  /// In en, this message translates to:
-  /// **'Go plus. Go more.'**
-  String get wawuPlusHero;
-
-  /// No description provided for @wawuPlusSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Discounted delivery. Exclusive treats. Priority support.'**
-  String get wawuPlusSubtitle;
-
-  /// No description provided for @wawuPlusMembers.
-  ///
-  /// In en, this message translates to:
-  /// **'Join 12,400 other happy baskets'**
-  String get wawuPlusMembers;
-
-  /// No description provided for @wawuPlusIncluded.
-  ///
-  /// In en, this message translates to:
-  /// **'What\'s included'**
-  String get wawuPlusIncluded;
-
-  /// No description provided for @wawuPlusBenefit1.
-  ///
-  /// In en, this message translates to:
-  /// **'Discounted delivery on every order'**
-  String get wawuPlusBenefit1;
-
-  /// No description provided for @wawuPlusBenefit2.
-  ///
-  /// In en, this message translates to:
-  /// **'Member-only deals every week'**
-  String get wawuPlusBenefit2;
-
-  /// No description provided for @wawuPlusBenefit3.
-  ///
-  /// In en, this message translates to:
-  /// **'Priority support, skip the line'**
-  String get wawuPlusBenefit3;
-
-  /// No description provided for @wawuPlusBenefit4.
-  ///
-  /// In en, this message translates to:
-  /// **'Free returns on wrong items'**
-  String get wawuPlusBenefit4;
-
-  /// No description provided for @wawuPlusBenefit5.
-  ///
-  /// In en, this message translates to:
-  /// **'Early access to new features'**
-  String get wawuPlusBenefit5;
-
-  /// No description provided for @wawuPlusPickPlan.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a plan'**
-  String get wawuPlusPickPlan;
-
-  /// No description provided for @wawuPlusYearly.
-  ///
-  /// In en, this message translates to:
-  /// **'Yearly'**
-  String get wawuPlusYearly;
-
-  /// No description provided for @wawuPlusYearlyNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Save 20% · billed once'**
-  String get wawuPlusYearlyNote;
-
-  /// No description provided for @wawuPlusMonthly.
-  ///
-  /// In en, this message translates to:
-  /// **'Monthly'**
-  String get wawuPlusMonthly;
-
-  /// No description provided for @wawuPlusMonthlyNote.
-  ///
-  /// In en, this message translates to:
-  /// **'Cancel anytime'**
-  String get wawuPlusMonthlyNote;
-
-  /// No description provided for @wawuPlusStartTrial.
-  ///
-  /// In en, this message translates to:
-  /// **'Start free trial, 7 days'**
-  String get wawuPlusStartTrial;
-
-  /// No description provided for @wawuPlusActiveMember.
-  ///
-  /// In en, this message translates to:
-  /// **'You\'re a WAWU+ member'**
-  String get wawuPlusActiveMember;
-
-  /// No description provided for @wawuPlusWebOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'Open WAWUBasket on your phone to join WAWU+.'**
-  String get wawuPlusWebOnly;
-
-  /// No description provided for @wawuPlusWelcome.
-  ///
-  /// In en, this message translates to:
-  /// **'Welcome to WAWU+!'**
-  String get wawuPlusWelcome;
 
   /// No description provided for @operatorSignOutTitle.
   ///

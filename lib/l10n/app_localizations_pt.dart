@@ -927,12 +927,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileBulkOrdersSub => 'Compras protegidas por escrow do /trade';
 
   @override
-  String get profileWawuPlus => 'Associação WAWU+';
-
-  @override
-  String get profileWawuPlusSub => 'Entrega com desconto e mais';
-
-  @override
   String get profileLanguage => 'Idioma';
 
   @override
@@ -1138,7 +1132,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get supportCall => 'Ligue para nós';
 
   @override
-  String get supportCallSub => 'Fale com um representante';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Ligar';
@@ -1147,7 +1141,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get supportEmail => 'Envie um e-mail';
 
   @override
-  String get supportEmailSub => 'Respondemos rapidamente';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Enviar e-mail';
@@ -1234,64 +1228,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'Método removido';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Seja plus. Faça mais.';
-
-  @override
-  String get wawuPlusSubtitle => 'Aproveite mais';
-
-  @override
-  String get wawuPlusMembers => 'Junte-se a outros 12.400 cestas felizes';
-
-  @override
-  String get wawuPlusIncluded => 'O que está incluído';
-
-  @override
-  String get wawuPlusBenefit1 => 'Entrega grátis em todos os pedidos';
-
-  @override
-  String get wawuPlusBenefit2 => 'Raio de entrega ampliado';
-
-  @override
-  String get wawuPlusBenefit3 => 'Suporte 24 horas por dia';
-
-  @override
-  String get wawuPlusBenefit4 => 'Ofertas exclusivas e acesso antecipado';
-
-  @override
-  String get wawuPlusBenefit5 => 'Acesso antecipado a novos recursos';
-
-  @override
-  String get wawuPlusPickPlan => 'Escolha um plano';
-
-  @override
-  String get wawuPlusYearly => 'Anual (economize 20%)';
-
-  @override
-  String get wawuPlusYearlyNote => 'Economize 20% · cobrado uma vez';
-
-  @override
-  String get wawuPlusMonthly => 'Mensal';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Cancele a qualquer momento';
-
-  @override
-  String get wawuPlusStartTrial => 'Começar teste grátis de 7 dias';
-
-  @override
-  String get wawuPlusActiveMember => 'Você é membro WAWU+';
-
-  @override
-  String get wawuPlusWebOnly =>
-      'Abra o WAWUBasket no seu celular para entrar no WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'Bem-vindo ao WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Sair?';

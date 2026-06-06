@@ -922,12 +922,6 @@ class AppLocalizationsSw extends AppLocalizations {
       'Manunuzi yaliyolindwa na escrow kutoka /trade';
 
   @override
-  String get profileWawuPlus => 'Uanachama wa WAWU+';
-
-  @override
-  String get profileWawuPlusSub => 'Utoaji wa punguzo na zaidi';
-
-  @override
   String get profileLanguage => 'Lugha';
 
   @override
@@ -1133,7 +1127,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get supportCall => 'Tupigie simu';
 
   @override
-  String get supportCallSub => 'Zungumza na mwakilishi wetu';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Piga simu';
@@ -1142,7 +1136,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get supportEmail => 'Tutumie barua pepe';
 
   @override
-  String get supportEmailSub => 'Tutajibu haraka';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Tuma barua pepe';
@@ -1229,64 +1223,6 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'Njia imeondolewa';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Kuwa plus. Fanya zaidi.';
-
-  @override
-  String get wawuPlusSubtitle => 'Pata zaidi';
-
-  @override
-  String get wawuPlusMembers => 'Jiunge na vikapu 12,400 vingine vya furaha';
-
-  @override
-  String get wawuPlusIncluded => 'Kilichojumuishwa';
-
-  @override
-  String get wawuPlusBenefit1 => 'Uwasilishaji bure kwa maagizo yote';
-
-  @override
-  String get wawuPlusBenefit2 => 'Eneo la uwasilishaji lililopanuliwa';
-
-  @override
-  String get wawuPlusBenefit3 => 'Msaada saa 24 kila siku';
-
-  @override
-  String get wawuPlusBenefit4 => 'Ofa za kipekee na ufikiaji wa mapema';
-
-  @override
-  String get wawuPlusBenefit5 => 'Ufikiaji wa mapema wa vipengele vipya';
-
-  @override
-  String get wawuPlusPickPlan => 'Chagua mpango';
-
-  @override
-  String get wawuPlusYearly => 'Kila mwaka (okoa 20%)';
-
-  @override
-  String get wawuPlusYearlyNote => 'Okoa 20% · inalipiwa mara moja';
-
-  @override
-  String get wawuPlusMonthly => 'Kila mwezi';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Ghairi wakati wowote';
-
-  @override
-  String get wawuPlusStartTrial => 'Anza majaribio ya bure ya siku 7';
-
-  @override
-  String get wawuPlusActiveMember => 'Wewe ni mwanachama wa WAWU+';
-
-  @override
-  String get wawuPlusWebOnly =>
-      'Fungua WAWUBasket kwenye simu yako kujiunga na WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'Karibu WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Toka?';

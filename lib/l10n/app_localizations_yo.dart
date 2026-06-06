@@ -920,12 +920,6 @@ class AppLocalizationsYo extends AppLocalizations {
   String get profileBulkOrdersSub => 'Àwọn rírà tí a dáàbò bò láti /òwò';
 
   @override
-  String get profileWawuPlus => 'Ọmọ ẹgbẹ́ WAWU+';
-
-  @override
-  String get profileWawuPlusSub => 'Ìfiránṣẹ́ tí ó dínkù àti jù bẹ́ẹ̀';
-
-  @override
   String get profileLanguage => 'Èdè';
 
   @override
@@ -1132,7 +1126,7 @@ class AppLocalizationsYo extends AppLocalizations {
   String get supportCall => 'Pe wa';
 
   @override
-  String get supportCallSub => '+234 800 WAWUBasket';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Pe';
@@ -1141,7 +1135,7 @@ class AppLocalizationsYo extends AppLocalizations {
   String get supportEmail => 'Rán wa e-mail';
 
   @override
-  String get supportEmailSub => 'support@wawu.africa';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Rán e-mail';
@@ -1228,66 +1222,6 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'Ọ̀nà yọ';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Lọ sí ìkejì. Gba jù.';
-
-  @override
-  String get wawuPlusSubtitle =>
-      'Ìfiránṣẹ́ tí ó dínkù. Àwọn ẹbùn ìkọ̀kọ̀. Àtìlẹ́yìn àkọ́kọ́.';
-
-  @override
-  String get wawuPlusMembers => 'Darapọ̀ mọ́ àwọn agbọn ayọ̀ 12,400 mìíràn';
-
-  @override
-  String get wawuPlusIncluded => 'Ohun tó wà nínú';
-
-  @override
-  String get wawuPlusBenefit1 => 'Ìfiránṣẹ́ tí ó dínkù lórí gbogbo àṣẹ';
-
-  @override
-  String get wawuPlusBenefit2 =>
-      'Àwọn ẹbùn fún àwọn ọmọ ẹgbẹ́ ní ọ̀sẹ̀ kọ̀ọ̀kan';
-
-  @override
-  String get wawuPlusBenefit3 => 'Àtìlẹ́yìn àkọ́kọ́, fò ní ìtẹ̀sí';
-
-  @override
-  String get wawuPlusBenefit4 => 'Àpadà ọfẹ́ fún àwọn ọja tí kò tọ';
-
-  @override
-  String get wawuPlusBenefit5 => 'Wọlé àkọ́kọ́ sí àwọn ìpèsè tuntun';
-
-  @override
-  String get wawuPlusPickPlan => 'Yan ètò kan';
-
-  @override
-  String get wawuPlusYearly => 'Lódọdún';
-
-  @override
-  String get wawuPlusYearlyNote => 'Fi 20% pamọ́ · san ẹẹ̀kan';
-
-  @override
-  String get wawuPlusMonthly => 'Lóṣooṣù';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Fagilee nígbàkigbà';
-
-  @override
-  String get wawuPlusStartTrial => 'Bẹ̀rẹ̀ àyẹ̀wò ọfẹ́, ọjọ́ 7';
-
-  @override
-  String get wawuPlusActiveMember => 'O jẹ́ ọmọ ẹgbẹ́ WAWU+';
-
-  @override
-  String get wawuPlusWebOnly =>
-      'Ṣí WAWUBasket lórí fóǹ rẹ láti darapọ̀ mọ́ WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'Káabọ̀ sí WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Jáde?';

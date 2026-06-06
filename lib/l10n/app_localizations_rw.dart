@@ -933,12 +933,6 @@ class AppLocalizationsRw extends AppLocalizations {
       'Kugura kurinzwe na escrow biva muri /trade';
 
   @override
-  String get profileWawuPlus => 'WAWU+ membership';
-
-  @override
-  String get profileWawuPlusSub => 'Gutanga ku giciro gito n\'ibindi';
-
-  @override
   String get profileLanguage => 'Ururimi';
 
   @override
@@ -1145,7 +1139,7 @@ class AppLocalizationsRw extends AppLocalizations {
   String get supportCall => 'Duhamagare';
 
   @override
-  String get supportCallSub => '+234 800 WAWUBasket';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Hamagara';
@@ -1154,7 +1148,7 @@ class AppLocalizationsRw extends AppLocalizations {
   String get supportEmail => 'Twoherereze email';
 
   @override
-  String get supportEmailSub => 'support@wawu.africa';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Ohereza email';
@@ -1241,65 +1235,6 @@ class AppLocalizationsRw extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'Uburyo bwakuwemo';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Genda plus. Bona byinshi.';
-
-  @override
-  String get wawuPlusSubtitle =>
-      'Gutanga ku giciro gito. Ibirori byihariye. Ubufasha bw\'ibanze.';
-
-  @override
-  String get wawuPlusMembers => 'Tashe ku tundi tuanyu 12,400 tw\'ibyishimo';
-
-  @override
-  String get wawuPlusIncluded => 'Ibirimo';
-
-  @override
-  String get wawuPlusBenefit1 => 'Gutanga ku giciro gito ku byatumijwe byose';
-
-  @override
-  String get wawuPlusBenefit2 => 'Ibirori by\'abanyamuryango buri cyumweru';
-
-  @override
-  String get wawuPlusBenefit3 => 'Ubufasha bw\'ibanze, simbuka umurongo';
-
-  @override
-  String get wawuPlusBenefit4 => 'Gusubiza ku buntu ku bintu bibi';
-
-  @override
-  String get wawuPlusBenefit5 => 'Kubona ibishya mbere';
-
-  @override
-  String get wawuPlusPickPlan => 'Hitamo gahunda';
-
-  @override
-  String get wawuPlusYearly => 'Mu mwaka';
-
-  @override
-  String get wawuPlusYearlyNote => 'Bika 20% · bishyurwa rimwe';
-
-  @override
-  String get wawuPlusMonthly => 'Buri kwezi';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Hagarika igihe cyose';
-
-  @override
-  String get wawuPlusStartTrial => 'Tangira igerageza ry\'ubuntu, iminsi 7';
-
-  @override
-  String get wawuPlusActiveMember => 'Uri umunyamuryango wa WAWU+';
-
-  @override
-  String get wawuPlusWebOnly =>
-      'Fungura WAWUBasket kuri telefoni yawe kugira ngo wifatanye na WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'Murakaza neza muri WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Sohoka?';

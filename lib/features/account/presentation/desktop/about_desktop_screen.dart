@@ -198,7 +198,7 @@ class AboutDesktopScreen extends StatelessWidget {
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
                           if (i == 0) {
-                            wbLaunchEmail(context, 'support@wawu.africa');
+                            wbLaunchEmail(context, 'support@wawubasket.com');
                           } else if (i == 1) {
                             context.push(AppRoutes.terms);
                           } else {

@@ -919,12 +919,6 @@ class AppLocalizationsTw extends AppLocalizations {
   String get profileBulkOrdersSub => 'Tɔn a wɔde escrow bɔ so fi /dwadie';
 
   @override
-  String get profileWawuPlus => 'WAWU+ membership';
-
-  @override
-  String get profileWawuPlusSub => 'Delivery ketewa ne nea ɛboro';
-
-  @override
   String get profileLanguage => 'Kasa';
 
   @override
@@ -1129,7 +1123,7 @@ class AppLocalizationsTw extends AppLocalizations {
   String get supportCall => 'Frɛ yɛn';
 
   @override
-  String get supportCallSub => '+234 800 WAWUBasket';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Frɛ';
@@ -1138,7 +1132,7 @@ class AppLocalizationsTw extends AppLocalizations {
   String get supportEmail => 'Soma yɛn email';
 
   @override
-  String get supportEmailSub => 'support@wawu.africa';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Soma email';
@@ -1225,65 +1219,6 @@ class AppLocalizationsTw extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'Wɔayi nhyiam no';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Kɔ soro. Gye paa.';
-
-  @override
-  String get wawuPlusSubtitle =>
-      'Delivery ketewa. Nneɛma a wɔhintaw. Support a ɛdi kan.';
-
-  @override
-  String get wawuPlusMembers => 'Ka kete 12,400 a ahyɛ nea afehyɛ ho';
-
-  @override
-  String get wawuPlusIncluded => 'Deɛ ɛwɔ mu';
-
-  @override
-  String get wawuPlusBenefit1 => 'Delivery ketewa wɔ nkɔso biara so';
-
-  @override
-  String get wawuPlusBenefit2 => 'Nneɛma foforo ma members ɔdawotwere biara';
-
-  @override
-  String get wawuPlusBenefit3 => 'Support a ɛdi kan, wu hia';
-
-  @override
-  String get wawuPlusBenefit4 => 'Free return ma nneɛma a ɛmpɛ';
-
-  @override
-  String get wawuPlusBenefit5 => 'Kɔ mu kan wɔ features foforo ho';
-
-  @override
-  String get wawuPlusPickPlan => 'Yi plan';
-
-  @override
-  String get wawuPlusYearly => 'Afe biara';
-
-  @override
-  String get wawuPlusYearlyNote => 'Sie 20% · tua ɛkwan baako';
-
-  @override
-  String get wawuPlusMonthly => 'Osram biara';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Wobetumi gyae berɛ biara';
-
-  @override
-  String get wawuPlusStartTrial => 'Hyɛ ase trial free, nnɛ 7';
-
-  @override
-  String get wawuPlusActiveMember => 'Wo yɛ WAWU+ member';
-
-  @override
-  String get wawuPlusWebOnly =>
-      'Bue WAWUBasket wɔ wo fɔn so sɛ wo ka WAWU+ ho.';
-
-  @override
-  String get wawuPlusWelcome => 'Akwaaba wɔ WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Pue?';

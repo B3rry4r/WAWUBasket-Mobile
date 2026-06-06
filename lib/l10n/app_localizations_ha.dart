@@ -929,12 +929,6 @@ class AppLocalizationsHa extends AppLocalizations {
   String get profileBulkOrdersSub => 'Siyan da aka kiyaye daga /kasuwanci';
 
   @override
-  String get profileWawuPlus => 'Zama ɗan WAWU+';
-
-  @override
-  String get profileWawuPlusSub => 'Isar da mai rahusa da ƙari';
-
-  @override
   String get profileLanguage => 'Harshe';
 
   @override
@@ -1140,7 +1134,7 @@ class AppLocalizationsHa extends AppLocalizations {
   String get supportCall => 'Kira mu';
 
   @override
-  String get supportCallSub => '+234 800 WAWUBasket';
+  String get supportCallSub => '07050622222';
 
   @override
   String get supportCallCta => 'Kira';
@@ -1149,7 +1143,7 @@ class AppLocalizationsHa extends AppLocalizations {
   String get supportEmail => 'Aika mu e-mail';
 
   @override
-  String get supportEmailSub => 'support@wawu.africa';
+  String get supportEmailSub => 'support@wawubasket.com';
 
   @override
   String get supportEmailCta => 'Aika e-mail';
@@ -1236,65 +1230,6 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get walletMethodRemoved => 'An cire hanya';
-
-  @override
-  String get wawuPlusTitle => 'WAWU+';
-
-  @override
-  String get wawuPlusHero => 'Tafi ga ƙari. Samu ƙari.';
-
-  @override
-  String get wawuPlusSubtitle =>
-      'Isar da mai rahusa. Kyaututtuka na musamman. Tallafi na farko.';
-
-  @override
-  String get wawuPlusMembers =>
-      'Shiga tare da sauran kwanduna masu farin ciki 12,400';
-
-  @override
-  String get wawuPlusIncluded => 'Abin da aka haɗa';
-
-  @override
-  String get wawuPlusBenefit1 => 'Isar da mai rahusa kan kowane umarni';
-
-  @override
-  String get wawuPlusBenefit2 => 'Yarjejeniyoyi ga mambobi kawai kowace mako';
-
-  @override
-  String get wawuPlusBenefit3 => 'Tallafi na farko, tsallake layi';
-
-  @override
-  String get wawuPlusBenefit4 => 'Mayar da kyauta kan kayan da ba daidai ba';
-
-  @override
-  String get wawuPlusBenefit5 => 'Farkon shiga zuwa sabbin fasalulluka';
-
-  @override
-  String get wawuPlusPickPlan => 'Zaɓi shiri';
-
-  @override
-  String get wawuPlusYearly => 'Shekara-shekara';
-
-  @override
-  String get wawuPlusYearlyNote => 'Adana 20% · biyan kuɗi sau ɗaya';
-
-  @override
-  String get wawuPlusMonthly => 'Wata-wata';
-
-  @override
-  String get wawuPlusMonthlyNote => 'Soke kowane lokaci';
-
-  @override
-  String get wawuPlusStartTrial => 'Fara gwajin kyauta, kwanaki 7';
-
-  @override
-  String get wawuPlusActiveMember => 'Kai memba ne na WAWU+';
-
-  @override
-  String get wawuPlusWebOnly => 'Bude WAWUBasket a wayarka don shiga WAWU+.';
-
-  @override
-  String get wawuPlusWelcome => 'Barka da zuwa WAWU+!';
 
   @override
   String get operatorSignOutTitle => 'Fita?';

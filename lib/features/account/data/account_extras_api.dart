@@ -2,7 +2,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/network/api_parse.dart';
 
 /// Wraps the secondary account endpoints — notifications, favorites,
-/// wallet, support and WAWU+ subscriptions.
+/// wallet and support.
 class AccountExtrasApi {
   AccountExtrasApi._();
   static final AccountExtrasApi instance = AccountExtrasApi._();
@@ -41,21 +41,6 @@ class AccountExtrasApi {
     final res = await _api.get('/wallet');
     return safeMap(res, context: 'wallet');
   }
-
-  // ─── WAWU+ subscription ────────────────────────────────────────────────
-
-  Future<Map<String, dynamic>> subscriptionStatus() async {
-    final res = await _api.get('/subscriptions/status');
-    return safeMap(res, context: 'subscriptionStatus');
-  }
-
-  Future<void> startTrial(String plan) =>
-      _api.post('/subscriptions/trial', body: {'plan': plan});
-
-  Future<void> subscribe(String plan) =>
-      _api.post('/subscriptions', body: {'plan': plan});
-
-  Future<void> cancelSubscription() => _api.delete('/subscriptions');
 
   // ─── Support ───────────────────────────────────────────────────────────
 
