@@ -128,6 +128,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         }
         final res = await RecipesApi.instance.checkout(
           addressId: addr.id,
+          platform: kIsWeb ? 'web' : 'app',
         );
         orderId = res['id'] as String? ?? '';
         checkoutUrl = res['checkoutUrl'] as String? ?? '';

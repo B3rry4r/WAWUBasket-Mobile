@@ -88,11 +88,11 @@ class RecipesApi {
   /// payment polling pipeline.
   Future<Map<String, dynamic>> checkout({
     required String addressId,
+    String? platform,
   }) async {
-    final res = await _api.post(
-      '/recipes/cart/checkout',
-      body: {'addressId': addressId},
-    );
+    final body = <String, dynamic>{'addressId': addressId};
+    if (platform != null) body['platform'] = platform;
+    final res = await _api.post('/recipes/cart/checkout', body: body);
     final map = safeMap(res, context: 'recipeCheckout');
     // The endpoint shape is `{ order: {...} }`; surface a flat map that
     // mirrors the regular orders endpoint for caller convenience.
