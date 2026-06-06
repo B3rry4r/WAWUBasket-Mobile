@@ -212,30 +212,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loginForgotPassword => 'نسيت كلمة المرور؟';
 
   @override
-  String get loginBiometric => 'استخدام معرّف الوجه';
-
-  @override
   String get loginSignupLink => 'جديد على WAWUBasket؟';
 
   @override
   String get loginErrorEmpty => 'أدخل هاتفك/بريدك وكلمة المرور.';
-
-  @override
-  String get loginBiometricOfferTitle => 'تسجيل دخول أسرع';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'استخدم معرّف الوجه أو بصمتك في المرة القادمة؟';
-
-  @override
-  String get loginBiometricNotNow => 'ليس الآن';
-
-  @override
-  String get loginBiometricEnable => 'تفعيل';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'لم يُهيَّأ فتح القفل البيومتري على هذا الجهاز.';
 
   @override
   String get signupTitle => 'ما رقم واتساب الخاص بك؟';
@@ -957,12 +937,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileChangePasswordSub => 'احتفظ بأمان حسابك';
 
   @override
-  String get profileBiometricLogin => 'تسجيل الدخول البيومتري';
-
-  @override
-  String get profileBiometricLoginSub => 'استخدم وجهك أو بصمتك';
-
-  @override
   String get profileTwoFactor => 'المصادقة الثنائية';
 
   @override
@@ -1095,12 +1069,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'احتفظ بأمان حسابك';
-
-  @override
-  String get securityBiometric => 'تسجيل الدخول بالبصمة';
-
-  @override
-  String get securityBiometricSub => 'استخدم وجهك أو بصمتك';
 
   @override
   String get securityTwoFactor => 'التحقق الثنائي';
@@ -2050,11 +2018,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'إلى صندوق بريدك';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'المتابعة مع $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'تم قبول الطلب';

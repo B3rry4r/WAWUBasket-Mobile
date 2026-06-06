@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Simu au barua pepe",
   "loginPasswordLabel": "Nywila",
   "loginForgotPassword": "Umesahau nywila?",
-  "loginBiometric": "Tumia Face ID",
   "loginSignupLink": "Mpya kwenye WAWUBasket?",
   "loginErrorEmpty": "Weka simu/barua pepe na nywila yako.",
-  "loginBiometricOfferTitle": "Kuingia kwa haraka",
-  "loginBiometricOfferBody": "Tumia Face ID au kidole chako kuingia mara inayofuata?",
-  "loginBiometricNotNow": "Si sasa",
-  "loginBiometricEnable": "Washa",
-  "loginBiometricNotAvailable": "Kufungua kwa biometrics hakujasanidiwa kwenye kifaa hiki.",
   "signupTitle": "Nambari yako ya WhatsApp ni nini?",
   "signupSubtitle": "Tutatuma nambari ya uthibitisho kuhakikisha ni wewe.",
   "signupNameLabel": "Jina kamili",
@@ -307,8 +301,6 @@
   "profileAbout": "Kuhusu WAWUBasket",
   "profileChangePassword": "Badilisha nywila",
   "profileChangePasswordSub": "Weka akaunti yako salama",
-  "profileBiometricLogin": "Kuingia kwa biometrics",
-  "profileBiometricLoginSub": "Tumia uso wako au kidole",
   "profileTwoFactor": "Uthibitishaji wa hatua mbili",
   "profileTwoFactorSub": "Safu ya ziada ya ulinzi",
   "profileHelpCenter": "Kituo cha msaada",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Weka akaunti yako salama.",
   "securityChangePassword": "Badilisha nywila",
   "securityChangePasswordSub": "Weka akaunti yako salama",
-  "securityBiometric": "Ingia kwa alama ya mwili",
-  "securityBiometricSub": "Tumia uso wako au kidole",
   "securityTwoFactor": "Uthibitishaji wa hatua mbili",
   "securityTwoFactorSub": "Safu ya ziada ya ulinzi",
   "securityCurrentPassword": "Nywila ya sasa",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "Kwa simu yako",
   "forgotEmailLabel": "Barua pepe",
   "forgotEmailSub": "Kwa sanduku lako",
-  "welcomeBiometric": "Endelea na {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Agizo limekubaliwa",
   "vendorOrderDeclined": "Agizo linakataliwa",
   "vendorLiveOrdersTitle": "Maagizo hai",

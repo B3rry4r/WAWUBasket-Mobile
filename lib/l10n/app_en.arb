@@ -66,14 +66,8 @@
   "loginPhoneLabel": "Phone or email",
   "loginPasswordLabel": "Password",
   "loginForgotPassword": "Forgot password?",
-  "loginBiometric": "Use Face ID",
   "loginSignupLink": "New to WAWUBasket?",
   "loginErrorEmpty": "Enter your phone/email and password.",
-  "loginBiometricOfferTitle": "Faster sign-in",
-  "loginBiometricOfferBody": "Use Face ID or your fingerprint to sign in next time?",
-  "loginBiometricNotNow": "Not now",
-  "loginBiometricEnable": "Enable",
-  "loginBiometricNotAvailable": "Biometric unlock isn't set up on this device.",
   "signupTitle": "What's your WhatsApp number?",
   "signupSubtitle": "We'll send a code to make sure it's really you.",
   "signupNameLabel": "Full name",
@@ -316,8 +310,6 @@
   "profileAbout": "About WAWUBasket",
   "profileChangePassword": "Change password",
   "profileChangePasswordSub": "Keep your account safe",
-  "profileBiometricLogin": "Biometric login",
-  "profileBiometricLoginSub": "Use your face or fingerprint",
   "profileTwoFactor": "Two-factor authentication",
   "profileTwoFactorSub": "Extra layer of protection",
   "profileHelpCenter": "Help center",
@@ -375,8 +367,6 @@
   "securitySubtitle": "Keep your account safe.",
   "securityChangePassword": "Change password",
   "securityChangePasswordSub": "Keep your account safe",
-  "securityBiometric": "Biometric login",
-  "securityBiometricSub": "Use your face or fingerprint",
   "securityTwoFactor": "Two-factor authentication",
   "securityTwoFactorSub": "Extra layer of protection",
   "securityCurrentPassword": "Current password",
@@ -762,14 +752,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

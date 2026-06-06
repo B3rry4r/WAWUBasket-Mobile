@@ -216,31 +216,11 @@ class AppLocalizationsZu extends AppLocalizations {
   String get loginForgotPassword => 'Ukhohlwe iphasiwedi?';
 
   @override
-  String get loginBiometric => 'Sebenzisa i-Face ID';
-
-  @override
   String get loginSignupLink => 'Umusha ku-WAWUBasket?';
 
   @override
   String get loginErrorEmpty =>
       'Faka ucingo/i-imeyili kanye nephasiwedi yakho.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Ukungena okukhawuleza';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Sebenzisa i-Face ID noma umunwe wakho ukungena ngokulandelayo?';
-
-  @override
-  String get loginBiometricNotNow => 'Hhayi manje';
-
-  @override
-  String get loginBiometricEnable => 'Nika amandla';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Ukuvula i-biometric akusetwanga kuleli diva.';
 
   @override
   String get signupTitle => 'Inombolo yakho ye-WhatsApp iyini?';
@@ -986,13 +966,6 @@ class AppLocalizationsZu extends AppLocalizations {
   String get profileChangePasswordSub => 'Gcina i-akhawunti yakho ephephile';
 
   @override
-  String get profileBiometricLogin => 'Ukungena kwe-biometric';
-
-  @override
-  String get profileBiometricLoginSub =>
-      'Sebenzisa ubuso bakho noma umunwe wakho';
-
-  @override
   String get profileTwoFactor => 'Ukuqinisekiswa kwezigaba ezimbili';
 
   @override
@@ -1125,12 +1098,6 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Gcina i-akhawunti yakho ephephile';
-
-  @override
-  String get securityBiometric => 'Ngena nge-biometric';
-
-  @override
-  String get securityBiometricSub => 'Sebenzisa ubuso bakho noma umunwe wakho';
 
   @override
   String get securityTwoFactor => 'Ukuqinisekiswa kwezigaba ezimbili';
@@ -2102,11 +2069,6 @@ class AppLocalizationsZu extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';

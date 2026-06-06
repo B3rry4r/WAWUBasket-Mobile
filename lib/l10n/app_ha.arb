@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Waya ko e-mail",
   "loginPasswordLabel": "Kalmar sirri",
   "loginForgotPassword": "Manta kalmar sirri?",
-  "loginBiometric": "Yi amfani da Face ID",
   "loginSignupLink": "Sabon a WAWUBasket?",
   "loginErrorEmpty": "Shigar da wayar/e-mail da kalmar sirri.",
-  "loginBiometricOfferTitle": "Shiga da sauri",
-  "loginBiometricOfferBody": "Yi amfani da Face ID ko yatsar ka don shiga karo na gaba?",
-  "loginBiometricNotNow": "Ba yanzu ba",
-  "loginBiometricEnable": "Kunna",
-  "loginBiometricNotAvailable": "Buɗewar biometric ba ta kafa a wannan na'urar ba.",
   "signupTitle": "Menene lambar WhatsApp ɗinka?",
   "signupSubtitle": "Za mu aika lambar don tabbatar da cewa kai ne.",
   "signupNameLabel": "Cikakken suna",
@@ -307,8 +301,6 @@
   "profileAbout": "Game da WAWUBasket",
   "profileChangePassword": "Canza kalmar sirri",
   "profileChangePasswordSub": "Kiyaye asusun ka lafiya",
-  "profileBiometricLogin": "Shiga da biometric",
-  "profileBiometricLoginSub": "Yi amfani da fuskar ka ko yatsar ka",
   "profileTwoFactor": "Tabbatarwa ta biyu",
   "profileTwoFactorSub": "Wani layer na kariya",
   "profileHelpCenter": "Cibiyar taimako",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Kiyaye asusun ka lafiya.",
   "securityChangePassword": "Canza kalmar sirri",
   "securityChangePasswordSub": "Kiyaye asusun ka lafiya",
-  "securityBiometric": "Shiga da biometric",
-  "securityBiometricSub": "Yi amfani da fuskar ka ko yatsar ka",
   "securityTwoFactor": "Tabbatarwa ta biyu",
   "securityTwoFactorSub": "Wani layer na kariya",
   "securityCurrentPassword": "Kalmar sirri ta yanzu",
@@ -732,14 +722,6 @@
   "forgotSmsSub": "Zuwa wayarku",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "Zuwa imel ɗinku",
-  "welcomeBiometric": "Ci gaba da {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "An karɓi oda",
   "vendorOrderDeclined": "An ƙi oda",
   "vendorLiveOrdersTitle": "Oda na aiki",

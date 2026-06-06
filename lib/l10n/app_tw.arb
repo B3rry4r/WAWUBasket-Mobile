@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Fɔn anaa email",
   "loginPasswordLabel": "Password",
   "loginForgotPassword": "Woware password?",
-  "loginBiometric": "De Face ID",
   "loginSignupLink": "Foforɔ wɔ WAWUBasket?",
   "loginErrorEmpty": "Hyɛ wo fɔn/email ne password mu.",
-  "loginBiometricOfferTitle": "Kɔ mu ntɛm",
-  "loginBiometricOfferBody": "De Face ID anaa wo ntaban kɔ mu ɛberɛ a ɛdi hɔ?",
-  "loginBiometricNotNow": "Ɛnnɛ deɛ daakye",
-  "loginBiometricEnable": "Ma nkwa",
-  "loginBiometricNotAvailable": "Biometric unlock nni siesie wɔ fam no so.",
   "signupTitle": "Wo WhatsApp nɔma bɛn?",
   "signupSubtitle": "Yɛbɛsoma koodu sɛ yɛahwɛ sɛ wo ne wo ara.",
   "signupNameLabel": "Din a ɛto so nyinaa",
@@ -314,8 +308,6 @@
   "profileAbout": "Fa WAWUBasket ho",
   "profileChangePassword": "Sesa password",
   "profileChangePasswordSub": "Ma wo akaunti hye",
-  "profileBiometricLogin": "Biometric login",
-  "profileBiometricLoginSub": "De wo anim anaa ntaban",
   "profileTwoFactor": "Two-factor authentication",
   "profileTwoFactorSub": "Ahobanbo layer foforɔ",
   "profileHelpCenter": "Help center",
@@ -373,8 +365,6 @@
   "securitySubtitle": "Ma wo akaunti hye.",
   "securityChangePassword": "Sesa password",
   "securityChangePasswordSub": "Ma wo akaunti hye",
-  "securityBiometric": "Biometric login",
-  "securityBiometricSub": "De wo anim anaa ntaban",
   "securityTwoFactor": "Two-factor authentication",
   "securityTwoFactorSub": "Ahobanbo layer foforɔ",
   "securityCurrentPassword": "Password a wowɔ",
@@ -760,14 +750,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

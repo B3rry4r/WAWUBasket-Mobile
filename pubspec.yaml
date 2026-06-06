@@ -53,9 +53,6 @@ dependencies:
   # documents and chat attachments; uploaded to R2 via a presigned PUT.
   image_picker: ^1.1.2
 
-  # Face ID / fingerprint unlock for returning users.
-  local_auth: ^2.3.0
-
   # WAWU+ subscription via App Store / Play Store in-app purchase.
   in_app_purchase: ^3.2.0
 

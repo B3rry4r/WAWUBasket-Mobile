@@ -107,8 +107,7 @@ class PrivacyScreen extends StatelessWidget {
               '7. Data Security',
               'We implement industry-standard security measures including encryption in transit '
               '(TLS), encrypted storage for sensitive data, and access controls. However, no '
-              'system is completely secure. We encourage you to use a strong, unique password '
-              'and to enable biometric authentication where available.',
+              'system is completely secure. We encourage you to use a strong, unique password.',
             ),
             _buildSection(
               '8. Children\'s Privacy',

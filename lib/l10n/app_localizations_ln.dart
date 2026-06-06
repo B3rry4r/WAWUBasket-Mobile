@@ -216,30 +216,10 @@ class AppLocalizationsLn extends AppLocalizations {
   String get loginForgotPassword => 'Obosani mot ya nkúkú?';
 
   @override
-  String get loginBiometric => 'Salelá Face ID';
-
-  @override
   String get loginSignupLink => 'Sika na WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Komá telefone/email na yo mpé mot ya nkúkú.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Kɔtela noki';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Salelá Face ID to mosapi mpo na kɔtela mbala oyo elandi?';
-
-  @override
-  String get loginBiometricNotNow => 'Lelo te';
-
-  @override
-  String get loginBiometricEnable => 'Pesá nzela';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Biometric ezali sika te na telefone oyo.';
 
   @override
   String get signupTitle => 'Nimero na yo ya WhatsApp ezali nini?';
@@ -969,12 +949,6 @@ class AppLocalizationsLn extends AppLocalizations {
   String get profileChangePasswordSub => 'Bátelá konti na yo';
 
   @override
-  String get profileBiometricLogin => 'Kɔtela ya biometric';
-
-  @override
-  String get profileBiometricLoginSub => 'Salelá elongi to mosapi';
-
-  @override
   String get profileTwoFactor => 'Bondimi ya bibale';
 
   @override
@@ -1109,12 +1083,6 @@ class AppLocalizationsLn extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Bátelá konti na yo';
-
-  @override
-  String get securityBiometric => 'Kɔtela ya biometric';
-
-  @override
-  String get securityBiometricSub => 'Salelá elongi to mosapi';
 
   @override
   String get securityTwoFactor => 'Bondimi ya bibale';
@@ -2076,11 +2044,6 @@ class AppLocalizationsLn extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';

@@ -129,7 +129,6 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/onboarding_screen.dart';
 import '../../features/auth/presentation/screens/otp_screen.dart';
 import '../../features/auth/presentation/screens/reset_password_screen.dart';
-import '../../features/auth/presentation/screens/lock_screen.dart';
 import '../../features/auth/presentation/screens/role_select_screen.dart';
 import '../../features/auth/presentation/screens/web_unavailable_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
@@ -236,7 +235,6 @@ bool _isPublicRoute(String loc) {
     AppRoutes.splash,
     AppRoutes.welcome,
     AppRoutes.login,
-    AppRoutes.lock,
     AppRoutes.signup,
     AppRoutes.otp,
     AppRoutes.forgotPassword,
@@ -282,7 +280,7 @@ AppRole? _requiredRoleFor(String loc) {
 /// state) so it adds no latency. Signed-out users can't deep-link operator or
 /// admin shells; signed-in users without a given role are bounced to their own
 /// home. Public + customer/browse routes pass through untouched, so splash
-/// bootstrap, onboarding, guest browsing, and the biometric lock all still work.
+/// bootstrap, onboarding, and guest browsing all still work.
 /// True when [loc] points anywhere inside a role's area (shell, login, KYC).
 /// `home` is the bare prefix (e.g. `/rider`); every other route under it is
 /// `home/...` (e.g. `/rider/login`), so both forms have to be checked.
@@ -343,10 +341,6 @@ GoRouter buildRouter() {
           mobile: const LoginScreen(),
           desktop: const LoginDesktopScreen(),
         ),
-      ),
-      GoRoute(
-        path: AppRoutes.lock,
-        builder: (_, _) => const LockScreen(),
       ),
       GoRoute(
         path: AppRoutes.signup,

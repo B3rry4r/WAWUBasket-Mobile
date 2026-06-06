@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Telefone to email",
   "loginPasswordLabel": "Mot ya nkúkú",
   "loginForgotPassword": "Obosani mot ya nkúkú?",
-  "loginBiometric": "Salelá Face ID",
   "loginSignupLink": "Sika na WAWUBasket?",
   "loginErrorEmpty": "Komá telefone/email na yo mpé mot ya nkúkú.",
-  "loginBiometricOfferTitle": "Kɔtela noki",
-  "loginBiometricOfferBody": "Salelá Face ID to mosapi mpo na kɔtela mbala oyo elandi?",
-  "loginBiometricNotNow": "Lelo te",
-  "loginBiometricEnable": "Pesá nzela",
-  "loginBiometricNotAvailable": "Biometric ezali sika te na telefone oyo.",
   "signupTitle": "Nimero na yo ya WhatsApp ezali nini?",
   "signupSubtitle": "Tokotinda kode mpo na komona ete ezali yo solo.",
   "signupNameLabel": "Nkómbó mobimba",
@@ -314,8 +308,6 @@
   "profileAbout": "Mpo na WAWUBasket",
   "profileChangePassword": "Bongolá mot ya nkúkú",
   "profileChangePasswordSub": "Bátelá konti na yo",
-  "profileBiometricLogin": "Kɔtela ya biometric",
-  "profileBiometricLoginSub": "Salelá elongi to mosapi",
   "profileTwoFactor": "Bondimi ya bibale",
   "profileTwoFactorSub": "Libateli ya kobakisa",
   "profileHelpCenter": "Centre ya lisálísi",
@@ -373,8 +365,6 @@
   "securitySubtitle": "Bátelá konti na yo.",
   "securityChangePassword": "Bongolá mot ya nkúkú",
   "securityChangePasswordSub": "Bátelá konti na yo",
-  "securityBiometric": "Kɔtela ya biometric",
-  "securityBiometricSub": "Salelá elongi to mosapi",
   "securityTwoFactor": "Bondimi ya bibale",
   "securityTwoFactorSub": "Libateli ya kobakisa",
   "securityCurrentPassword": "Mot ya nkúkú ya sikawa",
@@ -715,14 +705,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Telefoni cyangwa email",
   "loginPasswordLabel": "Ijambobanga",
   "loginForgotPassword": "Wibagiwe ijambobanga?",
-  "loginBiometric": "Koresha Face ID",
   "loginSignupLink": "Mushya muri WAWUBasket?",
   "loginErrorEmpty": "Andika telefoni/email n'ijambobanga.",
-  "loginBiometricOfferTitle": "Kwinjira byihuse",
-  "loginBiometricOfferBody": "Gukoresha Face ID cyangwa intoki kwinjira ubutaha?",
-  "loginBiometricNotNow": "Atari ubu",
-  "loginBiometricEnable": "Emera",
-  "loginBiometricNotAvailable": "Biometric ntiyateguwe kuri iyi telefoni.",
   "signupTitle": "Nimero yawe ya WhatsApp ni iyihe?",
   "signupSubtitle": "Tuzakohereza kode kugira ngo turebe ko ari wowe koko.",
   "signupNameLabel": "Amazina yose",
@@ -314,8 +308,6 @@
   "profileAbout": "Kuri WAWUBasket",
   "profileChangePassword": "Hindura ijambobanga",
   "profileChangePasswordSub": "Komeza konti yawe ifite umutekano",
-  "profileBiometricLogin": "Kwinjira kuri biometric",
-  "profileBiometricLoginSub": "Koresha mu maso cyangwa intoki",
   "profileTwoFactor": "Kwemeza ku ntambwe ebyiri",
   "profileTwoFactorSub": "Urwego rwiyongera rw'umutekano",
   "profileHelpCenter": "Ikigo cy'ubufasha",
@@ -373,8 +365,6 @@
   "securitySubtitle": "Komeza konti yawe ifite umutekano.",
   "securityChangePassword": "Hindura ijambobanga",
   "securityChangePasswordSub": "Komeza konti yawe ifite umutekano",
-  "securityBiometric": "Kwinjira kuri biometric",
-  "securityBiometricSub": "Koresha mu maso cyangwa intoki",
   "securityTwoFactor": "Kwemeza ku ntambwe ebyiri",
   "securityTwoFactorSub": "Urwego rwiyongera rw'umutekano",
   "securityCurrentPassword": "Ijambobanga ririho",
@@ -715,14 +705,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

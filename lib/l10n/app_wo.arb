@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Telefon walla email",
   "loginPasswordLabel": "Baatu sutura",
   "loginForgotPassword": "Fàtte baatu sutura?",
-  "loginBiometric": "Jëfandikoo Face ID",
   "loginSignupLink": "Bees nga ci WAWUBasket?",
   "loginErrorEmpty": "Bind sa telefon/email ak baatu sutura.",
-  "loginBiometricOfferTitle": "Dugg bu gaaw",
-  "loginBiometricOfferBody": "Jëfandikoo Face ID walla sa baaraam ngir dugg yoon wi topp?",
-  "loginBiometricNotNow": "Du tey",
-  "loginBiometricEnable": "Ubbeel",
-  "loginBiometricNotAvailable": "Biometric ubbi amul ci telefon bi.",
   "signupTitle": "Lan mooy sa nimero WhatsApp?",
   "signupSubtitle": "Dinañu yónne kodd ngir wóoral ne yow rekk ci.",
   "signupNameLabel": "Tur bu mat",
@@ -314,8 +308,6 @@
   "profileAbout": "Ci mbirum WAWUBasket",
   "profileChangePassword": "Soppi baatu sutura",
   "profileChangePasswordSub": "Aar sa kont",
-  "profileBiometricLogin": "Dugg ci biometric",
-  "profileBiometricLoginSub": "Jëfandikoo sa kanam walla baaraam",
   "profileTwoFactor": "Wóoral 2-yoon",
   "profileTwoFactorSub": "Aar bu yokk",
   "profileHelpCenter": "Bunt ndimbal",
@@ -373,8 +365,6 @@
   "securitySubtitle": "Aar sa kont.",
   "securityChangePassword": "Soppi baatu sutura",
   "securityChangePasswordSub": "Aar sa kont",
-  "securityBiometric": "Dugg ci biometric",
-  "securityBiometricSub": "Jëfandikoo sa kanam walla baaraam",
   "securityTwoFactor": "Wóoral 2-yoon",
   "securityTwoFactorSub": "Aar bu yokk",
   "securityCurrentPassword": "Baatu sutura bu jëkk",
@@ -715,14 +705,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

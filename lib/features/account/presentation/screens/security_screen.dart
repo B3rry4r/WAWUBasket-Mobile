@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -9,7 +8,7 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/data/auth_api.dart';
 
-/// Account security, change password, biometric login toggle.
+/// Account security, change password.
 class SecurityScreen extends StatefulWidget {
   const SecurityScreen({super.key});
 
@@ -18,30 +17,6 @@ class SecurityScreen extends StatefulWidget {
 }
 
 class _SecurityScreenState extends State<SecurityScreen> {
-  bool _biometric = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBiometricState();
-  }
-
-  Future<void> _loadBiometricState() async {
-    final enabled = await BiometricService.instance.isEnabled();
-    if (!mounted) return;
-    setState(() => _biometric = enabled);
-  }
-
-  Future<void> _toggleBiometric(bool value) async {
-    await BiometricService.instance.setEnabled(value);
-    if (!mounted) return;
-    setState(() => _biometric = value);
-    wbShowSnack(
-      context,
-      value ? 'Biometric unlock enabled' : 'Biometric unlock disabled',
-    );
-  }
-
   void _changePassword() {
     final current = TextEditingController();
     final next = TextEditingController();
@@ -207,68 +182,8 @@ class _SecurityScreenState extends State<SecurityScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            WBCard(
-              padding: EdgeInsets.zero,
-              child: _ToggleRow(
-                label: context.l10n.securityBiometric,
-                sub: context.l10n.securityBiometricSub,
-                value: _biometric,
-                onChanged: _toggleBiometric,
-              ),
-            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _ToggleRow extends StatelessWidget {
-  const _ToggleRow({
-    required this.label,
-    required this.sub,
-    required this.value,
-    required this.onChanged,
-  });
-  final String label;
-  final String sub;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: WBTypography.body.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  sub,
-                  style: WBTypography.caption.copyWith(
-                    color: WBColors.fgSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch.adaptive(
-            value: value,
-            activeThumbColor: WBColors.surfaceDark,
-            onChanged: onChanged,
-          ),
-        ],
       ),
     );
   }

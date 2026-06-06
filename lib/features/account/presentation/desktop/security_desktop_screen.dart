@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/responsive/wb_responsive_exports.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
@@ -11,10 +10,9 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/data/auth_api.dart';
 import '../../../shell/presentation/desktop/customer_web_scaffold.dart';
 
-/// Desktop-web layout for account security: change password + biometric login
-/// toggle. Re-lays the mobile [SecurityScreen] into a centered settings column
-/// inside the customer web chrome. Behavior, toggles, actions, and l10n keys
-/// mirror the mobile screen exactly.
+/// Desktop-web layout for account security: change password. Re-lays the mobile
+/// [SecurityScreen] into a centered settings column inside the customer web
+/// chrome. Behavior, actions, and l10n keys mirror the mobile screen exactly.
 class SecurityDesktopScreen extends StatefulWidget {
   const SecurityDesktopScreen({super.key});
 
@@ -23,30 +21,6 @@ class SecurityDesktopScreen extends StatefulWidget {
 }
 
 class _SecurityDesktopScreenState extends State<SecurityDesktopScreen> {
-  bool _biometric = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBiometricState();
-  }
-
-  Future<void> _loadBiometricState() async {
-    final enabled = await BiometricService.instance.isEnabled();
-    if (!mounted) return;
-    setState(() => _biometric = enabled);
-  }
-
-  Future<void> _toggleBiometric(bool value) async {
-    await BiometricService.instance.setEnabled(value);
-    if (!mounted) return;
-    setState(() => _biometric = value);
-    wbShowSnack(
-      context,
-      value ? 'Biometric unlock enabled' : 'Biometric unlock disabled',
-    );
-  }
-
   void _changePassword() {
     final current = TextEditingController();
     final next = TextEditingController();
@@ -204,68 +178,8 @@ class _SecurityDesktopScreenState extends State<SecurityDesktopScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                WBCard(
-                  padding: EdgeInsets.zero,
-                  child: _ToggleRow(
-                    label: context.l10n.securityBiometric,
-                    sub: context.l10n.securityBiometricSub,
-                    value: _biometric,
-                    onChanged: _toggleBiometric,
-                  ),
-                ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ToggleRow extends StatelessWidget {
-  const _ToggleRow({
-    required this.label,
-    required this.sub,
-    required this.value,
-    required this.onChanged,
-  });
-  final String label;
-  final String sub;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: WBTypography.body.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 1),
-                Text(
-                  sub,
-                  style: WBTypography.caption.copyWith(
-                    color: WBColors.fgSecondary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Switch.adaptive(
-            value: value,
-            activeThumbColor: WBColors.surfaceDark,
-            onChanged: onChanged,
           ),
         ],
       ),

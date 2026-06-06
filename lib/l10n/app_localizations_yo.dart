@@ -216,30 +216,10 @@ class AppLocalizationsYo extends AppLocalizations {
   String get loginForgotPassword => 'Gbàgbé ọ̀rọ̀ aṣínà?';
 
   @override
-  String get loginBiometric => 'Lo Face ID';
-
-  @override
   String get loginSignupLink => 'Tuntun sí WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Tẹ fóǹ/e-mail àti ọ̀rọ̀ aṣínà rẹ.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Wọlé yára';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Lo Face ID tabi ika ọwọ́ rẹ wọlé ní ìgbà tí ó kàn?';
-
-  @override
-  String get loginBiometricNotNow => 'Kìí ṣe nísinsin';
-
-  @override
-  String get loginBiometricEnable => 'Mú ṣiṣẹ́';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Ìdásílẹ̀ biometric kò tí ì ṣetò lórí ẹ̀rọ yìí.';
 
   @override
   String get signupTitle => 'Kíni nọ́mbà WhatsApp rẹ?';
@@ -967,12 +947,6 @@ class AppLocalizationsYo extends AppLocalizations {
   String get profileChangePasswordSub => 'Jẹ́ kí àkáǹtì rẹ gbéko';
 
   @override
-  String get profileBiometricLogin => 'Wọlé biometric';
-
-  @override
-  String get profileBiometricLoginSub => 'Lo ojú tabi ika ọwọ́ rẹ';
-
-  @override
   String get profileTwoFactor => 'Ìfọwọ́sí ìgbéjọ́ méjì';
 
   @override
@@ -1107,12 +1081,6 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Jẹ́ kí àkáǹtì rẹ gbéko';
-
-  @override
-  String get securityBiometric => 'Wọlé biometric';
-
-  @override
-  String get securityBiometricSub => 'Lo ojú tabi ika ọwọ́ rẹ';
 
   @override
   String get securityTwoFactor => 'Ìfọwọ́sí ìgbéjọ́ méjì';
@@ -2073,11 +2041,6 @@ class AppLocalizationsYo extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'Sí ìnboxì rẹ';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Tẹ̀síwájú pẹ̀lú $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Àṣẹ ti gbà';

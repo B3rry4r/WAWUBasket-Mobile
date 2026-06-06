@@ -1,77 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/auth/biometric_service.dart';
-import '../../../../core/network/token_store.dart';
 import '../../../../core/responsive/wb_responsive_exports.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/guest_mode.dart';
-import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
-import '../../application/role_controller.dart';
 
 /// Desktop-web layout for [WelcomeScreen]. Isolated from the mobile build —
-/// re-lays the same content (brand pitch, biometric resume, get-started /
-/// sign-in CTAs, guest browse, operator sign-in) into a split brand panel.
+/// re-lays the same content (brand pitch, get-started / sign-in CTAs, guest
+/// browse, operator sign-in) into a split brand panel.
 ///
-/// Logic is mirrored from the mobile screen verbatim: same biometric flow,
-/// same routes pushed, same guest-mode handoff, same operator sheet.
-class WelcomeDesktopScreen extends StatefulWidget {
+/// Logic is mirrored from the mobile screen verbatim: same routes pushed,
+/// same guest-mode handoff, same operator sheet.
+class WelcomeDesktopScreen extends StatelessWidget {
   const WelcomeDesktopScreen({super.key});
-
-  @override
-  State<WelcomeDesktopScreen> createState() => _WelcomeDesktopScreenState();
-}
-
-class _WelcomeDesktopScreenState extends State<WelcomeDesktopScreen> {
-  bool _bioReady = false;
-  String _bioLabel = 'Biometric';
-  bool _unlocking = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkBiometric();
-  }
-
-  Future<void> _checkBiometric() async {
-    final hasRefresh = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
-    if (!hasRefresh) return;
-    final bio = BiometricService.instance;
-    if (!await bio.isAvailable() || !await bio.isEnabled()) return;
-    final label = await bio.label();
-    if (!mounted) return;
-    setState(() {
-      _bioReady = true;
-      _bioLabel = label;
-    });
-  }
-
-  Future<void> _biometricResume() async {
-    if (_unlocking) return;
-    setState(() => _unlocking = true);
-    final ok = await BiometricService.instance.authenticate(
-      reason: 'Sign in to WAWUBasket',
-    );
-    if (!mounted) {
-      return;
-    }
-    if (!ok) {
-      setState(() => _unlocking = false);
-      return;
-    }
-    // Restore the user's LAST role session and hand off to that role's home
-    // (not always customer). The interceptor refreshes the access token from
-    // the stored refresh token on the first request.
-    final role = RoleController.instance;
-    role.setRole(role.role);
-    GuestModeController.instance.exit();
-    NotificationService.instance.registerToken();
-    if (!mounted) return;
-    context.go(role.role.homeRoute);
-  }
 
   static const _features = <_Feature>[
     _Feature(WBIconName.basket, 'Eat now, gather fresh, stock up, one basket.'),
@@ -147,34 +91,17 @@ class _WelcomeDesktopScreenState extends State<WelcomeDesktopScreen> {
           const SizedBox(height: WBSpacing.sm + 4),
         ],
         const SizedBox(height: WBSpacing.lg),
-        if (_bioReady) ...[
-          WBButton(
-            // TODO(i18n): key=welcomeContinueWithBiometric
-            label: 'Continue with $_bioLabel',
-            fullWidth: true,
-            size: WBButtonSize.lg,
-            trailingIcon: WBIconName.arrowRight,
-            loading: _unlocking,
-            onPressed: _biometricResume,
-          ),
-          const SizedBox(height: WBSpacing.sm + 4),
-          _SecondaryCta(
-            label: context.l10n.welcomeSignIn,
-            onPressed: () => context.push(AppRoutes.login),
-          ),
-        ] else ...[
-          WBButton(
-            label: context.l10n.welcomeGetStarted,
-            fullWidth: true,
-            size: WBButtonSize.lg,
-            onPressed: () => context.push(AppRoutes.signup),
-          ),
-          const SizedBox(height: WBSpacing.sm + 4),
-          _SecondaryCta(
-            label: context.l10n.welcomeSignIn,
-            onPressed: () => context.push(AppRoutes.login),
-          ),
-        ],
+        WBButton(
+          label: context.l10n.welcomeGetStarted,
+          fullWidth: true,
+          size: WBButtonSize.lg,
+          onPressed: () => context.push(AppRoutes.signup),
+        ),
+        const SizedBox(height: WBSpacing.sm + 4),
+        _SecondaryCta(
+          label: context.l10n.welcomeSignIn,
+          onPressed: () => context.push(AppRoutes.login),
+        ),
         const SizedBox(height: WBSpacing.sm),
         Center(
           child: TextButton(

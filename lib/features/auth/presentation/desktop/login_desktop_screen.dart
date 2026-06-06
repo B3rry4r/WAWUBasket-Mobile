@@ -1,10 +1,7 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/api_exception.dart';
-import '../../../../core/network/token_store.dart';
 import '../../../../core/responsive/wb_responsive_exports.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/guest_mode.dart';
@@ -32,46 +29,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
   final _password = TextEditingController();
   bool _obscure = true;
   bool _busy = false;
-  String _bioLabel = 'Biometric';
-  bool _showBioButton = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadBioLabel();
-    _resolveBioButtonVisibility();
-    _maybeAutoTriggerBiometric();
-  }
-
-  /// Show the biometric button only when: not web, device supports it, AND
-  /// a refresh token is already stored (returning user — never on first sign-in).
-  Future<void> _resolveBioButtonVisibility() async {
-    if (kIsWeb) return;
-    final hasSession = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
-    if (!hasSession) return;
-    final available = await BiometricService.instance.isAvailable();
-    if (!mounted) return;
-    setState(() => _showBioButton = available);
-  }
-
-  /// On app resume, auto-prompt biometrics if the user has it enabled and a
-  /// refresh token is on disk (returning signed-in user).
-  Future<void> _maybeAutoTriggerBiometric() async {
-    await Future.delayed(const Duration(milliseconds: 350));
-    if (!mounted) return;
-    final bio = BiometricService.instance;
-    final hasRefresh = (TokenStore.instance.refreshToken ?? '').isNotEmpty;
-    if (!hasRefresh) return;
-    if (!await bio.isAvailable() || !await bio.isEnabled()) return;
-    if (!mounted) return;
-    _biometricSignIn();
-  }
-
-  Future<void> _loadBioLabel() async {
-    final label = await BiometricService.instance.label();
-    if (!mounted) return;
-    setState(() => _bioLabel = label);
-  }
 
   @override
   void dispose() {
@@ -95,10 +52,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       GuestModeController.instance.exit();
       NotificationService.instance.registerToken();
 
-      if (!mounted) return;
-      await _offerBiometric();
-      if (!mounted) return;
-      await _resolveBioButtonVisibility();
       if (!mounted) return;
       _navigateAfterAuth();
     } on ApiException catch (e) {
@@ -129,128 +82,6 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
     }
   }
 
-  /// After a password sign-in, offers to turn on biometric unlock so the
-  /// next launch can skip the password. Never shown on web.
-  Future<void> _offerBiometric() async {
-    if (kIsWeb) return;
-    final bio = BiometricService.instance;
-    // Don't re-offer if already enabled OR if the user previously declined —
-    // the offer-dismissed flag persists so we never nag on every sign-in.
-    if (!await bio.isAvailable() ||
-        await bio.isEnabled() ||
-        await bio.offerDismissed()) {
-      return;
-    }
-    if (!mounted) return;
-    final enable = await showModalBottomSheet<bool>(
-      context: context,
-      backgroundColor: WBColors.bgPrimary,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(WBRadius.sheet),
-        ),
-      ),
-      builder: (ctx) => Padding(
-        padding: const EdgeInsets.fromLTRB(
-          WBSpacing.screenPadding,
-          WBSpacing.lg,
-          WBSpacing.screenPadding,
-          WBSpacing.xl,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: WBSpacing.lg),
-                decoration: BoxDecoration(
-                  color: WBColors.bgDivider,
-                  borderRadius: BorderRadius.circular(WBRadius.pill),
-                ),
-              ),
-            ),
-            Text(
-              context.l10n.loginBiometricOfferTitle,
-              style: WBTypography.cardTitle.copyWith(fontSize: 18),
-            ),
-            const SizedBox(height: WBSpacing.sm),
-            Text(
-              context.l10n.loginBiometricOfferBody,
-              style: WBTypography.body.copyWith(color: WBColors.fgSecondary),
-            ),
-            const SizedBox(height: WBSpacing.lg),
-            WBButton(
-              label: context.l10n.loginBiometricEnable,
-              fullWidth: true,
-              size: WBButtonSize.lg,
-              onPressed: () => Navigator.pop(ctx, true),
-            ),
-            const SizedBox(height: WBSpacing.sm),
-            WBButton(
-              label: context.l10n.loginBiometricNotNow,
-              fullWidth: true,
-              size: WBButtonSize.lg,
-              variant: WBButtonVariant.ghost,
-              onPressed: () => Navigator.pop(ctx, false),
-            ),
-          ],
-        ),
-      ),
-    );
-    if (enable == true) {
-      final verified = await bio.authenticate(
-        reason: 'Register your biometric for WAWUBasket',
-      );
-      if (verified) {
-        await bio.setEnabled(true);
-      } else if (mounted) {
-        wbShowSnack(context, "Biometric not verified — it hasn't been enabled.");
-      }
-    } else {
-      // "Not now" — remember the choice so we stop offering on each sign-in.
-      // The user can still turn it on from Account → Security.
-      await bio.setOfferDismissed(true);
-    }
-  }
-
-  /// Unlocks an existing session with Face ID / fingerprint. Needs a prior
-  /// password sign-in (the refresh token is what gets unlocked).
-  Future<void> _biometricSignIn() async {
-    final bio = BiometricService.instance;
-    if (!await bio.isAvailable()) {
-      if (mounted) {
-        wbShowSnack(context, context.l10n.loginBiometricNotAvailable);
-      }
-      return;
-    }
-    final refresh = TokenStore.instance.refreshToken;
-    if (refresh == null || refresh.isEmpty || !await bio.isEnabled()) {
-      if (mounted) {
-        // TODO(i18n): key=loginBiometricFirstSignInHint
-        wbShowSnack(
-          context,
-          'Sign in with your password once to turn on $_bioLabel.',
-        );
-      }
-      return;
-    }
-    final ok = await bio.authenticate(reason: 'Sign in to WAWUBasket');
-    if (!mounted) return;
-    if (ok) {
-      await RoleController.instance.syncFromApi();
-      GuestModeController.instance.exit();
-      NotificationService.instance.registerToken();
-      if (!mounted) return;
-      _navigateAfterAuth();
-    } else {
-      // TODO(i18n): key=loginBiometricFailed
-      wbShowSnack(context, "Couldn't verify it's you — try your password.");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -269,11 +100,8 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
                   password: _password,
                   obscure: _obscure,
                   busy: _busy,
-                  bioLabel: _bioLabel,
-                  showBioButton: _showBioButton,
                   onToggleObscure: () => setState(() => _obscure = !_obscure),
                   onSubmit: _submit,
-                  onBiometric: _biometricSignIn,
                 ),
               ),
             ],
@@ -325,22 +153,16 @@ class _FormPanel extends StatelessWidget {
     required this.password,
     required this.obscure,
     required this.busy,
-    required this.bioLabel,
-    required this.showBioButton,
     required this.onToggleObscure,
     required this.onSubmit,
-    required this.onBiometric,
   });
 
   final TextEditingController identifier;
   final TextEditingController password;
   final bool obscure;
   final bool busy;
-  final String bioLabel;
-  final bool showBioButton;
   final VoidCallback onToggleObscure;
   final Future<void> Function() onSubmit;
-  final Future<void> Function() onBiometric;
 
   @override
   Widget build(BuildContext context) {
@@ -420,31 +242,6 @@ class _FormPanel extends StatelessWidget {
                 loading: busy,
                 onPressed: onSubmit,
               ),
-              if (showBioButton) ...[
-                const SizedBox(height: WBSpacing.md),
-                Row(
-                  children: [
-                    const Expanded(child: WBDivider()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        'or',
-                        style: WBTypography.caption.copyWith(
-                          color: WBColors.fgPlaceholder,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const Expanded(child: WBDivider()),
-                  ],
-                ),
-                const SizedBox(height: WBSpacing.md),
-                _OutlineCta(
-                  label: 'Use $bioLabel',
-                  icon: WBIconName.user,
-                  onPressed: onBiometric,
-                ),
-              ],
               const SizedBox(height: WBSpacing.xl),
               Center(
                 child: GestureDetector(
@@ -468,47 +265,6 @@ class _FormPanel extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _OutlineCta extends StatelessWidget {
-  const _OutlineCta({
-    required this.label,
-    required this.icon,
-    required this.onPressed,
-  });
-  final String label;
-  final WBIconName icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        height: 56,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: WBColors.bgPrimary,
-          borderRadius: BorderRadius.circular(WBRadius.pill),
-          border: Border.all(color: WBColors.bgDivider),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            WBIcon(icon, size: 18, color: WBColors.fgHeader),
-            const SizedBox(width: 10),
-            Text(
-              label,
-              style: WBTypography.body.copyWith(
-                fontWeight: FontWeight.w500,
-                color: WBColors.fgHeader,
-              ),
-            ),
-          ],
         ),
       ),
     );

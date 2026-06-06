@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/auth/biometric_service.dart';
 import '../../../../core/network/upload_service.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/services/guest_mode.dart';
@@ -24,8 +23,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _uploadingAvatar = false;
-  bool _biometric = false;
-  bool _biometricAvailable = false;
 
   @override
   void initState() {
@@ -34,29 +31,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ProfileController.instance.load();
       ProfileController.instance.loadStats();
     }
-    _loadBiometric();
-  }
-
-  Future<void> _loadBiometric() async {
-    final available = await BiometricService.instance.isAvailable();
-    final enabled = await BiometricService.instance.isEnabled();
-    if (!mounted) return;
-    setState(() {
-      _biometricAvailable = available;
-      _biometric = enabled;
-    });
-  }
-
-  Future<void> _toggleBiometric(bool value) async {
-    if (value) {
-      final ok = await BiometricService.instance.authenticate(
-        reason: 'Enable biometric unlock for WAWUBasket',
-      );
-      if (!ok) return;
-    }
-    await BiometricService.instance.setEnabled(value);
-    if (!mounted) return;
-    setState(() => _biometric = value);
   }
 
   Future<void> _uploadAvatar() async {
@@ -414,18 +388,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             sub: context.l10n.profileChangePasswordSub,
             onTap: () => context.push(AppRoutes.security),
           ),
-          if (_biometricAvailable)
-            AccountMenuRow(
-              icon: WBIconName.user,
-              label: context.l10n.profileBiometricLogin,
-              sub: context.l10n.profileBiometricLoginSub,
-              onTap: () => _toggleBiometric(!_biometric),
-              trailing: Switch.adaptive(
-                value: _biometric,
-                activeThumbColor: WBColors.surfaceDark,
-                onChanged: _toggleBiometric,
-              ),
-            ),
         ],
       ),
       AccountMenuSection(

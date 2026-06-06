@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Fóǹ tabi e-mail",
   "loginPasswordLabel": "Ọ̀rọ̀ aṣínà",
   "loginForgotPassword": "Gbàgbé ọ̀rọ̀ aṣínà?",
-  "loginBiometric": "Lo Face ID",
   "loginSignupLink": "Tuntun sí WAWUBasket?",
   "loginErrorEmpty": "Tẹ fóǹ/e-mail àti ọ̀rọ̀ aṣínà rẹ.",
-  "loginBiometricOfferTitle": "Wọlé yára",
-  "loginBiometricOfferBody": "Lo Face ID tabi ika ọwọ́ rẹ wọlé ní ìgbà tí ó kàn?",
-  "loginBiometricNotNow": "Kìí ṣe nísinsin",
-  "loginBiometricEnable": "Mú ṣiṣẹ́",
-  "loginBiometricNotAvailable": "Ìdásílẹ̀ biometric kò tí ì ṣetò lórí ẹ̀rọ yìí.",
   "signupTitle": "Kíni nọ́mbà WhatsApp rẹ?",
   "signupSubtitle": "A ó rán kóòdù láti ríi dájú pé o ni o.",
   "signupNameLabel": "Orúkọ kíkún",
@@ -307,8 +301,6 @@
   "profileAbout": "Nípa WAWUBasket",
   "profileChangePassword": "Yí ọ̀rọ̀ aṣínà padà",
   "profileChangePasswordSub": "Jẹ́ kí àkáǹtì rẹ gbéko",
-  "profileBiometricLogin": "Wọlé biometric",
-  "profileBiometricLoginSub": "Lo ojú tabi ika ọwọ́ rẹ",
   "profileTwoFactor": "Ìfọwọ́sí ìgbéjọ́ méjì",
   "profileTwoFactorSub": "Ìpele aabo afikún",
   "profileHelpCenter": "Àárọ̀ ìrànlọ́wọ́",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Jẹ́ kí àkáǹtì rẹ gbéko.",
   "securityChangePassword": "Yí ọ̀rọ̀ aṣínà padà",
   "securityChangePasswordSub": "Jẹ́ kí àkáǹtì rẹ gbéko",
-  "securityBiometric": "Wọlé biometric",
-  "securityBiometricSub": "Lo ojú tabi ika ọwọ́ rẹ",
   "securityTwoFactor": "Ìfọwọ́sí ìgbéjọ́ méjì",
   "securityTwoFactorSub": "Ìpele aabo afikún",
   "securityCurrentPassword": "Ọ̀rọ̀ aṣínà lọwọlọwọ",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "Sí foónu rẹ",
   "forgotEmailLabel": "Ìméèlì",
   "forgotEmailSub": "Sí ìnboxì rẹ",
-  "welcomeBiometric": "Tẹ̀síwájú pẹ̀lú {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Àṣẹ ti gbà",
   "vendorOrderDeclined": "Àṣẹ ti kọ̀",
   "vendorLiveOrdersTitle": "Àwọn àṣẹ tó wà",

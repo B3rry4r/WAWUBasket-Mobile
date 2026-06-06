@@ -217,30 +217,10 @@ class AppLocalizationsHa extends AppLocalizations {
   String get loginForgotPassword => 'Manta kalmar sirri?';
 
   @override
-  String get loginBiometric => 'Yi amfani da Face ID';
-
-  @override
   String get loginSignupLink => 'Sabon a WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Shigar da wayar/e-mail da kalmar sirri.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Shiga da sauri';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Yi amfani da Face ID ko yatsar ka don shiga karo na gaba?';
-
-  @override
-  String get loginBiometricNotNow => 'Ba yanzu ba';
-
-  @override
-  String get loginBiometricEnable => 'Kunna';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Buɗewar biometric ba ta kafa a wannan na\'urar ba.';
 
   @override
   String get signupTitle => 'Menene lambar WhatsApp ɗinka?';
@@ -976,12 +956,6 @@ class AppLocalizationsHa extends AppLocalizations {
   String get profileChangePasswordSub => 'Kiyaye asusun ka lafiya';
 
   @override
-  String get profileBiometricLogin => 'Shiga da biometric';
-
-  @override
-  String get profileBiometricLoginSub => 'Yi amfani da fuskar ka ko yatsar ka';
-
-  @override
   String get profileTwoFactor => 'Tabbatarwa ta biyu';
 
   @override
@@ -1115,12 +1089,6 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Kiyaye asusun ka lafiya';
-
-  @override
-  String get securityBiometric => 'Shiga da biometric';
-
-  @override
-  String get securityBiometricSub => 'Yi amfani da fuskar ka ko yatsar ka';
 
   @override
   String get securityTwoFactor => 'Tabbatarwa ta biyu';
@@ -2084,11 +2052,6 @@ class AppLocalizationsHa extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'Zuwa imel ɗinku';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Ci gaba da $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'An karɓi oda';

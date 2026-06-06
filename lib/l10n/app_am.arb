@@ -65,14 +65,8 @@
   "loginPhoneLabel": "ስልክ ወይም ኢሜይል",
   "loginPasswordLabel": "የምስጢር ቃል",
   "loginForgotPassword": "የምስጢር ቃሉን ረሳሁ?",
-  "loginBiometric": "ፊት መለያን ተጠቀም",
   "loginSignupLink": "ለ WAWUBasket አዲስ ነዎት?",
   "loginErrorEmpty": "ስልክ/ኢሜይልና የምስጢር ቃልዎን ያስገቡ።",
-  "loginBiometricOfferTitle": "ፈጣን ግቢ",
-  "loginBiometricOfferBody": "ቀጥሎ ለመግባት ፊት መለያ ወይም ጣት አሻራ ይጠቀሙ?",
-  "loginBiometricNotNow": "አሁን አይደለም",
-  "loginBiometricEnable": "አንቃ",
-  "loginBiometricNotAvailable": "በዚህ መሣሪያ ላይ ባዮሜትሪክ አልተዋቀረም።",
   "signupTitle": "WhatsApp ቁጥርዎ ምንድን ነው?",
   "signupSubtitle": "እርስዎ መሆንዎን ለማረጋገጥ ኮድ እንልካለን።",
   "signupNameLabel": "ሙሉ ስም",
@@ -307,8 +301,6 @@
   "profileAbout": "ስለ WAWUBasket",
   "profileChangePassword": "የምስጢር ቃል ቀይር",
   "profileChangePasswordSub": "መለያዎን ደህና አድርጉ",
-  "profileBiometricLogin": "ባዮሜትሪክ ግቢ",
-  "profileBiometricLoginSub": "ፊትዎን ወይም ጣት አሻራዎን ይጠቀሙ",
   "profileTwoFactor": "ሁለት-ደረጃ ማረጋገጫ",
   "profileTwoFactorSub": "ተጨማሪ ጥበቃ",
   "profileHelpCenter": "የእርዳታ ማዕከል",
@@ -352,8 +344,6 @@
   "securitySubtitle": "መለያዎን ደህና አድርጉ።",
   "securityChangePassword": "የይለፍ ቃል ቀይር",
   "securityChangePasswordSub": "መለያዎን ደህና አድርጉ",
-  "securityBiometric": "በፊዚካዊ መለያ ግባ",
-  "securityBiometricSub": "ፊትዎን ወይም ጣት አሻራዎን ይጠቀሙ",
   "securityTwoFactor": "ሁለት-ደረጃ ማረጋገጫ",
   "securityTwoFactorSub": "ተጨማሪ ጥበቃ",
   "securityCurrentPassword": "አሁን ያለ የምስጢር ቃል",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

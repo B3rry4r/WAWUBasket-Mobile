@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Téléphone ou e-mail",
   "loginPasswordLabel": "Mot de passe",
   "loginForgotPassword": "Mot de passe oublié ?",
-  "loginBiometric": "Utiliser Face ID",
   "loginSignupLink": "Nouveau sur WAWUBasket ?",
   "loginErrorEmpty": "Entrez votre téléphone/e-mail et mot de passe.",
-  "loginBiometricOfferTitle": "Connexion plus rapide",
-  "loginBiometricOfferBody": "Utiliser Face ID ou votre empreinte pour vous connecter la prochaine fois ?",
-  "loginBiometricNotNow": "Pas maintenant",
-  "loginBiometricEnable": "Activer",
-  "loginBiometricNotAvailable": "Le déverrouillage biométrique n'est pas configuré sur cet appareil.",
   "signupTitle": "Quel est votre numéro WhatsApp ?",
   "signupSubtitle": "Nous enverrons un code pour nous assurer que c'est bien vous.",
   "signupNameLabel": "Nom complet",
@@ -307,8 +301,6 @@
   "profileAbout": "À propos de WAWUBasket",
   "profileChangePassword": "Changer le mot de passe",
   "profileChangePasswordSub": "Gardez votre compte en sécurité",
-  "profileBiometricLogin": "Connexion biométrique",
-  "profileBiometricLoginSub": "Utilisez votre visage ou votre empreinte",
   "profileTwoFactor": "Authentification à deux facteurs",
   "profileTwoFactorSub": "Couche de protection supplémentaire",
   "profileHelpCenter": "Centre d'aide",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Gardez votre compte en sécurité.",
   "securityChangePassword": "Changer le mot de passe",
   "securityChangePasswordSub": "Gardez votre compte en sécurité",
-  "securityBiometric": "Connexion biométrique",
-  "securityBiometricSub": "Utilisez votre visage ou votre empreinte",
   "securityTwoFactor": "Authentification à deux facteurs",
   "securityTwoFactorSub": "Couche de protection supplémentaire",
   "securityCurrentPassword": "Mot de passe actuel",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "Sur votre téléphone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "Dans votre boîte mail",
-  "welcomeBiometric": "Continuer avec {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Commande acceptée",
   "vendorOrderDeclined": "Commande refusée",
   "vendorLiveOrdersTitle": "Commandes en direct",

@@ -214,30 +214,10 @@ class AppLocalizationsSw extends AppLocalizations {
   String get loginForgotPassword => 'Umesahau nywila?';
 
   @override
-  String get loginBiometric => 'Tumia Face ID';
-
-  @override
   String get loginSignupLink => 'Mpya kwenye WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Weka simu/barua pepe na nywila yako.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Kuingia kwa haraka';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Tumia Face ID au kidole chako kuingia mara inayofuata?';
-
-  @override
-  String get loginBiometricNotNow => 'Si sasa';
-
-  @override
-  String get loginBiometricEnable => 'Washa';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Kufungua kwa biometrics hakujasanidiwa kwenye kifaa hiki.';
 
   @override
   String get signupTitle => 'Nambari yako ya WhatsApp ni nini?';
@@ -969,12 +949,6 @@ class AppLocalizationsSw extends AppLocalizations {
   String get profileChangePasswordSub => 'Weka akaunti yako salama';
 
   @override
-  String get profileBiometricLogin => 'Kuingia kwa biometrics';
-
-  @override
-  String get profileBiometricLoginSub => 'Tumia uso wako au kidole';
-
-  @override
   String get profileTwoFactor => 'Uthibitishaji wa hatua mbili';
 
   @override
@@ -1108,12 +1082,6 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Weka akaunti yako salama';
-
-  @override
-  String get securityBiometric => 'Ingia kwa alama ya mwili';
-
-  @override
-  String get securityBiometricSub => 'Tumia uso wako au kidole';
 
   @override
   String get securityTwoFactor => 'Uthibitishaji wa hatua mbili';
@@ -2075,11 +2043,6 @@ class AppLocalizationsSw extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'Kwa sanduku lako';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Endelea na $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Agizo limekubaliwa';

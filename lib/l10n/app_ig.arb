@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Ekwentị ma ọ bụ email",
   "loginPasswordLabel": "Paswọọdụ",
   "loginForgotPassword": "Chefuo paswọọdụ?",
-  "loginBiometric": "Jiri ihu nchọpụta",
   "loginSignupLink": "Ọhụrụ na WAWUBasket?",
   "loginErrorEmpty": "Tinye ekwentị/email na paswọọdụ gị.",
-  "loginBiometricOfferTitle": "Ịbanye ngwa ngwa",
-  "loginBiometricOfferBody": "Jiri ihu nchọpụta ma ọ bụ mkpisi aka gị ịbanye n'oge ọzọ?",
-  "loginBiometricNotNow": "Ọ dịghị ugbu a",
-  "loginBiometricEnable": "Mezie",
-  "loginBiometricNotAvailable": "Ihe nchọpụta biometric adịghị n'ngwa ngwa a.",
   "signupTitle": "Ọnụọgụ WhatsApp gị bụ gịnị?",
   "signupSubtitle": "Anyị ga-eziga koodu iji nwayọọ chekwaa na ọ bụ gị.",
   "signupNameLabel": "Aha zuru oke",
@@ -307,8 +301,6 @@
   "profileAbout": "Maka WAWUBasket",
   "profileChangePassword": "Gbanwee paswọọdụ",
   "profileChangePasswordSub": "Jide akaụntụ gị n'oge",
-  "profileBiometricLogin": "Ịbanye biometric",
-  "profileBiometricLoginSub": "Jiri ihu gị ma ọ bụ mkpisi aka gị",
   "profileTwoFactor": "Nchọpụta abụọ",
   "profileTwoFactorSub": "Layer nchedo ọzọ",
   "profileHelpCenter": "Ebe nkuzi",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Jide akaụntụ gị n'oge.",
   "securityChangePassword": "Gbanwee okwuntughe",
   "securityChangePasswordSub": "Jide akaụntụ gị n'oge",
-  "securityBiometric": "Banye site na ihe ahụ gị",
-  "securityBiometricSub": "Jiri ihu gị ma ọ bụ mkpisi aka gị",
   "securityTwoFactor": "Nchekwa nke abụọ",
   "securityTwoFactorSub": "Layer nchedo ọzọ",
   "securityCurrentPassword": "Paswọọdụ ugbu a",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "Na ekwentị gị",
   "forgotEmailLabel": "Ozi-e",
   "forgotEmailSub": "Na igbe ozi-e gị",
-  "welcomeBiometric": "Gaa n'ihu na {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Ọnụ ahịa nabatara",
   "vendorOrderDeclined": "Ọnụ ahịa kọọrọ",
   "vendorLiveOrdersTitle": "Ọnụ ahịa dị ndụ",

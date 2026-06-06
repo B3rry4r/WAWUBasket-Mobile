@@ -218,30 +218,10 @@ class AppLocalizationsRw extends AppLocalizations {
   String get loginForgotPassword => 'Wibagiwe ijambobanga?';
 
   @override
-  String get loginBiometric => 'Koresha Face ID';
-
-  @override
   String get loginSignupLink => 'Mushya muri WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Andika telefoni/email n\'ijambobanga.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Kwinjira byihuse';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Gukoresha Face ID cyangwa intoki kwinjira ubutaha?';
-
-  @override
-  String get loginBiometricNotNow => 'Atari ubu';
-
-  @override
-  String get loginBiometricEnable => 'Emera';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Biometric ntiyateguwe kuri iyi telefoni.';
 
   @override
   String get signupTitle => 'Nimero yawe ya WhatsApp ni iyihe?';
@@ -980,12 +960,6 @@ class AppLocalizationsRw extends AppLocalizations {
   String get profileChangePasswordSub => 'Komeza konti yawe ifite umutekano';
 
   @override
-  String get profileBiometricLogin => 'Kwinjira kuri biometric';
-
-  @override
-  String get profileBiometricLoginSub => 'Koresha mu maso cyangwa intoki';
-
-  @override
   String get profileTwoFactor => 'Kwemeza ku ntambwe ebyiri';
 
   @override
@@ -1120,12 +1094,6 @@ class AppLocalizationsRw extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Komeza konti yawe ifite umutekano';
-
-  @override
-  String get securityBiometric => 'Kwinjira kuri biometric';
-
-  @override
-  String get securityBiometricSub => 'Koresha mu maso cyangwa intoki';
 
   @override
   String get securityTwoFactor => 'Kwemeza ku ntambwe ebyiri';
@@ -2092,11 +2060,6 @@ class AppLocalizationsRw extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';

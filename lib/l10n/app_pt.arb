@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Telefone ou e-mail",
   "loginPasswordLabel": "Senha",
   "loginForgotPassword": "Esqueceu a senha?",
-  "loginBiometric": "Usar Face ID",
   "loginSignupLink": "Novo no WAWUBasket?",
   "loginErrorEmpty": "Digite seu telefone/e-mail e senha.",
-  "loginBiometricOfferTitle": "Acesso mais rápido",
-  "loginBiometricOfferBody": "Usar Face ID ou impressão digital da próxima vez?",
-  "loginBiometricNotNow": "Agora não",
-  "loginBiometricEnable": "Ativar",
-  "loginBiometricNotAvailable": "O desbloqueio biométrico não está configurado neste dispositivo.",
   "signupTitle": "Qual é o seu número de WhatsApp?",
   "signupSubtitle": "Enviaremos um código para confirmar que é você.",
   "signupNameLabel": "Nome completo",
@@ -307,8 +301,6 @@
   "profileAbout": "Sobre o WAWUBasket",
   "profileChangePassword": "Alterar senha",
   "profileChangePasswordSub": "Mantenha sua conta segura",
-  "profileBiometricLogin": "Login biométrico",
-  "profileBiometricLoginSub": "Use seu rosto ou impressão digital",
   "profileTwoFactor": "Autenticação de dois fatores",
   "profileTwoFactorSub": "Camada extra de proteção",
   "profileHelpCenter": "Central de ajuda",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Mantenha sua conta segura.",
   "securityChangePassword": "Alterar senha",
   "securityChangePasswordSub": "Mantenha sua conta segura",
-  "securityBiometric": "Entrar com biometria",
-  "securityBiometricSub": "Use seu rosto ou impressão digital",
   "securityTwoFactor": "Verificação em duas etapas",
   "securityTwoFactorSub": "Camada extra de proteção",
   "securityCurrentPassword": "Senha atual",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

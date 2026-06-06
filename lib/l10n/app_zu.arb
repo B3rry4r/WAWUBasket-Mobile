@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Ucingo noma i-imeyili",
   "loginPasswordLabel": "Iphasiwedi",
   "loginForgotPassword": "Ukhohlwe iphasiwedi?",
-  "loginBiometric": "Sebenzisa i-Face ID",
   "loginSignupLink": "Umusha ku-WAWUBasket?",
   "loginErrorEmpty": "Faka ucingo/i-imeyili kanye nephasiwedi yakho.",
-  "loginBiometricOfferTitle": "Ukungena okukhawuleza",
-  "loginBiometricOfferBody": "Sebenzisa i-Face ID noma umunwe wakho ukungena ngokulandelayo?",
-  "loginBiometricNotNow": "Hhayi manje",
-  "loginBiometricEnable": "Nika amandla",
-  "loginBiometricNotAvailable": "Ukuvula i-biometric akusetwanga kuleli diva.",
   "signupTitle": "Inombolo yakho ye-WhatsApp iyini?",
   "signupSubtitle": "Sizoythumela ikhodi ukuqinisekisa ukuthi nguwe.",
   "signupNameLabel": "Igama eligcwele",
@@ -307,8 +301,6 @@
   "profileAbout": "Mayelana ne-WAWUBasket",
   "profileChangePassword": "Shintsha iphasiwedi",
   "profileChangePasswordSub": "Gcina i-akhawunti yakho ephephile",
-  "profileBiometricLogin": "Ukungena kwe-biometric",
-  "profileBiometricLoginSub": "Sebenzisa ubuso bakho noma umunwe wakho",
   "profileTwoFactor": "Ukuqinisekiswa kwezigaba ezimbili",
   "profileTwoFactorSub": "Izinga elengeziwe lokuvikela",
   "profileHelpCenter": "Iziko losizo",
@@ -352,8 +344,6 @@
   "securitySubtitle": "Gcina i-akhawunti yakho ephephile.",
   "securityChangePassword": "Shintsha iphasiwedi",
   "securityChangePasswordSub": "Gcina i-akhawunti yakho ephephile",
-  "securityBiometric": "Ngena nge-biometric",
-  "securityBiometricSub": "Sebenzisa ubuso bakho noma umunwe wakho",
   "securityTwoFactor": "Ukuqinisekiswa kwezigaba ezimbili",
   "securityTwoFactorSub": "Izinga elengeziwe lokuvikela",
   "securityCurrentPassword": "Iphasiwedi yamanje",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

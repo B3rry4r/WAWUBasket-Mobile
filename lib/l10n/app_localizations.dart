@@ -520,12 +520,6 @@ abstract class AppLocalizations {
   /// **'Forgot password?'**
   String get loginForgotPassword;
 
-  /// No description provided for @loginBiometric.
-  ///
-  /// In en, this message translates to:
-  /// **'Use Face ID'**
-  String get loginBiometric;
-
   /// No description provided for @loginSignupLink.
   ///
   /// In en, this message translates to:
@@ -537,36 +531,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter your phone/email and password.'**
   String get loginErrorEmpty;
-
-  /// No description provided for @loginBiometricOfferTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Faster sign-in'**
-  String get loginBiometricOfferTitle;
-
-  /// No description provided for @loginBiometricOfferBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Use Face ID or your fingerprint to sign in next time?'**
-  String get loginBiometricOfferBody;
-
-  /// No description provided for @loginBiometricNotNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Not now'**
-  String get loginBiometricNotNow;
-
-  /// No description provided for @loginBiometricEnable.
-  ///
-  /// In en, this message translates to:
-  /// **'Enable'**
-  String get loginBiometricEnable;
-
-  /// No description provided for @loginBiometricNotAvailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Biometric unlock isn\'t set up on this device.'**
-  String get loginBiometricNotAvailable;
 
   /// No description provided for @signupTitle.
   ///
@@ -1978,18 +1942,6 @@ abstract class AppLocalizations {
   /// **'Keep your account safe'**
   String get profileChangePasswordSub;
 
-  /// No description provided for @profileBiometricLogin.
-  ///
-  /// In en, this message translates to:
-  /// **'Biometric login'**
-  String get profileBiometricLogin;
-
-  /// No description provided for @profileBiometricLoginSub.
-  ///
-  /// In en, this message translates to:
-  /// **'Use your face or fingerprint'**
-  String get profileBiometricLoginSub;
-
   /// No description provided for @profileTwoFactor.
   ///
   /// In en, this message translates to:
@@ -2247,18 +2199,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Keep your account safe'**
   String get securityChangePasswordSub;
-
-  /// No description provided for @securityBiometric.
-  ///
-  /// In en, this message translates to:
-  /// **'Biometric login'**
-  String get securityBiometric;
-
-  /// No description provided for @securityBiometricSub.
-  ///
-  /// In en, this message translates to:
-  /// **'Use your face or fingerprint'**
-  String get securityBiometricSub;
 
   /// No description provided for @securityTwoFactor.
   ///
@@ -4089,12 +4029,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To your inbox'**
   String get forgotEmailSub;
-
-  /// No description provided for @welcomeBiometric.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue with {bio}'**
-  String welcomeBiometric(String bio);
 
   /// No description provided for @vendorOrderAccepted.
   ///

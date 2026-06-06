@@ -65,14 +65,8 @@
   "loginPhoneLabel": "Kakatakplɛ alo email",
   "loginPasswordLabel": "Gbedoɖedzi",
   "loginForgotPassword": "Ŋlɔ gbedoɖedzi be?",
-  "loginBiometric": "Zã Face ID",
   "loginSignupLink": "Yeye le WAWUBasket?",
   "loginErrorEmpty": "Ŋlɔ wò kakatakplɛ/email kple gbedoɖedzi.",
-  "loginBiometricOfferTitle": "Tsó gbɔ kabakaba",
-  "loginBiometricOfferBody": "Zã Face ID alo wò asibidɛ tsó gbɔ le ɣeyiɣi gbɔna me?",
-  "loginBiometricNotNow": "Menye fifia o",
-  "loginBiometricEnable": "Ɖe mɔ",
-  "loginBiometricNotAvailable": "Biometric meli ɖe esi dzi o.",
   "signupTitle": "Wò WhatsApp xexlẽme ɖe?",
   "signupSubtitle": "Míaɖo nu nɛ be míakpɔ be ènye ŋutɔ.",
   "signupNameLabel": "Ŋkɔ blibo",
@@ -314,8 +308,6 @@
   "profileAbout": "Tso WAWUBasket ŋu",
   "profileChangePassword": "Trɔ gbedoɖedzi",
   "profileChangePasswordSub": "Wɔ wò akɔnt dedie",
-  "profileBiometricLogin": "Biometric login",
-  "profileBiometricLoginSub": "Zã wò ŋkume alo asibidɛ",
   "profileTwoFactor": "Dzideda ƒe ŋutete eve",
   "profileTwoFactorSub": "Dedienɔnɔ ƒe akpa bubu",
   "profileHelpCenter": "Kpekpeɖeŋu xɔ",
@@ -373,8 +365,6 @@
   "securitySubtitle": "Wɔ wò akɔnt dedie.",
   "securityChangePassword": "Trɔ gbedoɖedzi",
   "securityChangePasswordSub": "Wɔ wò akɔnt dedie",
-  "securityBiometric": "Biometric login",
-  "securityBiometricSub": "Zã wò ŋkume alo asibidɛ",
   "securityTwoFactor": "Dzideda ƒe ŋutete eve",
   "securityTwoFactorSub": "Dedienɔnɔ ƒe akpa bubu",
   "securityCurrentPassword": "Gbedoɖedzi fifia tɔ",
@@ -715,14 +705,6 @@
   "forgotSmsSub": "To your phone",
   "forgotEmailLabel": "Email",
   "forgotEmailSub": "To your inbox",
-  "welcomeBiometric": "Continue with {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "Order accepted",
   "vendorOrderDeclined": "Order declined",
   "vendorLiveOrdersTitle": "Live orders",

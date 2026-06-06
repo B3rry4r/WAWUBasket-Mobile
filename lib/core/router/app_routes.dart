@@ -11,11 +11,6 @@ abstract final class AppRoutes {
   static const roleSelect = '/role';
   static const onboarding = '/onboarding';
 
-  /// In-app biometric unlock gate. Shown on reopen when the user has a
-  /// restorable session AND opted into biometric unlock — never as a
-  /// replacement for sign-in.
-  static const lock = '/lock';
-
   // Shell tabs
   static const home = '/home';
   static const orders = '/orders';

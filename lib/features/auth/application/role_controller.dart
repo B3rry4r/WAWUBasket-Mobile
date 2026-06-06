@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../core/auth/biometric_service.dart';
 import '../../../core/network/token_store.dart';
 import '../../../core/router/app_routes.dart';
 import '../data/auth_api.dart';
@@ -116,8 +115,8 @@ class RoleController {
   bool get signedIn => _signedIn;
 
   /// Set the first time the user ever signs in; never cleared on sign-out.
-  /// Splash uses this to send returning users directly to /login (where
-  /// biometrics auto-triggers) rather than to /welcome (onboarding).
+  /// Retained so flows that need to distinguish brand-new vs. returning users
+  /// can do so; launch routing itself is now guest-first (see SplashScreen).
   bool _hasEverSignedIn = false;
   bool get hasEverSignedIn => _hasEverSignedIn;
 
@@ -173,9 +172,9 @@ class RoleController {
   }
 
   /// Resets the active role to customer, clears the signed-in flag, wipes
-  /// stored JWT tokens, and clears per-role KYC status + biometric opt-in so
-  /// the next user on this device starts from a clean slate (no cross-user
-  /// leakage of approved operator roles or another person's biometric unlock).
+  /// stored JWT tokens, and clears per-role KYC status so the next user on
+  /// this device starts from a clean slate (no cross-user leakage of approved
+  /// operator roles).
   void signOut() {
     notifier.value = AppRole.customer;
     _signedIn = false;
@@ -188,8 +187,6 @@ class RoleController {
       unawaited(_persistStatus(r));
     }
     TokenStore.instance.clear();
-    // Biometric is an explicit per-account opt-in; drop it on real logout.
-    BiometricService.instance.clear();
   }
 
   // ─── Persistence ─────────────────────────────────────────────────────

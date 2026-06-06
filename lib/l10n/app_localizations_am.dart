@@ -210,28 +210,10 @@ class AppLocalizationsAm extends AppLocalizations {
   String get loginForgotPassword => 'የምስጢር ቃሉን ረሳሁ?';
 
   @override
-  String get loginBiometric => 'ፊት መለያን ተጠቀም';
-
-  @override
   String get loginSignupLink => 'ለ WAWUBasket አዲስ ነዎት?';
 
   @override
   String get loginErrorEmpty => 'ስልክ/ኢሜይልና የምስጢር ቃልዎን ያስገቡ።';
-
-  @override
-  String get loginBiometricOfferTitle => 'ፈጣን ግቢ';
-
-  @override
-  String get loginBiometricOfferBody => 'ቀጥሎ ለመግባት ፊት መለያ ወይም ጣት አሻራ ይጠቀሙ?';
-
-  @override
-  String get loginBiometricNotNow => 'አሁን አይደለም';
-
-  @override
-  String get loginBiometricEnable => 'አንቃ';
-
-  @override
-  String get loginBiometricNotAvailable => 'በዚህ መሣሪያ ላይ ባዮሜትሪክ አልተዋቀረም።';
 
   @override
   String get signupTitle => 'WhatsApp ቁጥርዎ ምንድን ነው?';
@@ -945,12 +927,6 @@ class AppLocalizationsAm extends AppLocalizations {
   String get profileChangePasswordSub => 'መለያዎን ደህና አድርጉ';
 
   @override
-  String get profileBiometricLogin => 'ባዮሜትሪክ ግቢ';
-
-  @override
-  String get profileBiometricLoginSub => 'ፊትዎን ወይም ጣት አሻራዎን ይጠቀሙ';
-
-  @override
   String get profileTwoFactor => 'ሁለት-ደረጃ ማረጋገጫ';
 
   @override
@@ -1082,12 +1058,6 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'መለያዎን ደህና አድርጉ';
-
-  @override
-  String get securityBiometric => 'በፊዚካዊ መለያ ግባ';
-
-  @override
-  String get securityBiometricSub => 'ፊትዎን ወይም ጣት አሻራዎን ይጠቀሙ';
 
   @override
   String get securityTwoFactor => 'ሁለት-ደረጃ ማረጋገጫ';
@@ -2033,11 +2003,6 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';

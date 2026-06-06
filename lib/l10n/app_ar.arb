@@ -65,14 +65,8 @@
   "loginPhoneLabel": "الهاتف أو البريد الإلكتروني",
   "loginPasswordLabel": "كلمة المرور",
   "loginForgotPassword": "نسيت كلمة المرور؟",
-  "loginBiometric": "استخدام معرّف الوجه",
   "loginSignupLink": "جديد على WAWUBasket؟",
   "loginErrorEmpty": "أدخل هاتفك/بريدك وكلمة المرور.",
-  "loginBiometricOfferTitle": "تسجيل دخول أسرع",
-  "loginBiometricOfferBody": "استخدم معرّف الوجه أو بصمتك في المرة القادمة؟",
-  "loginBiometricNotNow": "ليس الآن",
-  "loginBiometricEnable": "تفعيل",
-  "loginBiometricNotAvailable": "لم يُهيَّأ فتح القفل البيومتري على هذا الجهاز.",
   "signupTitle": "ما رقم واتساب الخاص بك؟",
   "signupSubtitle": "سنرسل رمزاً للتحقق أنك أنت.",
   "signupNameLabel": "الاسم الكامل",
@@ -307,8 +301,6 @@
   "profileAbout": "حول WAWUBasket",
   "profileChangePassword": "تغيير كلمة المرور",
   "profileChangePasswordSub": "احتفظ بأمان حسابك",
-  "profileBiometricLogin": "تسجيل الدخول البيومتري",
-  "profileBiometricLoginSub": "استخدم وجهك أو بصمتك",
   "profileTwoFactor": "المصادقة الثنائية",
   "profileTwoFactorSub": "طبقة حماية إضافية",
   "profileHelpCenter": "مركز المساعدة",
@@ -352,8 +344,6 @@
   "securitySubtitle": "احتفظ بأمان حسابك.",
   "securityChangePassword": "تغيير كلمة المرور",
   "securityChangePasswordSub": "احتفظ بأمان حسابك",
-  "securityBiometric": "تسجيل الدخول بالبصمة",
-  "securityBiometricSub": "استخدم وجهك أو بصمتك",
   "securityTwoFactor": "التحقق الثنائي",
   "securityTwoFactorSub": "طبقة حماية إضافية",
   "securityCurrentPassword": "كلمة المرور الحالية",
@@ -687,14 +677,6 @@
   "forgotSmsSub": "إلى هاتفك",
   "forgotEmailLabel": "البريد الإلكتروني",
   "forgotEmailSub": "إلى صندوق بريدك",
-  "welcomeBiometric": "المتابعة مع {bio}",
-  "@welcomeBiometric": {
-    "placeholders": {
-      "bio": {
-        "type": "String"
-      }
-    }
-  },
   "vendorOrderAccepted": "تم قبول الطلب",
   "vendorOrderDeclined": "تم رفض الطلب",
   "vendorLiveOrdersTitle": "الطلبات المباشرة",

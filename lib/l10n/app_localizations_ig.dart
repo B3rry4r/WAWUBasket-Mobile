@@ -214,30 +214,10 @@ class AppLocalizationsIg extends AppLocalizations {
   String get loginForgotPassword => 'Chefuo paswọọdụ?';
 
   @override
-  String get loginBiometric => 'Jiri ihu nchọpụta';
-
-  @override
   String get loginSignupLink => 'Ọhụrụ na WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Tinye ekwentị/email na paswọọdụ gị.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Ịbanye ngwa ngwa';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Jiri ihu nchọpụta ma ọ bụ mkpisi aka gị ịbanye n\'oge ọzọ?';
-
-  @override
-  String get loginBiometricNotNow => 'Ọ dịghị ugbu a';
-
-  @override
-  String get loginBiometricEnable => 'Mezie';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Ihe nchọpụta biometric adịghị n\'ngwa ngwa a.';
 
   @override
   String get signupTitle => 'Ọnụọgụ WhatsApp gị bụ gịnị?';
@@ -968,12 +948,6 @@ class AppLocalizationsIg extends AppLocalizations {
   String get profileChangePasswordSub => 'Jide akaụntụ gị n\'oge';
 
   @override
-  String get profileBiometricLogin => 'Ịbanye biometric';
-
-  @override
-  String get profileBiometricLoginSub => 'Jiri ihu gị ma ọ bụ mkpisi aka gị';
-
-  @override
   String get profileTwoFactor => 'Nchọpụta abụọ';
 
   @override
@@ -1105,12 +1079,6 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Jide akaụntụ gị n\'oge';
-
-  @override
-  String get securityBiometric => 'Banye site na ihe ahụ gị';
-
-  @override
-  String get securityBiometricSub => 'Jiri ihu gị ma ọ bụ mkpisi aka gị';
 
   @override
   String get securityTwoFactor => 'Nchekwa nke abụọ';
@@ -2071,11 +2039,6 @@ class AppLocalizationsIg extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'Na igbe ozi-e gị';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Gaa n\'ihu na $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Ọnụ ahịa nabatara';

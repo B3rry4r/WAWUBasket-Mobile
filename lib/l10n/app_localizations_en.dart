@@ -215,30 +215,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginForgotPassword => 'Forgot password?';
 
   @override
-  String get loginBiometric => 'Use Face ID';
-
-  @override
   String get loginSignupLink => 'New to WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Enter your phone/email and password.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Faster sign-in';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Use Face ID or your fingerprint to sign in next time?';
-
-  @override
-  String get loginBiometricNotNow => 'Not now';
-
-  @override
-  String get loginBiometricEnable => 'Enable';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Biometric unlock isn\'t set up on this device.';
 
   @override
   String get signupTitle => 'What\'s your WhatsApp number?';
@@ -967,12 +947,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileChangePasswordSub => 'Keep your account safe';
 
   @override
-  String get profileBiometricLogin => 'Biometric login';
-
-  @override
-  String get profileBiometricLoginSub => 'Use your face or fingerprint';
-
-  @override
   String get profileTwoFactor => 'Two-factor authentication';
 
   @override
@@ -1107,12 +1081,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Keep your account safe';
-
-  @override
-  String get securityBiometric => 'Biometric login';
-
-  @override
-  String get securityBiometricSub => 'Use your face or fingerprint';
 
   @override
   String get securityTwoFactor => 'Two-factor authentication';
@@ -2071,11 +2039,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';

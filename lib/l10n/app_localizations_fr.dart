@@ -221,31 +221,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get loginForgotPassword => 'Mot de passe oublié ?';
 
   @override
-  String get loginBiometric => 'Utiliser Face ID';
-
-  @override
   String get loginSignupLink => 'Nouveau sur WAWUBasket ?';
 
   @override
   String get loginErrorEmpty =>
       'Entrez votre téléphone/e-mail et mot de passe.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Connexion plus rapide';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Utiliser Face ID ou votre empreinte pour vous connecter la prochaine fois ?';
-
-  @override
-  String get loginBiometricNotNow => 'Pas maintenant';
-
-  @override
-  String get loginBiometricEnable => 'Activer';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'Le déverrouillage biométrique n\'est pas configuré sur cet appareil.';
 
   @override
   String get signupTitle => 'Quel est votre numéro WhatsApp ?';
@@ -996,13 +976,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileChangePasswordSub => 'Gardez votre compte en sécurité';
 
   @override
-  String get profileBiometricLogin => 'Connexion biométrique';
-
-  @override
-  String get profileBiometricLoginSub =>
-      'Utilisez votre visage ou votre empreinte';
-
-  @override
   String get profileTwoFactor => 'Authentification à deux facteurs';
 
   @override
@@ -1138,12 +1111,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Gardez votre compte en sécurité';
-
-  @override
-  String get securityBiometric => 'Connexion biométrique';
-
-  @override
-  String get securityBiometricSub => 'Utilisez votre visage ou votre empreinte';
 
   @override
   String get securityTwoFactor => 'Authentification à deux facteurs';
@@ -2119,11 +2086,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'Dans votre boîte mail';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continuer avec $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Commande acceptée';

@@ -216,29 +216,10 @@ class AppLocalizationsWo extends AppLocalizations {
   String get loginForgotPassword => 'Fàtte baatu sutura?';
 
   @override
-  String get loginBiometric => 'Jëfandikoo Face ID';
-
-  @override
   String get loginSignupLink => 'Bees nga ci WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Bind sa telefon/email ak baatu sutura.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Dugg bu gaaw';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Jëfandikoo Face ID walla sa baaraam ngir dugg yoon wi topp?';
-
-  @override
-  String get loginBiometricNotNow => 'Du tey';
-
-  @override
-  String get loginBiometricEnable => 'Ubbeel';
-
-  @override
-  String get loginBiometricNotAvailable => 'Biometric ubbi amul ci telefon bi.';
 
   @override
   String get signupTitle => 'Lan mooy sa nimero WhatsApp?';
@@ -966,12 +947,6 @@ class AppLocalizationsWo extends AppLocalizations {
   String get profileChangePasswordSub => 'Aar sa kont';
 
   @override
-  String get profileBiometricLogin => 'Dugg ci biometric';
-
-  @override
-  String get profileBiometricLoginSub => 'Jëfandikoo sa kanam walla baaraam';
-
-  @override
   String get profileTwoFactor => 'Wóoral 2-yoon';
 
   @override
@@ -1105,12 +1080,6 @@ class AppLocalizationsWo extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Aar sa kont';
-
-  @override
-  String get securityBiometric => 'Dugg ci biometric';
-
-  @override
-  String get securityBiometricSub => 'Jëfandikoo sa kanam walla baaraam';
 
   @override
   String get securityTwoFactor => 'Wóoral 2-yoon';
@@ -2070,11 +2039,6 @@ class AppLocalizationsWo extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';

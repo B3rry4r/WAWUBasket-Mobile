@@ -218,30 +218,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loginForgotPassword => 'Esqueceu a senha?';
 
   @override
-  String get loginBiometric => 'Usar Face ID';
-
-  @override
   String get loginSignupLink => 'Novo no WAWUBasket?';
 
   @override
   String get loginErrorEmpty => 'Digite seu telefone/e-mail e senha.';
-
-  @override
-  String get loginBiometricOfferTitle => 'Acesso mais rápido';
-
-  @override
-  String get loginBiometricOfferBody =>
-      'Usar Face ID ou impressão digital da próxima vez?';
-
-  @override
-  String get loginBiometricNotNow => 'Agora não';
-
-  @override
-  String get loginBiometricEnable => 'Ativar';
-
-  @override
-  String get loginBiometricNotAvailable =>
-      'O desbloqueio biométrico não está configurado neste dispositivo.';
 
   @override
   String get signupTitle => 'Qual é o seu número de WhatsApp?';
@@ -974,12 +954,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileChangePasswordSub => 'Mantenha sua conta segura';
 
   @override
-  String get profileBiometricLogin => 'Login biométrico';
-
-  @override
-  String get profileBiometricLoginSub => 'Use seu rosto ou impressão digital';
-
-  @override
   String get profileTwoFactor => 'Autenticação de dois fatores';
 
   @override
@@ -1113,12 +1087,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get securityChangePasswordSub => 'Mantenha sua conta segura';
-
-  @override
-  String get securityBiometric => 'Entrar com biometria';
-
-  @override
-  String get securityBiometricSub => 'Use seu rosto ou impressão digital';
 
   @override
   String get securityTwoFactor => 'Verificação em duas etapas';
@@ -2083,11 +2051,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get forgotEmailSub => 'To your inbox';
-
-  @override
-  String welcomeBiometric(String bio) {
-    return 'Continue with $bio';
-  }
 
   @override
   String get vendorOrderAccepted => 'Order accepted';
