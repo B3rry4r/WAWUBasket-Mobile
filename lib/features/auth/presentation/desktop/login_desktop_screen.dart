@@ -103,10 +103,10 @@ class _LoginDesktopScreenState extends State<LoginDesktopScreen> {
       _navigateAfterAuth();
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
-    } catch (_) {
-      // Unexpected (non-API) failure — surface a generic message without
-      // leaking internal details to the UI or logs.
-      if (mounted) wbShowSnack(context, 'Something went wrong. Please try again.');
+    } catch (e) {
+      // Unexpected (non-API) failure — surface a short cause so it isn't a
+      // dead end while debugging, instead of a blanket "Something went wrong".
+      if (mounted) wbShowSnack(context, "Couldn't sign in: $e");
     } finally {
       if (mounted) setState(() => _busy = false);
     }

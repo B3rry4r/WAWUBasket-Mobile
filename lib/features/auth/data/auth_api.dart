@@ -214,10 +214,21 @@ class AuthApi {
   }
 
   Future<void> _persist(dynamic res) async {
-    final map = res as Map<String, dynamic>;
-    await _tokens.save(
-      accessToken: map['accessToken'] as String,
-      refreshToken: map['refreshToken'] as String,
-    );
+    // WAWU ID wraps the session as { data: { accessToken, refreshToken, ... } },
+    // while the legacy Basket API returns the tokens at the top level. Accept
+    // either shape rather than blindly casting (a missing key would otherwise
+    // throw an opaque CastError that surfaces as "Something went wrong").
+    final body = res is Map<String, dynamic> ? res : const <String, dynamic>{};
+    final payload = body['data'] is Map<String, dynamic>
+        ? body['data'] as Map<String, dynamic>
+        : body;
+    final access = payload['accessToken'];
+    final refresh = payload['refreshToken'];
+    if (access is! String || access.isEmpty || refresh is! String || refresh.isEmpty) {
+      throw ApiException(
+        'Signed in, but no session was returned. Please try again.',
+      );
+    }
+    await _tokens.save(accessToken: access, refreshToken: refresh);
   }
 }
