@@ -4,11 +4,14 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/network/country_api.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
+import '../../../../core/services/notification_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/utils/wb_validators.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../application/role_controller.dart';
 import '../../data/auth_api.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -73,12 +76,18 @@ class _SignupScreenState extends State<SignupScreen> {
         password: _password.text,
         country: _country?.name ?? 'Nigeria',
       );
-      if (!mounted) return;
       // WAWU ID returns a live session from /auth/register, so the account is
-      // ready — go straight to role selection (no phone-OTP step on sign-up).
+      // ready. Mirror the login/OTP post-auth sequence before routing.
+      await RoleController.instance.syncFromApi();
+      GuestModeController.instance.exit();
+      NotificationService.instance.registerToken();
+      if (!mounted) return;
       context.go(AppRoutes.roleSelect);
     } on ApiException catch (e) {
       if (mounted) wbShowSnack(context, e.message);
+    } catch (e) {
+      // Non-API failure — show the cause instead of failing silently.
+      if (mounted) wbShowSnack(context, "Couldn't create account: $e");
     } finally {
       if (mounted) setState(() => _busy = false);
     }
