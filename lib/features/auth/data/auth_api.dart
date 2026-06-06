@@ -58,7 +58,7 @@ class AuthApi {
       'password': password,
       'country': country,
     });
-    await _persist(res);
+    await _persistWawuThenExchange(res);
   }
 
   /// Confirms a phone OTP, creating the account and starting a session.
@@ -66,7 +66,7 @@ class AuthApi {
   Future<void> verifySignup(String phone, String code) async {
     final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
-    await _persist(res);
+    await _persistWawuThenExchange(res);
   }
 
   // ─── Login (with organic WAWU ID migration) ──────────────────────────────
@@ -89,7 +89,7 @@ class AuthApi {
     try {
       final res = await _idPost('/auth/login',
           body: {'identifier': identifier, 'password': password});
-      await _persist(res);
+      await _persistWawuThenExchange(res);
       return;
     } on ApiException catch (e) {
       final notMigrated =
@@ -118,7 +118,7 @@ class AuthApi {
       final email = _nonEmpty(profile?['email'] as String?) ??
           (identifier.contains('@') ? identifier : '');
 
-      final registerRes = await _idPost('/auth/register', body: {
+      await _idPost('/auth/register', body: {
         'identifier': identifier,
         'fullName': fullName,
         'phone': phone,
@@ -126,13 +126,12 @@ class AuthApi {
         'password': password,
         'country': 'Nigeria',
       });
-      // If WAWU ID returns a token pair (pre-verified migration), switch the
-      // session to it. If it instead kicks off an OTP and returns no tokens,
-      // [_persist] throws and the catch below keeps the working Basket session.
-      await _persist(registerRes);
+      // The account is now mirrored into WAWU ID for next time. Keep the Basket
+      // session we already hold — do NOT switch to the WAWU ID tokens (the
+      // Basket API can't authenticate them). Next login takes the primary path.
     } catch (_) {
-      // Mirror failed or needs OTP verification — keep the legacy Basket
-      // session. The user is signed in; migration retries on the next login.
+      // Mirror failed or needs OTP verification — the working Basket session
+      // stays; migration retries on the next login.
     }
   }
 
@@ -162,7 +161,7 @@ class AuthApi {
   Future<void> verifyOtp(String phone, String code) async {
     final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
-    await _persist(res);
+    await _persistWawuThenExchange(res);
   }
 
   // ─── Password recovery ──────────────────────────────────────────────────
@@ -178,7 +177,7 @@ class AuthApi {
       'code': code,
       'newPassword': newPassword,
     });
-    await _persist(res);
+    await _persistWawuThenExchange(res);
   }
 
   Future<void> changePassword(
@@ -230,5 +229,22 @@ class AuthApi {
       );
     }
     await _tokens.save(accessToken: access, refreshToken: refresh);
+  }
+
+  /// Persist a WAWU ID session, then immediately exchange it for a Basket
+  /// session. WAWU ID tokens authenticate the identity, but the Basket API's
+  /// protected routes (and token refresh) need a Basket token carrying the
+  /// local user id + active role — so this is the session we actually run on.
+  Future<void> _persistWawuThenExchange(dynamic res) async {
+    await _persist(res); // WAWU ID tokens (used only for the exchange call)
+    await _exchangeForBasketSession();
+  }
+
+  /// POST /v1/auth/exchange with the just-persisted WAWU ID bearer token; the
+  /// Basket API resolves/links the local account and returns a Basket token
+  /// pair, which replaces the WAWU ID tokens as the live session.
+  Future<void> _exchangeForBasketSession() async {
+    final res = await _api.post('/auth/exchange');
+    await _persist(res);
   }
 }
