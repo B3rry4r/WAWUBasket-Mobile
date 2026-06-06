@@ -93,6 +93,28 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
+  /// A tappable, underlined legal link inside the agreement clause. Tapping it
+  /// opens the in-app document and does not toggle the agreement checkbox.
+  InlineSpan _legalLink(BuildContext context, String label, String route) {
+    return WidgetSpan(
+      alignment: PlaceholderAlignment.baseline,
+      baseline: TextBaseline.alphabetic,
+      child: GestureDetector(
+        onTap: () => context.push(route),
+        child: Text(
+          label,
+          style: WBTypography.caption.copyWith(
+            color: WBColors.fgHeader,
+            fontSize: 13,
+            height: 1.5,
+            fontWeight: FontWeight.w500,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,26 +220,13 @@ class _SignupScreenState extends State<SignupScreen> {
                             fontSize: 13,
                             height: 1.5,
                           ),
-                          children: const [
-                            TextSpan(text: 'I agree to the '),
-                            TextSpan(
-                              text: 'Terms',
-                              style: TextStyle(
-                                color: WBColors.fgHeader,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                            TextSpan(text: ' and '),
-                            TextSpan(
-                              text: 'Privacy Policy',
-                              style: TextStyle(
-                                color: WBColors.fgHeader,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                            TextSpan(text: '.'),
+                          children: [
+                            const TextSpan(text: 'I agree to the '),
+                            _legalLink(context, 'Terms', AppRoutes.terms),
+                            const TextSpan(text: ' and '),
+                            _legalLink(
+                                context, 'Privacy Policy', AppRoutes.privacy),
+                            const TextSpan(text: '.'),
                           ],
                         ),
                       ),
