@@ -1,0 +1,27 @@
+# Build artefacts & caches — keep the build context small and clean.
+build/
+.dart_tool/
+.idea/
+.vscode/
+.git/
+*.iml
+flutter_*.log
+
+# Platform output we don't need for a web build.
+ios/
+android/
+macos/
+linux/
+windows/
+test/
+
+# Misc
+*.md
+*.zip
+*.png
+*.svg
+*.pdf
+*.log
+tmp/
+docs/
+design_assets/
