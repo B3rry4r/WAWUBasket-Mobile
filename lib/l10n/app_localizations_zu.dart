@@ -1153,7 +1153,7 @@ class AppLocalizationsZu extends AppLocalizations {
   String get supportEmail => 'Thumela i-imeyili';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'Thumela i-imeyili';

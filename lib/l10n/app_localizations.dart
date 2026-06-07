@@ -2305,7 +2305,7 @@ abstract class AppLocalizations {
   /// No description provided for @supportEmailSub.
   ///
   /// In en, this message translates to:
-  /// **'support@wawubasket.com'**
+  /// **'basket@wawuafrica.com'**
   String get supportEmailSub;
 
   /// No description provided for @supportEmailCta.

@@ -58,7 +58,7 @@ class TermsScreen extends StatelessWidget {
             _buildSection(
               '3. User Accounts',
               'You are responsible for maintaining the confidentiality of your login credentials. '
-              'You agree to notify us immediately at support@wawubasket.com if you suspect unauthorised '
+              'You agree to notify us immediately at basket@wawuafrica.com if you suspect unauthorised '
               'access to your account. WAWUBasket is not liable for losses resulting from '
               'unauthorised account use where you have failed to safeguard your credentials.\n\n'
               'We reserve the right to suspend or terminate accounts that violate these Terms, '
@@ -139,7 +139,7 @@ class TermsScreen extends StatelessWidget {
             ),
             _buildSection(
               '13. Termination',
-              'You may close your account at any time by contacting us at support@wawubasket.com. '
+              'You may close your account at any time by contacting us at basket@wawuafrica.com. '
               'We may terminate or suspend your access to the platform at any time, with or '
               'without cause, with or without notice. Upon termination, your right to use the '
               'platform ceases immediately.',
@@ -148,7 +148,7 @@ class TermsScreen extends StatelessWidget {
               '14. Contact Us',
               'If you have questions about these Terms, please contact us:\n\n'
               'WAWUBasket Ltd\n'
-              'Email: support@wawubasket.com\n'
+              'Email: basket@wawuafrica.com\n'
               'Phone: 07050622222',
             ),
           ],

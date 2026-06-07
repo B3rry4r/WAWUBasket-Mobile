@@ -1141,7 +1141,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get supportEmail => 'Envie um e-mail';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'Enviar e-mail';

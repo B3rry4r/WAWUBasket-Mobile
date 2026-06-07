@@ -1143,7 +1143,7 @@ class AppLocalizationsHa extends AppLocalizations {
   String get supportEmail => 'Aika mu e-mail';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'Aika e-mail';

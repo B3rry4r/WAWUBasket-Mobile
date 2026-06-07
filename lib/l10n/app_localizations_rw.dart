@@ -1148,7 +1148,7 @@ class AppLocalizationsRw extends AppLocalizations {
   String get supportEmail => 'Twoherereze email';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'Ohereza email';

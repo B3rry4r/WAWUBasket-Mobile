@@ -256,7 +256,7 @@ class _SupportDesktopScreenState extends State<SupportDesktopScreen> {
                 } else if (c.icon == WBIconName.phone) {
                   wbCallPhone(context, '07050622222');
                 } else {
-                  wbLaunchEmail(context, 'support@wawubasket.com');
+                  wbLaunchEmail(context, 'basket@wawuafrica.com');
                 }
               },
             ),

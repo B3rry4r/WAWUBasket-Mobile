@@ -1133,7 +1133,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get supportEmail => 'Zipu anyị email';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'Ziga email';

@@ -1166,7 +1166,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get supportEmail => 'Nous envoyer un e-mail';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'Envoyer un e-mail';

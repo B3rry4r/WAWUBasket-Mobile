@@ -1111,7 +1111,7 @@ class AppLocalizationsAm extends AppLocalizations {
   String get supportEmail => 'ኢሜይል ላኩን';
 
   @override
-  String get supportEmailSub => 'support@wawubasket.com';
+  String get supportEmailSub => 'basket@wawuafrica.com';
 
   @override
   String get supportEmailCta => 'ኢሜይል ላክ';
