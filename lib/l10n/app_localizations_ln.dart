@@ -15,6 +15,9 @@ class AppLocalizationsLn extends AppLocalizations {
   String get navHome => 'Ndako';
 
   @override
+  String get navServices => 'Misala';
+
+  @override
   String get navTrade => 'Mombongo';
 
   @override

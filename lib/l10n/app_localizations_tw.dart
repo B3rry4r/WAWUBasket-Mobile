@@ -15,6 +15,9 @@ class AppLocalizationsTw extends AppLocalizations {
   String get navHome => 'Fie';
 
   @override
+  String get navServices => 'Nnwuma';
+
+  @override
   String get navTrade => 'Dwadie';
 
   @override

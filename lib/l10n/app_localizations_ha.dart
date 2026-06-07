@@ -15,6 +15,9 @@ class AppLocalizationsHa extends AppLocalizations {
   String get navHome => 'Gida';
 
   @override
+  String get navServices => 'Ayyuka';
+
+  @override
   String get navTrade => 'Kasuwanci';
 
   @override

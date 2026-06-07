@@ -2,6 +2,7 @@
   "@@locale": "fr",
   "appName": "WAWUBasket",
   "navHome": "Accueil",
+  "navServices": "Services",
   "navTrade": "Commerce",
   "navOrders": "Commandes",
   "navAccount": "Compte",

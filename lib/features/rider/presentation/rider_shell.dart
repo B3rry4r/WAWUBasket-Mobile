@@ -21,6 +21,7 @@ class RiderShell extends StatelessWidget {
       WBNavItem(id: AppRoutes.riderHome, icon: WBIconName.pin, label: l.navMap),
       WBNavItem(id: AppRoutes.riderDelivery, icon: WBIconName.bike, label: l.navActive),
       WBNavItem(id: AppRoutes.riderEarnings, icon: WBIconName.card, label: l.navEarnings),
+      WBNavItem(id: AppRoutes.riderServices, icon: WBIconName.services, label: l.navServices),
       WBNavItem(id: AppRoutes.riderAccount, icon: WBIconName.user, label: l.navAccount),
     ];
   }

@@ -15,6 +15,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get navHome => 'Início';
 
   @override
+  String get navServices => 'Serviços';
+
+  @override
   String get navTrade => 'Comércio';
 
   @override

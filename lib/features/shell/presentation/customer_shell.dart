@@ -20,6 +20,7 @@ class CustomerShell extends StatelessWidget {
     final l = context.l10n;
     return [
       WBNavItem(id: AppRoutes.home, icon: WBIconName.home, label: l.navHome),
+      WBNavItem(id: AppRoutes.services, icon: WBIconName.services, label: l.navServices),
       WBNavItem(id: AppRoutes.favorites, icon: WBIconName.heart, label: l.navFavorites),
       WBNavItem(id: AppRoutes.orders, icon: WBIconName.basket, label: l.navOrders),
       WBNavItem(id: AppRoutes.profile, icon: WBIconName.user, label: l.navProfile),

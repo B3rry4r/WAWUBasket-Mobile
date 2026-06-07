@@ -32,6 +32,7 @@ enum WBIconName {
   phone,
   message,
   card,
+  services,
 }
 
 class WBIcon extends StatelessWidget {
@@ -295,6 +296,23 @@ class _WBIconPainter extends CustomPainter {
         );
         canvas.drawRRect(rect, stroke);
         canvas.drawLine(const Offset(2.5, 9), const Offset(21.5, 9), stroke);
+      case WBIconName.services:
+        // 2×2 grid of rounded squares — the "all services" / apps glyph.
+        const r = Radius.circular(2);
+        for (final o in const [
+          Offset(4, 4),
+          Offset(13, 4),
+          Offset(4, 13),
+          Offset(13, 13),
+        ]) {
+          canvas.drawRRect(
+            RRect.fromRectAndRadius(
+              Rect.fromLTWH(o.dx, o.dy, 7, 7),
+              r,
+            ),
+            stroke,
+          );
+        }
     }
     canvas.restore();
   }

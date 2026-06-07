@@ -60,6 +60,11 @@ class CustomerWebScaffold extends ConsumerWidget {
                 active: activeNavId == AppRoutes.home,
               ),
               _NavLink(
+                label: l.navServices,
+                routeId: AppRoutes.services,
+                active: activeNavId == AppRoutes.services,
+              ),
+              _NavLink(
                 label: l.navFavorites,
                 routeId: AppRoutes.favorites,
                 active: activeNavId == AppRoutes.favorites,

@@ -25,6 +25,7 @@ class VendorShell extends StatelessWidget {
       WBNavItem(id: AppRoutes.vendorHome, icon: WBIconName.home, label: l.navHome),
       WBNavItem(id: AppRoutes.vendorOrders, icon: WBIconName.basket, label: l.navOrders),
       WBNavItem(id: AppRoutes.vendorMenu, icon: WBIconName.more, label: l.navMenu),
+      WBNavItem(id: AppRoutes.vendorServices, icon: WBIconName.services, label: l.navServices),
       WBNavItem(id: AppRoutes.vendorAccount, icon: WBIconName.user, label: l.navAccount),
     ];
   }

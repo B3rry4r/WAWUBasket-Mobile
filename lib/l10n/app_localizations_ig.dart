@@ -15,6 +15,9 @@ class AppLocalizationsIg extends AppLocalizations {
   String get navHome => 'Ụlọ';
 
   @override
+  String get navServices => 'Ọrụ';
+
+  @override
   String get navTrade => 'Azụmahịa';
 
   @override

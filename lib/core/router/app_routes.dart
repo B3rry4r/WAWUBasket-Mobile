@@ -18,6 +18,16 @@ abstract final class AppRoutes {
   static const favorites = '/favorites';
   static const profile = '/profile';
 
+  // WAWUAfrica services — a tab in every role's shell. Customer uses the base
+  // `/services`; operator roles get a role-scoped path so the per-shell
+  // longest-prefix nav matcher and the RBAC guard both keep working.
+  static const services = '/services';
+  static const vendorServices = '/vendor/services';
+  static const agentServices = '/agent/services';
+  static const riderServices = '/rider/services';
+  static const traderServices = '/trader/services';
+  static const driverServices = '/driver/services';
+
   // Pushed routes — shopping
   static const search = '/search';
 

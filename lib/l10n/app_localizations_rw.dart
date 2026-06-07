@@ -15,6 +15,9 @@ class AppLocalizationsRw extends AppLocalizations {
   String get navHome => 'Ahabanza';
 
   @override
+  String get navServices => 'Serivisi';
+
+  @override
   String get navTrade => 'Ubucuruzi';
 
   @override

@@ -15,6 +15,9 @@ class AppLocalizationsWo extends AppLocalizations {
   String get navHome => 'Kër';
 
   @override
+  String get navServices => 'Liggéey';
+
+  @override
   String get navTrade => 'Njaay';
 
   @override

@@ -15,6 +15,9 @@ class AppLocalizationsAm extends AppLocalizations {
   String get navHome => 'መነሻ';
 
   @override
+  String get navServices => 'አገልግሎቶች';
+
+  @override
   String get navTrade => 'ንግድ';
 
   @override

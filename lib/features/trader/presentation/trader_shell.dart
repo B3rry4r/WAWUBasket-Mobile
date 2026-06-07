@@ -24,6 +24,7 @@ class TraderShell extends StatelessWidget {
       WBNavItem(id: AppRoutes.traderHome, icon: WBIconName.home, label: l.navHome),
       WBNavItem(id: AppRoutes.traderListings, icon: WBIconName.basket, label: l.navListings),
       WBNavItem(id: AppRoutes.traderPrices, icon: WBIconName.card, label: l.navPrices),
+      WBNavItem(id: AppRoutes.traderServices, icon: WBIconName.services, label: l.navServices),
       WBNavItem(id: AppRoutes.traderAccount, icon: WBIconName.user, label: l.navAccount),
     ];
   }

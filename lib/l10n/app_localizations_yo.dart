@@ -15,6 +15,9 @@ class AppLocalizationsYo extends AppLocalizations {
   String get navHome => 'Ilé';
 
   @override
+  String get navServices => 'Àwọn iṣẹ́';
+
+  @override
   String get navTrade => 'Òwò';
 
   @override

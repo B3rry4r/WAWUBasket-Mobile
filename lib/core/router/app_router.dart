@@ -142,6 +142,8 @@ import '../../features/auth/presentation/desktop/reset_password_desktop_screen.d
 import '../../features/auth/presentation/desktop/role_select_desktop_screen.dart';
 import '../responsive/wb_responsive_exports.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/services/presentation/screens/services_screen.dart';
+import '../../features/services/presentation/desktop/services_desktop_screen.dart';
 import '../../features/shell/presentation/customer_shell.dart';
 import '../../features/shopping/presentation/screens/cart_screen.dart';
 import '../../features/shopping/presentation/screens/checkout_screen.dart';
@@ -415,6 +417,13 @@ GoRouter buildRouter() {
             pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
               mobile: HomeScreen(),
               desktop: HomeDesktopScreen(),
+            )),
+          ),
+          GoRoute(
+            path: AppRoutes.services,
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: ServicesScreen(),
+              desktop: ServicesDesktopScreen(),
             )),
           ),
           GoRoute(
@@ -847,6 +856,13 @@ GoRouter buildRouter() {
             )),
           ),
           GoRoute(
+            path: AppRoutes.vendorServices,
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: ServicesScreen(),
+              desktop: ServicesDesktopScreen(),
+            )),
+          ),
+          GoRoute(
             path: AppRoutes.vendorAccount,
             pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
               mobile: OperatorAccountScreen(role: AppRole.vendor),
@@ -962,6 +978,13 @@ GoRouter buildRouter() {
             )),
           ),
           GoRoute(
+            path: AppRoutes.agentServices,
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: ServicesScreen(),
+              desktop: ServicesDesktopScreen(),
+            )),
+          ),
+          GoRoute(
             path: AppRoutes.agentAccount,
             pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
               mobile: OperatorAccountScreen(role: AppRole.agent),
@@ -1038,6 +1061,10 @@ GoRouter buildRouter() {
             pageBuilder: (_, _) => _tabFade(const RiderEarningsScreen()),
           ),
           GoRoute(
+            path: AppRoutes.riderServices,
+            pageBuilder: (_, _) => _tabFade(const ServicesScreen()),
+          ),
+          GoRoute(
             path: AppRoutes.riderAccount,
             pageBuilder: (_, _) =>
                 _tabFade(const OperatorAccountScreen(role: AppRole.rider)),
@@ -1089,6 +1116,13 @@ GoRouter buildRouter() {
             pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
               mobile: TraderPricesScreen(),
               desktop: TraderPricesDesktopScreen(),
+            )),
+          ),
+          GoRoute(
+            path: AppRoutes.traderServices,
+            pageBuilder: (_, _) => _tabFade(const WBAdaptiveScreen(
+              mobile: ServicesScreen(),
+              desktop: ServicesDesktopScreen(),
             )),
           ),
           GoRoute(
@@ -1145,6 +1179,10 @@ GoRouter buildRouter() {
           GoRoute(
             path: AppRoutes.driverEarnings,
             pageBuilder: (_, _) => _tabFade(const DriverEarningsScreen()),
+          ),
+          GoRoute(
+            path: AppRoutes.driverServices,
+            pageBuilder: (_, _) => _tabFade(const ServicesScreen()),
           ),
           GoRoute(
             path: AppRoutes.driverAccount,

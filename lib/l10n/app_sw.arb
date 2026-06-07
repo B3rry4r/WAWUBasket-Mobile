@@ -2,6 +2,7 @@
   "@@locale": "sw",
   "appName": "WAWUBasket",
   "navHome": "Mwanzo",
+  "navServices": "Huduma",
   "navTrade": "Biashara",
   "navOrders": "Maagizo",
   "navAccount": "Akaunti",

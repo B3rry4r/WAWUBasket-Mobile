@@ -43,6 +43,7 @@ class OperatorDesktopScaffold extends StatelessWidget {
           WBNavItem(id: AppRoutes.vendorHome, icon: WBIconName.home, label: l.navHome),
           WBNavItem(id: AppRoutes.vendorOrders, icon: WBIconName.basket, label: l.navOrders),
           WBNavItem(id: AppRoutes.vendorMenu, icon: WBIconName.more, label: l.navMenu),
+          WBNavItem(id: AppRoutes.vendorServices, icon: WBIconName.services, label: l.navServices),
           WBNavItem(id: AppRoutes.vendorAccount, icon: WBIconName.user, label: l.navAccount),
         ];
       case AppRole.trader:
@@ -50,6 +51,7 @@ class OperatorDesktopScaffold extends StatelessWidget {
           WBNavItem(id: AppRoutes.traderHome, icon: WBIconName.home, label: l.navHome),
           WBNavItem(id: AppRoutes.traderListings, icon: WBIconName.basket, label: l.navListings),
           WBNavItem(id: AppRoutes.traderPrices, icon: WBIconName.card, label: l.navPrices),
+          WBNavItem(id: AppRoutes.traderServices, icon: WBIconName.services, label: l.navServices),
           WBNavItem(id: AppRoutes.traderAccount, icon: WBIconName.user, label: l.navAccount),
         ];
       case AppRole.agent:
@@ -57,6 +59,7 @@ class OperatorDesktopScaffold extends StatelessWidget {
           WBNavItem(id: AppRoutes.agentHome, icon: WBIconName.home, label: l.navHome),
           WBNavItem(id: AppRoutes.agentRecordTxn, icon: WBIconName.basket, label: l.navRecord),
           WBNavItem(id: AppRoutes.agentCashPayout, icon: WBIconName.card, label: l.navPayout),
+          WBNavItem(id: AppRoutes.agentServices, icon: WBIconName.services, label: l.navServices),
           WBNavItem(id: AppRoutes.agentAccount, icon: WBIconName.user, label: l.navAccount),
         ];
       default:

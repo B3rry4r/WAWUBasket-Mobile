@@ -15,6 +15,9 @@ class AppLocalizationsZu extends AppLocalizations {
   String get navHome => 'Ikhaya';
 
   @override
+  String get navServices => 'Izinsizakalo';
+
+  @override
   String get navTrade => 'Ukuhweba';
 
   @override

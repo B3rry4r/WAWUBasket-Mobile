@@ -20,6 +20,7 @@ class DriverShell extends StatelessWidget {
       WBNavItem(id: AppRoutes.driverHome, icon: WBIconName.basket, label: l.navLoads),
       WBNavItem(id: AppRoutes.driverActiveTrip, icon: WBIconName.bike, label: l.navTrip),
       WBNavItem(id: AppRoutes.driverEarnings, icon: WBIconName.card, label: l.navEarnings),
+      WBNavItem(id: AppRoutes.driverServices, icon: WBIconName.services, label: l.navServices),
       WBNavItem(id: AppRoutes.driverAccount, icon: WBIconName.user, label: l.navAccount),
     ];
   }

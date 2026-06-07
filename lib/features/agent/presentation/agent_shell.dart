@@ -24,6 +24,7 @@ class AgentShell extends StatelessWidget {
       WBNavItem(id: AppRoutes.agentHome, icon: WBIconName.home, label: l.navHome),
       WBNavItem(id: AppRoutes.agentRecordTxn, icon: WBIconName.basket, label: l.navRecord),
       WBNavItem(id: AppRoutes.agentCashPayout, icon: WBIconName.card, label: l.navPayout),
+      WBNavItem(id: AppRoutes.agentServices, icon: WBIconName.services, label: l.navServices),
       WBNavItem(id: AppRoutes.agentAccount, icon: WBIconName.user, label: l.navAccount),
     ];
   }
