@@ -4,7 +4,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/config/wawuafrica_hub.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
-import '../../../../core/widgets/wb_widgets.dart';
 
 /// A single WAWUAfrica service surfaced in the Services tab. `soon` flags a
 /// service that is announced but not yet live (renders a "Soon" pill).
@@ -106,42 +105,32 @@ class ServicesScreen extends StatelessWidget {
         ),
         children: [
           Text(l.navServices, style: WBTypography.page),
-          const SizedBox(height: WBSpacing.md),
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () => openWawuHub(context, '/services'),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-              decoration: BoxDecoration(
-                color: WBColors.bgSecondary,
-                borderRadius: BorderRadius.circular(WBRadius.card),
-              ),
-              child: Image.asset(
-                'assets/brand_icons/wawuafrica_mark.png',
-                height: 40,
-                fit: BoxFit.contain,
-                alignment: Alignment.centerLeft,
-              ),
-            ),
-          ),
           const SizedBox(height: WBSpacing.lg),
-          for (final service in wawuServices) ...[
-            _ServiceTile(service: service),
-            const SizedBox(height: WBSpacing.sm),
-          ],
+          // Same 3-column grid layout as WAWUBeauty's Services tab.
+          GridView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              mainAxisExtent: 120,
+            ),
+            itemCount: wawuServices.length,
+            itemBuilder: (context, index) =>
+                _ServiceItem(service: wawuServices[index]),
+          ),
         ],
       ),
     );
   }
 }
 
-/// One full-width service row: icon disc + label (+ optional "Soon" pill) and a
-/// chevron. Tapping opens the service's hub page.
-class _ServiceTile extends StatelessWidget {
-  const _ServiceTile({required this.service});
+/// One grid cell: icon over label (+ optional "Soon" pill), matching the
+/// WAWUBeauty services grid. Tapping opens the service's hub page.
+class _ServiceItem extends StatelessWidget {
+  const _ServiceItem({required this.service});
 
   final WawuService service;
 
@@ -151,44 +140,33 @@ class _ServiceTile extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () => openWawuHub(context, service.path),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         decoration: BoxDecoration(
-          color: WBColors.surfaceCard,
+          color: WBColors.bgSecondary,
           borderRadius: BorderRadius.circular(WBRadius.card),
-          boxShadow: WBShadows.card,
         ),
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: WBColors.bgSecondary,
-                borderRadius: BorderRadius.circular(WBRadius.input),
-              ),
-              alignment: Alignment.center,
-              child: Icon(service.icon, size: 22, color: WBColors.fgHeader),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                service.label,
-                style: WBTypography.body.copyWith(
-                  color: WBColors.fgHeader,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
-                ),
+            Icon(service.icon, size: 26, color: WBColors.fgHeader),
+            const SizedBox(height: 8),
+            Text(
+              service.label,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: WBTypography.body.copyWith(
+                color: WBColors.fgHeader,
+                fontWeight: FontWeight.w600,
+                fontSize: 11.5,
+                height: 1.15,
               ),
             ),
             if (service.soon) ...[
+              const SizedBox(height: 6),
               const ServiceSoonPill(),
-              const SizedBox(width: 10),
             ],
-            const WBIcon(
-              WBIconName.chevronRight,
-              size: 18,
-              color: WBColors.fgPlaceholder,
-            ),
           ],
         ),
       ),
