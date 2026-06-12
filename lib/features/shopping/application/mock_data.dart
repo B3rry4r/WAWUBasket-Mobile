@@ -748,13 +748,14 @@ abstract final class MockData {
 
   // ─── Helpers ─────────────────────────────────────────────────
   static Category? categoryById(String id) {
-    // Prefer the live API list when available, fall back to static mock.
+    // Live API list only — no hardcoded fallback. Null when categories haven't
+    // loaded yet or the id isn't found, so callers show a loading/empty state.
     final live = liveCategories();
-    if (live != null) {
-      return live.firstWhere((c) => c.id == id, orElse: () => categories.first);
+    if (live == null) return null;
+    for (final c in live) {
+      if (c.id == id) return c;
     }
-    return categories.firstWhere((c) => c.id == id,
-        orElse: () => categories.first);
+    return null;
   }
 
   // Resolved lazily via a function reference to avoid a circular import

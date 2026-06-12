@@ -83,7 +83,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final category = MockData.categoryById(widget.categoryId)!;
+    final category = MockData.categoryById(widget.categoryId);
+    if (category == null) {
+      // Categories still loading from the API (or unavailable) — no mock fallback.
+      return const Scaffold(
+        backgroundColor: WBColors.bgPrimary,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     final products = _products;
     final vendors = _vendors;
 

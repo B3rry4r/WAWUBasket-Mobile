@@ -24,11 +24,13 @@ class CategoryController {
           .toList();
       categories.value = parsed;
     } catch (_) {
-      // Fall back to static mock so the UI always shows something.
-      categories.value = MockData.categories;
-    } finally {
-      _loaded = true;
+      // No hardcoded fallback — surface an empty list so the UI shows its
+      // empty state instead of mock content. Allow a retry on the next load.
+      categories.value = const [];
+      _loaded = false;
+      return;
     }
+    _loaded = true;
   }
 
   void reload() {
