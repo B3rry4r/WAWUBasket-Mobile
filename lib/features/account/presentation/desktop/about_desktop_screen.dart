@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/wb_responsive_exports.dart';
-import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/utils/wb_actions.dart';
@@ -200,9 +199,9 @@ class AboutDesktopScreen extends StatelessWidget {
                           if (i == 0) {
                             wbLaunchEmail(context, 'basket@wawuafrica.com');
                           } else if (i == 1) {
-                            context.push(AppRoutes.terms);
+                            wbLaunchWebUrl(context, wbTermsUrl);
                           } else {
-                            context.push(AppRoutes.privacy);
+                            wbLaunchWebUrl(context, wbPrivacyUrl);
                           }
                         },
                         child: Padding(

@@ -44,6 +44,21 @@ Future<void> wbLaunchEmail(BuildContext context, String email) async {
   }
 }
 
+/// Canonical WAWUAfrica legal documents — one source of truth on the web, so a
+/// policy update never needs an app release. The single page covers the Privacy
+/// Policy, Terms of Use and Consent Framework.
+const String wbPrivacyUrl = 'https://wawuafrica.com/privacy';
+const String wbTermsUrl = 'https://wawuafrica.com/privacy';
+
+/// Opens an external web URL (legal documents, help pages) in the browser.
+Future<void> wbLaunchWebUrl(BuildContext context, String url) async {
+  final ok =
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+  if (!ok && context.mounted) {
+    wbShowError(context, "Couldn't open the link — visit $url");
+  }
+}
+
 enum _WBSnackKind { info, error }
 
 /// Neutral confirmation / info snackbar (saved, copied, placeholder actions).

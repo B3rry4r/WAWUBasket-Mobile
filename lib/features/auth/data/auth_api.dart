@@ -36,6 +36,26 @@ class AuthApi {
     }
   }
 
+  /// Records the user's consent to the current privacy-policy version on WAWU ID
+  /// (the consent ledger shared across the whole ecosystem). The WAWU ID access
+  /// token is read straight from the register response so this works even when
+  /// the persisted session token is later exchanged for a Basket token.
+  /// Best-effort: a consent-logging failure must never break sign-up.
+  Future<void> _recordPrivacyConsent(dynamic res) async {
+    try {
+      final data = res is Map ? res['data'] : null;
+      final token = (data is Map ? data['accessToken'] : null) as String?;
+      if (token == null || token.isEmpty) return;
+      await _wawuId.post<dynamic>(
+        '/policies/privacy/accept',
+        data: {'source': 'wawubasket'},
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+    } catch (_) {
+      // Non-fatal — the app can re-capture consent later via /policies/.../status.
+    }
+  }
+
   // ─── Sign-up (name + phone + email + password, verified by OTP) ─────────
 
   /// Registers the user on WAWU ID and starts their session.
@@ -59,6 +79,9 @@ class AuthApi {
       'country': country,
     });
     await _persistWawuThenExchange(res);
+    // The sign-up screen gates on accepting the terms, so log that consent
+    // against the new WAWU ID account for the ecosystem-wide ledger.
+    await _recordPrivacyConsent(res);
   }
 
   /// Confirms a phone OTP, creating the account and starting a session.

@@ -100,12 +100,12 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
 
   /// A tappable, underlined legal link inside the agreement clause. Tapping it
   /// opens the in-app document and does not toggle the agreement checkbox.
-  InlineSpan _legalLink(BuildContext context, String label, String route) {
+  InlineSpan _legalLink(BuildContext context, String label, String url) {
     return WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
       child: GestureDetector(
-        onTap: () => context.push(route),
+        onTap: () => wbLaunchWebUrl(context, url),
         child: Text(
           label,
           style: WBTypography.caption.copyWith(
@@ -251,9 +251,9 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
                     ),
                     children: [
                       const TextSpan(text: 'I agree to the '),
-                      _legalLink(context, 'Terms', AppRoutes.terms),
+                      _legalLink(context, 'Terms', wbTermsUrl),
                       const TextSpan(text: ' and '),
-                      _legalLink(context, 'Privacy Policy', AppRoutes.privacy),
+                      _legalLink(context, 'Privacy Policy', wbPrivacyUrl),
                       const TextSpan(text: '.'),
                     ],
                   ),
