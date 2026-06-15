@@ -49,3 +49,8 @@ app.*.map.json
 .claude/
 *.p8
 AuthKey*.p8
+
+# Android signing — never commit keystores or their passwords
+*.jks
+*.keystore
+key.properties
