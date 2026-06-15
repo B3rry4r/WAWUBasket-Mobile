@@ -6,13 +6,17 @@ name: Build & Release
 #   • push a tag matching v*       → release tagged with that tag
 #   • manual run (workflow_dispatch) → release tagged build-<run number>
 #
-# Two repository secrets are required
+# Repository secrets required
 # (Settings → Secrets and variables → Actions → New repository secret):
 #   • MAPBOX_TOKEN           — public pk.* token, injected at runtime via
 #                              --dart-define (never stored in the repo).
 #   • MAPBOX_DOWNLOADS_TOKEN — SECRET sk.* token with the DOWNLOADS:READ
 #                              scope, needed for Gradle to fetch the
 #                              Mapbox Android SDK from its private Maven.
+#   • KEYSTORE_BASE64        — the release keystore (.jks) base64-encoded.
+#   • KEYSTORE_PASSWORD      — keystore (store) password.
+#   • KEY_PASSWORD           — key password (often same as store password).
+#   • KEY_ALIAS              — alias of the key inside the keystore.
 
 on:
   push:
@@ -60,6 +64,16 @@ jobs:
           fi
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           echo "pubspec=${PUBSPEC_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Decode and set up release keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+          {
+            echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}"
+            echo "keyPassword=${{ secrets.KEY_PASSWORD }}"
+            echo "keyAlias=${{ secrets.KEY_ALIAS }}"
+            echo "storeFile=upload-keystore.jks"
+          } > android/key.properties
 
       - name: Flutter pub get
         run: flutter pub get
@@ -109,9 +123,7 @@ jobs:
             • `WAWUBasket-${{ steps.ver.outputs.tag }}.apk` — sideload on Android
             • `WAWUBasket-${{ steps.ver.outputs.tag }}.aab` — Play Store upload
 
-            Note: builds are debug-signed (no production keystore configured
-            yet) so they install for testing but are not Play-ready until a
-            release keystore is wired into android/app/build.gradle.kts.
+            Signed with the release upload keystore.
           files: dist/*
           draft: false
           prerelease: false
