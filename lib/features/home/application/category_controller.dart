@@ -1,14 +1,10 @@
 import 'package:flutter/foundation.dart' hide Category;
 
-import '../../shopping/application/mock_data.dart';
 import '../../shopping/data/catalog_api.dart';
 import '../domain/models/category.dart';
 
 class CategoryController {
-  CategoryController._() {
-    // Wire MockData.categoryById to look up from the live API list when loaded.
-    MockData.liveCategories = () => categories.value;
-  }
+  CategoryController._();
 
   static final CategoryController instance = CategoryController._();
 
@@ -37,5 +33,17 @@ class CategoryController {
     _loaded = false;
     categories.value = null;
     load();
+  }
+
+  /// Resolve a category from the live API list. Returns null when categories
+  /// haven't loaded yet or the id isn't found, so callers show a
+  /// loading/empty state — there is no hardcoded fallback.
+  Category? categoryById(String id) {
+    final live = categories.value;
+    if (live == null) return null;
+    for (final c in live) {
+      if (c.id == id) return c;
+    }
+    return null;
   }
 }

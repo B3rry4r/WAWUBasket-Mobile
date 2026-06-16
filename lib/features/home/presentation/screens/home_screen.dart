@@ -24,7 +24,6 @@ import '../../../category/domain/models/category_kind.dart';
 import '../../../category/presentation/widgets/subcategory_chip_row.dart';
 import '../../../recipes/application/recipes_controller.dart';
 import '../../../shopping/application/cart_controller.dart';
-import '../../../shopping/application/mock_data.dart';
 import '../../application/category_controller.dart';
 import '../../domain/models/category.dart';
 import '../widgets/category_body.dart';
@@ -86,7 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final activeCategory = _activeCategoryId == null
         ? null
-        : MockData.categoryById(_activeCategoryId!);
+        : CategoryController.instance.categoryById(_activeCategoryId!);
     final kind = activeCategory?.kind ?? CategoryKind.all;
 
     return ValueListenableBuilder<UserProfile?>(

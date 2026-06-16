@@ -8,10 +8,10 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../home/application/category_controller.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
 import '../../../shell/presentation/desktop/customer_web_scaffold.dart';
-import '../../../shopping/application/mock_data.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
 import '../../domain/models/category_kind.dart';
@@ -54,7 +54,7 @@ class _CategoryDesktopScreenState extends State<CategoryDesktopScreen> {
       _vendors = const [];
     });
     try {
-      final category = MockData.categoryById(widget.categoryId);
+      final category = CategoryController.instance.categoryById(widget.categoryId);
       final effectiveCategory = subcategoryId ?? widget.categoryId;
       final isRestaurant = category?.kind == CategoryKind.restaurant;
 
@@ -89,7 +89,7 @@ class _CategoryDesktopScreenState extends State<CategoryDesktopScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final category = MockData.categoryById(widget.categoryId);
+    final category = CategoryController.instance.categoryById(widget.categoryId);
     if (category == null) {
       // Categories still loading from the API (or unavailable) — no mock fallback.
       return CustomerWebScaffold(
