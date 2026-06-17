@@ -27,7 +27,9 @@ class _SignupScreenState extends State<SignupScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   Country? _country;
-  bool _agreed = true;
+  // Defaults to false so the user must explicitly accept the terms before
+  // submitting (App Review Guideline 1.2).
+  bool _agreed = false;
   bool _busy = false;
   bool _obscure = true;
 

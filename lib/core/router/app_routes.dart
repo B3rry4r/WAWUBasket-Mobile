@@ -70,6 +70,7 @@ abstract final class AppRoutes {
   static const privacy = '/account/privacy';
   static const dietary = '/account/dietary';
   static const security = '/account/security';
+  static const blockedUsers = '/account/blocked-users';
   static const deleteAccount = '/account/delete';
   static const devSettings = '/dev-settings';
 

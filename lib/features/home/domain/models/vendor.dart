@@ -13,11 +13,18 @@ class Vendor extends Equatable {
     required this.etaMax,
     required this.deliveryFee,
     required this.imageUrl,
+    this.ownerUserId,
     this.badge,
     this.tags = const [],
   });
 
   final String id;
+
+  /// The owner's user id, when the payload exposes it. The moderation flows
+  /// (report a `user`, block a user) key off the user id rather than the
+  /// storefront id.
+  final String? ownerUserId;
+
   final String name;
   final String shortName;
   final String cuisine;
@@ -46,6 +53,8 @@ class Vendor extends Equatable {
     final name = (j['name'] ?? j['businessName'] ?? 'Vendor').toString();
     return Vendor(
       id: (j['id'] ?? j['userId'] ?? '').toString(),
+      ownerUserId: (j['userId'] ?? j['ownerId'] ?? j['ownerUserId'])
+          ?.toString(),
       name: name,
       shortName: (j['shortName'] ?? name).toString(),
       cuisine: (j['cuisine'] ?? j['description'] ?? '').toString(),

@@ -382,6 +382,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             sub: context.l10n.profileChangePasswordSub,
             onTap: () => context.push(AppRoutes.security),
           ),
+          // TODO(i18n): key=profileBlockedUsers / profileBlockedUsersSub
+          AccountMenuRow(
+            icon: WBIconName.close,
+            label: 'Blocked users',
+            sub: 'Manage who you\'ve blocked',
+            onTap: () => context.push(AppRoutes.blockedUsers),
+          ),
         ],
       ),
       AccountMenuSection(

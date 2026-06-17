@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -10,20 +11,22 @@ import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/application/category_controller.dart';
 import '../../../home/presentation/widgets/ds_vendor_card.dart';
+import '../../../moderation/application/blocked_content_filter.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
 import '../../domain/models/category_kind.dart';
 import '../widgets/subcategory_chip_row.dart';
 
-class CategoryScreen extends StatefulWidget {
+class CategoryScreen extends ConsumerStatefulWidget {
   const CategoryScreen({super.key, required this.categoryId});
   final String categoryId;
 
   @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
+  ConsumerState<CategoryScreen> createState() => _CategoryScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _CategoryScreenState extends ConsumerState<CategoryScreen> {
   String? _activeSubcategory;
   bool _premium = false;
 
@@ -91,8 +94,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
         body: Center(child: CircularProgressIndicator()),
       );
     }
-    final products = _products;
-    final vendors = _vendors;
+    // Hide content from blocked users (client-side, instant).
+    final blocked = ref.watch(blockedUsersProvider);
+    final products = blocked.filterProducts(_products);
+    final vendors = blocked.filterVendors(_vendors);
 
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -11,17 +12,19 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../home/domain/models/vendor.dart';
 import '../../../home/presentation/widgets/search_field.dart';
+import '../../../moderation/application/blocked_content_filter.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
 import '../../data/catalog_api.dart';
 import '../../domain/models/product.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  ConsumerState<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenState extends ConsumerState<SearchScreen> {
   static const _filters = [
     'All',
     'Vendors',
@@ -118,6 +121,10 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final showVendors = _activeFilter != 'Dishes';
     final showDishes = _activeFilter != 'Vendors';
+    // Hide results from blocked users (client-side, instant).
+    final blocked = ref.watch(blockedUsersProvider);
+    final vendors = blocked.filterVendors(_vendors);
+    final products = blocked.filterProducts(_products);
 
     return Scaffold(
       backgroundColor: WBColors.bgPrimary,
@@ -282,7 +289,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ],
               SectionHeader(title: context.l10n.searchVendors),
               const SizedBox(height: WBSpacing.sm + 4),
-              for (final vendor in _idleVendors.take(2)) ...[
+              for (final vendor in blocked.filterVendors(_idleVendors).take(2)) ...[
                 _VendorRow(vendor: vendor),
                 const SizedBox(height: WBSpacing.sm + 4),
               ],
@@ -303,22 +310,22 @@ class _SearchScreenState extends State<SearchScreen> {
               )
             else if (_error != null)
               _hint(_error!)
-            else if (_vendors.isEmpty && _products.isEmpty)
+            else if (vendors.isEmpty && products.isEmpty)
               _hint('Nothing matched "${_query.text}".')
             else ...[
-              if (showVendors && _vendors.isNotEmpty) ...[
+              if (showVendors && vendors.isNotEmpty) ...[
                 SectionHeader(title: context.l10n.searchVendors),
                 const SizedBox(height: WBSpacing.sm + 4),
-                for (final v in _vendors) ...[
+                for (final v in vendors) ...[
                   _VendorRow(vendor: v),
                   const SizedBox(height: WBSpacing.sm + 4),
                 ],
               ],
-              if (showDishes && _products.isNotEmpty) ...[
+              if (showDishes && products.isNotEmpty) ...[
                 const SizedBox(height: WBSpacing.sm),
                 SectionHeader(title: context.l10n.searchDishes),
                 const SizedBox(height: WBSpacing.sm + 4),
-                for (final p in _products) ...[
+                for (final p in products) ...[
                   WBProductCard(
                     imageUrl: p.imageUrl,
                     name: p.name,

@@ -10,6 +10,10 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/data/account_extras_api.dart';
+import '../../../moderation/application/blocked_content_filter.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
+import '../../../moderation/domain/report_reason.dart';
+import '../../../moderation/presentation/widgets/moderation_actions.dart';
 import '../../application/cart_controller.dart';
 import '../../data/catalog_api.dart';
 import '../../domain/models/product.dart';
@@ -200,6 +204,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     }
 
     final total = product.priceNaira * _qty;
+    // Hide "more like this" entries from blocked vendors (client-side).
+    final blocked = ref.watch(blockedUsersProvider);
+    final moreLikeThis = blocked.filterProducts(_moreLikeThis);
     final cartCount = ref.watch(cartControllerProvider.select(
       (s) => s.items.fold(0, (n, l) => n + l.quantity),
     ));
@@ -225,12 +232,32 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                   Positioned(
                     top: 56,
                     right: WBSpacing.screenPadding,
-                    child: WBCircleIconButton(
-                      icon: WBIconName.heart,
-                      iconColor: _isFavorited
-                          ? WBColors.statusError
-                          : WBColors.fgHeader,
-                      onPressed: _toggleFavorite,
+                    child: Row(
+                      children: [
+                        WBCircleIconButton(
+                          icon: WBIconName.heart,
+                          iconColor: _isFavorited
+                              ? WBColors.statusError
+                              : WBColors.fgHeader,
+                          onPressed: _toggleFavorite,
+                        ),
+                        const SizedBox(width: 10),
+                        // Report this item / block its vendor (App Review 1.2).
+                        WBCircleIconButton(
+                          icon: WBIconName.more,
+                          onPressed: () => ModerationActions.showOverflow(
+                            context,
+                            ref,
+                            targetType: ReportTargetType.catalogItem,
+                            targetId: product.id,
+                            reportedUserId: product.vendorId,
+                            title: product.name,
+                            onBlocked: () {
+                              if (context.mounted) context.pop();
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -312,7 +339,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                   ],
                 ),
               ),
-              if (_moreLikeThis.isNotEmpty) ...[
+              if (moreLikeThis.isNotEmpty) ...[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
                     WBSpacing.screenPadding, WBSpacing.lg, WBSpacing.screenPadding, 0),
@@ -328,10 +355,10 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(
                         horizontal: WBSpacing.screenPadding),
-                    itemCount: _moreLikeThis.length,
+                    itemCount: moreLikeThis.length,
                     separatorBuilder: (_, _) => const SizedBox(width: 12),
                     itemBuilder: (_, i) {
-                      final p = _moreLikeThis[i];
+                      final p = moreLikeThis[i];
                       return GestureDetector(
                         onTap: () => context.push(
                             '${AppRoutes.product}/${p.id}'),

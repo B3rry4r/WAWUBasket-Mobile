@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
@@ -7,6 +8,8 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../moderation/domain/report_reason.dart';
+import '../../../moderation/presentation/widgets/moderation_actions.dart';
 import '../../application/trade_controller.dart';
 import '../../domain/models/corridor.dart';
 import '../../domain/models/export_listing.dart';
@@ -15,12 +18,12 @@ import '../../domain/models/export_listing.dart';
 /// an enquiry against the listing (which the trader sees on their
 /// dashboard) and shows a snackbar, the actual escrow checkout lands
 /// in batch D.
-class ExportListingDetailScreen extends StatelessWidget {
+class ExportListingDetailScreen extends ConsumerWidget {
   const ExportListingDetailScreen({super.key, required this.listingId});
   final String listingId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: ValueListenableBuilder(
@@ -49,7 +52,7 @@ class ExportListingDetailScreen extends StatelessWidget {
               ),
             );
           }
-          return _Body(listing: l);
+          return _Body(listing: l, ref: ref);
         },
       ),
     );
@@ -57,8 +60,9 @@ class ExportListingDetailScreen extends StatelessWidget {
 }
 
 class _Body extends StatelessWidget {
-  const _Body({required this.listing});
+  const _Body({required this.listing, required this.ref});
   final ExportListing listing;
+  final WidgetRef ref;
 
   void _enquire(BuildContext context) {
     TradeController.instance.recordEnquiry(listing.id);
@@ -86,6 +90,25 @@ class _Body extends StatelessWidget {
                   top: MediaQuery.of(context).padding.top + 10,
                   left: WBSpacing.screenPadding,
                   child: WBBackChip(onPressed: () => context.pop()),
+                ),
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 10,
+                  right: WBSpacing.screenPadding,
+                  // Report this listing / block the trader (App Review 1.2).
+                  child: WBCircleIconButton(
+                    icon: WBIconName.more,
+                    onPressed: () => ModerationActions.showOverflow(
+                      context,
+                      ref,
+                      targetType: ReportTargetType.exportListing,
+                      targetId: listing.id,
+                      reportedUserId: listing.traderUserId,
+                      title: listing.produce,
+                      onBlocked: () {
+                        if (context.mounted) context.pop();
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),

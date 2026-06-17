@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -11,6 +12,8 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../auth/application/role_controller.dart';
+import '../../../moderation/domain/report_reason.dart';
+import '../../../moderation/presentation/widgets/moderation_actions.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
 import '../../data/chat_local_store.dart';
@@ -29,6 +32,7 @@ class _DisplayMessage {
     required this.time,
     this.attachUrl,
     this.id,
+    this.senderId,
     this.isPending = false,
   });
 
@@ -37,10 +41,12 @@ class _DisplayMessage {
   final String time;
   final String? attachUrl;
   final String? id;
+  final String? senderId;
   final bool isPending;
 
   factory _DisplayMessage.fromOrderMessage(ChatMessage m) => _DisplayMessage(
         id: m.id,
+        senderId: m.senderId,
         body: m.body,
         attachUrl: m.attachmentUrl,
         fromMe: m.senderRole == RoleController.instance.role.name,
@@ -66,12 +72,13 @@ String _fmtTime(DateTime? t) {
   return '$h:$m';
 }
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends ConsumerStatefulWidget {
   const ChatScreen({
     super.key,
     this.kind = ChatContextKind.support,
     this.orderId,
     this.title,
+    this.counterpartId,
   });
 
   final ChatContextKind kind;
@@ -82,11 +89,15 @@ class ChatScreen extends StatefulWidget {
   /// Counterpart name shown in the header (passed by the inbox / call site).
   final String? title;
 
+  /// Counterpart user id, when known — enables the "Block user" header
+  /// action on order threads.
+  final String? counterpartId;
+
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  ConsumerState<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends ConsumerState<ChatScreen> {
   late final TextEditingController _composer = TextEditingController();
 
   /// Support thread — a /v1/support ticket conversation.
@@ -394,6 +405,43 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  // ── moderation ───────────────────────────────────────────────────────
+
+  /// Block the thread counterpart, then leave the thread (their content is
+  /// already hidden from the inbox by the client-side filter).
+  Future<void> _blockCounterpart() async {
+    final id = widget.counterpartId;
+    if (id == null || id.isEmpty) return;
+    await ModerationActions.confirmBlock(
+      context,
+      ref,
+      userId: id,
+      title: widget.title,
+      onBlocked: () {
+        if (mounted && context.canPop()) context.pop();
+      },
+    );
+  }
+
+  /// Long-press → report a single message. Offers "Block user" too when the
+  /// sender id is known and isn't the current user.
+  Future<void> _onMessageLongPress(_DisplayMessage m) async {
+    if (m.fromMe || m.id == null || m.id!.isEmpty) return;
+    await ModerationActions.showOverflow(
+      context,
+      ref,
+      targetType: ReportTargetType.chatMessage,
+      targetId: m.id!,
+      reportedUserId: (m.senderId ?? '').isNotEmpty
+          ? m.senderId
+          : (widget.counterpartId ?? ''),
+      title: widget.title,
+      onBlocked: () {
+        if (mounted && context.canPop()) context.pop();
+      },
+    );
+  }
+
   // ── render ───────────────────────────────────────────────────────────
 
   @override
@@ -448,6 +496,22 @@ class _ChatScreenState extends State<ChatScreen> {
                       ],
                     ),
                   ),
+                  // Block the counterpart on order threads (App Review 1.2).
+                  if (_isOrder && (widget.counterpartId ?? '').isNotEmpty)
+                    GestureDetector(
+                      onTap: _blockCounterpart,
+                      behavior: HitTestBehavior.opaque,
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          color: WBColors.bgSoft,
+                          shape: BoxShape.circle,
+                        ),
+                        alignment: Alignment.center,
+                        child: const WBIcon(WBIconName.more, size: 16),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -601,8 +665,13 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _bubble(_DisplayMessage m) {
-    return Align(
-      alignment: m.fromMe ? Alignment.centerRight : Alignment.centerLeft,
+    // Long-press an incoming order message to report / block its sender.
+    return GestureDetector(
+      onLongPress: (_isOrder && !m.fromMe && (m.id ?? '').isNotEmpty)
+          ? () => _onMessageLongPress(m)
+          : null,
+      child: Align(
+        alignment: m.fromMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Opacity(
         opacity: m.isPending ? 0.65 : 1.0,
         child: ConstrainedBox(
@@ -675,6 +744,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

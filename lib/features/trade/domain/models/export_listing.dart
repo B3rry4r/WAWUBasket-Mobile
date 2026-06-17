@@ -17,9 +17,14 @@ class ExportListing {
     this.enquiries = 0,
     this.status = ExportListingStatus.active,
     this.category,
+    this.traderUserId,
   });
 
   final String id;
+
+  /// The posting trader's user id, when the public payload exposes it. Used
+  /// by the moderation flows (report a `user`, block the trader).
+  final String? traderUserId;
   String produce;
   int quantityKg;
   int pricePerKgNaira;
@@ -63,6 +68,11 @@ class ExportListing {
       category: (j['category'] as String?)?.isNotEmpty == true
           ? j['category'].toString()
           : null,
+      traderUserId: (j['traderUserId'] ??
+              j['traderId'] ??
+              trader?['userId'] ??
+              trader?['id'])
+          ?.toString(),
     );
   }
 }

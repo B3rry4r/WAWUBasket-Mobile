@@ -8,6 +8,8 @@ import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_format.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../moderation/domain/report_reason.dart';
+import '../../../moderation/presentation/widgets/report_sheet.dart';
 import '../../application/recipe_cart_controller.dart';
 import '../../data/recipes_api.dart';
 import '../../domain/models/recipe.dart';
@@ -205,10 +207,25 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                         WBSpacing.screenPadding,
                         0,
                       ),
-                      child: WBBackChip(
-                        onPressed: () => context.canPop()
-                            ? context.pop()
-                            : context.go(AppRoutes.recipes),
+                      child: Row(
+                        children: [
+                          WBBackChip(
+                            onPressed: () => context.canPop()
+                                ? context.pop()
+                                : context.go(AppRoutes.recipes),
+                          ),
+                          const Spacer(),
+                          // Report this recipe (App Review 1.2).
+                          WBCircleIconButton(
+                            icon: WBIconName.more,
+                            onPressed: () => ReportSheet.show(
+                              context,
+                              targetType: ReportTargetType.recipe,
+                              targetId: recipe.id,
+                              title: recipe.name,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

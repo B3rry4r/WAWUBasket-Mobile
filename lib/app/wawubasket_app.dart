@@ -5,12 +5,15 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/gestures.dart' show PointerDeviceKind;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/i18n/locale_controller.dart';
 import '../core/network/api_client.dart';
+import '../core/network/token_store.dart';
 import '../core/router/app_router.dart';
 import '../core/router/app_routes.dart';
 import '../core/theme/wb_theme_exports.dart';
+import '../features/moderation/application/blocked_users_controller.dart';
 import '../l10n/app_localizations.dart';
 
 /// Lets the desktop web build be dragged/scrolled with a mouse and trackpad,
@@ -28,16 +31,17 @@ class _WBScrollBehavior extends MaterialScrollBehavior {
       };
 }
 
-class WAWUBasketApp extends StatefulWidget {
+class WAWUBasketApp extends ConsumerStatefulWidget {
   const WAWUBasketApp({super.key});
 
   @override
-  State<WAWUBasketApp> createState() => _WAWUBasketAppState();
+  ConsumerState<WAWUBasketApp> createState() => _WAWUBasketAppState();
 }
 
-class _WAWUBasketAppState extends State<WAWUBasketApp> {
+class _WAWUBasketAppState extends ConsumerState<WAWUBasketApp> {
   late final _router = buildRouter();
   StreamSubscription<Uri>? _deepLinkSub;
+  VoidCallback? _tokenListener;
 
   @override
   void initState() {
@@ -46,6 +50,21 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
     ApiClient.instance.onSessionExpired = () {
       _router.go(AppRoutes.login);
     };
+
+    // Hydrate the blocked-users set so the client-side content filters work
+    // from first paint, then re-hydrate on login / clear on logout.
+    final blocked = ref.read(blockedUsersProvider.notifier);
+    if (TokenStore.instance.hasSession) {
+      unawaited(blocked.hydrate());
+    }
+    _tokenListener = () {
+      if (TokenStore.instance.accessToken != null) {
+        unawaited(blocked.hydrate());
+      } else {
+        blocked.clear();
+      }
+    };
+    TokenStore.instance.tokenNotifier.addListener(_tokenListener!);
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
@@ -85,6 +104,9 @@ class _WAWUBasketAppState extends State<WAWUBasketApp> {
   @override
   void dispose() {
     _deepLinkSub?.cancel();
+    if (_tokenListener != null) {
+      TokenStore.instance.tokenNotifier.removeListener(_tokenListener!);
+    }
     super.dispose();
   }
 

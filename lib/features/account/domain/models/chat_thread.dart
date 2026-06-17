@@ -10,6 +10,7 @@ class ChatThread {
     required this.lastMessageAt,
     required this.unreadCount,
     required this.updatedAt,
+    this.counterpartId,
   });
 
   final String id;
@@ -17,6 +18,12 @@ class ChatThread {
   /// The order this thread belongs to. Drives chat-detail routing — null
   /// here means a support/system thread (rare; the inbox is order-keyed).
   final String? orderId;
+
+  /// The counterpart's user id, when the inbox payload exposes it. Drives the
+  /// blocked-user inbox filter and the "Block user" action in the thread
+  /// header. Not persisted to the local cache (only present on the network
+  /// path), so cached rows read it back as null.
+  final String? counterpartId;
 
   final String title;
   final String lastMessage;
@@ -32,6 +39,7 @@ class ChatThread {
     return ChatThread(
       id: (j['id'] ?? j['orderId'] ?? '').toString(),
       orderId: j['orderId']?.toString(),
+      counterpartId: (cp['id'] ?? cp['userId'])?.toString(),
       title: (cp['name'] ?? 'Conversation').toString(),
       lastMessage: (j['lastMessage'] ?? '').toString(),
       lastMessageAt: at,
@@ -75,6 +83,7 @@ class ChatThread {
       ChatThread(
         id: id,
         orderId: orderId,
+        counterpartId: counterpartId,
         title: title,
         lastMessage: lastMessage ?? this.lastMessage,
         lastMessageAt: lastMessageAt ?? this.lastMessageAt,

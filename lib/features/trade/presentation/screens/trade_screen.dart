@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
 import '../../application/trade_controller.dart';
 import '../widgets/bulk_lot_card.dart';
 import '../widgets/corridor_prices_table.dart';
@@ -15,16 +17,16 @@ import '../../../../core/utils/wb_l10n.dart';
 /// Export listings, Corridor prices. The tab pills sit in a segmented
 /// control so the active tab feels distinct; the produce filter row
 /// shows only on tabs where it's meaningful.
-class TradeScreen extends StatefulWidget {
+class TradeScreen extends ConsumerStatefulWidget {
   const TradeScreen({super.key});
 
   @override
-  State<TradeScreen> createState() => _TradeScreenState();
+  ConsumerState<TradeScreen> createState() => _TradeScreenState();
 }
 
 enum _Tab { suppliers, lots, listings, prices }
 
-class _TradeScreenState extends State<TradeScreen> {
+class _TradeScreenState extends ConsumerState<TradeScreen> {
   _Tab _tab = _Tab.suppliers;
   String _produceFilter = 'all';
 
@@ -189,7 +191,14 @@ class _TradeScreenState extends State<TradeScreen> {
       case _Tab.listings:
         return ValueListenableBuilder(
           valueListenable: TradeController.instance.listings,
-          builder: (_, listings, _) {
+          builder: (_, allListings, _) {
+            // Hide listings from blocked traders (client-side, instant).
+            final blocked = ref.watch(blockedUsersProvider);
+            final listings = allListings
+                .where((l) =>
+                    l.traderUserId == null ||
+                    !blocked.contains(l.traderUserId))
+                .toList();
             if (listings.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.fromLTRB(

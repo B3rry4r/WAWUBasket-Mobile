@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -6,16 +7,20 @@ import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
+import '../../../moderation/domain/report_reason.dart';
+import '../../../moderation/presentation/widgets/moderation_actions.dart';
 import '../../data/vendor_api.dart';
 
-class VendorReviewsScreen extends StatefulWidget {
+class VendorReviewsScreen extends ConsumerStatefulWidget {
   const VendorReviewsScreen({super.key});
 
   @override
-  State<VendorReviewsScreen> createState() => _VendorReviewsScreenState();
+  ConsumerState<VendorReviewsScreen> createState() =>
+      _VendorReviewsScreenState();
 }
 
-class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
+class _VendorReviewsScreenState extends ConsumerState<VendorReviewsScreen> {
   /// Review ids that carry a reply (either from the server or posted in
   /// this session).
   final Set<String> _replied = <String>{};
@@ -90,7 +95,11 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final reviews = _reviews;
+    final blocked = ref.watch(blockedUsersProvider);
+    // Hide reviews from blocked users (client-side, instant).
+    final reviews = _reviews
+        ?.where((r) => r.reviewerId == null || !blocked.contains(r.reviewerId))
+        .toList();
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,
       body: SafeArea(
@@ -215,6 +224,27 @@ class _VendorReviewsScreenState extends State<VendorReviewsScreen> {
                                       ? WBColors.fgHeader
                                       : WBColors.bgDivider,
                                 ),
+                              const SizedBox(width: 8),
+                              // Report this rating / block the reviewer.
+                              GestureDetector(
+                                onTap: () => ModerationActions.showOverflow(
+                                  context,
+                                  ref,
+                                  targetType: ReportTargetType.rating,
+                                  targetId: r.id,
+                                  reportedUserId: r.reviewerId,
+                                  title: r.name,
+                                ),
+                                behavior: HitTestBehavior.opaque,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 2),
+                                  child: WBIcon(
+                                    WBIconName.more,
+                                    size: 16,
+                                    color: WBColors.fgSecondary,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 6),
@@ -275,6 +305,7 @@ class _Review {
     required this.text,
     required this.date,
     required this.hasReply,
+    this.reviewerId,
   });
 
   final String id;
@@ -283,6 +314,10 @@ class _Review {
   final String text;
   final String date;
   final bool hasReply;
+
+  /// The reviewer's user id, when exposed — drives report (`reportedUserId`),
+  /// block, and the client-side blocked-user filter.
+  final String? reviewerId;
 
   factory _Review.fromJson(Map<String, dynamic> j) {
     final created = DateTime.tryParse('${j['createdAt'] ?? ''}')?.toLocal();
@@ -293,6 +328,8 @@ class _Review {
       text: (j['review'] ?? '').toString(),
       date: _ago(created),
       hasReply: (j['reply'] ?? '').toString().isNotEmpty,
+      reviewerId:
+          (j['reviewerId'] ?? j['reviewerUserId'] ?? j['userId'])?.toString(),
     );
   }
 }

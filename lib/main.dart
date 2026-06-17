@@ -16,6 +16,7 @@ import 'core/services/websocket_service.dart';
 import 'features/account/application/notifications_controller.dart';
 import 'features/account/data/chat_local_store.dart';
 import 'features/auth/application/role_controller.dart';
+import 'features/auth/application/terms_acceptance.dart';
 
 /// Top-level category SVGs that show on the home screen the moment the
 /// user lands. Pre-decoded into the [flutter_svg] cache so the very first
@@ -55,6 +56,9 @@ Future<void> main() async {
     await TokenStore.instance.load();
   } catch (_) {}
   await LocaleController.instance.load();
+  // One-time EULA / Terms acceptance flag (App Review Guideline 1.2). Read by
+  // the login/signup terms gate so it's only shown once per install.
+  await TermsAcceptance.instance.load();
   // Pre-decode the home-screen category SVGs so the first paint has them
   // in the flutter_svg in-memory cache. Failures are non-fatal — the
   // assets will still load lazily on demand.

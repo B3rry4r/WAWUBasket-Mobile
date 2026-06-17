@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -9,6 +10,7 @@ import '../../../../core/services/websocket_service.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../../core/utils/wb_l10n.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
 import '../../data/account_extras_api.dart';
 import '../../data/chat_api.dart';
 import '../../data/chat_local_store.dart';
@@ -18,14 +20,14 @@ import '../../domain/models/chat_thread.dart';
 /// the support-ticket thread; the order conversations below it come live
 /// from `/v1/chats`, persisted locally so the list opens instantly even
 /// before the API call completes (or while the device is offline).
-class ChatInboxScreen extends StatefulWidget {
+class ChatInboxScreen extends ConsumerStatefulWidget {
   const ChatInboxScreen({super.key});
 
   @override
-  State<ChatInboxScreen> createState() => _ChatInboxScreenState();
+  ConsumerState<ChatInboxScreen> createState() => _ChatInboxScreenState();
 }
 
-class _ChatInboxScreenState extends State<ChatInboxScreen> {
+class _ChatInboxScreenState extends ConsumerState<ChatInboxScreen> {
   List<ChatThread>? _chats;
   String? _supportPreview;
   String? _supportTime;
@@ -162,19 +164,28 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
     context.push(
       Uri(
         path: AppRoutes.chatRider,
-        queryParameters: {'orderId': id, 'title': c.title},
+        queryParameters: {
+          'orderId': id,
+          'title': c.title,
+          if (c.counterpartId != null) 'counterpartId': c.counterpartId!,
+        },
       ).toString(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final blocked = ref.watch(blockedUsersProvider);
     final supportRow = _SupportRow(
       preview: _supportPreview ?? context.l10n.chatSupportPrompt,
       time: _supportTime ?? '',
       onTap: () => context.push(AppRoutes.chatSupport),
     );
-    final chats = _chats;
+    // Hide threads whose counterpart the user has blocked (client-side).
+    final chats = _chats
+        ?.where((c) =>
+            c.counterpartId == null || !blocked.contains(c.counterpartId))
+        .toList();
 
     return Scaffold(
       backgroundColor: WBColors.bgSecondary,

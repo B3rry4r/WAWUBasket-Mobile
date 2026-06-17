@@ -10,6 +10,10 @@ import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../account/data/account_extras_api.dart';
 import '../../../home/domain/models/vendor.dart';
+import '../../../moderation/application/blocked_content_filter.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
+import '../../../moderation/domain/report_reason.dart';
+import '../../../moderation/presentation/widgets/moderation_actions.dart';
 import '../../application/cart_controller.dart';
 import '../../data/catalog_api.dart';
 import '../../domain/models/product.dart';
@@ -141,9 +145,12 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
     }
 
     final vendor = _vendor!;
+    // Hide items from blocked vendors (client-side, instant).
+    final blocked = ref.watch(blockedUsersProvider);
+    final visibleMenu = blocked.filterProducts(_menu);
     final items = _activeTab == 'All'
-        ? _menu
-        : _menu.where((p) => p.subcategoryId == _activeTab).toList();
+        ? visibleMenu
+        : visibleMenu.where((p) => p.subcategoryId == _activeTab).toList();
 
     final cart = ref.watch(cartControllerProvider);
     final cartCount = cart.items.fold<int>(0, (s, l) => s + l.quantity);
@@ -172,12 +179,33 @@ class _VendorScreenState extends ConsumerState<VendorScreen> {
                   Positioned(
                     top: 56,
                     right: WBSpacing.screenPadding,
-                    child: WBCircleIconButton(
-                      icon: WBIconName.heart,
-                      iconColor: _isFavorited
-                          ? WBColors.statusError
-                          : WBColors.fgHeader,
-                      onPressed: _toggleFavorite,
+                    child: Row(
+                      children: [
+                        WBCircleIconButton(
+                          icon: WBIconName.heart,
+                          iconColor: _isFavorited
+                              ? WBColors.statusError
+                              : WBColors.fgHeader,
+                          onPressed: _toggleFavorite,
+                        ),
+                        const SizedBox(width: 10),
+                        // Report / Block this storefront (App Review 1.2).
+                        WBCircleIconButton(
+                          icon: WBIconName.more,
+                          onPressed: () => ModerationActions.showOverflow(
+                            context,
+                            ref,
+                            targetType: ReportTargetType.user,
+                            targetId:
+                                vendor.ownerUserId ?? widget.vendorId ?? '',
+                            reportedUserId: vendor.ownerUserId,
+                            title: vendor.name,
+                            onBlocked: () {
+                              if (context.mounted) context.pop();
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

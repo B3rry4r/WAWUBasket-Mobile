@@ -32,7 +32,9 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   Country? _country;
-  bool _agreed = true;
+  // Defaults to false — explicit terms acceptance is required before submit
+  // (App Review Guideline 1.2).
+  bool _agreed = false;
   bool _busy = false;
   bool _obscure = true;
 

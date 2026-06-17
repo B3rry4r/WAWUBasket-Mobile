@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
@@ -6,6 +7,8 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/widgets/wb_widgets.dart';
 import '../../../category/domain/models/category_kind.dart';
+import '../../../moderation/application/blocked_content_filter.dart';
+import '../../../moderation/application/blocked_users_controller.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
 import '../../../trade/application/trade_controller.dart';
@@ -179,14 +182,14 @@ class _LivestockBodyState extends State<_LivestockBody> {
 
 /// Home default view — vendors + trending dishes pulled live from the
 /// catalog API. Falls back to a retry card if the request fails.
-class _AllBody extends StatefulWidget {
+class _AllBody extends ConsumerStatefulWidget {
   const _AllBody();
 
   @override
-  State<_AllBody> createState() => _AllBodyState();
+  ConsumerState<_AllBody> createState() => _AllBodyState();
 }
 
-class _AllBodyState extends State<_AllBody> {
+class _AllBodyState extends ConsumerState<_AllBody> {
   List<Vendor>? _vendors;
   List<Product>? _products;
   String? _error;
@@ -220,6 +223,10 @@ class _AllBodyState extends State<_AllBody> {
     if (_vendors == null || _products == null) {
       return const _LoadingHint();
     }
+    // Hide content from blocked users (client-side, instant).
+    final blocked = ref.watch(blockedUsersProvider);
+    final vendors = blocked.filterVendors(_vendors!);
+    final products = blocked.filterProducts(_products!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -229,10 +236,10 @@ class _AllBodyState extends State<_AllBody> {
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 14),
-        if (_vendors!.isEmpty)
+        if (vendors.isEmpty)
           _padH(const _EmptyHint(text: 'No vendors open near you yet.'))
         else
-          _VendorCarousel(vendors: _vendors!),
+          _VendorCarousel(vendors: vendors),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
           title: context.l10n.catBodyTrendingToday,
@@ -240,24 +247,24 @@ class _AllBodyState extends State<_AllBody> {
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 14),
-        if (_products!.isEmpty)
+        if (products.isEmpty)
           _padH(const _EmptyHint(text: 'No dishes listed yet.'))
         else
-          _padH(_ProductGrid(products: _products!.take(4).toList())),
+          _padH(_ProductGrid(products: products.take(4).toList())),
       ],
     );
   }
 }
 
-class _RestaurantBody extends StatefulWidget {
+class _RestaurantBody extends ConsumerStatefulWidget {
   const _RestaurantBody({required this.subcategoryId});
   final String? subcategoryId;
 
   @override
-  State<_RestaurantBody> createState() => _RestaurantBodyState();
+  ConsumerState<_RestaurantBody> createState() => _RestaurantBodyState();
 }
 
-class _RestaurantBodyState extends State<_RestaurantBody> {
+class _RestaurantBodyState extends ConsumerState<_RestaurantBody> {
   List<Vendor>? _vendors;
   List<Product>? _dishes;
   String? _error;
@@ -295,7 +302,12 @@ class _RestaurantBodyState extends State<_RestaurantBody> {
 
   @override
   Widget build(BuildContext context) {
-    final dishes = _dishes;
+    // Hide content from blocked users (client-side, instant).
+    final blocked = ref.watch(blockedUsersProvider);
+    final dishes =
+        _dishes == null ? null : blocked.filterProducts(_dishes!);
+    final vendors =
+        _vendors == null ? null : blocked.filterVendors(_vendors!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -305,12 +317,12 @@ class _RestaurantBodyState extends State<_RestaurantBody> {
               context.push('${AppRoutes.categoryDetail}/restaurants'),
         )),
         const SizedBox(height: 14),
-        if (_vendors == null && _error == null)
+        if (vendors == null && _error == null)
           const _LoadingHint()
-        else if ((_vendors ?? const []).isEmpty)
+        else if ((vendors ?? const []).isEmpty)
           _padH(const _EmptyHint(text: 'No restaurants open near you yet.'))
         else
-          _VendorCarousel(vendors: _vendors!),
+          _VendorCarousel(vendors: vendors!),
         const SizedBox(height: 28),
         _padH(_SectionHeader(
           title: context.l10n.catBodyPopularDishes,
@@ -345,7 +357,7 @@ class _RestaurantBodyState extends State<_RestaurantBody> {
   }
 }
 
-class _MarketplaceBody extends StatefulWidget {
+class _MarketplaceBody extends ConsumerStatefulWidget {
   const _MarketplaceBody({
     required this.categoryId,
     required this.subcategoryId,
@@ -354,10 +366,10 @@ class _MarketplaceBody extends StatefulWidget {
   final String? subcategoryId;
 
   @override
-  State<_MarketplaceBody> createState() => _MarketplaceBodyState();
+  ConsumerState<_MarketplaceBody> createState() => _MarketplaceBodyState();
 }
 
-class _MarketplaceBodyState extends State<_MarketplaceBody> {
+class _MarketplaceBodyState extends ConsumerState<_MarketplaceBody> {
   List<Product>? _products;
   String? _error;
 
@@ -392,7 +404,10 @@ class _MarketplaceBodyState extends State<_MarketplaceBody> {
 
   @override
   Widget build(BuildContext context) {
-    final products = _products;
+    // Hide content from blocked users (client-side, instant).
+    final blocked = ref.watch(blockedUsersProvider);
+    final products =
+        _products == null ? null : blocked.filterProducts(_products!);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

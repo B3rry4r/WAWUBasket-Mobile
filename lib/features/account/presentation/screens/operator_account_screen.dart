@@ -357,6 +357,13 @@ class _OperatorAccountScreenState extends State<OperatorAccountScreen> {
             sub: context.l10n.operatorVersionSub,
             onTap: () => context.push(AppRoutes.about),
           ),
+          // TODO(i18n): key=operatorBlockedUsers
+          AccountMenuRow(
+            icon: WBIconName.close,
+            label: 'Blocked users',
+            sub: 'Manage who you\'ve blocked',
+            onTap: () => context.push(AppRoutes.blockedUsers),
+          ),
         ],
       ),
       AccountMenuSection(

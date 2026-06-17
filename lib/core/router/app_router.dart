@@ -132,6 +132,8 @@ import '../../features/auth/presentation/screens/role_select_screen.dart';
 import '../../features/auth/presentation/screens/web_unavailable_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
+import '../../features/auth/presentation/screens/terms_gate_screen.dart';
+import '../../features/moderation/presentation/screens/blocked_users_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
 import '../../features/auth/presentation/desktop/welcome_desktop_screen.dart';
 import '../../features/auth/presentation/desktop/login_desktop_screen.dart';
@@ -335,18 +337,25 @@ GoRouter buildRouter() {
           desktop: const WelcomeDesktopScreen(),
         ),
       ),
+      // Login / signup sit behind a one-time EULA gate (App Review 1.2).
+      // [TermsGate] renders the acceptance screen until the user accepts
+      // (persisted locally), then swaps in the real auth screen.
       GoRoute(
         path: AppRoutes.login,
-        builder: (_, _) => WBAdaptiveScreen(
-          mobile: const LoginScreen(),
-          desktop: const LoginDesktopScreen(),
+        builder: (_, _) => TermsGate(
+          child: WBAdaptiveScreen(
+            mobile: const LoginScreen(),
+            desktop: const LoginDesktopScreen(),
+          ),
         ),
       ),
       GoRoute(
         path: AppRoutes.signup,
-        builder: (_, _) => WBAdaptiveScreen(
-          mobile: const SignupScreen(),
-          desktop: const SignupDesktopScreen(),
+        builder: (_, _) => TermsGate(
+          child: WBAdaptiveScreen(
+            mobile: const SignupScreen(),
+            desktop: const SignupDesktopScreen(),
+          ),
         ),
       ),
       GoRoute(
@@ -604,6 +613,10 @@ GoRouter buildRouter() {
         ),
       ),
       GoRoute(
+        path: AppRoutes.blockedUsers,
+        builder: (_, _) => const BlockedUsersScreen(),
+      ),
+      GoRoute(
         path: AppRoutes.dietary,
         builder: (_, _) => WBAdaptiveScreen(
           mobile: const DietaryPreferencesScreen(),
@@ -762,6 +775,7 @@ GoRouter buildRouter() {
             kind: ChatContextKind.rider,
             orderId: state.uri.queryParameters['orderId'],
             title: state.uri.queryParameters['title'],
+            counterpartId: state.uri.queryParameters['counterpartId'],
           ),
           desktop: ChatDesktopScreen(
             kind: ChatContextKind.rider,
