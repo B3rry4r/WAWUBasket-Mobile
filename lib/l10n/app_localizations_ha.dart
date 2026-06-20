@@ -270,7 +270,7 @@ class AppLocalizationsHa extends AppLocalizations {
   String get otpTitle => 'Kana da lambar!';
 
   @override
-  String get otpSubtitle => 'Duba WhatsApp ɗinka. Gajeren ne.';
+  String get otpSubtitle => 'Duba imel ɗinka don samun lambar.';
 
   @override
   String get otpEditNumber => 'Gyara lamba';

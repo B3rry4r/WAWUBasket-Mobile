@@ -261,7 +261,7 @@ class AppLocalizationsAm extends AppLocalizations {
   String get otpTitle => 'ኮድ አለዎት!';
 
   @override
-  String get otpSubtitle => 'WhatsAppዎን ይፈትሹ። አጭር ነው።';
+  String get otpSubtitle => 'ኮዱን ለማግኘት ኢሜይልዎን ይፈትሹ።';
 
   @override
   String get otpEditNumber => 'ቁጥር አርትዕ';

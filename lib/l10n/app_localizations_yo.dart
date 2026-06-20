@@ -269,7 +269,7 @@ class AppLocalizationsYo extends AppLocalizations {
   String get otpTitle => 'O ní kóòdù!';
 
   @override
-  String get otpSubtitle => 'Ṣàyẹ̀wò WhatsApp rẹ. Kóòdù kúkurú ni.';
+  String get otpSubtitle => 'Ṣàyẹ̀wò ìmẹ́lì rẹ fún kóòdù náà.';
 
   @override
   String get otpEditNumber => 'Àtúnṣe nọ́mbà';

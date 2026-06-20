@@ -271,7 +271,7 @@ class AppLocalizationsTw extends AppLocalizations {
   String get otpTitle => 'Koodu wɔ wo ho!';
 
   @override
-  String get otpSubtitle => 'Hwɛ wo WhatsApp. Ɛteɛ no ketewa.';
+  String get otpSubtitle => 'Hwɛ wo email so na hwehwɛ koodu no.';
 
   @override
   String get otpEditNumber => 'Sesa nɔma';

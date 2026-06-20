@@ -74,12 +74,6 @@ class _OtpDesktopScreenState extends State<OtpDesktopScreen>
     });
   }
 
-  String get _masked {
-    final p = widget.phone;
-    if (p.length < 7) return p;
-    return '${p.substring(0, p.length - 4)}•••${p.substring(p.length - 1)}';
-  }
-
   Future<void> _verify() async {
     if (_code.text.length != 6 || _busy) return;
     setState(() => _busy = true);
@@ -147,7 +141,6 @@ class _OtpDesktopScreenState extends State<OtpDesktopScreen>
               SizedBox(
                 width: 520,
                 child: _FormColumn(
-                  masked: _masked,
                   flow: widget.flow,
                   code: _code,
                   focus: _focus,
@@ -207,7 +200,6 @@ class _BrandPanel extends StatelessWidget {
 /// readable width and vertically centered.
 class _FormColumn extends StatelessWidget {
   const _FormColumn({
-    required this.masked,
     required this.flow,
     required this.code,
     required this.focus,
@@ -220,7 +212,6 @@ class _FormColumn extends StatelessWidget {
     required this.onFocusBoxes,
   });
 
-  final String masked;
   final String flow;
   final TextEditingController code;
   final FocusNode focus;
@@ -255,23 +246,11 @@ class _FormColumn extends StatelessWidget {
               const SizedBox(height: WBSpacing.xl),
               Text(context.l10n.otpTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm + 2),
-              RichText(
-                text: TextSpan(
-                  style: WBTypography.body.copyWith(
-                    color: WBColors.fgSecondary,
-                    fontSize: 15,
-                  ),
-                  children: [
-                    TextSpan(text: '${context.l10n.otpSubtitle} '),
-                    TextSpan(
-                      text: masked,
-                      style: const TextStyle(
-                        color: WBColors.fgHeader,
-                        fontWeight: FontWeight.w500,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ],
+              Text(
+                context.l10n.otpSubtitle,
+                style: WBTypography.body.copyWith(
+                  color: WBColors.fgSecondary,
+                  fontSize: 15,
                 ),
               ),
               const SizedBox(height: WBSpacing.sm),

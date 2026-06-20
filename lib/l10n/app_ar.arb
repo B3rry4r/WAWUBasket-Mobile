@@ -82,7 +82,7 @@
   "signupErrorPassword": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
   "signupErrorTerms": "اقبل الشروط للمتابعة.",
   "otpTitle": "وصلك رمز!",
-  "otpSubtitle": "تحقق من واتساب. إنه قصير.",
+  "otpSubtitle": "تحقق من بريدك الإلكتروني للحصول على الرمز.",
   "otpEditNumber": "تعديل الرقم",
   "otpResend": "إعادة إرسال الرمز",
   "otpVerifyButton": "تحقق وادخل",

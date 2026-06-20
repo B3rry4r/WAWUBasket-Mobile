@@ -71,12 +71,6 @@ class _OtpScreenState extends State<OtpScreen>
     });
   }
 
-  String get _masked {
-    final p = widget.phone;
-    if (p.length < 7) return p;
-    return '${p.substring(0, p.length - 4)}•••${p.substring(p.length - 1)}';
-  }
-
   Future<void> _verify() async {
     if (_code.text.length != 6 || _busy) return;
     setState(() => _busy = true);
@@ -151,24 +145,11 @@ class _OtpScreenState extends State<OtpScreen>
               const SizedBox(height: WBSpacing.xl),
               Text(context.l10n.otpTitle, style: WBTypography.hero),
               const SizedBox(height: WBSpacing.sm + 2),
-              RichText(
-                text: TextSpan(
-                  style: WBTypography.body.copyWith(
-                    color: WBColors.fgSecondary,
-                    fontSize: 15,
-                  ),
-                  children: [
-                    TextSpan(
-                        text: '${context.l10n.otpSubtitle} '),
-                    TextSpan(
-                      text: _masked,
-                      style: const TextStyle(
-                        color: WBColors.fgHeader,
-                        fontWeight: FontWeight.w500,
-                        fontFeatures: [FontFeature.tabularFigures()],
-                      ),
-                    ),
-                  ],
+              Text(
+                context.l10n.otpSubtitle,
+                style: WBTypography.body.copyWith(
+                  color: WBColors.fgSecondary,
+                  fontSize: 15,
                 ),
               ),
               const SizedBox(height: WBSpacing.sm),

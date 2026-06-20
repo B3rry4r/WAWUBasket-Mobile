@@ -272,7 +272,7 @@ class AppLocalizationsRw extends AppLocalizations {
   String get otpTitle => 'Ufite kode!';
 
   @override
-  String get otpSubtitle => 'Reba WhatsApp yawe. Ni ngufi.';
+  String get otpSubtitle => 'Reba imeyili yawe kugira ubone kode.';
 
   @override
   String get otpEditNumber => 'Hindura nimero';

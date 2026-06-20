@@ -267,7 +267,7 @@ class AppLocalizationsEe extends AppLocalizations {
   String get otpTitle => 'Kpe le asiwò!';
 
   @override
-  String get otpSubtitle => 'Kpɔ wò WhatsApp. Edidi o.';
+  String get otpSubtitle => 'Kpɔ wò e-mail be nàkpɔ koudu la.';
 
   @override
   String get otpEditNumber => 'Trɔ xexlẽme';
