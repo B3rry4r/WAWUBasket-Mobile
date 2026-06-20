@@ -82,7 +82,7 @@
   "signupErrorPassword": "የምስጢር ቃሉ ቢያንስ 8 ቁምፊዎች ሊኖረው ይገባል።",
   "signupErrorTerms": "ለመቀጠል ውሎቹን ይቀበሉ።",
   "otpTitle": "ኮድ አለዎት!",
-  "otpSubtitle": "WhatsAppዎን ይፈትሹ። አጭር ነው።",
+  "otpSubtitle": "ኮዱን ለማግኘት ኢሜይልዎን ይፈትሹ።",
   "otpEditNumber": "ቁጥር አርትዕ",
   "otpResend": "ኮድ እንደገና ላክ",
   "otpVerifyButton": "አረጋግጥ ና ግባ",

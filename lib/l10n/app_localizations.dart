@@ -625,7 +625,7 @@ abstract class AppLocalizations {
   /// No description provided for @otpSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Check your WhatsApp. It\'s a short one.'**
+  /// **'Check your email for the code.'**
   String get otpSubtitle;
 
   /// No description provided for @otpEditNumber.

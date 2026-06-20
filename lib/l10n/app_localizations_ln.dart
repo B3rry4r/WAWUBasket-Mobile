@@ -270,7 +270,7 @@ class AppLocalizationsLn extends AppLocalizations {
   String get otpTitle => 'Ozali na kode!';
 
   @override
-  String get otpSubtitle => 'Talá WhatsApp na yo. Ezali mokuse.';
+  String get otpSubtitle => 'Talá e-mail na yo mpo na koba.';
 
   @override
   String get otpEditNumber => 'Bongolá nimero';

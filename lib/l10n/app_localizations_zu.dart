@@ -271,7 +271,7 @@ class AppLocalizationsZu extends AppLocalizations {
   String get otpTitle => 'Unekhodi!';
 
   @override
-  String get otpSubtitle => 'Hlola i-WhatsApp yakho. Imfishane.';
+  String get otpSubtitle => 'Hlola i-imeyili yakho ukuze uthole ikhodi.';
 
   @override
   String get otpEditNumber => 'Hlela inombolo';

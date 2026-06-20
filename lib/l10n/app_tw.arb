@@ -82,7 +82,7 @@
   "signupErrorPassword": "Password fata sɛ ɛwɔ characters 8 anaa soro.",
   "signupErrorTerms": "Tua Ɔkwan so Nsɛm no sɛ wotoa so.",
   "otpTitle": "Koodu wɔ wo ho!",
-  "otpSubtitle": "Hwɛ wo WhatsApp. Ɛteɛ no ketewa.",
+  "otpSubtitle": "Hwɛ wo email so na hwehwɛ koodu no.",
   "otpEditNumber": "Sesa nɔma",
   "otpResend": "Soma koodu bio",
   "otpVerifyButton": "Sɔ mu na kɔ mu",

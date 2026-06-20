@@ -265,7 +265,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get otpTitle => 'وصلك رمز!';
 
   @override
-  String get otpSubtitle => 'تحقق من واتساب. إنه قصير.';
+  String get otpSubtitle => 'تحقق من بريدك الإلكتروني للحصول على الرمز.';
 
   @override
   String get otpEditNumber => 'تعديل الرقم';

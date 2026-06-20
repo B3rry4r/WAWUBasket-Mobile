@@ -268,7 +268,7 @@ class AppLocalizationsIg extends AppLocalizations {
   String get otpTitle => 'I nwere koodu!';
 
   @override
-  String get otpSubtitle => 'Lelee WhatsApp gị. Ọ dị mkpụmkpụ.';
+  String get otpSubtitle => 'Lelee email gị maka koodu ahụ.';
 
   @override
   String get otpEditNumber => 'Dezie ọnụọgụ';

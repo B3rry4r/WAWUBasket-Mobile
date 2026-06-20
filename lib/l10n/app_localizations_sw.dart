@@ -267,7 +267,7 @@ class AppLocalizationsSw extends AppLocalizations {
   String get otpTitle => 'Una nambari!';
 
   @override
-  String get otpSubtitle => 'Angalia WhatsApp yako. Ni fupi.';
+  String get otpSubtitle => 'Angalia barua pepe yako kupata msimbo.';
 
   @override
   String get otpEditNumber => 'Hariri nambari';

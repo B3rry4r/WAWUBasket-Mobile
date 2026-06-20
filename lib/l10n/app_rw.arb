@@ -82,7 +82,7 @@
   "signupErrorPassword": "Ijambobanga rigomba kugira inyuguti 8 cyangwa zirenga.",
   "signupErrorTerms": "Emera Amabwiriza kugira ngo ukomeze.",
   "otpTitle": "Ufite kode!",
-  "otpSubtitle": "Reba WhatsApp yawe. Ni ngufi.",
+  "otpSubtitle": "Reba imeyili yawe kugira ubone kode.",
   "otpEditNumber": "Hindura nimero",
   "otpResend": "Ongera wohereze kode",
   "otpVerifyButton": "Emeza maze winjire",

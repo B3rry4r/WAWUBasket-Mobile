@@ -267,7 +267,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get otpTitle => 'You\'ve got a code!';
 
   @override
-  String get otpSubtitle => 'Check your WhatsApp. It\'s a short one.';
+  String get otpSubtitle => 'Check your email for the code.';
 
   @override
   String get otpEditNumber => 'Edit number';

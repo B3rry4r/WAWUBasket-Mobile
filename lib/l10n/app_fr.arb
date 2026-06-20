@@ -82,7 +82,7 @@
   "signupErrorPassword": "Le mot de passe doit comporter au moins 8 caractères.",
   "signupErrorTerms": "Acceptez les Conditions pour continuer.",
   "otpTitle": "Vous avez un code !",
-  "otpSubtitle": "Vérifiez votre WhatsApp. C'est court.",
+  "otpSubtitle": "Vérifiez votre e-mail pour le code.",
   "otpEditNumber": "Modifier le numéro",
   "otpResend": "Renvoyer le code",
   "otpVerifyButton": "Vérifier et entrer",

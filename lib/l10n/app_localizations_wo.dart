@@ -269,7 +269,7 @@ class AppLocalizationsWo extends AppLocalizations {
   String get otpTitle => 'Am nga kodd!';
 
   @override
-  String get otpSubtitle => 'Xool sa WhatsApp. Gàtt na.';
+  String get otpSubtitle => 'Xool sa email ngir am koodu bi.';
 
   @override
   String get otpEditNumber => 'Soppi nimero';
