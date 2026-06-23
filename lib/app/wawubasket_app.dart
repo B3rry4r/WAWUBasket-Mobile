@@ -13,6 +13,7 @@ import '../core/network/token_store.dart';
 import '../core/router/app_router.dart';
 import '../core/router/app_routes.dart';
 import '../core/theme/wb_theme_exports.dart';
+import '../features/auth/application/role_controller.dart';
 import '../features/moderation/application/blocked_users_controller.dart';
 import '../l10n/app_localizations.dart';
 
@@ -50,6 +51,13 @@ class _WAWUBasketAppState extends ConsumerState<WAWUBasketApp> {
     ApiClient.instance.onSessionExpired = () {
       _router.go(AppRoutes.login);
     };
+
+    // WAWU ID is the single session token (no Basket activeRole claim), so the
+    // API derives the active role from the X-Active-Role header. Feed it the
+    // current role; switching roles is then a local change that every
+    // subsequent request reflects automatically.
+    ApiClient.instance.activeRoleProvider =
+        () => RoleController.instance.role.name;
 
     // Hydrate the blocked-users set so the client-side content filters work
     // from first paint, then re-hydrate on login / clear on logout.

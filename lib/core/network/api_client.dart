@@ -39,6 +39,12 @@ class ApiClient {
   /// navigation back to the welcome/login screen.
   void Function()? onSessionExpired;
 
+  /// Supplies the active role for the `X-Active-Role` header. WAWU ID is the
+  /// single session token and carries no Basket activeRole claim, so the API
+  /// derives the active role from this header (validated server-side against the
+  /// user's approved roles). The app wires this to `RoleController.role.name`.
+  String Function()? activeRoleProvider;
+
   /// Guards against a stampede of concurrent refreshes.
   Future<bool>? _refreshing;
 
@@ -73,6 +79,10 @@ class ApiClient {
     final token = _tokens.accessToken;
     if (token != null && token.isNotEmpty) {
       options.headers['Authorization'] = 'Bearer $token';
+    }
+    final role = activeRoleProvider?.call();
+    if (role != null && role.isNotEmpty) {
+      options.headers['X-Active-Role'] = role;
     }
     handler.next(options);
   }
@@ -133,9 +143,14 @@ class ApiClient {
 
   /// Exchanges the refresh token for a fresh pair. Uses a bare Dio so it
   /// never recurses through this interceptor.
+  ///
+  /// Refresh targets WAWU ID — the identity authority that issues the session
+  /// token the app runs on. (Legacy un-migrated sessions on a Basket token are
+  /// the rare exception; their refresh will be rejected and they re-login,
+  /// which then takes the WAWU ID path.)
   Future<bool> _refresh() async {
     try {
-      final bare = Dio(BaseOptions(baseUrl: apiBaseUrl));
+      final bare = Dio(BaseOptions(baseUrl: wawuIdBaseUrl));
       final res = await bare.post<Map<String, dynamic>>(
         '/auth/refresh',
         data: {'refreshToken': _tokens.refreshToken},

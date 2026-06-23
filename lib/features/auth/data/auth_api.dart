@@ -78,7 +78,7 @@ class AuthApi {
       'password': password,
       'country': country,
     });
-    await _persistWawuThenExchange(res);
+    await _persist(res);
     // The sign-up screen gates on accepting the terms, so log that consent
     // against the new WAWU ID account for the ecosystem-wide ledger.
     await _recordPrivacyConsent(res);
@@ -89,7 +89,7 @@ class AuthApi {
   Future<void> verifySignup(String phone, String code) async {
     final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
-    await _persistWawuThenExchange(res);
+    await _persist(res);
   }
 
   // ─── Login (with organic WAWU ID migration) ──────────────────────────────
@@ -112,7 +112,7 @@ class AuthApi {
     try {
       final res = await _idPost('/auth/login',
           body: {'identifier': identifier, 'password': password});
-      await _persistWawuThenExchange(res);
+      await _persist(res);
       return;
     } on ApiException catch (e) {
       final notMigrated =
@@ -126,8 +126,9 @@ class AuthApi {
     // password) throws an ApiException that bubbles up to the UI unchanged.
     final basketRes = await _api.post('/auth/login',
         body: {'identifier': identifier, 'password': password});
-    // Persist the Basket tokens immediately so the session is live regardless
-    // of whether the WAWU ID mirror below succeeds.
+    // Persist the legacy Basket tokens so the session is live immediately (the
+    // Basket API still accepts them as a transition fallback) while we try to
+    // mirror the account into WAWU ID below.
     await _persist(basketRes);
 
     // Best-effort mirror into WAWU ID. The Basket login response carries only
@@ -141,7 +142,7 @@ class AuthApi {
       final email = _nonEmpty(profile?['email'] as String?) ??
           (identifier.contains('@') ? identifier : '');
 
-      await _idPost('/auth/register', body: {
+      final regRes = await _idPost('/auth/register', body: {
         'identifier': identifier,
         'fullName': fullName,
         'phone': phone,
@@ -149,12 +150,13 @@ class AuthApi {
         'password': password,
         'country': 'Nigeria',
       });
-      // The account is now mirrored into WAWU ID for next time. Keep the Basket
-      // session we already hold — do NOT switch to the WAWU ID tokens (the
-      // Basket API can't authenticate them). Next login takes the primary path.
+      // Mirror succeeded — switch the live session to the WAWU ID tokens so the
+      // app runs on the identity authority's token (the Basket API now accepts
+      // it on every route). Next login takes the primary path.
+      await _persist(regRes);
     } catch (_) {
-      // Mirror failed or needs OTP verification — the working Basket session
-      // stays; migration retries on the next login.
+      // Mirror failed or needs OTP verification — the legacy Basket session
+      // stays (still accepted as a fallback); migration retries on next login.
     }
   }
 
@@ -184,7 +186,7 @@ class AuthApi {
   Future<void> verifyOtp(String phone, String code) async {
     final res = await _idPost('/auth/otp/verify',
         body: {'phone': phone, 'code': code});
-    await _persistWawuThenExchange(res);
+    await _persist(res);
   }
 
   // ─── Password recovery ──────────────────────────────────────────────────
@@ -200,7 +202,7 @@ class AuthApi {
       'code': code,
       'newPassword': newPassword,
     });
-    await _persistWawuThenExchange(res);
+    await _persist(res);
   }
 
   Future<void> changePassword(
@@ -218,11 +220,25 @@ class AuthApi {
     return (res as List<dynamic>?) ?? const [];
   }
 
-  /// Switches the active role for the session — returns a fresh token pair
-  /// carrying the new `activeRole` claim.
+  /// Switches the active role for the session.
+  ///
+  /// With WAWU ID as the single session token there is no Basket token to
+  /// re-mint: the active role is conveyed per-request via the `X-Active-Role`
+  /// header (see [ApiClient], driven by [RoleController.role]). Callers set the
+  /// role locally right after this resolves.
+  ///
+  /// We still verify the role is approved against the server so an operator
+  /// login / switch into a role the user doesn't hold fails loudly here (the
+  /// operator login screens don't run a full role sync first). Customer is
+  /// always allowed. Throws [ApiException] when the role isn't approved.
   Future<void> switchRole(String role) async {
-    final res = await _api.post('/auth/role/switch', body: {'role': role});
-    await _persist(res);
+    if (role == 'customer') return;
+    final roles = await getRoles();
+    final approved = roles.any((e) =>
+        e is Map && e['role'] == role && e['status'] == 'approved');
+    if (!approved) {
+      throw ApiException('Your $role access is not approved yet.');
+    }
   }
 
   /// Server-side sign-out, then drop the local session.
@@ -254,20 +270,4 @@ class AuthApi {
     await _tokens.save(accessToken: access, refreshToken: refresh);
   }
 
-  /// Persist a WAWU ID session, then immediately exchange it for a Basket
-  /// session. WAWU ID tokens authenticate the identity, but the Basket API's
-  /// protected routes (and token refresh) need a Basket token carrying the
-  /// local user id + active role — so this is the session we actually run on.
-  Future<void> _persistWawuThenExchange(dynamic res) async {
-    await _persist(res); // WAWU ID tokens (used only for the exchange call)
-    await _exchangeForBasketSession();
-  }
-
-  /// POST /v1/auth/exchange with the just-persisted WAWU ID bearer token; the
-  /// Basket API resolves/links the local account and returns a Basket token
-  /// pair, which replaces the WAWU ID tokens as the live session.
-  Future<void> _exchangeForBasketSession() async {
-    final res = await _api.post('/auth/exchange');
-    await _persist(res);
-  }
 }
