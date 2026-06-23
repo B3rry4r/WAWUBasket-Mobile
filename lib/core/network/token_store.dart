@@ -31,6 +31,15 @@ class TokenStore {
   String? get refreshToken => _refresh;
   bool get hasSession => _access != null && _access!.isNotEmpty;
 
+  /// When the live session token was last (re)written. Used by [ApiClient] to
+  /// suppress a spurious "session expired" bounce in the brief window right
+  /// after sign-in, when the post-login burst of authed calls (role sync, push
+  /// token registration, the first home fetch) races the freshly minted token.
+  /// A transient 401 in that window must NOT tear down a session the user just
+  /// established — that is the "logged in, then bounced back to login" bug.
+  DateTime? _savedAt;
+  DateTime? get savedAt => _savedAt;
+
   Future<void> load() async {
     try {
       _access = await _storage.read(key: _kAccess);
@@ -48,6 +57,7 @@ class TokenStore {
     // Update in-memory first — navigation must not be blocked by storage.
     _access = accessToken;
     _refresh = refreshToken;
+    _savedAt = DateTime.now();
     tokenNotifier.value = accessToken;
     try {
       await _storage.write(key: _kAccess, value: accessToken);
@@ -60,6 +70,7 @@ class TokenStore {
   Future<void> clear() async {
     _access = null;
     _refresh = null;
+    _savedAt = null;
     tokenNotifier.value = null;
     try {
       await _storage.delete(key: _kAccess);

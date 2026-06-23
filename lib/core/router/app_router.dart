@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show Listenable, kIsWeb;
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+
+import '../network/token_store.dart';
 
 import '../../features/account/presentation/screens/about_screen.dart';
 import '../../features/account/presentation/screens/terms_screen.dart';
@@ -324,6 +326,15 @@ GoRouter buildRouter() {
     initialLocation: AppRoutes.splash,
     onException: _onRouterException,
     redirect: _authGuard,
+    // Re-run the guard whenever auth state changes — the active role / signed-in
+    // flag (role-select, sign-out) and the live session token (login, expiry).
+    // Without this the guard only fires on explicit navigations, so a genuine
+    // session expiry or a programmatic sign-out wouldn't re-gate the current
+    // screen.
+    refreshListenable: Listenable.merge([
+      RoleController.instance.notifier,
+      TokenStore.instance.tokenNotifier,
+    ]),
     routes: [
       // Onboarding & Auth (no shell)
       GoRoute(
