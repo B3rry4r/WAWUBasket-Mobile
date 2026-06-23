@@ -50,6 +50,25 @@ class ApiClient {
   /// as usual but never trigger [onSessionExpired].
   static const Duration _freshSessionGrace = Duration(seconds: 8);
 
+  /// Auth endpoints that must never trigger a refresh-and-retry: the
+  /// unauthenticated surfaces (login/signup/OTP/password-reset — a 401 is a
+  /// real credential error), the refresh endpoint itself (retrying recurses),
+  /// and exchange (a one-shot during login carrying the WAWU ID token, not the
+  /// Basket session). Every OTHER authenticated /auth/* call refreshes normally.
+  static bool _isNoRefreshPath(String path) {
+    const noRefresh = <String>[
+      '/auth/login',
+      '/auth/signup',
+      '/auth/refresh',
+      '/auth/exchange',
+      '/auth/phone/start',
+      '/auth/phone/verify',
+      '/auth/forgot-password',
+      '/auth/reset-password',
+    ];
+    return noRefresh.any(path.contains);
+  }
+
   void _onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final token = _tokens.accessToken;
     if (token != null && token.isNotEmpty) {
@@ -62,9 +81,16 @@ class ApiClient {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    final isAuthCall = err.requestOptions.path.contains('/auth/');
+    // Only the UNAUTHENTICATED auth surfaces are exempt from refresh-and-retry:
+    // a 401 there is a real credential error (or, for /auth/refresh, would
+    // recurse). Authenticated /auth/* endpoints — role switch, roles, logout,
+    // password — MUST refresh-and-retry like any other call. Treating every
+    // path containing "/auth/" as exempt was the bug behind "switch roles →
+    // unauthorized": once the 15-minute access token lapsed, /auth/role/switch
+    // 401'd and was never refreshed.
+    final noRefresh = _isNoRefreshPath(err.requestOptions.path);
     if (err.response?.statusCode != 401 ||
-        isAuthCall ||
+        noRefresh ||
         _tokens.refreshToken == null) {
       return handler.next(err);
     }
@@ -83,7 +109,13 @@ class ApiClient {
     final ok = await (_refreshing ??= _refresh());
     _refreshing = null;
     if (!ok) {
-      if (!isFreshSession) {
+      // Only bounce to login when the session was genuinely invalidated — i.e.
+      // _refresh cleared the tokens after a definitive rejection (401/403). A
+      // transient network/timeout/5xx during refresh leaves the tokens intact;
+      // we surface the original error but keep the user signed in, so a blip
+      // doesn't log them out and drop them to guest on the next launch.
+      final sessionLost = !_tokens.hasSession;
+      if (sessionLost && !isFreshSession) {
         onSessionExpired?.call();
       }
       return handler.next(err);
@@ -108,14 +140,33 @@ class ApiClient {
         '/auth/refresh',
         data: {'refreshToken': _tokens.refreshToken},
       );
-      final data = res.data!;
-      await _tokens.save(
-        accessToken: data['accessToken'] as String,
-        refreshToken: data['refreshToken'] as String,
-      );
+      // Accept both the top-level shape and a { data: {...} } envelope so a
+      // future response-shape change can't silently fail to parse and wipe the
+      // session.
+      final body = res.data!;
+      final payload = body['data'] is Map<String, dynamic>
+          ? body['data'] as Map<String, dynamic>
+          : body;
+      final access = payload['accessToken'];
+      final refresh = payload['refreshToken'];
+      if (access is! String || access.isEmpty || refresh is! String || refresh.isEmpty) {
+        // Malformed success response — don't tear down a possibly-valid session.
+        return false;
+      }
+      await _tokens.save(accessToken: access, refreshToken: refresh);
       return true;
+    } on DioException catch (e) {
+      // ONLY a definitive rejection (the server says the refresh token itself
+      // is invalid) should clear the session. A network error, timeout, or 5xx
+      // is transient — keep the tokens so the next request or app launch can
+      // recover instead of logging the user out and dropping them to guest.
+      final status = e.response?.statusCode;
+      if (status == 401 || status == 403) {
+        await _tokens.clear();
+      }
+      return false;
     } catch (_) {
-      await _tokens.clear();
+      // Unexpected (non-HTTP) error — keep the session; treat as transient.
       return false;
     }
   }
