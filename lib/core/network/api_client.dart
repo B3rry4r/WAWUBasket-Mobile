@@ -42,6 +42,14 @@ class ApiClient {
   /// Guards against a stampede of concurrent refreshes.
   Future<bool>? _refreshing;
 
+  /// How long after a session is (re)minted we treat a 401 as transient rather
+  /// than a real expiry. Right after sign-in, several authed calls fire almost
+  /// at once (role sync, push-token registration, the first home fetch). If any
+  /// races the freshly minted token and 401s, bouncing the user to /login would
+  /// undo the login they just completed. Within this window we refresh-and-retry
+  /// as usual but never trigger [onSessionExpired].
+  static const Duration _freshSessionGrace = Duration(seconds: 8);
+
   void _onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final token = _tokens.accessToken;
     if (token != null && token.isNotEmpty) {
@@ -61,11 +69,23 @@ class ApiClient {
       return handler.next(err);
     }
 
+    // Capture session freshness BEFORE attempting the refresh: a failed
+    // refresh clears the token (and its timestamp), so this must be read first.
+    // A 401 in the post-login window is a race against the just-minted token,
+    // not a genuine expiry — without this guard a best-effort post-login call
+    // (e.g. push-token registration) could yank the user straight back to
+    // /login, which is the "logged in, then bounced to login" bug.
+    final savedAt = _tokens.savedAt;
+    final isFreshSession = savedAt != null &&
+        DateTime.now().difference(savedAt) < _freshSessionGrace;
+
     // Refresh once (shared across concurrent 401s), then replay the request.
     final ok = await (_refreshing ??= _refresh());
     _refreshing = null;
     if (!ok) {
-      onSessionExpired?.call();
+      if (!isFreshSession) {
+        onSessionExpired?.call();
+      }
       return handler.next(err);
     }
     try {
