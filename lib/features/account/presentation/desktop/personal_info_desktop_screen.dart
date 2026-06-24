@@ -35,6 +35,8 @@ class _PersonalInfoDesktopScreenState extends State<PersonalInfoDesktopScreen> {
   bool _busy = false;
   bool _uploadingAvatar = false;
   String? _avatarUrl;
+  // Canonical lowercase 'male' | 'female', or null when unset.
+  String? _gender;
 
   String _nameInitials() {
     final parts = _name.text.trim().split(' ');
@@ -99,6 +101,7 @@ class _PersonalInfoDesktopScreenState extends State<PersonalInfoDesktopScreen> {
     _email.text = p.email;
     _phone.text = p.phone;
     _avatarUrl = p.avatarUrl;
+    _gender = p.gender;
   }
 
   Future<void> _save() async {
@@ -111,6 +114,7 @@ class _PersonalInfoDesktopScreenState extends State<PersonalInfoDesktopScreen> {
       await ProfileController.instance.update(
         fullName: _name.text.trim(),
         email: _email.text.trim(),
+        gender: _gender,
       );
       if (!mounted) return;
       wbShowSnack(context, context.l10n.personalInfoSaved);
@@ -243,6 +247,13 @@ class _PersonalInfoDesktopScreenState extends State<PersonalInfoDesktopScreen> {
               controller: _email,
               leadingIcon: WBIconName.message,
               keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: WBSpacing.md),
+            // TODO(i18n): key=genderLabel (Gender)
+            WBGenderSelector(
+              label: 'Gender',
+              value: _gender,
+              onChanged: (g) => setState(() => _gender = g),
             ),
             const SizedBox(height: WBSpacing.md),
             WBInput(

@@ -32,6 +32,8 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   Country? _country;
+  // Canonical lowercase 'male' | 'female', or null when not chosen (optional).
+  String? _gender;
   // Defaults to false — explicit terms acceptance is required before submit
   // (App Review Guideline 1.2).
   bool _agreed = false;
@@ -82,6 +84,7 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
         email: _email.text.trim(),
         password: _password.text,
         country: _country?.name ?? 'Nigeria',
+        gender: _gender,
       );
       // WAWU ID returns a live session from /auth/register, so the account is
       // ready. Mirror the login/OTP post-auth sequence before routing.
@@ -189,6 +192,13 @@ class _SignupDesktopScreenState extends State<SignupDesktopScreen> {
           controller: _email,
           keyboardType: TextInputType.emailAddress,
           leadingIcon: WBIconName.user,
+        ),
+        const SizedBox(height: WBSpacing.sm + 6),
+        // TODO(i18n): key=genderLabel (Gender (optional))
+        WBGenderSelector(
+          label: 'Gender (optional)',
+          value: _gender,
+          onChanged: (g) => setState(() => _gender = g),
         ),
         const SizedBox(height: WBSpacing.sm + 6),
         WBInput(

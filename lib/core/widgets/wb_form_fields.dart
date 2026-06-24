@@ -650,7 +650,9 @@ class _WBCityFieldState extends State<WBCityField> {
   void didUpdateWidget(WBCityField old) {
     super.didUpdateWidget(old);
     if (old.countryName != widget.countryName ||
-        old.stateName != widget.stateName) _load();
+        old.stateName != widget.stateName) {
+      _load();
+    }
   }
 
   @override
@@ -811,6 +813,108 @@ class _WBCountryFieldState extends State<WBCountryField> {
               const WBIcon(WBIconName.chevronDown, size: 14,
                   color: WBColors.fgPlaceholder),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A two-option Male / Female selector styled to match [WBInput] (52px pills,
+/// soft fill, dark selected state). [value] is the canonical lowercase
+/// 'male' | 'female', or null when nothing is picked. Tapping the active option
+/// again clears it back to null, so gender stays optional everywhere.
+class WBGenderSelector extends StatelessWidget {
+  const WBGenderSelector({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    this.label,
+  });
+
+  /// Canonical lowercase 'male' | 'female', or null.
+  final String? value;
+  final ValueChanged<String?> onChanged;
+  final String? label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label != null) ...[
+          Text(
+            label!,
+            style: WBTypography.caption.copyWith(
+              color: WBColors.fgSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 6),
+        ],
+        Row(
+          children: [
+            Expanded(
+              child: _option(
+                label: 'Male',
+                icon: WBIconName.user,
+                selected: value == 'male',
+                onTap: () => onChanged(value == 'male' ? null : 'male'),
+              ),
+            ),
+            const SizedBox(width: WBSpacing.sm + 2),
+            Expanded(
+              child: _option(
+                label: 'Female',
+                icon: WBIconName.user,
+                selected: value == 'female',
+                onTap: () => onChanged(value == 'female' ? null : 'female'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _option({
+    required String label,
+    required WBIconName icon,
+    required bool selected,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: WBMotion.base,
+        curve: WBMotion.easeSoft,
+        height: 52,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: selected ? WBColors.surfaceDark : WBColors.surfaceInput,
+          border: Border.all(
+            color: selected ? WBColors.surfaceDark : Colors.transparent,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(WBRadius.input),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            WBIcon(
+              icon,
+              size: 18,
+              color: selected ? Colors.white : WBColors.fgPlaceholder,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: WBTypography.body.copyWith(
+                color: selected ? Colors.white : WBColors.fgHeader,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
