@@ -9,6 +9,7 @@ class UserProfile {
     this.fullName = '',
     this.email = '',
     this.phone = '',
+    this.gender,
     this.avatarUrl,
     this.dateOfBirth,
     // Role-specific display names (populated from the nested role profile
@@ -25,6 +26,9 @@ class UserProfile {
   final String fullName;
   final String email;
   final String phone;
+  /// Canonical lowercase 'male' | 'female' from WAWU-ID (mirrored by the Basket
+  /// API on /profile), or null when the user hasn't set it.
+  final String? gender;
   final String? avatarUrl;
   final DateTime? dateOfBirth;
 
@@ -47,6 +51,7 @@ class UserProfile {
       fullName: (j['fullName'] ?? '').toString(),
       email: (j['email'] ?? '').toString(),
       phone: (j['phone'] ?? '').toString(),
+      gender: _normGender(j['gender']),
       avatarUrl: j['avatarUrl']?.toString(),
       dateOfBirth: DateTime.tryParse('${j['dateOfBirth'] ?? ''}'),
       vendorBusinessName: pv != null ? '${pv['businessName'] ?? ''}' : null,
@@ -57,6 +62,16 @@ class UserProfile {
       driverDisplayName: pd != null ? '${pd['displayName'] ?? ''}' : null,
       driverPlateNumber: pd != null ? (pd['plateNumber'] as String?) : null,
     );
+  }
+
+  /// Maps any backend gender spelling to the canonical lowercase 'male'/'female',
+  /// or null. Mirrors WAWU-ID's normalisation so the UI only ever sees the two
+  /// canonical values.
+  static String? _normGender(dynamic v) {
+    final s = v?.toString().trim().toLowerCase();
+    if (s == 'male' || s == 'm') return 'male';
+    if (s == 'female' || s == 'f') return 'female';
+    return null;
   }
 }
 
@@ -179,8 +194,15 @@ class ProfileController {
   Future<void> update({
     required String fullName,
     required String email,
+    String? gender,
   }) async {
-    await _api.update({'fullName': fullName, 'email': email});
+    await _api.update({
+      'fullName': fullName,
+      'email': email,
+      // Only send gender when set to a canonical value; the Basket API mirrors it
+      // locally and forwards it to WAWU-ID (the identity authority).
+      if (gender == 'male' || gender == 'female') 'gender': gender,
+    });
     await load();
   }
 }

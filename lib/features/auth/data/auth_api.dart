@@ -70,6 +70,7 @@ class AuthApi {
     required String email,
     required String password,
     required String country,
+    String? gender,
   }) async {
     final res = await _idPost('/auth/register', body: {
       'fullName': fullName,
@@ -77,6 +78,9 @@ class AuthApi {
       'email': email,
       'password': password,
       'country': country,
+      // Canonical lowercase 'male'|'female'; WAWU-ID stores it (nullable), so
+      // only send it when the user actually picked one.
+      if (gender != null && gender.isNotEmpty) 'gender': gender,
     });
     await _persist(res);
     // The sign-up screen gates on accepting the terms, so log that consent
