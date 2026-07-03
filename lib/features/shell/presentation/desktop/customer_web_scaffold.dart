@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/responsive/wb_responsive_exports.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_home_app_bar.dart';
@@ -78,7 +79,12 @@ class CustomerWebScaffold extends ConsumerWidget {
               WBHomeAppBarButton(
                 icon: WBIconName.basket,
                 badgeCount: cartCount,
-                onTap: () => context.push(AppRoutes.cart),
+                onTap: () {
+                  if (GuestModeController.instance
+                      .requireAccount(context, action: 'view your basket')) {
+                    context.push(AppRoutes.cart);
+                  }
+                },
               ),
               ValueListenableBuilder<int>(
                 valueListenable: NotificationsController.instance.unreadCount,

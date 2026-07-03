@@ -310,6 +310,15 @@ String? _authGuard(BuildContext context, GoRouterState state) {
   final loc = state.matchedLocation;
   final webGate = _webMobileOnlyGate(loc);
   if (webGate != null) return webGate;
+  // Auth-required customer routes (cart, checkout) stay in the browse nav but
+  // need a real session. Safety net so a guest reaching them via deep link or a
+  // missed tap is sent to login instead of hitting a 401 "unauthenticated".
+  const authedCustomer = [AppRoutes.cart, AppRoutes.checkout];
+  if (authedCustomer.any((r) => loc == r || loc.startsWith('$r/'))) {
+    if (!(RoleController.instance.signedIn && TokenStore.instance.hasSession)) {
+      return AppRoutes.login;
+    }
+  }
   if (_isPublicRoute(loc)) return null;
   final required = _requiredRoleFor(loc);
   if (required == null) return null;

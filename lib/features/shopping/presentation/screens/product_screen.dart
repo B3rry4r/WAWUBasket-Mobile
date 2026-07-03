@@ -430,7 +430,12 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                   ),
                   const SizedBox(width: 12),
                   GestureDetector(
-                    onTap: () => context.push(AppRoutes.cart),
+                    onTap: () {
+                      if (GuestModeController.instance
+                          .requireAccount(context, action: 'view your basket')) {
+                        context.push(AppRoutes.cart);
+                      }
+                    },
                     behavior: HitTestBehavior.opaque,
                     child: Stack(
                       clipBehavior: Clip.none,
