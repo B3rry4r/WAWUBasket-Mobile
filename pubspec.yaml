@@ -1,7 +1,7 @@
 name: wawubasket
 description: "WAWUBasket, a calm, minimal, premium marketplace for orders and delivery."
 publish_to: 'none'
-version: 1.0.2+14
+version: 1.0.2+15
 
 environment:
   sdk: ^3.11.5
