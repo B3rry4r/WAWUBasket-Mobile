@@ -12,7 +12,7 @@ import '../../data/auth_api.dart';
 
 /// Desktop-web layout for the forgot-password screen. Re-lays-out
 /// [ForgotPasswordScreen] into a split brand/form panel without changing any
-/// of its behaviour: same controller, same SMS/email method toggle, same
+/// of its behaviour: same controller, same code-only recovery, same
 /// [AuthApi.forgotPassword] call, same OTP push on success.
 class ForgotPasswordDesktopScreen extends StatefulWidget {
   const ForgotPasswordDesktopScreen({super.key});
@@ -25,7 +25,6 @@ class ForgotPasswordDesktopScreen extends StatefulWidget {
 class _ForgotPasswordDesktopScreenState
     extends State<ForgotPasswordDesktopScreen> {
   final _identifier = TextEditingController();
-  String _method = 'sms';
   bool _busy = false;
 
   @override
@@ -42,7 +41,9 @@ class _ForgotPasswordDesktopScreenState
     setState(() => _busy = true);
     try {
       final id = _identifier.text.trim();
-      await AuthApi.instance.forgotPassword(id, method: _method);
+      // Always the code path (OTP delivered by email until WhatsApp is live).
+      // Never the reset-LINK path — recovery completes on the OTP screen.
+      await AuthApi.instance.forgotPassword(id, method: 'sms');
       if (!mounted) return;
       context.push('${AppRoutes.otp}?phone=${Uri.encodeComponent(id)}&flow=reset');
     } on ApiException catch (e) {
@@ -108,37 +109,6 @@ class _ForgotPasswordDesktopScreenState
           label: context.l10n.loginPhoneLabel,
           controller: _identifier,
           leadingIcon: WBIconName.user,
-        ),
-        const SizedBox(height: WBSpacing.lg + 4),
-        Text(
-          'SEND CODE VIA',
-          style: WBTypography.label.copyWith(
-            fontWeight: FontWeight.w600,
-            color: WBColors.fgPlaceholder,
-            letterSpacing: 0.66,
-          ),
-        ),
-        const SizedBox(height: WBSpacing.sm + 2),
-        Row(
-          children: [
-            Expanded(
-              child: _MethodCard(
-                label: context.l10n.forgotSmsLabel,
-                sub: context.l10n.forgotSmsSub,
-                active: _method == 'sms',
-                onTap: () => setState(() => _method = 'sms'),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _MethodCard(
-                label: context.l10n.forgotEmailLabel,
-                sub: context.l10n.forgotEmailSub,
-                active: _method == 'email',
-                onTap: () => setState(() => _method = 'email'),
-              ),
-            ),
-          ],
         ),
         const SizedBox(height: WBSpacing.xl),
         WBButton(
@@ -206,54 +176,3 @@ class _BrandPanel extends StatelessWidget {
   }
 }
 
-class _MethodCard extends StatelessWidget {
-  const _MethodCard({
-    required this.label,
-    required this.sub,
-    required this.active,
-    required this.onTap,
-  });
-
-  final String label;
-  final String sub;
-  final bool active;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: active ? WBColors.bgPrimary : WBColors.bgSecondary,
-          borderRadius: BorderRadius.circular(WBRadius.card),
-          border: Border.all(
-            color: active ? WBColors.fgHeader : Colors.transparent,
-            width: 1.5,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: WBTypography.secondary.copyWith(
-                color: WBColors.fgHeader,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              sub,
-              style: WBTypography.caption.copyWith(
-                color: WBColors.fgSecondary,
-                fontSize: 11,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
