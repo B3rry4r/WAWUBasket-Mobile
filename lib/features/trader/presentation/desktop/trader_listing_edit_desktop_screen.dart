@@ -53,6 +53,9 @@ class _TraderListingEditDesktopScreenState
   late Corridor _destination;
   late DateTime _harvest;
   String? _imageUrl;
+  // Durable object key for a newly picked photo (publicUrl is a 7-day
+  // presigned URL for preview only and must not be persisted).
+  String? _imageKey;
   bool _uploadingPhoto = false;
   String _category = '';
   List<_CategoryOption> _catOptions = [];
@@ -115,7 +118,10 @@ class _TraderListingEditDesktopScreenState
           .pickAndUpload(folder: UploadFolder.exportListings);
       if (!mounted) return;
       setState(() {
-        if (res != null) _imageUrl = res.publicUrl;
+        if (res != null) {
+          _imageUrl = res.publicUrl;
+          _imageKey = res.key;
+        }
         _uploadingPhoto = false;
       });
     } catch (_) {
@@ -164,10 +170,10 @@ class _TraderListingEditDesktopScreenState
       category: _category.isNotEmpty ? _category : null,
     );
     if (_isEdit) {
-      TradeController.instance.update(updated);
+      TradeController.instance.update(updated, imageKey: _imageKey);
       wbShowSnack(context, context.l10n.traderListingUpdated(updated.produce));
     } else {
-      TradeController.instance.add(updated);
+      TradeController.instance.add(updated, imageKey: _imageKey);
       wbShowSnack(context, context.l10n.traderListingPosted(updated.produce));
     }
     context.pop();

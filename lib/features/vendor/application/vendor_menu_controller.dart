@@ -45,6 +45,20 @@ int _money(dynamic v) {
   return int.tryParse(v.toString()) ?? 0;
 }
 
+/// Serialize modifier groups into the backend catalog DTO shape:
+/// `[{ name, required, options: [{ label, priceDeltaNaira }] }]`.
+List<Map<String, dynamic>> _groupsJson(List<ModifierGroup> groups) => [
+      for (final g in groups)
+        {
+          'name': g.name,
+          'required': g.required,
+          'options': [
+            for (final o in g.options)
+              {'label': o.label, 'priceDeltaNaira': o.priceDeltaNaira},
+          ],
+        },
+    ];
+
 List<ModifierGroup> _parseGroups(dynamic raw) {
   if (raw is! List) return const [];
   return [
@@ -275,6 +289,7 @@ class VendorMenuController {
         if (prepMins != null) 'prepMins': prepMins,
         if (imageUrl != null) 'images': [imageUrl],
         if (available != null) 'status': available ? 'active' : 'draft',
+        if (modifierGroups != null) 'modifierGroups': _groupsJson(modifierGroups),
       }).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
       });
@@ -321,6 +336,7 @@ class VendorMenuController {
         'category': item.category,
         'prepMins': item.prepMins,
         'images': [if (item.imageUrl.isNotEmpty) item.imageUrl],
+        'modifierGroups': _groupsJson(item.modifierGroups),
       });
     } on ApiException {
       // Keep the optimistic row; the vendor can retry the save.

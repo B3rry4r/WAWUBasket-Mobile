@@ -122,8 +122,8 @@ class DeliveryOffer {
       vendorLng:
           (vendor['lng'] as num?)?.toDouble() ?? RiderController.riderLng,
       vendorPhone: ((vendor['user'] as Map?)?.cast<String, dynamic>()?['phone'] ?? '').toString(),
-      customerName: (order['customerName'] ?? 'Customer').toString(),
-      customerPhone: (order['customerPhone'] ?? '').toString(),
+      customerName: (order['recipientName'] ?? 'Customer').toString(),
+      customerPhone: (order['recipientPhone'] ?? '').toString(),
       dropAddress:
           (address['line'] ?? order['dropoffAddress'] ?? '').toString(),
       dropLat:

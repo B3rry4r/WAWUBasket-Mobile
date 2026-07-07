@@ -95,7 +95,10 @@ class _OperatorAccountDesktopScreenState
             badge: 'Customer',
             payoutLabel: 'Wallet & payment methods',
             payoutSub: 'Cards, bank, mobile money',
-            payoutRoute: AppRoutes.wallet,
+            // Points at the payment-methods screen, not the wallet screen:
+            // the wallet screen's GET /v1/wallet is not built yet. Switch back
+            // to AppRoutes.wallet once that endpoint exists.
+            payoutRoute: AppRoutes.walletCards,
             settingsLabel: null,
             settingsSub: null,
             settingsRoute: null,

@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/network/api_exception.dart';
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/services/guest_mode.dart';
 import '../../../../core/theme/wb_theme_exports.dart';
 import '../../../../core/utils/wb_actions.dart';
 import '../../../../core/utils/wb_l10n.dart';
 import '../../../../core/widgets/wb_widgets.dart';
+import '../../../shopping/application/cart_controller.dart';
 import '../../../shopping/data/catalog_api.dart';
 import '../../../shopping/domain/models/product.dart';
 
-class MeatCutScreen extends StatefulWidget {
+class MeatCutScreen extends ConsumerStatefulWidget {
   const MeatCutScreen({super.key, required this.productId});
   final String productId;
 
   @override
-  State<MeatCutScreen> createState() => _MeatCutScreenState();
+  ConsumerState<MeatCutScreen> createState() => _MeatCutScreenState();
 }
 
-class _MeatCutScreenState extends State<MeatCutScreen> {
+class _MeatCutScreenState extends ConsumerState<MeatCutScreen> {
   String _cut = 'pieces';
   double _weight = 2.0;
   bool _fresh = true;
   bool _removeSkin = false;
+  bool _adding = false;
   final _instructions = TextEditingController();
 
   Product? _product;
@@ -48,6 +52,44 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
   void dispose() {
     _instructions.dispose();
     super.dispose();
+  }
+
+  Future<void> _addToBasket(Product product) async {
+    if (!GuestModeController.instance
+        .requireAccount(context, action: 'add to your cart')) {
+      return;
+    }
+    final cuts = _cutsByCat[product.subcategoryId] ?? _cutsByCat['chicken']!;
+    final cutLabel =
+        cuts.firstWhere((c) => c.$1 == _cut, orElse: () => (_cut, _cut)).$2;
+    final parts = <String>[
+      'Cut: $cutLabel',
+      'Weight: ${_weight.toStringAsFixed(1)} kg',
+      _fresh ? 'Fresh' : 'Frozen',
+      if (_removeSkin) 'Remove skin',
+    ];
+    final extra = _instructions.text.trim();
+    if (extra.isNotEmpty) parts.add('Instructions: $extra');
+    final note = parts.join(' · ');
+
+    setState(() => _adding = true);
+    // The cart prices by integer quantity, but meat is priced by weight
+    // (price × kg) and the cart API has no weight field. So we send quantity 1
+    // and encode the chosen weight in the note for the vendor; the cart
+    // subtotal won't reflect the weight-based price shown here until the API
+    // supports weighted line items.
+    await ref
+        .read(cartControllerProvider.notifier)
+        .add(product, qty: 1, note: note);
+    if (!mounted) return;
+    setState(() => _adding = false);
+    final error = ref.read(cartControllerProvider).error;
+    if (error != null) {
+      wbShowError(context, error);
+      return;
+    }
+    wbShowSnack(context, '${product.name} added to basket');
+    context.push(AppRoutes.cart);
   }
 
   static const _cutsByCat = {
@@ -439,13 +481,8 @@ class _MeatCutScreenState extends State<MeatCutScreen> {
                   label: 'Add to basket, ₦${_n(total)}',
                   fullWidth: true,
                   size: WBButtonSize.lg,
-                  onPressed: () {
-                    wbShowSnack(
-                      context,
-                      '${product.name} added to basket',
-                    );
-                    context.push(AppRoutes.cart);
-                  },
+                  loading: _adding,
+                  onPressed: () => _addToBasket(product),
                 ),
               ),
             ),

@@ -1,4 +1,35 @@
 import '../../../core/network/api_client.dart';
+import '../../../core/network/api_parse.dart';
+
+/// The server-computed charge for the current cart against a delivery address.
+///
+/// This is the authoritative preview of what checkout will bill: the backend
+/// uses distance-tiered delivery + an uncapped service fee, which the local
+/// [WbPricing] estimate deliberately does not model. Money fields arrive as
+/// BigInt-serialised strings and are parsed with [safeMoney].
+class OrderQuote {
+  const OrderQuote({
+    required this.subtotal,
+    required this.serviceFee,
+    required this.deliveryFee,
+    required this.total,
+    required this.currency,
+  });
+
+  final int subtotal;
+  final int serviceFee;
+  final int deliveryFee;
+  final int total;
+  final String currency;
+
+  factory OrderQuote.fromJson(Map<String, dynamic> j) => OrderQuote(
+        subtotal: safeMoney(j['subtotal'], field: 'subtotal'),
+        serviceFee: safeMoney(j['serviceFee'], field: 'serviceFee', orZero: true),
+        deliveryFee: safeMoney(j['deliveryFee'], field: 'deliveryFee', orZero: true),
+        total: safeMoney(j['total'], field: 'total'),
+        currency: safeString(j['currency'], fallback: 'NGN'),
+      );
+}
 
 /// Wraps the `/v1/orders` endpoints. All calls require a session.
 class OrdersApi {
@@ -6,6 +37,13 @@ class OrdersApi {
   static final OrdersApi instance = OrdersApi._();
 
   final _api = ApiClient.instance;
+
+  /// Fetches the exact charge for the current cart delivered to [addressId] —
+  /// the source of truth for the total shown at checkout. See [OrderQuote].
+  Future<OrderQuote> quote({required String addressId}) async {
+    final res = await _api.get('/orders/quote', query: {'addressId': addressId});
+    return OrderQuote.fromJson(safeMap(res, context: 'orderQuote'));
+  }
 
   /// Places an order from the current cart. Returns the raw payload —
   /// includes `id` and the escrow `checkoutUrl`.

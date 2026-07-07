@@ -82,11 +82,23 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       NotificationsController.instance.decrement();
       AccountExtrasApi.instance.markNotificationRead(n.id).catchError((_) {});
     }
-    if (n.icon == WBIconName.bike || n.icon == WBIconName.check) {
-      final path = n.orderId != null
-          ? '${AppRoutes.tracking}?orderId=${n.orderId}'
-          : AppRoutes.tracking;
-      context.push(path);
+    // The backend attaches a deep-link path (e.g. "/orders/<uuid>") in `link`.
+    // Parse it the way the app's other deep-link handlers do and route by it,
+    // falling back to a snackbar when there is nothing to open.
+    final link = n.link;
+    if (link == null || link.isEmpty) {
+      wbShowSnack(context, n.title);
+      return;
+    }
+    final uri = Uri.tryParse(link);
+    final segments = uri?.pathSegments ?? const <String>[];
+    if (segments.length >= 2 && segments.first == 'orders') {
+      // An order deep-link opens the tracking screen, which takes the id as a
+      // query param (matching the app's tracking route).
+      context.push('${AppRoutes.tracking}?orderId=${segments[1]}');
+    } else if (link.startsWith('/')) {
+      // Any other in-app path — hand it straight to the router.
+      context.push(link);
     } else {
       wbShowSnack(context, n.title);
     }
@@ -297,7 +309,7 @@ class _Notif {
     required this.body,
     required this.at,
     required this.unread,
-    this.orderId,
+    this.link,
   });
 
   final String id;
@@ -306,7 +318,9 @@ class _Notif {
   final String body;
   final DateTime at;
   final bool unread;
-  final String? orderId;
+
+  /// Deep-link path supplied by the backend, e.g. `/orders/{uuid}`.
+  final String? link;
 
   String get time =>
       '${at.hour.toString().padLeft(2, '0')}:${at.minute.toString().padLeft(2, '0')}';
@@ -318,7 +332,7 @@ class _Notif {
         body: body,
         at: at,
         unread: false,
-        orderId: orderId,
+        link: link,
       );
 
   factory _Notif.fromJson(Map<String, dynamic> j) => _Notif(
@@ -329,7 +343,7 @@ class _Notif {
         at: DateTime.tryParse('${j['createdAt'] ?? ''}')?.toLocal() ??
             DateTime.now(),
         unread: j['read'] != true,
-        orderId: j['orderId']?.toString(),
+        link: j['link']?.toString(),
       );
 }
 

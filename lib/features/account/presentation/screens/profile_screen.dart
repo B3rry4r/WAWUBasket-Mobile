@@ -324,12 +324,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       AccountMenuSection(
         title: context.l10n.navAccount,
         rows: [
-          AccountMenuRow(
-            icon: WBIconName.card,
-            label: context.l10n.profileWalletMenu,
-            sub: context.l10n.profileWalletSub,
-            onTap: () => context.push(AppRoutes.wallet),
-          ),
+          // Wallet entry hidden: the wallet screen calls GET /v1/wallet, which
+          // does not exist on the backend yet, so it always errors. Re-enable
+          // this tile once /v1/wallet is built. (Payment methods remain
+          // reachable via the operator/role account screen.)
+          // AccountMenuRow(
+          //   icon: WBIconName.card,
+          //   label: context.l10n.profileWalletMenu,
+          //   sub: context.l10n.profileWalletSub,
+          //   onTap: () => context.push(AppRoutes.wallet),
+          // ),
           AccountMenuRow(
             icon: WBIconName.user,
             label: context.l10n.profilePersonalInfo,

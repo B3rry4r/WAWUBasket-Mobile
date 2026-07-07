@@ -114,13 +114,25 @@ class _OtpScreenState extends State<OtpScreen>
   Future<void> _resend() async {
     if (_secondsLeft > 0) return;
     try {
-      await AuthApi.instance.startOtp(widget.phone);
+      if (widget.flow == 'reset') {
+        // Password recovery: [phone] is actually the email-or-phone identifier
+        // the forgot-password screen collected. Re-run the same recovery path
+        // (resolves the user by email OR phone); `startOtp` only looks up by
+        // phone and would 500 for an email. Keep the 'sms' method — it delivers
+        // the CODE this screen expects, not a reset LINK.
+        await AuthApi.instance.forgotPassword(widget.phone, method: 'sms');
+      } else {
+        await AuthApi.instance.startOtp(widget.phone);
+      }
       if (mounted) {
         _startCountdown();
         wbShowSnack(context, context.l10n.otpNewCode);
       }
     } on ApiException catch (e) {
       if (mounted) wbShowError(context, e.message);
+    } catch (e) {
+      // Non-API failure — show the cause instead of failing silently.
+      if (mounted) wbShowSnack(context, "Couldn't resend code: $e");
     }
   }
 

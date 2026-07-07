@@ -45,6 +45,10 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
   late Corridor _destination;
   late DateTime _harvest;
   String? _imageUrl;
+  // R2 object key of a photo uploaded in this session — the durable
+  // reference sent to the backend. Null until the trader picks a new photo,
+  // which is exactly when an edit should overwrite the existing image.
+  String? _imageKey;
   bool _uploadingPhoto = false;
   String _category = '';
   List<_CategoryOption> _catOptions = [];
@@ -101,7 +105,11 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
           .pickAndUpload(folder: UploadFolder.exportListings);
       if (!mounted) return;
       setState(() {
-        if (res != null) _imageUrl = res.publicUrl;
+        if (res != null) {
+          // publicUrl drives the on-screen preview; key is what we persist.
+          _imageUrl = res.publicUrl;
+          _imageKey = res.key;
+        }
         _uploadingPhoto = false;
       });
     } catch (_) {
@@ -150,10 +158,10 @@ class _TraderListingEditScreenState extends State<TraderListingEditScreen> {
       category: _category.isNotEmpty ? _category : null,
     );
     if (_isEdit) {
-      TradeController.instance.update(updated);
+      TradeController.instance.update(updated, imageKey: _imageKey);
       wbShowSnack(context, context.l10n.traderListingUpdated(updated.produce));
     } else {
-      TradeController.instance.add(updated);
+      TradeController.instance.add(updated, imageKey: _imageKey);
       wbShowSnack(context, context.l10n.traderListingPosted(updated.produce));
     }
     context.pop();

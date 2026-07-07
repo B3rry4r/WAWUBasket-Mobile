@@ -125,13 +125,19 @@ class TradeController {
     }
   }
 
-  String add(ExportListing l) {
+  /// [imageKey] is the R2 object key from a freshly uploaded photo. Pass it
+  /// so the backend can re-sign a fresh display URL on every read — sending
+  /// a presigned URL here would 404 once it expires (7-day TTL).
+  String add(ExportListing l, {String? imageKey}) {
     listings.value = [l, ...listings.value];
-    _create(l);
+    _create(l, imageKey);
     return l.id;
   }
 
-  void update(ExportListing l) {
+  /// [imageKey] is the R2 object key from a freshly uploaded photo. It is only
+  /// sent when the trader actually swapped the photo — leaving it null keeps
+  /// the listing's existing image untouched.
+  void update(ExportListing l, {String? imageKey}) {
     listings.value = [for (final cur in listings.value) if (cur.id == l.id) l else cur];
     if (!_isLocal(l.id)) {
       _api.updateExportListing(l.id, {
@@ -144,6 +150,7 @@ class TradeController {
         'farmName': l.farmName,
         'farmRegion': l.farmRegion,
         'status': l.status.name,
+        if (imageKey != null && imageKey.isNotEmpty) 'imageKey': imageKey,
       }).catchError((Object e) {
         if (e is ApiException) mutationError.value = e.message;
       });
@@ -170,7 +177,10 @@ class TradeController {
     listings.value = List.of(listings.value);
   }
 
-  Future<void> _create(ExportListing l) async {
+  Future<void> _create(ExportListing l, String? imageKey) async {
+    // The R2 object key is the durable reference. Fall back to the model's
+    // imageUrl only for callers that still stash the key there directly.
+    final key = (imageKey != null && imageKey.isNotEmpty) ? imageKey : l.imageUrl;
     try {
       await _api.createExportListing({
         'produce': l.produce,
@@ -181,7 +191,7 @@ class TradeController {
         'destinationCorridor': l.destinationCorridor.name,
         'farmName': l.farmName,
         'farmRegion': l.farmRegion,
-        if (l.imageUrl.isNotEmpty) 'imageKey': l.imageUrl,
+        if (key.isNotEmpty) 'imageKey': key,
         if (l.category != null) 'category': l.category,
       });
       // Replace the optimistic EXP-<timestamp> row with the real server record.

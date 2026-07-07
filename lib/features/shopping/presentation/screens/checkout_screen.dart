@@ -65,18 +65,85 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   final _recipientNameCtrl = TextEditingController();
   final _recipientPhoneCtrl = TextEditingController();
 
+  // Backend-quoted charge for the current cart (source of truth for the total).
+  // Null until fetched; falls back to the local [WbPricing] estimate on failure.
+  OrderQuote? _quote;
+  bool _quoteLoading = false;
+  bool _quoteFailed = false;
+  String? _quotedAddressId; // address the current quote/attempt is tied to
+
   @override
   void initState() {
     super.initState();
     AddressController.instance.load();
     RecipeCartController.instance.load();
+    // Re-quote whenever the saved-address list (and thus the default) changes.
+    AddressController.instance.addresses.addListener(_onAddressesChanged);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _onAddressesChanged());
   }
 
   @override
   void dispose() {
+    AddressController.instance.addresses.removeListener(_onAddressesChanged);
     _recipientNameCtrl.dispose();
     _recipientPhoneCtrl.dispose();
     super.dispose();
+  }
+
+  void _onAddressesChanged() {
+    final defaultAddr = AddressController.instance.addresses.value
+        .where((a) => a.isDefault)
+        .firstOrNull;
+    _maybeRefreshQuote(defaultAddr?.id);
+  }
+
+  /// Fetches a fresh quote when the delivery address changes. The quote covers
+  /// the product order (`/orders`); with no products or no address there is
+  /// nothing to quote, so we clear back to the local estimate.
+  void _maybeRefreshQuote(String? addressId) {
+    if (!mounted) return;
+    final hasProducts = ref.read(cartControllerProvider).items.isNotEmpty;
+    if (addressId == null || !hasProducts) {
+      if (_quote != null || _quoteFailed || _quoteLoading) {
+        setState(() {
+          _quote = null;
+          _quoteFailed = false;
+          _quoteLoading = false;
+          _quotedAddressId = addressId;
+        });
+      }
+      return;
+    }
+    // Already quoted (or quoting) for this address — nothing to do.
+    if (addressId == _quotedAddressId && (_quote != null || _quoteLoading)) {
+      return;
+    }
+    _fetchQuote(addressId);
+  }
+
+  Future<void> _fetchQuote(String addressId) async {
+    setState(() {
+      _quoteLoading = true;
+      _quoteFailed = false;
+      _quotedAddressId = addressId;
+    });
+    try {
+      final quote = await OrdersApi.instance.quote(addressId: addressId);
+      // Ignore a stale response if the address changed mid-flight.
+      if (!mounted || _quotedAddressId != addressId) return;
+      setState(() {
+        _quote = quote;
+        _quoteLoading = false;
+      });
+    } catch (_) {
+      if (!mounted || _quotedAddressId != addressId) return;
+      // Fall back to the local estimate, clearly labelled in the UI.
+      setState(() {
+        _quote = null;
+        _quoteFailed = true;
+        _quoteLoading = false;
+      });
+    }
   }
 
   /// Converts the picked slot into an ISO datetime for the API.
@@ -102,13 +169,29 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
         return;
       }
     }
+    final hasRecipes =
+        RecipeCartController.instance.items.value.isNotEmpty;
+    final hasProducts =
+        ref.read(cartControllerProvider).items.isNotEmpty;
+
+    // FIX (mixed cart): recipes and products check out through two DIFFERENT
+    // endpoints (RecipesApi.checkout vs OrdersApi.placeOrder), each minting its
+    // own order + Flutterwave checkoutUrl. We can only launch ONE payment page,
+    // so running both would leave the other order created-but-unpaid (an orphan).
+    // Chosen approach: require SEPARATE checkout — block the combined order and
+    // tell the user to pay for recipes and products separately. This guarantees
+    // we never create an order we won't take the user to pay for.
+    if (hasRecipes && hasProducts) {
+      wbShowSnack(
+        context,
+        'Recipe items and products are paid for separately. '
+        'Please check out one, then the other.',
+      );
+      return;
+    }
+
     setState(() => _placing = true);
     try {
-      final hasRecipes =
-          RecipeCartController.instance.items.value.isNotEmpty;
-      final hasProducts =
-          ref.read(cartControllerProvider).items.isNotEmpty;
-
       String orderId = '';
       String checkoutUrl = '';
 
@@ -264,9 +347,17 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       (s, i) => s + i.totalPriceNaira,
     );
     final subtotal = productSubtotal + recipeSubtotal;
-    var delivery = WbPricing.deliveryFeeNaira;
-    final serviceFee = WbPricing.serviceFee(subtotal);
-    final total = subtotal + delivery + serviceFee;
+
+    // Prefer the backend quote (distance-tiered delivery + uncapped fee) as the
+    // source of truth; fall back to the local estimate only if the quote fails
+    // or isn't applicable (e.g. no address yet), and label it as an estimate.
+    final quote = _quote;
+    final delivery =
+        quote != null ? quote.deliveryFee : WbPricing.deliveryFeeNaira;
+    final serviceFee =
+        quote != null ? quote.serviceFee : WbPricing.serviceFee(subtotal);
+    final total = quote != null ? quote.total : subtotal + delivery + serviceFee;
+    final isEstimate = quote == null;
 
     // Show waiting-for-payment screen while polling.
     if (_waitingForPayment) {
@@ -583,6 +674,27 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       _Line(label: 'Delivery', value: '₦${_n(delivery)}'),
                       const SizedBox(height: 8),
                       _Line(label: 'Service fee', value: '₦${_n(serviceFee)}'),
+                      if (isEstimate) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const WBIcon(WBIconName.pin,
+                                size: 12, color: WBColors.fgPlaceholder),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: Text(
+                                _quoteLoading
+                                    ? 'Calculating exact delivery & fees…'
+                                    : 'Estimated — the exact total is confirmed at payment.',
+                                style: WBTypography.caption.copyWith(
+                                  color: WBColors.fgPlaceholder,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                       const SizedBox(height: 14),
                       const WBDivider(),
                       const SizedBox(height: 14),
