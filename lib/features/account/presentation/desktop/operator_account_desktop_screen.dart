@@ -93,12 +93,14 @@ class _OperatorAccountDesktopScreenState
           ),
         AppRole.customer => const _RoleConfig(
             badge: 'Customer',
-            payoutLabel: 'Wallet & payment methods',
-            payoutSub: 'Cards, bank, mobile money',
-            // Points at the payment-methods screen, not the wallet screen:
-            // the wallet screen's GET /v1/wallet is not built yet. Switch back
-            // to AppRoutes.wallet once that endpoint exists.
-            payoutRoute: AppRoutes.walletCards,
+            // No money tile for customers: there's no wallet (GET /v1/wallet
+            // isn't built) and no saved-card checkout — Flutterwave's hosted
+            // redirect collects card details per payment, so a stored
+            // "payment method" / "add card" screen can never charge anything.
+            // Hidden until a real saved-instrument charge path exists.
+            payoutLabel: null,
+            payoutSub: null,
+            payoutRoute: null,
             settingsLabel: null,
             settingsSub: null,
             settingsRoute: null,
@@ -512,12 +514,17 @@ class _OperatorAccountDesktopScreenState
       AccountMenuSection(
         title: context.l10n.operatorAccountTitle,
         rows: [
-          AccountMenuRow(
-            icon: WBIconName.card,
-            label: config.payoutLabel,
-            sub: config.payoutSub,
-            onTap: () => context.push(config.payoutRoute),
-          ),
+          // Payout / money tile — omitted for roles that have no money screen
+          // (customer: no wallet, no saved-card charge path).
+          if (config.payoutLabel != null &&
+              config.payoutSub != null &&
+              config.payoutRoute != null)
+            AccountMenuRow(
+              icon: WBIconName.card,
+              label: config.payoutLabel!,
+              sub: config.payoutSub!,
+              onTap: () => context.push(config.payoutRoute!),
+            ),
           AccountMenuRow(
             icon: WBIconName.user,
             label: context.l10n.operatorPersonalInfo,
@@ -703,9 +710,9 @@ class _RoleConfig {
     required this.settingsRoute,
   });
   final String badge;
-  final String payoutLabel;
-  final String payoutSub;
-  final String payoutRoute;
+  final String? payoutLabel;
+  final String? payoutSub;
+  final String? payoutRoute;
   final String? settingsLabel;
   final String? settingsSub;
   final String? settingsRoute;

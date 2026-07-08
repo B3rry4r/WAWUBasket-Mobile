@@ -44,8 +44,12 @@ class AccountExtrasApi {
 
   // ─── Support ───────────────────────────────────────────────────────────
 
-  Future<List<dynamic>> faqs() async {
-    final res = await _api.get('/support/faqs');
+  Future<List<dynamic>> faqs({String? query}) async {
+    final q = query?.trim() ?? '';
+    final res = await _api.get(
+      '/support/faqs',
+      query: q.isEmpty ? null : {'q': q},
+    );
     return safeList(res, context: 'faqs');
   }
 

@@ -10,7 +10,7 @@ import '../../../transport/application/transport_controller.dart';
 import '../../../transport/domain/models/load_offer.dart';
 import '../../../../core/utils/wb_l10n.dart';
 
-/// Active trip screen, vertical checkpoint timeline, GPS-active banner,
+/// Active trip screen, vertical checkpoint timeline, trip-status banner,
 /// masked-call trader. "Log checkpoint" advances state; the last
 /// checkpoint marks the trip delivered.
 ///
@@ -126,7 +126,7 @@ class _Body extends StatelessWidget {
             const SizedBox(height: WBSpacing.lg),
             _Hero(trip: trip),
             const SizedBox(height: WBSpacing.lg),
-            _GpsBanner(),
+            _TripStatusBanner(),
             const SizedBox(height: WBSpacing.lg),
             _SectionLabel('Checkpoints'),
             const SizedBox(height: 10),
@@ -275,7 +275,7 @@ class _Hero extends StatelessWidget {
   }
 }
 
-class _GpsBanner extends StatelessWidget {
+class _TripStatusBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -305,7 +305,7 @@ class _GpsBanner extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              'GPS active · we log each checkpoint automatically',
+              'Trip in progress · tap "Log checkpoint" as you reach each stop',
               style: WBTypography.caption.copyWith(
                 color: WBColors.fgHeader,
                 fontWeight: FontWeight.w500,

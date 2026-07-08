@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -61,15 +63,41 @@ class _SupportScreenState extends State<SupportScreen> {
   final Set<int> _expandedFaqs = {};
   _Ticket? _ticket;
 
+  final _searchCtrl = TextEditingController();
+  Timer? _debounce;
+  String _query = '';
+
   @override
   void initState() {
     super.initState();
-    _load();
+    _loadFaqs();
+    _loadTickets();
   }
 
-  Future<void> _load() async {
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchCtrl.dispose();
+    super.dispose();
+  }
+
+  /// Debounces keystrokes, then re-queries the FAQ endpoint with the search
+  /// term (backend supports GET /support/faqs?q=).
+  void _onSearchChanged(String value) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      final q = value.trim();
+      if (q == _query) return;
+      _query = q;
+      _expandedFaqs.clear();
+      _loadFaqs();
+    });
+  }
+
+  Future<void> _loadFaqs() async {
+    if (mounted) setState(() => _faqs = null);
     try {
-      final faqs = await AccountExtrasApi.instance.faqs();
+      final faqs = await AccountExtrasApi.instance.faqs(query: _query);
       if (mounted) {
         setState(() => _faqs = [
               for (final f in faqs)
@@ -82,6 +110,9 @@ class _SupportScreenState extends State<SupportScreen> {
     } on ApiException {
       if (mounted) setState(() => _faqs = const []);
     }
+  }
+
+  Future<void> _loadTickets() async {
     try {
       final tickets = await AccountExtrasApi.instance.tickets();
       if (tickets.isNotEmpty && mounted) {
@@ -140,13 +171,43 @@ class _SupportScreenState extends State<SupportScreen> {
                     color: WBColors.fgPlaceholder,
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    context.l10n.supportSearchPlaceholder,
-                    style: WBTypography.body.copyWith(
-                      color: WBColors.fgPlaceholder,
-                      fontSize: 15,
+                  Expanded(
+                    child: TextField(
+                      controller: _searchCtrl,
+                      onChanged: _onSearchChanged,
+                      textInputAction: TextInputAction.search,
+                      style: WBTypography.body.copyWith(fontSize: 15),
+                      cursorColor: WBColors.surfaceDark,
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        border: InputBorder.none,
+                        hintText: context.l10n.supportSearchPlaceholder,
+                        hintStyle: WBTypography.body.copyWith(
+                          color: WBColors.fgPlaceholder,
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
                   ),
+                  if (_searchCtrl.text.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        _debounce?.cancel();
+                        _searchCtrl.clear();
+                        _query = '';
+                        _expandedFaqs.clear();
+                        _loadFaqs();
+                        setState(() {});
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 8),
+                        child: WBIcon(
+                          WBIconName.close,
+                          size: 18,
+                          color: WBColors.fgPlaceholder,
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -319,6 +380,20 @@ class _SupportScreenState extends State<SupportScreen> {
                       if (i != faqs.length - 1) const WBDivider(),
                     ],
                   ],
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 28),
+                child: Center(
+                  child: Text(
+                    _query.isEmpty
+                        ? context.l10n.supportCommonQuestions
+                        : 'No results for "$_query"',
+                    style: WBTypography.caption.copyWith(
+                      color: WBColors.fgSecondary,
+                    ),
+                  ),
                 ),
               ),
             if (_ticket != null) ...[
