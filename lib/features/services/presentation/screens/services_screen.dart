@@ -25,14 +25,33 @@ class WawuService {
 /// hub web platform via [openWawuHub]. Promoted verbatim from the old customer
 /// home services strip so the same set reaches every role.
 const List<WawuService> wawuServices = [
-  // Only services that have a live page on the WAWUAfrica hub are surfaced.
-  // Insurance / Pension / Banking / Grants were removed because no such hub
-  // pages exist yet (they 404'd) — re-add a tile here once the hub ships that
-  // service page so it links to a real URL instead of a dead one.
+  // Insurance / Pension / Banking / Grants now resolve to real "Coming soon"
+  // pages on the hub (/services/<id>), so the tiles link to a live URL instead
+  // of a 404 — the coming-soon state is shown on the hub page they open.
   WawuService(
     label: 'EasyBuy',
     path: '/services/easybuy/apply',
     icon: Icons.shopping_bag_outlined,
+  ),
+  WawuService(
+    label: 'Health Insurance',
+    path: '/services/insurance',
+    icon: Icons.health_and_safety_outlined,
+  ),
+  WawuService(
+    label: 'Pension',
+    path: '/services/pension',
+    icon: Icons.savings_outlined,
+  ),
+  WawuService(
+    label: 'Banking',
+    path: '/services/banking',
+    icon: Icons.account_balance_outlined,
+  ),
+  WawuService(
+    label: 'Grants & Funding',
+    path: '/services/grants',
+    icon: Icons.volunteer_activism_outlined,
   ),
   WawuService(
     label: 'CAC Registration',
