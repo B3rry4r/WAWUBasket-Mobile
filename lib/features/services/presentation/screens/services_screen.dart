@@ -25,34 +25,14 @@ class WawuService {
 /// hub web platform via [openWawuHub]. Promoted verbatim from the old customer
 /// home services strip so the same set reaches every role.
 const List<WawuService> wawuServices = [
+  // Only services that have a live page on the WAWUAfrica hub are surfaced.
+  // Insurance / Pension / Banking / Grants were removed because no such hub
+  // pages exist yet (they 404'd) — re-add a tile here once the hub ships that
+  // service page so it links to a real URL instead of a dead one.
   WawuService(
     label: 'EasyBuy',
     path: '/services/easybuy/apply',
     icon: Icons.shopping_bag_outlined,
-  ),
-  WawuService(
-    label: 'Health Insurance',
-    path: '/services/insurance',
-    icon: Icons.health_and_safety_outlined,
-    soon: true,
-  ),
-  WawuService(
-    label: 'Pension',
-    path: '/services/pension',
-    icon: Icons.savings_outlined,
-    soon: true,
-  ),
-  WawuService(
-    label: 'Banking',
-    path: '/services/banking',
-    icon: Icons.account_balance_outlined,
-    soon: true,
-  ),
-  WawuService(
-    label: 'Grants & Funding',
-    path: '/services/grants',
-    icon: Icons.volunteer_activism_outlined,
-    soon: true,
   ),
   WawuService(
     label: 'CAC Registration',
@@ -77,7 +57,14 @@ const List<WawuService> wawuServices = [
 Future<void> openWawuHub(BuildContext context, String path) async {
   final messenger = ScaffoldMessenger.of(context);
   final uri = Uri.parse('$wawuAfricaHubUrl$path');
-  final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  bool ok = false;
+  try {
+    ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } catch (_) {
+    // launchUrl can throw a PlatformException (no browser/handler) instead of
+    // returning false — treat that as a failure and show the fallback.
+    ok = false;
+  }
   if (!ok && context.mounted) {
     messenger.showSnackBar(
       const SnackBar(content: Text('Could not open WAWUAfrica')),
